@@ -65,7 +65,7 @@ module.exports = function(app) {
         str += '<li'+(limitItem[limitItemKey].id == parent ? ' class="active">':'>')+'<a href="'+href+'"><i class="'+className+'"></i>'+name;
         if (path.length > 0) {
 
-          str += '<span class="fa arrow"></span></a><ul class="nav nav-second-level'+(limitItem[limitItemKey].id == parent ?' collapse in" aria-expanded="false':'')+'">';
+          str += '<span class="fa arrow"></span></a><ul class="nav nav-second-level'+(limitItem[limitItemKey].id == parent ?' collapse in" aria-expanded="true':'')+'">';
           path.forEach(function(v,k) {
             for(var i = 1; i < subLimitItemArray.length; i++){
                 if(k === parseInt(subLimitItemArray[i])){

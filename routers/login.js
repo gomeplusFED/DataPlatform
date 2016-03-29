@@ -4,7 +4,7 @@
  * @fileoverview 用户登陆控制器和权限校验
  */
 var ldap = require('ldapjs');
-var config = require('../libs/config');
+var config = require('../libs/controllers');
 var lodash = require('lodash');
 
 var username = 'yunyingbaobiao';
@@ -150,7 +150,9 @@ module.exports = function(Router) {
         if (err) {
           unbind(client, next);
         } else {
-          email += '@gomeplus.com';
+          if(email.indexOf("@") < 0) {
+            email += '@gomeplus.com';
+          }
           client.search('ou=美信,dc=meixin,dc=com', {
             filter: '(userprincipalname=' + email + ')',
             scope: 'sub'
