@@ -3,6 +3,7 @@
  * @date 20151128
  * @fileoverview 全站统一配置
  */
+var dataOverview = require("./dataOverview");
 
 module.exports = {
     siteName: '美信数据平台',
@@ -15,17 +16,7 @@ module.exports = {
             display: true,
             className: "fa fa-dashboard fa-fw",
             href: "#",
-            path: [
-                {
-                    router : "/test",
-                    pageTitle : "测试",
-                    defaultData : [{
-                        type : "table",
-                        title : "test",
-                        query_api : "/test_json"
-                    }]
-                }
-            ]
+            path: [dataOverview()]
         }
     }, {
         "userManagement": {
