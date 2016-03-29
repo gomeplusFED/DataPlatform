@@ -1,0 +1,262 @@
+<% include ../include/header.html %>
+<link href="/admin/dist/css/pageDetail_dataOverviewIndex.css" rel="stylesheet">
+<link href="/admin/js/vendors/datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" >
+<link href="/admin/js/vendors/datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" >
+<link href="/admin/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+<link href="/admin/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css" rel="stylesheet">
+<link href="/admin/bower_components/datatables-responsive/css/dataTables.responsive.css" rel="stylesheet">
+<link href="/admin/dist/css/sb-admin-2.css" rel="stylesheet">
+<link href="/admin/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+<script>
+
+</script>
+<div id="page-wrapper">
+
+<div class="row">
+  <div class="col-lg-12">
+    <h4 class="page-header"><%= session.userInfo.username %></h4>
+    <% if (pageInitData.links.length > 0) {%>
+    <div class="btn-group" style="margin-top: 8px;margin-bottom: 8px">
+        <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+            <%
+            var arr = pageInitData.links;
+            for(var i = 0; i < arr.length; i++){
+                if(arr[i].href === pageInitData.currentPageUrl){
+                    %><%=arr[i].name%><%
+                    break;
+                }
+            }
+            %>
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" >
+            <% var arr = pageInitData.links %>
+            <% arr.forEach(function(item){ %>
+                <li><a href="<%=item.href%>"><%=item.name%></a></li>
+            <% })%>
+        </ul>
+    </div>
+    <% }%>
+  </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <strong>数据概览</strong>
+            </div>
+            <div class="panel-body">
+              <table class="table table-hover table-bordered" id="over_view">
+                  <thead>
+                      <tr>
+                          <th scope="row"></th>
+                          <th>访客数</th>
+                          <th>浏览量</th>
+                          <th>IP数</th>
+                          <th>跳出率</th>
+                          <th>新用户</th>
+                          <th>新用户占比</th>
+                          <th>新增账户</th>
+                          <th>注册转化率</th>
+                          <th>平均访问时长</th>
+                      </tr>
+                  </thead>
+                  <tbody></tbody>
+              </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+
+    <form id="topnavbar" class="navbar-form navbar-right" >
+        <% var types = {'type': 'type','ver': 'ver','c': 'channel','quan': 'coupon_type'}; %>
+        <% for(var key in types){ %>
+            <% var arr = getType[key];if(Array.isArray(arr) && arr.length){%>
+                <div class="btn-group searchDatas">
+                    <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" type_query='<%= types[key] %>'>
+                    <%= getType[key][0] %>
+                    <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                    <% arr.forEach(function(item){ %>
+                        <li><a><%=item%></a></li>
+                    <% })%>
+                    </ul>
+                </div>
+            <%}%>
+        <% } %>
+        <input style="width:230px;" size="16" type="text" value="" readonly class="form_datetime1" id="chartStartTime">
+    </form>
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <strong>数据趋势</strong>
+                <% if(day_type){ %>
+                <div style="float: right" id="textBtn">
+                    <input type="button" value="天"/>
+                    <input type="button" value="周"/>
+                    <input type="button" value="月"/>
+                </div>
+                <% } %>
+            </div>
+            <div class="panel-body">
+                <div class="responsive" id="Echart_newUser" style="height:400px"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <strong>访问页面</strong><span>（TOP10）</span>
+                <a href="jump_url" class="jump_url" style="float: right;">查看全部</a>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-bordered" id="pv_top">
+                    <thead>
+                        <tr>
+                            <th scope="row">序号</th>
+                            <th>访问页面</th>
+                            <th>访问页面备注名称</th>
+                            <th>访问次数</th>
+                            <th>访问次数占比</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <strong>地域分布</strong><span>（TOP10）</span>
+                <a href="jump_url" class="jump_url" style="float: right;">查看全部</a>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-bordered" id="area_top">
+                    <thead>
+                        <tr>
+                            <th scope="row">序号</th>
+                            <th>地区</th>
+                            <th>访客数</th>
+                            <th>浏览量</th>
+                            <th>浏览量占比</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+
+
+<script type="text/javascript">
+    
+// 数据概览的图表数据
+$PageinitData = {
+    data:<%- JSON.stringify(pageInitData)%>,
+    lines:<%- JSON.stringify(pageInitData.lines) %>,
+    rows:<%- JSON.stringify(rows) %>,
+    now:<%= Date.now()%>,
+    api:"<%= api %>"
+};
+</script>
+
+<!-- /#page-wrapper -->
+<%- include('../include/footer.html',{
+  js:['/admin/echart/build/dist/echarts-all.js',
+    '/admin/js/vendors/datetimepicker/js/bootstrap-datetimepicker.js',
+    '/admin/js/vendors/datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js',
+    '/admin/js/mods/chartBase.js',
+    '/admin/bower_components/datatables/media/js/jquery.dataTables.min.js',
+    '/admin/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.js',
+    '/admin/bower_components/metisMenu/dist/metisMenu.min.js',
+    '/admin/dist/js/sb-admin-2.js',
+    '/admin/js/vendors/ejs.js',
+    '/admin/js/conf/mychart.js'
+  ]
+}) %>
+
+
+<script type="text/javascript">
+
+    // 数据概览 
+    var overViewApi = location.pathname.indexOf('wap') == '-1' ? '/dataTrends_json' : '/dataTrends/wap_json';
+    $.ajax({
+      url: overViewApi,
+      type: 'get',
+      success: function(data){
+        $('#over_view').DataTable({
+            responsive: false,
+            searching: false,
+            ordering: false,
+            display: false,
+            lengthChange: false,
+            data: data.pageInitData.data
+        });
+      }
+    })
+
+
+    // 访问页面top10
+    $.ajax({
+        url: '/OverviewPage/top_json',
+        type: 'get',
+        success: function(data){
+            $('#pv_top').DataTable({
+                responsive: false,
+                searching: false,
+                ordering: false,
+                display: false,
+                lengthChange: false,
+                data: data.pageInitData.data
+            });
+            var jump_url = data.pageInitData.jump_url && data.pageInitData.jump_url !== '' ? data.pageInitData.jump_url : false;
+            if(jump_url){
+                $('#pv_top').parents('.col-lg-12').find('.jump_url').attr('href',jump_url)
+                
+            }else{
+                $('#pv_top').parents('.col-lg-12').find('.jump_url').hide();
+            }
+        }
+    })
+
+    // 地域top10
+    $.ajax({
+        url: '/OverviewPlatf/top_json',
+        type: 'get',
+        success: function(data){
+            $('#area_top').DataTable({
+                responsive: false,
+                searching: false,
+                ordering: false,
+                display: false,
+                lengthChange: false,
+                data: data.pageInitData.data
+            });
+            var jump_url = data.pageInitData.jump_url && data.pageInitData.jump_url !== '' ? data.pageInitData.jump_url : false;
+            if(jump_url){
+                $('#area_top').parents('.col-lg-12').find('.jump_url').attr('href',jump_url)
+            }else{
+                $('#area_top').parents('.col-lg-12').find('.jump_url').hide();
+            }
+        }
+    })
+
+</script>
+
+

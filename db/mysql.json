@@ -1,0 +1,32 @@
+{
+  "dev" : {
+    "username": "datapltfm_user",
+    "pwd": "Db57AteE172E4D1168",
+    "host": "10.125.31.220:3306",
+    "database" : "dataplatform"
+  },
+  "test" : {
+    "username": "tester",
+    "pwd": "Test_usEr",
+    "host": "atlas01.test.gomeplus.com:8806",
+    "database" : "dataplatform"
+  },
+  "pre" : {
+    "username": "gome_business",
+    "pwd": "P7P2k2yf3F",
+    "host": "10.125.2.9:3306",
+    "database" : "dataplatform"
+  },
+  "pro1" : {
+    "username": "dong",
+    "pwd": "1234567",
+    "host": "10.69.7.8",
+    "database" : "dataplatform"
+  },
+  "pro" : {
+    "username": "gome_business",
+    "pwd": "DjbnHtjSYD",
+    "host": "atlas01.ic.pro.gomeplus.com:8806",
+    "database" : "dataplatform"
+  }
+}

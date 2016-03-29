@@ -1,0 +1,83 @@
+<%- include("./header.html") %>
+    <script type="text/javascript">
+    var defaultData = [{
+        type: 'table',
+        title: '数据概览',
+        query_api: '/marketingAnalysis/mod',
+        drop_down_default_data: {
+            plataform: [],
+            channel: [],
+            version: [],
+            coupon: []
+        },
+        components: {
+            excel_export: true,
+            date_picker: {
+                show: true,
+                defaultData: 7
+            },
+            date_type: {
+                show: true,
+                defaultData: [1, 2, 3]
+            },
+            drop_down: {
+                plataform: false,
+                channel: false,
+                version: false,
+                coupon: false,
+            },
+            btn_groups: {
+                position: '',
+                show: false,
+                groups: [{
+                    name: '',
+                    key: '',
+                    value: ''
+                }]
+            },
+            level_select: {
+                show: true,
+                data: 'data'
+            },
+            filter_select_radio: {
+                show: false,
+                data: { // radio
+                    title: '指标选择',
+                    key: '',
+                    groups: [{
+                        key: '',
+                        value: ''
+                    }, {
+                        key: '',
+                        value: ''
+                    }]
+                }
+            },
+            filter_select_level: {
+                show: true,
+                data: [{
+                    title: '',
+                    groups: [],
+                    cell: {
+                        title: '',
+                        key: '',
+                        groups: [{
+                            key: '',
+                            value: ''
+                        }, {
+                            key: '',
+                            value: ''
+                        }, {
+                            key: '',
+                            value: ''
+                        }],
+                    }
+                }]
+            }
+        }
+    }]
+    </script>
+    <div id="page-wrapper" style="min-height: 1054px;">
+        <m-loading :loading.sync="loading"></m-loading>
+    </div>
+    <%- include('./footer.html') %>

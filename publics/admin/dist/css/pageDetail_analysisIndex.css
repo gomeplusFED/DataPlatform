@@ -1,0 +1,30 @@
+  .detailDate {
+    background-color: #428bca;
+    color: #fff;
+    border-radius: 3px;
+    border-width: 0;
+  }
+  .row {
+    margin-right: 0;
+    margin-left: 15px;
+  }
+  .glyphicon  {
+    display:inline-block;
+    width:14px;
+    height:14px;
+    *margin-right:.3em;
+    line-height:14px;
+    vertical-align:text-top;
+    background-image:url("/admin/js/vendors/datetimepicker/bootstrapv3/bootstrap/css/img/glyphicons-halflings.png");
+    background-position:14px 14px;
+    background-repeat:no-repeat;
+    margin-top:1px;
+  }
+  .icon-arrow-left {
+    background-position: -240px -96px;
+  }
+  .icon-arrow-right {
+    background-position: -264px -96px;
+  }
+
+  .page_display .pagination{display: none;}
