@@ -16,13 +16,13 @@ function connect(app) {
         id:{type: 'serial', key: true},
         username: String,
         is_admin:{type:"number",defaultValue:0},
-        limited:  {type:"text",defaultValue:"2,3-0-1-2-3-4-5-6,4,5-0-1-2,6-0-1-2-3-4,7-0,8-0-1-2-3-4-5-6-7-8-9-10-11-12-13,9-0,10,11,12,13-0-1-2-3-4-5-6-7-8-9,14-0-1-2"},
+        limited:  {type:"text",defaultValue:"2,3-0-1-2-3,4,5-0-1-2,6-0-1-2-3-4,7-0,8-0-1-2-3-4-5-6-7-8-9-10-11-12-13,9-0,10,11,12,13-0-1-2,14-0-1-2"},
         last_ip: String,
         login_ip: String,
         login_time: Date,
         lastlogin_time: Date
       });
-      models.NewAccount = db.define("tbl_rt_user_new",{
+      models.NewAccount = db.define("tbl_rt_useranalysis_newuser",{
         id : {type: 'number', key: true},
         date : Date,
         new_users : Number,
@@ -30,6 +30,7 @@ function connect(app) {
         active_users : Number,
         active_account : Number,
         start_up : Number,
+        startup_per : Number,
         type : String,
         ver : String,
         channel : String,
@@ -60,7 +61,10 @@ function connect(app) {
         type: String,
         ver: String,
         channel: String,
-        day_type: Number
+        day_type: Number,
+        url : String,
+        url_comment : String,
+        bounce_rate : Number
       });
       models.Terminal = db.define("tbl_rt_terminal_device",{
         id : {type: 'number', key: true},
@@ -165,8 +169,10 @@ function connect(app) {
         pay_num : Number,
         order_commodity_num : Number,
         pay_commodity_num : Number,
+        commodity_times : Number,
         refund_num : Number,
         pay_price : Number,
+        sku_type : Number,
         refund_price : Number,
         type : String,
         channel : String,
@@ -310,6 +316,15 @@ function connect(app) {
         share_num : Number,
         open_num : Number,
         buy_num : Number
+      });
+	  models.verAnalysis = db.define("tbl_rt_useranalysis_version",{
+        id : {type: 'number', key: true},
+        date: Date,
+        day_type: Number,
+        type: String,
+        ver: String,
+        channel: String,
+        users : Number
       });
       next();
     }

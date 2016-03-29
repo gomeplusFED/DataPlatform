@@ -1,8 +1,7 @@
-var express = require('express');
-var router = express.Router();
-var mysql = require('../models/mysql');
-var config = require('../libs/config');
-var api = require('./api');
+var express = require('express'),
+    router = express.Router(),
+    config = require('../libs/controllers'),
+    renderApi = require("./renderApi");
 
 //var model = mysql.init({
 //  username: 'datapltfm_user',
@@ -13,25 +12,21 @@ var api = require('./api');
 module.exports = [];
 
 function addRouter(path) {
-  module.exports.push(require(path)(router));
+    module.exports.push(require(path)(router));
 }
 
 addRouter('./combine');
 addRouter('./login');
-addRouter('./dataOverview');
 addRouter('./user');
-addRouter('./achievements');
 
-config.limit.forEach(function(options) {
-  Object.keys(options).forEach(function(key) {
-    if(options[key].display) {
-      if (options[key].path.length > 0) {
-        options[key].path.forEach(function(p) {
-          if (p.serverConfig) {
-            module.exports.push(new api(router, p.serverConfig));
-          }
-        });
-      }
-    }
-  });
-});
+for(var key of config.limit) {
+    Object.keys(key).forEach((data) => {
+        if(key[data].display) {
+            if(key[data].path.length > 0) {
+                for(var k of key[data].path) {
+                    module.exports.push(new renderApi(router, k));
+                }
+            }
+        }
+    });
+}

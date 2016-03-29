@@ -5,10 +5,6 @@
       "href" : "/analysis/verAnalysis"
     },
     {
-      "name" : "新增账号",
-      "href" : "/analysis/verAnalysisAccount"
-    },
-    {
       "name" : "活跃用户",
       "href" : "/analysis/verAnalysisActive"
     },
