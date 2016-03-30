@@ -11,8 +11,8 @@ var config = require('./config');
 var routers = require('./routers');
 var bodyParser = require('body-parser');
 var flash = require('flashify');
-var app = express();
 var mysql = require('./models/mysql');
+var app = express();
 
 Object.keys(config).forEach(function(key) {
     app.locals[key] = config[key];
@@ -72,9 +72,9 @@ app.use(function() {
     }
 });
 
-app.use("/dataOverview", (req, res, next) => {
-    res.render("table");
-});
+//app.use("/dataOverview", (req, res, next) => {
+//    res.render("table");
+//});
 
 app.get('/viewtest', (req, res, next) => {
     res.render('main/index.html')
