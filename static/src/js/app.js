@@ -1,6 +1,9 @@
 'use strict';
 var Vue = require('Vue');
 var $ = require('jQuery');
+window.jQuery = $;
+window.$ = $;
+
 
 var dom = require('./dom/index.js');
 

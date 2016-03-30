@@ -31,8 +31,8 @@ var webpackConfig = {
             pwd + '/src/js/lib/jquery.min.js',
             pwd + '/src/js/lib/bootstrap.min.js',
             pwd + '/src/js/lib/metisMenu.min.js',
-            pwd + '/src/js/lib/bootstrap-datetimepicker.min.js',
-            pwd + '/src/js/lib/bootstrap-datetimepicker.zh-CN.js'
+            pwd + '/src/js/lib/moment.min.js',
+            pwd + '/src/js/lib/datePicker.min.js',
         ]
     },
     output: {
