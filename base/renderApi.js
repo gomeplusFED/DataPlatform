@@ -12,7 +12,7 @@ function renderApi(Router, options){
         //路由
         router : "",
         //跳转页面
-        view : "",
+        view : "main",
         //下拉框表
         modelName : "Configure",
         //页面标题
@@ -80,7 +80,7 @@ renderApi.prototype = {
         })
     },
     _renderData(res, types) {
-        res.json({
+        res.render(this.view, {
             pageTitle : this.pageTitle,
             drop_down_default_data : types,
             defaultData : this.defaultData
