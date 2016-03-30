@@ -3,6 +3,6 @@
         "name": "DataPalatform",
         "script": "app.js",
         "watch": true,
-        "ignore_watch": ["node_modules", ".git", "publics", "views"]
+        "ignore_watch": ["node_modules", ".git", "static", "views"]
     }]
 }

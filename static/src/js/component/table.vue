@@ -1,5 +1,5 @@
 <template>
-    <div :id="'table_'+index" class="table" v-show="data.type.indexOf('table') !== -1">
+    <div :id="'table_'+index" class="table" v-show="currentData.type.indexOf('table') !== -1">
         <a class="excel_export" :href="data.query_api+'_excel'" v-show="data.excel_export">导出</a>
         <table class="table table-striped table-bordered table-hover dataTable no-footer" id="dataTables" role="grid" aria-describedby="dataTables_info">
             <thead>
@@ -26,7 +26,7 @@ var Table = Vue.extend({
             tableData: ''
         }
     },
-    props: ['index','data','argvs','loading'],
+    props: ['index','initData','argvs','loading','currentData'],
     methods: {
         fetchData: function(cb){
             $.ajax({
@@ -43,7 +43,7 @@ var Table = Vue.extend({
         'argvs': {
             handler: function(val){
                 // 参数改了 请求数据，进行渲染
-                if(this.data.type.indexOf('table') !== -1){
+                if(this.currentData.type.indexOf('table') !== -1){
                     this.$log('argvs');
                     // this.fetchData(function(data){
 

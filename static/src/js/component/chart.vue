@@ -20,10 +20,10 @@ var Chart = Vue.extend({
 
 		}
 	},
-	props: ['index','data','argvs','loading'],
+	props: ['index','initData','argvs','loading','currentData'],
 	methods: {
 		checkIsChart: function(){
-			return this.data.type.match(/chart/i) !== null;
+			return this.currentData.type.match(/chart/i) !== null;
 		},
 		fetchData: function(cb){
 		    $.ajax({

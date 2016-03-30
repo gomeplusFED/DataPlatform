@@ -63,7 +63,7 @@ routers.forEach(function(router) {
     app.use(router);
 });
 
-app.use(lactate.static(__dirname + '/publics'));
+app.use(lactate.static(__dirname + '/static'));
 
 app.use(function() {
     var args = arguments;
@@ -79,8 +79,125 @@ app.use("/dataOverview", (req, res, next) => {
     res.render("table");
 });
 
+
+// 测试
 app.get('/viewtest', (req, res, next) => {
     res.render('main/index.html')
+})
+app.get('/404', (req, res, next) => {
+    res.render('include/404')
+})
+app.get('/test_json1', (req, res) => {
+    res.send({
+        components: {
+            excel_export: true,
+            date_picker: {
+                show: true,
+                defaultData: 7
+            },
+            drop_down: {
+                platform: true,
+                channel: false,
+                version: false,
+                coupon: false,
+            },
+            level_select: {
+                show: true,
+                data: 'data'
+            },
+            filter_select: {
+                show: false,
+                type: 'btn/radio',
+                data: {
+                    title: '指标选择',
+                    groups: [{
+                        key: '',
+                        value: ''
+                    }, {
+                        key: '',
+                        value: ''
+                    }]
+                }
+            },
+            filter_select_level: {
+                show: true,
+                data: [{
+                    title: '',
+                    groups: [],
+                    cell: {
+                        title: '',
+                        key: '',
+                        groups: [{
+                            key: '',
+                            value: ''
+                        }, {
+                            key: '',
+                            value: ''
+                        }, {
+                            key: '',
+                            value: ''
+                        }],
+                    }
+                }]
+            }
+        }
+    })
+})
+app.get('/test_json2', (req, res) => {
+    res.send({
+        components: {
+            excel_export: true,
+            date_picker: {
+                show: true,
+                defaultData: 7
+            },
+            drop_down: {
+                platform: true,
+                channel: false,
+                version: true,
+                coupon: false,
+            },
+            level_select: {
+                show: true,
+                data: 'data'
+            },
+            filter_select: {
+                show: false,
+                type: 'btn/radio',
+                data: {
+                    title: '指标选择',
+                    groups: [{
+                        key: '',
+                        value: ''
+                    }, {
+                        key: '',
+                        value: ''
+                    }]
+                }
+            },
+            filter_select_level: {
+                show: true,
+                data: [{
+                    title: '',
+                    groups: [],
+                    cell: {
+                        title: '',
+                        key: '',
+                        groups: [{
+                            key: '',
+                            value: ''
+                        }, {
+                            key: '',
+                            value: ''
+                        }, {
+                            key: '',
+                            value: ''
+                        }],
+                    }
+                }]
+            }
+        }
+    })
 })
 
 //app.use((err, req, res, next) => {

@@ -1,48 +1,68 @@
-<%- include("./header.html") %>
+<%- include('../include/header.html',{
+    pageTitle: pageTitle
+}) %>
     <script type="text/javascript">
-    var defaultData = [{
-        type: 'table',
-        title: '数据概览',
-        query_api: '/marketingAnalysis/mod',
-        drop_down_default_data: {
-            plataform: [],
-            channel: [],
-            version: [],
-            coupon: []
+    var initData = {
+        "pageTitle": "测试",
+        "drop_down_default_data": {
+            "platform": ["H5", "android", "ios"],
+            "version": ["0.0.1", "ALL"],
+            "channel": [],
+            "coupon": ["商家优惠券", "平台优惠券"]
         },
-        components: {
-            excel_export: true,
-            date_picker: {
-                show: true,
-                defaultData: 7
-            },
-            date_type: {
-                show: true,
-                defaultData: [1, 2, 3]
-            },
-            drop_down: {
-                plataform: false,
-                channel: false,
-                version: false,
-                coupon: false,
-            },
-            btn_groups: {
-                position: '',
-                show: false,
+        "defaultData": [{
+            "type": "table",
+            "title": "test",
+            "query_api": "/test_json1"
+        },{
+            "type": "chart",
+            "title": "图",
+            "query_api": "/test_json2"
+        }]
+    }
+    </script>
+    <div id="page-wrapper" style="min-height: 1054px;">
+        <m-loading :loading.sync="loading"></m-loading>
+    </div>
+    <%- include('../include/footer.html') %>
+        <!--
+    components: {
+        excel_export: true,
+        date_picker: {
+            show: true,
+            defaultData: 7
+        },
+        drop_down: {
+            platform: false,
+            channel: false,
+            version: false,
+            coupon: false,
+        },
+        level_select: {
+            show: true,
+            data: 'data'
+        },
+        filter_select: {
+            show: false,
+            type: 'btn/radio',
+            data: {
+                title: '指标选择',
                 groups: [{
-                    name: '',
+                    key: '',
+                    value: ''
+                }, {
                     key: '',
                     value: ''
                 }]
-            },
-            level_select: {
-                show: true,
-                data: 'data'
-            },
-            filter_select_radio: {
-                show: false,
-                data: { // radio
-                    title: '指标选择',
+            }
+        },
+        filter_select_level: {
+            show: true,
+            data: [{
+                title: '',
+                groups: [],
+                cell: {
+                    title: '',
                     key: '',
                     groups: [{
                         key: '',
@@ -50,34 +70,14 @@
                     }, {
                         key: '',
                         value: ''
-                    }]
-                }
-            },
-            filter_select_level: {
-                show: true,
-                data: [{
-                    title: '',
-                    groups: [],
-                    cell: {
-                        title: '',
+                    }, {
                         key: '',
-                        groups: [{
-                            key: '',
-                            value: ''
-                        }, {
-                            key: '',
-                            value: ''
-                        }, {
-                            key: '',
-                            value: ''
-                        }],
-                    }
-                }]
-            }
+                        value: ''
+                    }],
+                }
+            }]
         }
-    }]
-    </script>
-    <div id="page-wrapper" style="min-height: 1054px;">
-        <m-loading :loading.sync="loading"></m-loading>
-    </div>
-    <%- include('./footer.html') %>
+    }
+
+
+    -->

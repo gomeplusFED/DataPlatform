@@ -67,7 +67,6 @@
        </div>
        <%- include('../include/pagination.html',{currentPage:currentPage,pageCount:pageCount,pageMax:pageMax,paginationMaxCount:paginationMaxCount,path:path})%>
          </div>
-         <!-- /.col-lg-12 -->
      </div>
  </div>
  <script>
@@ -78,10 +77,4 @@
   };
   var limitArray = <%-JSON.stringify(limit);%>;
  </script>
- <!-- /#page-wrapper -->
- <%- include('../include/footer.html',{
-      js:['/admin/js/mods/pagination.js',
-        '/admin/js/vendors/select2/dist/js/select2.full.min.js',
-        '/admin/js/conf/useSelect2.js'
-        ]
- }) %>
+ <%- include('../include/footer.html') %>

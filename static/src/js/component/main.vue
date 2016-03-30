@@ -3,18 +3,18 @@
 	<div class="col-lg-12">
 		<div class="panel panel-default">
 			<div class="panel-heading">
-				<strong>{{data.title}}</strong>
+				<strong>{{currentData.title}}</strong>
 				<div class="head_group_con">
-					<m-drop-down :index="index" :argvs.sync='argvs' :page-components-data="pageComponentsData" :component-type="'plataform'"></m-drop-down>
-					<m-drop-down :index="index" :argvs.sync='argvs' :page-components-data="pageComponentsData" :component-type="'channel'"></m-drop-down>
-					<m-drop-down :index="index" :argvs.sync='argvs' :page-components-data="pageComponentsData" :component-type="'version'"></m-drop-down>
-					<m-drop-down :index="index" :argvs.sync='argvs' :page-components-data="pageComponentsData" :component-type="'coupon'"></m-drop-down>
-					<m-date :index="index" :argvs.sync='argvs' :page-components-data="pageComponentsData"></m-date>
+					<m-drop-down :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'platform'" :argvs.sync='argvs'></m-drop-down>
+					<m-drop-down :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'channel'" :argvs.sync='argvs'></m-drop-down>
+					<m-drop-down :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'version'" :argvs.sync='argvs'></m-drop-down>
+					<m-drop-down :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'coupon'" :argvs.sync='argvs'></m-drop-down>
+					<!-- <m-date :index="index" :argvs.sync='argvs' :page-components-data="pageComponentsData"></m-date> -->
 				</div>
 			</div>
 			<div class="panel-body">
-				<m-table :index="index" :argvs='resultArgvs' :data="data" :loading.sync="loading"></m-table>
-				<m-chart :index="index" :argvs='resultArgvs' :data="data" :loading.sync="loading"></m-chart>
+				<m-table :index="index" :argvs='resultArgvs' :init-data="initData" :current-data="currentData" :loading.sync="loading"></m-table>
+				<m-chart :index="index" :argvs='resultArgvs' :init-data="initData" :current-data="currentData" :loading.sync="loading"></m-chart>
 			</div>
 		</div>
 	</div>
@@ -34,7 +34,6 @@ var $ = require('jQuery');
 
 var DatePicker = require('./datePicker.vue');
 var DropDown = require('./dropDown.vue');
-var DayType = require('./dayType.vue');
 var Table = require('./table.vue');
 var Chart = require('./chart.vue');
 
@@ -44,7 +43,6 @@ var Main = Vue.extend({
 	name: 'Main',
 	data: function(){
 		return {
-			pageComponentsData: '',
 			argvs: {
 				type: '',
 				channel: '',
@@ -54,10 +52,11 @@ var Main = Vue.extend({
 				endTime: '',
 				day_type: 1
 			},
+			pageComponentsData: null,
 			resultArgvs: ''
 		}
 	},
-	props: ['data','loading','index'],
+	props: ['initData','currentData','loading','index'],
 	components: {
 		'm-date': DatePicker,
 		'm-drop-down': DropDown,
@@ -65,7 +64,14 @@ var Main = Vue.extend({
 		'm-chart': Chart
 	},
 	created: function(){
-		this.pageComponentsData = this.data.components;
+		var _this = this;
+		$.ajax({
+			url: this.currentData.query_api,
+			type: 'get',
+			success: function(data){
+				_this.pageComponentsData = data.components;
+			}
+		})
 	},
 	methods: {
 

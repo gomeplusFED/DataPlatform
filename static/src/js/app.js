@@ -8,12 +8,14 @@ var dom = require('./dom/index.js');
 var initHtml = function(defaultData, cb) {
     var _currentHtml = '';
     defaultData.forEach(function(item, index) {
-        _currentHtml += '<m-main :data="defaultData[' + index + ']" :index="' + index + '" :loading.sync="loading"></m-main>\n';
+        _currentHtml += '<m-main :index="' + index + '" :init-data="initData" :current-data="initData.defaultData['+ index +']" :loading.sync="loading"></m-main>\n';
     })
     $('#page-wrapper').html($('#page-wrapper').html() + _currentHtml);
     cb && cb();
 }
-initHtml(window.defaultData);
+
+window.initData.defaultData === undefined ? window.initData.defaultData = [] : window.initData.defaultData = window.initData.defaultData;
+initHtml(window.initData.defaultData);
 
 var Loading = require('./component/loading.vue');
 var Main = require('./component/main.vue');
@@ -24,7 +26,7 @@ var app = new Vue({
     el: '#page-wrapper',
     data: {
         loading: false,
-        defaultData: window.defaultData,
+        initData: window.initData,
     },
     components: {
         'm-loading': Loading,

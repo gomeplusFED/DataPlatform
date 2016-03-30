@@ -1,7 +1,7 @@
 <template>
 <div class="loading_bg" v-show="loading" transition="fade">
 	<div class="loading_main all_center">
-		<img src="/main/dist/img/loading.png">
+		<img src="/dist/img/loading.png">
 		<span>加载中...</span>
 	</div>	
 </div>
