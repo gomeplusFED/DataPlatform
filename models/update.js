@@ -2,7 +2,7 @@
  * @author liuliang
  * @fileoverview 用户权限update
  */
-var utils = require('../libs/utils');
+var utils = require('../utils');
 module.exports.userLimitUpdate = function(params, func) {
 
   var model = params.model,

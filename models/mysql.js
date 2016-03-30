@@ -12,6 +12,7 @@ var mysql = db[config.db];
 function connect(app) {
   app.use(orm.express('mysql://' + mysql.username + ':' + mysql.pwd + '@' + mysql.host + '/' + mysql.database + '?timezone=CST', {
     define : function(db, models, next) {
+      db.settings.set('instance.cache', false);
       models.Users = db.define("tbl_dataplatform_nodejs_users", {
         id:{type: 'serial', key: true},
         username: String,

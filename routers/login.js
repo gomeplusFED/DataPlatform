@@ -4,7 +4,7 @@
  * @fileoverview 用户登陆控制器和权限校验
  */
 var ldap = require('ldapjs');
-var config = require('../libs/controllers');
+var config = require('../config');
 var lodash = require('lodash');
 
 var username = 'yunyingbaobiao';

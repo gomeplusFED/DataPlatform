@@ -7,16 +7,13 @@ var ejs = require('ejs');
 var express = require('express');
 var session = require('cookie-session');
 var lactate = require('lactate');
-var config = require('./libs/controllers');
+var config = require('./config');
 var routers = require('./routers');
 var bodyParser = require('body-parser');
 var flash = require('flashify');
-var app = express();
 var mysql = require('./models/mysql');
-var orm = require('orm');
+var app = express();
 
-
-orm.settings.set("connection.pool", true);
 Object.keys(config).forEach(function(key) {
     app.locals[key] = config[key];
 });
@@ -75,9 +72,9 @@ app.use(function() {
     }
 });
 
-app.use("/dataOverview", (req, res, next) => {
-    res.render("table");
-});
+//app.use("/dataOverview", (req, res, next) => {
+//    res.render("table");
+//});
 
 
 // 测试
