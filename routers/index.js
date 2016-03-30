@@ -1,6 +1,6 @@
 var express = require('express'),
     router = express.Router(),
-    config = require('../libs/controllers'),
+    config = require('../config'),
     renderApi = require("./renderApi");
 
 //var model = mysql.init({

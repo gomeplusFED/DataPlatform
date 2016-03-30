@@ -3,7 +3,7 @@
  * @date 20151128
  * @fileoverview 全站统一配置
  */
-var dataOverview = require("./dataOverview");
+var dataOverview = require("./controllers/dataOverview");
 
 module.exports = {
     siteName: '美信数据平台',

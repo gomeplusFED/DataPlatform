@@ -1,5 +1,5 @@
 var multistream = require('multistream');
-var utils = require('../libs/utils');
+var utils = require('../utils');
 var path = require('path');
 var fs = require('fs');
 

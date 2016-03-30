@@ -7,16 +7,13 @@ var ejs = require('ejs');
 var express = require('express');
 var session = require('cookie-session');
 var lactate = require('lactate');
-var config = require('./libs/controllers');
+var config = require('./config');
 var routers = require('./routers');
 var bodyParser = require('body-parser');
 var flash = require('flashify');
 var app = express();
 var mysql = require('./models/mysql');
-var orm = require('orm');
 
-
-orm.settings.set("connection.pool", true);
 Object.keys(config).forEach(function(key) {
     app.locals[key] = config[key];
 });
@@ -63,7 +60,7 @@ routers.forEach(function(router) {
     app.use(router);
 });
 
-app.use(lactate.static(__dirname + '/publics'));
+app.use(lactate.static(__dirname + '/static'));
 
 app.use(function() {
     var args = arguments;
