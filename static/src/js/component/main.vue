@@ -9,7 +9,7 @@
 					<m-drop-down :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'channel'" :argvs.sync='argvs'></m-drop-down>
 					<m-drop-down :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'version'" :argvs.sync='argvs'></m-drop-down>
 					<m-drop-down :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'coupon'" :argvs.sync='argvs'></m-drop-down>
-					<!-- <m-date :index="index" :argvs.sync='argvs' :page-components-data="pageComponentsData"></m-date> -->
+					<m-date :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'date_picker'" :argvs.sync='argvs' :page-components-data="pageComponentsData"></m-date>
 				</div>
 			</div>
 			<div class="panel-body">

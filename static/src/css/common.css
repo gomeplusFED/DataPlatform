@@ -16,4 +16,6 @@
 .fromRight-transition{transition: all ease 0.2s;-webkit-transition: all ease 0.2s;}
 .fromRight-enter,.fromRight-leave{transform: translateX(100%);-webkit-transform: translateX(100%);}
 
+/* 组件按钮组 */
+.btn-group{margin: 0 5px;}
 

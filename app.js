@@ -145,7 +145,7 @@ app.get('/test_json2', (req, res) => {
         components: {
             excel_export: true,
             date_picker: {
-                show: true,
+                show: false,
                 defaultData: 7
             },
             drop_down: {

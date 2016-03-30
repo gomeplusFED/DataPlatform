@@ -27,7 +27,7 @@ var webpackConfig = {
     entry: {
         DataPlatform: './src/js/app.js',
         vendor: [
-            pwd + '/src/js/lib/vue.min.js', 
+            pwd + '/src/js/lib/vue.min.js',
             pwd + '/src/js/lib/jquery.min.js',
             pwd + '/src/js/lib/bootstrap.min.js',
             pwd + '/src/js/lib/metisMenu.min.js',
@@ -51,9 +51,10 @@ var webpackConfig = {
     resolve: {
         extensions: ['', '.js', '.json', '.scss'],
         alias: {
-            'Vue': pwd + '/src/js/lib/vue.min.js', 
+            'Vue': pwd + '/src/js/lib/vue.min.js',
             'jQuery': pwd + '/src/js/lib/jquery.min.js',
-            '$':pwd + '/src/js/lib/jquery.min.js'
+            '$': pwd + '/src/js/lib/jquery.min.js',
+            'utils': pwd + '/src/js/utils/index.js'
         }
     },
 };
