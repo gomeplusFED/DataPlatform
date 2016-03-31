@@ -89,7 +89,7 @@ app.get('/test_json1', (req, res) => {
         components: {
             excel_export: true,
             date_picker: {
-                show: false,
+                show: true,
                 defaultData: 7
             },
             drop_down: {
@@ -102,35 +102,17 @@ app.get('/test_json1', (req, res) => {
                 show: true,
                 data: 'data'
             },
-            filter_select: {
-                show: false,
-                type: 'btn/radio',
-                data: {
-                    title: '',
-                    groups: []
-                }
-            },
-            filter_select_level: {
-                show: true,
-                data: [{
-                    title: '',
-                    groups: [],
-                    cell: {
-                        title: '',
-                        key: '',
-                        groups: [{
-                            key: '',
-                            value: ''
-                        }, {
-                            key: '',
-                            value: ''
-                        }, {
-                            key: '',
-                            value: ''
-                        }],
-                    }
+            filter_select: [{
+                title: '指标选择',
+                filter_key: 'filter1',
+                groups: [{
+                    key: 'filter_argv1',
+                    value: '指标1'
+                }, {
+                    key: 'filter_argv2',
+                    value: '指标2'
                 }]
-            }
+            }]
         }
     })
 })
@@ -152,41 +134,27 @@ app.get('/test_json2', (req, res) => {
                 show: true,
                 data: 'data'
             },
-            filter_select: {
-                show: true,
-                type: 'btn/radio',
-                data: {
-                    title: '指标选择',
-                    groups: [{
-                        key: 'filter_argv1',
-                        value: '指标1'
-                    }, {
-                        key: 'filter_argv2',
-                        value: '指标2'
-                    }]
-                }
-            },
-            filter_select_level: {
-                show: true,
-                data: [{
-                    title: '',
-                    groups: [],
-                    cell: {
-                        title: '',
-                        key: '',
-                        groups: [{
-                            key: '',
-                            value: ''
-                        }, {
-                            key: '',
-                            value: ''
-                        }, {
-                            key: '',
-                            value: ''
-                        }],
-                    }
+            filter_select: [{
+                title: '指标选择',
+                filter_key: 'filter1',
+                groups: [{
+                    key: 'filter_argv1',
+                    value: '指标1'
+                }, {
+                    key: 'filter_argv2',
+                    value: '指标2'
                 }]
-            }
+            }, {
+                title: '指标选择',
+                filter_key: 'filter2',
+                groups: [{
+                    key: 'filter_argv1',
+                    value: '指标1'
+                }, {
+                    key: 'filter_argv2',
+                    value: '指标2'
+                }]
+            }]
         }
     })
 })

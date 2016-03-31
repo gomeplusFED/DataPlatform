@@ -42,6 +42,7 @@ var Chart = Vue.extend({
 	            // 参数改了 请求数据，进行渲染
 	            if(this.checkIsChart()){
 		            this.$log('resultArgvs');
+		            // console.log(this.resultArgvs);
 		            // this.fetchData(function(data){
 
 		            // })
