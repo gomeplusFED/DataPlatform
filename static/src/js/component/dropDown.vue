@@ -5,7 +5,7 @@
 	    	<span class="caret caret_close"></span>
 	    </button>
 	    <ul class="dropdown-menu">
-	        <li v-for="item in initData['drop_down_default_data'][componentType]" @click="getArgv($event)"><a>{{item}}</a></li>
+	        <li v-for="item in initData['drop_down_default_data'][componentType]" @click="getArgv($event)" track-by="$index"><a>{{item}}</a></li>
 	    </ul>
 	</div>
 </template>

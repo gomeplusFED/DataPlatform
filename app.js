@@ -103,14 +103,93 @@ app.get('/test_json1', (req, res) => {
                 data: 'data'
             },
             filter_select: [{
-                title: '指标选择',
+                title: '',
                 filter_key: 'filter1',
                 groups: [{
-                    key: 'filter_argv1',
-                    value: '指标1'
+                    key: 'date',
+                    value: '日期'
                 }, {
-                    key: 'filter_argv2',
-                    value: '指标2'
+                    key: 'area',
+                    value: '地区'
+                }]
+            }, {
+                title: '',
+                filter_key: 'filter1',
+                groups: [{
+                    key: 'date',
+                    value: '日期'
+                }, {
+                    key: 'area',
+                    value: '地区'
+                }]
+            }]
+        }
+    })
+})
+app.get('/test_json1_json', (req, res) => {
+    res.send({
+        modelData: {
+            data: [{
+                "channel": "ALL",
+                "new_users": 3305,
+                "active_users": 16,
+                "start_up": 36,
+                "new_users_rate": "100%"
+            }],
+            code: 200,
+            rows: ["channel", "new_users", "active_users", "start_up", "new_users_rate"],
+            cols: [{
+                "caption": "渠道名",
+                "type": "string"
+            }, {
+                "caption": "新增用户",
+                "type": "number"
+            }, {
+                "caption": "活跃用户",
+                "type": "number"
+            }, {
+                "caption": "启动次数",
+                "type": "number"
+            }, {
+                "caption": "新增用户比",
+                "type": "string"
+            }]
+        },
+        components: {
+            excel_export: true,
+            date_picker: {
+                show: true,
+                defaultData: 7
+            },
+            drop_down: {
+                platform: true,
+                channel: false,
+                version: false,
+                coupon: false,
+            },
+            level_select: {
+                show: true,
+                data: 'data'
+            },
+            filter_select: [{
+                title: '',
+                filter_key: 'filter1',
+                groups: [{
+                    key: 'date',
+                    value: '日期'
+                }, {
+                    key: 'area',
+                    value: '地区'
+                }]
+            }, {
+                title: '',
+                filter_key: 'filter1',
+                groups: [{
+                    key: 'date',
+                    value: '日期'
+                }, {
+                    key: 'area',
+                    value: '地区'
                 }]
             }]
         }
@@ -119,7 +198,7 @@ app.get('/test_json1', (req, res) => {
 app.get('/test_json2', (req, res) => {
     res.send({
         components: {
-            excel_export: true,
+            excel_export: false,
             date_picker: {
                 show: false,
                 defaultData: 1

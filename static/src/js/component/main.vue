@@ -14,8 +14,8 @@
 			</div>
 			<div class="panel-body">
 				<m-filter-select :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'filter_select'" :argvs.sync='argvs'></m-filter-select>
-				<m-table :index="index" :result-argvs='resultArgvs' :init-data="initData" :current-data="currentData" :loading.sync="loading"></m-table>
-				<m-chart :index="index" :result-argvs='resultArgvs' :init-data="initData" :current-data="currentData" :loading.sync="loading"></m-chart>
+				<m-table :index="index" :result-argvs="resultArgvs" :init-data="initData" :page-components-data="pageComponentsData" :current-data="currentData" :loading.sync="loading"></m-table>
+				<m-chart :index="index" :result-argvs="resultArgvs" :init-data="initData" :page-components-data="pageComponentsData" :current-data="currentData" :loading.sync="loading"></m-chart>
 			</div>
 		</div>
 	</div>

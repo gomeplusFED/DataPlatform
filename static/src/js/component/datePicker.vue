@@ -56,7 +56,6 @@ var DateCom = Vue.extend({
                     ]
                 }
                 // 初始化需要发送参数
-
                 this.argvs.startTime = this.pageComponentsData[this.componentType].defaultData === 1 ? yesterday : last7Day;
                 this.argvs.endTime = yesterday;
 

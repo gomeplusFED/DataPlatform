@@ -33,6 +33,7 @@ var webpackConfig = {
             pwd + '/src/js/lib/metisMenu.min.js',
             pwd + '/src/js/lib/moment.min.js',
             pwd + '/src/js/lib/datePicker.min.js',
+            pwd + '/src/js/lib/jquery-table.min.js',
         ]
     },
     output: {

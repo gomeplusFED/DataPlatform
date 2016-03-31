@@ -2,7 +2,7 @@
 	<div class="filter_select" v-show="pageComponentsData[componentType].length > 0">
 		<div class="filter_group" :id="'filter_group_' + index + '_' + $index" v-for="item in pageComponentsData[componentType]" track-by="$index">
 			<div class="group">
-				<strong>{{item.title}}：</strong>
+				<strong>{{item.title}}{{item.title === '' ? '' : '：'}}</strong>
 				<div class="btn_group">
 					<button v-for="group in item.groups" @click="getArgv(item.filter_key,group.key,$event)" track-by="$index">{{group.value}}</button>
 				</div>	
@@ -13,7 +13,7 @@
 
 <style>
 
-.filter_select{font-size: 0;margin: 0 0 12px 0;}
+.filter_select{font-size: 0;margin: 0 0 12px 0;display: inline-block;}
 .filter_select .filter_group{display: inline-block;vertical-align: middle;margin-right: 25px;}
 .filter_select .filter_group .group{}
 .filter_select .filter_group .group strong{font-size: 12px;display: inline-block;vertical-align: middle;}
@@ -45,7 +45,7 @@ var FilterSelect = Vue.extend({
 	},
 	methods: {
 		getArgv: function(key,value,ev){
-			Vue.set(this.argvs, key, value); // 数据响应式
+			Vue.set(this.argvs, key, value);
 		}
 	},
 	watch: {
@@ -56,7 +56,6 @@ var FilterSelect = Vue.extend({
 				if(val === null || !this.pageComponentsData[this.componentType].length > 0){
 					return;
 				}
-				// 为所有的button绑定正确的点击事件
 				for(var i = 0;i < this.pageComponentsData[this.componentType].length;i++){
 					(function(filterIndex){
 						$('#filter_group_' + _this.index + '_' + filterIndex).find('button').bind('click',function(){

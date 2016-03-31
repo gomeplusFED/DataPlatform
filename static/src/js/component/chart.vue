@@ -20,16 +20,17 @@ var Chart = Vue.extend({
 
 		}
 	},
-	props: ['index','initData','resultArgvs','loading','currentData'],
+	props: ['index','initData','resultArgvs','loading','currentData','pageComponentsData'],
 	methods: {
 		checkIsChart: function(){
 			return this.currentData.type.match(/chart/i) !== null;
 		},
 		fetchData: function(cb){
+			var _this = this;
 		    $.ajax({
 		        url: data.query_api,
 		        type: 'get',
-		        data: this.argvs,
+		        data: _this.resultArgvs,
 		        success: function(data){
 		            cb && cb(data);
 		        }
@@ -42,7 +43,6 @@ var Chart = Vue.extend({
 	            // 参数改了 请求数据，进行渲染
 	            if(this.checkIsChart()){
 		            this.$log('resultArgvs');
-		            // console.log(this.resultArgvs);
 		            // this.fetchData(function(data){
 
 		            // })
