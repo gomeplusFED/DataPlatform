@@ -9,12 +9,13 @@
 					<m-drop-down :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'channel'" :argvs.sync='argvs'></m-drop-down>
 					<m-drop-down :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'version'" :argvs.sync='argvs'></m-drop-down>
 					<m-drop-down :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'coupon'" :argvs.sync='argvs'></m-drop-down>
-					<m-date :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'date_picker'" :argvs.sync='argvs' :page-components-data="pageComponentsData"></m-date>
+					<m-date :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'date_picker'" :argvs.sync='argvs'></m-date>
 				</div>
 			</div>
 			<div class="panel-body">
-				<m-table :index="index" :argvs='resultArgvs' :init-data="initData" :current-data="currentData" :loading.sync="loading"></m-table>
-				<m-chart :index="index" :argvs='resultArgvs' :init-data="initData" :current-data="currentData" :loading.sync="loading"></m-chart>
+				<m-filter-select :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'filter_select'" :argvs.sync='argvs'></m-filter-select>
+				<m-table :index="index" :result-argvs='resultArgvs' :init-data="initData" :current-data="currentData" :loading.sync="loading"></m-table>
+				<m-chart :index="index" :result-argvs='resultArgvs' :init-data="initData" :current-data="currentData" :loading.sync="loading"></m-chart>
 			</div>
 		</div>
 	</div>
@@ -34,8 +35,10 @@ var $ = require('jQuery');
 
 var DatePicker = require('./datePicker.vue');
 var DropDown = require('./dropDown.vue');
+var FilterSelect = require('./filterSelect.vue');
 var Table = require('./table.vue');
 var Chart = require('./chart.vue');
+
 
 var utils = require('../utils/index.js');
 
@@ -50,7 +53,7 @@ var Main = Vue.extend({
 				coupon_type: '',
 				startTime: '',
 				endTime: '',
-				day_type: 1
+				day_type: 1, // 摒弃的默认参数，默认1，不用更改
 			},
 			pageComponentsData: null,
 			resultArgvs: ''
@@ -60,6 +63,7 @@ var Main = Vue.extend({
 	components: {
 		'm-date': DatePicker,
 		'm-drop-down': DropDown,
+		'm-filter-select': FilterSelect,
 		'm-table': Table,
 		'm-chart': Chart
 	},

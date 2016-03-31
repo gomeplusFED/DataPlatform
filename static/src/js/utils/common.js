@@ -3,7 +3,7 @@
 var utils = {};
 
 
-utils.format = function(date, fmt) { //author: meizz 
+utils.formatDate = function(date, fmt) {
     var o = {
         "M+": date.getMonth() + 1, //月份 
         "d+": date.getDate(), //日 

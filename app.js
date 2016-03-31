@@ -89,7 +89,7 @@ app.get('/test_json1', (req, res) => {
         components: {
             excel_export: true,
             date_picker: {
-                show: true,
+                show: false,
                 defaultData: 7
             },
             drop_down: {
@@ -106,14 +106,8 @@ app.get('/test_json1', (req, res) => {
                 show: false,
                 type: 'btn/radio',
                 data: {
-                    title: '指标选择',
-                    groups: [{
-                        key: '',
-                        value: ''
-                    }, {
-                        key: '',
-                        value: ''
-                    }]
+                    title: '',
+                    groups: []
                 }
             },
             filter_select_level: {
@@ -146,7 +140,7 @@ app.get('/test_json2', (req, res) => {
             excel_export: true,
             date_picker: {
                 show: false,
-                defaultData: 7
+                defaultData: 1
             },
             drop_down: {
                 platform: true,
@@ -159,16 +153,16 @@ app.get('/test_json2', (req, res) => {
                 data: 'data'
             },
             filter_select: {
-                show: false,
+                show: true,
                 type: 'btn/radio',
                 data: {
                     title: '指标选择',
                     groups: [{
-                        key: '',
-                        value: ''
+                        key: 'filter_argv1',
+                        value: '指标1'
                     }, {
-                        key: '',
-                        value: ''
+                        key: 'filter_argv2',
+                        value: '指标2'
                     }]
                 }
             },

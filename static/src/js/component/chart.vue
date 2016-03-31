@@ -20,7 +20,7 @@ var Chart = Vue.extend({
 
 		}
 	},
-	props: ['index','initData','argvs','loading','currentData'],
+	props: ['index','initData','resultArgvs','loading','currentData'],
 	methods: {
 		checkIsChart: function(){
 			return this.currentData.type.match(/chart/i) !== null;
@@ -37,11 +37,11 @@ var Chart = Vue.extend({
 		}
 	},
 	watch: {
-	    'argvs': {
+	    'resultArgvs': {
 	        handler: function(val){
 	            // 参数改了 请求数据，进行渲染
 	            if(this.checkIsChart()){
-		            // this.$log('argvs');
+		            this.$log('resultArgvs');
 		            // this.fetchData(function(data){
 
 		            // })

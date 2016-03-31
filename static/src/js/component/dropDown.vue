@@ -49,12 +49,10 @@ var DropDown = Vue.extend({
 		'pageComponentsData': {
 			handler: function(val){
 				// 异步请求组件参数，watch到变化之后初始化，其它组件类似
-				if(val === null){
+				if(val === null || !this.pageComponentsData['drop_down'][this.componentType]){
 					return;
 				}
-				if(this.pageComponentsData['drop_down'][this.componentType]){
-					$('#dropDown_'+this.componentType+'_'+this.index).find('ul li').eq(0).trigger('click');
-				}
+				$('#dropDown_'+this.componentType+'_'+this.index).find('ul li').eq(0).trigger('click');
 				$('#dropDown_'+this.componentType+'_'+this.index).on('click',function(){
 					if($(this).find('.caret').hasClass('caret_close')){
 						$(this).find('.caret').removeClass('caret_close');

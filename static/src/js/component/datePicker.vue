@@ -27,32 +27,20 @@ var DateCom = Vue.extend({
 
     },
     methods: {
-        formatTime: function(value) {
-            if (!value) {
-                return {
-                    startTime: "",
-                    endTime: ""
-                };
-            }
-            var arr = value.split("~");
-            return {
-                startTime: arr[0].split("(")[1],
-                endTime: arr[1].split(")")[0]
-            };
-        }
+
     },
     watch: {
         'pageComponentsData': {
             handler: function(val){
+                var _this = this;
                 // 异步请求组件参数，watch到变化之后初始化，其它组件类似
-                if(val === null){
+                if(val === null || !this.pageComponentsData[this.componentType].show){
                     return;
                 }
-                var initRange = {};
-                var today = utils.format(new Date(),'yyyy-MM-dd');
-                var yesterday = utils.format(new Date(Date.now() - 24 * 60 * 60 * 1000),'yyyy-MM-dd');
-                var last7Day = utils.format(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),'yyyy-MM-dd');
-                var last30Day = utils.format(new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),'yyyy-MM-dd');
+                var today = utils.formatDate (new Date(),'yyyy-MM-dd');
+                var yesterday = utils.formatDate (new Date(Date.now() - 24 * 60 * 60 * 1000),'yyyy-MM-dd');
+                var last7Day = utils.formatDate (new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),'yyyy-MM-dd');
+                var last30Day = utils.formatDate (new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),'yyyy-MM-dd');
                 var range = {
                     "昨天": [
                         yesterday,
@@ -67,6 +55,11 @@ var DateCom = Vue.extend({
                         yesterday
                     ]
                 }
+                // 初始化需要发送参数
+
+                this.argvs.startTime = this.pageComponentsData[this.componentType].defaultData === 1 ? yesterday : last7Day;
+                this.argvs.endTime = yesterday;
+
                 $('#datePicker_' + this.index).find('input').daterangepicker({
                     "startDate": this.pageComponentsData[this.componentType].defaultData === 1 ? yesterday : last7Day,
                     "endDate": yesterday,
@@ -88,8 +81,8 @@ var DateCom = Vue.extend({
                         alert('请选择今天之前的时间！');
                         return;
                     }
-                    console.log(start.format('YYYY-MM-DD'));
-                    console.log(end.format('YYYY-MM-DD'));
+                    _this.argvs.startTime = start.format('YYYY-MM-DD');
+                    _this.argvs.endTime = end.format('YYYY-MM-DD');
                 });
             },
             deep: true

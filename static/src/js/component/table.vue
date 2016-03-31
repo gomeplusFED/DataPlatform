@@ -26,13 +26,13 @@ var Table = Vue.extend({
             tableData: ''
         }
     },
-    props: ['index','initData','argvs','loading','currentData'],
+    props: ['initData','currentData','loading','index','resultArgvs'],
     methods: {
         fetchData: function(cb){
             $.ajax({
-                url: data.query_api,
+                url: this.currentData.query_api,
                 type: 'get',
-                data: this.argvs,
+                data: this.resultArgvs,
                 success: function(data){
                     cb && cb(data);
                 }
@@ -40,11 +40,11 @@ var Table = Vue.extend({
         }
     },
     watch: {
-        'argvs': {
+        'resultArgvs': {
             handler: function(val){
                 // 参数改了 请求数据，进行渲染
                 if(this.currentData.type.indexOf('table') !== -1){
-                    // this.$log('argvs');
+                    this.$log('resultArgvs');
                     // this.fetchData(function(data){
 
                     // })
