@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "async": "^1.5.0",
+    "asyncawait": "^1.0.3",
     "body-parser": "1.14.1",
     "cookie-session": "2.0.0-alpha.1",
     "ejs": "2.3.4",

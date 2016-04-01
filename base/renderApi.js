@@ -80,7 +80,7 @@ renderApi.prototype = {
         })
     },
     _renderData(res, types) {
-        res.render(this.view, {
+        res.json({
             pageTitle : this.pageTitle,
             drop_down_default_data : types,
             defaultData : this.defaultData

@@ -13,6 +13,8 @@ var bodyParser = require('body-parser');
 var flash = require('flashify');
 var mysql = require('./models/mysql');
 var app = express();
+var async = require("asyncawait/async");
+var await = require("asyncawait/await");
 
 Object.keys(config).forEach(function(key) {
     app.locals[key] = config[key];
