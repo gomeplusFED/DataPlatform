@@ -18,6 +18,7 @@ function addRouter(path) {
 addRouter('./combine');
 addRouter('./login');
 addRouter('./user');
+addRouter('../controllers/manage/userAnalysis');
 
 for(var key of config.limit) {
     Object.keys(key).forEach((data) => {

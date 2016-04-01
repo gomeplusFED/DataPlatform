@@ -6,7 +6,7 @@
 
 module.exports = () => {
     return {
-        router : "/test",
+        router : "/11",
             pageTitle : "测试",
         defaultData : [{
             type : "table",

@@ -3,7 +3,8 @@
  * @date 20151128
  * @fileoverview 全站统一配置
  */
-var dataOverview = require("./controllers/dataOverview");
+var dataOverview = require("./controllers/path/dataOverview"),
+    usersAnalysis = require("./controllers/path/usersAnalysis");
 
 module.exports = {
     siteName: '美信数据平台',
@@ -25,16 +26,22 @@ module.exports = {
             display: false,
             className: "fa fa-user fa-fw",
             href: "#",
-            path: []
+            path: [{
+                name: "用户列表",
+                path: "/user/all",
+                display: true
+            }]
         }
     }, {
         "userAnalysis": {
             name: "用户分析",
             id: 3,
-            display: false,
+            display: true,
             className: "fa fa-bar-chart-o fa-fw",
             href: "#",
-            path: []
+            path: [
+                usersAnalysis.newUsers()
+            ]
         }
     }, {
         "retainedAnalysis": {

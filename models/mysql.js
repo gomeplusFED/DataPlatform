@@ -208,7 +208,7 @@ function connect(app) {
         day_type : Number,
         ver : String
       });
-	  models.MarketingFlow = db.define("tbl_rt_marketing_flow",{
+      models.MarketingFlow = db.define("tbl_rt_marketing_flow",{
         id : {type: 'number', key: true},
         date: Date,
         region: String,
@@ -222,7 +222,7 @@ function connect(app) {
         day_type: Number,
         h5_conversion_rate: Number
       });
-	  models.MarketingCoupon = db.define("tbl_rt_marketing_coupon",{
+      models.MarketingCoupon = db.define("tbl_rt_marketing_coupon",{
         id : {type: 'number', key: true},
         date: Date,
         type: String,
@@ -236,7 +236,7 @@ function connect(app) {
         used_coupon_amount: Number,
         day_type : Number
       });
-	  models.MarketingCouponDetails = db.define("tbl_rt_marketing_coupon_details",{
+      models.MarketingCouponDetails = db.define("tbl_rt_marketing_coupon_details",{
         id : {type: 'number', key: true},
         date: Date,
         coupon_id: String,
@@ -248,7 +248,7 @@ function connect(app) {
         coupon_status: String,
         day_type : Number
       });
-	  models.OverviewPage = db.define("tbl_rt_overview_page",{
+      models.OverviewPage = db.define("tbl_rt_overview_page",{
         id : {type: 'number', key: true},
         date: Date,
         page_type: Number,
@@ -265,7 +265,7 @@ function connect(app) {
         exit_page_cut : Number,
         exit_rate : Number
       });
-	  models.OverviewPlatf = db.define("tbl_rt_overview_platf",{
+      models.OverviewPlatf = db.define("tbl_rt_overview_platf",{
         id : {type: 'number', key: true},
         date: Date,
         region: String,
@@ -285,7 +285,7 @@ function connect(app) {
         day_type : Number,
         type : String
       });
-	  models.KpiValue = db.define("tbl_rt_kpi_value",{
+      models.KpiValue = db.define("tbl_rt_kpi_value",{
         id : {type: 'number', key: true},
         date: Date,
         kpi_type: Number,
@@ -294,7 +294,7 @@ function connect(app) {
         ver: String,
         channel: String
       });
-	  models.KeepLive = db.define("tbl_rt_keeplive_analysis_3",{
+      models.KeepLive = db.define("tbl_rt_keeplive_analysis_3",{
         id : {type: 'number', key: true},
         date: Date,
         day_type: Number,
@@ -307,7 +307,7 @@ function connect(app) {
         t14 : Number,
         t30 : Number
       });
-	  models.ShareAnalysis = db.define("tbl_rt_share_analysis_3",{
+      models.ShareAnalysis = db.define("tbl_rt_share_analysis_3",{
         id : {type: 'number', key: true},
         date: Date,
         day_type: Number,
@@ -318,7 +318,7 @@ function connect(app) {
         open_num : Number,
         buy_num : Number
       });
-	  models.verAnalysis = db.define("tbl_rt_useranalysis_version",{
+      models.verAnalysis = db.define("tbl_rt_useranalysis_version",{
         id : {type: 'number', key: true},
         date: Date,
         day_type: Number,

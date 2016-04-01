@@ -112,3 +112,15 @@ exports.updateSession = function(req,obj){
         }
     }
 };
+
+exports.uniq = function(dates){
+    var result = [],
+        hash = {};
+    for(var key of dates) {
+        if(!hash[key]) {
+            result.push(key);
+            hash[key] = true;
+        }
+    }
+    return result;
+};
