@@ -127,190 +127,188 @@ app.get('/test_json1', (req, res) => {
     })
 })
 app.get('/test_json1_json', (req, res) => {
-    setTimeout(function() {
-        res.send({
-            code: 200,
-            tableData: [{
-                data: [{
-                    "channel": "ALL",
-                    "new_users": 3305,
-                    "active_users": 16,
-                    "start_up": 36,
-                    "new_users_rate": "100%"
+    res.send({
+        code: 200,
+        tableData: [{
+            data: [{
+                "channel": "ALL",
+                "new_users": 3305,
+                "active_users": 16,
+                "start_up": 36,
+                "new_users_rate": "100%"
+            }, {
+                "channel": "ALL",
+                "new_users": 3305,
+                "active_users": 16,
+                "start_up": 36,
+                "new_users_rate": "100%"
+            }, {
+                "channel": "ALL",
+                "new_users": 3305,
+                "active_users": 16,
+                "start_up": 36,
+                "new_users_rate": "100%"
+            }, {
+                "channel": "ALL",
+                "new_users": 3305,
+                "active_users": 16,
+                "start_up": 36,
+                "new_users_rate": "100%"
+            }, {
+                "channel": "ALL",
+                "new_users": 3305,
+                "active_users": 16,
+                "start_up": 36,
+                "new_users_rate": "100%"
+            }, {
+                "channel": "ALL",
+                "new_users": 3305,
+                "active_users": 16,
+                "start_up": 36,
+                "new_users_rate": "100%"
+            }, {
+                "channel": "ALL",
+                "new_users": 3305,
+                "active_users": 16,
+                "start_up": 36,
+                "new_users_rate": "100%"
+            }, {
+                "channel": "ALL",
+                "new_users": 3305,
+                "active_users": 16,
+                "start_up": 36,
+                "new_users_rate": "100%"
+            }, {
+                "channel": "ALL",
+                "new_users": 3305,
+                "active_users": 16,
+                "start_up": 36,
+                "new_users_rate": "100%"
+            }, {
+                "channel": "ALL",
+                "new_users": 3305,
+                "active_users": 16,
+                "start_up": 36,
+                "new_users_rate": "100%"
+            }, {
+                "channel": "ALL",
+                "new_users": 3305,
+                "active_users": 16,
+                "start_up": 36,
+                "new_users_rate": "100%"
+            }, {
+                "channel": "ALL",
+                "new_users": 3305,
+                "active_users": 16,
+                "start_up": 36,
+                "new_users_rate": "100%"
+            }, {
+                "channel": "ALL",
+                "new_users": 3305,
+                "active_users": 16,
+                "start_up": 36,
+                "new_users_rate": "100%"
+            }, {
+                "channel": "ALL",
+                "new_users": 3305,
+                "active_users": 16,
+                "start_up": 36,
+                "new_users_rate": "100%"
+            }, {
+                "channel": "ALL",
+                "new_users": 3305,
+                "active_users": 16,
+                "start_up": 36,
+                "new_users_rate": "100%"
+            }, {
+                "channel": "ALL",
+                "new_users": 3305,
+                "active_users": 16,
+                "start_up": 36,
+                "new_users_rate": "100%"
+            }],
+            rows: ["channel", "new_users", "active_users", "start_up", "new_users_rate"],
+            cols: [{
+                "caption": "渠道名",
+                "type": "string"
+            }, {
+                "caption": "新增用户",
+                "type": "number"
+            }, {
+                "caption": "活跃用户",
+                "type": "number"
+            }, {
+                "caption": "启动次数",
+                "type": "number"
+            }, {
+                "caption": "新用户占比",
+                "type": "number"
+            }]
+        }, {
+            data: [{
+                "channel": "ALL",
+                "new_users": 3305,
+                "active_users": 16,
+                "start_up": 36,
+                "new_users_rate": "100%"
+            }],
+            rows: ["channel", "new_users", "active_users", "start_up", "new_users_rate"],
+            cols: [{
+                "caption": "渠道名",
+                "type": "string"
+            }, {
+                "caption": "新增用户",
+                "type": "number"
+            }, {
+                "caption": "活跃用户",
+                "type": "number"
+            }, {
+                "caption": "启动次数",
+                "type": "number"
+            }, {
+                "caption": "新增用户比",
+                "type": "string"
+            }]
+        }],
+        components: {
+            excel_export: true,
+            date_picker: {
+                show: true,
+                defaultData: 7
+            },
+            drop_down: {
+                platform: true,
+                channel: false,
+                version: false,
+                coupon: false,
+            },
+            level_select: {
+                show: true,
+                data: 'data'
+            },
+            filter_select: [{
+                title: '',
+                filter_key: 'filter1',
+                groups: [{
+                    key: 'date',
+                    value: '日期'
                 }, {
-                    "channel": "ALL",
-                    "new_users": 3305,
-                    "active_users": 16,
-                    "start_up": 36,
-                    "new_users_rate": "100%"
-                }, {
-                    "channel": "ALL",
-                    "new_users": 3305,
-                    "active_users": 16,
-                    "start_up": 36,
-                    "new_users_rate": "100%"
-                }, {
-                    "channel": "ALL",
-                    "new_users": 3305,
-                    "active_users": 16,
-                    "start_up": 36,
-                    "new_users_rate": "100%"
-                }, {
-                    "channel": "ALL",
-                    "new_users": 3305,
-                    "active_users": 16,
-                    "start_up": 36,
-                    "new_users_rate": "100%"
-                }, {
-                    "channel": "ALL",
-                    "new_users": 3305,
-                    "active_users": 16,
-                    "start_up": 36,
-                    "new_users_rate": "100%"
-                }, {
-                    "channel": "ALL",
-                    "new_users": 3305,
-                    "active_users": 16,
-                    "start_up": 36,
-                    "new_users_rate": "100%"
-                }, {
-                    "channel": "ALL",
-                    "new_users": 3305,
-                    "active_users": 16,
-                    "start_up": 36,
-                    "new_users_rate": "100%"
-                }, {
-                    "channel": "ALL",
-                    "new_users": 3305,
-                    "active_users": 16,
-                    "start_up": 36,
-                    "new_users_rate": "100%"
-                }, {
-                    "channel": "ALL",
-                    "new_users": 3305,
-                    "active_users": 16,
-                    "start_up": 36,
-                    "new_users_rate": "100%"
-                }, {
-                    "channel": "ALL",
-                    "new_users": 3305,
-                    "active_users": 16,
-                    "start_up": 36,
-                    "new_users_rate": "100%"
-                }, {
-                    "channel": "ALL",
-                    "new_users": 3305,
-                    "active_users": 16,
-                    "start_up": 36,
-                    "new_users_rate": "100%"
-                }, {
-                    "channel": "ALL",
-                    "new_users": 3305,
-                    "active_users": 16,
-                    "start_up": 36,
-                    "new_users_rate": "100%"
-                }, {
-                    "channel": "ALL",
-                    "new_users": 3305,
-                    "active_users": 16,
-                    "start_up": 36,
-                    "new_users_rate": "100%"
-                }, {
-                    "channel": "ALL",
-                    "new_users": 3305,
-                    "active_users": 16,
-                    "start_up": 36,
-                    "new_users_rate": "100%"
-                }, {
-                    "channel": "ALL",
-                    "new_users": 3305,
-                    "active_users": 16,
-                    "start_up": 36,
-                    "new_users_rate": "100%"
-                }],
-                rows: ["channel", "new_users", "active_users", "start_up", "new_users_rate"],
-                cols: [{
-                    "caption": "渠道名",
-                    "type": "string"
-                }, {
-                    "caption": "新增用户",
-                    "type": "number"
-                }, {
-                    "caption": "活跃用户",
-                    "type": "number"
-                }, {
-                    "caption": "启动次数",
-                    "type": "number"
-                }, {
-                    "caption": "新用户占比",
-                    "type": "number"
+                    key: 'area',
+                    value: '地区'
                 }]
             }, {
-                data: [{
-                    "channel": "ALL",
-                    "new_users": 3305,
-                    "active_users": 16,
-                    "start_up": 36,
-                    "new_users_rate": "100%"
-                }],
-                rows: ["channel", "new_users", "active_users", "start_up", "new_users_rate"],
-                cols: [{
-                    "caption": "渠道名",
-                    "type": "string"
+                title: '',
+                filter_key: 'filter1',
+                groups: [{
+                    key: 'date',
+                    value: '日期'
                 }, {
-                    "caption": "新增用户",
-                    "type": "number"
-                }, {
-                    "caption": "活跃用户",
-                    "type": "number"
-                }, {
-                    "caption": "启动次数",
-                    "type": "number"
-                }, {
-                    "caption": "新增用户比",
-                    "type": "string"
+                    key: 'area',
+                    value: '地区'
                 }]
-            }],
-            components: {
-                excel_export: true,
-                date_picker: {
-                    show: true,
-                    defaultData: 7
-                },
-                drop_down: {
-                    platform: true,
-                    channel: false,
-                    version: false,
-                    coupon: false,
-                },
-                level_select: {
-                    show: true,
-                    data: 'data'
-                },
-                filter_select: [{
-                    title: '',
-                    filter_key: 'filter1',
-                    groups: [{
-                        key: 'date',
-                        value: '日期'
-                    }, {
-                        key: 'area',
-                        value: '地区'
-                    }]
-                }, {
-                    title: '',
-                    filter_key: 'filter1',
-                    groups: [{
-                        key: 'date',
-                        value: '日期'
-                    }, {
-                        key: 'area',
-                        value: '地区'
-                    }]
-                }]
-            }
-        })
-    }, 1000);
+            }]
+        }
+    })
 
 })
 app.get('/test_json2', (req, res) => {
@@ -357,6 +355,38 @@ app.get('/test_json2', (req, res) => {
 })
 app.get('/test_json2_json', (req, res) => {
     res.send({
+        chartData: [{
+            type: 'line',
+            data: {
+                '2016-03-21': {
+                    pv: 1000,
+                    uv: 500
+                },
+                '2016-03-22': {
+                    pv: 2000,
+                    uv: 1000
+                },
+                '2016-03-23': {
+                    pv: 3000,
+                    uv: 1500
+                },
+                '2016-03-24': {
+                    pv: 4000,
+                    uv: 2000
+                },
+                '2016-03-25': {
+                    pv: 5000,
+                    uv: 2500
+                },
+            },
+            map: {
+                pv: '访问数',
+                uv: '访客数'
+            },
+            config: {
+                stack: false
+            }
+        }],
         components: {
             excel_export: false,
             date_picker: {

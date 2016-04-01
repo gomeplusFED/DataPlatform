@@ -18,10 +18,14 @@ var Table = Vue.extend({
     name: 'Table',
     data: function() {
         return {
+            initEd: false,
             tableData: [],
             tableExample: [],
             scrollTop: null
         }
+    },
+    created: function(){
+        this.initEd = true;
     },
     props: ['initData','currentData','loading','index','resultArgvs','pageComponentsData'],
     methods: {
@@ -75,7 +79,12 @@ var Table = Vue.extend({
                             eachTableData.data.length > 9 ? setConfig.paging = true : setConfig.paging = false;
                             var t = $('#table_' + _this.index).children().eq(tableIndex).DataTable(setConfig);
                         })
-                        _this.loading = false;
+                        // 所有组件加载完毕之后loading消失
+                        if(_this.loading === 1 || _this.initEd){
+                            _this.loading = false;
+                        }else{
+                            _this.loading = 1;
+                        }
                         // 重新生成表格页面会回到顶部，重置下
                         $(document).scrollTop(_this.scrollTop);
                     })

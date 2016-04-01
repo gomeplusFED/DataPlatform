@@ -34,6 +34,12 @@ var webpackConfig = {
             pwd + '/src/js/lib/moment.min.js',
             pwd + '/src/js/lib/datePicker.min.js',
             pwd + '/src/js/lib/jquery-table.min.js',
+            'echarts/lib/echarts',
+            'echarts/lib/chart/bar',
+            'echarts/lib/chart/line',
+            'echarts/lib/chart/pie',
+            'echarts/lib/component/legend',
+            'echarts/lib/component/tooltip'
         ]
     },
     output: {
