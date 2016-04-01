@@ -131,92 +131,8 @@ app.get('/test_json1', (req, res) => {
 app.get('/test_json1_json', (req, res) => {
     res.send({
         code: 200,
-        tableData: [{
+        modelData: [{
             data: [{
-                "channel": "ALL",
-                "new_users": 3305,
-                "active_users": 16,
-                "start_up": 36,
-                "new_users_rate": "100%"
-            }, {
-                "channel": "ALL",
-                "new_users": 3305,
-                "active_users": 16,
-                "start_up": 36,
-                "new_users_rate": "100%"
-            }, {
-                "channel": "ALL",
-                "new_users": 3305,
-                "active_users": 16,
-                "start_up": 36,
-                "new_users_rate": "100%"
-            }, {
-                "channel": "ALL",
-                "new_users": 3305,
-                "active_users": 16,
-                "start_up": 36,
-                "new_users_rate": "100%"
-            }, {
-                "channel": "ALL",
-                "new_users": 3305,
-                "active_users": 16,
-                "start_up": 36,
-                "new_users_rate": "100%"
-            }, {
-                "channel": "ALL",
-                "new_users": 3305,
-                "active_users": 16,
-                "start_up": 36,
-                "new_users_rate": "100%"
-            }, {
-                "channel": "ALL",
-                "new_users": 3305,
-                "active_users": 16,
-                "start_up": 36,
-                "new_users_rate": "100%"
-            }, {
-                "channel": "ALL",
-                "new_users": 3305,
-                "active_users": 16,
-                "start_up": 36,
-                "new_users_rate": "100%"
-            }, {
-                "channel": "ALL",
-                "new_users": 3305,
-                "active_users": 16,
-                "start_up": 36,
-                "new_users_rate": "100%"
-            }, {
-                "channel": "ALL",
-                "new_users": 3305,
-                "active_users": 16,
-                "start_up": 36,
-                "new_users_rate": "100%"
-            }, {
-                "channel": "ALL",
-                "new_users": 3305,
-                "active_users": 16,
-                "start_up": 36,
-                "new_users_rate": "100%"
-            }, {
-                "channel": "ALL",
-                "new_users": 3305,
-                "active_users": 16,
-                "start_up": 36,
-                "new_users_rate": "100%"
-            }, {
-                "channel": "ALL",
-                "new_users": 3305,
-                "active_users": 16,
-                "start_up": 36,
-                "new_users_rate": "100%"
-            }, {
-                "channel": "ALL",
-                "new_users": 3305,
-                "active_users": 16,
-                "start_up": 36,
-                "new_users_rate": "100%"
-            }, {
                 "channel": "ALL",
                 "new_users": 3305,
                 "active_users": 16,
@@ -357,7 +273,39 @@ app.get('/test_json2', (req, res) => {
 })
 app.get('/test_json2_json', (req, res) => {
     res.send({
-        chartData: [{
+        code: 200,
+        modelData: [{
+            type: 'pie',
+            data: {
+                '2016-03-21': {
+                    pv: 1000,
+                    uv: 500
+                },
+                '2016-03-22': {
+                    pv: 2000,
+                    uv: 1000
+                },
+                '2016-03-23': {
+                    pv: 3000,
+                    uv: 1500
+                },
+                '2016-03-24': {
+                    pv: 4000,
+                    uv: 2000
+                },
+                '2016-03-25': {
+                    pv: 5000,
+                    uv: 2500
+                },
+            },
+            map: {
+                pv: '访问数',
+                uv: '访客数'
+            },
+            config: {
+                stack: true // 是否堆叠
+            }
+        },{
             type: 'line',
             data: {
                 '2016-03-21': {
@@ -386,7 +334,7 @@ app.get('/test_json2_json', (req, res) => {
                 uv: '访客数'
             },
             config: {
-                stack: false
+                stack: false // 是否堆叠
             }
         }],
         components: {

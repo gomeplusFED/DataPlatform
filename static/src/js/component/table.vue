@@ -52,7 +52,7 @@ var Table = Vue.extend({
                     this.loading = true;
                     this.scrollTop = $(document).scrollTop(),
                     this.fetchData(function(data){
-                        _this.tableData = data.tableData;
+                        _this.tableData = data.modelData;
                         var htmlresult = '';
                         _this.tableData.forEach(function(item){
                             htmlresult += tableTpl;

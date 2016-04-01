@@ -1,6 +1,6 @@
 <template>
 	<div :id="'chart_'+index" class="chart" v-show="checkIsChart()">
-		<div class="chart_con" v-for="item in chartData" style="height: 400px;"></div>
+		<div class="chart_con" v-for="item in chartData" style="height: 400px;width: 100%;"></div>
 	</div>
 </template>
 
@@ -15,7 +15,7 @@ var $ = require('jQuery');
 
 var chartDataModel = {
 	tooltip: {
-        trigger: 'axis',
+        trigger: 'xAxis',
         axisPointer : {
 			type : 'shadow'
 		}
@@ -25,7 +25,7 @@ var chartDataModel = {
     },
     grid: {
         containLabel: true,
-        show: false,
+        show: true,
     },
     xAxis: { // X轴
         type: 'category',
@@ -90,13 +90,21 @@ var Chart = Vue.extend({
 				_currentObj.name = map[item];
 				_currentObj.data = [];
 				for(var dataItem in data){
-					_currentObj.data.push(data[dataItem][item]);
+					_currentObj.data.push({
+						value: data[dataItem][item],
+						name: dataItem
+					});
 				}
 				series.push(_currentObj);
 			}
 			options.legend.data = legend;
 			options.xAxis.data = xAxis;
 			options.series = series;
+			if(chartType === 'pie'){
+				delete options.xAxis;
+				delete options.yAxis;
+				delete options.grid;
+			}
 			return options;
 		}
 	},
@@ -109,7 +117,7 @@ var Chart = Vue.extend({
 		            var _this = this;
 		            _this.loading = true;
 		            this.fetchData(function(data){
-		            	_this.chartData = data.chartData;
+		            	_this.chartData = data.modelData;
 		            	_this.chartData.forEach(function(item,domIndex){
 		            		var chartOptions = _this.rinseData(item.type, item.data, item.map, item.config);
 		            		setTimeout(function(){
