@@ -8,7 +8,7 @@
 </template>
 
 <style>
-.loading_bg{position: absolute;width: 100%;height: 100%;left: 0;top: 0;background: rgba(0,0,0,0.6);z-index: 999;}
+.loading_bg{position: fixed;width: 100%;height: 100%;left: 0;top: 0;background: rgba(0,0,0,0.6);z-index: 9999;}
 .loading_bg .loading_main{width: 120px;height: 120px;background: #fff;border-radius: 12px;}
 .loading_bg .loading_main img{display: block;margin: 32px auto 0;-webkit-animation:loading linear both 1s infinite;}
 .loading_bg .loading_main span{display: block;width: 100%;text-align: center;font-size: 14px;line-height: 24px;margin-top: 5px;}

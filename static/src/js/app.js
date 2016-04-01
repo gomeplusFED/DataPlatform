@@ -22,19 +22,15 @@ initHtml(window.initData.defaultData);
 
 var Loading = require('./component/loading.vue');
 var Main = require('./component/main.vue');
-var Table = require('./component/table.vue');
-var Chart = require('./component/chart.vue');
 
 var app = new Vue({
     el: '#page-wrapper',
     data: {
-        loading: false,
+        loading: true,
         initData: window.initData,
     },
     components: {
         'm-loading': Loading,
-        'm-main': Main,
-        'm-table': Table,
-        'm-chart': Chart
+        'm-main': Main
     }
 });

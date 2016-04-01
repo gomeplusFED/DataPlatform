@@ -114,21 +114,138 @@ app.get('/test_json1', (req, res) => {
                 }]
             }, {
                 title: '',
-                filter_key: 'filter1',
+                filter_key: 'filter2',
                 groups: [{
                     key: 'date',
-                    value: '日期'
+                    value: '一页'
                 }, {
                     key: 'area',
-                    value: '地区'
+                    value: '两页'
                 }]
             }]
         }
     })
 })
 app.get('/test_json1_json', (req, res) => {
+    setTimeout(function(){
     res.send({
-        modelData: {
+        code: 200,
+        tableData: [{
+            data: [{
+                "channel": "ALL",
+                "new_users": 3305,
+                "active_users": 16,
+                "start_up": 36,
+                "new_users_rate": "100%"
+            }, {
+                "channel": "ALL",
+                "new_users": 3305,
+                "active_users": 16,
+                "start_up": 36,
+                "new_users_rate": "100%"
+            },{
+                "channel": "ALL",
+                "new_users": 3305,
+                "active_users": 16,
+                "start_up": 36,
+                "new_users_rate": "100%"
+            }, {
+                "channel": "ALL",
+                "new_users": 3305,
+                "active_users": 16,
+                "start_up": 36,
+                "new_users_rate": "100%"
+            },{
+                "channel": "ALL",
+                "new_users": 3305,
+                "active_users": 16,
+                "start_up": 36,
+                "new_users_rate": "100%"
+            }, {
+                "channel": "ALL",
+                "new_users": 3305,
+                "active_users": 16,
+                "start_up": 36,
+                "new_users_rate": "100%"
+            },{
+                "channel": "ALL",
+                "new_users": 3305,
+                "active_users": 16,
+                "start_up": 36,
+                "new_users_rate": "100%"
+            }, {
+                "channel": "ALL",
+                "new_users": 3305,
+                "active_users": 16,
+                "start_up": 36,
+                "new_users_rate": "100%"
+            },{
+                "channel": "ALL",
+                "new_users": 3305,
+                "active_users": 16,
+                "start_up": 36,
+                "new_users_rate": "100%"
+            }, {
+                "channel": "ALL",
+                "new_users": 3305,
+                "active_users": 16,
+                "start_up": 36,
+                "new_users_rate": "100%"
+            },{
+                "channel": "ALL",
+                "new_users": 3305,
+                "active_users": 16,
+                "start_up": 36,
+                "new_users_rate": "100%"
+            }, {
+                "channel": "ALL",
+                "new_users": 3305,
+                "active_users": 16,
+                "start_up": 36,
+                "new_users_rate": "100%"
+            },{
+                "channel": "ALL",
+                "new_users": 3305,
+                "active_users": 16,
+                "start_up": 36,
+                "new_users_rate": "100%"
+            }, {
+                "channel": "ALL",
+                "new_users": 3305,
+                "active_users": 16,
+                "start_up": 36,
+                "new_users_rate": "100%"
+            },{
+                "channel": "ALL",
+                "new_users": 3305,
+                "active_users": 16,
+                "start_up": 36,
+                "new_users_rate": "100%"
+            }, {
+                "channel": "ALL",
+                "new_users": 3305,
+                "active_users": 16,
+                "start_up": 36,
+                "new_users_rate": "100%"
+            }, ],
+            rows: ["channel", "new_users", "active_users", "start_up", "new_users_rate"],
+            cols: [{
+                "caption": "渠道名",
+                "type": "string"
+            }, {
+                "caption": "新增用户",
+                "type": "number"
+            }, {
+                "caption": "活跃用户",
+                "type": "number"
+            }, {
+                "caption": "启动次数",
+                "type": "number"
+            }, {
+                "caption": "新用户占比",
+                "type": "number"
+            }]
+        }, {
             data: [{
                 "channel": "ALL",
                 "new_users": 3305,
@@ -136,7 +253,6 @@ app.get('/test_json1_json', (req, res) => {
                 "start_up": 36,
                 "new_users_rate": "100%"
             }],
-            code: 200,
             rows: ["channel", "new_users", "active_users", "start_up", "new_users_rate"],
             cols: [{
                 "caption": "渠道名",
@@ -154,7 +270,7 @@ app.get('/test_json1_json', (req, res) => {
                 "caption": "新增用户比",
                 "type": "string"
             }]
-        },
+        }],
         components: {
             excel_export: true,
             date_picker: {
@@ -194,6 +310,8 @@ app.get('/test_json1_json', (req, res) => {
             }]
         }
     })
+    }, 1000);
+
 })
 app.get('/test_json2', (req, res) => {
     res.send({
