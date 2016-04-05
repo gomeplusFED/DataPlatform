@@ -25,8 +25,8 @@ exports.checkFilePath = function(filepath, typelist, src) {
     var param = filepath.match(/(^.+\?\?)|(.+$)/gi);
     if (param) {
         var types = new RegExp("[^\,]+\.(" + typelist + ")(?=$|[\,|\?])", "gi");
-        if (param[1]) {
-            var matched = path.normalize(param[1]).match(types);
+        if (param[0]) {
+            var matched = path.normalize(param[0]).match(types);
             if (matched) {
                 matched = exports.unique(matched);
                 var extension = matched.map(function(element) {
@@ -34,11 +34,11 @@ exports.checkFilePath = function(filepath, typelist, src) {
                     return element.match(typeReg)[2];
                 });
                 if (exports.unique(extension).length === 1) {
-                    var root = param[0].slice(0, -2),
-                        files = matched.map(function(element) {
+                    var root = param[0].slice(0, -2);
+                    var files = matched.map(function(element) {
                             var t = element.indexOf('?');
                             element = (t !== -1) ? element.slice(0, t) : element;
-                            return path.join(src + root + element);
+                            return path.join(src + element);
                         });
                     return files;
                 }

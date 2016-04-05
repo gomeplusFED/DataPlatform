@@ -7,7 +7,6 @@ module.exports = function(Router) {
     Router.get('*', function(req, res, next) {
         //https://github.com/xiaojue/node-combo/blob/master/lib/tools.js#L26
         var files = utils.checkFilePath(req.url, 'js|css', path.join(__dirname, '../static'));
-        console.log();
         //concat，不存在的文件不录入
         if (files) {
             var streams = files.map(function(file) {
