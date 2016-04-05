@@ -7,8 +7,8 @@
 module.exports = {
     platformOrder() {
         return {
-            router : "/platformRebate/platformOrder",
-            pageTitle : "平台订单返利汇总",
+            path : "/platformRebate/platformOrder",
+            name : "平台订单返利汇总",
             defaultData : [{
                 type : "table",
                 title : "返利订单总览",
