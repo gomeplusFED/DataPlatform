@@ -53,7 +53,6 @@ require('echarts/lib/component/tooltip'); // 工具箱
 require('echarts/lib/chart/bar'); // 柱状图
 require('echarts/lib/chart/line'); // 折线图
 require('echarts/lib/chart/pie'); // 饼图
-require('echarts/lib/loading/default.js');
 
 var Chart = Vue.extend({
 	name: 'Chart',
