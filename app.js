@@ -15,7 +15,9 @@ var mysql = require('./models/mysql');
 var app = express();
 var async = require("asyncawait/async");
 var await = require("asyncawait/await");
+var orm = require('orm');
 
+orm.settings.set("connection.pool",true);
 Object.keys(config).forEach(function(key) {
     app.locals[key] = config[key];
 });
