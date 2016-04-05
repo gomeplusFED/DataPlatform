@@ -88,9 +88,7 @@ var Chart = Vue.extend({
 		    })
 		},
 		rinseData: function(chartType,data,map,config){
-			if(Object.keys(data).length === 0){
-				// return null;
-			}
+			
 			var options = $.extend(true, {}, chartDataModel);
 			var xAxis = [];
 			var series = [];
@@ -123,6 +121,10 @@ var Chart = Vue.extend({
 				delete options.yAxis;
 				delete options.grid;
 			}
+			// if(Object.keys(data).length === 0){
+			// 	options.series[0].data = [];
+			// }
+			console.log(options);
 			return options;
 		}
 	},
@@ -140,15 +142,7 @@ var Chart = Vue.extend({
 		            		var chartOptions = _this.rinseData(item.type, item.data, item.map, item.config);
 		            		setTimeout(function(){
 		            			var Chart = echarts.init($('#chart_' + _this.index).find('.chart_con').eq(domIndex)[0]);
-		            			Chart.showLoading({
-		            			    text : effect[effectIndex],
-		            			    effect : effect[effectIndex],
-		            			    textStyle : {
-		            			        fontSize : 20
-		            			    }
-		            			});
 		            			Chart.setOption(chartOptions);
-		            			Chart.hideLoading();
 		            		}, 1);
 		            		if(_this.loading === 1 || _this.initEd){
 		            		    _this.loading = false;

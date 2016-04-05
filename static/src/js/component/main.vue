@@ -85,13 +85,11 @@ var Main = Vue.extend({
 	},
 	methods: {
 		downLoadExcel: function(){
-			var _this = this;
-			$.ajax({
-				url: _this.currentData.query_api+'_excel',
-				type: 'get',
-				data: _this.resultArgvs,
-				success: function(data){}
-			})
+			var resultQuery = [];
+			for(var item in this.resultArgvs){
+				resultQuery.push(item + '=' + this.resultArgvs[item]);
+			}
+			window.open(this.currentData.query_api + '_excel?' +  resultQuery.join('&'));
 		}
 	},
 	watch: {
