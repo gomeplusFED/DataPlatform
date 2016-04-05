@@ -14,6 +14,19 @@ var Vue = require('Vue');
 var $ = require('jQuery');
 
 var chartDataModel = {
+	noDataLoadingOption: {
+		text: '暂无数据',
+		effect:'bubble',
+		effectOption : {
+			effect: {
+				n: 0
+			}
+		},
+		textStyle: {
+			fontSize: 32,
+			fontWeight: 'bold'
+		}
+	},
 	tooltip: {
         trigger: 'xAxis',
         axisPointer : {
@@ -40,11 +53,12 @@ var chartDataModel = {
 
 // echart 主模块，npm安装
 var echarts = require('echarts/lib/echarts');
-require('echarts/lib/component/legend');
-require('echarts/lib/component/tooltip'); //
+require('echarts/lib/component/legend'); // 图例
+require('echarts/lib/component/tooltip'); // 工具箱
 require('echarts/lib/chart/bar'); // 柱状图
 require('echarts/lib/chart/line'); // 折线图
 require('echarts/lib/chart/pie'); // 饼图
+require('echarts/lib/loading/default.js');
 
 var Chart = Vue.extend({
 	name: 'Chart',
@@ -74,8 +88,8 @@ var Chart = Vue.extend({
 		    })
 		},
 		rinseData: function(chartType,data,map,config){
-			if(!Object.keys(data).data.length){
-				return null;
+			if(Object.keys(data).length === 0){
+				// return null;
 			}
 			var options = $.extend(true, {}, chartDataModel);
 			var xAxis = [];
@@ -126,7 +140,15 @@ var Chart = Vue.extend({
 		            		var chartOptions = _this.rinseData(item.type, item.data, item.map, item.config);
 		            		setTimeout(function(){
 		            			var Chart = echarts.init($('#chart_' + _this.index).find('.chart_con').eq(domIndex)[0]);
+		            			Chart.showLoading({
+		            			    text : effect[effectIndex],
+		            			    effect : effect[effectIndex],
+		            			    textStyle : {
+		            			        fontSize : 20
+		            			    }
+		            			});
 		            			Chart.setOption(chartOptions);
+		            			Chart.hideLoading();
 		            		}, 1);
 		            		if(_this.loading === 1 || _this.initEd){
 		            		    _this.loading = false;

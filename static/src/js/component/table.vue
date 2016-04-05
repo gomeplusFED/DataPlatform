@@ -1,15 +1,9 @@
 <template>
-    <a class="excel_export" :href="currentData.query_api+'_excel'" v-show="pageComponentsData.excel_export">导出</a>
-    <div :id="'table_'+index" class="table_con table-responsive" v-show="currentData.type.indexOf('table') !== -1"></div>
+    <div :id="'table_'+index" class="table_con table-responsive" v-show="currentData.type.indexOf('table') !== -1"></div>    
 </template>
 <style>
 .table_con{}
 .table_con td,.table_con th{max-width: 200px;min-width: 120px;word-break:break-all;word-wrap:break-word;white-space: pre-wrap;}
-.excel_export{float: right;display: inline-block;vertical-align: middle;border: 1px solid #cacaca;color: #333;background: #fff;font-size: 12px;border-radius: 2px;outline: none;padding: 4px 12px;}
-.excel_export:hover{background: #f5f5f5;text-decoration: none;}
-.excel_export:active{background: #3389d4;color: #fff;text-decoration: none;}
-.excel_export:focus{text-decoration: none;}
-.excel_export:visited{text-decoration: none;}
 </style>
 <script>
 var Vue = require('Vue');

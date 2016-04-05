@@ -39,7 +39,8 @@ var webpackConfig = {
             'echarts/lib/chart/line',
             'echarts/lib/chart/pie',
             'echarts/lib/component/legend',
-            'echarts/lib/component/tooltip'
+            'echarts/lib/component/tooltip',
+            'echarts/lib/loading/default.js'
         ]
     },
     output: {

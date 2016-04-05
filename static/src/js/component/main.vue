@@ -10,6 +10,7 @@
 					<m-drop-down :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'version'" :argvs.sync='argvs'></m-drop-down>
 					<m-drop-down :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'coupon'" :argvs.sync='argvs'></m-drop-down>
 					<m-date :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'date_picker'" :argvs.sync='argvs'></m-date>
+					<div class="excel_export clearfix" @click="downLoadExcel()" v-show="pageComponentsData.excel_export">导出</div>
 				</div>
 			</div>
 			<div class="panel-body">
@@ -26,6 +27,11 @@
 .panel-heading{position: relative;line-height: 32px;}
 .head_group_con{position: absolute;top: 50%;transform: translateY(-50%);-webkit-transform: translateY(-50%);right: 5px;font-size: 0;z-index: 9;}
 .head_group_con .head_group{display: inline-block;vertical-align: middle;font-size: 14px;margin: 0 5px;}
+.excel_export{border: 1px solid #cacaca;color: #333;background: #fff;font-size: 12px;border-radius: 2px;outline: none;padding: 0 12px;display: inline-block;vertical-align: middle;cursor: pointer;}
+.excel_export:hover{background: #f5f5f5;text-decoration: none;}
+.excel_export:active{background: #3389d4;color: #fff;text-decoration: none;}
+.excel_export:focus{text-decoration: none;}
+.excel_export:visited{text-decoration: none;}
 </style>
 
 <script>
@@ -70,7 +76,7 @@ var Main = Vue.extend({
 	created: function(){
 		var _this = this;
 		$.ajax({
-			url: this.currentData.query_api + '_json',
+			url: _this.currentData.query_api + '_json',
 			type: 'get',
 			success: function(data){
 				_this.pageComponentsData = data.components;
@@ -78,7 +84,15 @@ var Main = Vue.extend({
 		})
 	},
 	methods: {
-
+		downLoadExcel: function(){
+			var _this = this;
+			$.ajax({
+				url: _this.currentData.query_api+'_excel',
+				type: 'get',
+				data: _this.resultArgvs,
+				success: function(data){}
+			})
+		}
 	},
 	watch: {
 		'argvs': {
