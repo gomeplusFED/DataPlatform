@@ -18,8 +18,7 @@ module.exports = {
             display: true,
             className: "fa fa-dashboard fa-fw",
             href: "/dataOverview",
-            path: [],
-            routers: [dataOverview()]
+            path: [dataOverview()],
         }
     }, {
         "userManagement": {
@@ -33,7 +32,6 @@ module.exports = {
                 path: "/user/all",
                 display: true
             }],
-            routers: []
         }
     }, {
         "userAnalysis": {
