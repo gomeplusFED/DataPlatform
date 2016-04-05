@@ -7,7 +7,8 @@
 module.exports = () => {
     return {
         path: "/dataOverview",
-        pageTitle: "测试",
+        name: "测试",
+        display : true,
         defaultData: [{
             type: "table",
             title: "test",
