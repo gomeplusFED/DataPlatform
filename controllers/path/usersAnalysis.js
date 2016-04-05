@@ -7,8 +7,9 @@
 module.exports = {
     newUsers() {
         return {
-            router : "/userAnalysis/newUsers",
-            pageTitle : "用户分析",
+            path : "/userAnalysis/newUsers",
+            name : "新增用户",
+            display : true,
             defaultData : [{
                 type : "chart",
                 title : "新增用户趋势",

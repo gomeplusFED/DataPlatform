@@ -9,7 +9,7 @@ var api = require("../../base/api"),
 module.exports = (Router) => {
     Router = new api(Router,{
         router : "/userAnalysis/newUsersOne",
-        modelName : "NewAccount",
+        modelName : ["NewAccount"],
         excel_export : false,
         platform : true,
         filter(data, filter_key) {
