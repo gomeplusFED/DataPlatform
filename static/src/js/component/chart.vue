@@ -101,6 +101,7 @@ var Chart = Vue.extend({
 			options.xAxis.data = xAxis;
 			options.series = series;
 			if(chartType === 'pie'){
+				options.legend.data = xAxis;
 				delete options.xAxis;
 				delete options.yAxis;
 				delete options.grid;
