@@ -6,7 +6,7 @@
 
 module.exports = () => {
     return {
-        router: "/dataOverview",
+        path: "/dataOverview",
         pageTitle: "测试",
         defaultData: [{
             type: "table",

@@ -74,6 +74,9 @@ var Chart = Vue.extend({
 		    })
 		},
 		rinseData: function(chartType,data,map,config){
+			if(!Object.keys(data).data.length){
+				return null;
+			}
 			var options = $.extend(true, {}, chartDataModel);
 			var xAxis = [];
 			var series = [];
