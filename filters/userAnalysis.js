@@ -11,6 +11,7 @@ module.exports = {
         var type = "line",
             source = data.data,
             newData = {},
+            data = [],
             map = {
                 new_users : "新增用户",
                 new_account : "新增账户"
@@ -29,10 +30,14 @@ module.exports = {
             }
             newData[date] = obj;
         }
-        return {
+        data.push({
             type : type,
             data : newData,
-            map : map
-        };
+            map : map,
+            config: {
+                stack: false
+            }
+        });
+        return data;
     }
 };
