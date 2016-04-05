@@ -1,11 +1,19 @@
 <template>
 	<div :id="'chart_'+index" class="chart" v-show="checkIsChart()">
-		<div class="chart_con" v-for="item in chartData" style="height: 400px;width: 100%;"></div>
+		<div class="chart_con" v-for="item in chartData" style="height: 400px;width: 100%;">
+			<div class="nodata all_center">
+				<img src="/dist/img/nodata.png">
+				<span>暂无数据</span>
+			</div>
+		</div>
 	</div>
 </template>
 
 <style>
-	
+.chart_con {background: #fff;}
+.chart_con .nodata{text-align: center;}
+.chart_con .nodata img{display: block;width: 100px;}
+.chart_con .nodata span{display: block;position: absolute;font-size: 14px;color: #000;width: 100%;text-align: center;}
 </style>
 
 <script>
@@ -14,19 +22,6 @@ var Vue = require('Vue');
 var $ = require('jQuery');
 
 var chartDataModel = {
-	noDataLoadingOption: {
-		text: '暂无数据',
-		effect:'bubble',
-		effectOption : {
-			effect: {
-				n: 0
-			}
-		},
-		textStyle: {
-			fontSize: 32,
-			fontWeight: 'bold'
-		}
-	},
 	tooltip: {
         trigger: 'xAxis',
         axisPointer : {
@@ -88,7 +83,6 @@ var Chart = Vue.extend({
 		    })
 		},
 		rinseData: function(chartType,data,map,config){
-			
 			var options = $.extend(true, {}, chartDataModel);
 			var xAxis = [];
 			var series = [];
@@ -121,10 +115,6 @@ var Chart = Vue.extend({
 				delete options.yAxis;
 				delete options.grid;
 			}
-			// if(Object.keys(data).length === 0){
-			// 	options.series[0].data = [];
-			// }
-			console.log(options);
 			return options;
 		}
 	},
@@ -141,8 +131,10 @@ var Chart = Vue.extend({
 		            	_this.chartData.forEach(function(item,domIndex){
 		            		var chartOptions = _this.rinseData(item.type, item.data, item.map, item.config);
 		            		setTimeout(function(){
-		            			var Chart = echarts.init($('#chart_' + _this.index).find('.chart_con').eq(domIndex)[0]);
-		            			Chart.setOption(chartOptions);
+		            			if(chartOptions.series[0].data.length){
+		            				var Chart = echarts.init($('#chart_' + _this.index).find('.chart_con').eq(domIndex)[0]);
+		            				Chart.setOption(chartOptions);
+		            			}
 		            		}, 1);
 		            		if(_this.loading === 1 || _this.initEd){
 		            		    _this.loading = false;
