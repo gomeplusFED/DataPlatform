@@ -105,6 +105,12 @@ gulp.task('img', function() {
         .pipe(gulp.dest('./dist/img/'))
 })
 
+gulp.task('font', function() {
+    return gulp
+        .src('./src/fonts/*')
+        .pipe(gulp.dest('./dist/fonts/'))
+})
+
 gulp.task('watch', function() {
     webpackConfig.watch = argv.env != 'pro';
     gulp.watch('./src/js/*', ['js']);
@@ -113,5 +119,5 @@ gulp.task('watch', function() {
 })
 
 gulp.task('default', ['clean'], function() {
-    gulp.start(['js', 'css', 'img']);
+    gulp.start(['js', 'css', 'img','font']);
 });

@@ -70,7 +70,7 @@ var Main = Vue.extend({
 	created: function(){
 		var _this = this;
 		$.ajax({
-			url: this.currentData.query_api,
+			url: this.currentData.query_api + '_json',
 			type: 'get',
 			success: function(data){
 				_this.pageComponentsData = data.components;
