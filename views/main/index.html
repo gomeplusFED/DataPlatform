@@ -3,22 +3,9 @@
 }) %>
     <script type="text/javascript">
     var initData = {
-        "pageTitle": "测试",
-        "drop_down_default_data": {
-            "platform": ["H5", "android", "ios"],
-            "version": ["0.0.1", "ALL"],
-            "channel": [],
-            "coupon": ["商家优惠券", "平台优惠券"]
-        },
-        "defaultData": [{
-            "type": "chart",
-            "title": "图",
-            "query_api": "/test_json2"
-        },{
-            "type": "table",
-            "title": "表",
-            "query_api": "/test_json1"
-        }]
+        "pageTitle": <%- JSON.stringify(pageTitle) %>,
+        "drop_down_default_data": <%- JSON.stringify(drop_down_default_data) %>,
+        "defaultData": <%- JSON.stringify(defaultData) %>
     }
     </script>
     <div id="page-wrapper" style="min-height: 1054px;">

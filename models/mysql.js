@@ -327,6 +327,21 @@ function connect(app) {
         channel: String,
         users : Number
       });
+      models.Rebate = db.define("tbl_rt_rebate ",{
+        id : {type: 'number', key: true},
+        date: Date,
+        day_type: Number,
+        type: String,
+        ver: String,
+        channel: String,
+        new_account : Number,
+        new_users : Number,
+        total_users : Number,
+        active_account : Number,
+        active_users : Number,
+        start_up : Number,
+        startup_per : Number
+      });
       next();
     }
   }))

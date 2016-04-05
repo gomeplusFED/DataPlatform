@@ -12,11 +12,7 @@ module.exports = {
             defaultData : [{
                 type : "chart",
                 title : "新增用户趋势",
-                query_api : "/userAnalysis/newUsers"
-            }, {
-                type : "table",
-                title : "新增用户明细",
-                query_api : "/userAnalysis/newUsers"
+                query_api : "/userAnalysis/newUsersOne"
             }]
         }
     }
