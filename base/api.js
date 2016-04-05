@@ -103,14 +103,16 @@ api.prototype = {
     _sendData(type, req, res, next) {
         var query = req.query,
             params = {};
-        if (query.startTime || query.endTime) {
+        if(!query.startTime && !query.endTime) {
             params = this.default;
+        } else {
+            if((this._checkDate(query.startTime, "startTime参数出错", next)
+                && this._checkDate(query.endTime, "endTime参数出错", next))) {
+                params.date = orm.between(new Date(query.startTime + " 00:00:00"), new Date(query.endTime + " 23:59:59"));
+            }
         }
-        if (this._checkDate(query.startTime, "startTime参数出错", next) && this._checkDate(query.endTime, "endTime参数出错", next)) {
-            params.date = orm.between(new Date(query.startTime + " 00:00:00"), new Date(query.endTime + " 23:59:59"));
-            this.filter_key = query.filter_key;
-            this._getCache(type, res, req, query, next, params);
-        }
+        this.filter_key = query.filter_key;
+        this._getCache(type, res, req, query, next, params);
     },
     _checkDate(option, errorMassage, next) {
         if (!validator.isDate(option)) {
@@ -209,13 +211,16 @@ api.prototype = {
     _checkQuery(query, data, next, params) {
         var errObj = {},
             err = [];
-        for (var key of this.defaultRender) {
-            if (this[key.key]) {
-                errObj[key.key] = false;
-                for (var k of data[key.key]) {
-                    if (query[key.key] === k) {
-                        params[key.value] = query[key.key];
-                        errObj[key.key] = true;
+        for(var key of this.defaultRender) {
+            if(this[key.key]) {
+                if(!query[key.value]) {
+                    query[key.value] = params[key.value];
+                }
+                errObj[key.value] = false;
+                for(var k of data[key.key]) {
+                    if(query[key.value] === k) {
+                        params[key.value] = query[key.value];
+                        errObj[key.value] = true;
                     }
                 }
             }

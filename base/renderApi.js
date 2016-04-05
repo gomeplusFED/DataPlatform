@@ -10,13 +10,13 @@ var utils = require("../utils"),
 function renderApi(Router, options) {
     var defaultOption = utils.mixin({
         //路由
-        router: "",
+        path : "",
         //跳转页面
         view: "main",
         //下拉框表
         modelName: "Configure",
         //页面标题
-        pageTitle: "",
+        name : "",
         //下拉框初始化，在页面中的属性名
         defaultRender: [{
             key: "platform",
@@ -79,13 +79,13 @@ renderApi.prototype = {
     },
     _renderData(res, types) {
         res.render(this.view, {
-            pageTitle: this.pageTitle,
-            drop_down_default_data: types,
-            defaultData: this.defaultData
+            pageTitle : this.name,
+            drop_down_default_data : types,
+            defaultData : this.defaultData
         });
     },
     setRouter(Router) {
-        Router.get(this.router, this._sendData.bind(this));
+        Router.get(this.path, this._sendData.bind(this));
         return Router;
     }
 };
