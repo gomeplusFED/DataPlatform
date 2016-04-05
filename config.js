@@ -4,7 +4,8 @@
  * @fileoverview 全站统一配置
  */
 var dataOverview = require("./controllers/path/dataOverview"),
-    usersAnalysis = require("./controllers/path/usersAnalysis");
+    usersAnalysis = require("./controllers/path/usersAnalysis"),
+    platformRebate = require("./controllers/path/platformRebate");
 
 module.exports = {
     siteName: '美信数据平台',

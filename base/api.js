@@ -6,6 +6,8 @@
 var utils = require("../utils"),
     cache = require("../utils/cache"),
     cacheName = "Configure",
+    excelExport = require('../utils/excelExport'),
+    nodeExcel = require('excel-export'),
     validator = require('validator'),
     async = require("asyncawait/async"),
     await = require("asyncawait/await"),
@@ -17,11 +19,18 @@ function api(Router, options) {
         //路由
         router : "",
         //数据库
-        modelName : "",
+        modelName : [],
         //行
         rows : [],
         //列
         cols : [],
+        //初始化数据
+        default : {
+            type : "H5",
+            ver : "1.0.0",
+            channel : "百度",
+            day_type : 1
+        },
         //是否显示平台
         platform : false,
         //是否显示渠道
@@ -80,6 +89,7 @@ function api(Router, options) {
 
     utils.mixin(this, defaultOption);
 
+    this.setDefaultOptionDate(Router);
     this.setRouter(Router);
 
     return Router;
@@ -87,16 +97,24 @@ function api(Router, options) {
 
 api.prototype = {
     constructor: api,
-    _sendData: function(type, req, res, next) {
-        var query = req.query;
+    setDefaultOptionDate() {
+        var now = new Date();
+        var date = new Date(now.getTime() - 7 * 24 * 60 * 1000);
+        var startTime = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+        var endTime = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate();
+        this.default.date = orm.between(new Date(startTime + ' 00:00:00'), new Date(endTime + ' 23:59:59'));
+    },
+    _sendData(type, req, res, next) {
+        var query = req.query,
+            params = {};
+        if(query.startTime || query.endTime) {
+            params = this.default;
+        }
         if(this._checkDate(query.startTime, "startTime参数出错", next)
             && this._checkDate(query.endTime, "endTime参数出错", next)) {
-            query.date = orm.between(new Date(query.startTime + " 00:00:00"), new Date(query.endTime + " 23:59:59"));
-            this.filter_key = query.filter_key ? query.filter_key : '';
-            delete query.startTime;
-            delete query.endTime;
-            delete query.filter_key;
-            this._getCache(type, res, req, query, next);
+            params.date = orm.between(new Date(query.startTime + " 00:00:00"), new Date(query.endTime + " 23:59:59"));
+            this.filter_key = query.filter_key;
+            this._getCache(type, res, req, query, next,params);
         }
     },
     _checkDate(option, errorMassage, next) {
@@ -106,12 +124,12 @@ api.prototype = {
         }
         return true;
     },
-    _getCache(type, res, req, query, next) {
+    _getCache(type, res, req, query, next, params) {
         cache.cacheGet(cacheName, (err, cacheData) => {
             if(!err) {
                 if(cacheData) {
-                    if(this._checkQuery(query, cacheData, next)) {
-                        this._findData(type, res, req, query, next);
+                    if(this._checkQuery(query, cacheData, next, params)) {
+                        this._findData(type, res, req, params, next);
                     }
                 } else {
                     cacheData = {};
@@ -127,8 +145,8 @@ api.prototype = {
                                 }
                             }
                         }
-                        if(this._checkQuery(query, cacheData, next)) {
-                            this._setCache(type, req, res, query, cacheData, next);
+                        if(this._checkQuery(query, cacheData, next, params)) {
+                            this._setCache(type, req, res, params, cacheData, next);
                         }
                     })();
                 }
@@ -139,20 +157,24 @@ api.prototype = {
     },
     _findData(type, res, req, query, next) {
         async (() => {
-            var data = await (this._findDatabase(req, this.modelName, query).catch((err) => {
-                next(err);
-            }));
             var sendData = {
-                code : 200,
-                data : data,
                 rows : this.rows,
                 cols : this.cols
             };
+            sendData.data = await (this._findDatabase(req, this.modelName[0], query).catch((err) => {
+                next(err);
+            }));
+            if(this.modelName[1]) {
+                sendData.orderData = await (this._findDatabase(req, this.modelName[0], query).catch((err) => {
+                    next(err);
+                }));
+            }
             if(this.filter) {
                 sendData = this.filter(sendData, this.filter_key);
             }
             if(type !== "excel") {
                 res[type]({
+                    code : 200,
                     modelData : sendData,
                     components : {
                         excel_export : this.excel_export,
@@ -172,20 +194,24 @@ api.prototype = {
                     }
                 });
             } else {
-
+                var conf = excelExport.analysisExcel(sendData.cols, sendData.rows, sendData.data),
+                    result = nodeExcel.execute(conf);
+                res.setHeader('Content-Type', 'application/vnd.openxmlformats');
+                res.setHeader("Content-Disposition", "attachment; filename=" + "Report.xlsx");
+                res.end(result, 'binary');
             }
         })();
     },
-    _setCache(type, req, res, query, data, next) {
+    _setCache(type, req, res, params, data, next) {
         cache.cacheSet(cacheName, data, cacheTime, (err, success) => {
             if(!err && success) {
-                this._findData(type, res, req, query, next);
+                this._findData(type, res, req, params, next);
             } else {
                 next(err);
             }
         });
     },
-    _checkQuery(query, data, next) {
+    _checkQuery(query, data, next, params) {
         var errObj = {},
             err = [];
         for(var key of this.defaultRender) {
@@ -193,6 +219,7 @@ api.prototype = {
                 errObj[key.key] = false;
                 for(var k of data[key.key]) {
                     if(query[key.key] === k) {
+                        params[key.value] = query[key.key];
                         errObj[key.key] = true;
                     }
                 }
@@ -220,7 +247,7 @@ api.prototype = {
             })
         });
     }),
-    setRouter: function(Router) {
+    setRouter(Router) {
         Router.get(this.router + '_json', this._sendData.bind(this, 'json'));
         Router.get(this.router + '_jsonp', this._sendData.bind(this, 'jsonp'));
         if(this.excel_export) {
