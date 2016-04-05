@@ -9,7 +9,7 @@ var dataOverview = require("./controllers/path/dataOverview"),
 
 module.exports = {
     siteName: '美信数据平台',
-    pageTitle:'',
+    pageTitle: '',
     js: [],
     limit: [{
         "dataOverview": {
@@ -17,8 +17,9 @@ module.exports = {
             id: 2,
             display: true,
             className: "fa fa-dashboard fa-fw",
-            href: "#",
-            path: [dataOverview()]
+            href: "/dataOverview",
+            path: [],
+            routers: [dataOverview()]
         }
     }, {
         "userManagement": {
@@ -31,7 +32,8 @@ module.exports = {
                 name: "用户列表",
                 path: "/user/all",
                 display: true
-            }]
+            }],
+            routers: []
         }
     }, {
         "userAnalysis": {
@@ -48,25 +50,29 @@ module.exports = {
         "retainedAnalysis": {
             name: "留存分析",
             id: 4,
-            display: false,
+            display: true,
             className: "fa fa-th-list fa-fw",
-            href: "/retainedAnalysis",
+            href: "#",
             path: []
         }
     }, {
         "channelAnalysis": {
             name: "渠道分析",
             id: 5,
-            display: false,
+            display: true,
             className: "fa  fa-laptop fa-fw",
             href: "#",
-            path: []
+            path: [{
+                name: "用户列表",
+                path: "/user/all",
+                display: true
+            }]
         }
-    },{
+    }, {
         "useAnalysis": {
             name: "使用分析",
             id: 6,
-            display: false,
+            display: true,
             className: "fa fa-th fa-fw",
             href: "#",
             path: []
@@ -75,7 +81,7 @@ module.exports = {
         "terminal": {
             name: "终端属性",
             id: 8,
-            display: false,
+            display: true,
             className: "fa fa-tablet fa-fw",
             href: "#",
             path: []
@@ -84,7 +90,7 @@ module.exports = {
         "share": {
             name: "分享数据",
             id: 9,
-            display: false,
+            display: true,
             className: "fa fa-external-link fa-fw",
             href: "#",
             path: []

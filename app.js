@@ -35,7 +35,7 @@ app.set('view engine', 'html');
 app.use(bodyParser.urlencoded({
     extended: false
 }));
-//  
+
 //parse application/json 
 app.use(bodyParser.json());
 
@@ -74,17 +74,13 @@ app.use(function() {
     }
 });
 
-//app.use("/dataOverview", (req, res, next) => {
-//    res.render("table");
+//app.use((err, req, res, next) => {
+//  res.render('include/404');
 //});
-
 
 // 测试
 app.get('/viewtest', (req, res, next) => {
     res.render('main/index.html')
-})
-app.get('/404', (req, res, next) => {
-    res.render('include/404')
 })
 app.get('/test_json1', (req, res) => {
     res.send({
@@ -129,104 +125,107 @@ app.get('/test_json1', (req, res) => {
     })
 })
 app.get('/test_json1_json', (req, res) => {
-    res.send({
-        code: 200,
-        modelData: [{
-            data: [{
-                "channel": "ALL",
-                "new_users": 3305,
-                "active_users": 16,
-                "start_up": 36,
-                "new_users_rate": "100%"
-            }, {
-                "channel": "ALL",
-                "new_users": 3305,
-                "active_users": 16,
-                "start_up": 36,
-                "new_users_rate": "100%"
-            }],
-            rows: ["channel", "new_users", "active_users", "start_up", "new_users_rate"],
-            cols: [{
-                "caption": "渠道名",
-                "type": "string"
-            }, {
-                "caption": "新增用户",
-                "type": "number"
-            }, {
-                "caption": "活跃用户",
-                "type": "number"
-            }, {
-                "caption": "启动次数",
-                "type": "number"
-            }, {
-                "caption": "新用户占比",
-                "type": "number"
-            }]
-        }, {
-            data: [{
-                "channel": "ALL",
-                "new_users": 3305,
-                "active_users": 16,
-                "start_up": 36,
-                "new_users_rate": "100%"
-            }],
-            rows: ["channel", "new_users", "active_users", "start_up", "new_users_rate"],
-            cols: [{
-                "caption": "渠道名",
-                "type": "string"
-            }, {
-                "caption": "新增用户",
-                "type": "number"
-            }, {
-                "caption": "活跃用户",
-                "type": "number"
-            }, {
-                "caption": "启动次数",
-                "type": "number"
-            }, {
-                "caption": "新增用户比",
-                "type": "string"
-            }]
-        }],
-        components: {
-            excel_export: true,
-            date_picker: {
-                show: true,
-                defaultData: 7
-            },
-            drop_down: {
-                platform: true,
-                channel: false,
-                version: false,
-                coupon: false,
-            },
-            level_select: {
-                show: true,
-                data: 'data'
-            },
-            filter_select: [{
-                title: '',
-                filter_key: 'filter1',
-                groups: [{
-                    key: 'date',
-                    value: '日期'
+    setTimeout(function(){
+        res.send({
+            code: 200,
+            modelData: [{
+                data: [{
+                    "channel": "ALL",
+                    "new_users": 3305,
+                    "active_users": 16,
+                    "start_up": 36,
+                    "new_users_rate": "100%"
                 }, {
-                    key: 'area',
-                    value: '地区'
+                    "channel": "ALL",
+                    "new_users": 3305,
+                    "active_users": 16,
+                    "start_up": 36,
+                    "new_users_rate": "100%"
+                }],
+                rows: ["channel", "new_users", "active_users", "start_up", "new_users_rate"],
+                cols: [{
+                    "caption": "渠道名",
+                    "type": "string"
+                }, {
+                    "caption": "新增用户",
+                    "type": "number"
+                }, {
+                    "caption": "活跃用户",
+                    "type": "number"
+                }, {
+                    "caption": "启动次数",
+                    "type": "number"
+                }, {
+                    "caption": "新用户占比",
+                    "type": "number"
                 }]
             }, {
-                title: '',
-                filter_key: 'filter1',
-                groups: [{
-                    key: 'date',
-                    value: '日期'
+                data: [{
+                    "channel": "ALL",
+                    "new_users": 3305,
+                    "active_users": 16,
+                    "start_up": 36,
+                    "new_users_rate": "100%"
+                }],
+                rows: ["channel", "new_users", "active_users", "start_up", "new_users_rate"],
+                cols: [{
+                    "caption": "渠道名",
+                    "type": "string"
                 }, {
-                    key: 'area',
-                    value: '地区'
+                    "caption": "新增用户",
+                    "type": "number"
+                }, {
+                    "caption": "活跃用户",
+                    "type": "number"
+                }, {
+                    "caption": "启动次数",
+                    "type": "number"
+                }, {
+                    "caption": "新增用户比",
+                    "type": "string"
                 }]
-            }]
-        }
-    })
+            }],
+            components: {
+                excel_export: true,
+                date_picker: {
+                    show: true,
+                    defaultData: 7
+                },
+                drop_down: {
+                    platform: true,
+                    channel: false,
+                    version: false,
+                    coupon: false,
+                },
+                level_select: {
+                    show: true,
+                    data: 'data'
+                },
+                filter_select: [{
+                    title: '',
+                    filter_key: 'filter1',
+                    groups: [{
+                        key: 'date',
+                        value: '日期'
+                    }, {
+                        key: 'area',
+                        value: '地区'
+                    }]
+                }, {
+                    title: '',
+                    filter_key: 'filter1',
+                    groups: [{
+                        key: 'date',
+                        value: '日期'
+                    }, {
+                        key: 'area',
+                        value: '地区'
+                    }]
+                }]
+            }
+        })
+    }, 100);
+
 
 })
 app.get('/test_json2', (req, res) => {
@@ -378,8 +377,6 @@ app.get('/test_json2_json', (req, res) => {
     })
 })
 
-//app.use((err, req, res, next) => {
-//  res.render('include/404');
-//});
+
 
 app.listen(7879);

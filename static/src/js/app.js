@@ -8,7 +8,7 @@ window.$ = $;
 var dom = require('./dom/index.js');
 
 // 之后改为ejs渲染
-var _currentHtml = '<m-loading :loading.sync="loading"></m-loading>';
+var _currentHtml = '';
 var initHtml = function(defaultData, cb) {
     defaultData.forEach(function(item, index) {
         _currentHtml += '<m-main :index="' + index + '" :init-data="initData" :current-data="initData.defaultData['+ index +']" :loading.sync="loading"></m-main>\n';

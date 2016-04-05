@@ -17,74 +17,70 @@ var utils = require("../utils"),
 function api(Router, options) {
     var defaultOption = utils.mixin({
         //路由
-        router : "",
+        router: "",
         //数据库
-        modelName : [],
+        modelName: [],
         //行
-        rows : [],
+        rows: [],
         //列
-        cols : [],
+        cols: [],
         //初始化数据
-        default : {
-            type : "H5",
-            ver : "1.0.0",
-            channel : "百度",
-            day_type : 1
+        default: {
+            type: "H5",
+            ver: "1.0.0",
+            channel: "百度",
+            day_type: 1
         },
         //是否显示平台
-        platform : false,
+        platform: false,
         //是否显示渠道
-        channel : false,
+        channel: false,
         //是否显示版本
-        version : false,
+        version: false,
         //是否显示优惠券类型
-        coupon : false,
+        coupon: false,
         //是否显示导出按钮
-        excel_export : true,
+        excel_export: true,
         //是否显示时间
-        date_picker : true,
+        date_picker: true,
         //初始时间
-        date_picker_data : 7,
+        date_picker_data: 7,
         //按钮设置
-        btn_groups : {},
+        btn_groups: {},
         //联动菜单
-        level_select : {},
+        level_select: {},
         //单选
-        filter_select : {},
+        filter_select: {},
         //过滤数据
-        filter : null,
+        filter: null,
         //参数名对应字段名
-        defaultRender: [
-            {
-                key : "platform",
-                value : "type"
-            },{
-                key : "version",
-                value : "ver"
-            },{
-                key : "channel",
-                value : "channel"
-            },{
-                key : "coupon",
-                value : "coupon_type"
-            }
-        ],
+        defaultRender: [{
+            key: "platform",
+            value: "type"
+        }, {
+            key: "version",
+            value: "ver"
+        }, {
+            key: "channel",
+            value: "channel"
+        }, {
+            key: "coupon",
+            value: "coupon_type"
+        }],
         //下拉框初始化，在页面中的属性名
-        defaultCache: [
-            {
-                key : "platform",
-                value : "platform"
-            },{
-                key : "version",
-                value : "version"
-            },{
-                key : "channel",
-                value : "channel"
-            },{
-                key : "quan",
-                value : "coupon"
-            }
-        ]
+        defaultCache: [{
+            key: "platform",
+            value: "platform"
+        }, {
+            key: "version",
+            value: "version"
+        }, {
+            key: "channel",
+            value: "channel"
+        }, {
+            key: "quan",
+            value: "coupon"
+        }]
     }, options);
 
     utils.mixin(this, defaultOption);
@@ -107,14 +103,13 @@ api.prototype = {
     _sendData(type, req, res, next) {
         var query = req.query,
             params = {};
-        if(query.startTime || query.endTime) {
+        if (query.startTime || query.endTime) {
             params = this.default;
         }
-        if(this._checkDate(query.startTime, "startTime参数出错", next)
-            && this._checkDate(query.endTime, "endTime参数出错", next)) {
+        if (this._checkDate(query.startTime, "startTime参数出错", next) && this._checkDate(query.endTime, "endTime参数出错", next)) {
             params.date = orm.between(new Date(query.startTime + " 00:00:00"), new Date(query.endTime + " 23:59:59"));
             this.filter_key = query.filter_key;
-            this._getCache(type, res, req, query, next,params);
+            this._getCache(type, res, req, query, next, params);
         }
     },
     _checkDate(option, errorMassage, next) {
@@ -126,26 +121,26 @@ api.prototype = {
     },
     _getCache(type, res, req, query, next, params) {
         cache.cacheGet(cacheName, (err, cacheData) => {
-            if(!err) {
-                if(cacheData) {
-                    if(this._checkQuery(query, cacheData, next, params)) {
+            if (!err) {
+                if (cacheData) {
+                    if (this._checkQuery(query, cacheData, next, params)) {
                         this._findData(type, res, req, params, next);
                     }
                 } else {
                     cacheData = {};
-                    async (() => {
+                    async(() => {
                         var data = await (this._findDatabase(req, cacheName, {}).catch((err) => {
-                                next(err);
-                            }));
-                        for(var key of this.defaultCache) {
+                            next(err);
+                        }));
+                        for (var key of this.defaultCache) {
                             cacheData[key.value] = [];
-                            for(var k of data) {
-                                if(k.type === key.key) {
+                            for (var k of data) {
+                                if (k.type === key.key) {
                                     cacheData[key.value].push(k.name);
                                 }
                             }
                         }
-                        if(this._checkQuery(query, cacheData, next, params)) {
+                        if (this._checkQuery(query, cacheData, next, params)) {
                             this._setCache(type, req, res, params, cacheData, next);
                         }
                     })();
@@ -156,41 +151,41 @@ api.prototype = {
         });
     },
     _findData(type, res, req, query, next) {
-        async (() => {
+        async(() => {
             var sendData = {
-                rows : this.rows,
-                cols : this.cols
+                rows: this.rows,
+                cols: this.cols
             };
             sendData.data = await (this._findDatabase(req, this.modelName[0], query).catch((err) => {
                 next(err);
             }));
-            if(this.modelName[1]) {
+            if (this.modelName[1]) {
                 sendData.orderData = await (this._findDatabase(req, this.modelName[0], query).catch((err) => {
                     next(err);
                 }));
             }
-            if(this.filter) {
+            if (this.filter) {
                 sendData = this.filter(sendData, this.filter_key);
             }
-            if(type !== "excel") {
+            if (type !== "excel") {
                 res[type]({
-                    code : 200,
-                    modelData : sendData,
-                    components : {
-                        excel_export : this.excel_export,
-                        date_picker : {
-                            show : this.date_picker,
-                            defaultData : this.date_picker_data
+                    code: 200,
+                    modelData: sendData,
+                    components: {
+                        excel_export: this.excel_export,
+                        date_picker: {
+                            show: this.date_picker,
+                            defaultData: this.date_picker_data
                         },
-                        drop_down : {
+                        drop_down: {
                             platform: this.platform,
                             channel: this.channel,
                             version: this.version,
                             coupon: this.coupon
                         },
-                        btn_groups : this.btn_groups,
-                        level_select : this.level_select,
-                        filter_select : this.filter_select
+                        btn_groups: this.btn_groups,
+                        level_select: this.level_select,
+                        filter_select: this.filter_select
                     }
                 });
             } else {
@@ -204,7 +199,7 @@ api.prototype = {
     },
     _setCache(type, req, res, params, data, next) {
         cache.cacheSet(cacheName, data, cacheTime, (err, success) => {
-            if(!err && success) {
+            if (!err && success) {
                 this._findData(type, res, req, params, next);
             } else {
                 next(err);
@@ -214,11 +209,11 @@ api.prototype = {
     _checkQuery(query, data, next, params) {
         var errObj = {},
             err = [];
-        for(var key of this.defaultRender) {
-            if(this[key.key]) {
+        for (var key of this.defaultRender) {
+            if (this[key.key]) {
                 errObj[key.key] = false;
-                for(var k of data[key.key]) {
-                    if(query[key.key] === k) {
+                for (var k of data[key.key]) {
+                    if (query[key.key] === k) {
                         params[key.value] = query[key.key];
                         errObj[key.key] = true;
                     }
@@ -226,20 +221,20 @@ api.prototype = {
             }
         }
         Object.keys(errObj).forEach((key) => {
-            if(!errObj[key]) {
+            if (!errObj[key]) {
                 err.push(key);
             }
         });
-        if(err.length > 0) {
+        if (err.length > 0) {
             next(new Error(err.join("参数或者") + "参数出错"));
             return false;
         }
         return true;
     },
-    _findDatabase : async ((req, modelName, params) => {
+    _findDatabase: async((req, modelName, params) => {
         return new Promise((resolve, reject) => {
             req.models[modelName].find(params, (err, data) => {
-                if(err) {
+                if (err) {
                     reject(err);
                 } else {
                     resolve(data);
@@ -250,7 +245,7 @@ api.prototype = {
     setRouter(Router) {
         Router.get(this.router + '_json', this._sendData.bind(this, 'json'));
         Router.get(this.router + '_jsonp', this._sendData.bind(this, 'jsonp'));
-        if(this.excel_export) {
+        if (this.excel_export) {
             Router.get(this.router + '_excel', this._sendData.bind(this, 'excel'));
         }
         return Router;

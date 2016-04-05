@@ -6,13 +6,12 @@
 
 module.exports = () => {
     return {
-        router : "/11",
-            pageTitle : "测试",
-        defaultData : [{
-            type : "table",
-            title : "test",
-            query_api : "/test_json"
+        router: "/dataOverview",
+        pageTitle: "测试",
+        defaultData: [{
+            type: "table",
+            title: "test",
+            query_api: "/test_json1"
         }]
     }
-
 };
