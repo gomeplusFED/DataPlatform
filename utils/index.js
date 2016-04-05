@@ -124,3 +124,15 @@ exports.uniq = function(dates){
     }
     return result;
 };
+
+exports.toTable = function(data, rows, cols) {
+    var newData = [];
+    for(var i = 0; i < data.length; i++) {
+        newData.push({
+            data : data[i],
+            rows : rows[i],
+            cols : cols[i]
+        });
+    }
+    return newData;
+};

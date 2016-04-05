@@ -14,6 +14,10 @@ module.exports = {
                 type : "chart",
                 title : "新增用户趋势",
                 query_api : "/userAnalysis/newUsersOne"
+            }, {
+                type : "table",
+                title : "新增用户明细",
+                query_api : "/userAnalysis/newUsersTwe"
             }]
         }
     }
