@@ -8,8 +8,8 @@ window.$ = $;
 var dom = require('./dom/index.js');
 
 // 之后改为ejs渲染
+var _currentHtml = '<m-loading :loading.sync="loading"></m-loading>';
 var initHtml = function(defaultData, cb) {
-    var _currentHtml = '';
     defaultData.forEach(function(item, index) {
         _currentHtml += '<m-main :index="' + index + '" :init-data="initData" :current-data="initData.defaultData['+ index +']" :loading.sync="loading"></m-main>\n';
     })
@@ -17,20 +17,23 @@ var initHtml = function(defaultData, cb) {
     cb && cb();
 }
 
-window.initData.defaultData === undefined ? window.initData.defaultData = [] : window.initData.defaultData = window.initData.defaultData;
-initHtml(window.initData.defaultData);
+if(window.initData){
+    window.initData.defaultData === undefined ? window.initData.defaultData = [] : window.initData.defaultData = window.initData.defaultData;
+    initHtml(window.initData.defaultData);
 
-var Loading = require('./component/loading.vue');
-var Main = require('./component/main.vue');
+    var Loading = require('./component/loading.vue');
+    var Main = require('./component/main.vue');
 
-var app = new Vue({
-    el: '#page-wrapper',
-    data: {
-        loading: true,
-        initData: window.initData,
-    },
-    components: {
-        'm-loading': Loading,
-        'm-main': Main
-    }
-});
+    var app = new Vue({
+        el: '#page-wrapper',
+        data: {
+            loading: true,
+            initData: window.initData,
+        },
+        components: {
+            'm-loading': Loading,
+            'm-main': Main
+        }
+    });
+}
+
