@@ -9,6 +9,7 @@ module.exports = {
         return {
             path : "/platformRebate/platformOrder",
             name : "平台订单返利汇总",
+            display : true,
             defaultData : [{
                 type : "table",
                 title : "返利订单总览",

@@ -342,6 +342,23 @@ function connect(app) {
         start_up : Number,
         startup_per : Number
       });
+      models.RebateRefund = db.define("tbl_rt_rebate_refund ",{
+        id : {type: 'number', key: true},
+        //date: Date,
+        day_type: Number,
+        type: String,
+        ver: String,
+        channel: String,
+        spu_count : Number,
+        sku_count : Number,
+        refund_user_count : Number,
+        refund_goods_amount_count : Number,
+        refund_goods_amount_actual_count : Number,
+        pay_order_time : Date,
+        user_party : String,
+        category_id : String,
+        category_name : String
+      });
       next();
     }
   }))
