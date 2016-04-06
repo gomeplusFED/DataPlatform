@@ -17,7 +17,7 @@ function connect(app) {
         id:{type: 'serial', key: true},
         username: String,
         is_admin:{type:"number",defaultValue:0},
-        limited:  {type:"text",defaultValue:"2,3-0-1-2-3,4,5-0-1-2,6-0-1-2-3-4,7-0,8-0-1-2-3-4-5-6-7-8-9-10-11-12-13,9-0,10,11,12,13-0-1-2,14-0-1-2"},
+        limited:  {type:"text",defaultValue:"2,3-0-1-2-3,4,5-0-1-2,6-0-1-2-3-4,7-0,8-0-1-2-3-4-5-6-7-8-9-10-11-12-13,9-0,10,11,12,13-0-1-2,14-0-1-2,16"},
         last_ip: String,
         login_ip: String,
         login_time: Date,
@@ -327,7 +327,7 @@ function connect(app) {
         channel: String,
         users : Number
       });
-      models.Rebate = db.define("tbl_rt_rebate ",{
+      models.Rebate = db.define("tbl_rt_rebate",{
         id : {type: 'number', key: true},
         date: Date,
         day_type: Number,
@@ -342,7 +342,7 @@ function connect(app) {
         start_up : Number,
         startup_per : Number
       });
-      models.RebateRefund = db.define("tbl_rt_rebate_refund ",{
+      models.RebateRefund = db.define("tbl_rt_rebate_refund",{
         id : {type: 'number', key: true},
         //date: Date,
         day_type: Number,
@@ -358,6 +358,49 @@ function connect(app) {
         user_party : String,
         category_id : String,
         category_name : String
+      });
+      models.RebateShopOverview = db.define("tbl_rt_rebate_shop_overview",{
+        id : {type: 'number', key: true},
+        date: Date,
+        day_type: Number,
+        type: String,
+        ver: String,
+        channel: String,
+        order_num : Number,
+        total_order_num : Number,
+        order_amount : Number,
+        total_order_amount : Number,
+        shop_num : Number,
+        total_shop_num : Number,
+        user_num : Number,
+        total_user_num : Number,
+        product_sku_num : Number,
+        total_product_sku_num : Number,
+        rebate_order_num : Number,
+        rebate_amount_total : Number,
+        rebate_amount_actual : Number,
+        rebate_amount : Number,
+        platform_amount : Number,
+        pay_order_time : Date
+      });
+      models.RebateShopRefund = db.define("tbl_rt_rebate_shop_refund",{
+        id : {type: 'number', key: true},
+        date: Date,
+        day_type: Number,
+        type: String,
+        ver: String,
+        channel: String,
+        spu_num : Number,
+        total_spu_num : Number,
+        sku_num : Number,
+        total_sku_num : Number,
+        user_num : Number,
+        total_user_num : Number,
+        amount : Number,
+        total_amount : Number,
+        amount_actual : Number,
+        total_amount_actual : Number,
+        pay_order_time : Date
       });
       next();
     }

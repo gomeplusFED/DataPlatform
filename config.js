@@ -5,7 +5,8 @@
  */
 var dataOverview = require("./controllers/path/dataOverview"),
     usersAnalysis = require("./controllers/path/usersAnalysis"),
-    platformRebate = require("./controllers/path/platformRebate");
+    platformRebate = require("./controllers/path/platformRebate"),
+    businessRebate = require("./controllers/path/businessRebate");
 
 module.exports = {
     siteName: '美信数据平台',
@@ -18,7 +19,8 @@ module.exports = {
             display: true,
             className: "fa fa-dashboard fa-fw",
             href: "/dataOverview",
-            path: [dataOverview()],
+            path: [],
+            routers : [dataOverview()]
         }
     }, {
         "userManagement": {
@@ -142,10 +144,20 @@ module.exports = {
         "platformRebate": {
             name: "平台返利汇总",
             id: 15,
-            display: true,
+            display: false,
             className: "fa fa-bar-chart-o fa-fw fa-fw",
             href: "#",
             path: []
+        }
+    }, {
+        "businessRebate": {
+            name: "商家返利汇总",
+            id: 16,
+            display: true,
+            className: "fa fa-desktop fa-fw",
+            href: "/businessRebate",
+            path: [],
+            routers : [businessRebate.all()]
         }
     }]
 };
