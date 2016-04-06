@@ -1,11 +1,11 @@
 <template>
-    <div class="btn-group date_picker" :id="'datePicker_'+index" v-show="pageComponentsData[componentType].show">
+    <div class="btn-group date_picker" :id="'datePicker_'+index" :style="pageComponentsData[componentType].defaultData === 1 ? 'width: 120px;' : 'width: 210px'" v-show="pageComponentsData[componentType].show">
         <input type="text" class="form-control">
         <span class="glyphicon glyphicon-calendar fa fa-calendar"></span>
     </div>
 </template>
 <style>
-.date_picker{width: 210px;}
+.date_picker{}
 .date_picker input{display: inline-block;vertical-align: middle;}
 .date_picker span{font-size: 12px;margin-left: -20px;position: absolute;top: 50%;transform: translateY(-50%);-webkit-transform: translateY(-50%);}
 </style>
@@ -77,14 +77,22 @@ var DateCom = Vue.extend({
                     },
                     "ranges": this.pageComponentsData[this.componentType].defaultData === 7 ? range : {"昨天": [yesterday, yesterday]}
                 }
-                $('#datePicker_' + this.index).find('input').daterangepicker(options, function(start, end, label) {
-                    if(Number(end.format('YYYY-MM-DD').replace(/\-/g,'')) > Number(yesterday.replace(/\-/g,''))){
+                $('#datePicker_' + this.index).find('input').daterangepicker(options);
+                $('#datePicker_' + this.index).find('input').on('cancel.daterangepicker',function(ev, picker){
+
+                })
+
+                $('#datePicker_' + this.index).find('input').on('apply.daterangepicker',function(ev, picker){
+                    if(Number(picker.endDate.format('YYYY-MM-DD').replace(/\-/g,'')) > Number(yesterday.replace(/\-/g,''))){
                         alert('请选择今天之前的时间！');
+                        $('#datePicker_' + _this.index).find('input').data('daterangepicker').setStartDate(_this.pageComponentsData[_this.componentType].defaultData === 1 ? yesterday : last7Day);
+                        $('#datePicker_' + _this.index).find('input').data('daterangepicker').setEndDate(yesterday);
                         return;
                     }
-                    _this.argvs.startTime = start.format('YYYY-MM-DD');
-                    _this.argvs.endTime = end.format('YYYY-MM-DD');
-                });
+                    _this.argvs.startTime = picker.startDate.format('YYYY-MM-DD');
+                    _this.argvs.endTime = picker.endDate.format('YYYY-MM-DD');
+                })
+
             },
             deep: true
         }
