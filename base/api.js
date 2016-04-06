@@ -234,6 +234,13 @@ api.prototype = {
             next(new Error(err.join("参数或者") + "参数出错"));
             return false;
         }
+        Object.keys(query).forEach((value) => {
+            if(value !== "startTime" && value !== "endTime") {
+                if(!params.hasOwnProperty(value)) {
+                    params[value] = query[value];
+                }
+            }
+        });
         return true;
     },
     _findDatabase: async((req, modelName, params) => {
