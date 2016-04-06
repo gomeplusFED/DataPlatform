@@ -133,7 +133,7 @@ module.exports = {
         "marketingAnalysis": {
             name: "营销分析",
             id: 14,
-            display: false,
+            display: true,
             className: "fa fa-bar-chart-o fa-fw fa-fw",
             href: "#",
             path: []
