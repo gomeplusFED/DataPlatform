@@ -1,13 +1,14 @@
 'use strict';
 var Vue = require('Vue');
 var $ = require('jQuery');
+
+// for debug
 window.jQuery = $;
 window.$ = $;
 
 
 var dom = require('./dom/index.js');
 
-// 之后改为ejs渲染
 var _currentHtml = '';
 var initHtml = function(defaultData, cb) {
     defaultData.forEach(function(item, index) {
