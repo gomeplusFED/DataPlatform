@@ -18,34 +18,34 @@ module.exports = {
             twe = [],
             three = [],
             objOne = {
-                name : "返利订单",
-                order_num : 0,
-                order_amount : 0,
-                shop_num : 0,
-                user_num : 0,
-                product_sku_num : 0
+                name: "返利订单",
+                order_num: 0,
+                order_amount: 0,
+                shop_num: 0,
+                user_num: 0,
+                product_sku_num: 0
             },
             objTwe = {
-                rebate_order_num : 0,
-                rebate_amount_total : 0,
-                rebate_amount_actual : 0,
-                rebate_amount : 0,
-                platform_amount : 0
+                rebate_order_num: 0,
+                rebate_amount_total: 0,
+                rebate_amount_actual: 0,
+                rebate_amount: 0,
+                platform_amount: 0
             },
             objThree = {
-                name : "返利订单",
-                spu_num : 0,
-                total_spu_num : 0,
-                sku_num : 0,
-                total_sku_num : 0,
-                user_num : 0,
-                total_user_num : 0,
-                amount : 0,
-                total_amount : 0,
-                amount_actual : 0,
-                total_amount_actual : 0
+                name: "返利订单",
+                spu_num: 0,
+                total_spu_num: 0,
+                sku_num: 0,
+                total_sku_num: 0,
+                user_num: 0,
+                total_user_num: 0,
+                amount: 0,
+                total_amount: 0,
+                amount_actual: 0,
+                total_amount_actual: 0
             };
-        for(var key of source) {
+        for (var key of source) {
             total_order_num = key.total_order_num;
             total_order_amount = key.total_order_amount;
             total_shop_num = key.total_shop_num;
@@ -62,7 +62,7 @@ module.exports = {
             objTwe.rebate_amount += key.rebate_amount;
             objTwe.platform_amount += key.platform_amount;
         }
-        for(var key of orderSource) {
+        for (var key of orderSource) {
             objThree.spu_num += key.spu_num;
             objThree.total_spu_num += key.total_spu_num;
             objThree.sku_num += key.sku_num;
@@ -76,31 +76,23 @@ module.exports = {
         }
         one.push(objOne);
         one.push({
-            name : "总占比",
-            order_num : (objOne.order_num / (total_order_num === 0 ? 1 : total_order_num) * 100).toFixed(1) + "%",
-            order_amount : (objOne.order_amount / (total_order_amount === 0 ? 1 : total_order_amount)
-                * 100).toFixed(1) + "%",
-            shop_num : (objOne.shop_num / (total_shop_num === 0 ? 1 : total_shop_num) * 100).toFixed(1) + "%",
-            user_num : (objOne.user_num / (total_user_num === 0 ? 1 : total_user_num) * 100).toFixed(1) + "%",
-            product_sku_num : (objOne.product_sku_num / (total_product_sku_num === 0 ? 1 : total_product_sku_num)
-                * 100).toFixed(1) + "%"
+            name: "总占比",
+            order_num: (objOne.order_num / (total_order_num === 0 ? 1 : total_order_num) * 100).toFixed(1) + "%",
+            order_amount: (objOne.order_amount / (total_order_amount === 0 ? 1 : total_order_amount) * 100).toFixed(1) + "%",
+            shop_num: (objOne.shop_num / (total_shop_num === 0 ? 1 : total_shop_num) * 100).toFixed(1) + "%",
+            user_num: (objOne.user_num / (total_user_num === 0 ? 1 : total_user_num) * 100).toFixed(1) + "%",
+            product_sku_num: (objOne.product_sku_num / (total_product_sku_num === 0 ? 1 : total_product_sku_num) * 100).toFixed(1) + "%"
         });
-        objTwe.rate = (objTwe.rebate_amount / (objTwe.rebate_amount_actual === 0 ? 1 : objTwe.rebate_amount_actual)
-            * 100).toFixed(1) + "%";
+        objTwe.rate = (objTwe.rebate_amount / (objTwe.rebate_amount_actual === 0 ? 1 : objTwe.rebate_amount_actual) * 100).toFixed(1) + "%";
         twe.push(objTwe);
         three.push(objThree);
         three.push({
-            name : "返利退货订单占比",
-            spu_num : (objThree.spu_num / (objThree.total_spu_num === 0 ? 1 : objThree.total_spu_num)
-                * 100).toFixed(1) + "%",
-            sku_num : (objThree.sku_num / (objThree.total_sku_num === 0 ? 1 : objThree.total_sku_num)
-                * 100).toFixed(1) + "%",
-            user_num : (objThree.user_num / (objThree.total_user_num === 0 ? 1 : objThree.total_user_num)
-                * 100).toFixed(1) + "%",
-            amount : (objThree.amount / (objThree.total_amount === 0 ? 1 : objThree.total_amount)
-                * 100).toFixed(1) + "%",
-            amount_actual : (objThree.amount_actual / (objThree.total_amount_actual === 0 ? 1 : objThree.total_amount_actual)
-                * 100).toFixed(1) + "%"
+            name: "返利退货订单占比",
+            spu_num: (objThree.spu_num / (objThree.total_spu_num === 0 ? 1 : objThree.total_spu_num) * 100).toFixed(1) + "%",
+            sku_num: (objThree.sku_num / (objThree.total_sku_num === 0 ? 1 : objThree.total_sku_num) * 100).toFixed(1) + "%",
+            user_num: (objThree.user_num / (objThree.total_user_num === 0 ? 1 : objThree.total_user_num) * 100).toFixed(1) + "%",
+            amount: (objThree.amount / (objThree.total_amount === 0 ? 1 : objThree.total_amount) * 100).toFixed(1) + "%",
+            amount_actual: (objThree.amount_actual / (objThree.total_amount_actual === 0 ? 1 : objThree.total_amount_actual) * 100).toFixed(1) + "%"
         });
         return util.toTable([one, twe, three], data.rows, data.cols);
     }
