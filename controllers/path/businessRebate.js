@@ -15,6 +15,11 @@ module.exports = {
                     type : "table",
                     title : "商家设置返利总览",
                     query_api : "/businessRebate/businessAllOne"
+                },
+                {
+                    type : "chart",
+                    title : "返利订单趋势",
+                    query_api : "/businessRebate/businessAllTwo"
                 }
             ]
         }

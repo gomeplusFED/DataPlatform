@@ -50,7 +50,7 @@ function api(Router, options) {
         //联动菜单
         level_select: {},
         //单选
-        filter_select: {},
+        filter_select: [],
         //过滤数据
         filter: null,
         //参数名对应字段名
@@ -112,6 +112,7 @@ api.prototype = {
             }
         }
         this.filter_key = query.filter_key;
+        delete query.filter_key;
         this._getCache(type, res, req, query, next, params);
     },
     _checkDate(option, errorMassage, next) {
@@ -154,20 +155,27 @@ api.prototype = {
     },
     _findData(type, res, req, query, next) {
         async(() => {
+            var isErr = false,
+                error = "";
             var sendData = {
                 rows: this.rows,
                 cols: this.cols
             };
-            sendData.data = await (this._findDatabase(req, this.modelName[0], query).catch((err) => {
-                next(err);
-            }));
-            if (this.modelName[1]) {
-                sendData.orderData = await (this._findDatabase(req, this.modelName[0], query).catch((err) => {
-                    next(err);
-                }));
+            try {
+                sendData.data = await (this._findDatabase(req, this.modelName[0], query));
+                if (this.modelName[1]) {
+                    sendData.orderData = await (this._findDatabase(req, this.modelName[0], query));
+                }
+            }catch(err) {
+                isErr = true;
+                error = err;
             }
             if (this.filter) {
                 sendData = this.filter(sendData, this.filter_key);
+            }
+            if(isErr) {
+                res.status(404).send(error);
+                return;
             }
             if (type !== "excel") {
                 res[type]({

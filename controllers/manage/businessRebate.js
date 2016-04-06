@@ -89,5 +89,28 @@ module.exports = (Router) => {
         ]
     });
 
+    Router = new api(Router,{
+        router : "/businessRebate/businessAllTwo",
+        modelName : [ "RebateShopTredencyDetails" ],
+        excel_export : false,
+        filter_select: [{
+            title: '指标选择',
+            filter_key: 'filter_key',
+            groups: [{
+                key: 'order_num',
+                value: '订单数'
+            }, {
+                key: 'order_amount',
+                value: '订单总金额'
+            }, {
+                key: 'product_sku_num',
+                value: '商品件数'
+            }]
+        }],
+        filter(data, filter_key) {
+            return businessRebate.businessAllTwe(data, "");
+        }
+    });
+
     return Router;
 };

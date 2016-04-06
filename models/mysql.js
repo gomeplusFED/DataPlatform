@@ -402,6 +402,23 @@ function connect(app) {
         total_amount_actual : Number,
         pay_order_time : Date
       });
+      models.RebateShopTredencyDetails = db.define("tbl_rt_rebate_shop_tredency_details",{
+        id : {type: 'number', key: true},
+        date: Date,
+        day_type: Number,
+        type: String,
+        ver: String,
+        channel: String,
+        order_num : Number,
+        order_amount : Number,
+        product_sku_num : Number,
+        item_amount : Number,
+        rebate_amount : Number,
+        rebate_type : String,
+        category_name : String,
+        level : String,
+        pay_order_time : Date
+      });
       next();
     }
   }))
