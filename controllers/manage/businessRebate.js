@@ -108,7 +108,57 @@ module.exports = (Router) => {
             }]
         }],
         filter(data, filter_key) {
-            return businessRebate.businessAllTwe(data, "");
+            return businessRebate.businessAllTwe(data, filter_key);
+        }
+    });
+
+    Router = new api(Router,{
+        router : "/businessRebate/businessAllThree",
+        modelName : [ "RebateShopTredencyDetails" ],
+        excel_export : false,
+        filter_select: [
+            {
+                title: '指标选择',
+                filter_key: 'filter_key',
+                groups: [{
+                    key: 'product_sku_num',
+                    value: '商品件数'
+                }, {
+                    key: 'item_amount',
+                    value: '商品总金额'
+                }, {
+                    key: 'rebate_amount',
+                    value: '返利到账金额'
+                }]
+            }
+        ],
+        filter(data, filter_key) {
+            return businessRebate.businessAllThree(data, filter_key);
+        }
+    });
+
+    Router = new api(Router,{
+        router : "/businessRebate/businessAllFour",
+        modelName : [ "RebateShopTredencyDetails" ],
+        excel_export : false,
+        filter_select: [
+            {
+                title: '指标选择',
+                filter_key: 'filter_key',
+                groups: [{
+                    key: 'product_sku_num',
+                    value: '商品件数'
+                }, {
+                    key: 'item_amount',
+                    value: '商品总金额'
+                }, {
+                    key: 'rebate_amount',
+                    value: '返利到账金额'
+                }]
+            }
+        ],
+        filter(data, filter_key) {
+            return businessRebate.businessAllFour(data, filter_key);
         }
     });
 
