@@ -3,7 +3,9 @@
  * @date 20160405
  * @fileoverview 商家返利汇总
  */
-var util = require("../utils");
+var util = require("../utils"),
+    moment = require("moment"),
+    _ = require("lodash");
 
 module.exports = {
     businessAllOne(data) {
@@ -95,5 +97,40 @@ module.exports = {
             amount_actual: (objThree.amount_actual / (objThree.total_amount_actual === 0 ? 1 : objThree.total_amount_actual) * 100).toFixed(1) + "%"
         });
         return util.toTable([one, twe, three], data.rows, data.cols);
+    },
+    businessAllTwe(data, filter_key) {
+        var source = data.data,
+            type = "line",
+            array = [ "分销购买", "分享购买", "组合返利" ],
+            map = {},
+            newDate = {},
+            dates = util.uniq(_.pluck(source, "date"));
+        map[filter_key + "_0"] = "分销购买";
+        map[filter_key + "_1"] = "分享购买";
+        map[filter_key + "_2"] = "组合返利";
+        for(var date of dates) {
+            var obj = {};
+            for(var i = 0; i < array.length; i++) {
+                obj[filter_key + "_" + i] = 0;
+            }
+            for(var key of source) {
+                if(date.getTime() === key.date.getTime()) {
+                    for(var i = 0; i < array.length; i++) {
+                        if(key.rebate_type === array[i]) {
+                            obj[filter_key + "_" + i] += key[filter_key];
+                        }
+                    }
+                }
+            }
+            newDate[moment(date).format("YYYY-MM-DD")] = obj;
+        }
+        return [{
+            type : type,
+            map : map,
+            config: {
+                stack: false
+            },
+            data : newDate
+        }];
     }
 };
