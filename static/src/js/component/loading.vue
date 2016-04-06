@@ -1,5 +1,5 @@
 <template>
-<div class="loading_bg" v-show="loading" transition="fade">
+<div class="loading_bg" v-if="loading" transition="fade">
 	<div class="loading_main all_center">
 		<img src="/dist/img/loading.png">
 		<span>加载中...</span>
@@ -27,15 +27,62 @@
 var Vue = require('Vue');
 var $ = require('jQuery');
 
+var loadingBeginTime = Date.now();
+
 var Loading = Vue.extend({
 	name: 'Loading',
 	data: function(){
 		return {
-
+			
 		}
 	},
-	props: ['loading']
+	props: ['loading'],
+	watch: {
+		'loading': {
+			handler: function(val){
+				// console.log(Date.now() - this.loadingBeginTime);
+			},
+			deep: true
+		}
+	}
 })
+
+
+var loadingBeginTime = Date.now();
+Vue.transition('fade', {
+	css: false,
+    beforeEnter: function (el) {
+		loadingBeginTime = Date.now();
+    },
+    enter: function (el, done) {
+    	$(el).css('opacity', 1).animate({ opacity: 1 }, 300, done)
+    },
+    afterEnter: function (el) {
+        
+    },
+    enterCancelled: function (el) {
+    	$(el).stop();
+    },
+    beforeLeave: function (el) {
+        
+    },
+    leave: function (el, done) {
+        if(Date.now() - loadingBeginTime < 300){
+        	setTimeout(function(){
+        		$(el).animate({ opacity: 0 }, 300, done)
+        	}, 300);
+        }else{
+        	$(el).animate({ opacity: 0 }, 300, done)
+        }
+    },
+    afterLeave: function (el) {
+        
+    },
+    leaveCancelled: function (el) {
+        $(el).stop();
+    }
+})
+
 
 module.exports = Loading;
 
