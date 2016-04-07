@@ -39,14 +39,14 @@ function api(Router, options) {
         version: false,
         //是否显示优惠券类型
         coupon: false,
-        //是否显示导出按钮
-        excel_export: true,
+        //是否有导出路径
+        excel_export : false,
+        //按钮设置
+        flexible_btn: [],
         //是否显示时间
         date_picker: true,
         //初始时间
         date_picker_data: 7,
-        //按钮设置
-        btn_groups: {},
         //联动菜单
         level_select: {},
         //单选
@@ -182,7 +182,7 @@ api.prototype = {
                     code: 200,
                     modelData: sendData,
                     components: {
-                        excel_export: this.excel_export,
+                        flexible_btn: this.flexible_btn,
                         date_picker: {
                             show: this.date_picker,
                             defaultData: this.date_picker_data
@@ -193,7 +193,6 @@ api.prototype = {
                             version: this.version,
                             coupon: this.coupon
                         },
-                        btn_groups: this.btn_groups,
                         level_select: this.level_select,
                         filter_select: this.filter_select
                     }

@@ -144,7 +144,7 @@ module.exports = {
         "platformRebate": {
             name: "平台返利汇总",
             id: 15,
-            display: false,
+            display: true,
             className: "fa fa-bar-chart-o fa-fw fa-fw",
             href: "#",
             path: []

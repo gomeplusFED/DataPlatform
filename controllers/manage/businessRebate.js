@@ -11,7 +11,6 @@ module.exports = (Router) => {
     Router = new api(Router, {
         router: "/businessRebate/businessAllOne",
         modelName: ["RebateShopOverview", "RebateShopRefund"],
-        excel_export: false,
         date_picker_data: 1,
         filter(data, filter_key) {
             return businessRebate.businessAllOne(data);
@@ -85,7 +84,6 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/businessRebate/businessAllTwo",
         modelName : [ "RebateShopTredencyDetails" ],
-        excel_export : false,
         filter_select: [{
             title: '指标选择',
             filter_key: 'filter_key',
@@ -108,7 +106,6 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/businessRebate/businessAllThree",
         modelName : [ "RebateShopTredencyDetails" ],
-        excel_export : false,
         filter_select: [
             {
                 title: '指标选择',
@@ -133,7 +130,6 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/businessRebate/businessAllFour",
         modelName : [ "RebateShopTredencyDetails" ],
-        excel_export : false,
         filter_select: [
             {
                 title: '指标选择',
@@ -158,7 +154,6 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/businessRebate/businessAllFive",
         modelName : [ "RebateShopTop" ],
-        excel_export : false,
         date_picker_data: 1,
         filter(data, filter_key) {
             return businessRebate.businessAllFive(data);
@@ -207,8 +202,14 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/businessRebate/businessAllSix",
         modelName : [ "RebateShopPlanTop" ],
-        excel_export : false,
         date_picker_data: 1,
+        flexible_btn : [
+            {
+                content: '<a href="/businessRebate/plan" target="_blank">查看全部</a>',
+                preMethods: [],
+                customMethods: ''
+            }
+        ],
         filter(data, filter_key) {
             return businessRebate.businessAllSix(data);
         },
@@ -262,7 +263,12 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/businessRebate/planOne",
         modelName : [ "RebateShopPlanTop" ],
-        excel_export : false,
+        excel_export : true,
+        flexible_btn : [{
+            content: '导出',
+            preMethods: ['excel_export'],
+            customMethods: ''
+        }],
         date_picker_data: 1,
         filter(data, filter_key) {
             return businessRebate.planOne(data);
