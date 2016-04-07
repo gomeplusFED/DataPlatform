@@ -158,3 +158,7 @@ exports.sort = function(array, first, second) {
     }
     return array;
 };
+
+exports.toFixed = function(one, two) {
+    return (one / (two === 0 ? 1 : two) * 1000).toFixed(1) / 10 + "%";
+};

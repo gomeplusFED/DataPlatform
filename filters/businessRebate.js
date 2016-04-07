@@ -79,22 +79,22 @@ module.exports = {
         one.push(objOne);
         one.push({
             name: "总占比",
-            order_num: (objOne.order_num / (total_order_num === 0 ? 1 : total_order_num) * 100).toFixed(1) + "%",
-            order_amount: (objOne.order_amount / (total_order_amount === 0 ? 1 : total_order_amount) * 100).toFixed(1) + "%",
-            shop_num: (objOne.shop_num / (total_shop_num === 0 ? 1 : total_shop_num) * 100).toFixed(1) + "%",
-            user_num: (objOne.user_num / (total_user_num === 0 ? 1 : total_user_num) * 100).toFixed(1) + "%",
-            product_sku_num: (objOne.product_sku_num / (total_product_sku_num === 0 ? 1 : total_product_sku_num) * 100).toFixed(1) + "%"
+            order_num: util.toFixed(objOne.order_num, total_order_num),
+            order_amount: util.toFixed(objOne.order_amount, total_order_amount),
+            shop_num: util.toFixed(objOne.shop_num, total_shop_num),
+            user_num: util.toFixed(objOne.user_num, total_user_num),
+            product_sku_num: util.toFixed(objOne.product_sku_num, total_product_sku_num)
         });
-        objTwe.rate = (objTwe.rebate_amount / (objTwe.rebate_amount_actual === 0 ? 1 : objTwe.rebate_amount_actual) * 100).toFixed(1) + "%";
+        objTwe.rate = util.toFixed(objTwe.rebate_amount, objTwe.rebate_amount_actual);
         twe.push(objTwe);
         three.push(objThree);
         three.push({
             name: "返利退货订单占比",
-            spu_num: (objThree.spu_num / (objThree.total_spu_num === 0 ? 1 : objThree.total_spu_num) * 100).toFixed(1) + "%",
-            sku_num: (objThree.sku_num / (objThree.total_sku_num === 0 ? 1 : objThree.total_sku_num) * 100).toFixed(1) + "%",
-            user_num: (objThree.user_num / (objThree.total_user_num === 0 ? 1 : objThree.total_user_num) * 100).toFixed(1) + "%",
-            amount: (objThree.amount / (objThree.total_amount === 0 ? 1 : objThree.total_amount) * 100).toFixed(1) + "%",
-            amount_actual: (objThree.amount_actual / (objThree.total_amount_actual === 0 ? 1 : objThree.total_amount_actual) * 100).toFixed(1) + "%"
+            spu_num: util.toFixed(objThree.spu_num, objThree.total_spu_num),
+            sku_num: util.toFixed(objThree.sku_num, objThree.total_sku_num),
+            user_num: util.toFixed(objThree.user_num, objThree.total_user_num),
+            amount: util.toFixed(objThree.amount, objThree.total_amount),
+            amount_actual: util.toFixed(objThree.amount_actual, objThree.total_amount_actual)
         });
         return util.toTable([one, twe, three], data.rows, data.cols);
     },
@@ -276,8 +276,7 @@ module.exports = {
                 pay_rate : source[i].order_num + "/" + source[i].total_order_num,
                 pay_price_rate : source[i].order_amount + "/" + source[i].total_order_amount,
                 rebate_amount : source[i].rebate_amount,
-                refund_rate : (source[i].refund_sku_num / (source[i].sku_num === 0 ? 1 : source[i].sku_num)
-                    * 100).toFixed(1) + "%"
+                refund_rate : util.toFixed(source[i].refund_sku_num, source[i].sku_num)
             };
             newData.push(obj);
         }
@@ -289,8 +288,7 @@ module.exports = {
             source[i].id = i + 1;
             source[i].pay_rate = source[i].order_num + "/" + source[i].total_order_num;
             source[i].pay_price_rate = source[i].order_amount + "/" + source[i].total_order_amount;
-            source[i].refund_rate = (source[i].refund_sku_num / (source[i].sku_num === 0 ? 1 : source[i].sku_num)
-                * 100).toFixed(1) + "%";
+            source[i].refund_rate = util.toFixed(source[i].refund_sku_num, source[i].sku_num);
         }
         return util.toTable([source], data.rows, data.cols);
     }
