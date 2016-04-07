@@ -111,8 +111,12 @@ api.prototype = {
                 params.date = orm.between(new Date(query.startTime + " 00:00:00"), new Date(query.endTime + " 23:59:59"));
             }
         }
-        this.filter_key = query.filter_key;
-        delete query.filter_key;
+        Object.keys(query).forEach((key) => {
+            if(key.indexOf("filter") > -1) {
+                this[key] = query[key];
+                delete query[key];
+            }
+        });
         this._getCache(type, res, req, query, next, params);
     },
     _checkDate(option, errorMassage, next) {

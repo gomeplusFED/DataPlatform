@@ -189,5 +189,45 @@ module.exports = {
                 stack: true
             }
         }]
+    },
+    platformOrderFour(data, filter_key) {
+        var source = data.data,
+            newData = {},
+            map = {},
+            typePie = "pie",
+            typeBar = "bar",
+            filter_name = {
+                goods_sku_count : "商品件数",
+                goods_amount_count : "商品总金额",
+                rebate_amount_count : "返利到账金额"
+            },
+            XData = [ "单项单级返利", "平台基础返利", "平台促销返利", "邀请商家入驻返利" ];
+        for(var x of XData) {
+            var obj = {
+                value : 0
+            };
+            for(var key of source) {
+                if(x === key.rebate_type) {
+                    obj.value += key[filter_key];
+                }
+            }
+            newData[x] = obj;
+        }
+        map.value = filter_name[filter_key];
+        return [{
+            type : typePie,
+            map : map,
+            data : newData,
+            config: {
+                stack: false
+            }
+        },{
+            type : typeBar,
+            map : map,
+            data : newData,
+            config: {
+                stack: false
+            }
+        }]
     }
 };

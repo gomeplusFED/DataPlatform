@@ -126,6 +126,28 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/platformRebate/platformOrderFour",
+        modelName : [ "RebatetRedencyDetails" ],
+        filter_select: [{
+            title: '指标选择',
+            filter_key: 'filter_key',
+            groups: [{
+                key: 'goods_sku_count',
+                value: '商品件数'
+            }, {
+                key: 'goods_amount_count',
+                value: '商品总金额'
+            }, {
+                key: 'rebate_amount_count',
+                value: '返利到账金额'
+            }]
+        }],
+        filter(data, filter_key) {
+            return filter.platformOrderFour(data, filter_key);
+        }
+    });
+
+    Router = new api(Router,{
+        router : "/platformRebate/platformOrderFive",
         modelName : "Rebate"
     });
 
