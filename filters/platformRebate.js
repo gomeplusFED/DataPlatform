@@ -128,5 +128,66 @@ module.exports = {
             },
             data : newData
         }];
+    },
+    platformOrderThree(data, filter_key) {
+        var source = data.data,
+            typePie = "pie",
+            typeBar = "bar",
+            mapPie = {},
+            mapBar = {},
+            newDataPie = {},
+            newDataBar = {},
+            filter_name = {
+                goods_sku_count : "商品件数",
+                goods_amount_count : "商品总金额",
+                rebate_amount_count : "返利到账金额"
+            },
+            XPie = ["1级","2级","3级","4级"],
+            XBar = ["层级1","层级2","层级3","层级4"];
+        for(var level of XPie) {
+            var obj = {};
+            obj.value = 0;
+            for(var key of source) {
+                if(level === key.grade) {
+                    obj.value += key[filter_key];
+                }
+            }
+            newDataPie[level] = obj;
+        }
+        for(var level of XPie) {
+            var obj = {};
+            for(var i = 0; i < XBar.length; i++) {
+                obj[i] = 0;
+            }
+            for(var key of source) {
+                if(key.level === level) {
+                    for(var i = 0; i < XBar.length; i++) {
+                        if(key.grade === XBar[i]) {
+                            obj[i] += key[filter_key];
+                        }
+                    }
+                }
+            }
+            newDataBar[level] = obj;
+        }
+        for(var i = 0; i < XBar.length; i++) {
+            mapBar[i] = XBar[i];
+        }
+        mapPie.value= filter_name[filter_key];
+        return [{
+            type : typePie,
+            map : mapPie,
+            data : newDataPie,
+            config: {
+                stack: false
+            }
+        }, {
+            type : typeBar,
+            map : mapBar,
+            data : newDataBar,
+            config: {
+                stack: true
+            }
+        }]
     }
 };

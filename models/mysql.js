@@ -482,6 +482,27 @@ function connect(app) {
         sku_num : Number,
         pay_order_time : Date
       });
+      models.RebatetRedencyDetails = db.define("tbl_rt_rebate_tredency_details",{
+        id : {type: 'number', key: true},
+        date: Date,
+        day_type: Number,
+        type: String,
+        ver: String,
+        channel: String,
+        order_count : Number,
+        order_amount_count : Number,
+        goods_sku_count : Number,
+        goods_amount_count : Number,
+        rebate_amount_count : Number,
+        user_party : String,
+        level : String,
+        grade : String,
+        correlate_flow : String,
+        rebate_type : String,
+        category_id : String,
+        category_name : String,
+        pay_order_time : Date
+      });
       next();
     }
   }))
