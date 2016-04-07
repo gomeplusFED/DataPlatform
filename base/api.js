@@ -174,7 +174,7 @@ api.prototype = {
                 sendData = this.filter(sendData, this.filter_key);
             }
             if(isErr) {
-                res.status(404).send(error);
+                next(error);
                 return;
             }
             if (type !== "excel") {

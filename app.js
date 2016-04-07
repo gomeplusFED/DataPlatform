@@ -76,9 +76,11 @@ app.use(function() {
     }
 });
 
-//app.use((err, req, res, next) => {
-//    res.render('include/404');
-//});
+app.use((err, req, res, next) => {
+    res.send({
+        iserro : true
+    });
+});
 
 // 测试
 app.get('/viewtest', (req, res, next) => {

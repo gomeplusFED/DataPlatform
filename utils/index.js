@@ -136,3 +136,25 @@ exports.toTable = function(data, rows, cols) {
     }
     return newData;
 };
+
+exports.sort = function(array, first, second) {
+    for(var i = 0;i < array.length; i++) {
+        var j = i,
+            key = array[i];
+        while(--j > -1) {
+            if (array[j][first] < key[first]) {
+                array[j + 1] = array[j];
+            } else if(array[j][first] === key[first]) {
+                if (array[j][second] < key[second]) {
+                    array[j + 1] = array[j];
+                } else {
+                    break;
+                }
+            } else {
+                break;
+            }
+        }
+        array[j + 1] = key;
+    }
+    return array;
+};

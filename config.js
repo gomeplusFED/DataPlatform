@@ -39,7 +39,7 @@ module.exports = {
         "userAnalysis": {
             name: "用户分析",
             id: 3,
-            display: true,
+            display: false,
             className: "fa fa-bar-chart-o fa-fw",
             href: "#",
             path: [
@@ -50,7 +50,7 @@ module.exports = {
         "retainedAnalysis": {
             name: "留存分析",
             id: 4,
-            display: true,
+            display: false,
             className: "fa fa-th-list fa-fw",
             href: "#",
             path: []
@@ -59,7 +59,7 @@ module.exports = {
         "channelAnalysis": {
             name: "渠道分析",
             id: 5,
-            display: true,
+            display: false,
             className: "fa  fa-laptop fa-fw",
             href: "#",
             path: [{
@@ -72,7 +72,7 @@ module.exports = {
         "useAnalysis": {
             name: "使用分析",
             id: 6,
-            display: true,
+            display: false,
             className: "fa fa-th fa-fw",
             href: "#",
             path: []
@@ -81,7 +81,7 @@ module.exports = {
         "terminal": {
             name: "终端属性",
             id: 8,
-            display: true,
+            display: false,
             className: "fa fa-tablet fa-fw",
             href: "#",
             path: []
@@ -90,7 +90,7 @@ module.exports = {
         "share": {
             name: "分享数据",
             id: 9,
-            display: true,
+            display: false,
             className: "fa fa-external-link fa-fw",
             href: "#",
             path: []
@@ -135,7 +135,7 @@ module.exports = {
         "marketingAnalysis": {
             name: "营销分析",
             id: 14,
-            display: true,
+            display: false,
             className: "fa fa-bar-chart-o fa-fw fa-fw",
             href: "#",
             path: []
