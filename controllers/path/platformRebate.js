@@ -32,7 +32,7 @@ module.exports = {
     inviteRegisterAndEnter(){
         return {
             path : "/platformRebate/platformOrder",
-            name : "平台订单返利汇总",
+            name : "邀请注册、入驻",
             display : true,
             defaultData : [{
                 type : "table",
