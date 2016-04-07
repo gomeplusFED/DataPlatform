@@ -82,7 +82,24 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/platformRebate/platformOrderTwe",
-        modelName : "Rebate"
+        modelName : [ "Rebate" ],
+        filter_select: [{
+            title: '指标选择',
+            filter_key: 'filter_key',
+            groups: [{
+                key: 'order_count',
+                value: '订单数'
+            }, {
+                key: 'rebate_order_amount_count',
+                value: '订单总金额'
+            }, {
+                key: 'participate_goods_count',
+                value: '商品件数'
+            }]
+        }],
+        filter(data, filter_key) {
+            return filter.platformOrderTwe(data, filter_key);
+        }
     });
 
     Router = new api(Router,{

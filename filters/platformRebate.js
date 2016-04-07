@@ -95,5 +95,38 @@ module.exports = {
             refund_goods_amount_actual_count: util.toFixed(objThree.refund_goods_amount_actual_count, objThree.total_amount_actual)
         });
         return util.toTable([one, two, three], data.rows, data.cols);
+    },
+    platformOrderTwe(data, filter_key) {
+        var source = data.data,
+            dates = util.uniq(_.pluck(source, "date")),
+            type = "line",
+            array = [ "单项单级返利", "平台基础返利", "平台促销返利", "邀请商家入驻返利" ],
+            newData = {},
+            map = {};
+        map[filter_key + "_0"] = array[0];
+        map[filter_key + "_1"] = array[1];
+        map[filter_key + "_2"] = array[2];
+        map[filter_key + "_3"] = array[3];
+        for(var date of dates) {
+            var obj = {};
+            for(var key of source) {
+                if(date.getTime() === key.date.getTime()) {
+                    for(var i = 0; i < array.length; i++) {
+                        if(key.rebate_type === array[i]) {
+                            obj[filter_key + "_" + i] += key[filter_key];
+                        }
+                    }
+                }
+            }
+            newData[moment(date).format("YYYY-MM-DD")] = obj;
+        }
+        return [{
+            type : type,
+            map : map,
+            config: {
+                stack: false
+            },
+            data : newData
+        }];
     }
 };
