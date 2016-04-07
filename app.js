@@ -76,11 +76,11 @@ app.use(function() {
     }
 });
 
-app.use((err, req, res, next) => {
-    res.send({
-        iserro: true
-    });
-});
+// app.use((err, req, res, next) => {
+//     res.send({
+//         iserro: true
+//     });
+// });
 
 // 测试
 app.get('/viewtest', (req, res, next) => {
