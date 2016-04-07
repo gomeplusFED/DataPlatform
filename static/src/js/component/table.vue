@@ -8,6 +8,10 @@
 <script>
 var Vue = require('Vue');
 var $ = require('jQuery');
+
+var store = require('../store/store.js');
+var actions = require('../store/actions.js');
+
 var Table = Vue.extend({
     name: 'Table',
     data: function() {
@@ -30,6 +34,14 @@ var Table = Vue.extend({
                 type: 'get',
                 data: _this.resultArgvs,
                 success: function(data){
+                    if(data.iserro){
+                        actions.alert(store,{
+                            show: true,
+                            msg: '查询失败',
+                            type: 'danger'
+                        })
+                        return;
+                    }
                     cb && cb(data);
                 }
             })

@@ -54,6 +54,10 @@ require('echarts/lib/chart/bar'); // 柱状图
 require('echarts/lib/chart/line'); // 折线图
 require('echarts/lib/chart/pie'); // 饼图
 
+
+var store = require('../store/store.js');
+var actions = require('../store/actions.js');
+
 var Chart = Vue.extend({
 	name: 'Chart',
 	data: function(){
@@ -61,6 +65,14 @@ var Chart = Vue.extend({
 			initEd: false,
 			chartData: [],
 		}
+	},
+	vuex: {
+	    getters: {
+	        alertConfig: function() {
+	            return store.state.alertConfig;
+	        }
+	    },
+	    actions: actions
 	},
 	created: function(){
 		this.initEd = true;
@@ -77,6 +89,14 @@ var Chart = Vue.extend({
 		        type: 'get',
 		        data: _this.resultArgvs,
 		        success: function(data){
+		        	if(data.iserro){
+		        		actions.alert(stroe,{
+		        			show: true,
+		        			msg: '查询失败',
+		        			type: 'danger'
+		        		})
+		        		return;
+		        	}
 		            cb && cb(data);
 		        }
 		    })

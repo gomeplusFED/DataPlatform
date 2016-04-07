@@ -24,16 +24,21 @@ if(window.initData){
 
     var Loading = require('./component/loading.vue');
     var Main = require('./component/main.vue');
+    var Alert = require('./component/alert.vue');
+
+    var store = require('./store/store.js');
 
     var app = new Vue({
         el: '#page-wrapper',
+        store,
         data: {
             loading: true,
-            initData: window.initData,
+            initData: window.initData
         },
         components: {
             'm-loading': Loading,
-            'm-main': Main
+            'm-main': Main,
+            'm-alert': Alert
         }
     });
 }
