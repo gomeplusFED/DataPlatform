@@ -26,10 +26,10 @@ module.exports = {
                 type : "chart",
                 title : "返利类型分布",
                 query_api : "/platformRebate/platformOrderFour"
-            //},{
-            //    type : "table",
-            //    title : "返利计划汇总",
-            //    query_api : "/platformRebate/platformOrderFive"
+            },{
+                type : "table",
+                title : "返利计划汇总",
+                query_api : "/platformRebate/platformOrderFive"
             }]
         }
     },

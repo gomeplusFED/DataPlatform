@@ -229,5 +229,14 @@ module.exports = {
                 stack: false
             }
         }]
+    },
+    platformOrderFive(data) {
+        var source = data.data;
+        source.forEach((key, value) => {
+            key.id = value + 1;
+            key.order_rate = key.new_order_count + "/" + key.order_all_count;
+            key.price_rate = key.new_order_amount + "/" + key.order_all_amount;
+        });
+        return util.toTable([source], data.rows, data.cols);
     }
 };

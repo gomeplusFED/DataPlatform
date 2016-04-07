@@ -148,7 +148,123 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/platformRebate/platformOrderFive",
-        modelName : "Rebate"
+        modelName : [ "RebatetSheduleDetails" ],
+        filter_select: [{
+            title: '使用方',
+            filter_key: 'user_party',
+            groups: [{
+                key: '单项单级返利',
+                value: '单项单级返利',
+                cell: {
+                    title: '关联流程',
+                    filter_key : 'correlate_flow',
+                    groups : [{
+                        key: '固定返利',
+                        value: '固定返利'
+                    },{
+                        key: '比例返利',
+                        value: '比例返利'
+                    }]
+                }
+            }, {
+                key: '平台基础返利',
+                value: '平台基础返利',
+                cell: {
+                    title: '关联流程',
+                    filter_key : 'correlate_flow',
+                    groups : [{
+                        key: '分享购买',
+                        value: '分享购买'
+                    },{
+                        key: '邀请好友-购买返利',
+                        value: '邀请好友-购买返利'
+                    },{
+                        key: '邀请好友-固定返利',
+                        value: '邀请好友-固定返利'
+                    }]
+                }
+            }, {
+                key: '平台促销返利',
+                value: '平台促销返利',
+                cell: {
+                    title: '关联流程',
+                    filter_key : 'correlate_flow',
+                    groups : [{
+                        key: '分享购买',
+                        value: '分享购买'
+                    },{
+                        key: '邀请好友-购买返利',
+                        value: '邀请好友-购买返利'
+                    },{
+                        key: '邀请好友-固定返利',
+                        value: '邀请好友-固定返利'
+                    }]
+                }
+            }, {
+                key: '邀请商家入驻返利',
+                value: '邀请商家入驻返利',
+                cell: {
+                    title: '关联流程',
+                    filter_key : 'correlate_flow',
+                    groups : [{
+                        key: '固定返利',
+                        value: '固定返利'
+                    }, {
+                        key: '分享购买',
+                        value: '分享购买'
+                    }]
+                }
+            }]
+        }],
+        filter(data, filter_key) {
+            return filter.platformOrderFive(data);
+        },
+        rows : [
+            [ "id", "", "user_party", "deadline", "correlate_flow", "level", "participate_seller_count",
+                "participate_goods_count", "participate_user_count", "order_rate", "price_rate",
+                "rebate_amount" ]
+        ],
+        cols : [
+            [
+                {
+                    caption : "序号",
+                    type : "number"
+                }, {
+                    caption : "返利计划名称",
+                    type : "string"
+                }, {
+                    caption : "使用方",
+                    type : "string"
+                }, {
+                    caption : "有效期",
+                    type : "string"
+                }, {
+                    caption : "相关流程",
+                    type : "string"
+                }, {
+                    caption : "层级",
+                    type : "string"
+                }, {
+                    caption : "参与商家数",
+                    type : "number"
+                }, {
+                    caption : "参与商品数",
+                    type : "number"
+                }, {
+                    caption : "参与用户数",
+                    type : "number"
+                }, {
+                    caption : "新增订单数/订单总数",
+                    type : "string"
+                }, {
+                    caption : "新增订单金额/订单总金额",
+                    type : "string"
+                }, {
+                    caption : "返利到账金额",
+                    type : "number"
+                }
+            ]
+        ]
     });
 
     return Router;
