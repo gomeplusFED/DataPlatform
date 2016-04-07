@@ -148,7 +148,7 @@ module.exports = {
             className: "fa fa-bar-chart-o fa-fw fa-fw",
             href: "#",
             path: [
-                1,
+                platformRebate.platformOrder(),
                 2,
                 3,
                 4,

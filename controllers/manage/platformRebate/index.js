@@ -12,12 +12,15 @@ module.exports = (Router) => {
         modelName : ["Rebate", "RebateRefund"],
         date_picker_data: 1,
         filter(data, filter_key) {
-            return filter.one(data);
+            return filter.platformOrderOne(data);
         },
         rows: [
-            ["name", "order_num", "order_amount", "shop_num", "user_num", "product_sku_num"],
-            ["rebate_order_num", "rebate_amount_total", "rebate_amount_actual", "rebate_amount", "rate"],
-            ["name", "spu_num", "sku_num", "user_num", "amount", "amount_actual"]
+            ["name", "order_count", "rebate_order_amount_count", "participate_seller_count",
+                "participate_user_count", "participate_goods_count"],
+            ["rebate_order_count", "rebate_order_amount_count", "rebate_order_amount_actual_count",
+                "rebate_amount_count", "rate"],
+            ["name", "spu_count", "sku_count", "refund_user_count", "refund_goods_amount_count",
+                "refund_goods_amount_actual_count"]
         ],
         cols: [
             [{

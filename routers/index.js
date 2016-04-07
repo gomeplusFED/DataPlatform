@@ -19,9 +19,10 @@ function addRouter(path) {
 addRouter('./combine');
 addRouter('./login');
 addRouter('./user');
-addRouter('../controllers/manage/dataOverview/index.js');
-addRouter('../controllers/manage/userAnalysis/index.js');
-addRouter('../controllers/manage/businessRebate/index.js');
+addRouter('../controllers/manage/dataOverview');
+addRouter('../controllers/manage/userAnalysis');
+addRouter('../controllers/manage/businessRebate');
+addRouter('../controllers/manage/platformRebate');
 
 
 for(var key of config.limit) {
