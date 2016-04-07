@@ -43,5 +43,19 @@ module.exports = {
                 }
             ]
         }
+    },
+    plan() {
+        return {
+            name : "商家返利计划",
+            path : "/businessRebate/plan",
+            display : true,
+            defaultData : [
+                {
+                    type : "table",
+                    title : "商家设置返利",
+                    query_api : "/businessRebate/planOne"
+                }
+            ]
+        }
     }
 };

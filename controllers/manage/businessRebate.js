@@ -259,5 +259,60 @@ module.exports = (Router) => {
         ]
     });
 
+    Router = new api(Router,{
+        router : "/businessRebate/planOne",
+        modelName : [ "RebateShopPlanTop" ],
+        excel_export : false,
+        date_picker_data: 1,
+        filter(data, filter_key) {
+            return businessRebate.planOne(data);
+        },
+        rows : [
+            [ "id", "plan_name", "shop_name", "deadline", "related_flow", "level", "spu_num", "user_num",
+                "pay_rate", "pay_price_rate", "rebate_amount", "refund_rate" ]
+        ],
+        cols : [
+            [
+                {
+                    caption : "序号",
+                    type : "number"
+                },{
+                    caption : "返利计划名称",
+                    type : "string"
+                },{
+                    caption : "商家名称",
+                    type : "string"
+                },{
+                    caption : "有效期",
+                    type : "string"
+                },{
+                    caption : "相关流程",
+                    type : "string"
+                },{
+                    caption : "层级",
+                    type : "string"
+                },{
+                    caption : "参与商品数",
+                    type : "number"
+                },{
+                    caption : "参与用户数",
+                    type : "number"
+                },{
+                    caption : "新增订单数/订单总数",
+                    type : "string"
+                },{
+                    caption : "新增订单金额/订单总金额",
+                    type : "string"
+                },{
+                    caption : "返利到账金额",
+                    type : "number"
+                },{
+                    caption : "退出率",
+                    type : "string"
+                }
+            ]
+        ]
+    });
+
     return Router;
 };
