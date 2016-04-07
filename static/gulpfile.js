@@ -28,6 +28,7 @@ var webpackConfig = {
         DataPlatform: './src/js/app.js',
         vendor: [
             pwd + '/src/js/lib/vue.min.js',
+            pwd + '/src/js/lib/vuex.min.js',
             pwd + '/src/js/lib/jquery.min.js',
             pwd + '/src/js/lib/bootstrap.min.js',
             pwd + '/src/js/lib/metisMenu.min.js',
@@ -61,7 +62,8 @@ var webpackConfig = {
             'Vue': pwd + '/src/js/lib/vue.min.js',
             'jQuery': pwd + '/src/js/lib/jquery.min.js',
             '$': pwd + '/src/js/lib/jquery.min.js',
-            'utils': pwd + '/src/js/utils/index.js'
+            'utils': pwd + '/src/js/utils/index.js',
+            'Vuex': pwd + '/src/js/lib/vuex.min.js'
         }
     },
 };
@@ -119,5 +121,5 @@ gulp.task('watch', function() {
 })
 
 gulp.task('default', ['clean'], function() {
-    gulp.start(['js', 'css', 'img','font']);
+    gulp.start('js', 'css', 'img','font');
 });

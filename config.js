@@ -20,7 +20,7 @@ module.exports = {
             className: "fa fa-dashboard fa-fw",
             href: "/dataOverview",
             path: [],
-            routers : [dataOverview()]
+            routers : [dataOverview.route()]
         }
     }, {
         "userManagement": {
