@@ -152,11 +152,8 @@ module.exports = {
                 2,
                 3,
                 4,
-                5, {
-                    name: "邀请注册、入驻",
-                    path: "/user/all",
-                    display: true
-                }
+                5, 
+                
             ],
             routers: []
         }
