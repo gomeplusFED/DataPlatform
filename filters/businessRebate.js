@@ -282,5 +282,16 @@ module.exports = {
             newData.push(obj);
         }
         return util.toTable([newData], data.rows, data.cols);
+    },
+    planOne(data) {
+        var source = data.data;
+        for(var i = 0; i < source.length; i++) {
+            source[i].id = i + 1;
+            source[i].pay_rate = source[i].order_num + "/" + source[i].total_order_num;
+            source[i].pay_price_rate = source[i].order_amount + "/" + source[i].total_order_amount;
+            source[i].refund_rate = (source[i].refund_sku_num / (source[i].sku_num === 0 ? 1 : source[i].sku_num)
+                * 100).toFixed(1) + "%";
+        }
+        return util.toTable([source], data.rows, data.cols);
     }
 };

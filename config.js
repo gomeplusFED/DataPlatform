@@ -157,7 +157,10 @@ module.exports = {
             className: "fa fa-desktop fa-fw",
             href: "/businessRebate",
             path: [],
-            routers : [businessRebate.all()]
+            routers : [
+                businessRebate.all(),
+                businessRebate.plan()
+            ]
         }
     }]
 };
