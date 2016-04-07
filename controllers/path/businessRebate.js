@@ -20,6 +20,21 @@ module.exports = {
                     type : "chart",
                     title : "返利订单趋势",
                     query_api : "/businessRebate/businessAllTwo"
+                },
+                {
+                    type : "chart",
+                    title : "返利层级分布",
+                    query_api : "/businessRebate/businessAllThree"
+                },
+                {
+                    type : "chart",
+                    title : "返利类型分布",
+                    query_api : "/businessRebate/businessAllFour"
+                },
+                {
+                    type : "table",
+                    title : "商家返利TOP50",
+                    query_api : "/businessRebate/businessAllFive"
                 }
             ]
         }

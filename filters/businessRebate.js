@@ -132,5 +132,80 @@ module.exports = {
             },
             data : newDate
         }];
+    },
+    businessAllThree(data, filter_key) {
+        var source = data.data,
+            newDataPie = {},
+            newDataBar = {},
+            mapPie = {},
+            mapBar = {},
+            filter_name = {
+                product_sku_num : "商品件数",
+                item_amount : "商品总金额",
+                rebate_amount : "返利到账金额"
+            },
+            typePie = "pie",
+            typeBar = "bar",
+            XPie = ["1级","2级","3级","4级"],
+            XBar = ["层级1","层级2","层级3","层级4"];
+        for(var level of XPie) {
+            var obj = {};
+            obj.value = 0;
+            for(var key of source) {
+                if(level === key.level) {
+                    obj.value += key[filter_key];
+                }
+            }
+            newDataPie[level] = obj;
+        }
+        mapPie.value= filter_name[filter_key];
+        return [{
+            type : typePie,
+            map : mapPie,
+            data : newDataPie,
+            config: {
+                stack: false
+            }
+        }]
+    },
+    businessAllFour(data, filter_key) {
+        var source = data.data,
+            newData = {},
+            map = {},
+            typePie = "pie",
+            typeBar = "bar",
+            filter_name = {
+                product_sku_num : "商品件数",
+                item_amount : "商品总金额",
+                rebate_amount : "返利到账金额"
+            },
+            XData = ["分销购买","分享购买"];
+        for(var x of XData) {
+            var obj = {
+                value : 0
+            };
+            for(var key of source) {
+                if(x === key.rebate_type) {
+                    obj.value += key[filter_key];
+                }
+            }
+            newData[x] = obj;
+        }
+        map.value = filter_name[filter_key];
+        return [{
+            type : typePie,
+            map : map,
+            data : newData,
+            config: {
+                stack: false
+            }
+        },{
+            type : typeBar,
+            map : map,
+            data : newData,
+            config: {
+                stack: false
+            }
+        }]
     }
 };

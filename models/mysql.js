@@ -419,6 +419,23 @@ function connect(app) {
         level : String,
         pay_order_time : Date
       });
+      models.RebateShopTop = db.define("tbl_rt_rebate_shop_top",{
+        id : {type: 'number', key: true},
+        date: Date,
+        day_type: Number,
+        type: String,
+        ver: String,
+        channel: String,
+        shop_name : String,
+        shop_id : Number,
+        plan_num : Number,
+        spu_num : Number,
+        rebate_amount : Number,
+        rebate_type : String,
+        category_name : String,
+        level : String,
+        pay_order_time : Date
+      });
       next();
     }
   }))
