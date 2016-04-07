@@ -39,7 +39,7 @@ module.exports = {
         "userAnalysis": {
             name: "用户分析",
             id: 3,
-            display: false,
+            display: true,
             className: "fa fa-bar-chart-o fa-fw",
             href: "#",
             path: [

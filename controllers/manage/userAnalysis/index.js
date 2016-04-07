@@ -32,18 +32,18 @@ module.exports = (Router) => {
                     },
                     width: 20
                 }, {
-                    caption: '新增用户',
-                    type: 'number'
-                }, {
-                    caption: '新增用户占比',
-                    type: 'string'
-                }, {
-                    caption: '新增账户',
-                    type: 'number'
-                }, {
-                    caption: '新增账户占比',
-                    type: 'string'
-                }
+                caption: '新增用户',
+                type: 'number'
+            }, {
+                caption: '新增用户占比',
+                type: 'string'
+            }, {
+                caption: '新增账户',
+                type: 'number'
+            }, {
+                caption: '新增账户占比',
+                type: 'string'
+            }
             ]
         ],
         platform : true,

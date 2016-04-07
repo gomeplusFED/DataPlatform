@@ -168,33 +168,33 @@ module.exports = (Router) => {
                     caption : "排名",
                     type : "number"
                 },{
-                    caption : "商家名称",
-                    type : "string"
-                },{
-                    caption : "计划数",
-                    type : "number"
-                },{
-                    caption : "参与商品数",
-                    type : "number"
-                },{
-                    caption : "参与用户数",
-                    type : "number"
-                },{
-                    caption : "新增订单数/订单总数",
-                    type : "string"
-                },{
-                    caption : "新增订单金额/订单总金额",
-                    type : "string"
-                },{
-                    caption : "预计返利金额",
-                    type : "number"
-                },{
-                    caption : "返利到账金额",
-                    type : "number"
-                },{
-                    caption : "平台到账金额",
-                    type : "number"
-                }
+                caption : "商家名称",
+                type : "string"
+            },{
+                caption : "计划数",
+                type : "number"
+            },{
+                caption : "参与商品数",
+                type : "number"
+            },{
+                caption : "参与用户数",
+                type : "number"
+            },{
+                caption : "新增订单数/订单总数",
+                type : "string"
+            },{
+                caption : "新增订单金额/订单总金额",
+                type : "string"
+            },{
+                caption : "预计返利金额",
+                type : "number"
+            },{
+                caption : "返利到账金额",
+                type : "number"
+            },{
+                caption : "平台到账金额",
+                type : "number"
+            }
             ]
         ]
     });
@@ -223,39 +223,39 @@ module.exports = (Router) => {
                     caption : "序号",
                     type : "number"
                 },{
-                    caption : "返利计划名称",
-                    type : "string"
-                },{
-                    caption : "商家名称",
-                    type : "string"
-                },{
-                    caption : "有效期",
-                    type : "string"
-                },{
-                    caption : "相关流程",
-                    type : "string"
-                },{
-                    caption : "层级",
-                    type : "string"
-                },{
-                    caption : "参与商品数",
-                    type : "number"
-                },{
-                    caption : "参与用户数",
-                    type : "number"
-                },{
-                    caption : "新增订单数/订单总数",
-                    type : "string"
-                },{
-                    caption : "新增订单金额/订单总金额",
-                    type : "string"
-                },{
-                    caption : "返利到账金额",
-                    type : "number"
-                },{
-                    caption : "退出率",
-                    type : "string"
-                }
+                caption : "返利计划名称",
+                type : "string"
+            },{
+                caption : "商家名称",
+                type : "string"
+            },{
+                caption : "有效期",
+                type : "string"
+            },{
+                caption : "相关流程",
+                type : "string"
+            },{
+                caption : "层级",
+                type : "string"
+            },{
+                caption : "参与商品数",
+                type : "number"
+            },{
+                caption : "参与用户数",
+                type : "number"
+            },{
+                caption : "新增订单数/订单总数",
+                type : "string"
+            },{
+                caption : "新增订单金额/订单总金额",
+                type : "string"
+            },{
+                caption : "返利到账金额",
+                type : "number"
+            },{
+                caption : "退出率",
+                type : "string"
+            }
             ]
         ]
     });
@@ -283,39 +283,39 @@ module.exports = (Router) => {
                     caption : "序号",
                     type : "number"
                 },{
-                    caption : "返利计划名称",
-                    type : "string"
-                },{
-                    caption : "商家名称",
-                    type : "string"
-                },{
-                    caption : "有效期",
-                    type : "string"
-                },{
-                    caption : "相关流程",
-                    type : "string"
-                },{
-                    caption : "层级",
-                    type : "string"
-                },{
-                    caption : "参与商品数",
-                    type : "number"
-                },{
-                    caption : "参与用户数",
-                    type : "number"
-                },{
-                    caption : "新增订单数/订单总数",
-                    type : "string"
-                },{
-                    caption : "新增订单金额/订单总金额",
-                    type : "string"
-                },{
-                    caption : "返利到账金额",
-                    type : "number"
-                },{
-                    caption : "退出率",
-                    type : "string"
-                }
+                caption : "返利计划名称",
+                type : "string"
+            },{
+                caption : "商家名称",
+                type : "string"
+            },{
+                caption : "有效期",
+                type : "string"
+            },{
+                caption : "相关流程",
+                type : "string"
+            },{
+                caption : "层级",
+                type : "string"
+            },{
+                caption : "参与商品数",
+                type : "number"
+            },{
+                caption : "参与用户数",
+                type : "number"
+            },{
+                caption : "新增订单数/订单总数",
+                type : "string"
+            },{
+                caption : "新增订单金额/订单总金额",
+                type : "string"
+            },{
+                caption : "返利到账金额",
+                type : "number"
+            },{
+                caption : "退出率",
+                type : "string"
+            }
             ]
         ]
     });
