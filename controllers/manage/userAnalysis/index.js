@@ -3,9 +3,9 @@
  * @date 201603231
  * @fileoverview 用户分析
  */
-var api = require("../../base/api"),
+var api = require("../../../base/api"),
     moment = require("moment"),
-    userAnalysis = require("../../filters/userAnalysis");
+    userAnalysis = require("../../../filters/userAnalysis");
 
 module.exports = (Router) => {
     Router = new api(Router,{

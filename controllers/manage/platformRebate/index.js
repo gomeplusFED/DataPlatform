@@ -3,8 +3,8 @@
  * @date 20160401
  * @fileoverview 平台返利汇总
  */
-var api = require("../../base/api"),
-    filter = require("../../filters/platformRebate");
+var api = require("../../../base/api"),
+    filter = require("../../../filters/platformRebate");
 
 module.exports = (Router) => {
     Router = new api(Router,{

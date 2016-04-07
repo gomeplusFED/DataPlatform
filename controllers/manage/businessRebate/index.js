@@ -3,9 +3,9 @@
  * @date 201600405
  * @fileoverview 商家返利汇总
  */
-var api = require("../../base/api"),
+var api = require("../../../base/api"),
     moment = require("moment"),
-    businessRebate = require("../../filters/businessRebate");
+    businessRebate = require("../../../filters/businessRebate");
 
 module.exports = (Router) => {
     Router = new api(Router, {

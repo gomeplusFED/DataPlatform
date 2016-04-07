@@ -4,9 +4,9 @@
  * @fileoverview 数据概览
  */
 
-var api = require("../../base/api"),
+var api = require("../../../base/api"),
     moment = require("moment"),
-    dataOverview = require("../../filters/dataOverview.js");
+    dataOverview = require("../../../filters/dataOverview.js");
 
 module.exports = (Router) => {
     Router = new api(Router, {
