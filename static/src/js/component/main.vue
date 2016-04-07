@@ -10,7 +10,7 @@
 					<m-drop-down :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'version'" :argvs.sync='argvs'></m-drop-down>
 					<m-drop-down :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'coupon'" :argvs.sync='argvs'></m-drop-down>
 					<m-date :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'date_picker'" :argvs.sync='argvs'></m-date>
-					<button class="btn btn-default excel_export" @click="downLoadExcel()" v-show="pageComponentsData.excel_export">导出</button>
+					<m-btns :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'btn_group'" :result-argvs="resultArgvs"></m-btns>
 				</div>
 			</div>
 			<div class="panel-body">
@@ -40,7 +40,7 @@ var DropDown = require('./dropDown.vue');
 var FilterSelect = require('./filterSelect.vue');
 var Table = require('./table.vue');
 var Chart = require('./chart.vue');
-
+var Btns = require('./btnGroup.vue');
 
 var utils = require('../utils/index.js');
 
@@ -67,7 +67,8 @@ var Main = Vue.extend({
 		'm-drop-down': DropDown,
 		'm-filter-select': FilterSelect,
 		'm-table': Table,
-		'm-chart': Chart
+		'm-chart': Chart,
+		'm-btns': Btns,
 	},
 	created: function(){
 		var _this = this;

@@ -17,7 +17,7 @@ var async = require("asyncawait/async");
 var await = require("asyncawait/await");
 var orm = require('orm');
 
-orm.settings.set("connection.pool",true);
+orm.settings.set("connection.pool", true);
 Object.keys(config).forEach(function(key) {
     app.locals[key] = config[key];
 });
@@ -76,9 +76,11 @@ app.use(function() {
     }
 });
 
-//app.use((err, req, res, next) => {
-//    res.render('include/404');
-//});
+app.use((err, req, res, next) => {
+    res.send({
+        iserro: true
+    });
+});
 
 // 测试
 app.get('/viewtest', (req, res, next) => {
@@ -127,7 +129,7 @@ app.get('/test_json1', (req, res) => {
     })
 })
 app.get('/test_json1_json', (req, res) => {
-    setTimeout(function(){
+    setTimeout(function() {
         res.send({
             code: 200,
             modelData: [{
@@ -188,7 +190,15 @@ app.get('/test_json1_json', (req, res) => {
                 }]
             }],
             components: {
-                excel_export: true,
+                flexible_btn: [{
+                    content: '导出',
+                    preMethods: ['excel_export','test'],
+                    customMethods: ''
+                }, {
+                    content: '<a href="asdasd" target="_blank">查看全部</a>',
+                    preMethods: [],
+                    customMethods: 'console.log("!!!");'
+                }],
                 date_picker: {
                     show: true,
                     defaultData: 7
@@ -306,7 +316,7 @@ app.get('/test_json2_json', (req, res) => {
             config: {
                 stack: true // 是否堆叠
             }
-        },{
+        }, {
             type: 'line',
             data: {
                 '2016-03-21': {

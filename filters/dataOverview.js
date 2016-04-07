@@ -11,7 +11,7 @@ module.exports = {
     dataOverviewAllOne(data, filter_key) {
         return [{
             data: {},
-            rows: ["", "pv", "predictToday"],
+            rows: ["", "uv", "pv", ""],
             cols: [{
                 caption: "",
                 type: "string"

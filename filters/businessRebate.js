@@ -152,11 +152,30 @@ module.exports = {
             var obj = {};
             obj.value = 0;
             for(var key of source) {
-                if(level === key.level) {
+                if(level === key.grade) {
                     obj.value += key[filter_key];
                 }
             }
             newDataPie[level] = obj;
+        }
+        for(var level of XPie) {
+            var obj = {};
+            for(var i = 0; i < XBar.length; i++) {
+                obj[i] = 0;
+            }
+            for(var key of source) {
+                if(key.level === level) {
+                    for(var i = 0; i < XBar.length; i++) {
+                        if(key.grade === XBar[i]) {
+                            obj[i] += key[filter_key];
+                        }
+                    }
+                }
+            }
+            newDataBar[level] = obj;
+        }
+        for(var i = 0; i < XBar.length; i++) {
+            mapBar[i] = XBar[i];
         }
         mapPie.value= filter_name[filter_key];
         return [{
@@ -165,6 +184,13 @@ module.exports = {
             data : newDataPie,
             config: {
                 stack: false
+            }
+        }, {
+            type : typeBar,
+            map : mapBar,
+            data : newDataBar,
+            config: {
+                stack: true
             }
         }]
     },
@@ -207,5 +233,54 @@ module.exports = {
                 stack: false
             }
         }]
+    },
+    businessAllFive(data) {
+        var source = data.data,
+            newData = [],
+            length = source.length,
+            top = length > 50 ? 50 : length;
+        source = util.sort(source, "order_num", "pay_order_num");
+        for(var i = 0; i < top; i++) {
+            var obj = {
+                id : i + 1,
+                shop_name : source[i].shop_name,
+                plan_num : source[i].plan_num,
+                spu_num : source[i].spu_num,
+                user_num : source[i].user_num,
+                pay_rate : source[i].order_num + "/" + source[i].total_order_num,
+                pay_price_rate : source[i].order_amount + "/" + source[i].total_order_amount,
+                plan_rebate_amount : source[i].plan_rebate_amount,
+                rebate_amount : source[i].rebate_amount,
+                platform_amount : source[i].platform_amount
+            }
+            newData.push(obj);
+        }
+        return util.toTable([newData], data.rows, data.cols);
+    },
+    businessAllSix(data) {
+        var source = data.data,
+            newData = [],
+            length = source.length,
+            top = length > 50 ? 50 : length;
+        source = util.sort(source, "order_num", "pay_order_num");
+        for(var i = 0; i < top; i++) {
+            var obj = {
+                id : i + 1,
+                plan_name : source[i].plan_name,
+                shop_name : source[i].shop_name,
+                deadline : source[i].deadline,
+                related_flow : source[i].related_flow,
+                level : source[i].level,
+                spu_num : source[i].spu_num,
+                user_num : source[i].user_num,
+                pay_rate : source[i].order_num + "/" + source[i].total_order_num,
+                pay_price_rate : source[i].order_amount + "/" + source[i].total_order_amount,
+                rebate_amount : source[i].rebate_amount,
+                refund_rate : (source[i].refund_sku_num / (source[i].sku_num === 0 ? 1 : source[i].sku_num)
+                    * 100).toFixed(1) + "%"
+            };
+            newData.push(obj);
+        }
+        return util.toTable([newData], data.rows, data.cols);
     }
 };

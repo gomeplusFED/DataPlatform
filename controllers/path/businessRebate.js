@@ -35,6 +35,11 @@ module.exports = {
                     type : "table",
                     title : "商家返利TOP50",
                     query_api : "/businessRebate/businessAllFive"
+                },
+                {
+                    type : "table",
+                    title : "商家返利计划TOP50",
+                    query_api : "/businessRebate/businessAllSix"
                 }
             ]
         }

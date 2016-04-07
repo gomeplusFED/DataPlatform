@@ -13,7 +13,7 @@ module.exports = {
             defaultData: [{
                 type: "table",
                 title: "数据概览",
-                query_api: "/dataOverview/dataOverviewAllOne"
+                query_api: "/test_json1"
             }]
         }
     }
