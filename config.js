@@ -20,7 +20,7 @@ module.exports = {
             className: "fa fa-dashboard fa-fw",
             href: "/dataOverview",
             path: [],
-            routers : [dataOverview.all()]
+            routers: [dataOverview.all()]
         }
     }, {
         "userManagement": {
@@ -152,9 +152,13 @@ module.exports = {
                 2,
                 3,
                 4,
-                5,
-                6
-            ]
+                5, {
+                    name: "邀请注册、入驻",
+                    path: "/user/all",
+                    display: true
+                }
+            ],
+            routers: []
         }
     }, {
         "businessRebate": {
@@ -164,7 +168,7 @@ module.exports = {
             className: "fa fa-desktop fa-fw",
             href: "/businessRebate",
             path: [],
-            routers : [
+            routers: [
                 businessRebate.all(),
                 businessRebate.plan()
             ]
