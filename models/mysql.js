@@ -17,7 +17,7 @@ function connect(app) {
         id:{type: 'serial', key: true},
         username: String,
         is_admin:{type:"number",defaultValue:0},
-        limited:  {type:"text",defaultValue:"2,3-0-1-2-3,4,5-0-1-2,6-0-1-2-3-4,7-0,8-0-1-2-3-4-5-6-7-8-9-10-11-12-13,9-0,10,11,12,13-0-1-2,14-0-1-2,16"},
+        limited:  {type:"text",defaultValue:"2,3-0-1-2-3,4,5-0-1-2,6-0-1-2-3-4,7-0,8-0-1-2-3-4-5-6-7-8-9-10-11-12-13,9-0,10,11,12,13-0-1-2,14-0-1-2,15-0-1-2-3-4-5,16"},
         last_ip: String,
         login_ip: String,
         login_time: Date,

@@ -28,8 +28,8 @@ module.exports = {
                 participate_goods_count: 0
             },
             objTwe = {
-                rebate_order_num: 0,
-                rebate_amount_total: 0,
+                rebate_order_count: 0,
+                rebate_order_amount_count: 0,
                 rebate_amount_actual: 0,
                 rebate_amount: 0,
                 platform_amount: 0
@@ -67,6 +67,6 @@ module.exports = {
             participate_seller_count: util.toFixed(objOne.participate_seller_count, oneThree),
             participate_user_count: util.toFixed(objOne.participate_user_count, oneFour),
             participate_goods_count: util.toFixed(objOne.participate_goods_count, oneFive)
-        })
+        });
     }
 };
