@@ -81,6 +81,9 @@ var Table = Vue.extend({
                                 responsive: false,
                                 lengthChange: false,
                                 retrieve: true,
+                                "language": {
+                                    "emptyTable": "暂无数据"
+                                }
                             }
                             eachTableData.data.length > 9 ? setConfig.paging = true : setConfig.paging = false;
                             var t = $('#table_' + _this.index).children().eq(tableIndex).DataTable(setConfig);
