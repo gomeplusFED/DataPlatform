@@ -81,13 +81,7 @@ var Main = Vue.extend({
 		})
 	},
 	methods: {
-		downLoadExcel: function(){
-			var resultQuery = [];
-			for(var item in this.resultArgvs){
-				resultQuery.push(item + '=' + this.resultArgvs[item]);
-			}
-			window.open(this.currentData.query_api + '_excel?' +  resultQuery.join('&'));
-		}
+		
 	},
 	watch: {
 		'argvs': {
