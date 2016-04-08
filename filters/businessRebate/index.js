@@ -3,7 +3,7 @@
  * @date 20160405
  * @fileoverview 商家返利汇总
  */
-var util = require("../utils"),
+var util = require("../../utils"),
     moment = require("moment"),
     _ = require("lodash");
 
