@@ -553,6 +553,18 @@ function connect(app) {
                 rebate_amount_count: Number,
                 pay_order_time: Date
             });
+            models.RebatetRegisterTrendency = db.define("tbl_rt_rebate_register_trendency", {
+                id: { type: 'number', key: true },
+                date: Date,
+                day_type: Number,
+                type: String,
+                ver: String,
+                channel: String,
+                registered_count: Number,
+                rebate_amount_count: Number,
+                user_party: String,
+                pay_order_time: Date
+            });
             next();
         }
     }))

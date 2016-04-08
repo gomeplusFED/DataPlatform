@@ -39,14 +39,39 @@ module.exports = {
     },
     inviteRegisterAndEnterTwo(data) {
         var source = data.data,
+            registered_all_count = 0,
+            newData = [],
             obj = {
                 rebate_plan_count : 0,
                 participate_user_count : 0,
-                registered_count : 0
+                registered_count : 0,
+                rebate_amount_count : 0
             };
+        for(var key of source) {
+            registered_all_count = key.registered_all_count;
+            obj.rebate_plan_count += key.rebate_plan_count;
+            obj.participate_user_count += key.participate_user_count;
+            obj.registered_count += key.registered_count;
+            obj.rebate_amount_count += key.rebate_amount_count;
+        }
+        obj.registered_rate = util.toFixed(obj.registered_count, registered_all_count);
+        newData.push(obj);
+        return util.toTable([newData], data.rows, data.cols);
     },
-    inviteRegisterAndEnterThree() {
-        return '123'
+    inviteRegisterAndEnterThree(data, filter_key) {
+        var source = data.data,
+            array = [ "邀请好友-平台基础返利", "邀请好友-平台促销返利", "邀请商家入驻返利" ],
+            type = "line",
+            map = {
+                basis : "邀请好友-平台基础返利",
+                promotions : "邀请好友-平台促销返利",
+                shop : "邀请商家入驻返利"
+            },
+            dates = util.uniq(_.pluck(source, "date")),
+            newData = {};
+        for(var date of dates) {
+            
+        }
     },
     inviteRegisterAndEnterFour() {
         return '123'
