@@ -63,6 +63,9 @@ var DateCom = Vue.extend({
                     "startDate": this.pageComponentsData[this.componentType].defaultData === 1 ? yesterday : last7Day,
                     "endDate": yesterday,
                     "opens": "left",
+                    "dateLimit": {
+                        "days": 60
+                    },
                     "singleDatePicker": this.pageComponentsData[this.componentType].defaultData === 1,
                     "alwaysShowCalendars": true,
                     "locale": {

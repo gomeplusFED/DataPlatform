@@ -22,12 +22,10 @@
 	</div>
 </div>
 </template>
-
 <style>
 .panel-heading{position: relative;line-height: 32px;}
 .head_group_con{position: absolute;top: 50%;transform: translateY(-50%);-webkit-transform: translateY(-50%);right: 5px;font-size: 0;z-index: 9;}
 .head_group_con .head_group{display: inline-block;vertical-align: middle;font-size: 14px;margin: 0 5px;}
-
 </style>
 
 <script>

@@ -3,9 +3,14 @@
 		<div class="filter_group" :id="'filter_group_' + index + '_' + $index" v-for="item in pageComponentsData[componentType]" track-by="$index">
 			<div class="group">
 				<strong>{{item.title}}{{item.title === '' ? '' : '：'}}</strong>
-				<div class="btn_group">
+				<div class="btn_group" v-if="!isCell">
 					<button v-for="group in item.groups" @click="getArgv(item.filter_key,group.key,$event)" track-by="$index">{{group.value}}</button>
-				</div>	
+				</div>
+				<div class="btn_group" v-else>
+					<select :value="item.groups[0].key" v-model="selected" @change="extraSelect($event)">
+						<option v-for="group in item.groups" :value="group.key">{{group.value}}</option>
+					</select>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -14,7 +19,8 @@
 <style>
 .filter_select{font-size: 0;margin: 0 0 12px 0;display: inline-block;}
 .filter_select .filter_group{display: inline-block;vertical-align: middle;margin-right: 25px;}
-.filter_select .filter_group .group{}
+.filter_select .filter_group .group{display: inline-block;vertical-align: middle;margin-left: 25px;}
+.filter_select .filter_group .group:first-child{margin-left: 0;}
 .filter_select .filter_group .group strong{font-size: 12px;display: inline-block;vertical-align: middle;}
 .filter_select .filter_group .group .btn_group{font-size: 0;display: inline-block;vertical-align: middle;}
 .filter_select .filter_group .group .btn_group:hover button{border-color: #bbb;}
@@ -23,6 +29,8 @@
 .filter_select .filter_group .group .btn_group button:first-child{border-radius: 2px 0 0 2px;margin-left: 0;}
 .filter_select .filter_group .group .btn_group button:last-child{border-radius: 0 2px 2px 0;}
 .filter_select .filter_group .group .btn_group button.active{background: #3389d4;border: 1px solid #3389d4;color: #fff;}
+.filter_select .filter_group .group .btn_group select{font-size: 12px;outline: none;padding: 0;margin: 0;display: inline-block;vertical-align: middle;height: 27px;line-height: 27px;color: #555;background-color: #fff;    border: 1px solid #ccc;border-radius: 4px;-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);}
+.filter_select .filter_group .group .btn_group select option{font-size: 12px;}
 </style>
 
 <script>
@@ -34,7 +42,8 @@ var FilterSelect = Vue.extend({
 	name: 'FilterSelect',
 	data: function(){
 		return {
-			targetParentGroup: null
+			targetParentGroup: null,
+			isCell: false
 		}
 	},
 	props: ['index','pageComponentsData','componentType','argvs','initData'],
@@ -44,6 +53,22 @@ var FilterSelect = Vue.extend({
 	methods: {
 		getArgv: function(key,value,ev){
 			Vue.set(this.argvs, key, value);
+		},
+		extraSelect: function(ev){
+			console.info(this.selected);
+		},
+		checkHasCell: function(){
+			for(var item of this.pageComponentsData[this.componentType]){
+				var _count = 0;
+				for(var group of item.groups){
+					if(group.cell && group.cell.groups.length){
+						_count ++;
+						if(_count === item.groups.length){
+							this.isCell = true;
+						}
+					}
+				}
+			}
 		}
 	},
 	watch: {
@@ -54,6 +79,10 @@ var FilterSelect = Vue.extend({
 				if(val === null || !this.pageComponentsData[this.componentType].length > 0){
 					return;
 				}
+				// 检测filter是否是级联选择
+				this.checkHasCell();
+
+				// 纯按钮事件绑定
 				for(var i = 0;i < this.pageComponentsData[this.componentType].length;i++){
 					(function(filterIndex){
 						$('#filter_group_' + _this.index + '_' + filterIndex).find('button').bind('click',function(){
@@ -63,6 +92,9 @@ var FilterSelect = Vue.extend({
 					})(i)
 					$('#filter_group_' + this.index + '_' + i).find('button').eq(0).trigger('click');
 				}
+
+				// 级联菜单事件绑定
+				
 
 			},
 			deep: true
