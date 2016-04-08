@@ -23,6 +23,7 @@ addRouter('../controllers/manage/dataOverview');
 addRouter('../controllers/manage/userAnalysis');
 addRouter('../controllers/manage/businessRebate');
 addRouter('../controllers/manage/platformRebate');
+addRouter('../controllers/manage/platformRebate/inviteRegisterAndEnter');
 
 
 for(var key of config.limit) {

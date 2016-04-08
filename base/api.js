@@ -164,7 +164,7 @@ api.prototype = {
             try {
                 sendData.data = await (this._findDatabase(req, this.modelName[0], query));
                 if (this.modelName[1]) {
-                    sendData.orderData = await (this._findDatabase(req, this.modelName[0], query));
+                    sendData.orderData = await (this._findDatabase(req, this.modelName[1], query));
                 }
             }catch(err) {
                 isErr = true;

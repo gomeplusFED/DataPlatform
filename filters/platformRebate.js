@@ -46,7 +46,7 @@ module.exports = {
                 refund_goods_amount_actual_count: 0,
                 total_amount_actual: 0
             };
-        for(var key of source) {
+        for (var key of source) {
             oneOne = key.total_order_num;
             oneTwo = key.total_order_amount;
             oneThree = key.total_shop_num;
@@ -62,7 +62,7 @@ module.exports = {
             objTwo.rebate_order_amount_actual_count += key.rebate_order_amount_actual_count;
             objTwo.rebate_amount_count += key.rebate_amount_count;
         }
-        for(var key of orderSource) {
+        for (var key of orderSource) {
             objThree.spu_count += key.spu_count;
             objThree.sku_count += key.sku_count;
             objThree.refund_user_count += key.refund_user_count;
@@ -87,7 +87,7 @@ module.exports = {
         two.push(objTwo);
         three.push(objThree);
         three.push({
-            name : "返利退货订单占比",
+            name: "返利退货订单占比",
             spu_count: util.toFixed(objThree.spu_count, objThree.total_spu_num),
             sku_count: util.toFixed(objThree.sku_count, objThree.total_sku_num),
             refund_user_count: util.toFixed(objThree.refund_user_count, objThree.total_user_num),
@@ -95,5 +95,57 @@ module.exports = {
             refund_goods_amount_actual_count: util.toFixed(objThree.refund_goods_amount_actual_count, objThree.total_amount_actual)
         });
         return util.toTable([one, two, three], data.rows, data.cols);
-    }
+    },
+
+
+
+
+
+
+
+
+
+
+    inviteRegisterAndEnterOne(data) {
+        var source = data.data;
+        var resultData = [];
+        var _current = {};
+        _current.rows = data.rows;
+        _current.cols = data.cols;
+        _current.data = [];
+        var one = {
+            "rebate_plan_count": 0,
+            "participate_user_count": 0,
+            "registered_count": 0,
+            "rebate_amount_count": 0,
+        }
+        for(var item of source){
+            one.rebate_plan_count += item.rebate_plan_count;
+            one.participate_user_count += item.participate_user_count;
+            one.registered_count += item.registered_count;
+            one.rebate_amount_count += item.rebate_amount_count;
+        }
+        _current.data.push({
+            "rebate_plan_count": one.rebate_plan_count,
+            "participate_user_count": one.participate_user_count,
+            "registered_count": one.registered_count,
+            "registered_rate": util.toFixed(one.registered_count, one.participate_user_count),
+            "rebate_amount_count": one.rebate_amount_count
+        });
+        resultData.push(_current);
+        return resultData;
+    },
+    inviteRegisterAndEnterTwo() {
+        return '123'
+    },
+    inviteRegisterAndEnterThree() {
+        return '123'
+    },
+    inviteRegisterAndEnterFour() {
+        return '123'
+    },
+
+
+
+
 };

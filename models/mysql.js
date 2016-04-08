@@ -482,6 +482,20 @@ function connect(app) {
         sku_num : Number,
         pay_order_time : Date
       });
+      models.RebateInvitepartner = db.define("tbl_rt_rebate_invitepartner",{
+        id : {type: 'number', key: true},
+        date: Date,
+        day_type: Number,
+        type: String,
+        ver: String,
+        channel: String,
+        rebate_plan_count : Number,
+        participate_user_count : Number,
+        registered_count : Number,
+        registered_all_count : Number,
+        rebate_amount_count : Number,
+        pay_order_time : String
+      });
       next();
     }
   }))
