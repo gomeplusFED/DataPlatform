@@ -44,6 +44,18 @@ module.exports = {
                 query_api : "/platformRebate/inviteRegisterAndEnterOne"
             },]
         }
+    },
+    individualEvent() {
+        return {
+            path : "/platformRebate/individualEvent",
+            name : "单项单级返利",
+            display : true,
+            defaultData : [{
+                type : "table",
+                title : "单项单级返利总览",
+                query_api : "/platformRebate/individualEventOne"
+            }]
+        }
     }
 };
 
