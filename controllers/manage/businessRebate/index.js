@@ -205,7 +205,7 @@ module.exports = (Router) => {
         date_picker_data: 1,
         flexible_btn : [
             {
-                content: '<a href="/businessRebate/plan" target="_blank">查看全部</a>',
+                content: '<a href="/businessRebate/plan" target="_blank">更多</a>',
                 preMethods: [],
                 customMethods: ''
             }

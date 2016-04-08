@@ -97,9 +97,149 @@ module.exports = {
         return util.toTable([one, two, three], data.rows, data.cols);
     },
 
-
-
-
+    platformOrderTwe(data, filter_key) {
+        var source = data.data,
+            dates = util.uniq(_.pluck(source, "date")),
+            type = "line",
+            array = ["单项单级返利", "平台基础返利", "平台促销返利", "邀请商家入驻返利"],
+            newData = {},
+            map = {};
+        map[filter_key + "_0"] = array[0];
+        map[filter_key + "_1"] = array[1];
+        map[filter_key + "_2"] = array[2];
+        map[filter_key + "_3"] = array[3];
+        for (var date of dates) {
+            var obj = {};
+            for (var key of source) {
+                if (date.getTime() === key.date.getTime()) {
+                    for (var i = 0; i < array.length; i++) {
+                        if (key.rebate_type === array[i]) {
+                            obj[filter_key + "_" + i] += key[filter_key];
+                        }
+                    }
+                }
+            }
+            newData[moment(date).format("YYYY-MM-DD")] = obj;
+        }
+        return [{
+            type: type,
+            map: map,
+            config: {
+                stack: false
+            },
+            data: newData
+        }];
+    },
+    platformOrderThree(data, filter_key) {
+        var source = data.data,
+            typePie = "pie",
+            typeBar = "bar",
+            mapPie = {},
+            mapBar = {},
+            newDataPie = {},
+            newDataBar = {},
+            filter_name = {
+                goods_sku_count: "商品件数",
+                goods_amount_count: "商品总金额",
+                rebate_amount_count: "返利到账金额"
+            },
+            XPie = ["1级", "2级", "3级", "4级"],
+            XBar = ["层级1", "层级2", "层级3", "层级4"];
+        for (var level of XPie) {
+            var obj = {};
+            obj.value = 0;
+            for (var key of source) {
+                if (level === key.grade) {
+                    obj.value += key[filter_key];
+                }
+            }
+            newDataPie[level] = obj;
+        }
+        for (var level of XPie) {
+            var obj = {};
+            for (var i = 0; i < XBar.length; i++) {
+                obj[i] = 0;
+            }
+            for (var key of source) {
+                if (key.level === level) {
+                    for (var i = 0; i < XBar.length; i++) {
+                        if (key.grade === XBar[i]) {
+                            obj[i] += key[filter_key];
+                        }
+                    }
+                }
+            }
+            newDataBar[level] = obj;
+        }
+        for (var i = 0; i < XBar.length; i++) {
+            mapBar[i] = XBar[i];
+        }
+        mapPie.value = filter_name[filter_key];
+        return [{
+            type: typePie,
+            map: mapPie,
+            data: newDataPie,
+            config: {
+                stack: false
+            }
+        }, {
+            type: typeBar,
+            map: mapBar,
+            data: newDataBar,
+            config: {
+                stack: true
+            }
+        }]
+    },
+    platformOrderFour(data, filter_key) {
+        var source = data.data,
+            newData = {},
+            map = {},
+            typePie = "pie",
+            typeBar = "bar",
+            filter_name = {
+                goods_sku_count: "商品件数",
+                goods_amount_count: "商品总金额",
+                rebate_amount_count: "返利到账金额"
+            },
+            XData = ["单项单级返利", "平台基础返利", "平台促销返利", "邀请商家入驻返利"];
+        for (var x of XData) {
+            var obj = {
+                value: 0
+            };
+            for (var key of source) {
+                if (x === key.rebate_type) {
+                    obj.value += key[filter_key];
+                }
+            }
+            newData[x] = obj;
+        }
+        map.value = filter_name[filter_key];
+        return [{
+            type: typePie,
+            map: map,
+            data: newData,
+            config: {
+                stack: false
+            }
+        }, {
+            type: typeBar,
+            map: map,
+            data: newData,
+            config: {
+                stack: false
+            }
+        }]
+    },
+    platformOrderFive(data) {
+        var source = data.data;
+        source.forEach((key, value) => {
+            key.id = value + 1;
+            key.order_rate = key.new_order_count + "/" + key.order_all_count;
+            key.price_rate = key.new_order_amount + "/" + key.order_all_amount;
+        });
+        return util.toTable([source], data.rows, data.cols);
+    },
 
 
 
@@ -119,7 +259,7 @@ module.exports = {
             "registered_count": 0,
             "rebate_amount_count": 0,
         }
-        for(var item of source){
+        for (var item of source) {
             one.rebate_plan_count += item.rebate_plan_count;
             one.participate_user_count += item.participate_user_count;
             one.registered_count += item.registered_count;
