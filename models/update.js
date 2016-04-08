@@ -60,7 +60,7 @@ module.exports.userRoleUpdate = function(params, func) {
       func(err);
     } else {
       if (ret.length > 0) {
-        ret[0].isAdmin = role;
+        ret[0].is_admin = role;
         ret[0].limited = self.userLimitUpdateByCondition(role,/0\-0(\,)?/,"0-0,",ret[0].limited);
         ret[0].save(function(error) {
           if (error) {

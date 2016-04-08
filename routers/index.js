@@ -24,6 +24,10 @@ addRouter('../controllers/manage/userAnalysis');
 addRouter('../controllers/manage/businessRebate');
 addRouter('../controllers/manage/platformRebate');
 addRouter('../controllers/manage/platformRebate/inviteRegisterAndEnter');
+addRouter('../controllers/manage/platformRebate/individualEvent');
+addRouter('../controllers/manage/platformRebate/platformPromotions');
+addRouter('../controllers/manage/platformRebate/platformBasis');
+addRouter('../controllers/manage/platformRebate/inviteBusiness');
 
 
 for(var key of config.limit) {

@@ -11,7 +11,7 @@
                 <th width="10%">ID</th>
                 <th width="10%">邮箱</th>
                 <th width="20%">管理员/普通用户</th>
-                <% if(session.userInfo.isAdmin){%> <th width="70%">权限操作</th><%}%>
+                <% if(session.userInfo.is_admin){%> <th width="70%">权限操作</th><%}%>
               </tr>
             </thead>
             <tbody>
@@ -19,9 +19,9 @@
                 users.forEach(function(user){%>
                   <tr>
                     <% Object.keys(user).forEach(function(item){
-                        if(item === "isAdmin"){
+                        if(item === "is_admin"){
                           %>
-                          <td><span class="user-role"><%=user[item] ? "管理员" : "普通用户"%></span><a href="javascript:;" class="limit-change-role btn btn-default pull-right <%= session.userInfo.isAdmin && parseInt(session.userInfo.isAdmin) === 99? "" : "hidden"%> title="编辑<%=user.id%>的角色" data-role="<%=user.isAdmin%>" data-id="<%=user.id%>">角色修改<i class="fa fa-pencil-square-o"></i></a></td>
+                          <td><span class="user-role"><%=user[item] ? "管理员" : "普通用户"%></span><a href="javascript:;" class="limit-change-role btn btn-default pull-right <%= session.userInfo.is_admin && parseInt(session.userInfo.is_admin) === 99? "" : "hidden"%> title="编辑<%=user.id%>的角色" data-role="<%=user.is_admin%>" data-id="<%=user.id%>">角色修改<i class="fa fa-pencil-square-o"></i></a></td>
                           <%
                         }else{
                           %>
@@ -30,8 +30,8 @@
                         }
                       }) 
                     %>
-                    <% if(session.userInfo.isAdmin){%>
-                        <td class="<%=session.userInfo.isAdmin?'' : 'hidden';%>">
+                    <% if(session.userInfo.is_admin){%>
+                        <td class="<%=session.userInfo.is_admin?'' : 'hidden';%>">
                             <a href="javascript:;" class="limit-edit btn btn-default" data-id="<%=user.id%>" title="编辑<%=user.id%>的权限">编辑<i class="fa fa-pencil-square-o"></i></a>
                             <form style="display:none;" class="form-inline pull-right" method="post"><input type="hidden" name="userId" value="<%=user.id%>"/><input type="hidden"  name="limits"><input class="btn btn-default" type="button" value="保存" name="submit"></form>
                             <select class='js-example-responsive js-data-example-ajax form-control hidden'  multiple='multiple' style="width: 50%"></select>

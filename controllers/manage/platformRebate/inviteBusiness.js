@@ -1,21 +1,21 @@
 /**
  * @author yanglei
  * @date 20160408
- * @fileoverview 单项单级返利
+ * @fileoverview 邀请商户入驻
  */
 var api = require("../../../base/api"),
-    filter = require("../../../filters/platformRebate/individualEvent");
+    filter = require("../../../filters/platformRebate/inviteBusiness");
 
 module.exports = (Router) => {
     Router = new api(Router, {
-        router : "/platformRebate/individualEventOne",
+        router : "/platformRebate/inviteBusinessOne",
         modelName : ["Rebate", "RebateRefund"],
         fixedParams : {
-            user_party : "单项单级返利"
+            user_party : "邀请商户入驻"
         },
         date_picker_data: 1,
         filter(data, filter_key) {
-            return filter.individualEventOne(data);
+            return filter.inviteBusinessOne(data);
         },
         rows: [
             ["defate_plan_count", "participate_seller_count", "participate_goods_count", "order_count",
@@ -81,10 +81,10 @@ module.exports = (Router) => {
     });
 
     Router = new api(Router, {
-        router : "/platformRebate/individualEventTwo",
+        router : "/platformRebate/inviteBusinessTwo",
         modelName : [ "RebatetRedencyDetails" ],
         fixedParams : {
-            user_party : "单项单级返利"
+            user_party : "邀请商户入驻"
         },
         filter_select: [{
             title: '指标选择',
@@ -101,15 +101,15 @@ module.exports = (Router) => {
             }]
         }],
         filter(data, filter_key) {
-            return filter.individualEventTwo(data, filter_key);
+            return filter.inviteBusinessTwo(data, filter_key);
         }
     });
 
     Router = new api(Router,{
-        router : "/platformRebate/individualEventThree",
+        router : "/platformRebate/inviteBusinessThree",
         modelName : [ "RebatetRedencyDetails" ],
         fixedParams : {
-            user_party : "单项单级返利"
+            user_party : "邀请商户入驻"
         },
         filter_select: [{
             title: '指标选择',
@@ -126,23 +126,23 @@ module.exports = (Router) => {
             }]
         }],
         filter(data, filter_key) {
-            return filter.individualEventThree(data, filter_key);
+            return filter.inviteBusinessThree(data, filter_key);
         }
     });
 
     Router = new api(Router,{
-        router : "/platformRebate/individualEventFour",
+        router : "/platformRebate/inviteBusinessFour",
         modelName : [ "RebatetSheduleDetails" ],
         fixedParams : {
-            user_party : "单项单级返利"
+            user_party : "邀请商户入驻"
         },
         excel_export : true,
-        flexible_btn : [{
-            content: '导出',
-            preMethods: ['excel_export']
-        }],
+        //flexible_btn : [{
+        //    content: '导出',
+        //    preMethods: ['excel_export']
+        //}],
         filter(data, filter_key) {
-            return filter.individualEventFour(data);
+            return filter.inviteBusinessFour(data);
         },
         rows : [
             [ "id", "rebate_plan_name", "user_party", "deadline", "correlate_flow", "level", "participate_seller_count",

@@ -1,7 +1,7 @@
 /**
  * @author luoye
  * @date 20160407
- * @fileoverview 邀请注册、入驻
+ * @fileoverview 邀请注册 / 入驻
  */
 var api = require("../../../base/api"),
     filter = require("../../../filters/platformRebate");
@@ -10,8 +10,8 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/platformRebate/inviteRegisterAndEnterOne",
         modelName : ["RebateInvitepartner"],
-        date_picker_data: 7,
-        filter(data) {
+        date_picker_data: 1,
+        filter(data, filter_key) {
             return filter.inviteRegisterAndEnterOne(data);
         },
         rows: ["rebate_plan_count", "participate_user_count", "registered_count", "registered_rate", "rebate_amount_count"],
@@ -35,12 +35,13 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/platformRebate/inviteRegisterAndEnterTwo",
-        date_picker_data: 7,
-        modelName : ["Rebate", "RebateRefund"],
+        date_picker_data: 1,
+        modelName : [ "RebatetInviteseller" ],
         filter(data, filter_key) {
             return filter.inviteRegisterAndEnterTwo(data);
         },
-        rows: ["rebate_plan_count", "participate_user_count", "registered_count", "registered_rate", "rebate_amount_count"],
+        rows: ["rebate_plan_count", "participate_user_count", "registered_count", "registered_rate",
+            "rebate_amount_count"],
         cols: [{
             "caption": "返利计划数",
             "type": "string"
