@@ -1,80 +1,71 @@
 <% include ../include/header.html %>
-<link rel="stylesheet" href="/admin/dist/css/select2.min.css">
- <div id="page-wrapper">
-     <div class="row">
-         <div class="col-lg-12">
-             <h1 class="page-header">用户管理</h1>
-             <div class="table-responsive">
-          <table class="table table-bordered table-hover table-striped table-condensed" id="userInfoTable">
-            <thead>
-              <tr>
-                <th width="10%">ID</th>
-                <th width="10%">邮箱</th>
-                <th width="20%">管理员/普通用户</th>
-                <% if(session.userInfo.is_admin){%> <th width="70%">权限操作</th><%}%>
-              </tr>
-            </thead>
-            <tbody>
-              <% if (users.length) { 
-                users.forEach(function(user){%>
-                  <tr>
-                    <% Object.keys(user).forEach(function(item){
-                        if(item === "is_admin"){
-                          %>
-                          <td><span class="user-role"><%=user[item] ? "管理员" : "普通用户"%></span><a href="javascript:;" class="limit-change-role btn btn-default pull-right <%= session.userInfo.is_admin && parseInt(session.userInfo.is_admin) === 99? "" : "hidden"%> title="编辑<%=user.id%>的角色" data-role="<%=user.is_admin%>" data-id="<%=user.id%>">角色修改<i class="fa fa-pencil-square-o"></i></a></td>
-                          <%
-                        }else{
-                          %>
-                            <td><%=user[item]%></td>
-                          <%
-                        }
-                      }) 
-                    %>
-                    <% if(session.userInfo.is_admin){%>
-                        <td class="<%=session.userInfo.is_admin?'' : 'hidden';%>">
-                            <a href="javascript:;" class="limit-edit btn btn-default" data-id="<%=user.id%>" title="编辑<%=user.id%>的权限">编辑<i class="fa fa-pencil-square-o"></i></a>
-                            <form style="display:none;" class="form-inline pull-right" method="post"><input type="hidden" name="userId" value="<%=user.id%>"/><input type="hidden"  name="limits"><input class="btn btn-default" type="button" value="保存" name="submit"></form>
-                            <select class='js-example-responsive js-data-example-ajax form-control hidden'  multiple='multiple' style="width: 50%"></select>
-                        </td>
-                    <%}%>
-                  </tr>
-                <% }) %>
-              <% 
-                }else{
-                  %>
-                  <tr><td colspan="5">
-                    <div class="alert alert-info alert-dismissible" role="alert" style="margin-bottom:0px;">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <strong>温馨提示：</strong>未搜索到相关的数据，请重新搜索
+<link rel="stylesheet" type="text/css" href="/dist/css/DataPlatform.min.css">
+<div id="page-wrapper">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <strong>用户管理</strong>
+                </div>
+                <div class="panel-body">
+                    <div class="table_con table-responsive">
+                        <table class="table table-bordered table-hover" role="grid" aria-describedby="dataTables_info"></table>
                     </div>
-                  </td></tr>
-                  <%
-                }
-              %>
-            </tbody>
-            <tfoot>
-              <tr>
-                <td colspan="5" style="position:relative;">
-                  <input type="text" class="form-control pull-left" placeholder="请输入邮箱帐号......" style="width:initial;" name="search-by-mail">
-                  <span class="pull-left" style="margin-left:5px;">
-                    <button class="btn btn-default" type="button" name="search-btn">查询</button>
-                  </span>
-                  <span class="alert-message hidden label label-danger pull-left" style="position:absolute;top:50%;transform:translateY(-50%);"></span>
-                </td>
-              </tr>
-            </tfoot>
-          </table>
-       </div>
-       <%- include('../include/pagination.html',{currentPage:currentPage,pageCount:pageCount,pageMax:pageMax,paginationMaxCount:paginationMaxCount,path:path})%>
-         </div>
-     </div>
- </div>
- <script>
-  var $page_config = {
-      currentPage : <%=currentPage%>,
-      pageCount : <%=pageCount%>,
-      path:'<%=path%>'
-  };
-  var limitArray = <%-JSON.stringify(limit);%>;
- </script>
- <%- include('../include/footer.html') %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript" src="/src/js/lib/jquery.min.js"></script>
+<script type="text/javascript" src="/src/js/lib/jquery-table.min.js"></script>
+<script type="text/javascript">
+    
+</script>
+    <script>
+    var $page_config = {
+        currentPage: <%=currentPage%>,
+        pageCount: <%=pageCount%>,
+        path: '<%=path%>'
+    };
+    var limitArray = <%-JSON.stringify(limit);%>;
+    var users = <%- JSON.stringify(users); %>;
+    var columns = [];
+    var map = {
+        id: 'ID',
+        username: '邮箱',
+        is_admin: '管理员/普通用户'
+    }
+
+    for(var key in users[0]){
+        columns.push({
+            data: key,
+            title: map[key]
+        })
+    }
+
+    for (var i = users.length - 1; i >= 0; i--) {
+        users[i].is_admin = users[i].is_admin === 0 ? '普通用户' : '管理员';
+    }
+
+    var setConfig = {
+        columns: columns,
+        data: users,
+        ordering: false,
+        info: false,
+        responsive: false,
+        lengthChange: false,
+        retrieve: true,
+        "language": {
+            "emptyTable": "暂无数据",
+            "search": "查询："
+        }
+    }
+
+    $('.table').DataTable(setConfig);
+    
+    </script>
+</div>
+</body>
+</html>
