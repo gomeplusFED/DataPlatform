@@ -12,7 +12,6 @@
 </template>
 
 <style>
-
 .filter_select{font-size: 0;margin: 0 0 12px 0;display: inline-block;}
 .filter_select .filter_group{display: inline-block;vertical-align: middle;margin-right: 25px;}
 .filter_select .filter_group .group{}
@@ -24,7 +23,6 @@
 .filter_select .filter_group .group .btn_group button:first-child{border-radius: 2px 0 0 2px;margin-left: 0;}
 .filter_select .filter_group .group .btn_group button:last-child{border-radius: 0 2px 2px 0;}
 .filter_select .filter_group .group .btn_group button.active{background: #3389d4;border: 1px solid #3389d4;color: #fff;}
-
 </style>
 
 <script>
