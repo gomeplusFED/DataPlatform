@@ -5,7 +5,7 @@
  */
 var _ = require("lodash"),
     moment = require("moment"),
-    util = require("../utils");
+    util = require("../../utils");
 
 module.exports = {
     platformOrderOne(data) {

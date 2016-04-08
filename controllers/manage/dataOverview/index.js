@@ -6,7 +6,7 @@
 
 var api = require("../../../base/api"),
     moment = require("moment"),
-    dataOverview = require("../../../filters/dataOverview.js");
+    dataOverview = require("../../../filters/dataOverview");
 
 module.exports = (Router) => {
     Router = new api(Router, {

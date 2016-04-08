@@ -3,7 +3,7 @@
  * @date 20160407
  * @fileoverview 数据概览
  */
-var util = require("../utils"),
+var util = require("../../utils"),
     moment = require("moment"),
     _ = require("lodash");
 
