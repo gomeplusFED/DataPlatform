@@ -7,7 +7,8 @@ var _ = require("lodash"),
     moment = require("moment"),
     util = require("../../utils");
 
-module.exports = { inviteRegisterAndEnterOne(data) {
+module.exports = {
+    inviteRegisterAndEnterOne(data) {
         var source = data.data;
         var resultData = [];
         var _current = {};
