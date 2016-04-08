@@ -149,11 +149,11 @@ module.exports = {
             href: "#",
             path: [
                 platformRebate.platformOrder(),
-                2,
+                platformRebate.individualEvent(),
                 3,
                 4,
                 5, 
-                platformRebate.inviteRegisterAndEnter(),
+                platformRebate.inviteRegisterAndEnter()
             ],
             routers: []
         }
