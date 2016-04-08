@@ -34,7 +34,7 @@ module.exports = function(Router) {
         var fixedRet = lodash.map(ret, function(item) {
           var obj = {};
           lodash.forIn(item, function(val, key) {
-            if (val !== null && (key === "id" || key === "username" || key === "isAdmin")) {
+            if (val !== null && (key === "id" || key === "username" || key === "is_admin")) {
               obj[key] = val;
             }
           });

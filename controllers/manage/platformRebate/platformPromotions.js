@@ -1,21 +1,21 @@
 /**
  * @author yanglei
  * @date 20160408
- * @fileoverview 单项单级返利
+ * @fileoverview 平台促销返利
  */
 var api = require("../../../base/api"),
-    filter = require("../../../filters/platformRebate/individualEvent");
+    filter = require("../../../filters/platformRebate/platformPromotions");
 
 module.exports = (Router) => {
     Router = new api(Router, {
-        router : "/platformRebate/individualEventOne",
+        router : "/platformRebate/platformPromotionsOne",
         modelName : ["Rebate", "RebateRefund"],
         fixedParams : {
-            user_party : "单项单级返利"
+            user_party : "平台促销返利"
         },
         date_picker_data: 1,
         filter(data, filter_key) {
-            return filter.individualEventOne(data);
+            return filter.platformPromotionsOne(data);
         },
         rows: [
             ["defate_plan_count", "participate_seller_count", "participate_goods_count", "order_count",
@@ -81,10 +81,10 @@ module.exports = (Router) => {
     });
 
     Router = new api(Router, {
-        router : "/platformRebate/individualEventTwo",
+        router : "/platformRebate/platformPromotionsTwo",
         modelName : [ "RebatetRedencyDetails" ],
         fixedParams : {
-            user_party : "单项单级返利"
+            user_party : "平台促销返利"
         },
         filter_select: [{
             title: '指标选择',
@@ -101,15 +101,15 @@ module.exports = (Router) => {
             }]
         }],
         filter(data, filter_key) {
-            return filter.individualEventTwo(data, filter_key);
+            return filter.platformPromotionsTwo(data, filter_key);
         }
     });
 
     Router = new api(Router,{
-        router : "/platformRebate/individualEventThree",
+        router : "/platformRebate/platformPromotionsThree",
         modelName : [ "RebatetRedencyDetails" ],
         fixedParams : {
-            user_party : "单项单级返利"
+            user_party : "平台促销返利"
         },
         filter_select: [{
             title: '指标选择',
@@ -126,23 +126,48 @@ module.exports = (Router) => {
             }]
         }],
         filter(data, filter_key) {
-            return filter.individualEventThree(data, filter_key);
+            return filter.platformPromotionsThree(data, filter_key);
         }
     });
 
     Router = new api(Router,{
-        router : "/platformRebate/individualEventFour",
-        modelName : [ "RebatetSheduleDetails" ],
+        router : "/platformRebate/platformPromotionsFour",
+        modelName : [ "RebatetRedencyDetails" ],
         fixedParams : {
-            user_party : "单项单级返利"
+            user_party : "平台促销返利"
         },
-        excel_export : true,
-        flexible_btn : [{
-            content: '导出',
-            preMethods: ['excel_export']
+        filter_select: [{
+            title: '指标选择',
+            filter_key: 'filter_key',
+            groups: [{
+                key: 'goods_sku_count',
+                value: '商品件数'
+            }, {
+                key: 'goods_amount_count',
+                value: '商品总金额'
+            }, {
+                key: 'rebate_amount_count',
+                value: '返利到账金额'
+            }]
         }],
         filter(data, filter_key) {
-            return filter.individualEventFour(data);
+            return filter.platformPromotionsFour(data, filter_key);
+        }
+    });
+
+    Router = new api(Router,{
+        router : "/platformRebate/platformPromotionsFive",
+        modelName : [ "RebatetSheduleDetails" ],
+        fixedParams : {
+            user_party : "平台促销返利"
+        },
+        excel_export : true,
+        //flexible_btn : [{
+        //    content: '导出',
+        //    preMethods: ['excel_export']
+        //}],
+        filter(data, filter_key) {
+            return filter.platformPromotionsFive(data);
         },
         rows : [
             [ "id", "rebate_plan_name", "user_party", "deadline", "correlate_flow", "level", "participate_seller_count",

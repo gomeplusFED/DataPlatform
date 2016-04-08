@@ -37,8 +37,13 @@ module.exports = {
         resultData.push(_current);
         return resultData;
     },
-    inviteRegisterAndEnterTwo() {
-        return '123'
+    inviteRegisterAndEnterTwo(data) {
+        var source = data.data,
+            obj = {
+                rebate_plan_count : 0,
+                participate_user_count : 0,
+                registered_count : 0
+            };
     },
     inviteRegisterAndEnterThree() {
         return '123'

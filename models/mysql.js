@@ -525,6 +525,7 @@ function connect(app) {
                 ver: String,
                 channel: String,
                 deadline: String,
+                rebate_plan_name: String,
                 level: String,
                 participate_seller_count: Number,
                 participate_goods_count: Number,
@@ -536,6 +537,20 @@ function connect(app) {
                 rebate_amount: Number,
                 user_party: String,
                 correlate_flow: String,
+                pay_order_time: Date
+            });
+            models.RebatetInviteseller = db.define("tbl_rt_rebate_inviteseller", {
+                id: { type: 'number', key: true },
+                date: Date,
+                day_type: Number,
+                type: String,
+                ver: String,
+                channel: String,
+                rebate_plan_count: Number,
+                participate_user_count: Number,
+                registered_count: Number,
+                registered_all_count: Number,
+                rebate_amount_count: Number,
                 pay_order_time: Date
             });
             next();

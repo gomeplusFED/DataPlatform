@@ -12,7 +12,7 @@ module.exports.userFindAll = function(params, func) {
     model = params.model;
 
   var findParams = {
-    isAdmin: orm.ne('99')
+    is_admin: orm.ne('99')
   };
   if (params.query) {
       findParams.username = orm.like('%' + params.query + '%');

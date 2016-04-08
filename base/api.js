@@ -20,6 +20,8 @@ function api(Router, options) {
         router: "",
         //数据库
         modelName: [],
+        //固定参数
+        fixedParams : {},
         //行
         rows: [],
         //列
@@ -116,6 +118,9 @@ api.prototype = {
                 this[key] = query[key];
                 delete query[key];
             }
+        });
+        Object.keys(this.fixedParams).forEach((key) => {
+            query[key] = this.fixedParams[key];
         });
         this._getCache(type, res, req, query, next, params);
     },

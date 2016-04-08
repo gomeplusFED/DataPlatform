@@ -149,6 +149,11 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/platformRebate/platformOrderFive",
         modelName : [ "RebatetSheduleDetails" ],
+        excel_export : true,
+        flexible_btn : [{
+            content: '导出',
+            preMethods: ['excel_export']
+        }],
         filter_select: [{
             title: '使用方',
             filter_key: 'user_party',
@@ -220,7 +225,7 @@ module.exports = (Router) => {
             return filter.platformOrderFive(data);
         },
         rows : [
-            [ "id", "", "user_party", "deadline", "correlate_flow", "level", "participate_seller_count",
+            [ "id", "rebate_plan_name", "user_party", "deadline", "correlate_flow", "level", "participate_seller_count",
                 "participate_goods_count", "participate_user_count", "order_rate", "price_rate",
                 "rebate_amount" ]
         ],

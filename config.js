@@ -26,14 +26,14 @@ module.exports = {
         "userManagement": {
             name: "用户管理",
             id: 0,
-            display: false,
+            display: true,
             className: "fa fa-user fa-fw",
             href: "#",
             path: [{
                 name: "用户列表",
                 path: "/user/all",
                 display: true
-            }],
+            }]
         }
     }, {
         "userAnalysis": {
@@ -150,9 +150,9 @@ module.exports = {
             path: [
                 platformRebate.platformOrder(),
                 platformRebate.individualEvent(),
-                3,
-                4,
-                5, 
+                platformRebate.platformPromotions(),
+                platformRebate.platformBasis(),
+                platformRebate.inviteBusiness(),
                 platformRebate.inviteRegisterAndEnter()
             ],
             routers: []
