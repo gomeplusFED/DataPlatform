@@ -5,6 +5,7 @@
 			<div class="panel-heading">
 				<strong>{{currentData.title}}</strong>
 				<div class="head_group_con">
+					<m-multi-select :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'multi_select'" :argvs.sync='argvs'></m-multi-select>
 					<m-drop-down :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'platform'" :argvs.sync='argvs'></m-drop-down>
 					<m-drop-down :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'channel'" :argvs.sync='argvs'></m-drop-down>
 					<m-drop-down :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'version'" :argvs.sync='argvs'></m-drop-down>
@@ -39,6 +40,7 @@ var FilterSelect = require('./filterSelect.vue');
 var Table = require('./table.vue');
 var Chart = require('./chart.vue');
 var Btns = require('./btnGroup.vue');
+var MultiSelect = require('./multiSelect.vue')
 
 var utils = require('../utils/index.js');
 
@@ -67,6 +69,7 @@ var Main = Vue.extend({
 		'm-table': Table,
 		'm-chart': Chart,
 		'm-btns': Btns,
+		'm-multi-select': MultiSelect
 	},
 	created: function(){
 		var _this = this;

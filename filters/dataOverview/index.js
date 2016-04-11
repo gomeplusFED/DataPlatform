@@ -9,39 +9,61 @@ var util = require("../../utils"),
 
 module.exports = {
     dataOverviewAllOne(data, filter_key) {
-        console.log(filter_key);
-        return [{
-            data: [{
-                "channel": "ALL",
-                "new_users": 3305,
-                "active_users": 16,
-                "start_up": 36,
-                "new_users_rate": "100%"
-            }, {
-                "channel": "ALL",
-                "new_users": 3305,
-                "active_users": 16,
-                "start_up": 36,
-                "new_users_rate": "100%"
-            }],
-            rows: ["channel", "new_users", "active_users", "start_up", "new_users_rate"],
+        var sourceData = data.data; 
+        var resultArr = [];
+        var resultData = [];
+
+        // resultData = [{
+        //     "": "昨日",
+        //     "start_up": 100,
+        //     "active_users": 3305,
+        //     "startup_per": 16,
+        //     "new_users": 36,
+        //     "new_users_rate": "100%",
+        //     "new_account": "100%",
+        //     "register_rate": "100%",
+        //     "use_time_everyone": "100%",
+        //     "use_time_everytime": "100%"
+        // }];
+
+        resultArr[0] = {
+            rows: ["", "start_up", "active_users", "startup_per", "new_users", "new_users_rate", "new_account", "register_rate", "use_time_everyone", "use_time_everytime"],
             cols: [{
-                "caption": "渠道名",
+                "caption": "",
                 "type": "string"
             }, {
-                "caption": "新增用户",
+                "caption": "启动次数",
                 "type": "number"
             }, {
                 "caption": "活跃用户",
                 "type": "number"
             }, {
-                "caption": "启动次数",
+                "caption": "人均启动次数",
+                "type": "number"
+            }, {
+                "caption": "新用户",
                 "type": "number"
             }, {
                 "caption": "新用户占比",
+                "type": "string"
+            }, {
+                "caption": "新增账户",
                 "type": "number"
+            }, {
+                "caption": "注册转化率",
+                "type": "string"
+            }, {
+                "caption": "每人使用时长",
+                "type": "string"
+            }, {
+                "caption": "每次使用时长",
+                "type": "string"
             }]
-        }]
+        }
+
+        resultArr[0].data = resultData;
+
+        return resultArr;
     },
     dataOverviewAllTwo(data, filter_key) {
         return [{

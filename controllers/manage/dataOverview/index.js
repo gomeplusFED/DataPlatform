@@ -11,7 +11,7 @@ var api = require("../../../base/api"),
 module.exports = (Router) => {
     Router = new api(Router, {
         router: "/dataOverview/dataOverviewAllOne",
-        modelName: ["RebateShopOverview", "RebateShopRefund"],
+        modelName: ["NewAccount"],
         date_picker: false,
         filter_select: [{
             title: '',

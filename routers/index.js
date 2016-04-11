@@ -19,6 +19,7 @@ function addRouter(path) {
 addRouter('./combine');
 addRouter('./login');
 addRouter('./user');
+// addRouter('./multiSelect');
 addRouter('../controllers/manage/dataOverview');
 addRouter('../controllers/manage/userAnalysis');
 addRouter('../controllers/manage/businessRebate');
