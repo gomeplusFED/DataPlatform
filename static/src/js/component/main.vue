@@ -4,7 +4,7 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<strong>{{currentData.title}}</strong>
-				<div class="head_group_con">
+				<div class="head_group_con clearfix">
 					<m-multi-select :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'multi_select'" :argvs.sync='argvs'></m-multi-select>
 					<m-drop-down :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'platform'" :argvs.sync='argvs'></m-drop-down>
 					<m-drop-down :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'channel'" :argvs.sync='argvs'></m-drop-down>
@@ -25,7 +25,7 @@
 </template>
 <style>
 .panel-heading{position: relative;line-height: 32px;}
-.head_group_con{position: absolute;top: 50%;transform: translateY(-50%);-webkit-transform: translateY(-50%);right: 5px;font-size: 0;z-index: 9;}
+.head_group_con{right: 5px;font-size: 0;z-index: 9;display: inline-block;vertical-align: middle;float: right;}
 .head_group_con .head_group{display: inline-block;vertical-align: middle;font-size: 14px;margin: 0 5px;}
 </style>
 
