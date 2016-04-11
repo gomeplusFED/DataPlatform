@@ -53,7 +53,6 @@ var Table = Vue.extend({
                 // 参数改了 请求数据，进行渲染
                 var _this = this;
                 if(this.currentData.type.indexOf('table') !== -1){
-                    this.$log('resultArgvs');
                     var tableTpl = '<table class="table table-bordered table-hover" role="grid" aria-describedby="dataTables_info"></table>'
                     this.loading = true;
                     this.scrollTop = $(document).scrollTop(),

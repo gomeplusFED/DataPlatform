@@ -92,6 +92,8 @@ var Main = Vue.extend({
 					}
 				}
 				this.resultArgvs = result;
+				// for debug
+				this.$log('resultArgvs');
 			},
 			deep: true
 		}
