@@ -87,15 +87,115 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/platformRebate/inviteRegisterAndEnterFour",
         date_picker_data: 7,
-        modelName : ["Rebate", "RebateRefund"],
+        modelName : ["RebatetRegisterSheduleDetails"],
         flexible_btn: [{
             content: '导出',
             preMethods: ['excel_export'],
             customMethods: ''
         }],
+        filter_select: [{
+            title: '使用方',
+            filter_key: 'user_party',
+            groups: [{
+                key: '单项单级返利',
+                value: '单项单级返利',
+                cell: {
+                    title: '关联流程',
+                    filter_key : 'correlate_flow',
+                    groups : [{
+                        key: '固定返利',
+                        value: '固定返利'
+                    },{
+                        key: '比例返利',
+                        value: '比例返利'
+                    }]
+                }
+            }, {
+                key: '平台基础返利',
+                value: '平台基础返利',
+                cell: {
+                    title: '关联流程',
+                    filter_key : 'correlate_flow',
+                    groups : [{
+                        key: '分享购买',
+                        value: '分享购买'
+                    },{
+                        key: '邀请好友-购买返利',
+                        value: '邀请好友-购买返利'
+                    },{
+                        key: '邀请好友-固定返利',
+                        value: '邀请好友-固定返利'
+                    }]
+                }
+            }, {
+                key: '平台促销返利',
+                value: '平台促销返利',
+                cell: {
+                    title: '关联流程',
+                    filter_key : 'correlate_flow',
+                    groups : [{
+                        key: '分享购买',
+                        value: '分享购买'
+                    },{
+                        key: '邀请好友-购买返利',
+                        value: '邀请好友-购买返利'
+                    },{
+                        key: '邀请好友-固定返利',
+                        value: '邀请好友-固定返利'
+                    }]
+                }
+            }, {
+                key: '邀请商家入驻返利',
+                value: '邀请商家入驻返利',
+                cell: {
+                    title: '关联流程',
+                    filter_key : 'correlate_flow',
+                    groups : [{
+                        key: '固定返利',
+                        value: '固定返利'
+                    }, {
+                        key: '分享购买',
+                        value: '分享购买'
+                    }]
+                }
+            }]
+        }],
         filter(data, filter_key) {
             return filter.inviteRegisterAndEnterFour(data);
-        }
+        },
+        rows : [
+            ["id", "rebate_plan_name", "user_party", "deadline", "correlate_flow", "participate_user_count",
+                "registered_count", "rebate_amount_count"]
+        ],
+        cols : [
+            [
+                {
+                    caption : "序号",
+                    type : "number"
+                },{
+                    caption : "返利计划名称",
+                    type : "string"
+                },{
+                    caption : "使用方",
+                    type : "string"
+                },{
+                    caption : "有效期",
+                    type : "string"
+                },{
+                    caption : "相关流程",
+                    type : "string"
+                },{
+                    caption : "参与用户数",
+                    type : "number"
+                },{
+                    caption : "用户注册成功数(商户入驻成功数)",
+                    type : "number"
+                },{
+                    caption : "返利到账金额",
+                    type : "number"
+                }
+            ]
+        ]
     });
 
     return Router;

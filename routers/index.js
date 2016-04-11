@@ -1,6 +1,10 @@
 var express = require('express'),
     router = express.Router(),
     config = require('../config'),
+    fs = require("fs"),
+    async = require("asyncawait/async"),
+    await = require("asyncawait/await"),
+    files = "./controllers/manage",
     renderApi = require("./renderApi");
 
 //var model = mysql.init({
@@ -16,20 +20,38 @@ function addRouter(path) {
     module.exports.push(require(path)(router));
 }
 
+var filePath = async ((path) => {
+    return new Promise((resolve, reject) =>{
+        fs.readdir(path, (err, data) => {
+            if(err) {
+                reject(err);
+            } else {
+                resolve(data);
+            }
+        })
+    });
+});
+
 addRouter('./combine');
 addRouter('./login');
 addRouter('./user');
-// addRouter('./multiSelect');
-addRouter('../controllers/manage/dataOverview');
-addRouter('../controllers/manage/userAnalysis');
-addRouter('../controllers/manage/businessRebate');
-addRouter('../controllers/manage/platformRebate');
-addRouter('../controllers/manage/platformRebate/inviteRegisterAndEnter');
-addRouter('../controllers/manage/platformRebate/individualEvent');
-addRouter('../controllers/manage/platformRebate/platformPromotions');
-addRouter('../controllers/manage/platformRebate/platformBasis');
-addRouter('../controllers/manage/platformRebate/inviteBusiness');
-addRouter('../controllers/manage/platformRebate/inviteRegisterAndEnter');
+
+
+async (() => {
+    try {
+        var data = await (filePath(files));
+        for(var file of data) {
+            if(file.indexOf(".js") < 0) {
+                var f = await (filePath(files + "/" + file));
+                for(var key of f) {
+                    addRouter("." + files + "/" + file + "/" + key);
+                }
+            }
+        }
+    } catch(err) {
+        console.log("readdir error, error in ./routers/index.js");
+    }
+})();
 
 
 for(var key of config.limit) {
