@@ -63,17 +63,43 @@ module.exports = {
             array = [ "邀请好友-平台基础返利", "邀请好友-平台促销返利", "邀请商家入驻返利" ],
             type = "line",
             map = {
-                basis : "邀请好友-平台基础返利",
-                promotions : "邀请好友-平台促销返利",
-                shop : "邀请商家入驻返利"
+                value_0 : "邀请好友-平台基础返利",
+                value_1 : "邀请好友-平台促销返利",
+                value_2 : "邀请商家入驻返利"
             },
             dates = util.uniq(_.pluck(source, "date")),
             newData = {};
         for(var date of dates) {
-            
+            var obj = {
+                value_0 : 0,
+                value_1 : 0,
+                value_2 : 0
+            };
+            for(var key of source) {
+                if(date.getTime() === key.date.getTime()) {
+                    for(var i = 0; i < array.length; i++) {
+                        if(array[i] === key.user_party) {
+                            obj["value_" + i] += key[filter_key];
+                        }
+                    }
+                }
+            }
+            newData[moment(date).format("YYYY-MM-DD")] = obj;
         }
+        return [{
+            type : type,
+            map : map,
+            data : newData,
+            config: {
+                stack: false
+            }
+        }];
     },
-    inviteRegisterAndEnterFour() {
-        return '123'
+    inviteRegisterAndEnterFour(data) {
+        var source = data.data;
+        for(var i = 0; i < source.length; i++) {
+            source[i].id = i + 1;
+        }
+        return util.toTable([source], data.rows, data.cols);
     }
 };
