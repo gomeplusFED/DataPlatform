@@ -9,6 +9,7 @@ var util = require("../../utils"),
 
 module.exports = {
     dataOverviewAllOne(data, filter_key) {
+        console.log(filter_key);
         return [{
             data: [{
                 "channel": "ALL",

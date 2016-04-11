@@ -2,11 +2,6 @@
 var Vue = require('Vue');
 var $ = require('jQuery');
 
-// for debug
-window.jQuery = $;
-window.$ = $;
-
-
 var dom = require('./dom/index.js');
 
 var _currentHtml = '';

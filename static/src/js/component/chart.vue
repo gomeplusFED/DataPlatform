@@ -142,7 +142,6 @@ var Chart = Vue.extend({
 	        handler: function(val){
 	            // 参数改了 请求数据，进行渲染
 	            if(this.checkIsChart()){
-		            this.$log('resultArgvs');
 		            var _this = this;
 		            _this.loading = true;
 		            this.fetchData(function(data){
