@@ -52,7 +52,7 @@ function api(Router, options) {
         //初始时间
         date_picker_data: 7,
         //联动菜单
-        level_select: false,
+        level_select: true,
         //单选
         filter_select: [],
         //过滤数据

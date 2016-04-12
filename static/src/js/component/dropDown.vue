@@ -19,6 +19,13 @@
 
 <script>
 
+/*
+ * 组件说明
+ * 名称： 下拉组件
+ * 数据来源：drop_down
+ * 详细：下拉分为四个部分：版本、平台、渠道、优惠券。下拉框的数据是死的，显示与否根据相应字段来控制(plataform、channel、version、coupon)
+ */
+
 var Vue = require('Vue');
 var $ = require('jQuery');
 

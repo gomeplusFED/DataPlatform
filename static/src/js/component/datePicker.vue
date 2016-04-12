@@ -10,6 +10,15 @@
 .date_picker span{font-size: 12px;margin-left: -20px;position: absolute;top: 50%;transform: translateY(-50%);-webkit-transform: translateY(-50%);}
 </style>
 <script>
+
+/*
+ * 组件说明
+ * 名称：时间控件
+ * 数据来源：date_picker
+ * 详细：date_picker.show -> 控制组件是否显示
+        date_picker.defaultData -> 1:选择单天  7:任意选择
+ */
+
 var Vue = require('Vue');
 var $ = require('jQuery');
 
