@@ -163,6 +163,7 @@ module.exports = (Router) => {
     Router = new api(Router, {
         router: "/dataOverview/dataOverviewAllFour",
         modelName: ["OverviewPage"],
+        date_picker : false,
         params : {
             date : orm.between(new Date(ydate + " 00:00:00"), new Date(ydate + " 23:59:59")),
             day_type : 1
