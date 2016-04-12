@@ -99,7 +99,7 @@ var Table = Vue.extend({
                                     }
                                 }
                             }
-                            eachTableData.data.length > 9 ? setConfig.paging = true : setConfig.paging = false;
+                            eachTableData.data.length > 10 ? setConfig.paging = true : setConfig.paging = false;
                             var t = $('#table_' + _this.index).children().eq(tableIndex).DataTable(setConfig);
                         })
                         // 所有组件加载完毕之后loading消失
