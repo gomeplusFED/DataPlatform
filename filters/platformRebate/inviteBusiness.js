@@ -84,6 +84,9 @@ module.exports = {
             array = [ "分享返利" ],
             newData = {},
             map = {};
+        dates.sort((a, b) => {
+            return new Date(a) - new Date(b);
+        });
         map[filter_key + "_0"] = array[0];
         for (var date of dates) {
             var obj = {};

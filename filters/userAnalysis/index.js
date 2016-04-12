@@ -15,6 +15,9 @@ module.exports = {
             data = [],
             map = {},
             dates = util.uniq(_.pluck(source, "date"));
+        dates.sort((a, b) => {
+            return new Date(a) - new Date(b);
+        });
         for(var i = 0; i < mapKey.length; i++) {
             map[mapKey[i]] = mapName[i];
         }
@@ -47,6 +50,9 @@ module.exports = {
             total_users = 0,
             total_account = 0,
             dates = util.uniq(_.pluck(source, "date"));
+        dates.sort((a, b) => {
+            return new Date(b) - new Date(a);
+        });
         for(var date of dates) {
             var obj = {
                 date : moment(date).format("YYYY-MM-DD"),
@@ -78,6 +84,9 @@ module.exports = {
             dates = util.uniq(_.pluck(source, "date")),
             total_users = 0,
             total_account = 0;
+        dates.sort((a, b) => {
+            return new Date(b) - new Date(a);
+        });
         for(var date of dates) {
             var obj = {
                 date : moment(date).format("YYYY-MM-DD"),

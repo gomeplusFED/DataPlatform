@@ -105,6 +105,9 @@ module.exports = {
             map = {},
             newDate = {},
             dates = util.uniq(_.pluck(source, "date"));
+        dates.sort((a, b) => {
+            return new Date(a) - new Date(b);
+        });
         map[filter_key + "_0"] = "分销购买";
         map[filter_key + "_1"] = "分享购买";
         map[filter_key + "_2"] = "组合返利";

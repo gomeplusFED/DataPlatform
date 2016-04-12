@@ -20,7 +20,7 @@ module.exports = {
             "participate_user_count": 0,
             "registered_count": 0,
             "rebate_amount_count": 0,
-        }
+        };
         for (var item of source) {
             one.rebate_plan_count += item.rebate_plan_count;
             one.participate_user_count += item.participate_user_count;
@@ -69,6 +69,9 @@ module.exports = {
             },
             dates = util.uniq(_.pluck(source, "date")),
             newData = {};
+        dates.sort((a, b) => {
+            return new Date(a) - new Date(b);
+        });
         for(var date of dates) {
             var obj = {
                 value_0 : 0,
