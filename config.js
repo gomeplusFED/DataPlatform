@@ -20,7 +20,8 @@ module.exports = {
             className: "fa fa-dashboard fa-fw",
             href: "#",
             path: [
-                dataOverview.all()
+                dataOverview.all(),
+                dataOverview.wap()
             ]
         }
     }, {

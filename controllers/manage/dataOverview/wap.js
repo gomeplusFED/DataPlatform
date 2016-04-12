@@ -1,6 +1,6 @@
 /**
  * @author yanglei
- * @date 20160329
+ * @date 20160412
  * @fileoverview 数据概览
  */
 
@@ -15,7 +15,7 @@ module.exports = (Router) => {
         ydate = util.getDate(new Date(now.getTime() - 24 * 60 * 60 * 1000)),
         qdate = util.getDate(new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000));
     Router = new api(Router, {
-        router: "/dataOverview/dataOverviewAllOne",
+        router: "/dataOverview/wapOne",
         modelName: ['OverviewPlatf', "KpiValue"],
         date_picker : false,
         params : {
@@ -28,11 +28,11 @@ module.exports = (Router) => {
             day_type : 1
         },
         filter(data, filter_key) {
-            return dataOverview.dataOverviewAllOne(data, "H5");
+            return dataOverview.dataOverviewAllOne(data, "");
         },
         rows : [
-            ['name', 'open_total', 'open_user_total', 'open_user_avg', 'new_user',
-                'new_user_rate', 'new_account', 'register_rate', 'stay_time_avg', 'using_time_avg',
+            ['name', 'uv', 'pv', 'ip_count', 'jump_loss_rate',
+                'new_user', 'new_user_rate', 'new_account', 'register_rate', 'visit_time_avg',
                 "pv", "create"]
         ],
         cols : [
@@ -40,14 +40,17 @@ module.exports = (Router) => {
                 caption: ' ',
                 type: 'string'
             }, {
-                caption: '启动次数',
+                caption: '访客数',
                 type: 'number'
             },  {
-                caption: '启动用户',
+                caption: '浏览量',
                 type: 'number'
             },  {
-                caption: '人均启动次数',
-                type: 'string'
+                caption: 'IP数',
+                type: 'number'
+            }, {
+                caption: '跳出率',
+                type: 'number'
             }, {
                 caption: '新用户',
                 type: 'number'
@@ -61,10 +64,7 @@ module.exports = (Router) => {
                 caption: '注册转化率',
                 type: 'string'
             }, {
-                caption: '每人使用时长',
-                type: 'string'
-            }, {
-                caption: '每次使用时长',
+                caption: '平均访问时长',
                 type: 'string'
             }, {
                 caption: '累计访问用户数',
@@ -77,7 +77,7 @@ module.exports = (Router) => {
     });
 
     Router = new api(Router, {
-        router: "/dataOverview/dataOverviewAllTwo",
+        router: "/dataOverview/wapTwo",
         modelName: ["OverviewPlatf"],
         fixedParams : {
             region : "ALL"
@@ -110,19 +110,20 @@ module.exports = (Router) => {
                 data,
                 filter_key,
                 {
-                    open_user_total : "启动用户",
-                    open_total : "启动次数",
+                    uv : "访客数",
+                    pv : "浏览量",
+                    ip_count : "IP数",
                     new_user : "新用户",
                     new_account : "新增账户",
-                    register_rate : "注册转化率",
-                    using_time_avg : "每次使用时长"
+                    visit_time_avg : "平均访问时长",
+                    register_rate : "注册转化率"
                 }
             );
         }
     });
 
     Router = new api(Router, {
-        router: "/dataOverview/dataOverviewAllThree",
+        router: "/dataOverview/wapThree",
         modelName: ["OverviewPlatf"],
         date_picker : false,
         params : {
@@ -161,7 +162,7 @@ module.exports = (Router) => {
     });
 
     Router = new api(Router, {
-        router: "/dataOverview/dataOverviewAllFour",
+        router: "/dataOverview/wapFour",
         modelName: ["OverviewPage"],
         params : {
             date : orm.between(new Date(ydate + " 00:00:00"), new Date(ydate + " 23:59:59")),

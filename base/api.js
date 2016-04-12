@@ -23,7 +23,9 @@ function api(Router, options) {
         //固定参数
         fixedParams : {},
         //固定查询数据库参数
-        params : {},
+        params : null,
+        //固定查询数据库参数
+        orderParams : null,
         //行
         rows: [],
         //列
@@ -178,6 +180,9 @@ api.prototype = {
             try {
                 sendData.data = await (this._findDatabase(req, this.modelName[0], query));
                 if (this.modelName[1]) {
+                    if(this.orderParams) {
+                        query = this.orderParams;
+                    }
                     sendData.orderData = await (this._findDatabase(req, this.modelName[1], query));
                 }
             }catch(err) {

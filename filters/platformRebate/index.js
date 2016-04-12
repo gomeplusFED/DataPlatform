@@ -103,6 +103,9 @@ module.exports = {
             array = ["单项单级返利", "平台基础返利", "平台促销返利", "邀请商家入驻返利"],
             newData = {},
             map = {};
+        dates.sort((a, b) => {
+            return new Date(a) - new Date(b);
+        });
         map[filter_key + "_0"] = array[0];
         map[filter_key + "_1"] = array[1];
         map[filter_key + "_2"] = array[2];
