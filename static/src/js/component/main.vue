@@ -63,6 +63,7 @@ var Main = Vue.extend({
 				startTime: '',
 				endTime: '',
 				day_type: 1, // 摒弃的默认参数，默认1，不用更改
+				forceChange: false
 			},
 			pageComponentsData: null,
 			resultArgvs: ''
@@ -84,7 +85,9 @@ var Main = Vue.extend({
 			url: _this.currentData.query_api + '_json',
 			type: 'get',
 			success: function(data){
+				console.log(123);
 				_this.pageComponentsData = data.components;
+				_this.argvs.forceChange = true;
 			}
 		})
 	},
