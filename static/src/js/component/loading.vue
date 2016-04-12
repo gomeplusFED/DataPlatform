@@ -37,14 +37,6 @@ var Loading = Vue.extend({
 		}
 	},
 	props: ['loading'],
-	watch: {
-		'loading': {
-			handler: function(val){
-				// console.log(Date.now() - this.loadingBeginTime);
-			},
-			deep: true
-		}
-	}
 })
 
 

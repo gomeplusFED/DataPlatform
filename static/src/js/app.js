@@ -2,7 +2,7 @@
 var Vue = require('Vue');
 var $ = require('jQuery');
 
-// for debug
+// for jq plugin
 window.jQuery = $;
 window.$ = $;
 

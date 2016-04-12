@@ -1,0 +1,115 @@
+<template>
+	<div class="btn-group level_select">
+		<p @click="showSelect = !showSelect">选择类目</p>
+		<div class="select_con" v-show="showSelect" transition="fade">
+			<div class="dialog_bg" @click="showSelect = !showSelect"></div>
+			<div class="dialog_main all_center panel panel-default">
+				<div class="panel-heading">
+					<strong>选择类目</strong>
+				</div>
+				<div class="panel-body">
+					<div class="select_group_con clearfix" :style="{width: level.length * (180 + 15) + 'px'}">
+						<div class="select_group" v-for="(index,item) in level">
+							<h2>{{numberMap[index] + '级目录'}}</h2>
+							<ul>
+								<li v-for="value in item" :key="$key" track-by="$index" @click="createNext($event,index)">{{value.name}}</li>							
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="panel-footer clearfix">
+					<button class="btn btn-default" style="margin-right: 10px;float: left;" @click="resetAll()">重置</button>
+					<div class="checked_select">当前选择：{{showResult.length ? showResult.join('－') : '无'}}</div>
+					<button class="btn btn-default" style="margin-left: 10px;float: right;" @click="showSelect = !showSelect">取消</button>
+					<button class="btn btn-default" style="margin-left: 10px;float: right;" @click="showSelect = !showSelect">确认</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</template>
+
+<style>
+.level_select{}
+.level_select p{font-size: 14px;display: inline-block;vertical-align: middle;margin: 0;cursor: pointer;color: #3389d4;}
+.level_select p:hover{text-decoration: underline;}
+.select_con{font-size: 14px;position: fixed;top: 0;left: 0;width: 100%;height: 100%;z-index: 9999;}
+.select_con .dialog_bg{position: absolute;top: 0;left: 0;width: 100%;height: 100%;background: rgba(0,0,0,0.6);}
+.select_con .dialog_main{width: 80%;height: 580px;background: #fff;}
+.select_con .dialog_main.panel{display: flex;flex-direction: column;}
+.select_con .dialog_main.panel button{outline: none;}
+.select_con .dialog_main.panel .panel-body{flex: 1;width: 100%;overflow-x: scroll;}
+.select_con .dialog_main.panel .panel-body .select_group_con{}
+.select_con .dialog_main.panel .panel-body .select_group_con .select_group{float: left;width: 180px;height: 440px;margin: 0 0 0 15px;}
+.select_con .dialog_main.panel .panel-body .select_group_con .select_group:first-child{margin-left: 0;}
+.select_con .dialog_main.panel .panel-body .select_group_con .select_group h2{font-size: 18px;line-height: 32px;display: block;text-align: center;margin: 0;padding: 0;}
+.select_con .dialog_main.panel .panel-body .select_group_con .select_group ul{overflow-y: scroll;border: 1px solid #ddd;border-radius: 10px;height: 408px;}
+.select_con .dialog_main.panel .panel-body .select_group_con .select_group li{cursor: pointer;background: #fff;transition: all ease 0.2s;-webkit-transition: all ease 0.2s;padding: 0 8px;}
+.select_con .dialog_main.panel .panel-body .select_group_con .select_group li:hover{background: rgba(0,0,0,0.1);}
+.select_con .dialog_main.panel .panel-body .select_group_con .select_group li.active{background: #3389d4;color: #fff;}
+.select_con .dialog_main.panel .panel-footer .checked_select{display: inline-block;vertical-align: middle;max-width: 85%;overflow-x: scroll;height: 32px;}
+</style>
+
+<script>
+
+
+var Vue = require('Vue');
+var $ = require('jQuery');
+
+var MultiSelect = Vue.extend({
+	name: 'MultiSelect',
+	data: function(){
+		return {
+			showSelect: false,
+			level: [],
+			noop: function() {},
+			showResult: [],
+			result: [],
+			numberMap: {
+				'0': '一',
+				'1': '二',
+				'2': '三',
+				'3': '四',
+				'4': '五',
+				'5': '六',
+				'6': '七'
+			}
+		}
+	},
+	created: function(){
+		this.level[0] = this.initData.level_selevt;
+	},
+	props: ['index','pageComponentsData','componentType','argvs','initData'],
+	methods: {
+		createNext: function(ev,select_index) {
+		    this.level.splice(select_index + 1);
+		    var cell = this.level[select_index][$(ev.target).attr('key')].cell;
+		    if (cell) {
+		        this.level.push(cell);
+		    }
+		    $(ev.target).parent().find('li').removeClass('active');
+		    $(ev.target).addClass('active');
+		    this.showResult.$set(select_index,$(ev.target).text());
+			this.showResult.splice(select_index + 1);
+		},
+		resetAll: function() {
+		    this.level = [this.initData.level_selevt];
+		    $('.select_group li').removeClass('active');
+		    this.showResult = [];
+		}
+	},
+	watch: {
+		'showSelect': {
+			handler: function(val){
+				if(val){
+					$('body').css('overflow','hidden');
+				}else{
+					$('body').css('overflow','auto');
+				}
+			}
+		}
+	}
+})
+
+module.exports = MultiSelect;
+
+</script>
