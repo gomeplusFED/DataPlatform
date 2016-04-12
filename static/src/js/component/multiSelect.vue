@@ -1,5 +1,5 @@
 <template>
-	<div class="btn-group level_select">
+	<div class="btn-group level_select" v-show="!pageComponentsData[componentType]">
 		<p @click="showSelect = !showSelect">选择类目</p>
 		<div class="select_con" v-show="showSelect" transition="fade">
 			<div class="dialog_bg" @click="showSelect = !showSelect"></div>
@@ -8,11 +8,11 @@
 					<strong>选择类目</strong>
 				</div>
 				<div class="panel-body">
-					<div class="select_group_con clearfix" :style="{width: level.length * (180 + 15) + 'px'}">
+					<div class="select_group_con clearfix">
 						<div class="select_group" v-for="(index,item) in level">
 							<h2>{{numberMap[index] + '级目录'}}</h2>
 							<ul>
-								<li v-for="value in item" :key="$key" track-by="$index" @click="createNext($event,index)">{{value.name}}</li>							
+								<li v-for="value in item" :key="value.id" track-by="$index" @click="createNext($event,index)">{{value.name}}</li>							
 							</ul>
 						</div>
 					</div>
@@ -21,7 +21,7 @@
 					<button class="btn btn-default" style="margin-right: 10px;float: left;" @click="resetAll()">重置</button>
 					<div class="checked_select">当前选择：{{showResult.length ? showResult.join('－') : '无'}}</div>
 					<button class="btn btn-default" style="margin-left: 10px;float: right;" @click="showSelect = !showSelect">取消</button>
-					<button class="btn btn-default" style="margin-left: 10px;float: right;" @click="showSelect = !showSelect">确认</button>
+					<button class="btn btn-default" style="margin-left: 10px;float: right;" @click="showSelect = !showSelect,submit()">确认</button>
 				</div>
 			</div>
 		</div>
@@ -51,6 +51,12 @@
 
 <script>
 
+/*
+ * 组件说明
+ * 名称：选择类目（异步多级联动）
+ * 数据来源：ajax
+ * 详细：弹出层多级联动选择，数据较多，每选一层请求下一层的数据
+ */
 
 var Vue = require('Vue');
 var $ = require('jQuery');
@@ -72,37 +78,66 @@ var MultiSelect = Vue.extend({
 				'4': '五',
 				'5': '六',
 				'6': '七'
-			}
+			},
+			checkedId: null
 		}
 	},
 	created: function(){
-		this.level[0] = this.initData.level_selevt;
+
+
 	},
 	props: ['index','pageComponentsData','componentType','argvs','initData'],
 	methods: {
 		createNext: function(ev,select_index) {
 		    this.level.splice(select_index + 1);
-		    var cell = this.level[select_index][$(ev.target).attr('key')].cell;
-		    if (cell) {
-		        this.level.push(cell);
-		    }
 		    $(ev.target).parent().find('li').removeClass('active');
 		    $(ev.target).addClass('active');
 		    this.showResult.$set(select_index,$(ev.target).text());
 			this.showResult.splice(select_index + 1);
+			this.checkedId = $(ev.target).attr('key');
+			var _this = this;
+			$.ajax({
+				url: '/api/categories',
+				type: 'get',
+				data: {
+					pid: $(ev.target).attr('key')
+				},
+				success: function(data){
+					if(data.length){
+						_this.level.push(data);
+					}	
+				}
+			})
 		},
 		resetAll: function() {
-		    this.level = [this.initData.level_selevt];
+		    this.level.splice(1);
 		    $('.select_group li').removeClass('active');
 		    this.showResult = [];
+		},
+		submit: function(){
+			console.log(this.checkedId);
+			// 设置参数
+			// this.argvs.$set('')
 		}
 	},
 	watch: {
 		'showSelect': {
 			handler: function(val){
+				var _this = this;
 				if(val){
 					$('body').css('overflow','hidden');
+					$.ajax({
+						url: '/api/categories',
+						type: 'get',
+						data: {
+							pid: 0
+						},
+						success: function(data){
+							_this.level.$set(0, data);
+						}
+					})
 				}else{
+					_this.level = [];
 					$('body').css('overflow','auto');
 				}
 			}

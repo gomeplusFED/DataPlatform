@@ -24,6 +24,13 @@
 
 <script>
 
+/*
+ * 组件说明
+ * 名称：loading组件
+ * 数据来源：loading
+ * 详细：双向绑定实现loading显示与否
+ */
+
 var Vue = require('Vue');
 var $ = require('jQuery');
 

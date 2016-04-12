@@ -7,6 +7,14 @@
 .flexible_btn a:hover{text-decoration: none;color: #333;}
 </style>
 <script>
+
+/*
+ * 组件说明
+ * 名称：万能按钮组件
+ * 数据来源：flexible_btn
+ * 详细：为导出、查看全部或者其他的自定义行为的按钮提供基础，组件内预置了一个导出的函数，后台配置信息可以在customMethods中写函数的字符串，前端直接用eval解析
+ */
+
 var Vue = require('Vue');
 
 var store = require('../store/store.js');

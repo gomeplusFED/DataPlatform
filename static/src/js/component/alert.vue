@@ -15,6 +15,16 @@
 .alert.danger {color: #a94442;background-color: #f2dede;border-color: #ebccd1;}
 </style>
 <script>
+
+/*
+ * 组件说明
+ * 名称：alert提示信息
+ * 数据来源：store.alertConfig   From Vuex
+ * 详细：store.alertConfig.show -> 控制alert界面显示与否
+ 		store.alertConfig.msg -> 控制alert的提示信息内容
+ 		store.alertConfig.type -> 控制alert的类型：info/warning/success/danger(类型不一样样式不一样)
+ */
+
 var Vue = require('Vue');
 
 

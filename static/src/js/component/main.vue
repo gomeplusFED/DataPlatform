@@ -5,7 +5,7 @@
 			<div class="panel-heading">
 				<strong>{{currentData.title}}</strong>
 				<div class="head_group_con clearfix">
-					<m-multi-select :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'multi_select'" :argvs.sync='argvs'></m-multi-select>
+					<m-multi-select :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'level_select'" :argvs.sync='argvs'></m-multi-select>
 					<m-drop-down :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'platform'" :argvs.sync='argvs'></m-drop-down>
 					<m-drop-down :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'channel'" :argvs.sync='argvs'></m-drop-down>
 					<m-drop-down :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'version'" :argvs.sync='argvs'></m-drop-down>
@@ -30,6 +30,13 @@
 </style>
 
 <script>
+
+/*
+ * 组件说明
+ * 名称：模块主入口组件
+ * 数据来源：ajax
+ * 详细：先根据页面上的initData中相应的query_api请求此模块中需要的组件数据，然后渲染组件，然后接受参数，然后处理参数，然后传递给table.vue/chart.vue，然后这两个组件再根据参数请求图表数据进行渲染
+ */
 
 var Vue = require('Vue');
 var $ = require('jQuery');

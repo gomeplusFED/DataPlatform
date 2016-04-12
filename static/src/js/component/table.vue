@@ -6,6 +6,14 @@
 .table_con td,.table_con th{max-width: 200px;min-width: 120px;word-break:break-all;word-wrap:break-word;white-space: pre-wrap;}
 </style>
 <script>
+
+/*
+ * 组件说明
+ * 名称：表组件
+ * 数据来源：ajax
+ * 详细：根据其他组件中交互导致的参数变化，然后请求数据进行渲染
+ */
+ 
 var Vue = require('Vue');
 var $ = require('jQuery');
 

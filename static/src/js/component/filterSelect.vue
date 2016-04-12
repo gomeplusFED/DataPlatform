@@ -43,6 +43,13 @@
 
 <script>
 
+/*
+ * 组件说明
+ * 名称：条件过滤组件
+ * 数据来源：filter_select
+ * 详细：可以分为单选和联动选择，位置在head的下面，图表的上面
+ */
+
 var Vue = require('Vue');
 var $ = require('jQuery');
 
