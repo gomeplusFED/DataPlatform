@@ -6,13 +6,23 @@
 
 var api = require("../../../base/api"),
     moment = require("moment"),
+    util = require("../../../utils"),
+    orm = require("orm"),
     dataOverview = require("../../../filters/dataOverview");
 
 module.exports = (Router) => {
+    var now = new Date(),
+        ydate = util.getDate(new Date(now.getTime() - 24 * 60 * 60 * 1000)) + " 23:59:59",
+        qdate = util.getDate(new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000)) + " 00:00:00";
     Router = new api(Router, {
         router: "/dataOverview/dataOverviewAllOne",
-        modelName: ['OverviewPlatf', 'KpiValue'],
+        modelName: ['OverviewPlatf'],
         date_picker: false,
+        params : {
+            date : orm.between(new Date(qdate), new Date(ydate)),
+            region : "ALL",
+            day_type : 1
+        },
         filter(data, filter_key) {
             return dataOverview.dataOverviewAllOne(data, filter_key);
         },

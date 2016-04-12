@@ -22,6 +22,8 @@ function api(Router, options) {
         modelName: [],
         //固定参数
         fixedParams : {},
+        //固定查询数据库参数
+        params : {},
         //行
         rows: [],
         //列
@@ -122,6 +124,9 @@ api.prototype = {
         Object.keys(this.fixedParams).forEach((key) => {
             query[key] = this.fixedParams[key];
         });
+        if(this.params) {
+            params = this.params;
+        }
         this._getCache(type, res, req, query, next, params);
     },
     _checkDate(option, errorMassage, next) {
@@ -261,6 +266,7 @@ api.prototype = {
     },
     _findDatabase: async((req, modelName, params) => {
         return new Promise((resolve, reject) => {
+            console.log(params);
             req.models[modelName].find(params, (err, data) => {
                 if (err) {
                     reject(err);
