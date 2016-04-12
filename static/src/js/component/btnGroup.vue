@@ -2,8 +2,8 @@
     <button class="btn btn-default flexible_btn" v-for="item in pageComponentsData.flexible_btn" @click="resolveMethods(item)">{{{item.content}}}</button>
 </template>
 <style>
-.flexible_btn{margin: 0 5px;}
-.flexible_btn a{text-decoration: none;color: #333;}
+.flexible_btn{margin: 0 5px;padding: 0;box-sizing: border-box;}
+.flexible_btn a{text-decoration: none;color: #333;padding: 6px 12px;display: block;}
 .flexible_btn a:hover{text-decoration: none;color: #333;}
 </style>
 <script>
