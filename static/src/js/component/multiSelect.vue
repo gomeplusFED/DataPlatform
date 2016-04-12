@@ -1,5 +1,5 @@
 <template>
-	<div class="btn-group level_select" v-show="!pageComponentsData[componentType]">
+	<div class="btn-group level_select" v-show="pageComponentsData[componentType]">
 		<p @click="showSelect = !showSelect">选择类目</p>
 		<div class="select_con" v-show="showSelect" transition="fade">
 			<div class="dialog_bg" @click="showSelect = !showSelect"></div>

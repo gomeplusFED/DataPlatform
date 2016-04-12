@@ -170,7 +170,8 @@ var Chart = Vue.extend({
 		            })
 	            }
 	        },
-	        deep: true
+	        deep: true,
+	        immediate: true
 	    }
 	}
 

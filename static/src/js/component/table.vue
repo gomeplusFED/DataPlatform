@@ -106,7 +106,8 @@ var Table = Vue.extend({
                     })
                 }
             },
-            deep: true
+            deep: true,
+            immediate: true
         }
     }
 })
