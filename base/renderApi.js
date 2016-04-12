@@ -15,6 +15,8 @@ function renderApi(Router, options) {
         view: "main",
         //下拉框表
         modelName: "Configure",
+        //选择类目
+        categoriesName : "ConfCategories",
         //页面标题
         name : "",
         //下拉框初始化，在页面中的属性名
@@ -72,6 +74,15 @@ renderApi.prototype = {
                         next(err);
                     }
                 })
+            } else {
+                next(err);
+            }
+        })
+    },
+    _findCategories(req, next) {
+        req.models[this.categoriesName].find({}, (err, data) => {
+            if(!err) {
+
             } else {
                 next(err);
             }

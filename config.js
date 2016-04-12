@@ -18,9 +18,8 @@ module.exports = {
             id: 2,
             display: true,
             className: "fa fa-dashboard fa-fw",
-            href: "/dataOverview",
-            path: [],
-            routers: [dataOverview.all()]
+            href: "#",
+            path: [dataOverview.all()]
         }
     }, {
         "userManagement": {
@@ -39,11 +38,12 @@ module.exports = {
         "userAnalysis": {
             name: "用户分析",
             id: 3,
-            display: false,
+            display: true,
             className: "fa fa-bar-chart-o fa-fw",
             href: "#",
             path: [
-                usersAnalysis.newUsers()
+                usersAnalysis.newUsers(),
+                usersAnalysis.activeAccount()
             ]
         }
     }, {

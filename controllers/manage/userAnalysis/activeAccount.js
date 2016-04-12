@@ -1,7 +1,7 @@
 /**
  * @author yanglei
- * @date 20160323
- * @fileoverview 用户分析
+ * @date 20160411
+ * @fileoverview 活跃用户分析
  */
 var api = require("../../../base/api"),
     moment = require("moment"),
@@ -9,22 +9,22 @@ var api = require("../../../base/api"),
 
 module.exports = (Router) => {
     Router = new api(Router,{
-        router : "/userAnalysis/newUsersOne",
+        router : "/userAnalysis/activeAccountOne",
         modelName : ["NewAccount"],
         excel_export : false,
         platform : true,
         filter(data, filter_key) {
             return userAnalysis.One(data,
-                [ "new_users", "new_account" ],
-                [ "新增用户", "新增账户" ]
+                [ "active_users", "active_account" ],
+                [ "活跃用户", "活跃账号" ]
             );
         }
     });
 
     Router = new api(Router,{
-        router : "/userAnalysis/newUsersTwe",
+        router : "/userAnalysis/activeAccountTwe",
         modelName : ["NewAccount"],
-        rows : [['date', 'new_users', 'new_users_rate', 'new_account', 'new_account_rate' ]],
+        rows : [['date', 'active_users', 'active_users_rate', 'active_account', 'active_account_rate' ]],
         cols : [
             [
                 {
@@ -35,23 +35,23 @@ module.exports = (Router) => {
                     },
                     width: 20
                 }, {
-                caption: '新增用户',
+                caption: '活跃用户',
                 type: 'number'
             }, {
-                caption: '新增用户占比',
+                caption: '活跃用户占比',
                 type: 'string'
             }, {
-                caption: '新增账户',
+                caption: '活跃账户',
                 type: 'number'
             }, {
-                caption: '新增账户占比',
+                caption: '活跃账户占比',
                 type: 'string'
             }
             ]
         ],
         platform : true,
         filter(data, filter_key) {
-            return userAnalysis.newUsersTwe(data);
+            return userAnalysis.activeUsersTwe(data);
         }
     });
 

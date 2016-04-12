@@ -11,23 +11,49 @@ var api = require("../../../base/api"),
 module.exports = (Router) => {
     Router = new api(Router, {
         router: "/dataOverview/dataOverviewAllOne",
-        modelName: ["RebateShopOverview", "RebateShopRefund"],
+        modelName: ['OverviewPlatf', 'KpiValue'],
         date_picker: false,
-        filter_select: [{
-            title: '',
-            filter_key: 'filter_key',
-            groups: [{
-                key: 'app',
-                value: '数据概览'
-            }, {
-                key: 'wap',
-                value: '数据概览-wap'
-            }]
-        }],
         filter(data, filter_key) {
             return dataOverview.dataOverviewAllOne(data, filter_key);
-        }
-    })
+        },
+        rows : [
+            ['name', 'open_total', 'open_user_total', 'open_user_avg', 'new_user',
+                'new_user_rate', 'new_account', 'register_rate', 'stay_time_avg', 'using_time_avg']
+        ],
+        cols : [
+            [{
+                caption: ' ',
+                type: 'string'
+            }, {
+                caption: '启动次数',
+                type: 'number'
+            },  {
+                caption: '启动用户',
+                type: 'number'
+            },  {
+                caption: '人均启动次数',
+                type: 'string'
+            }, {
+                caption: '新用户',
+                type: 'number'
+            }, {
+                caption: '新用户占比',
+                type: 'string'
+            }, {
+                caption: '新增账户',
+                type: 'number'
+            }, {
+                caption: '注册转化率',
+                type: 'string'
+            }, {
+                caption: '每人使用时长',
+                type: 'string'
+            }, {
+                caption: '每次使用时长',
+                type: 'string'
+            }]
+        ]
+    });
 
     Router = new api(Router, {
         router: "/dataOverview/dataOverviewAllTwo",
@@ -59,7 +85,7 @@ module.exports = (Router) => {
         filter(data, filter_key) {
             return dataOverview.dataOverviewAllTwo(data, filter_key);
         }
-    })
+    });
 
     Router = new api(Router, {
         router: "/dataOverview/dataOverviewAllThree",
@@ -74,7 +100,7 @@ module.exports = (Router) => {
         filter(data) {
             return dataOverview.dataOverviewAllThree(data);
         }
-    })
+    });
 
     Router = new api(Router, {
         router: "/dataOverview/dataOverviewAllFour",
@@ -89,7 +115,7 @@ module.exports = (Router) => {
         filter(data) {
             return dataOverview.dataOverviewAllFour(data);
         }
-    })
+    });
 
     return Router;
 };

@@ -582,6 +582,18 @@ function connect(app) {
                 rebate_amount_count: Number,
                 pay_order_time: Date
             });
+            models.ConfCategories = db.define("tbl_rt_conf_categories", {
+                id: { type: 'number', key: true },
+                pid: Number,
+                name: String,
+                level: Number,
+                status: Number,
+                has_children: Number,
+                has_spu: Number,
+                created_at: Date,
+                updated_at: Date,
+                outer_id: String
+            });
             next();
         }
     }))
