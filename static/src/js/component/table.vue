@@ -92,7 +92,11 @@ var Table = Vue.extend({
                                 lengthChange: false,
                                 retrieve: true,
                                 "language": {
-                                    "emptyTable": "暂无数据"
+                                    "emptyTable": "暂无数据",
+                                    "paginate": {
+                                        "previous": "上一页",
+                                        "next": "下一页"
+                                    }
                                 }
                             }
                             eachTableData.data.length > 9 ? setConfig.paging = true : setConfig.paging = false;
