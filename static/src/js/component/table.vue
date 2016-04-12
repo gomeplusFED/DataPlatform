@@ -37,6 +37,9 @@ var Table = Vue.extend({
     methods: {
         fetchData: function(cb){
             var _this = this;
+            if(_this.resultArgvs.forceChange){
+                delete _this.resultArgvs.forceChange;
+            }
             $.ajax({
                 url: this.currentData.query_api + '_json',
                 type: 'get',

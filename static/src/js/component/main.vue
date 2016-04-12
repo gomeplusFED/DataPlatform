@@ -88,8 +88,6 @@ var Main = Vue.extend({
 				
 				if(_this.isnoComponent(data.components)){
 					_this.$set('argvs.forceChange',true);
-					// Vue.set('argvs', 'forceChange', true)
-					console.log(111);
 				}
 			}
 		})

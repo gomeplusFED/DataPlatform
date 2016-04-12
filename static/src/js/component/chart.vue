@@ -91,6 +91,9 @@ var Chart = Vue.extend({
 		},
 		fetchData: function(cb){
 			var _this = this;
+			if(_this.resultArgvs.forceChange){
+				delete _this.resultArgvs.forceChange;
+			}
 		    $.ajax({
 		        url: _this.currentData.query_api + '_json',
 		        type: 'get',
