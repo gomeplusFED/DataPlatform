@@ -19,7 +19,9 @@ module.exports = {
             display: true,
             className: "fa fa-dashboard fa-fw",
             href: "#",
-            path: [dataOverview.all()]
+            path: [
+                dataOverview.all()
+            ]
         }
     }, {
         "userManagement": {

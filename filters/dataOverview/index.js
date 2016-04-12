@@ -9,9 +9,10 @@ var util = require("../../utils"),
 
 module.exports = {
     dataOverviewAllOne(data, filter_key) {
-        var dates = util.uniq(_.pluck(data, "date"));
+        var source = data.data;
+        var dates = util.uniq(_.pluck(source, "date"));
         var newData = [];
-        data.sort((a, b) => {
+        source.sort((a, b) => {
             return new Date(b.date) - new Date(a.date);
         });
         var obj = {
@@ -36,7 +37,7 @@ module.exports = {
                 visit_time_avg : 0,
                 stay_time_avg : 0
             };
-            for(var key of data) {
+            for(var key of source) {
                 if(date.getTime() === key.date.getTime()) {
                     total_new_users += key.new_user;
                     zObj.open_total += key.open_total;
