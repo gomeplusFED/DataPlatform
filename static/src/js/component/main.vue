@@ -63,7 +63,6 @@ var Main = Vue.extend({
 				startTime: '',
 				endTime: '',
 				day_type: 1, // 摒弃的默认参数，默认1，不用更改
-				forceChange: false
 			},
 			pageComponentsData: null,
 			resultArgvs: ''
@@ -85,14 +84,24 @@ var Main = Vue.extend({
 			url: _this.currentData.query_api + '_json',
 			type: 'get',
 			success: function(data){
-				console.log(123);
 				_this.pageComponentsData = data.components;
-				_this.argvs.forceChange = true;
+				
+				if(_this.isnoComponent(data.components)){
+					// _this.argvs.$set('forceChange',true);
+					Vue.set('argvs', 'forceChange', true)
+					console.log(111);
+				}
 			}
 		})
 	},
 	methods: {
-		
+		isnoComponent: function(componentData){
+			// 如果没有组件，强制更新argvs，然后触发脏检查使得图表组件请求数据
+			if(!componentData.date_picker.show && !componentData.drop_down.channel && !componentData.drop_down.coupon && !componentData.drop_down.platform && !componentData.drop_down.version && !componentData.filter_select.length && !componentData.level_select){
+				return true;
+			}
+			return false;
+		}
 	},
 	watch: {
 		'argvs': {

@@ -57,14 +57,6 @@ var Btns = Vue.extend({
                 eval(item.customMethods);
             }
     	}
-    },
-    watch: {
-        'pageComponentsData': {
-            handler: function(val){
-                // console.log(this.initData.defaultData[this.index].query_api);
-            },
-            deep: true
-        }
     }
 })
 
