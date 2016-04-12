@@ -4,6 +4,7 @@
  * @fileoverview 统一跳转页面
  */
 var utils = require("../utils"),
+    _ = require("lodash"),
     cache = require("../utils/cache"),
     cacheTime = 1;
 
@@ -82,7 +83,45 @@ renderApi.prototype = {
     _findCategories(req, next) {
         req.models[this.categoriesName].find({}, (err, data) => {
             if(!err) {
+                var level_0 = level_1 = level_2 = level_3 = {};
+                for(var key of data) {
+                    if(key.level === 0) {
+                        if(key.status > 0) {
+                            level_0[key.id] = {
+                                name : key.name,
+                                cell : {}
+                            }
+                        }
+                    } else if(key.level === 3) {
+                        if(key.status > 0) {
+                            if(level_3[key.pid]) {
+                                level_3[key.pid][key.id] = {
+                                    name : key.name
+                                };
+                            } else {
+                                level_3[key.pid] = {};
+                                level_3[key.pid][key.id] = {
+                                    name : key.name
+                                };
+                            }
+                        }
+                    }
+                    if(key.level === 1) {
+                        if(level_1[key.pid]) {
 
+                        } else {
+                            if(key.status > 0) {
+                                level_1[key.pid] = {};
+                                level_1[key.pid][key.id] = {
+                                    name : key.name
+                                };
+                                if(key.has_children) {
+                                    level_1[key.pid][key.id].cell = {};
+                                }
+                            }
+                        }
+                    }
+                }
             } else {
                 next(err);
             }
