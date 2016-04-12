@@ -19,7 +19,7 @@ module.exports = function(Router) {
 
     Router.get('/login', function(req, res) {
         if (req.session.isLogin) {
-            res.redirect('/dataOverview');
+            res.redirect('/dataOverview/app');
         } else {
             res.render('login/login', {
                 from: req.query.from
@@ -113,7 +113,7 @@ module.exports = function(Router) {
 
     Router.post('/login', function(req, res, next) {
         if (req.session.isLogin) {
-            res.redirect('/dataOverview');
+            res.redirect('/dataOverview/app');
         } else {
             //本地要有个数据库
             var email = req.body.email,
@@ -135,7 +135,7 @@ module.exports = function(Router) {
                     } else {
                         if (ret.length) {
                             saveLogin(req, res, remember, email, ret[0]);
-                            res.redirect(from || '/dataOverview');
+                            res.redirect(from || '/dataOverview/app');
                         }
                     }
                 });
@@ -183,7 +183,7 @@ module.exports = function(Router) {
                                                 if (ret.length) {
                                                     saveLogin(req, res, remember, email, ret[0]);
                                                     unbind(client, next);
-                                                    res.redirect(from || '/dataOverview');
+                                                    res.redirect(from || '/dataOverview/app');
                                                 } else {
                                                     //不存在本地用户,写入本地用户
                                                     req.models.Users.create({
@@ -196,7 +196,7 @@ module.exports = function(Router) {
                                                         } else {
                                                             saveLogin(req, res, remember, email, ret);
                                                             unbind(client, next);
-                                                            res.redirect(from || '/dataOverview');
+                                                            res.redirect(from || '/dataOverview/app');
                                                         }
                                                     });
                                                 }
@@ -227,7 +227,7 @@ module.exports = function(Router) {
     });
 
     Router.all('/', function(req, res) {
-        res.redirect("/dataOverview");
+        res.redirect("/dataOverview/app");
     });
 
     return Router;
