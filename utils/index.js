@@ -160,7 +160,7 @@ exports.sort = function(array, first, second) {
 };
 
 exports.toFixed = function(one, two) {
-    return (one / (two === 0 ? 1 : two) * 1000).toFixed(1) / 10 + "%";
+    return (one / (two === 0 ? 1 : two) * 100).toFixed(1) + "%";
 };
 
 exports.getDate = function(date){

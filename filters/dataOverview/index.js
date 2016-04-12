@@ -10,6 +10,7 @@ var util = require("../../utils"),
 module.exports = {
     dataOverviewAllOne(data, type) {
         var source = data.data,
+            orderData = data.orderData,
             newData = [],
             now = new Date(),
             zdate = util.getDate(new Date(now.getTime() - 24 * 60 * 60 * 1000)),
@@ -35,10 +36,23 @@ module.exports = {
                 ip_count : 0,
                 jump_loss_rate : 0,
                 visit_time_avg : 0,
-                stay_time_avg : 0
+                stay_time_avg : 0,
+                pv : 0,
+                create : 0
             };
+            for(var key of orderData) {
+                if(new Date(date + " 00:00:00").getTime() < key.date.getTime() &&
+                    key.date.getTime() < new Date(date + " 23:59:59")) {
+                    if(key.kpi_type === 1) {
+                        zObj.pv += key.kpi_value;
+                    }
+                    if(key.kpi_type === 2) {
+                        zObj.create += key.kpi_value;
+                    }
+                }
+            }
             for(var key of source) {
-                if(type && key.type !== type) {
+                if(type && key.type === type) {
                     continue;
                 }
                 if(new Date(date + " 00:00:00").getTime() < key.date.getTime() &&
@@ -93,6 +107,10 @@ module.exports = {
             - newData[1].register_rate.replace("%", "")).toFixed(1) + "%";
         obj.new_user_rate = (newData[0].new_user_rate.replace("%", "")
             - newData[1].new_user_rate.replace("%", "")).toFixed(1) + "%";
+        obj.pv = ((newData[0].pv - newData[1].pv) /
+            (newData[0].pv === 0 ? 1 : newData[0].pv) * 100).toFixed(1) + "%";
+        obj.create = ((newData[0].create - newData[1].create) /
+            (newData[0].create === 0 ? 1 : newData[0].create) * 100).toFixed(1) + "%";
         newData.push(obj);
         return util.toTable([newData], data.rows, data.cols);
     },
@@ -113,7 +131,12 @@ module.exports = {
             };
             for(var key of source) {
                 if(date.getTime() === key.date.getTime()) {
-                    obj.value += key[filter_key];
+                    if(filter_key === "register_rate") {
+                        obj.value += Math.round(key.new_account / (key.new_user === 0 ? 1 : key.new_user) * 100);
+                    } else {
+                        obj.value += key[filter_key];
+                    }
+
                 }
             }
             newData[moment(date).format("YYYY-MM-DD")] = obj;
@@ -127,7 +150,7 @@ module.exports = {
             }
         }];
     },
-    dataOverviewAllThree(data, filter_key) {
+    dataOverviewAllThree(data) {
         var source = data.data,
             newData = [],
             total_pv = 0,
@@ -135,11 +158,16 @@ module.exports = {
         source.sort((a, b) => {
             return b.pv - a.pv;
         });
+        for(var key of source) {
+            if(key.region === "ALL") {
+                continue;
+            }
+            total_pv += key.pv;
+        }
         for(var i = 0; i < top; i++) {
             if(source[i].region === "ALL") {
                 top++;
             } else {
-                total_pv += source[i].pv;
                 newData.push(source[i]);
             }
         }
@@ -149,42 +177,24 @@ module.exports = {
         }
         return util.toTable([newData], data.rows, data.cols);
     },
-    dataOverviewAllFour(data, filter_key) {
-        return [{
-            data: {},
-            rows: ["", "uv", "pv", "break_rate", "new_user", ""],
-            cols: [{
-                caption: "",
-                type: "string"
-            }, {
-                caption: "访客数",
-                type: "string"
-            }, {
-                caption: "浏览量",
-                type: "string"
-            }, {
-                caption: "IP数",
-                type: "string"
-            }, {
-                caption: "跳出率",
-                type: "string"
-            }, {
-                caption: "新用户",
-                type: "string"
-            }, {
-                caption: "新用户占比",
-                type: "string"
-            }, {
-                caption: "新增用户",
-                type: "string"
-            }, {
-                caption: "注册转化率",
-                type: "string"
-            }, {
-                caption: "平均访问时长",
-                type: "string"
-            }]
-
-        }]
+    dataOverviewAllFour(data) {
+        var source = data.data,
+            top = source.length > 10 ? 10 : source.length,
+            total_pv = 0,
+            newData = [];
+        source.sort((a, b) => {
+            return b.pv - a.pv;
+        });
+        for(var key of source) {
+            total_pv += key.pv;
+        }
+        for(var i = 0; i < top; i++) {
+            source[i].id = i + 1;
+            newData.push(source[i]);
+        }
+        for(var key of newData) {
+            key.pv_rate = util.toFixed(key.pv, total_pv);
+        }
+        return util.toTable([newData], data.rows, data.cols);
     }
 };
