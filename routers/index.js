@@ -49,7 +49,7 @@ async (() => {
             }
         }
     } catch(err) {
-        console.log("readdir error, error in ./routers/index.js");
+        console.log(err);
     }
 })();
 
