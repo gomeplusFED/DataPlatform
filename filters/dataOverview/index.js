@@ -8,13 +8,13 @@ var util = require("../../utils"),
     _ = require("lodash");
 
 module.exports = {
-    dataOverviewAllOne(data, filter_key) {
-        var source = data.data;
-        var dates = util.uniq(_.pluck(source, "date"));
-        var newData = [];
-        source.sort((a, b) => {
-            return new Date(b.date) - new Date(a.date);
-        });
+    dataOverviewAllOne(data, type) {
+        var source = data.data,
+            newData = [],
+            now = new Date(),
+            zdate = util.getDate(new Date(now.getTime() - 24 * 60 * 60 * 1000)),
+            qdate = util.getDate(new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000)),
+            dates = [ zdate, qdate ];
         var obj = {
                 name : '对比效果'
             },
@@ -38,7 +38,11 @@ module.exports = {
                 stay_time_avg : 0
             };
             for(var key of source) {
-                if(date.getTime() === key.date.getTime()) {
+                if(type && key.type !== type) {
+                    continue;
+                }
+                if(new Date(date + " 00:00:00").getTime() < key.date.getTime() &&
+                    key.date.getTime() < new Date(date + " 23:59:59")) {
                     total_new_users += key.new_user;
                     zObj.open_total += key.open_total;
                     zObj.open_user_total += key.open_user_total;
@@ -55,47 +59,9 @@ module.exports = {
             newData.push(zObj);
         }
         for(var key of newData) {
-            key.new_user_rate = (key.new_user / (total_new_users === 0 ? 1 : total_new_users) * 100).toFixed(1) + "%";
+            key.new_user_rate = util.toFixed(key.new_user, total_new_users);
             key.open_user_avg = (key.open_user_total / (key.open_total === 0 ? 1 : key.open_total) * 100).toFixed(1);
-            key.register_rate = (key.new_account / (key.new_user === 0 ? 1 : key.new_user) * 100).toFixed(1) + "%";
-        }
-        if(newData.length < 2) {
-            newData[0] = {
-                name : "",
-                open_total : 0,
-                open_user_total : 0,
-                open_user_avg : 0,
-                new_user : 0,
-                new_user_rate : "0%",
-                new_account : 0,
-                register_rate : "0%",
-                using_time_avg : 0,
-                uv : 0,
-                pv : 0,
-                ip_count : 0,
-                jump_loss_rate : 0,
-                visit_time_avg : 0,
-                stay_time_avg : 0
-            };
-        }
-        if(newData.length < 3) {
-            newData[1] = {
-                name : "",
-                open_total : 0,
-                open_user_total : 0,
-                open_user_avg : 0,
-                new_user : 0,
-                new_user_rate : "0%",
-                new_account : 0,
-                register_rate : "0%",
-                using_time_avg : 0,
-                uv : 0,
-                pv : 0,
-                ip_count : 0,
-                jump_loss_rate : 0,
-                visit_time_avg : 0,
-                stay_time_avg : 0
-            };
+            key.register_rate = util.toFixed(key.new_account, key.new_user);
         }
         newData[0].name = "昨天";
         newData[1].name = "前天";
@@ -104,97 +70,84 @@ module.exports = {
         obj.jump_loss_rate = ((newData[0].jump_loss_rate - newData[1].jump_loss_rate)
             / (newData[0].jump_loss_rate === 0 ? 1 : newData[0].jump_loss_rate) * 100).toFixed(1) + "%";
         obj.open_user_total = ((newData[0].open_user_total - newData[1].open_user_total)
-            / (newData[0].open_user_total === 0 ? 1 : newData[0].open_user_total) * 1000).toFixed(1) / 10 + "%";
+            / (newData[0].open_user_total === 0 ? 1 : newData[0].open_user_total) * 100).toFixed(1) + "%";
         obj.new_user = ((newData[0].new_user - newData[1].new_user)
-            / (newData[0].new_user === 0 ? 1 : newData[0].new_user) * 1000).toFixed(1) / 10 + "%";
+            / (newData[0].new_user === 0 ? 1 : newData[0].new_user) * 100).toFixed(1) + "%";
         obj.new_account = ((newData[0].new_account - newData[1].new_account)
-            / (newData[0].new_account === 0 ? 1 : newData[0].new_account) * 1000).toFixed(1) / 10 + "%";
+            / (newData[0].new_account === 0 ? 1 : newData[0].new_account) * 100).toFixed(1) + "%";
         obj.stay_time_avg = ((newData[0].stay_time_avg - newData[1].stay_time_avg)
-            / (newData[0].stay_time_avg === 0 ? 1 : newData[0].stay_time_avg) * 1000).toFixed(1) / 10 + "%";
+            / (newData[0].stay_time_avg === 0 ? 1 : newData[0].stay_time_avg) * 100).toFixed(1) + "%";
         obj.using_time_avg = ((newData[0].using_time_avg - newData[1].using_time_avg)
-            / (newData[0].using_time_avg === 0 ? 1 : newData[0].using_time_avg) * 1000).toFixed(1) / 10 + "%";
+            / (newData[0].using_time_avg === 0 ? 1 : newData[0].using_time_avg) * 100).toFixed(1) + "%";
         obj.uv = ((newData[0].uv - newData[1].uv)
-            / (newData[0].uv === 0 ? 1 : newData[0].uv) * 1000).toFixed(1) / 10 + "%";
+            / (newData[0].uv === 0 ? 1 : newData[0].uv) * 100).toFixed(1) + "%";
         obj.pv = ((newData[0].pv - newData[1].pv)
-            / (newData[0].pv === 0 ? 1 : newData[0].pv) * 1000).toFixed(1) / 10 + "%";
+            / (newData[0].pv === 0 ? 1 : newData[0].pv) * 100).toFixed(1) + "%";
         obj.ip_count = ((newData[0].ip_count - newData[1].ip_count)
-            / (newData[0].ip_count === 0 ? 1 : newData[0].ip_count) * 1000).toFixed(1) / 10 + "%";
+            / (newData[0].ip_count === 0 ? 1 : newData[0].ip_count) * 100).toFixed(1) + "%";
         obj.visit_time_avg = ((newData[0].visit_time_avg - newData[1].visit_time_avg)
-            / (newData[0].visit_time_avg === 0 ? 1 : newData[0].visit_time_avg) * 1000).toFixed(1) / 10 + "%";
-        obj.open_user_avg = ((newData[0].open_user_avg - newData[1].open_user_avg)
-            / (newData[0].open_user_avg === 0 ? 1 : newData[0].open_user_avg) * 1000).toFixed(1) / 10 + "%";
-        obj.register_rate = newData[0].register_rate.replace("%", "") - newData[1].register_rate.replace("%", "") + "%";
-        obj.new_user_rate = newData[0].new_user_rate.replace("%", "") - newData[1].new_user_rate.replace("%", "") + "%";
+            / (newData[0].visit_time_avg === 0 ? 1 : newData[0].visit_time_avg) * 100).toFixed(1) + "%";
+        obj.open_user_avg = ((newData[0].open_user_avg - newData[1].open_user_avg) /
+            (newData[0].open_user_avg === "0.0" ? 1 : newData[0].open_user_avg) * 100).toFixed(1) + "%";
+        obj.register_rate = (newData[0].register_rate.replace("%", "")
+            - newData[1].register_rate.replace("%", "")).toFixed(1) + "%";
+        obj.new_user_rate = (newData[0].new_user_rate.replace("%", "")
+            - newData[1].new_user_rate.replace("%", "")).toFixed(1) + "%";
         newData.push(obj);
         return util.toTable([newData], data.rows, data.cols);
     },
-    dataOverviewAllTwo(data, filter_key) {
-        return [{
-            type: 'line',
-            data: {
-                '2016-03-21': {
-                    pv: 1000,
-                    uv: 500
-                },
-                '2016-03-22': {
-                    pv: 2000,
-                    uv: 1000
-                },
-                '2016-03-23': {
-                    pv: 3000,
-                    uv: 1500
-                },
-                '2016-03-24': {
-                    pv: 4000,
-                    uv: 2000
-                },
-                '2016-03-25': {
-                    pv: 5000,
-                    uv: 2500
-                },
+    dataOverviewAllTwo(data, filter_key, filter_name) {
+        var source = data.data,
+            newData = {},
+            type = "line",
+            map = {
+                value : filter_name[filter_key]
             },
-            map: {
-                pv: '访问数',
-                uv: '访客数'
-            },
-            config: {
-                stack: false // 是否堆叠
+            dates = util.uniq(_.pluck(source, "date"));
+        dates.sort((a, b) => {
+            return new Date(a) - new Date(b);
+        });
+        for(var date of dates) {
+            var obj = {
+                value : 0
+            };
+            for(var key of source) {
+                if(date.getTime() === key.date.getTime()) {
+                    obj.value += key[filter_key];
+                }
             }
-        }]
+            newData[moment(date).format("YYYY-MM-DD")] = obj;
+        }
+        return [{
+            type : type,
+            map : map,
+            data : newData,
+            config: {
+                stack: false
+            }
+        }];
     },
     dataOverviewAllThree(data, filter_key) {
-        return [{
-            type: 'pie',
-            data: {
-                '2016-03-21': {
-                    pv: 1000,
-                    uv: 500
-                },
-                '2016-03-22': {
-                    pv: 2000,
-                    uv: 1000
-                },
-                '2016-03-23': {
-                    pv: 3000,
-                    uv: 1500
-                },
-                '2016-03-24': {
-                    pv: 4000,
-                    uv: 2000
-                },
-                '2016-03-25': {
-                    pv: 5000,
-                    uv: 2500
-                },
-            },
-            map: {
-                pv: '访问数',
-                uv: '访客数'
-            },
-            config: {
-                stack: true // 是否堆叠
+        var source = data.data,
+            newData = [],
+            total_pv = 0,
+            top = source.length > 10 ? 10 : source.length;
+        source.sort((a, b) => {
+            return b.pv - a.pv;
+        });
+        for(var i = 0; i < top; i++) {
+            if(source[i].region === "ALL") {
+                top++;
+            } else {
+                total_pv += source[i].pv;
+                newData.push(source[i]);
             }
-        }]
+        }
+        for(var i = 0; i < newData.length; i++) {
+            newData[i].id = i + 1;
+            newData[i].pv_rate = util.toFixed(newData[i].pv, total_pv);
+        }
+        return util.toTable([newData], data.rows, data.cols);
     },
     dataOverviewAllFour(data, filter_key) {
         return [{
