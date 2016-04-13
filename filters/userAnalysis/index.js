@@ -23,7 +23,7 @@ module.exports = {
                 new_account : 0
             };
             for(var key of source) {
-                if(date.getTime() === key.date.getTime()) {
+                if(date === util.getDate(key.date)) {
                     obj.new_users += key.new_users;
                     obj.new_account += key.new_account;
                 }
@@ -52,7 +52,7 @@ module.exports = {
                 new_account : 0
             };
             for(var key of source) {
-                if(date.getTime() === key.date.getTime()) {
+                if(date === util.getDate(key.date)) {
                     total_users += key.new_users;
                     total_account += key.new_account;
                     obj.new_users += key.new_users;
@@ -82,7 +82,7 @@ module.exports = {
                 active_account : 0
             };
             for(var key of source) {
-                if(date.getTime() === key.date.getTime()) {
+                if(date === util.getDate(key.date)) {
                     total_users += key.active_users;
                     total_account += key.active_account;
                     obj.active_users += key.active_users;

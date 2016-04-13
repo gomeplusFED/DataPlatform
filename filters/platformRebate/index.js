@@ -109,7 +109,7 @@ module.exports = {
         for (var date of dates) {
             var obj = {};
             for (var key of source) {
-                if (date.getTime() === key.date.getTime()) {
+                if (date === util.getDate(key.date)) {
                     for (var i = 0; i < array.length; i++) {
                         if (key.rebate_type === array[i]) {
                             obj[filter_key + "_" + i] += key[filter_key];

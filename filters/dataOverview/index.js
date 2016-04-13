@@ -126,7 +126,7 @@ module.exports = {
                 value : 0
             };
             for(var key of source) {
-                if(date.getTime() === key.date.getTime()) {
+                if(date === util.getDate(key.date)) {
                     if(filter_key === "register_rate") {
                         obj.value += Math.round(key.new_account / (key.new_user === 0 ? 1 : key.new_user) * 100);
                     } else {

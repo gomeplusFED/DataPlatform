@@ -75,7 +75,7 @@ module.exports = {
                 value_2 : 0
             };
             for(var key of source) {
-                if(date.getTime() === key.date.getTime()) {
+                if(date === util.getDate(key.date)) {
                     for(var i = 0; i < array.length; i++) {
                         if(array[i] === key.user_party) {
                             obj["value_" + i] += key[filter_key];
