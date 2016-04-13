@@ -27,7 +27,7 @@ module.exports = (Router) => {
             date : orm.between(new Date(qdate + " 00:00:00"), new Date(ydate + " 23:59:59")),
             day_type : 1
         },
-        filter(data, filter_key) {
+        filter(data, filter_key, dates) {
             return dataOverview.dataOverviewAllOne(data, "H5");
         },
         rows : [
@@ -105,7 +105,7 @@ module.exports = (Router) => {
                 value: '每次使用时长'
             }]
         }],
-        filter(data, filter_key) {
+        filter(data, filter_key, dates) {
             return dataOverview.dataOverviewAllTwo(
                 data,
                 filter_key,
@@ -116,7 +116,8 @@ module.exports = (Router) => {
                     new_account : "新增账户",
                     register_rate : "注册转化率",
                     using_time_avg : "每次使用时长"
-                }
+                },
+                dates
             );
         }
     });
@@ -134,7 +135,7 @@ module.exports = (Router) => {
             preMethods: [],
             customMethods: ''
         }],
-        filter(data, filter_key) {
+        filter(data, filter_key, dates) {
             return dataOverview.dataOverviewAllThree(data);
         },
         cols : [
@@ -173,7 +174,7 @@ module.exports = (Router) => {
             preMethods: [],
             customMethods: ''
         }],
-        filter(data) {
+        filter(data, filter_key, dates) {
             return dataOverview.dataOverviewAllFour(data);
         },
         cols : [

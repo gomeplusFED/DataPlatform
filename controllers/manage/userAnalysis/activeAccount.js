@@ -13,10 +13,11 @@ module.exports = (Router) => {
         modelName : ["NewAccount"],
         excel_export : false,
         platform : true,
-        filter(data, filter_key) {
+        filter(data, filter_key, dates) {
             return userAnalysis.One(data,
                 [ "active_users", "active_account" ],
-                [ "活跃用户", "活跃账号" ]
+                [ "活跃用户", "活跃账号" ],
+                dates
             );
         }
     });
@@ -50,8 +51,8 @@ module.exports = (Router) => {
             ]
         ],
         platform : true,
-        filter(data, filter_key) {
-            return userAnalysis.activeUsersTwe(data);
+        filter(data, filter_key, dates) {
+            return userAnalysis.activeUsersTwe(data, dates);
         }
     });
 

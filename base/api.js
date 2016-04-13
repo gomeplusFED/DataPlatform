@@ -108,13 +108,15 @@ api.prototype = {
     },
     _sendData(type, req, res, next) {
         var query = req.query,
-            params = {};
+            params = {},
+            dates = [];
         if(!query.startTime && !query.endTime) {
             params = this.default;
         } else {
             if((this._checkDate(query.startTime, "startTime参数出错", next)
                 && this._checkDate(query.endTime, "endTime参数出错", next))) {
                 params.date = orm.between(new Date(query.startTime + " 00:00:00"), new Date(query.endTime + " 23:59:59"));
+                dates = utils.times(query.startTime, query.endTime);
             }
         }
         Object.keys(query).forEach((key) => {
@@ -129,7 +131,7 @@ api.prototype = {
         if(this.params) {
             params = this.params;
         }
-        this._getCache(type, res, req, query, next, params);
+        this._getCache(type, res, req, query, next, params, dates);
     },
     _checkDate(option, errorMassage, next) {
         if (!validator.isDate(option)) {
@@ -138,12 +140,12 @@ api.prototype = {
         }
         return true;
     },
-    _getCache(type, res, req, query, next, params) {
+    _getCache(type, res, req, query, next, params, dates) {
         cache.cacheGet(cacheName, (err, cacheData) => {
             if (!err) {
                 if (cacheData) {
                     if (this._checkQuery(query, cacheData, next, params)) {
-                        this._findData(type, res, req, params, next);
+                        this._findData(type, res, req, params, next, dates);
                     }
                 } else {
                     cacheData = {};
@@ -160,7 +162,7 @@ api.prototype = {
                             }
                         }
                         if (this._checkQuery(query, cacheData, next, params)) {
-                            this._setCache(type, req, res, params, cacheData, next);
+                            this._setCache(type, req, res, params, cacheData, next, dates);
                         }
                     })();
                 }
@@ -169,7 +171,7 @@ api.prototype = {
             }
         });
     },
-    _findData(type, res, req, query, next) {
+    _findData(type, res, req, query, next, dates) {
         async(() => {
             var isErr = false,
                 error = "";
@@ -189,8 +191,9 @@ api.prototype = {
                 isErr = true;
                 error = err;
             }
+
             if (this.filter) {
-                sendData = this.filter(sendData, this.filter_key);
+                sendData = this.filter(sendData, this.filter_key, dates);
             }
             if(isErr) {
                 next(error);
@@ -225,10 +228,10 @@ api.prototype = {
             }
         })();
     },
-    _setCache(type, req, res, params, data, next) {
+    _setCache(type, req, res, params, data, next, dates) {
         cache.cacheSet(cacheName, data, cacheTime, (err, success) => {
             if (!err && success) {
-                this._findData(type, res, req, params, next);
+                this._findData(type, res, req, params, next, dates);
             } else {
                 next(err);
             }

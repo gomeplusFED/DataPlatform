@@ -162,18 +162,3 @@ module.exports = {
         }
     }
 };
-
-
-// {
-//                 type : "table",
-//                 title : "邀请商户入驻总览",
-//                 query_api : "/platformRebate/inviteRegisterAndEnterTwo"
-//             },{
-//                 type : "chart",
-//                 title : "邀请趋势",
-//                 query_api : "/platformRebate/inviteRegisterAndEnterThree"
-//             },{
-//                 type : "table",
-//                 title : "邀请返利汇总",
-//                 query_api : "/platformRebate/inviteRegisterAndEnterFour"
-//             }

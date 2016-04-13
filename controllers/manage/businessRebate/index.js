@@ -12,7 +12,7 @@ module.exports = (Router) => {
         router: "/businessRebate/businessAllOne",
         modelName: ["RebateShopOverview", "RebateShopRefund"],
         date_picker_data: 1,
-        filter(data, filter_key) {
+        filter(data, filter_key, dates) {
             return businessRebate.businessAllOne(data);
         },
         rows: [
@@ -98,8 +98,8 @@ module.exports = (Router) => {
                 value: '商品件数'
             }]
         }],
-        filter(data, filter_key) {
-            return businessRebate.businessAllTwe(data, filter_key);
+        filter(data, filter_key, dates) {
+            return businessRebate.businessAllTwe(data, filter_key, dates);
         }
     });
 
@@ -122,7 +122,7 @@ module.exports = (Router) => {
                 }]
             }
         ],
-        filter(data, filter_key) {
+        filter(data, filter_key, dates) {
             return businessRebate.businessAllThree(data, filter_key);
         }
     });
@@ -146,7 +146,7 @@ module.exports = (Router) => {
                 }]
             }
         ],
-        filter(data, filter_key) {
+        filter(data, filter_key, dates) {
             return businessRebate.businessAllFour(data, filter_key);
         }
     });
@@ -155,7 +155,7 @@ module.exports = (Router) => {
         router : "/businessRebate/businessAllFive",
         modelName : [ "RebateShopTop" ],
         date_picker_data: 1,
-        filter(data, filter_key) {
+        filter(data, filter_key, dates) {
             return businessRebate.businessAllFive(data);
         },
         rows : [
@@ -210,7 +210,7 @@ module.exports = (Router) => {
                 customMethods: ''
             }
         ],
-        filter(data, filter_key) {
+        filter(data, filter_key, dates) {
             return businessRebate.businessAllSix(data);
         },
         rows : [
@@ -270,7 +270,7 @@ module.exports = (Router) => {
             customMethods: ''
         }],
         date_picker_data: 1,
-        filter(data, filter_key) {
+        filter(data, filter_key, dates) {
             return businessRebate.planOne(data);
         },
         rows : [

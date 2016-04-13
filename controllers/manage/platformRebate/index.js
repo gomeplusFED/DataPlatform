@@ -11,7 +11,7 @@ module.exports = (Router) => {
         router : "/platformRebate/platformOrderOne",
         modelName : ["Rebate", "RebateRefund"],
         date_picker_data: 1,
-        filter(data, filter_key) {
+        filter(data, filter_key, dates) {
             return filter.platformOrderOne(data);
         },
         rows: [
@@ -97,8 +97,8 @@ module.exports = (Router) => {
                 value: '商品件数'
             }]
         }],
-        filter(data, filter_key) {
-            return filter.platformOrderTwe(data, filter_key);
+        filter(data, filter_key, dates) {
+            return filter.platformOrderTwe(data, filter_key, dates);
         }
     });
 
@@ -119,7 +119,7 @@ module.exports = (Router) => {
                 value: '返利到账金额'
             }]
         }],
-        filter(data, filter_key) {
+        filter(data, filter_key, dates) {
             return filter.platformOrderThree(data, filter_key);
         }
     });
@@ -141,7 +141,7 @@ module.exports = (Router) => {
                 value: '返利到账金额'
             }]
         }],
-        filter(data, filter_key) {
+        filter(data, filter_key, dates) {
             return filter.platformOrderFour(data, filter_key);
         }
     });
@@ -221,7 +221,7 @@ module.exports = (Router) => {
                 }
             }]
         }],
-        filter(data, filter_key) {
+        filter(data, filter_key, dates) {
             return filter.platformOrderFive(data);
         },
         rows : [

@@ -6,7 +6,8 @@
 var dataOverview = require("./controllers/path/dataOverview"),
     usersAnalysis = require("./controllers/path/usersAnalysis"),
     platformRebate = require("./controllers/path/platformRebate"),
-    businessRebate = require("./controllers/path/businessRebate");
+    businessRebate = require("./controllers/path/businessRebate"),
+    useAnalysis = require("./controllers/path/useAnalysis");
 
 module.exports = {
     siteName: '美信数据平台',
@@ -75,10 +76,12 @@ module.exports = {
         "useAnalysis": {
             name: "使用分析",
             id: 6,
-            display: false,
+            display: true,
             className: "fa fa-th fa-fw",
             href: "#",
-            path: []
+            path: [
+                useAnalysis.useTime()
+            ]
         }
     }, {
         "terminal": {

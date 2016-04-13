@@ -8,16 +8,12 @@ var _ = require("lodash"),
     util = require("../../utils");
 
 module.exports = {
-    One(data, mapKey, mapName) {
+    One(data, mapKey, mapName, dates) {
         var type = "line",
             source = data.data,
             newData = {},
             data = [],
-            map = {},
-            dates = util.uniq(_.pluck(source, "date"));
-        dates.sort((a, b) => {
-            return new Date(a) - new Date(b);
-        });
+            map = {};
         for(var i = 0; i < mapKey.length; i++) {
             map[mapKey[i]] = mapName[i];
         }
@@ -44,15 +40,11 @@ module.exports = {
         });
         return data;
     },
-    newUsersTwe(data) {
+    newUsersTwe(data, dates) {
         var source = data.data,
             newData = [],
             total_users = 0,
-            total_account = 0,
-            dates = util.uniq(_.pluck(source, "date"));
-        dates.sort((a, b) => {
-            return new Date(b) - new Date(a);
-        });
+            total_account = 0;
         for(var date of dates) {
             var obj = {
                 date : moment(date).format("YYYY-MM-DD"),
@@ -78,15 +70,11 @@ module.exports = {
         });
         return util.toTable([newData], data.rows, data.cols);
     },
-    activeUsersTwe(data) {
+    activeUsersTwe(data, dates) {
         var source = data.data,
             newData = [],
-            dates = util.uniq(_.pluck(source, "date")),
             total_users = 0,
             total_account = 0;
-        dates.sort((a, b) => {
-            return new Date(b) - new Date(a);
-        });
         for(var date of dates) {
             var obj = {
                 date : moment(date).format("YYYY-MM-DD"),

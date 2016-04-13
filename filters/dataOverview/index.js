@@ -114,17 +114,13 @@ module.exports = {
         newData.push(obj);
         return util.toTable([newData], data.rows, data.cols);
     },
-    dataOverviewAllTwo(data, filter_key, filter_name) {
+    dataOverviewAllTwo(data, filter_key, filter_name, dates) {
         var source = data.data,
             newData = {},
             type = "line",
             map = {
                 value : filter_name[filter_key]
-            },
-            dates = util.uniq(_.pluck(source, "date"));
-        dates.sort((a, b) => {
-            return new Date(a) - new Date(b);
-        });
+            };
         for(var date of dates) {
             var obj = {
                 value : 0

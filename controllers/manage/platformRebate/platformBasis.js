@@ -14,7 +14,7 @@ module.exports = (Router) => {
             user_party : "平台基础返利"
         },
         date_picker_data: 1,
-        filter(data, filter_key) {
+        filter(data, filter_key, dates) {
             return filter.platformBasisOne(data);
         },
         rows: [
@@ -100,8 +100,8 @@ module.exports = (Router) => {
                 value: '商品件数'
             }]
         }],
-        filter(data, filter_key) {
-            return filter.platformBasisTwo(data, filter_key);
+        filter(data, filter_key, dates) {
+            return filter.platformBasisTwo(data, filter_key, dates);
         }
     });
 
@@ -125,7 +125,7 @@ module.exports = (Router) => {
                 value: '返利到账金额'
             }]
         }],
-        filter(data, filter_key) {
+        filter(data, filter_key, dates) {
             return filter.platformBasisThree(data, filter_key);
         }
     });
@@ -150,7 +150,7 @@ module.exports = (Router) => {
                 value: '返利到账金额'
             }]
         }],
-        filter(data, filter_key) {
+        filter(data, filter_key, dates) {
             return filter.platformBasisFour(data, filter_key);
         }
     });
@@ -166,7 +166,7 @@ module.exports = (Router) => {
         //    content: '导出',
         //    preMethods: ['excel_export']
         //}],
-        filter(data, filter_key) {
+        filter(data, filter_key, dates) {
             return filter.platformBasisFive(data);
         },
         rows : [

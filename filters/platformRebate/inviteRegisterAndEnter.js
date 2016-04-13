@@ -58,7 +58,7 @@ module.exports = {
         newData.push(obj);
         return util.toTable([newData], data.rows, data.cols);
     },
-    inviteRegisterAndEnterThree(data, filter_key) {
+    inviteRegisterAndEnterThree(data, filter_key, dates) {
         var source = data.data,
             array = [ "邀请好友-平台基础返利", "邀请好友-平台促销返利", "邀请商家入驻返利" ],
             type = "line",
@@ -67,11 +67,7 @@ module.exports = {
                 value_1 : "邀请好友-平台促销返利",
                 value_2 : "邀请商家入驻返利"
             },
-            dates = util.uniq(_.pluck(source, "date")),
             newData = {};
-        dates.sort((a, b) => {
-            return new Date(a) - new Date(b);
-        });
         for(var date of dates) {
             var obj = {
                 value_0 : 0,

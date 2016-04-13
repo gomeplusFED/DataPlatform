@@ -98,16 +98,12 @@ module.exports = {
         });
         return util.toTable([one, twe, three], data.rows, data.cols);
     },
-    businessAllTwe(data, filter_key) {
+    businessAllTwe(data, filter_key, dates) {
         var source = data.data,
             type = "line",
             array = [ "分销购买", "分享购买", "组合返利" ],
             map = {},
-            newDate = {},
-            dates = util.uniq(_.pluck(source, "date"));
-        dates.sort((a, b) => {
-            return new Date(a) - new Date(b);
-        });
+            newDate = {};
         map[filter_key + "_0"] = "分销购买";
         map[filter_key + "_1"] = "分享购买";
         map[filter_key + "_2"] = "组合返利";

@@ -77,16 +77,12 @@ module.exports = {
         });
         return util.toTable([one, two, three], data.rows, data.cols);
     },
-    inviteBusinessTwo(data, filter_key) {
+    inviteBusinessTwo(data, filter_key, dates) {
         var source = data.data,
-            dates = util.uniq(_.pluck(source, "date")),
             type = "line",
             array = [ "分享返利" ],
             newData = {},
             map = {};
-        dates.sort((a, b) => {
-            return new Date(a) - new Date(b);
-        });
         map[filter_key + "_0"] = array[0];
         for (var date of dates) {
             var obj = {};

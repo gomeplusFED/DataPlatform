@@ -11,7 +11,7 @@ module.exports = (Router) => {
         router : "/platformRebate/inviteRegisterAndEnterOne",
         modelName : ["RebateInvitepartner"],
         date_picker_data: 1,
-        filter(data, filter_key) {
+        filter(data, filter_key, dates) {
             return filter.inviteRegisterAndEnterOne(data);
         },
         rows: ["rebate_plan_count", "participate_user_count", "registered_count", "registered_rate", "rebate_amount_count"],
@@ -37,7 +37,7 @@ module.exports = (Router) => {
         router : "/platformRebate/inviteRegisterAndEnterTwo",
         date_picker_data: 1,
         modelName : [ "RebatetInviteseller" ],
-        filter(data, filter_key) {
+        filter(data, filter_key, dates) {
             return filter.inviteRegisterAndEnterTwo(data);
         },
         rows: [
@@ -79,8 +79,8 @@ module.exports = (Router) => {
                 value: '返利到账金额'
             }]
         }],
-        filter(data, filter_key) {
-            return filter.inviteRegisterAndEnterThree(data, filter_key);
+        filter(data, filter_key, dates) {
+            return filter.inviteRegisterAndEnterThree(data, filter_key, dates);
         }
     });
 
@@ -160,7 +160,7 @@ module.exports = (Router) => {
                 }
             }]
         }],
-        filter(data, filter_key) {
+        filter(data, filter_key, dates) {
             return filter.inviteRegisterAndEnterFour(data);
         },
         rows : [

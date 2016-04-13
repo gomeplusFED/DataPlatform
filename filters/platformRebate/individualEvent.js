@@ -77,16 +77,12 @@ module.exports = {
         });
         return util.toTable([one, two, three], data.rows, data.cols);
     },
-    individualEventTwo(data, filter_key) {
+    individualEventTwo(data, filter_key, dates) {
         var source = data.data,
-            dates = util.uniq(_.pluck(source, "date")),
             type = "line",
             array = [ "分享购买", "邀请好友-购买返利" ],
             newData = {},
             map = {};
-        dates.sort((a, b) => {
-            return new Date(a) - new Date(b);
-        });
         map[filter_key + "_0"] = array[0];
         map[filter_key + "_1"] = array[1];
         for (var date of dates) {

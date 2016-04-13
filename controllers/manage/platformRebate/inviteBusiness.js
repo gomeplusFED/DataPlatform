@@ -14,7 +14,7 @@ module.exports = (Router) => {
             user_party : "邀请商户入驻"
         },
         date_picker_data: 1,
-        filter(data, filter_key) {
+        filter(data, filter_key, dates) {
             return filter.inviteBusinessOne(data);
         },
         rows: [
@@ -100,8 +100,8 @@ module.exports = (Router) => {
                 value: '商品件数'
             }]
         }],
-        filter(data, filter_key) {
-            return filter.inviteBusinessTwo(data, filter_key);
+        filter(data, filter_key, dates) {
+            return filter.inviteBusinessTwo(data, filter_key, dates);
         }
     });
 
@@ -125,7 +125,7 @@ module.exports = (Router) => {
                 value: '返利到账金额'
             }]
         }],
-        filter(data, filter_key) {
+        filter(data, filter_key, dates) {
             return filter.inviteBusinessThree(data, filter_key);
         }
     });
@@ -141,7 +141,7 @@ module.exports = (Router) => {
         //    content: '导出',
         //    preMethods: ['excel_export']
         //}],
-        filter(data, filter_key) {
+        filter(data, filter_key, dates) {
             return filter.inviteBusinessFour(data);
         },
         rows : [

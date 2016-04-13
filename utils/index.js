@@ -166,3 +166,14 @@ exports.toFixed = function(one, two) {
 exports.getDate = function(date){
     return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
 };
+
+exports.times = function(startTime, endTime) {
+    var start = new Date(startTime).getTime(),
+        end = new Date(endTime).getTime(),
+        array = [];
+    while(start <= end) {
+        array.push(exports.getDate(new Date(start)));
+        start = start + 24 * 60 * 60 * 1000;
+    }
+    return array;
+};
