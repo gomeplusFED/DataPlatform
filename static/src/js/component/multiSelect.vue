@@ -115,9 +115,8 @@ var MultiSelect = Vue.extend({
 		    this.showResult = [];
 		},
 		submit: function(){
-			console.log(this.checkedId);
 			// 设置参数
-			// this.argvs.$set('')
+			this.$set('argvs.category_id',this.checkedId)
 		}
 	},
 	watch: {
