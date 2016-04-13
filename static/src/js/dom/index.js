@@ -1,10 +1,11 @@
-// 首页dom操作，比如左侧栏的打开关闭
+
 var $ = require('jQuery');
 
 $(function() {
     $('#side-menu').metisMenu();
 });
 
+// 首页dom操作，左侧栏的打开关闭
 $(function() {
     $(window).bind("load resize", function() {
         topOffset = 50;
@@ -31,4 +32,4 @@ $(function() {
     if (element.is('li')) {
         element.addClass('active');
     }
-});
+}); 
