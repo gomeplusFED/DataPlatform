@@ -83,6 +83,7 @@ module.exports = (Router) => {
     Router = new api(Router, {
         router : "/platformRebate/individualEventTwo",
         modelName : [ "RebatetRedencyDetails" ],
+        level_select : true,
         fixedParams : {
             user_party : "单项单级返利"
         },
@@ -108,6 +109,7 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/platformRebate/individualEventThree",
         modelName : [ "RebatetRedencyDetails" ],
+        level_select : true,
         fixedParams : {
             user_party : "单项单级返利"
         },

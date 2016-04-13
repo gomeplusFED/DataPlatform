@@ -10,6 +10,7 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/platformRebate/platformOrderOne",
         modelName : ["Rebate", "RebateRefund"],
+        level_select : true,
         date_picker_data: 1,
         filter(data, filter_key, dates) {
             return filter.platformOrderOne(data);
@@ -83,6 +84,7 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/platformRebate/platformOrderTwe",
         modelName : [ "RebatetRedencyDetails" ],
+        level_select : true,
         filter_select: [{
             title: '指标选择',
             filter_key: 'filter_key',
@@ -105,6 +107,7 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/platformRebate/platformOrderThree",
         modelName : [ "RebatetRedencyDetails" ],
+        level_select : true,
         filter_select: [{
             title: '指标选择',
             filter_key: 'filter_key',
@@ -127,6 +130,7 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/platformRebate/platformOrderFour",
         modelName : [ "RebatetRedencyDetails" ],
+        level_select : true,
         filter_select: [{
             title: '指标选择',
             filter_key: 'filter_key',

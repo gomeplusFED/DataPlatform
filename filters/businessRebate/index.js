@@ -4,7 +4,6 @@
  * @fileoverview 商家返利汇总
  */
 var util = require("../../utils"),
-    moment = require("moment"),
     _ = require("lodash");
 
 module.exports = {
@@ -121,7 +120,7 @@ module.exports = {
                     }
                 }
             }
-            newDate[moment(date).format("YYYY-MM-DD")] = obj;
+            newDate[util.getDate(new Date(date))] = obj;
         }
         return [{
             type : type,

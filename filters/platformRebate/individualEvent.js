@@ -4,8 +4,7 @@
  * @fileoverview 单项单级返利
  */
 var util = require("../../utils"),
-    _ = require("lodash"),
-    moment = require("moment");
+    _ = require("lodash");
 
 module.exports = {
     individualEventOne(data) {
@@ -96,7 +95,7 @@ module.exports = {
                     }
                 }
             }
-            newData[moment(date).format("YYYY-MM-DD")] = obj;
+            newData[date] = obj;
         }
         return [{
             type: type,

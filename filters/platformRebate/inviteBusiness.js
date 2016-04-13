@@ -4,8 +4,7 @@
  * @fileoverview 邀请商户入驻
  */
 var util = require("../../utils"),
-    _ = require("lodash"),
-    moment = require("moment");
+    _ = require("lodash");
 
 module.exports = {
     inviteBusinessOne(data) {
@@ -95,7 +94,7 @@ module.exports = {
                     }
                 }
             }
-            newData[moment(date).format("YYYY-MM-DD")] = obj;
+            newData[date] = obj;
         }
         return [{
             type: type,
