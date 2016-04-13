@@ -4,8 +4,7 @@
  * @fileoverview 平台基础返利
  */
 var util = require("../../utils"),
-    _ = require("lodash"),
-    moment = require("moment");
+    _ = require("lodash");
 
 module.exports = {
     platformBasisOne(data) {
@@ -96,7 +95,7 @@ module.exports = {
                     }
                 }
             }
-            newData[moment(date).format("YYYY-MM-DD")] = obj;
+            newData[date] = obj;
         }
         return [{
             type: type,

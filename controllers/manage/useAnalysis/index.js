@@ -19,5 +19,40 @@ module.exports = (Router) => {
         }
     });
 
+    Router = new api(Router,{
+        router : "/useAnalysis/useTimeTwo",
+        modelName : ["UserCompose"],
+        fixedParams : {
+            use_type : 1
+        },
+        excel_export : true,
+        flexible_btn : [{
+            content: '导出',
+            preMethods: ['excel_export']
+        }],
+        filter(data, filter_key, dates) {
+            return filter.useTimeTwo(
+                data,
+                [ '1-3秒', '4-10秒', '11-30秒', '31-60秒',
+                    '1-3分', '3-10分', '10-30分', '30分+' ]
+            );
+        },
+        rows : [
+            ['distribution', 'num', 'num_rate']
+        ],
+        cols : [
+            [{
+                caption: '访问页面',
+                type: 'string'
+            }, {
+                caption: '启动次数',
+                type: 'number'
+            }, {
+                caption: '启动次数占比',
+                type: 'string'
+            }]
+        ]
+    });
+
     return Router;
 };

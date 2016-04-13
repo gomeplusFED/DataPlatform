@@ -83,6 +83,7 @@ module.exports = (Router) => {
     Router = new api(Router, {
         router : "/platformRebate/inviteBusinessTwo",
         modelName : [ "RebatetRedencyDetails" ],
+        level_select : true,
         fixedParams : {
             user_party : "邀请商户入驻"
         },
@@ -108,6 +109,7 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/platformRebate/inviteBusinessThree",
         modelName : [ "RebatetRedencyDetails" ],
+        level_select : true,
         fixedParams : {
             user_party : "邀请商户入驻"
         },

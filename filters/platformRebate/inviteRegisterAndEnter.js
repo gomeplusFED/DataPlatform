@@ -4,7 +4,6 @@
  * @fileoverview 平台返利汇总
  */
 var _ = require("lodash"),
-    moment = require("moment"),
     util = require("../../utils");
 
 module.exports = {
@@ -83,7 +82,7 @@ module.exports = {
                     }
                 }
             }
-            newData[moment(date).format("YYYY-MM-DD")] = obj;
+            newData[date] = obj;
         }
         return [{
             type : type,

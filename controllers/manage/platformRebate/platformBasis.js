@@ -83,6 +83,7 @@ module.exports = (Router) => {
     Router = new api(Router, {
         router : "/platformRebate/platformBasisTwo",
         modelName : [ "RebatetRedencyDetails" ],
+        level_select : true,
         fixedParams : {
             user_party : "平台基础返利"
         },
@@ -108,6 +109,7 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/platformRebate/platformBasisThree",
         modelName : [ "RebatetRedencyDetails" ],
+        level_select : true,
         fixedParams : {
             user_party : "平台基础返利"
         },
@@ -133,6 +135,7 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/platformRebate/platformBasisFour",
         modelName : [ "RebatetRedencyDetails" ],
+        level_select : true,
         fixedParams : {
             user_party : "平台基础返利"
         },

@@ -96,7 +96,7 @@ module.exports = {
                     }
                 }
             }
-            newData[moment(date).format("YYYY-MM-DD")] = obj;
+            newData[date] = obj;
         }
         return [{
             type: type,
