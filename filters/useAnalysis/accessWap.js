@@ -1,0 +1,68 @@
+/**
+ * @author yanglei
+ * @date 20160413
+ * @fileoverview 访问页面-wap
+ */
+var util = require("../../utils"),
+    _ = require("lodash");
+
+module.exports = {
+    accessWapOne(data, filter_key, dates) {
+        var source = data.data,
+            type = "line",
+            filter_name = {
+                page_view : "浏览量",
+                access_num : "访客数",
+                ip_num : "ip数"
+            },
+            map = {
+                value : filter_name[filter_key]
+            },
+            newData = {};
+        for(var date of dates) {
+            var obj = {
+                value : 0
+            };
+            for(var key of source) {
+                if(date === util.getDate(key.date)) {
+                    obj.value += key[filter_key];
+                }
+            }
+            newData[date] = obj;
+        }
+        return [{
+            type : type,
+            map : map,
+            data : newData,
+            config: { // 配置信息
+                stack: false // 图的堆叠
+            }
+        }]
+    },
+    accessWapTwo(data) {
+        var source = data.data,
+            urls = util.uniq(_.pluck(source, "url")),
+            newData = [];
+        for(var i = 0; i < urls.length; i++) {
+            var obj = {
+                id : i + 1,
+                url : urls[i],
+                page_view : 0,
+                access_num : 0,
+                down_browse : 0,
+                avg_stay_time : 0,
+                operating : "<button url_detail='/useAnalysis/wap'>详情>></button>"
+            };
+            for(var key of source) {
+                if(urls[i] === key.url) {
+                    obj.page_view += key.page_view;
+                    obj.access_num += key.access_num;
+                    obj.down_browse += key.down_browse;
+                    obj.avg_stay_time += key.avg_stay_time;
+                }
+            }
+            newData.push(obj);
+        }
+        return util.toTable([newData], data.rows, data.cols);
+    }
+};

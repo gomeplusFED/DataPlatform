@@ -594,6 +594,32 @@ function connect(app) {
                 updated_at: Date,
                 outer_id: String
             });
+            models.UrlAccessWap = db.define("tbl_rt_url_access_wap",{
+                id : {type: 'number', key: true},
+                date: Date,
+                day_type: Number,
+                type: String,
+                ver: String,
+                channel: String,
+                url : String,
+                url_type : String,
+                page_view : Number,
+                access_num : Number,
+                ip_num : Number,
+                down_browse : Number,
+                avg_stay_time : Number
+            });
+            models.UserKeep = db.define("tbl_rt_user_keep",{
+                id : {type: 'number', key: true},
+                date: Date,
+                day_type: Number,
+                type: String,
+                ver: String,
+                channel: String,
+                keep_type : String,
+                new_user : Number,
+                keep_num : Number
+            });
             next();
         }
     }))

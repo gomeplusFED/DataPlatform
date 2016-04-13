@@ -80,7 +80,10 @@ module.exports = {
             className: "fa fa-th fa-fw",
             href: "#",
             path: [
-                useAnalysis.useTime()
+                useAnalysis.useTime(),
+                useAnalysis.useFrequency(),
+                useAnalysis.accessPage(),
+                useAnalysis.accessWap()
             ]
         }
     }, {
