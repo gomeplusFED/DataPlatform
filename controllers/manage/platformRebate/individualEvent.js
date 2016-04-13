@@ -13,6 +13,7 @@ module.exports = (Router) => {
         fixedParams : {
             user_party : "单项单级返利"
         },
+        platform : false,
         date_picker_data: 1,
         filter(data, filter_key, dates) {
             return filter.individualEventOne(data);
@@ -84,6 +85,7 @@ module.exports = (Router) => {
         router : "/platformRebate/individualEventTwo",
         modelName : [ "RebatetRedencyDetails" ],
         level_select : true,
+        platform : false,
         fixedParams : {
             user_party : "单项单级返利"
         },
@@ -110,6 +112,7 @@ module.exports = (Router) => {
         router : "/platformRebate/individualEventThree",
         modelName : [ "RebatetRedencyDetails" ],
         level_select : true,
+        platform : false,
         fixedParams : {
             user_party : "单项单级返利"
         },
@@ -138,9 +141,10 @@ module.exports = (Router) => {
         fixedParams : {
             user_party : "单项单级返利"
         },
+        platform : false,
         excel_export : true,
         flexible_btn : [{
-            content: '导出',
+            content: '<a href="javascript:woid(0)">导出</a>',
             preMethods: ['excel_export']
         }],
         filter(data, filter_key, dates) {

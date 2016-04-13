@@ -10,6 +10,7 @@ module.exports = (Router) => {
     Router = new api(Router, {
         router : "/platformRebate/platformPromotionsOne",
         modelName : ["Rebate", "RebateRefund"],
+        platform : false,
         fixedParams : {
             user_party : "平台促销返利"
         },
@@ -83,6 +84,7 @@ module.exports = (Router) => {
     Router = new api(Router, {
         router : "/platformRebate/platformPromotionsTwo",
         modelName : [ "RebatetRedencyDetails" ],
+        platform : false,
         level_select : true,
         fixedParams : {
             user_party : "平台促销返利"
@@ -109,6 +111,7 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/platformRebate/platformPromotionsThree",
         modelName : [ "RebatetRedencyDetails" ],
+        platform : false,
         level_select : true,
         fixedParams : {
             user_party : "平台促销返利"
@@ -135,6 +138,7 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/platformRebate/platformPromotionsFour",
         modelName : [ "RebatetRedencyDetails" ],
+        platform : false,
         level_select : true,
         fixedParams : {
             user_party : "平台促销返利"
@@ -161,12 +165,13 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/platformRebate/platformPromotionsFive",
         modelName : [ "RebatetSheduleDetails" ],
+        platform : false,
         fixedParams : {
             user_party : "平台促销返利"
         },
         excel_export : true,
         //flexible_btn : [{
-        //    content: '导出',
+        //    content: '<a href="javascript:woid(0)">导出</a>',
         //    preMethods: ['excel_export']
         //}],
         filter(data, filter_key, dates) {

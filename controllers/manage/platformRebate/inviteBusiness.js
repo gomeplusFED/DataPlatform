@@ -13,6 +13,7 @@ module.exports = (Router) => {
         fixedParams : {
             user_party : "邀请商户入驻"
         },
+        platform : false,
         date_picker_data: 1,
         filter(data, filter_key, dates) {
             return filter.inviteBusinessOne(data);
@@ -84,6 +85,7 @@ module.exports = (Router) => {
         router : "/platformRebate/inviteBusinessTwo",
         modelName : [ "RebatetRedencyDetails" ],
         level_select : true,
+        platform : false,
         fixedParams : {
             user_party : "邀请商户入驻"
         },
@@ -110,6 +112,7 @@ module.exports = (Router) => {
         router : "/platformRebate/inviteBusinessThree",
         modelName : [ "RebatetRedencyDetails" ],
         level_select : true,
+        platform : false,
         fixedParams : {
             user_party : "邀请商户入驻"
         },
@@ -135,12 +138,13 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/platformRebate/inviteBusinessFour",
         modelName : [ "RebatetSheduleDetails" ],
+        platform : false,
         fixedParams : {
             user_party : "邀请商户入驻"
         },
         excel_export : true,
         //flexible_btn : [{
-        //    content: '导出',
+        //    content: '<a href="javascript:woid(0)">导出</a>',
         //    preMethods: ['excel_export']
         //}],
         filter(data, filter_key, dates) {

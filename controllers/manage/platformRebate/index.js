@@ -11,6 +11,7 @@ module.exports = (Router) => {
         router : "/platformRebate/platformOrderOne",
         modelName : ["Rebate", "RebateRefund"],
         level_select : true,
+        platform : false,
         date_picker_data: 1,
         filter(data, filter_key, dates) {
             return filter.platformOrderOne(data);
@@ -85,6 +86,7 @@ module.exports = (Router) => {
         router : "/platformRebate/platformOrderTwe",
         modelName : [ "RebatetRedencyDetails" ],
         level_select : true,
+        platform : false,
         filter_select: [{
             title: '指标选择',
             filter_key: 'filter_key',
@@ -108,6 +110,7 @@ module.exports = (Router) => {
         router : "/platformRebate/platformOrderThree",
         modelName : [ "RebatetRedencyDetails" ],
         level_select : true,
+        platform : false,
         filter_select: [{
             title: '指标选择',
             filter_key: 'filter_key',
@@ -131,6 +134,7 @@ module.exports = (Router) => {
         router : "/platformRebate/platformOrderFour",
         modelName : [ "RebatetRedencyDetails" ],
         level_select : true,
+        platform : false,
         filter_select: [{
             title: '指标选择',
             filter_key: 'filter_key',
@@ -154,8 +158,9 @@ module.exports = (Router) => {
         router : "/platformRebate/platformOrderFive",
         modelName : [ "RebatetSheduleDetails" ],
         excel_export : true,
+        platform : false,
         flexible_btn : [{
-            content: '导出',
+            content: '<a href="javascript:woid(0)">导出</a>',
             preMethods: ['excel_export']
         }],
         filter_select: [{

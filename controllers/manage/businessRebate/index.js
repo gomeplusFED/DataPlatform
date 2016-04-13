@@ -12,6 +12,7 @@ module.exports = (Router) => {
         router: "/businessRebate/businessAllOne",
         modelName: ["RebateShopOverview", "RebateShopRefund"],
         date_picker_data: 1,
+        platform : false,
         filter(data, filter_key, dates) {
             return businessRebate.businessAllOne(data);
         },
@@ -85,6 +86,7 @@ module.exports = (Router) => {
         router : "/businessRebate/businessAllTwo",
         modelName : [ "RebateShopTredencyDetails" ],
         level_select : true,
+        platform : false,
         filter_select: [{
             title: '指标选择',
             filter_key: 'filter_key',
@@ -108,6 +110,7 @@ module.exports = (Router) => {
         router : "/businessRebate/businessAllThree",
         modelName : [ "RebateShopTredencyDetails" ],
         level_select : true,
+        platform : false,
         filter_select: [
             {
                 title: '指标选择',
@@ -133,6 +136,7 @@ module.exports = (Router) => {
         router : "/businessRebate/businessAllFour",
         modelName : [ "RebateShopTredencyDetails" ],
         level_select : true,
+        platform : false,
         filter_select: [
             {
                 title: '指标选择',
@@ -158,6 +162,7 @@ module.exports = (Router) => {
         router : "/businessRebate/businessAllFive",
         modelName : [ "RebateShopTop" ],
         date_picker_data: 1,
+        platform : false,
         filter(data, filter_key, dates) {
             return businessRebate.businessAllFive(data);
         },
@@ -206,6 +211,7 @@ module.exports = (Router) => {
         router : "/businessRebate/businessAllSix",
         modelName : [ "RebateShopPlanTop" ],
         date_picker_data: 1,
+        platform : false,
         flexible_btn : [
             {
                 content: '<a href="/businessRebate/plan" target="_blank">更多</a>',
@@ -267,10 +273,10 @@ module.exports = (Router) => {
         router : "/businessRebate/planOne",
         modelName : [ "RebateShopPlanTop" ],
         excel_export : true,
+        platform : false,
         flexible_btn : [{
-            content: '导出',
-            preMethods: ['excel_export'],
-            customMethods: ''
+            content: '<a href="javascript:woid(0)">导出</a>',
+            preMethods: ['excel_export']
         }],
         date_picker_data: 1,
         filter(data, filter_key, dates) {

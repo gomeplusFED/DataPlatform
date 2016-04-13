@@ -18,14 +18,14 @@ module.exports = {
                 type : "table",
                 title : "单次使用时长分布明细",
                 query_api : "/useAnalysis/useTimeTwo"
-            //},{
-            //    type : "chart",
-            //    title : "日使用时长分布",
-            //    query_api : "/useAnalysis/useTimeThree"
-            //},{
-            //    type : "table",
-            //    title : "日使用时长分布明细",
-            //    query_api : "/useAnalysis/useTimeFour"
+            },{
+                type : "chart",
+                title : "日使用时长分布",
+                query_api : "/useAnalysis/useTimeThree"
+            },{
+                type : "table",
+                title : "日使用时长分布明细",
+                query_api : "/useAnalysis/useTimeFour"
             }]
         };
     }

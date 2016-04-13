@@ -4,7 +4,6 @@
  * @fileoverview 数据概览
  */
 var util = require("../../utils"),
-    moment = require("moment"),
     _ = require("lodash");
 
 module.exports = {
@@ -135,7 +134,7 @@ module.exports = {
 
                 }
             }
-            newData[moment(date).format("YYYY-MM-DD")] = obj;
+            newData[date] = obj;
         }
         return [{
             type : type,

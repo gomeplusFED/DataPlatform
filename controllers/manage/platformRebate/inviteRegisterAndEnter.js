@@ -11,6 +11,7 @@ module.exports = (Router) => {
         router : "/platformRebate/inviteRegisterAndEnterOne",
         modelName : ["RebateInvitepartner"],
         date_picker_data: 1,
+        platform : false,
         filter(data, filter_key, dates) {
             return filter.inviteRegisterAndEnterOne(data);
         },
@@ -36,6 +37,7 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/platformRebate/inviteRegisterAndEnterTwo",
         date_picker_data: 1,
+        platform : false,
         modelName : [ "RebatetInviteseller" ],
         filter(data, filter_key, dates) {
             return filter.inviteRegisterAndEnterTwo(data);
@@ -66,7 +68,7 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/platformRebate/inviteRegisterAndEnterThree",
-        date_picker_data: 7,
+        platform : false,
         modelName : ["RebatetRegisterTrendency"],
         filter_select: [{
             title: '指标选择',
@@ -86,12 +88,11 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/platformRebate/inviteRegisterAndEnterFour",
-        date_picker_data: 7,
+        platform : false,
         modelName : ["RebatetRegisterSheduleDetails"],
         flexible_btn: [{
-            content: '导出',
-            preMethods: ['excel_export'],
-            customMethods: ''
+            content: '<a href="javascript:woid(0)">导出</a>',
+            preMethods: ['excel_export']
         }],
         filter_select: [{
             title: '使用方',

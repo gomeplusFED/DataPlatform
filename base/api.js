@@ -38,7 +38,7 @@ function api(Router, options) {
             day_type: 1
         },
         //是否显示平台
-        platform: false,
+        platform: true,
         //是否显示渠道
         channel: false,
         //是否显示版本

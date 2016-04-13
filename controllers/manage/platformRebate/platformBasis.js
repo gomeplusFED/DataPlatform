@@ -10,6 +10,7 @@ module.exports = (Router) => {
     Router = new api(Router, {
         router : "/platformRebate/platformBasisOne",
         modelName : ["Rebate", "RebateRefund"],
+        platform : false,
         fixedParams : {
             user_party : "平台基础返利"
         },
@@ -84,6 +85,7 @@ module.exports = (Router) => {
         router : "/platformRebate/platformBasisTwo",
         modelName : [ "RebatetRedencyDetails" ],
         level_select : true,
+        platform : false,
         fixedParams : {
             user_party : "平台基础返利"
         },
@@ -110,6 +112,7 @@ module.exports = (Router) => {
         router : "/platformRebate/platformBasisThree",
         modelName : [ "RebatetRedencyDetails" ],
         level_select : true,
+        platform : false,
         fixedParams : {
             user_party : "平台基础返利"
         },
@@ -136,6 +139,7 @@ module.exports = (Router) => {
         router : "/platformRebate/platformBasisFour",
         modelName : [ "RebatetRedencyDetails" ],
         level_select : true,
+        platform : false,
         fixedParams : {
             user_party : "平台基础返利"
         },
@@ -164,9 +168,10 @@ module.exports = (Router) => {
         fixedParams : {
             user_party : "平台基础返利"
         },
+        platform : false,
         excel_export : true,
         //flexible_btn : [{
-        //    content: '导出',
+        //    content: '<a href="javascript:woid(0)">导出</a>',
         //    preMethods: ['excel_export']
         //}],
         filter(data, filter_key, dates) {

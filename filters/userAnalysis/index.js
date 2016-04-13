@@ -4,7 +4,6 @@
  * @fileoverview 用户分析
  */
 var _ = require("lodash"),
-    moment = require("moment"),
     util = require("../../utils");
 
 module.exports = {
@@ -28,7 +27,7 @@ module.exports = {
                     obj.new_account += key.new_account;
                 }
             }
-            newData[moment(date).format("YYYY-MM-DD")] = obj;
+            newData[date] = obj;
         }
         data.push({
             type : type,
@@ -47,7 +46,7 @@ module.exports = {
             total_account = 0;
         for(var date of dates) {
             var obj = {
-                date : moment(date).format("YYYY-MM-DD"),
+                date : date,
                 new_users : 0,
                 new_account : 0
             };
@@ -77,7 +76,7 @@ module.exports = {
             total_account = 0;
         for(var date of dates) {
             var obj = {
-                date : moment(date).format("YYYY-MM-DD"),
+                date : date,
                 active_users : 0,
                 active_account : 0
             };

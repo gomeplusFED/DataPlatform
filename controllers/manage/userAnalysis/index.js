@@ -11,8 +11,6 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/userAnalysis/newUsersOne",
         modelName : ["NewAccount"],
-        excel_export : false,
-        platform : true,
         filter(data, filter_key, dates) {
             return userAnalysis.One(data,
                 [ "new_users", "new_account" ],
@@ -50,7 +48,11 @@ module.exports = (Router) => {
             }
             ]
         ],
-        platform : true,
+        excel_export : true,
+        flexible_btn : [{
+            content: '<a href="javascript:woid(0)">导出</a>',
+            preMethods: ['excel_export']
+        }],
         filter(data, filter_key, dates) {
             return userAnalysis.newUsersTwe(data, dates);
         }

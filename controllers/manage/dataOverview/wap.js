@@ -18,6 +18,7 @@ module.exports = (Router) => {
         router: "/dataOverview/wapOne",
         modelName: ['OverviewPlatf', "KpiValue"],
         date_picker : false,
+        platform : false,
         params : {
             date : orm.between(new Date(qdate + " 00:00:00"), new Date(ydate + " 23:59:59")),
             region : "ALL",
@@ -82,6 +83,7 @@ module.exports = (Router) => {
         fixedParams : {
             region : "ALL"
         },
+        platform : false,
         filter_select: [{
             title: '指标选择',
             filter_key: 'filter_key',
@@ -130,6 +132,7 @@ module.exports = (Router) => {
         router: "/dataOverview/wapThree",
         modelName: ["OverviewPlatf"],
         date_picker : false,
+        platform : false,
         params : {
             date : orm.between(new Date(ydate + " 00:00:00"), new Date(ydate + " 23:59:59")),
             day_type : 1
@@ -169,6 +172,7 @@ module.exports = (Router) => {
         router: "/dataOverview/wapFour",
         modelName: ["OverviewPage"],
         date_picker : false,
+        platform : false,
         params : {
             date : orm.between(new Date(ydate + " 00:00:00"), new Date(ydate + " 23:59:59")),
             day_type : 1

@@ -18,6 +18,7 @@ module.exports = (Router) => {
         router: "/dataOverview/dataOverviewAllOne",
         modelName: ['OverviewPlatf', "KpiValue"],
         date_picker : false,
+        platform : false,
         params : {
             date : orm.between(new Date(qdate + " 00:00:00"), new Date(ydate + " 23:59:59")),
             region : "ALL",
@@ -79,6 +80,7 @@ module.exports = (Router) => {
     Router = new api(Router, {
         router: "/dataOverview/dataOverviewAllTwo",
         modelName: ["OverviewPlatf"],
+        platform : false,
         fixedParams : {
             region : "ALL"
         },
@@ -125,6 +127,7 @@ module.exports = (Router) => {
     Router = new api(Router, {
         router: "/dataOverview/dataOverviewAllThree",
         modelName: ["OverviewPlatf"],
+        platform : false,
         date_picker : false,
         params : {
             date : orm.between(new Date(ydate + " 00:00:00"), new Date(ydate + " 23:59:59")),
@@ -164,6 +167,7 @@ module.exports = (Router) => {
     Router = new api(Router, {
         router: "/dataOverview/dataOverviewAllFour",
         modelName: ["OverviewPage"],
+        platform : false,
         date_picker : false,
         params : {
             date : orm.between(new Date(ydate + " 00:00:00"), new Date(ydate + " 23:59:59")),
