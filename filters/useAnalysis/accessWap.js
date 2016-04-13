@@ -51,7 +51,7 @@ module.exports = {
                 access_num : 0,
                 down_browse : 0,
                 avg_stay_time : 0,
-                operating : "<button url_detail='/useAnalysis/wap'>详情>></button>"
+                operating : "<button class='btn btn-default' url_detail='/useAnalysis/wap'>详情>></button>"
             };
             for(var key of source) {
                 if(urls[i] === key.url) {
@@ -64,5 +64,12 @@ module.exports = {
             newData.push(obj);
         }
         return util.toTable([newData], data.rows, data.cols);
+    },
+    wap(data) {
+        var source = data.data;
+        for(var i = 0; i < source.length; i++) {
+            source[i].id = i + 1;
+        }
+        return util.toTable([source], data.rows, data.cols);
     }
 };

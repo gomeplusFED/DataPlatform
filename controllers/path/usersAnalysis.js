@@ -19,7 +19,7 @@ module.exports = {
                 title : "新增用户明细",
                 query_api : "/userAnalysis/newUsersTwe"
             }]
-        }
+        };
     },
     activeAccount() {
         return {
@@ -35,6 +35,38 @@ module.exports = {
                 title : "活跃用户明细",
                 query_api : "/userAnalysis/activeAccountTwe"
             }]
-        }
+        };
+    },
+    startUp() {
+        return {
+            path : "/userAnalysis/startUp",
+            name : "启动次数",
+            display : true,
+            defaultData : [{
+                type : "chart",
+                title : "启动次数趋势",
+                query_api : "/userAnalysis/startUpOne"
+            }, {
+                type : "table",
+                title : "启动次数明细",
+                query_api : "/userAnalysis/startUpTwe"
+            }]
+        };
+    },
+    version() {
+        return {
+            path : "/userAnalysis/version",
+            name : "版本分布",
+            display : true,
+            defaultData : [{
+                type : "chart",
+                title : "TOP 10版本趋势",
+                query_api : "/userAnalysis/versionOne"
+            }, {
+                type : "table",
+                title : "版本累计用户",
+                query_api : "/userAnalysis/versionTwe"
+            }]
+        };
     }
 };

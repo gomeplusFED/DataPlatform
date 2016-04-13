@@ -15,7 +15,7 @@ module.exports = (Router) => {
             type : "H5"
         },
         filter_select: [{
-            title: '指标选择',
+            title: '',
             filter_key : 'filter_key',
             groups: [{
                 key: 'page_view',
@@ -42,7 +42,7 @@ module.exports = (Router) => {
             preMethods: ['excel_export']
         }],
         filter_select: [{
-            title: '指标选择',
+            title: '',
             filter_key : 'url_type',
             groups: [{
                 key: '1',
@@ -89,28 +89,31 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/useAnalysis/wap",
-        modelName : ["UsersAccess"],
+        modelName : ["UrlAccessWap"],
         filter(data, filter_key, dates) {
-            return filter.page(data);
+            return filter.wap(data);
         },
         rows : [
             [ "id", "date", "acc_num", "acc_time", "bounce_rate" ]
         ],
         cols : [
             [ {
-                caption : "序号",
-                type : "number"
-            },{
                 caption : "日期",
                 type : "number"
             },{
-                caption : "访问次数",
+                caption : "页面URL",
+                type : "number"
+            },{
+                caption : "浏览量",
+                type : "number"
+            },{
+                caption : "访客数",
+                type : "number"
+            },{
+                caption : "贡献下游浏览",
                 type : "number"
             },{
                 caption : "平均停留时间",
-                type : "number"
-            },{
-                caption : "页面跳出率",
                 type : "number"
             } ]
         ]

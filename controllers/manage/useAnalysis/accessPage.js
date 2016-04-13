@@ -11,7 +11,7 @@ module.exports = (Router) => {
         router : "/useAnalysis/accessPageOne",
         modelName : ["UsersAccess"],
         filter_select: [{
-            title: '指标选择',
+            title: '',
             filter_key : 'filter_key',
             groups: [{
                 key: 'acc_num',

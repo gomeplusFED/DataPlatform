@@ -4,6 +4,7 @@
  * @fileoverview 用户分析
  */
 var _ = require("lodash"),
+    moment = require("moment"),
     util = require("../../utils");
 
 module.exports = {
@@ -19,12 +20,18 @@ module.exports = {
         for(var date of dates) {
             var obj = {
                 new_users : 0,
-                new_account : 0
+                new_account : 0,
+                active_account : 0,
+                active_users : 0,
+                start_up : 0
             };
             for(var key of source) {
                 if(date === util.getDate(key.date)) {
                     obj.new_users += key.new_users;
                     obj.new_account += key.new_account;
+                    obj.active_account += key.active_account;
+                    obj.active_users += key.active_users;
+                    obj.start_up += key.start_up;
                 }
             }
             newData[date] = obj;
@@ -98,5 +105,44 @@ module.exports = {
             return new Date(b.date) - new Date(a.date);
         });
         return util.toTable([newData], data.rows, data.cols);
+    },
+    startUp(data, dates) {
+        var source = data.data,
+            newData = [];
+        dates.sort((a, b) => {
+            return new Date(b) - new Date(a);
+        });
+        for(var date of dates) {
+            var obj = {
+                date : date,
+                start_up : 0,
+                active_users : 0,
+                active_account : 0,
+                startup_per : 0
+            };
+            for(var key of source) {
+                if(date === util.getDate(key.date)) {
+                    obj.start_up += key.start_up;
+                    obj.active_users += key.active_users;
+                    obj.active_account += key.active_account;
+                    obj.startup_per += key.startup_per;
+                }
+            }
+            newData.push(obj);
+        }
+        for(var key of newData) {
+            key.startup_per = key.startup_per.toFixed(2);
+        }
+        return util.toTable([newData], data.rows, data.cols);
+    },
+    versionOne(data, filter_key, dates) {
+        var source = data.data,
+            type = "line",
+            map = {},
+            filter_name = {
+                new_users : "新增用户",
+                active_users : "活跃用户",
+                start_up : "启动次数"
+            };
     }
 };

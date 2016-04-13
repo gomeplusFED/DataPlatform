@@ -92,5 +92,21 @@ module.exports = {
                 query_api : "/useAnalysis/accessWapTwo"
             }]
         };
+    },
+    accessPageNum() {
+        return {
+            path : "/useAnalysis/accessNum",
+            name : "访问页面数量分布",
+            display : true,
+            defaultData : [{
+                type : "chart",
+                title : "访问页面分布",
+                query_api : "/useAnalysis/accessPageNumOne"
+            },{
+                type : "table",
+                title : "访问页面数据明细",
+                query_api : "/useAnalysis/accessPageNumTwo"
+            }]
+        };
     }
 };

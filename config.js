@@ -47,7 +47,8 @@ module.exports = {
             href: "#",
             path: [
                 usersAnalysis.newUsers(),
-                usersAnalysis.activeAccount()
+                usersAnalysis.activeAccount(),
+                usersAnalysis.startUp()
             ]
         }
     }, {
@@ -83,7 +84,8 @@ module.exports = {
                 useAnalysis.useTime(),
                 useAnalysis.useFrequency(),
                 useAnalysis.accessPage(),
-                useAnalysis.accessWap()
+                useAnalysis.accessWap(),
+                useAnalysis.accessPageNum()
             ]
         }
     }, {

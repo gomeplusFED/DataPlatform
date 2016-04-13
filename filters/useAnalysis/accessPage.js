@@ -55,7 +55,7 @@ module.exports = {
                 acc_time : 0,
                 acc_time_rate : "",
                 bounce_rate : 0,
-                operating : "<button url_detail='/useAnalysis/page'>详情>></button>"
+                operating : "<button class='btn btn-default' url_detail='/useAnalysis/page'>详情>></button>"
             };
             for(var key of source) {
                 if(urls[i] === key.url) {
