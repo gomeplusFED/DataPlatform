@@ -32,4 +32,4 @@ $(function() {
     if (element.is('li')) {
         element.addClass('active');
     }
-});
+}); 
