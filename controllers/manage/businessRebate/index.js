@@ -275,7 +275,7 @@ module.exports = (Router) => {
         excel_export : true,
         platform : false,
         flexible_btn : [{
-            content: '<a href="javascript:woid(0)">导出</a>',
+            content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
         date_picker_data: 1,
