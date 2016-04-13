@@ -1,5 +1,20 @@
 <template>
     <div :id="'table_'+index" class="table_con table-responsive" v-show="currentData.type.indexOf('table') !== -1"></div>    
+    <div class="modal" v-show="modal" transtion="fade">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">查看详情</h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-striped table-bordered table-hover"></table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn default" data-dismiss="modal" @click="modal = !modal">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 <style>
 .table_con{}
@@ -20,6 +35,8 @@ var $ = require('jQuery');
 var store = require('../store/store.js');
 var actions = require('../store/actions.js');
 
+var utils = require('utils');
+
 var Table = Vue.extend({
     name: 'Table',
     data: function() {
@@ -27,7 +44,10 @@ var Table = Vue.extend({
             initEd: false,
             tableData: [],
             tableExample: [],
-            scrollTop: null
+            scrollTop: null,
+            modal: false,
+            hasRequestUrl: null,
+            modalTableData: null
         }
     },
     created: function(){
@@ -101,6 +121,62 @@ var Table = Vue.extend({
                             }
                             eachTableData.data.length > 10 ? setConfig.paging = true : setConfig.paging = false;
                             var t = $('#table_' + _this.index).children().eq(tableIndex).DataTable(setConfig);
+
+                            // 为表格中查看详情的按钮绑定弹窗事件
+                            $('#table_' + _this.index).children().eq(tableIndex).find('[url_detail]').on('click',function(){
+                                var api = $(this).attr('url_detail');
+                                var url = $(this).parents('tr').find('td').eq(1).text();
+                                var params = {};
+
+                                params[columns[1].data] = url;
+                                utils.mixin(params,_this.resultArgvs);
+
+                                if(_this.hasRequestUrl !== null && _this.hasRequestUrl === url){
+                                    _this.modal = true;
+                                    return;
+                                }
+
+                                $('#table_' + _this.index).parent('.panel-body').find('.modal .modal-body').html('<table class="table table-striped table-bordered table-hover"></table>');
+
+                                $.ajax({
+                                    url: api + '_json',
+                                    type: 'get',
+                                    data: params,
+                                    success: function(data) {
+                                        _this.hasRequestUrl = url;
+                                        _this.modal = true;
+                                        _this.modalTableData = data.modelData[0];
+                                        // 生成弹窗图表
+                                        var modalColumns = [];
+                                        _this.modalTableData.rows.forEach(function(item,index){
+                                            modalColumns.push({
+                                                data: item,
+                                                title: _this.modalTableData.cols[index].caption
+                                            })
+                                        })
+                                        var config = {
+                                            data: _this.modalTableData.data,
+                                            columns: modalColumns,
+                                            ordering: false,
+                                            info: false,
+                                            searching: false,
+                                            responsive: false,
+                                            lengthChange: false,
+                                            retrieve: true,
+                                            "language": {
+                                                "emptyTable": "暂无数据",
+                                                "paginate": {
+                                                    "previous": "上一页",
+                                                    "next": "下一页"
+                                                }
+                                            }
+                                        }
+                                        $('#table_' + _this.index).parent('.panel-body').find('.modal table').DataTable(config);
+                                    }
+                                })
+                            })
+
+
                         })
                         // 所有组件加载完毕之后loading消失
                         if(_this.loading === 1 || _this.initEd){
