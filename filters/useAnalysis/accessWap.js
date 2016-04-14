@@ -4,6 +4,7 @@
  * @fileoverview 访问页面-wap
  */
 var util = require("../../utils"),
+    moment = require("moment"),
     _ = require("lodash");
 
 module.exports = {
@@ -69,6 +70,7 @@ module.exports = {
         var source = data.data;
         for(var i = 0; i < source.length; i++) {
             source[i].id = i + 1;
+            source[i].date = moment(source[i].date).format("YYYY-MM-DD");
         }
         return util.toTable([source], data.rows, data.cols);
     }

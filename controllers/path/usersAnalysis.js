@@ -65,7 +65,7 @@ module.exports = {
             }, {
                 type : "table",
                 title : "版本累计用户",
-                query_api : "/userAnalysis/versionTwe"
+                query_api : "/userAnalysis/versionTwo"
             }]
         };
     }

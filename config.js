@@ -48,7 +48,8 @@ module.exports = {
             path: [
                 usersAnalysis.newUsers(),
                 usersAnalysis.activeAccount(),
-                usersAnalysis.startUp()
+                usersAnalysis.startUp(),
+                usersAnalysis.version()
             ]
         }
     }, {

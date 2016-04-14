@@ -137,12 +137,96 @@ module.exports = {
     },
     versionOne(data, filter_key, dates) {
         var source = data.data,
+            vers = util.uniq(_.pluck(source, "ver")),
+            newData = {},
+            array = [],
             type = "line",
-            map = {},
             filter_name = {
                 new_users : "新增用户",
                 active_users : "活跃用户",
                 start_up : "启动次数"
+            },
+            map = {};
+        for(var ver of vers) {
+            var obj = {
+                ver : ver,
+                value : 0
             };
+            for(var key of source) {
+                if(key.ver === ver) {
+                    obj.value += key[filter_key];
+                }
+            }
+            array.push(obj);
+        }
+        array.sort((a, b) => {
+            return b.value - a.value;
+        });
+        var top = array.length > 10 ? 10 : array.length;
+        for(var i = 0; i < top; i++) {
+            map[array[i].ver] = array[i].ver + "版本";
+        }
+        for(var date of dates) {
+            var obj = {};
+            for(var i = 0; i < top; i++) {
+                obj[array[i].ver] = 0;
+            }
+            for(var key of source) {
+                if(date === util.getDate(key.date)) {
+                    obj[key.ver] += key[filter_key];
+                }
+            }
+            newData[date] = obj;
+        }
+        return [{
+            type : type,
+            map : map,
+            data : newData,
+            config: { // 配置信息
+                stack: false // 图的堆叠
+            }
+        }]
+    },
+    versionTwo(data, filter_key, dates) {
+        var source = data.data,
+            newData = [],
+            rows = [ "date" ],
+            cols = [
+                {
+                    caption : '时间',
+                    type : 'string',
+                    beforeCellWrite : function(row, cellData){
+                        return moment(cellData).format('YYYY-MM-DD HH:mm');
+                    },
+                    width : 20
+                }],
+            vers = util.uniq(_.pluck(source, "ver"));
+        for(var ver of vers) {
+            rows.push(ver);
+            cols.push({
+                caption : ver + "版本",
+                type : "number"
+            });
+        }
+        dates.sort((a, b) => {
+            return new Date(b) - new Date(a);
+        });
+        data.rows[0] = rows;
+        data.cols[0] = cols;
+        for(var date of dates) {
+            var obj = {
+                date : date
+            };
+            for(var ver of vers) {
+                obj[ver] = 0;
+            }
+            for(var key of source) {
+                if(date === util.getDate(key.date)) {
+                    obj[key.ver] += key[filter_key];
+                }
+            }
+            newData.push(obj);
+        }
+        return util.toTable([newData], data.rows, data.cols);
     }
 };
