@@ -7,7 +7,10 @@ var dataOverview = require("./controllers/path/dataOverview"),
     usersAnalysis = require("./controllers/path/usersAnalysis"),
     platformRebate = require("./controllers/path/platformRebate"),
     businessRebate = require("./controllers/path/businessRebate"),
-    useAnalysis = require("./controllers/path/useAnalysis");
+    useAnalysis = require("./controllers/path/useAnalysis"),
+    marketingAnalysis = require("./controllers/path/marketingAnalysis"),
+    channelAnalysis = require("./controllers/path/channelAnalysis"),
+    retainedAnalysis = require("./controllers/path/retainedAnalysis");
 
 module.exports = {
     siteName: '美信数据平台',
@@ -56,23 +59,25 @@ module.exports = {
         "retainedAnalysis": {
             name: "留存分析",
             id: 4,
-            display: false,
+            display: true,
             className: "fa fa-th-list fa-fw",
-            href: "#",
-            path: []
+            href: "/retainedAnalysis",
+            path: [],
+            routers : [
+                retainedAnalysis.retained()
+            ]
         }
     }, {
         "channelAnalysis": {
             name: "渠道分析",
             id: 5,
-            display: false,
+            display: true,
             className: "fa  fa-laptop fa-fw",
-            href: "#",
-            path: [{
-                name: "用户列表",
-                path: "/user/all",
-                display: true
-            }]
+            href: "/channelAnalysis",
+            path: [],
+            routers : [
+                channelAnalysis.channel()
+            ]
         }
     }, {
         "useAnalysis": {
@@ -147,10 +152,14 @@ module.exports = {
         "marketingAnalysis": {
             name: "营销分析",
             id: 14,
-            display: false,
+            display: true,
             className: "fa fa-bar-chart-o fa-fw fa-fw",
             href: "#",
-            path: []
+            path: [
+                marketingAnalysis.overview(),
+                marketingAnalysis.activityFlow(),
+                marketingAnalysis.couponInfo()
+            ]
         }
     }, {
         "platformRebate": {

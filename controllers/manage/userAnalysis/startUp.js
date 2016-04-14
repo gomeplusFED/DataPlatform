@@ -4,7 +4,6 @@
  * @fileoverview 启动次数
  */
 var api = require("../../../base/api"),
-    moment = require("moment"),
     userAnalysis = require("../../../filters/userAnalysis");
 
 module.exports = (Router) => {
@@ -29,9 +28,6 @@ module.exports = (Router) => {
                 {
                     caption : '时间',
                     type : 'string',
-                    beforeCellWrite : function(row, cellData){
-                        return moment(cellData).format('YYYY-MM-DD');
-                    },
                     width : 20
                 },
                 {

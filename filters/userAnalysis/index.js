@@ -224,7 +224,7 @@ module.exports = {
             }
             for(var key of source) {
                 if(date === util.getDate(key.date)) {
-                    obj[key.ver] += key[filter_key];
+                    obj[key.ver.replace(/\./g,'')] += key[filter_key];
                 }
             }
             newData.push(obj);

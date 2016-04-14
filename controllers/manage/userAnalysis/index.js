@@ -29,9 +29,6 @@ module.exports = (Router) => {
                 {
                     caption: '时间',
                     type: 'string',
-                    beforeCellWrite: function(row, cellData) {
-                        return moment(cellData).format('YYYY-MM-DD');
-                    },
                     width: 20
                 }, {
                 caption: '新增用户',

@@ -32,9 +32,6 @@ function api(Router, options) {
         cols: [],
         //初始化数据
         default: {
-            type: "H5",
-            ver: "1.0.0",
-            channel: "百度",
             day_type: 1
         },
         //是否显示平台
@@ -105,6 +102,18 @@ api.prototype = {
         var startTime = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
         var endTime = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate();
         this.default.date = orm.between(new Date(startTime + ' 00:00:00'), new Date(endTime + ' 23:59:59'));
+        if(this.platform) {
+            this.default.type = "H5";
+        }
+        if(this.channel) {
+            this.default.channel = "百度";
+        }
+        if(this.version) {
+            this.default.ver = "1.0.0";
+        }
+        if(this.coupon) {
+            this.default.coupon_type = "平台优惠券";
+        }
     },
     _sendData(type, req, res, next) {
         var query = req.query,
