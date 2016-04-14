@@ -202,7 +202,7 @@ module.exports = {
                 }],
             vers = util.uniq(_.pluck(source, "ver"));
         for(var ver of vers) {
-            rows.push(ver);
+            rows.push(ver.replace(/\./g,''));
             cols.push({
                 caption : ver + "版本",
                 type : "number"
@@ -211,6 +211,7 @@ module.exports = {
         dates.sort((a, b) => {
             return new Date(b) - new Date(a);
         });
+
         data.rows[0] = rows;
         data.cols[0] = cols;
         for(var date of dates) {
@@ -218,6 +219,7 @@ module.exports = {
                 date : date
             };
             for(var ver of vers) {
+                ver = ver.replace(/\./g,'');
                 obj[ver] = 0;
             }
             for(var key of source) {
