@@ -504,7 +504,7 @@ function connect(app) {
                 category_name: String,
                 pay_order_time: Date
             });
-            models.RebatetSheduleDetails = db.define("tbl_rt_rebate_shedule_details", {
+            models.RebatetSheduleDetails = db.define("tbl_rt_rebate_schedule_details", {
                 id: { type: 'number', key: true },
                 date: Date,
                 day_type: Number,
