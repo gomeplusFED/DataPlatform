@@ -49,11 +49,15 @@ module.exports = function(Router) {
         var url = req.originalUrl,
             limitedStr = "",
             urlTransToIndex = "",
-            fixedUrl = url.match(/^\/.+?\/.+(?=\?|\/)|^\/.+?\/.+(?=\?|\/)?/);
+            fixedUrl = url;
+
+//.match(/^\/.+?\/.+   (?=\?|\/) |  ^\/.+?\/.+ (?=\?|\/)? /);
+
+
         if (fixedUrl) {
             var limitedConfigArr = config.limit;
             limitedStr = req.session.userInfo.limited;
-            fixedUrl = fixedUrl[0];
+            // fixedUrl = fixedUrl[0];
             lodash.forEach(limitedConfigArr, function(item) {
                 var key = Object.keys(item)[0];
                 var obj = item[key];
@@ -74,7 +78,6 @@ module.exports = function(Router) {
                                 lodash.forEach(links, function(v1) {
                                     if (v1.href === fixedUrl) {
                                         urlTransToIndex = obj.id + "-" + k;
-
                                         flag = false;
                                     }
                                 });
@@ -86,14 +89,13 @@ module.exports = function(Router) {
         }
         /*路由不存在或者无权限时urlTransToIndex为空字符串*/
         if (urlTransToIndex) {
+            urlTransToIndex = urlTransToIndex.toString();
             var parent = urlTransToIndex.split("-")[0];
             var children = urlTransToIndex.split("-")[1];
-
-            if (limitedStr.match(/[\d-|\d](.*?)(,|$)/g).some(function(item) {
-                    item = item[item.length - 1] === "," ? item.slice(0, item.length - 1) : item.slice(0, item.length);
+            if (limitedStr.split(',').some(function(item) {
                     var arrs = item.split("-");
                     var arrsFirstItem = arrs.shift();
-                    return arrsFirstItem === parent && arrs.indexOf(children) >= 0;
+                    return arrsFirstItem === parent || arrs.indexOf(children) >= 0;
                 })) {
                 /*实现三级菜单所处的index保存到session*/
                 req.session.thirdMenuIndex = urlTransToIndex;
