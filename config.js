@@ -148,7 +148,7 @@ module.exports = {
         "achievements": {
             name: "销售业绩",
             id: 13,
-            display: true,
+            display: false,
             className: "fa fa-flag-checkered fa-fw",
             href: "#",
             path: [

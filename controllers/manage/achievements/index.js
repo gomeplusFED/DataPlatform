@@ -134,33 +134,54 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/achievements/shopFour",
-        modelName : ["ShopList"],
+        modelName : ["ShopTop"],
+        platform : false,
         excel_export : true,
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
         filter(data, filter_key, dates) {
-            return filter.outerTwo(data);
+            return filter.shopFour(data);
         },
+        filter_select: [{
+            title: '',
+            filter_key : 'filter_key',
+            groups: [{
+                key: '1',
+                value: '合并SKU'
+            }, {
+                key: '2',
+                value: 'SKU'
+            }]
+        }],
         rows : [
-            ['channel','open_num','open_num_rate']
+            [ 'top', 'shop_name', 'pay_price', 'pay_price_rate', 'pay_commodity_num',
+                'pay_commodity_rate', 'share_commodity_num']
         ],
         cols : [
-            [
-                {
-                    caption: '分享平台',
-                    type: 'string'
-                },
-                {
-                    caption: '累计打开次数',
-                    type: 'number'
-                },
-                {
-                    caption: '打开次数占比',
-                    type: 'string'
-                }
-            ]
+            [{
+                caption: '排名',
+                type: 'number'
+            }, {
+                caption: '店铺名称',
+                type: 'string'
+            }, {
+                caption: '支付金额',
+                type: 'number'
+            }, {
+                caption: '支付金额占比',
+                type: 'string'
+            }, {
+                caption: '支付商品数',
+                type: 'number'
+            }, {
+                caption: '支付商品数占比',
+                type: 'string'
+            }, {
+                caption: '被分享商品数',
+                type: 'number'
+            }]
         ]
     });
 
