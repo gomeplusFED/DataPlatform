@@ -12,7 +12,8 @@ module.exports = {
             type = "bar",
             map = {
                 get_coupon_cut : "领取数量",
-                used_coupon_cut : "使用数量"
+                used_coupon_cut : "使用数量",
+                users_rate : "优惠券使用率"
             },
             newData = {},
             coupons = util.uniq(_.pluck(source, "coupon_facevalue")),
@@ -42,6 +43,10 @@ module.exports = {
             }
             newData[coupon] = obj;
         }
+        Object.keys(newData).forEach((key) => {
+            newData[key].users_rate = newData[key].used_coupon_cut /
+                (newData[key].get_coupon_cut === 0 ? 1 : newData[key].get_coupon_cut) * 100;
+        });
         return [{
             type : type,
             map : map,

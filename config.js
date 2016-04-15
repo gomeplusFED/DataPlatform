@@ -10,6 +10,7 @@ var dataOverview = require("./controllers/path/dataOverview"),
     useAnalysis = require("./controllers/path/useAnalysis"),
     marketingAnalysis = require("./controllers/path/marketingAnalysis"),
     channelAnalysis = require("./controllers/path/channelAnalysis"),
+    share = require("./controllers/path/share"),
     retainedAnalysis = require("./controllers/path/retainedAnalysis");
 
 module.exports = {
@@ -107,10 +108,13 @@ module.exports = {
         "share": {
             name: "分享数据",
             id: 9,
-            display: false,
+            display: true,
             className: "fa fa-external-link fa-fw",
             href: "#",
-            path: []
+            path: [
+                share.inside(),
+                share.outer()
+            ]
         }
     }, {
         "information": {

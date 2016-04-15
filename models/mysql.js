@@ -294,20 +294,7 @@ function connect(app) {
                 ver: String,
                 channel: String
             });
-            models.KeepLive = db.define("tbl_rt_keeplive_analysis_3", {
-                id: { type: 'number', key: true },
-                date: Date,
-                day_type: Number,
-                type: String,
-                ver: String,
-                channel: String,
-                newuser: Number,
-                t1: Number,
-                t7: Number,
-                t14: Number,
-                t30: Number
-            });
-            models.ShareAnalysis = db.define("tbl_rt_share_analysis_3", {
+            models.ShareAnalysis = db.define("tbl_rt_share_analysis", {
                 id: { type: 'number', key: true },
                 date: Date,
                 day_type: Number,
