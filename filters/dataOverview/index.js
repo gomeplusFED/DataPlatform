@@ -113,7 +113,7 @@ module.exports = {
         newData.push(obj);
         return util.toTable([newData], data.rows, data.cols);
     },
-    dataOverviewAllTwo(data, filter_key, filter_name, dates) {
+    dataOverviewAllTwo(data, filter_key, filter_name, dates, type_key) {
         var source = data.data,
             newData = {},
             type = "line",
@@ -126,6 +126,9 @@ module.exports = {
             };
             for(var key of source) {
                 if(date === util.getDate(key.date)) {
+                    if(type_key && key.type === type_key) {
+                        continue;
+                    }
                     if(filter_key === "register_rate") {
                         obj.value += Math.round(key.new_account / (key.new_user === 0 ? 1 : key.new_user) * 100);
                     } else {

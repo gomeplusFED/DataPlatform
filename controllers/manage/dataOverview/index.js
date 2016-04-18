@@ -119,7 +119,8 @@ module.exports = (Router) => {
                     register_rate : "注册转化率",
                     using_time_avg : "每次使用时长"
                 },
-                dates
+                dates,
+                "H5"
             );
         }
     });

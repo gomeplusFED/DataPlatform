@@ -123,7 +123,8 @@ module.exports = (Router) => {
                     visit_time_avg : "平均访问时长",
                     register_rate : "注册转化率"
                 },
-                dates
+                dates,
+                ""
             );
         }
     });

@@ -607,6 +607,20 @@ function connect(app) {
                 new_user : Number,
                 keep_num : Number
             });
+            models.KeyValue = db.define("tbl_rt_key_value",{
+                id : {type: 'number', key: true},
+                date: Date,
+                day_type: Number,
+                type: String,
+                ver: String,
+                channel: String,
+                key_type : String,
+                key_name : String,
+                key_desc : String,
+                value : Number,
+                value2 : Number,
+                value3 : Number
+            });
             next();
         }
     }))

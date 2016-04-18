@@ -12,6 +12,7 @@ var dataOverview = require("./controllers/path/dataOverview"),
     channelAnalysis = require("./controllers/path/channelAnalysis"),
     share = require("./controllers/path/share"),
     achievements = require("./controllers/path/achievements"),
+    terminal = require("./controllers/path/terminal"),
     retainedAnalysis = require("./controllers/path/retainedAnalysis");
 
 module.exports = {
@@ -100,10 +101,12 @@ module.exports = {
         "terminal": {
             name: "终端属性",
             id: 8,
-            display: false,
+            display: true,
             className: "fa fa-tablet fa-fw",
             href: "#",
-            path: []
+            path: [
+                terminal.model()
+            ]
         }
     }, {
         "share": {
