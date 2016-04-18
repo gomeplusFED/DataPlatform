@@ -11,6 +11,7 @@ var dataOverview = require("./controllers/path/dataOverview"),
     marketingAnalysis = require("./controllers/path/marketingAnalysis"),
     channelAnalysis = require("./controllers/path/channelAnalysis"),
     share = require("./controllers/path/share"),
+    achievements = require("./controllers/path/achievements"),
     retainedAnalysis = require("./controllers/path/retainedAnalysis");
 
 module.exports = {
@@ -150,7 +151,9 @@ module.exports = {
             display: false,
             className: "fa fa-flag-checkered fa-fw",
             href: "#",
-            path: []
+            path: [
+                achievements.shop()
+            ]
         }
     }, {
         "marketingAnalysis": {
