@@ -44,7 +44,9 @@ async (() => {
             if(file.indexOf(".js") < 0) {
                 var f = await (filePath(files + "/" + file));
                 for(var key of f) {
-                    addRouter("." + files + "/" + file + "/" + key);
+                    if(key.indexOf("js") >= 0) {
+                        addRouter("." + files + "/" + file + "/" + key);
+                    }
                 }
             }
         }

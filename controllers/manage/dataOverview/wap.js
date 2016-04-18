@@ -137,11 +137,11 @@ module.exports = (Router) => {
             date : orm.between(new Date(ydate + " 00:00:00"), new Date(ydate + " 23:59:59")),
             day_type : 1
         },
-        flexible_btn: [{
-            content: '<a href="www.baidu.com" target="_blank">查看全部</a>',
-            preMethods: [],
-            customMethods: ''
-        }],
+        //flexible_btn: [{
+        //    content: '<a href="www.baidu.com" target="_blank">查看全部</a>',
+        //    preMethods: [],
+        //    customMethods: ''
+        //}],
         filter(data, filter_key, dates) {
             return dataOverview.dataOverviewAllThree(data);
         },
@@ -178,7 +178,7 @@ module.exports = (Router) => {
             day_type : 1
         },
         flexible_btn: [{
-            content: '<a href="www.baidu.com" target="_blank">查看全部</a>',
+            content: '<a href="/useAnalysis/accessPage" target="_blank">查看全部</a>',
             preMethods: [],
             customMethods: ''
         }],

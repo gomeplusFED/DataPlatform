@@ -17,5 +17,6 @@ module.exports = function(Router) {
             next();
         }
     });
+
     return Router;
 };
