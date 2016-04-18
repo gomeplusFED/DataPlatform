@@ -135,9 +135,21 @@ var Chart = Vue.extend({
 				}
 				series.push(_currentObj);
 			}
+			
 			options.legend.data = legend;
 			options.xAxis.data = xAxis;
 			options.series = series;
+
+
+			// 柱状图 false:竖置 true:横置
+			var categoryY = config.categoryY ? config.categoryY : false;
+			if(categoryY){
+				var _xAxis = options.xAxis;
+				var _yAxis = options.yAxis;
+				options.xAxis = _yAxis;
+				options.yAxis = _xAxis;
+			}
+
 			if(chartType === 'pie'){
 				options.legend.data = xAxis;
 				delete options.xAxis;
