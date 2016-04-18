@@ -218,7 +218,7 @@ module.exports = function(Router) {
         }
     });
 
-    Router.all('*', function(req, res, next) {
+    Router.get(/^((?!\/dist).)*$/, function(req, res, next) {
         if (req.session.isLogin) {
             /*用户输入浏览器地址栏URL路由权限控制*/
             authorityRouteFromBrowserUrl(req, res, next);

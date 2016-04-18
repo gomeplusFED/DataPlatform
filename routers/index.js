@@ -32,7 +32,7 @@ var filePath = async ((path) => {
     });
 });
 
-addRouter('./combine');
+// addRouter('./combine');
 addRouter('./login');
 addRouter('./user');
 addRouter('./categories');
