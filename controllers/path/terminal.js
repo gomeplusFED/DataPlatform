@@ -15,11 +15,11 @@ module.exports = {
                     type : "chart",
                     title : "TOP 10",
                     query_api : "/terminal/modelOne"
-                //},
-                //{
-                //    type : "table",
-                //    title : "明细",
-                //    query_api : "/terminal/modelTwo"
+                },
+                {
+                    type : "table",
+                    title : "明细",
+                    query_api : "/terminal/modelTwo"
                 }
             ]
         }
