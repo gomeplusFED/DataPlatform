@@ -22,6 +22,7 @@ module.exports = (Router) => {
         params : {
             date : orm.between(new Date(qdate + " 00:00:00"), new Date(ydate + " 23:59:59")),
             region : "ALL",
+            type : "H5",
             day_type : 1
         },
         orderParams : {
@@ -34,7 +35,7 @@ module.exports = (Router) => {
         rows : [
             ['name', 'uv', 'pv', 'ip_count', 'jump_loss_rate',
                 'new_user', 'new_user_rate', 'new_account', 'register_rate', 'visit_time_avg',
-                "pv", "create"]
+                "pv1", "create"]
         ],
         cols : [
             [{
@@ -81,7 +82,8 @@ module.exports = (Router) => {
         router: "/dataOverview/wapTwo",
         modelName: ["OverviewPlatf"],
         fixedParams : {
-            region : "ALL"
+            region : "ALL",
+            type : "H5"
         },
         platform : false,
         filter_select: [{
@@ -138,11 +140,11 @@ module.exports = (Router) => {
             date : orm.between(new Date(ydate + " 00:00:00"), new Date(ydate + " 23:59:59")),
             day_type : 1
         },
-        //flexible_btn: [{
-        //    content: '<a href="www.baidu.com" target="_blank">查看全部</a>',
-        //    preMethods: [],
-        //    customMethods: ''
-        //}],
+        flexible_btn: [{
+            content: '<a href="/terminal/provinces" target="_blank">查看全部</a>',
+            preMethods: [],
+            customMethods: ''
+        }],
         filter(data, filter_key, dates) {
             return dataOverview.dataOverviewAllThree(data);
         },

@@ -133,6 +133,9 @@ api.prototype = {
                 this[key] = query[key];
                 delete query[key];
             }
+            if(key === "key_type") {
+                this[key] = query[key];
+            }
         });
         Object.keys(this.fixedParams).forEach((key) => {
             query[key] = this.fixedParams[key];
@@ -202,7 +205,7 @@ api.prototype = {
             }
 
             if (this.filter) {
-                sendData = this.filter(sendData, this.filter_key, dates);
+                sendData = this.filter(sendData, this.filter_key||this.key_type, dates);
             }
             if(isErr) {
                 next(error);

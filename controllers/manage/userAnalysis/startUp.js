@@ -36,11 +36,11 @@ module.exports = (Router) => {
                 },
                 {
                     caption : '活跃用户',
-                    type : 'string'
+                    type : 'number'
                 },
                 {
                     caption : '活跃账户',
-                    type : 'string'
+                    type : 'number'
                 },
                 {
                     caption : '人均启动次数',
