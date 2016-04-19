@@ -116,8 +116,8 @@ module.exports = (Router) => {
                     open_total : "启动次数",
                     new_user : "新用户",
                     new_account : "新增账户",
-                    register_rate : "注册转化率",
-                    using_time_avg : "每次使用时长"
+                    register_rate : "注册转化率(%)",
+                    using_time_avg : "每次使用时长(s)"
                 },
                 dates,
                 "H5"

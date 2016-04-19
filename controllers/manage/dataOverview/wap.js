@@ -122,8 +122,8 @@ module.exports = (Router) => {
                     ip_count : "IP数",
                     new_user : "新用户",
                     new_account : "新增账户",
-                    visit_time_avg : "平均访问时长",
-                    register_rate : "注册转化率"
+                    visit_time_avg : "平均访问时长(s)",
+                    register_rate : "注册转化率(%)"
                 },
                 dates,
                 ""

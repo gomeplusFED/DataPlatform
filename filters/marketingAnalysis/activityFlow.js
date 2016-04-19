@@ -15,7 +15,7 @@ module.exports = {
                 visitor_cut : "访问用户数",
                 pv : "访问次数",
                 stay_time_avg : "平均停留时长(s)",
-                jump_loss_rate : "页面跳失率"
+                jump_loss_rate : "页面跳失率(%)"
             },
             map = {
                 value : filter_name[filter_key]

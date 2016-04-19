@@ -14,7 +14,7 @@ module.exports = {
             filter_name = {
                 acc_num : "访问次数",
                 acc_time : "平均停留时间(s)",
-                bounce_rate : "跳出率"
+                bounce_rate : "跳出率(%)"
             },
             map = {
                 value : filter_name[filter_key]
