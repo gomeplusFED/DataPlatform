@@ -165,7 +165,8 @@ var Chart = Vue.extend({
 	            // 参数改了 请求数据，进行渲染
 	            if(this.checkIsChart()){
 		            var _this = this;
-		            _this.loading = true;
+		            _this.loading.show = true;
+		            _this.loading.noLoaded += 1;
 		            this.fetchData(function(data){
 		            	_this.chartData = data.modelData;
 		            	_this.chartData.forEach(function(item,domIndex){
@@ -176,12 +177,11 @@ var Chart = Vue.extend({
 		            				Chart.setOption(chartOptions);
 		            			}
 		            		}, 1);
-		            		if(_this.loading === 1 || _this.initEd){
-		            		    _this.loading = false;
-		            		}else{
-		            		    _this.loading = 1;
-		            		}
 		            	})
+		            	_this.loading.noLoaded -= 1;
+		            	if(_this.loading.noLoaded === 0){
+		            	    _this.loading.show = false;
+		            	}
 		            })
 	            }
 	        },

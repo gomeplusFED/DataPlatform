@@ -85,7 +85,8 @@ var Table = Vue.extend({
                 var _this = this;
                 if(this.currentData.type.indexOf('table') !== -1){
                     var tableTpl = '<table class="table table-bordered table-hover" role="grid" aria-describedby="dataTables_info"></table>'
-                    this.loading = true;
+                    this.loading.show = true;
+                    this.loading.noLoaded += 1;
                     this.scrollTop = $(document).scrollTop(),
                     this.fetchData(function(data){
                         _this.tableData = data.modelData;
@@ -175,14 +176,11 @@ var Table = Vue.extend({
                                     }
                                 })
                             })
-
-
                         })
                         // 所有组件加载完毕之后loading消失
-                        if(_this.loading === 1 || _this.initEd){
-                            _this.loading = false;
-                        }else{
-                            _this.loading = 1;
+                        _this.loading.noLoaded -= 1;
+                        if(_this.loading.noLoaded === 0){
+                            _this.loading.show = false;
                         }
                         // 重新生成表格页面会回到顶部，重置下
                         $(document).scrollTop(_this.scrollTop);
