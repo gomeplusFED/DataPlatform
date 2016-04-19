@@ -27,27 +27,27 @@ var Btns = Vue.extend({
     name: 'Btns',
     data: function(){
         return {
-            preMethods: {
-                excel_export: function(){
-                    var resultQuery = [];
-                    for(var item in btnsVm.resultArgvs){
-                        resultQuery.push(item + '=' + btnsVm.resultArgvs[item]);
-                    }
-                    window.open(btnsVm.initData.defaultData[btnsVm.index].query_api + '_excel?' +  resultQuery.join('&'));
-                }
-            }
+
         }
     },
     ready: function(){
         btnsVm = this;
     },
+
     props: ['index','pageComponentsData','componentType','argvs','initData','resultArgvs'],
     methods: {
+        excel_export: function(){
+            var resultQuery = [];
+            for(var item in this.resultArgvs){
+                resultQuery.push(item + '=' + this.resultArgvs[item]);
+            }
+            window.open(this.initData.defaultData[this.index].query_api + '_excel?' +  resultQuery.join('&'));
+        },
     	resolveMethods: function(item){
             if(item.preMethods.length){
                 for(var i = 0;i < item.preMethods.length;i++){
                     if(utils.isInObj(item.preMethods[i],this.preMethods)){
-                        eval('this.preMethods.'+ item.preMethods[i]+ '()');
+                        eval('this.'+ item.preMethods[i]+ '()');
                     }else{
                         console.warn('Warn: '+ item.preMethods[i] + 'is not a pre-method! From [Vue: btnGroup.vue]');
                     }
