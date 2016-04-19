@@ -32,7 +32,10 @@ if(window.initData){
         el: '#page-wrapper',
         store,
         data: {
-            loading: true,
+            loading: {
+                show: true,
+                noLoaded: 0
+            },
             initData: window.initData
         },
         components: {
