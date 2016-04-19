@@ -94,7 +94,7 @@ module.exports = (Router) => {
             return filter.wap(data);
         },
         rows : [
-            [ "id", "date", "acc_num", "acc_time", "bounce_rate" ]
+            [ "date", "url", "page_view", "access_num", "down_browse", "avg_stay_time" ]
         ],
         cols : [
             [ {
