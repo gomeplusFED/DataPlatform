@@ -123,7 +123,7 @@ var Table = Vue.extend({
                             var t = $('#table_' + _this.index).children().eq(tableIndex).DataTable(setConfig);
 
                             // 为表格中查看详情的按钮绑定弹窗事件
-                            $('#table_' + _this.index).children().eq(tableIndex).find('[url_detail]').on('click',function(){
+                            $('#table_' + _this.index).children().eq(tableIndex).on('click', '[url_detail]',function(){
                                 var api = $(this).attr('url_detail');
                                 var url = $(this).parents('tr').find('td').eq(1).text();
                                 var params = {};
