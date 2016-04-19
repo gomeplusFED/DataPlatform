@@ -123,7 +123,7 @@ module.exports = function(Router) {
                 from = req.body.from,
                 remember = req.body.remember;
             //直接去ldap交换验证
-            if (!email && !pwd) {
+            if (!email || !pwd) {
                 req.flash('密码和账户不正确');
                 res.redirect('back');
                 return;

@@ -61,12 +61,13 @@ module.exports = {
                     zObj.open_user_total += key.open_user_total;
                     zObj.new_user += key.new_user;
                     zObj.new_account += key.new_account;
-                    zObj.stay_time_avg += key.stay_time_avg;
-                    zObj.using_time_avg += key.using_time_avg;
+                    zObj.stay_time_avg += Math.round(key.stay_time_avg);
+                    zObj.using_time_avg += Math.round(key.using_time_avg);
                     zObj.uv += key.uv;
                     zObj.pv += key.pv;
                     zObj.ip_count += key.ip_count;
                     zObj.jump_loss_rate += key.jump_loss_rate;
+                    zObj.visit_time_avg += Math.round(key.visit_time_avg);
                 }
             }
             newData.push(zObj);
@@ -121,23 +122,25 @@ module.exports = {
                 value : filter_name[filter_key]
             };
         for(var date of dates) {
-            var obj = {
+            newData[date] = {
                 value : 0
             };
-            for(var key of source) {
-                if(date === util.getDate(key.date)) {
-                    if(type_key && key.type === type_key) {
-                        continue;
-                    }
-                    if(filter_key === "register_rate") {
-                        obj.value += Math.round(key.new_account / (key.new_user === 0 ? 1 : key.new_user) * 100);
-                    } else {
-                        obj.value += key[filter_key];
-                    }
-
-                }
+        }
+        for(var key of source) {
+            if(type_key && key.type === type_key) {
+                continue;
             }
-            newData[date] = obj;
+            if(filter_key === "register_rate") {
+                newData[util.getDate(key.date)].value += key.new_account /
+                    (key.new_user === 0 ? 1 : key.new_user) * 100;
+            } else {
+                newData[util.getDate(key.date)].value += key[filter_key];
+            }
+        }
+        if(filter_key === "register_rate") {
+            Object.keys(newData).forEach((key) => {
+                newData[key].value = newData[key].value.toFixed(2);
+            });
         }
         return [{
             type : type,

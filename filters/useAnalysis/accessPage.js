@@ -21,15 +21,17 @@ module.exports = {
             },
             newData = {};
         for(var date of dates) {
-            var obj = {
+            newData[date] = {
                 value : 0
             };
-            for(var key of source) {
-                if(date === util.getDate(key.date)) {
-                    obj.value += key[filter_key];
-                }
-            }
-            newData[date] = obj;
+        }
+        for(var key of source) {
+            newData[util.getDate(key.date)].value += key[filter_key];
+        }
+        if(filter_key === "bounce_rate") {
+            Object.keys(newData).forEach((key) => {
+                newData[key].value = newData[key].value.toFixed(2);
+            });
         }
         return [{
             type : type,

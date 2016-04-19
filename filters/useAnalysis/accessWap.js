@@ -59,7 +59,7 @@ module.exports = {
                     obj.page_view += key.page_view;
                     obj.access_num += key.access_num;
                     obj.down_browse += key.down_browse;
-                    obj.avg_stay_time += key.avg_stay_time;
+                    obj.avg_stay_time += Math.round(key.avg_stay_time);
                 }
             }
             newData.push(obj);
