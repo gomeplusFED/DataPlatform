@@ -27,13 +27,14 @@ var Btns = Vue.extend({
     name: 'Btns',
     data: function(){
         return {
-
+            preMethods: {
+                excel_export: true
+            }
         }
     },
     ready: function(){
         btnsVm = this;
     },
-
     props: ['index','pageComponentsData','componentType','argvs','initData','resultArgvs'],
     methods: {
         excel_export: function(){
