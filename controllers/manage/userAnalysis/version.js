@@ -36,26 +36,12 @@ module.exports = (Router) => {
         rows : [],
         cols : [],
         excel_export : true,
-        filter_select: [{
-            title: '',
-            filter_key : 'filter_key',
-            groups: [{
-                key: 'new_users',
-                value: '新增用户'
-            }, {
-                key: 'active_users',
-                value: '活跃用户'
-            }, {
-                key: 'start_up',
-                value: '启动次数'
-            }]
-        }],
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
         filter(data, filter_key, dates) {
-            return userAnalysis.versionTwo(data, filter_key, dates);
+            return userAnalysis.versionTwo(data, dates);
         }
     });
 

@@ -1,22 +1,22 @@
 /**
  * @author yanglei
  * @date 20160418
- * @fileoverview 设备终端
+ * @fileoverview 网络及运营商
  */
 var api = require("../../../base/api"),
-    filter = require("../../../filters/terminal");
+    filter = require("../../../filters/terminal/provinces");
 
 module.exports = (Router) => {
 
     Router = new api(Router,{
-        router : "/terminal/modelOne",
+        router : "/terminal/provincesOne",
         modelName : ["KeyValue"],
         filter_select: [{
             title: '',
             filter_key : 'key_type',
             groups: [{
-                key: 'terminal_model',
-                value: '机型',
+                key: 'terminal_province',
+                value: '省市',
                 cell: {
                     title: '',
                     filter_key : 'filter_key',
@@ -29,8 +29,8 @@ module.exports = (Router) => {
                     }]
                 }
             }, {
-                key: 'terminal_resolution',
-                value: '分辨率',
+                key: 'terminal_country',
+                value: '国家',
                 cell: {
                     title: '',
                     filter_key : 'filter_key',
@@ -42,42 +42,26 @@ module.exports = (Router) => {
                         value: '启动次数'
                     }]
                 }
-            }, {
-                key: 'terminal_os',
-                value: '操作系统',
-                cell: {
-                    title: '',
-                    filter_key : 'filter_key',
-                    groups : [{
-                        key: 'value',
-                        value: '新增用户'
-                    },{
-                        key: 'value3',
-                        value: '启动次数'
-                    }]
-                }
-            }]
+            }
+            ]
         }],
         filter(data, filter_key, dates) {
-            return filter.modelOne(data, filter_key);
+            return filter.provincesOne(data, filter_key);
         }
     });
 
     Router = new api(Router,{
-        router : "/terminal/modelTwo",
+        router : "/terminal/provincesTwo",
         modelName : ["KeyValue"],
         filter_select: [{
             title: '',
             filter_key : 'key_type',
             groups: [{
-                key: 'terminal_model',
-                value: '机型'
+                key: 'terminal_province',
+                value: '省市'
             }, {
-                key: 'terminal_resolution',
-                value: '分辨率'
-            }, {
-                key: 'terminal_os',
-                value: '操作系统'
+                key: 'terminal_country',
+                value: '国家'
             }]
         }],
         excel_export : true,
@@ -86,7 +70,7 @@ module.exports = (Router) => {
             preMethods: ['excel_export']
         }],
         filter(data, filter_key, dates) {
-            return filter.modelTwo(data, filter_key);
+            return filter.provincesTwo(data, filter_key);
         },
         rows : [
             [ 'name', 'new_users', 'new_users_rate', 'start_up', 'start_up_rate' ]
@@ -94,7 +78,7 @@ module.exports = (Router) => {
         cols : [
             [
                 {
-                    caption : "",
+                    caption : '机型',
                     type : 'string'
                 },
                 {

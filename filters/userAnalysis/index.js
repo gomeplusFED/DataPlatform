@@ -4,7 +4,6 @@
  * @fileoverview 用户分析
  */
 var _ = require("lodash"),
-    moment = require("moment"),
     util = require("../../utils");
 
 module.exports = {
@@ -68,8 +67,8 @@ module.exports = {
             newData.push(obj);
         }
         for(var key of newData) {
-            key.new_users_rate = (key.new_users / (total_users === 0 ? 1 : total_users) * 100).toFixed(1) + "%";
-            key.new_account_rate = (key.new_account / (total_account === 0 ? 1 : total_account) * 100).toFixed(1) + "%";
+            key.new_users_rate = util.toFixed(key.new_users, total_users);
+            key.new_account_rate = util.toFixed(key.new_account, total_account);
         }
         newData.sort((a, b) => {
             return new Date(b.date) - new Date(a.date);
@@ -187,7 +186,7 @@ module.exports = {
             }
         }]
     },
-    versionTwo(data, filter_key, dates) {
+    versionTwo(data, dates) {
         var source = data.data,
             newData = [],
             rows = [ "date" ],
@@ -195,9 +194,6 @@ module.exports = {
                 {
                     caption : '时间',
                     type : 'string',
-                    beforeCellWrite : function(row, cellData){
-                        return moment(cellData).format('YYYY-MM-DD HH:mm');
-                    },
                     width : 20
                 }],
             vers = util.uniq(_.pluck(source, "ver"));
@@ -224,7 +220,7 @@ module.exports = {
             }
             for(var key of source) {
                 if(date === util.getDate(key.date)) {
-                    obj[key.ver.replace(/\./g,'')] += key[filter_key];
+                    obj[key.ver.replace(/\./g,'')] += key.total_users;
                 }
             }
             newData.push(obj);

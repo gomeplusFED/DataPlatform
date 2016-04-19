@@ -1,13 +1,13 @@
 /**
  * @author yanglei
  * @date 20160418
- * @fileoverview 设备终端
+ * @fileoverview 网络及运营商
  */
 var _ = require("lodash"),
     util = require("../../utils");
 
 module.exports = {
-    modelOne(data, filter_key) {
+    provincesOne(data, filter_key) {
         var source = data.data,
             newData = {},
             tArray = [],
@@ -51,21 +51,18 @@ module.exports = {
             }
         }]
     },
-    modelTwo(data, filter_key) {
+    provincesTwo(data, filter_key) {
         var source = data.data,
             newData = [],
             obj = {},
-            cols = [],
             cols_name = "",
             total_new_users = 0,
             total_start_up = 0,
             array = util.uniq(_.pluck(source, "key_name"));
-        if(filter_key === "terminal_model") {
-            cols_name = "机型";
-        } else if(filter_key === "terminal_resolution") {
-            cols_name = "分辨率";
+        if(filter_key === "terminal_province") {
+            cols_name = "省市";
         } else {
-            cols_name = "操作系统";
+            cols_name = "国家";
         }
         data.cols[0][0].caption = cols_name;
         for(var key of array) {

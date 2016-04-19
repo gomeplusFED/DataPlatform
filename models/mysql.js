@@ -29,6 +29,7 @@ function connect(app) {
                 new_users: Number,
                 new_account: Number,
                 active_users: Number,
+                total_users: Number,
                 active_account: Number,
                 start_up: Number,
                 startup_per: Number,
@@ -282,6 +283,7 @@ function connect(app) {
                 register_rate: Number,
                 stay_time_avg: Number,
                 using_time_avg: Number,
+                visit_time_avg: Number,
                 day_type: Number,
                 type: String
             });

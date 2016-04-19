@@ -105,7 +105,9 @@ module.exports = {
             className: "fa fa-tablet fa-fw",
             href: "#",
             path: [
-                terminal.model()
+                terminal.model(),
+                terminal.network(),
+                terminal.provinces()
             ]
         }
     }, {
