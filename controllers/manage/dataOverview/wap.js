@@ -66,7 +66,7 @@ module.exports = (Router) => {
                 caption: '注册转化率',
                 type: 'string'
             }, {
-                caption: '平均访问时长',
+                caption: '平均访问时长(s)',
                 type: 'string'
             }, {
                 caption: '累计访问用户数',

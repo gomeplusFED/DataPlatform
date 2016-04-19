@@ -79,7 +79,7 @@ module.exports = (Router) => {
                 caption: '贡献下游流量',
                 type: 'string'
             }, {
-                caption: '平均停留时长',
+                caption: '平均停留时长(s)',
                 type: 'number'
             }, {
                 caption: '趋势'

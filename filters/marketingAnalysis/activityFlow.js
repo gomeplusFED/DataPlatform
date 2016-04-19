@@ -14,7 +14,7 @@ module.exports = {
             filter_name = {
                 visitor_cut : "访问用户数",
                 pv : "访问次数",
-                stay_time_avg : "平均停留时长",
+                stay_time_avg : "平均停留时长(s)",
                 jump_loss_rate : "页面跳失率"
             },
             map = {
@@ -22,15 +22,22 @@ module.exports = {
             },
             newData = {};
         for(var date of dates) {
-            var obj = {
+            newData[date] = {
                 value : 0
             };
-            for(var key of source){
-                if(date === util.getDate(key.date)) {
-                    obj.value += key[filter_key];
-                }
-            }
-            newData[date] = obj;
+        }
+        for(var key of source) {
+            newData[util.getDate(key.date)].value += key[filter_key];
+        }
+        if(filter_key === "stay_time_avg") {
+            Object.keys(newData).forEach((key) => {
+                newData[key].value = Math.round(newData[key].value);
+            });
+        }
+        if(filter_key === "jump_loss_rate") {
+            Object.keys(newData).forEach((key) => {
+                newData[key].value = newData[key].value.toFixed(2);
+            });
         }
         return [{
             type : type,
@@ -42,13 +49,46 @@ module.exports = {
         }]
     },
     activityFlowTwo(data) {
-        var source = data.data;
+        var source = data.data,
+            urls = util.uniq(_.pluck(source, "page_url")),
+            obj = {},
+            newData = [];
+        for(var url of urls) {
+            obj[url] = {
+                page_url : url,
+                page_name : "",
+                visitor_cut : 0,
+                pv : 0,
+                stay_time_avg : 0,
+                jump_loss_rate : 0,
+                h5_conversion_rate : 0,
+                operating : ""
+            };
+        }
         for(var i = 0; i < source.length; i++) {
-            source[i].id = i + 1;
-            source[i].operating =
+            obj[source[i].page_url].page_name = source[i].page_name;
+            obj[source[i].page_url].visitor_cut += source[i].visitor_cut;
+            obj[source[i].page_url].pv += source[i].pv;
+            obj[source[i].page_url].stay_time_avg += source[i].stay_time_avg;
+            obj[source[i].page_url].jump_loss_rate += source[i].jump_loss_rate;
+            obj[source[i].page_url].h5_conversion_rate += source[i].h5_conversion_rate;
+            obj[source[i].page_url].operating =
                 "<button class='btn btn-default' url_detail='/marketingAnalysis/activityFlowThree'>详情>></button>";
         }
-        return util.toTable([source], data.rows, data.cols);
+        for(var i = 0; i < urls.length; i++) {
+            newData.push({
+                id : i + 1,
+                page_url : urls[i],
+                page_name : obj[urls[i]].page_name,
+                visitor_cut : obj[urls[i]].visitor_cut,
+                pv : obj[urls[i]].pv,
+                stay_time_avg : Math.round(obj[urls[i]].stay_time_avg),
+                jump_loss_rate : obj[urls[i]].jump_loss_rate.toFixed(2) + "%",
+                h5_conversion_rate : obj[urls[i]].h5_conversion_rate.toFixed(2) + "%",
+                operating : obj[urls[i]].operating
+            });
+        }
+        return util.toTable([newData], data.rows, data.cols);
     },
     activityFlowThree(data) {
         var source = data.data;

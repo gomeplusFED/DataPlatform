@@ -19,7 +19,7 @@ module.exports = {
     },
     activityFlow() {
         return {
-            name: "活动概览",
+            name: "活动流量",
             path: "/marketingAnalysis/activityFlow",
             display: true,
             defaultData: [{

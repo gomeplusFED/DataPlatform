@@ -62,10 +62,10 @@ module.exports = (Router) => {
                 caption: '注册转化率',
                 type: 'string'
             }, {
-                caption: '每人使用时长',
+                caption: '每人使用时长(s)',
                 type: 'string'
             }, {
-                caption: '每次使用时长',
+                caption: '每次使用时长(s)',
                 type: 'string'
             }, {
                 caption: '累计访问用户数',

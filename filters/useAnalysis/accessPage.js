@@ -13,7 +13,7 @@ module.exports = {
             type = "line",
             filter_name = {
                 acc_num : "访问次数",
-                acc_time : "平均停留时间",
+                acc_time : "平均停留时间(s)",
                 bounce_rate : "跳出率"
             },
             map = {
@@ -33,6 +33,11 @@ module.exports = {
                 newData[key].value = newData[key].value.toFixed(2);
             });
         }
+        if(filter_key === "acc_time") {
+            Object.keys(newData).forEach((key) => {
+                newData[key].value = Math.round(newData[key].value);
+            });
+        }
         return [{
             type : type,
             map : map,
@@ -47,34 +52,39 @@ module.exports = {
             newData = [],
             total_num = 0,
             total_time = 0,
+            obj = {},
             urls = util.uniq(_.pluck(source, "url"));
-        for(var i = 0; i < urls.length; i++) {
-            var obj = {
-                id : i + 1,
-                url : urls[i],
+        for(var url of urls) {
+            obj[url] = {
+                url : urls,
                 url_comment : "",
                 acc_num : 0,
                 acc_num_rate : "",
                 acc_time : 0,
                 acc_time_rate : "",
-                bounce_rate : 0,
-                operating : "<button class='btn btn-default' url_detail='/useAnalysis/page'>详情>></button>"
+                bounce_rate : 0
             };
-            for(var key of source) {
-                if(urls[i] === key.url) {
-                    total_num += key.acc_num;
-                    total_time += key.acc_time;
-                    obj.url_comment = key.url_comment;
-                    obj.acc_num += key.acc_num;
-                    obj.acc_time += key.acc_time;
-                    obj.bounce_rate += key.bounce_rate;
-                }
-            }
-            newData.push(obj);
         }
-        for(var key of newData) {
-            key.acc_num_rate = util.toFixed(key.acc_num, total_num);
-            key.acc_time_rate = util.toFixed(key.acc_time, total_time);
+        for(var key of source) {
+            total_num += key.acc_num;
+            total_time += key.acc_time;
+            obj[key.url].acc_num += key.acc_num;
+            obj[key.url].acc_time += key.acc_time;
+            obj[key.url].bounce_rate += key.bounce_rate;
+            obj[key.url].url_comment = key.url_comment;
+        }
+        for(var i = 0; i < urls.length; i++) {
+            newData.push({
+                id : i + 1,
+                url : urls[i],
+                url_comment : obj[urls[i]].url_comment,
+                acc_num : obj[urls[i]].acc_num,
+                acc_time : Math.round(obj[urls[i]].acc_time),
+                bounce_rate : obj[urls[i]].bounce_rate.toFixed(2) + "%",
+                acc_num_rate : util.toFixed(obj[urls[i]].acc_num, total_num),
+                acc_time_rate : util.toFixed(obj[urls[i]].acc_time, total_time),
+                operating : "<button class='btn btn-default' url_detail='/useAnalysis/page'>详情>></button>"
+            });
         }
         return util.toTable([newData], data.rows, data.cols);
     },

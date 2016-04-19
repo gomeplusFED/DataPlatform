@@ -73,7 +73,7 @@ module.exports = (Router) => {
                     type : 'number'
                 },
                 {
-                    caption : '平均停留时长',
+                    caption : '平均停留时长(s)',
                     type : 'string'
                 },
                 {
