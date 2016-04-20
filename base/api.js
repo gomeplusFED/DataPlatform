@@ -9,8 +9,6 @@ var utils = require("../utils"),
     excelExport = require('../utils/excelExport'),
     nodeExcel = require('excel-export'),
     validator = require('validator'),
-    async = require("asyncawait/async"),
-    await = require("asyncawait/await"),
     orm = require("orm"),
     cacheTime = 1;
 
@@ -21,11 +19,11 @@ function api(Router, options) {
         //数据库
         modelName: [],
         //固定参数
-        fixedParams : {},
+        fixedParams: {},
         //固定查询数据库参数
-        params : null,
+        params: null,
         //固定查询数据库参数
-        orderParams : null,
+        orderParams: null,
         //行
         rows: [],
         //列
@@ -43,7 +41,7 @@ function api(Router, options) {
         //是否显示优惠券类型
         coupon: false,
         //是否有导出路径
-        excel_export : false,
+        excel_export: false,
         //按钮设置
         flexible_btn: [],
         //是否显示时间
@@ -102,16 +100,16 @@ api.prototype = {
         var startTime = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
         var endTime = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate();
         this.default.date = orm.between(new Date(startTime + ' 00:00:00'), new Date(endTime + ' 23:59:59'));
-        if(this.platform) {
+        if (this.platform) {
             this.default.type = "H5";
         }
-        if(this.channel) {
+        if (this.channel) {
             this.default.channel = "百度";
         }
-        if(this.version) {
+        if (this.version) {
             this.default.ver = "1.0.0";
         }
-        if(this.coupon) {
+        if (this.coupon) {
             this.default.coupon_type = "平台优惠券";
         }
     },
@@ -119,28 +117,27 @@ api.prototype = {
         var query = req.query,
             params = {},
             dates = [];
-        if(!query.startTime && !query.endTime) {
+        if (!query.startTime && !query.endTime) {
             params = this.default;
         } else {
-            if((this._checkDate(query.startTime, "startTime参数出错", next)
-                && this._checkDate(query.endTime, "endTime参数出错", next))) {
+            if ((this._checkDate(query.startTime, "startTime参数出错", next) && this._checkDate(query.endTime, "endTime参数出错", next))) {
                 params.date = orm.between(new Date(query.startTime + " 00:00:00"), new Date(query.endTime + " 23:59:59"));
                 dates = utils.times(query.startTime, query.endTime);
             }
         }
         Object.keys(query).forEach((key) => {
-            if(key.indexOf("filter") > -1) {
+            if (key.indexOf("filter") > -1) {
                 this[key] = query[key];
                 delete query[key];
             }
-            if(key === "key_type") {
+            if (key === "key_type") {
                 this[key] = query[key];
             }
         });
         Object.keys(this.fixedParams).forEach((key) => {
             query[key] = this.fixedParams[key];
         });
-        if(this.params) {
+        if (this.params) {
             params = this.params;
         }
         this._getCache(type, res, req, query, next, params, dates);
@@ -161,10 +158,10 @@ api.prototype = {
                     }
                 } else {
                     cacheData = {};
-                    async(() => {
-                        var data = await (this._findDatabase(req, cacheName, {}).catch((err) => {
+                    (async () => {
+                        var data = await this._findDatabase(req, cacheName, {}).catch((err) => {
                             next(err);
-                        }));
+                        });
                         for (var key of this.defaultCache) {
                             cacheData[key.value] = [];
                             for (var k of data) {
@@ -184,7 +181,7 @@ api.prototype = {
         });
     },
     _findData(type, res, req, query, next, dates) {
-        async(() => {
+        (async() => {
             var isErr = false,
                 error = "";
             var sendData = {
@@ -192,22 +189,22 @@ api.prototype = {
                 cols: this.cols
             };
             try {
-                sendData.data = await (this._findDatabase(req, this.modelName[0], query));
+                sendData.data = await this._findDatabase(req, this.modelName[0], query);
                 if (this.modelName[1]) {
-                    if(this.orderParams) {
+                    if (this.orderParams) {
                         query = this.orderParams;
                     }
-                    sendData.orderData = await (this._findDatabase(req, this.modelName[1], query));
+                    sendData.orderData = await this._findDatabase(req, this.modelName[1], query);
                 }
-            }catch(err) {
+            } catch (err) {
                 isErr = true;
                 error = err;
             }
 
             if (this.filter) {
-                sendData = this.filter(sendData, this.filter_key||this.key_type, dates);
+                sendData = this.filter(sendData, this.filter_key || this.key_type, dates);
             }
-            if(isErr) {
+            if (isErr) {
                 next(error);
                 return;
             }
@@ -252,14 +249,14 @@ api.prototype = {
     _checkQuery(query, data, next, params) {
         var errObj = {},
             err = [];
-        for(var key of this.defaultRender) {
-            if(this[key.key]) {
-                if(!query[key.value]) {
+        for (var key of this.defaultRender) {
+            if (this[key.key]) {
+                if (!query[key.value]) {
                     query[key.value] = params[key.value];
                 }
                 errObj[key.value] = false;
-                for(var k of data[key.key]) {
-                    if(query[key.value] === k) {
+                for (var k of data[key.key]) {
+                    if (query[key.value] === k) {
                         params[key.value] = query[key.value];
                         errObj[key.value] = true;
                     }
@@ -276,15 +273,15 @@ api.prototype = {
             return false;
         }
         Object.keys(query).forEach((value) => {
-            if(value !== "startTime" && value !== "endTime") {
-                if(!params.hasOwnProperty(value)) {
+            if (value !== "startTime" && value !== "endTime") {
+                if (!params.hasOwnProperty(value)) {
                     params[value] = query[value];
                 }
             }
         });
         return true;
     },
-    _findDatabase: async((req, modelName, params) => {
+    _findDatabase: async(req, modelName, params) => {
         return new Promise((resolve, reject) => {
             req.models[modelName].find(params, (err, data) => {
                 if (err) {
@@ -294,7 +291,7 @@ api.prototype = {
                 }
             })
         });
-    }),
+    },
     setRouter(Router) {
         Router.get(this.router + '_json', this._sendData.bind(this, 'json'));
         Router.get(this.router + '_jsonp', this._sendData.bind(this, 'jsonp'));

@@ -13,9 +13,8 @@ var bodyParser = require('body-parser');
 var flash = require('flashify');
 var mysql = require('./models/mysql');
 var app = express();
-var async = require("asyncawait/async");
-var await = require("asyncawait/await");
 var orm = require('orm');
+var path = require('path');
 
 orm.settings.set("connection.pool", true);
 Object.keys(config).forEach(function(key) {
@@ -37,6 +36,7 @@ app.set('view engine', 'html');
 app.use(bodyParser.urlencoded({
     extended: false
 }));
+
 
 //parse application/json 
 app.use(bodyParser.json());
@@ -64,7 +64,23 @@ routers.forEach(function(router) {
     app.use(router);
 });
 
-app.use(lactate.static(__dirname + '/static'));
+var count = 0;
+setInterval(function(){
+    count += 1;
+    console.log(count);
+}, 1000);
+
+var test = require('./test.js');
+
+if (module.hot) {
+    module.hot.accept('./test.js', function() {
+        test = require('./test.js');
+        console.log('hot');
+    });
+}
+
+app.use(lactate.static(path.resolve(__dirname, '../static')));
+
 
 app.use(function() {
     var args = arguments;
