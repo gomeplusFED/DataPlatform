@@ -1,31 +1,57 @@
 var webpack = require('webpack');
 
+var fs = require('fs');
+var path = require('path')
 
-var rd = require('rd');
-
-var files = rd.readFileFilterSync('./',function(filename){
-	if(filename.match(/node_modules|static|\.git|\.idea|doc|\.gitignore|package.json|webpack/) === null && filename.match(/\.js|\.json/) ){
-		return true;
-	}
-})
-
-
-var pwd = __dirname;
-
-var entry = {};
-files.forEach(function(item){
-	var filename = item.replace(pwd,'/lib').replace(/\\/g,'/').replace(/\.js/g,'');
-	entry[filename] = item.replace(pwd,'.').replace(/\\/g,'/');
-})
-
- console.log(entry);
+var nodeModules = {};
+fs.readdirSync('node_modules')
+    .filter(function(x) {
+        return ['.bin'].indexOf(x) === -1;
+    })
+    .forEach(function(mod) {
+        nodeModules[mod] = 'commonjs ' + mod;
+    });
 
 var webpackConfig = {
-	entry: entry,
-	output: {
-        filename: '[name].js'
+    cache: true,
+    entry: [
+        'webpack/hot/poll?1000',
+        './app.js'
+    ],
+    output: {
+        path: path.resolve(__dirname,'build'),
+        filename: 'bundle.js'
+    },
+    context: __dirname,
+    node: {
+        __filename: false,
+        __dirname: false
+    },
+    target: 'node',
+    externals: nodeModules,
+    module: {
+        loaders: [{
+            test: /\.js$/,
+            loader: 'babel-loader',
+            exclude: [
+                path.resolve(__dirname, "node_modules"),
+            ],
+            query: {
+                plugins: ['transform-runtime'],
+                presets: ['es2015', 'stage-0'],
+            }
+        }, {
+            test: /\.json$/,
+            loader: 'json-loader'
+        }]
     },
     target: 'node'
+    plugins: [
+        new webpack.HotModuleReplacementPlugin()
+    ],
+    resolve: {
+        extensions: ['', '.js', '.json']
+    }
 }
 
 
