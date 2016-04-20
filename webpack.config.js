@@ -25,6 +25,7 @@ var webpackConfig = {
 	output: {
         filename: '[name].js'
     },
+    target: 'node'
 }
 
 
