@@ -1,25 +1,25 @@
-var webpack = require('webpack');
+import webpack from 'webpack';
+import fs from 'fs';
+import path from 'path';
 
-var fs = require('fs');
-var path = require('path')
 
-var nodeModules = {};
+let nodeModules = {};
 fs.readdirSync('node_modules')
-    .filter(function(x) {
+    .filter((x) => {
         return ['.bin'].indexOf(x) === -1;
     })
-    .forEach(function(mod) {
+    .forEach((mod) => {
         nodeModules[mod] = 'commonjs ' + mod;
     });
 
-var webpackConfig = {
+export default {
     cache: true,
     entry: [
         'webpack/hot/poll?1000',
         './app.js'
     ],
     output: {
-        path: path.resolve(__dirname,'build'),
+        path: path.resolve(__dirname, 'build'),
         filename: 'bundle.js'
     },
     context: __dirname,
@@ -52,6 +52,3 @@ var webpackConfig = {
         extensions: ['', '.js', '.json']
     }
 }
-
-
-module.exports = webpackConfig;

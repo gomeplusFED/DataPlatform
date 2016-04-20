@@ -27,7 +27,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "255c53206fbdfa4db48a"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "c64964ceddbdd9bcf59e"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -693,7 +693,7 @@
 	});
 
 	//载入view helps
-	__webpack_require__(199)(app);
+	__webpack_require__(201)(app);
 
 	new mysql(app);
 
@@ -707,11 +707,11 @@
 	    console.log(count);
 	}, 1000);
 
-	var test = __webpack_require__(200);
+	var test = __webpack_require__(202);
 
 	if (true) {
-	    module.hot.accept(200, function () {
-	        test = __webpack_require__(200);
+	    module.hot.accept(202, function () {
+	        test = __webpack_require__(202);
 	        console.log('hot');
 	    });
 	}
@@ -18607,8 +18607,8 @@
 	 */
 
 	var orm = __webpack_require__(135);
-	var config = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../db/config.json\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
-	var db = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../db/mysql.json\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	var config = __webpack_require__(199);
+	var db = __webpack_require__(200);
 	var mysql = db[config.db];
 
 	function connect(app) {
@@ -19367,6 +19367,51 @@
 
 /***/ },
 /* 199 */
+/***/ function(module, exports) {
+
+	module.exports = {
+		"db": "dev"
+	};
+
+/***/ },
+/* 200 */
+/***/ function(module, exports) {
+
+	module.exports = {
+		"dev": {
+			"username": "datapltfm_user",
+			"pwd": "Db57AteE172E4D1168",
+			"host": "10.125.31.220:3306",
+			"database": "dataplatform"
+		},
+		"test": {
+			"username": "tester",
+			"pwd": "Test_usEr",
+			"host": "atlas01.test.gomeplus.com:8806",
+			"database": "dataplatform"
+		},
+		"pre": {
+			"username": "gome_business",
+			"pwd": "P7P2k2yf3F",
+			"host": "10.125.2.9:3306",
+			"database": "dataplatform"
+		},
+		"pro1": {
+			"username": "dong",
+			"pwd": "1234567",
+			"host": "10.69.7.8",
+			"database": "dataplatform"
+		},
+		"pro": {
+			"username": "gome_business",
+			"pwd": "DjbnHtjSYD",
+			"host": "atlas01.ic.pro.gomeplus.com:8806",
+			"database": "dataplatform"
+		}
+	};
+
+/***/ },
+/* 201 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -19470,7 +19515,7 @@
 	};
 
 /***/ },
-/* 200 */
+/* 202 */
 /***/ function(module, exports) {
 
 	"use strict";
