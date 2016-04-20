@@ -45,7 +45,6 @@ var webpackConfig = {
             loader: 'json-loader'
         }]
     },
-    target: 'node'
     plugins: [
         new webpack.HotModuleReplacementPlugin()
     ],

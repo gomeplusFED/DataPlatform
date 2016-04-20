@@ -15,8 +15,19 @@
 
 /******/ 	
 /******/ 	
+/******/ 	// Copied from https://github.com/facebook/react/blob/bef45b0/src/shared/utils/canDefineProperty.js
+/******/ 	var canDefineProperty = false;
+/******/ 	try {
+/******/ 		Object.defineProperty({}, "x", {
+/******/ 			get: function() {}
+/******/ 		});
+/******/ 		canDefineProperty = true;
+/******/ 	} catch(x) {
+/******/ 		// IE will fail on defineProperty
+/******/ 	}
+/******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "d2d9b74a5a3d9a5e971f"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "255c53206fbdfa4db48a"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -39,7 +50,7 @@
 /******/ 		};
 /******/ 		for(var name in __webpack_require__) {
 /******/ 			if(Object.prototype.hasOwnProperty.call(__webpack_require__, name)) {
-/******/ 				if(Object.defineProperty) {
+/******/ 				if(canDefineProperty) {
 /******/ 					Object.defineProperty(fn, name, (function(name) {
 /******/ 						return {
 /******/ 							configurable: true,
@@ -82,7 +93,7 @@
 /******/ 				}
 /******/ 			});
 /******/ 		}
-/******/ 		if(Object.defineProperty) {
+/******/ 		if(canDefineProperty) {
 /******/ 			Object.defineProperty(fn, "e", {
 /******/ 				enumerable: true,
 /******/ 				value: ensure
@@ -636,9 +647,9 @@
 	var lactate = __webpack_require__(42);
 	var config = __webpack_require__(43);
 	var routers = __webpack_require__(55);
-	var bodyParser = __webpack_require__(197);
-	var flash = __webpack_require__(198);
-	var mysql = __webpack_require__(199);
+	var bodyParser = __webpack_require__(196);
+	var flash = __webpack_require__(197);
+	var mysql = __webpack_require__(198);
 	var app = express();
 	var orm = __webpack_require__(135);
 	var path = __webpack_require__(79);
@@ -682,7 +693,7 @@
 	});
 
 	//载入view helps
-	__webpack_require__(202)(app);
+	__webpack_require__(199)(app);
 
 	new mysql(app);
 
@@ -696,11 +707,11 @@
 	    console.log(count);
 	}, 1000);
 
-	var test = __webpack_require__(203);
+	var test = __webpack_require__(200);
 
 	if (true) {
-	    module.hot.accept(203, function () {
-	        test = __webpack_require__(203);
+	    module.hot.accept(200, function () {
+	        test = __webpack_require__(200);
 	        console.log('hot');
 	    });
 	}
@@ -867,7 +878,7 @@
 	      if(value != value)return true;
 	    // Array#toIndex ignores holes, Array#includes - not
 	    } else for(;length > index; index++)if(IS_INCLUDES || index in O){
-	      if(O[index] === el)return IS_INCLUDES || index;
+	      if(O[index] === el)return IS_INCLUDES || index || 0;
 	    } return !IS_INCLUDES && -1;
 	  };
 	};
@@ -1040,7 +1051,7 @@
 /* 26 */
 /***/ function(module, exports) {
 
-	var core = module.exports = {version: '2.2.1'};
+	var core = module.exports = {version: '2.2.2'};
 	if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
 
 /***/ },
@@ -2230,9 +2241,9 @@
 
 	// addRouter('./combine');
 
-	module.exports.push(__webpack_require__(191)(router));
-	module.exports.push(__webpack_require__(193)(router));
-	module.exports.push(__webpack_require__(196)(router));
+	module.exports.push(__webpack_require__(190)(router));
+	module.exports.push(__webpack_require__(192)(router));
+	module.exports.push(__webpack_require__(195)(router));
 
 	// (async() => {
 	//     try {
@@ -6206,7 +6217,7 @@
 	  try {
 	    var arr  = [7]
 	      , iter = arr[ITERATOR]();
-	    iter.next = function(){ safe = true; };
+	    iter.next = function(){ return {done: safe = true}; };
 	    arr[ITERATOR] = function(){ return iter; };
 	    exec(arr);
 	  } catch(e){ /* empty */ }
@@ -18052,8 +18063,7 @@
 	};
 
 /***/ },
-/* 190 */,
-/* 191 */
+/* 190 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -18069,7 +18079,7 @@
 	 * @date 20151128
 	 * @fileoverview 用户登陆控制器和权限校验
 	 */
-	var ldap = __webpack_require__(192);
+	var ldap = __webpack_require__(191);
 	var config = __webpack_require__(43);
 	var lodash = __webpack_require__(84);
 
@@ -18301,13 +18311,13 @@
 	};
 
 /***/ },
-/* 192 */
+/* 191 */
 /***/ function(module, exports) {
 
 	module.exports = require("ldapjs");
 
 /***/ },
-/* 193 */
+/* 192 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -18317,8 +18327,8 @@
 	 * @date 20151209
 	 * @description 针对用户模块的增删改查
 	 */
-	var update = __webpack_require__(194);
-	var select = __webpack_require__(195);
+	var update = __webpack_require__(193);
+	var select = __webpack_require__(194);
 	var lodash = __webpack_require__(84);
 	module.exports = function (Router) {
 
@@ -18417,7 +18427,7 @@
 	};
 
 /***/ },
-/* 194 */
+/* 193 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -18512,7 +18522,7 @@
 	};
 
 /***/ },
-/* 195 */
+/* 194 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -18556,7 +18566,7 @@
 	};
 
 /***/ },
-/* 196 */
+/* 195 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -18573,19 +18583,19 @@
 	};
 
 /***/ },
-/* 197 */
+/* 196 */
 /***/ function(module, exports) {
 
 	module.exports = require("body-parser");
 
 /***/ },
-/* 198 */
+/* 197 */
 /***/ function(module, exports) {
 
 	module.exports = require("flashify");
 
 /***/ },
-/* 199 */
+/* 198 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -18597,8 +18607,8 @@
 	 */
 
 	var orm = __webpack_require__(135);
-	var config = __webpack_require__(200);
-	var db = __webpack_require__(201);
+	var config = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../db/config.json\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	var db = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../db/mysql.json\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 	var mysql = db[config.db];
 
 	function connect(app) {
@@ -19356,52 +19366,7 @@
 	module.exports = connect;
 
 /***/ },
-/* 200 */
-/***/ function(module, exports) {
-
-	module.exports = {
-		"db": "test"
-	};
-
-/***/ },
-/* 201 */
-/***/ function(module, exports) {
-
-	module.exports = {
-		"dev": {
-			"username": "datapltfm_user",
-			"pwd": "Db57AteE172E4D1168",
-			"host": "10.125.31.220:3306",
-			"database": "dataplatform"
-		},
-		"test": {
-			"username": "tester",
-			"pwd": "Test_usEr",
-			"host": "atlas01.test.gomeplus.com:8806",
-			"database": "dataplatform"
-		},
-		"pre": {
-			"username": "gome_business",
-			"pwd": "P7P2k2yf3F",
-			"host": "10.125.2.9:3306",
-			"database": "dataplatform"
-		},
-		"pro1": {
-			"username": "dong",
-			"pwd": "1234567",
-			"host": "10.69.7.8",
-			"database": "dataplatform"
-		},
-		"pro": {
-			"username": "gome_business",
-			"pwd": "DjbnHtjSYD",
-			"host": "atlas01.ic.pro.gomeplus.com:8806",
-			"database": "dataplatform"
-		}
-	};
-
-/***/ },
-/* 202 */
+/* 199 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -19505,7 +19470,7 @@
 	};
 
 /***/ },
-/* 203 */
+/* 200 */
 /***/ function(module, exports) {
 
 	"use strict";
