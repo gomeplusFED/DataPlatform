@@ -1550,5 +1550,21 @@
       ],
       "province_code": "65000"
     }
-  ]
+  ],
+  "help" : {
+    "rows" : [
+      ["name", "help"]
+    ],
+    "cols" : [
+      [
+        {
+          "caption" : "指标",
+          "type" : "string"
+          }, {
+          "caption" : "注释",
+          "type" : "string"
+        }
+      ]
+    ]
+  }
 }

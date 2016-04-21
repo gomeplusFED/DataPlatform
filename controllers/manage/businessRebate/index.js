@@ -4,7 +4,8 @@
  * @fileoverview 商家返利汇总
  */
 var api = require("../../../base/api"),
-    moment = require("moment"),
+    help = require("../../../base/help"),
+    config = require("../../../utils/config.json"),
     businessRebate = require("../../../filters/businessRebate");
 
 module.exports = (Router) => {
@@ -16,6 +17,11 @@ module.exports = (Router) => {
         filter(data, filter_key, dates) {
             return businessRebate.businessAllOne(data);
         },
+        flexible_btn: [{
+            content: '<a href="javascript:void(0)" help_url="/businessAll/help_json">帮助</a>',
+            preMethods: ["show_help"],
+            customMethods: ''
+        }],
         rows: [
             ["name", "order_num", "order_amount", "shop_num", "user_num", "product_sku_num"],
             ["rebate_order_num", "rebate_amount_total", "rebate_amount_actual", "rebate_amount", "rate", "platform_amount"],
@@ -326,6 +332,30 @@ module.exports = (Router) => {
                 type : "string"
             }
             ]
+        ]
+    });
+
+    Router = new help(Router, {
+        router : "/businessAll/help",
+        rows : config.help.rows,
+        cols : config.help.cols,
+        data : [
+            {
+                name : "商家返利TOP50",
+                help : "按新增订单数由高到低排序"
+            },
+            {
+                name : "商家返利计划TOP50",
+                help : "按新增订单数由高到低排序"
+            },
+            {
+                name : "平台到账金额",
+                help : "时间段内商家设置返利中平台到账总金额，统计时间为订单返利到账时间"
+            },
+            {
+                name : "退货率",
+                help : "统计周期内，退货商品件数/销售商品总件数，统计时间为订单生成时间"
+            }
         ]
     });
 

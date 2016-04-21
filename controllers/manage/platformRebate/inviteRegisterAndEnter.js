@@ -4,6 +4,8 @@
  * @fileoverview 邀请注册 / 入驻
  */
 var api = require("../../../base/api"),
+    help = require("../../../base/help"),
+    config = require("../../../utils/config.json"),
     filter = require("../../../filters/platformRebate/inviteRegisterAndEnter");
 
 module.exports = (Router) => {
@@ -12,6 +14,11 @@ module.exports = (Router) => {
         modelName : ["RebateInvitepartner"],
         date_picker_data: 1,
         platform : false,
+        flexible_btn: [{
+            content: '<a href="javascript:void(0)" help_url="/inviteRegisterAndEnter/help_json">帮助</a>',
+            preMethods: ["show_help"],
+            customMethods: ''
+        }],
         filter(data, filter_key, dates) {
             return filter.inviteRegisterAndEnterOne(data);
         },
@@ -196,6 +203,30 @@ module.exports = (Router) => {
                     type : "number"
                 }
             ]
+        ]
+    });
+
+    Router = new help(Router, {
+        router : "/inviteRegisterAndEnter/help",
+        rows : config.help.rows,
+        cols : config.help.cols,
+        data : [
+            {
+                name : "返利计划数",
+                help : "统计时间内所有平台邀请返利计划数"
+            },
+            {
+                name : "参与用户数",
+                help : "时间段内所有参与邀请返利的用户，并且所邀请的用户注册成功或商家入驻成功"
+            },
+            {
+                name : "注册成功占比",
+                help : "时间段内（返利注册成功数/总注册成功数）"
+            },
+            {
+                name : "入驻成功占比",
+                help : "时间段内（返利入驻成功数/总入驻成功数）"
+            }
         ]
     });
 

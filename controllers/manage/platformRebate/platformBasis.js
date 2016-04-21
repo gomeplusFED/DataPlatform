@@ -4,6 +4,8 @@
  * @fileoverview 平台基础返利
  */
 var api = require("../../../base/api"),
+    help = require("../../../base/help"),
+    config = require("../../../utils/config.json"),
     filter = require("../../../filters/platformRebate/platformBasis");
 
 module.exports = (Router) => {
@@ -14,6 +16,11 @@ module.exports = (Router) => {
         fixedParams : {
             user_party : "平台基础返利"
         },
+        flexible_btn: [{
+            content: '<a href="javascript:void(0)" help_url="/platformBasis/help_json">帮助</a>',
+            preMethods: ["show_help"],
+            customMethods: ''
+        }],
         date_picker_data: 1,
         filter(data, filter_key, dates) {
             return filter.platformBasisOne(data);
@@ -225,5 +232,44 @@ module.exports = (Router) => {
         ]
     });
 
+    Router = new help(Router, {
+        router : "/platformBasis/help",
+        rows : config.help.rows,
+        cols : config.help.cols,
+        data : [
+            {
+                name : "商品件数",
+                help : "所有订单中，带返利的商品总件数，统计时间为订单生成时间"
+            },
+            {
+                name : "返利到账订单数",
+                help : "返利订单中已经返利到账的订单数，统计时间为订单返利到账时间"
+            },
+            {
+                name : "返利到账订单总金额",
+                help : "统计时间内所有已返利订单的成交金额，统计时间为订单返利到账时间"
+            },
+            {
+                name : "返利到账订单实付金额",
+                help : "统计时间内所有已返利订单的实际支付金额，统计时间为订单返利到账时间"
+            },
+            {
+                name : "返利到账金额",
+                help : "返利订单中已返利总金额，统计时间为订单返利到账时间"
+            },
+            {
+                name : "返利比率",
+                help : "返利到账金额/返利到账订单实付金额"
+            },
+            {
+                name : "返利退货订单占比",
+                help : "（例）退货商品数/（所有退货商品数，包括无返利商品），统计时间为订单生成时间"
+            },
+            {
+                name : "返利层级分布",
+                help : "返利商品件数，返利商品总金额，统计时间为订单生成时间；返利到账金额，统计时间为订单返利到账时间"
+            }
+        ]
+    });
     return Router;
 };
