@@ -64,20 +64,20 @@ routers.forEach(function(router) {
     app.use(router);
 });
 
-var count = 0;
-setInterval(function(){
-    count += 1;
-    console.log(count);
-}, 1000);
+// var count = 0;
+// setInterval(function(){
+//     count += 1;
+//     console.log(count);
+// }, 1000);
 
-var test = require('./test.js');
+// var test = require('./test.js');
 
-if (module.hot) {
-    module.hot.accept('./test.js', function() {
-        test = require('./test.js');
-        console.log('hot');
-    });
-}
+// if (module.hot) {
+//     module.hot.accept('./test.js', function() {
+//         test = require('./test.js');
+//         console.log('hot');
+//     });
+// }
 
 app.use(lactate.static(path.resolve(__dirname, '../static')));
 

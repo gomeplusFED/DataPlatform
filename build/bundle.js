@@ -15,19 +15,8 @@
 
 /******/ 	
 /******/ 	
-/******/ 	// Copied from https://github.com/facebook/react/blob/bef45b0/src/shared/utils/canDefineProperty.js
-/******/ 	var canDefineProperty = false;
-/******/ 	try {
-/******/ 		Object.defineProperty({}, "x", {
-/******/ 			get: function() {}
-/******/ 		});
-/******/ 		canDefineProperty = true;
-/******/ 	} catch(x) {
-/******/ 		// IE will fail on defineProperty
-/******/ 	}
-/******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "c64964ceddbdd9bcf59e"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "a7194c9ac3953918a349"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -50,7 +39,7 @@
 /******/ 		};
 /******/ 		for(var name in __webpack_require__) {
 /******/ 			if(Object.prototype.hasOwnProperty.call(__webpack_require__, name)) {
-/******/ 				if(canDefineProperty) {
+/******/ 				if(Object.defineProperty) {
 /******/ 					Object.defineProperty(fn, name, (function(name) {
 /******/ 						return {
 /******/ 							configurable: true,
@@ -93,7 +82,7 @@
 /******/ 				}
 /******/ 			});
 /******/ 		}
-/******/ 		if(canDefineProperty) {
+/******/ 		if(Object.defineProperty) {
 /******/ 			Object.defineProperty(fn, "e", {
 /******/ 				enumerable: true,
 /******/ 				value: ensure
@@ -701,20 +690,20 @@
 	    app.use(router);
 	});
 
-	var count = 0;
-	setInterval(function () {
-	    count += 1;
-	    console.log(count);
-	}, 1000);
+	// var count = 0;
+	// setInterval(function(){
+	//     count += 1;
+	//     console.log(count);
+	// }, 1000);
 
-	var test = __webpack_require__(202);
+	// var test = require('./test.js');
 
-	if (true) {
-	    module.hot.accept(202, function () {
-	        test = __webpack_require__(202);
-	        console.log('hot');
-	    });
-	}
+	// if (module.hot) {
+	//     module.hot.accept('./test.js', function() {
+	//         test = require('./test.js');
+	//         console.log('hot');
+	//     });
+	// }
 
 	app.use(lactate.static(path.resolve(__dirname, '../static')));
 
@@ -878,7 +867,7 @@
 	      if(value != value)return true;
 	    // Array#toIndex ignores holes, Array#includes - not
 	    } else for(;length > index; index++)if(IS_INCLUDES || index in O){
-	      if(O[index] === el)return IS_INCLUDES || index || 0;
+	      if(O[index] === el)return IS_INCLUDES || index;
 	    } return !IS_INCLUDES && -1;
 	  };
 	};
@@ -1051,7 +1040,7 @@
 /* 26 */
 /***/ function(module, exports) {
 
-	var core = module.exports = {version: '2.2.2'};
+	var core = module.exports = {version: '2.2.1'};
 	if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
 
 /***/ },
@@ -6217,7 +6206,7 @@
 	  try {
 	    var arr  = [7]
 	      , iter = arr[ITERATOR]();
-	    iter.next = function(){ return {done: safe = true}; };
+	    iter.next = function(){ safe = true; };
 	    arr[ITERATOR] = function(){ return iter; };
 	    exec(arr);
 	  } catch(e){ /* empty */ }
@@ -19370,7 +19359,7 @@
 /***/ function(module, exports) {
 
 	module.exports = {
-		"db": "dev"
+		"db": "test"
 	};
 
 /***/ },
@@ -19513,14 +19502,6 @@
 	        return str;
 	    };
 	};
-
-/***/ },
-/* 202 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	console.log(666);
 
 /***/ }
 /******/ ]);
