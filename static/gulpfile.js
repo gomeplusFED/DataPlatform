@@ -44,6 +44,7 @@ var webpackConfig = {
         ]
     },
     output: {
+        path: './dist/js',
         filename: '[name].min.js'
     },
     module: {
