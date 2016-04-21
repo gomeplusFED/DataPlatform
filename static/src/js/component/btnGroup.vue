@@ -44,6 +44,9 @@ var Btns = Vue.extend({
             }
             window.open(this.initData.defaultData[this.index].query_api + '_excel?' +  resultQuery.join('&'));
         },
+        show_help: function(){
+            
+        },
     	resolveMethods: function(item){
             if(item.preMethods.length){
                 for(var i = 0;i < item.preMethods.length;i++){
