@@ -25,6 +25,7 @@ if(window.initData){
     var Loading = require('./component/loading.vue');
     var Main = require('./component/main.vue');
     var Alert = require('./component/alert.vue');
+    var ModalTable = require('./component/modalTable.vue');
 
     var store = require('./store/store.js');
 
@@ -41,7 +42,8 @@ if(window.initData){
         components: {
             'm-loading': Loading,
             'm-main': Main,
-            'm-alert': Alert
+            'm-alert': Alert,
+            'm-modal': ModalTable
         }
     });
 }

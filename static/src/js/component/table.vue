@@ -1,20 +1,5 @@
 <template>
     <div :id="'table_'+index" class="table_con table-responsive" v-show="currentData.type.indexOf('table') !== -1"></div>    
-    <div class="modal" v-show="modal" transtion="fade">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">查看详情</h4>
-                </div>
-                <div class="modal-body">
-                    <table class="table table-striped table-bordered table-hover"></table>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn default" data-dismiss="modal" @click="modal = !modal">确定</button>
-                </div>
-            </div>
-        </div>
-    </div>
 </template>
 <style>
 .table_con{}
@@ -45,10 +30,16 @@ var Table = Vue.extend({
             tableData: [],
             tableExample: [],
             scrollTop: null,
-            modal: false,
             hasRequestUrl: null,
-            modalTableData: null
         }
+    },
+    vuex: {
+        getters: {
+            modalTableData: function() {
+                return store.state.modalTableData;
+            }
+        },
+        actions: actions
     },
     created: function(){
         this.initEd = true;
@@ -133,11 +124,11 @@ var Table = Vue.extend({
                                 utils.mixin(params,_this.resultArgvs);
 
                                 if(_this.hasRequestUrl !== null && _this.hasRequestUrl === url){
-                                    _this.modal = true;
+                                    actions.modalTable(store, {
+                                        show: true,
+                                    });
                                     return;
                                 }
-
-                                $('#table_' + _this.index).parent('.panel-body').find('.modal .modal-body').html('<table class="table table-striped table-bordered table-hover"></table>');
 
                                 $.ajax({
                                     url: api + '_json',
@@ -145,34 +136,38 @@ var Table = Vue.extend({
                                     data: params,
                                     success: function(data) {
                                         _this.hasRequestUrl = url;
-                                        _this.modal = true;
-                                        _this.modalTableData = data.modelData[0];
+                                        var tableData = data.modelData[0];
                                         // 生成弹窗图表
                                         var modalColumns = [];
-                                        _this.modalTableData.rows.forEach(function(item,index){
-                                            modalColumns.push({
-                                                data: item,
-                                                title: _this.modalTableData.cols[index].caption
-                                            })
+                                        tableData.rows.forEach(function(item,index){
+                                           modalColumns.push({
+                                               data: item,
+                                               title: tableData.cols[index].caption
+                                           })
                                         })
                                         var config = {
-                                            data: _this.modalTableData.data,
-                                            columns: modalColumns,
-                                            ordering: false,
-                                            info: false,
-                                            searching: false,
-                                            responsive: false,
-                                            lengthChange: false,
-                                            retrieve: true,
-                                            "language": {
-                                                "emptyTable": "暂无数据",
-                                                "paginate": {
-                                                    "previous": "上一页",
-                                                    "next": "下一页"
-                                                }
-                                            }
+                                           data: tableData.data,
+                                           columns: modalColumns,
+                                           ordering: false,
+                                           info: false,
+                                           searching: false,
+                                           responsive: false,
+                                           lengthChange: false,
+                                           retrieve: true,
+                                           "language": {
+                                               "emptyTable": "暂无数据",
+                                               "paginate": {
+                                                   "previous": "上一页",
+                                                   "next": "下一页"
+                                               }
+                                           }
                                         }
-                                        $('#table_' + _this.index).parent('.panel-body').find('.modal table').DataTable(config);
+                                        
+                                        actions.modalTable(store, {
+                                            show: true,
+                                            title: '帮助信息',
+                                            data: config
+                                        });
                                     }
                                 })
                             })

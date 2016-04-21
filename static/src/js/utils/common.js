@@ -23,10 +23,9 @@ utils.isInObj = function(source, target) {
     for(var item in target){
         if(item === source){
             return true;
-        }else{
-            return false;
         }
     }
+    return false;
 }
 
 module.exports = utils;

@@ -3,13 +3,16 @@ var Vuex = require('Vuex');
 
 Vue.use(Vuex);
 
-
-
 var state = {
     alertConfig: {
         show: false,
         msg: '提示信息',
         type: 'info'
+    },
+    modalTableData: {
+        show: false,
+        title: '弹窗表格',
+        data: null // 表格数据
     }
 }
 
@@ -25,6 +28,20 @@ mutations.ALERT = function(state, params) {
 
 mutations.HIDEALERT = function(state) {
     state.alertConfig.show = false;
+}
+
+mutations.MODALTABLE = function(state, params) {
+    if(params.title){
+        state.modalTableData.title = params.title;
+    }
+    if(params.data){
+        state.modalTableData.data = params.data;
+    }
+    state.modalTableData.show = params.show;
+}
+
+mutations.HIDEMODALTABLE = function(state) {
+    state.modalTableData.show = false;
 }
 
 module.exports = new Vuex.Store({

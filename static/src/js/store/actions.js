@@ -7,6 +7,13 @@ actions.alert = function(store, params) {
     }, 2500);
 }
 
+actions.modalTable = function(store, params) {
+    store.dispatch('MODALTABLE', params);
+}
+
+actions.hideModalTable = function(store) {
+    store.dispatch('HIDEMODALTABLE');
+}
 
 
 module.exports = actions;
