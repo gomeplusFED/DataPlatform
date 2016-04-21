@@ -4,6 +4,7 @@
  * @fileoverview 平台返利汇总
  */
 var api = require("../../../base/api"),
+    help = require("../../../base/help"),
     filter = require("../../../filters/platformRebate");
 
 module.exports = (Router) => {
@@ -13,6 +14,11 @@ module.exports = (Router) => {
         level_select : true,
         platform : false,
         date_picker_data: 1,
+        flexible_btn: [{
+            content: '<a href="javascript:void(0)" help_url="/platformRebate/help_json">帮助</a>',
+            preMethods: ["show_help"],
+            customMethods: ''
+        }],
         filter(data, filter_key, dates) {
             return filter.platformOrderOne(data);
         },
@@ -276,6 +282,24 @@ module.exports = (Router) => {
                 }, {
                     caption : "返利到账金额",
                     type : "number"
+                }
+            ]
+        ]
+    });
+
+    Router = new help(Router, {
+        router : "/platformRebate/help",
+        rows : [
+            ["name", "help"]
+        ],
+        cols : [
+            [
+                {
+                    caption : "指标",
+                    type : "string"
+                }, {
+                    caption : "注释",
+                    type : "string"
                 }
             ]
         ]
