@@ -6,6 +6,6 @@
 var renderApi = require("../base/renderApi");
 
 module.exports = function(Router, options) {
-    Router = new renderApi(Router, options);
-    return Router;
+	Router = new renderApi(Router, options);
+	return Router;
 };

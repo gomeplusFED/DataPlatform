@@ -21,10 +21,10 @@ function addRouter(path) {
     module.exports.push(require(path)(router));
 }
 
-var filePath = async ((path) => {
-    return new Promise((resolve, reject) =>{
+var filePath = async((path) => {
+    return new Promise((resolve, reject) => {
         fs.readdir(path, (err, data) => {
-            if(err) {
+            if (err) {
                 reject(err);
             } else {
                 resolve(data);
@@ -38,34 +38,34 @@ addRouter('./login');
 addRouter('./user');
 addRouter('./categories');
 
-async (() => {
+async(() => {
     try {
         var data = await (filePath(files));
-        for(var file of data) {
-            if(file.indexOf(".js") < 0) {
+        for (var file of data) {
+            if (file.indexOf(".js") < 0) {
                 var f = await (filePath(files + "/" + file));
-                for(var key of f) {
-                    if(key.indexOf("js") >= 0) {
+                for (var key of f) {
+                    if (key.indexOf("js") >= 0) {
                         addRouter("." + files + "/" + file + "/" + key);
                     }
                 }
             }
         }
-    } catch(err) {
+    } catch (err) {
         console.log(err);
     }
 })();
 
 
-for(var key of config.limit) {
+for (var key of config.limit) {
     Object.keys(key).forEach((data) => {
-        if(key[data].display) {
-            if(key[data].path.length > 0) {
-                for(var k of key[data].path) {
+        if (key[data].display) {
+            if (key[data].path.length > 0) {
+                for (var k of key[data].path) {
                     module.exports.push(new renderApi(router, k));
                 }
-            } else if(key[data].routers && key[data].routers.length > 0) {
-                for(var k of key[data].routers) {
+            } else if (key[data].routers && key[data].routers.length > 0) {
+                for (var k of key[data].routers) {
                     module.exports.push(new renderApi(router, k));
                 }
             }
