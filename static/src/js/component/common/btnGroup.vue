@@ -52,7 +52,7 @@ var Btns = Vue.extend({
             for(var item in this.resultArgvs){
                 resultQuery.push(item + '=' + this.resultArgvs[item]);
             }
-            window.open(this.initData.defaultData[this.index].query_api + '_excel?' +  resultQuery.join('&'));
+            // window.open(this.initData.defaultData[this.index].query_api + '_excel?' +  resultQuery.join('&'));
         },
         show_help: function(ev){
             var _this = this;

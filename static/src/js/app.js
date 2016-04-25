@@ -50,6 +50,8 @@ var dom = require('./dom/index.js');
     //     }
     // });
 
+    var blankApp = Vue.extend({});
+
     var App = require('./component/app.vue');
 
     var router = new VueRouter();
@@ -57,28 +59,28 @@ var dom = require('./dom/index.js');
     var store = require('./store/store.js');
     var actions = require('./store/actions.js');
 
-    // router.map({
-    //     '*': {
-    //         component: App
-    //     }
-    // })
+    router.map({
+        '*': {
+            component: App
+        }
+    })
 
     router.beforeEach(function (transition) {
         // console.log(transition.to.path);
         var key = transition.to.path;
-        console.log(key);
         actions.setCurrentPageDefaultData(store, window.allPageConfig.page[key])
-        console.log(window.allPageConfig.page[key].defaultData);
-        // if(!window.allPageConfig[key]){
-        //     router.go({
-        //         path: '/dataOverview/app'
-        //     })
-        // }
+        if(!window.allPageConfig[key]){
+            router.go({
+                // path: '/dataOverview/app'
+            })
+        }
     })
 
     router.redirect({
         '/': '/dataOverview/app'
     })
+
+
 
     router.start(App, '#page-wrapper')
 // }

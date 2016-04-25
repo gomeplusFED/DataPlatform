@@ -66,17 +66,17 @@ module.exports = function(app) {
                 var isActive = function(isChildren) {
                     return limitItem[limitItemKey].id === parent ? 'active' : ''
                 }
-                var isActive = limitItem[limitItemKey].id === parent ? 'active' : '';
-                var isIn = limitItem[limitItemKey].id === parent ? 'in' : '';
-                var isExpand = limitItem[limitItemKey].id === parent ? 'true' : 'false';
-                str += '<li class="' + isActive + '"><a href="' + href + '"><i class="' + className + '"></i>' + name;
+                // var isActive = limitItem[limitItemKey].id === parent ? 'active' : '';
+                // var isIn = limitItem[limitItemKey].id === parent ? 'in' : '';
+                // var isExpand = limitItem[limitItemKey].id === parent ? 'true' : 'false';
+                str += '<li class=""><a href="/#!' + href + '"><i class="' + className + '"></i>' + name;
                 if (path.length > 0) {
-                    str += '<span class="fa arrow"></span></a><ul class="nav nav-second-level collapse ' + isIn + '" aria-expanded="' + isExpand + '">';
+                    str += '<span class="fa arrow"></span></a><ul class="nav nav-second-level collapse" aria-expanded="">';
                     path.forEach(function(v, k) {
                         for (var i = 1; i < subLimitItemArray.length; i++) {
                             if (k === parseInt(subLimitItemArray[i])) {
                                 if (v.display) {
-                                    str += '<li><a href="' + v.path + '" class="' + (limitItem[limitItemKey].id === parent && k === children ? 'active' : '') + '">' + v.name + '</a></li>';
+                                    str += '<li><a href="/#!' + v.path + '" class="' + (limitItem[limitItemKey].id === parent && k === children ? 'active' : '') + '">' + v.name + '</a></li>';
                                 }
                             }
                         }

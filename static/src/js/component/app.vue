@@ -1,8 +1,10 @@
 <template>
-    <m-loading :loading.sync="loading"></m-loading>
-    <m-alert></m-alert>
-    <m-modal></m-modal>
-    <m-main v-for="item in currentPageDefaultData.defaultData" :index="$index" :current-data="currentPageDefaultData.defaultData[$index]" :loading.sync="loading"></m-main>
+    <div id="page-wrapper" style="min-height: 1054px;">
+        <m-loading :loading.sync="loading"></m-loading>
+        <m-alert></m-alert>
+        <m-modal></m-modal>
+        <m-main v-for="item in currentPageDefaultData.defaultData" :index="$index" :init-data="initData" :current-data="currentPageDefaultData.defaultData[$index]" :loading.sync="loading"></m-main>
+    </div>
 </template>
 
 
@@ -22,7 +24,11 @@ var App = Vue.extend({
 	store: store,
 	data: function(){
 		return {
-
+            loading: {
+                show: true,
+                noLoaded: 0
+            },
+            initData: window.allPageConfig
 		}
 	},
     vuex: {
