@@ -6,6 +6,7 @@
 var utils = require("../utils"),
     _ = require("lodash"),
     cache = require("../utils/cache"),
+    config = require("../config"),
     cacheTime = 1;
 
 function renderApi(Router, options) {
@@ -83,10 +84,33 @@ renderApi.prototype = {
         })
     },
     _renderData(res, dataParams) {
+        var page = {};
+        for(var key of config.limit) {
+            Object.keys(key).forEach((param) => {
+                if(key[param].display && param !== "userManagement" ) {
+                    if(key[param].href === "#") {
+                        for(var path of key[param].path) {
+                            page[path.path] = {
+                                pageTitle : path.name,
+                                defaultData : path.defaultData
+                            }
+                        }
+                    } else {
+                        for(var path of key[param].routers) {
+                            page[path.path] = {
+                                pageTitle : path.name,
+                                defaultData : path.defaultData
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        console.log(page);
         res.render(this.view, {
-            pageTitle: this.name,
+            //pageTitle: this.name,
             drop_down_default_data: dataParams.types,
-            defaultData: this.defaultData
+            page : page
         });
     },
     setRouter(Router) {
