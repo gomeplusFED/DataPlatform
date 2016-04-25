@@ -27,13 +27,11 @@ router.map({
     }
 });
 
-console.log(111);
 router.beforeEach(function (transition) {
-
     var url = window.location.hash;
     $('[href="'+ url +'"]').parent().parent().parent().addClass('active');
     $('[href="'+ url +'"]').parent().parent().addClass('in').attr('aria-expanded', true);
-    console.log($('[href="'+ url +'"]'));
+    $('[href="'+ url +'"]').focus();
 
     var key = transition.to.path;
     actions.setCurrentPageDefaultData(store, window.allPageConfig.page[key])
@@ -42,7 +40,6 @@ router.beforeEach(function (transition) {
             path: '/dataOverview/app'
         })
     }
-
 });
 
 router.redirect({
