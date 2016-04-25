@@ -32,6 +32,8 @@ router.beforeEach(function (transition) {
     $('[href="'+ url +'"]').parent().parent().parent().addClass('active');
     $('[href="'+ url +'"]').parent().parent().addClass('in').attr('aria-expanded', true);
     $('[href="'+ url +'"]').focus();
+    $('#side-menu a').removeClass('active');
+    $('[href="'+ url +'"]').addClass('active');
 
     var key = transition.to.path;
     actions.setCurrentPageDefaultData(store, window.allPageConfig.page[key])
