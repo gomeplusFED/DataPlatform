@@ -3278,6 +3278,10 @@ select[multiple].input-group-sm>.form-control, select[multiple].input-group-sm>.
     text-decoration: none;
     background-color: #eee
 }
+.nav>li>a.active{
+    text-decoration: none;
+    background-color: #eee
+}
 .nav>li.disabled>a {
     color: #777
 }
