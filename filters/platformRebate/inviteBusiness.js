@@ -118,17 +118,51 @@ module.exports = {
                 goods_amount_count: "商品总金额",
                 rebate_amount_count: "返利到账金额"
             },
-            XPie = ["1级", "2级", "3级", "4级"],
-            XBar = ["层级1", "层级2", "层级3", "层级4"];
+            XPie = [
+                {
+                    key : "1级",
+                    value : "1"
+                },
+                {
+                    key : "2级",
+                    value : "2"
+                },
+                {
+                    key : "3级",
+                    value : "3"
+                },
+                {
+                    key : "4级",
+                    value : "4"
+                }
+            ],
+            XBar = [
+                {
+                    key : "层级1",
+                    value : "1"
+                },
+                {
+                    key : "层级2",
+                    value : "2"
+                },
+                {
+                    key : "层级3",
+                    value : "3"
+                },
+                {
+                    key : "层级4",
+                    value : "4"
+                }
+            ];
         for (var level of XPie) {
             var obj = {};
             obj.value = 0;
             for (var key of source) {
-                if (level === key.grade) {
+                if (level.value === key.grade) {
                     obj.value += key[filter_key];
                 }
             }
-            newDataPie[level] = obj;
+            newDataPie[level.key] = obj;
         }
         for (var level of XPie) {
             var obj = {};
@@ -136,18 +170,18 @@ module.exports = {
                 obj[i] = 0;
             }
             for (var key of source) {
-                if (key.level === level) {
+                if (key.level === level.value) {
                     for (var i = 0; i < XBar.length; i++) {
-                        if (key.grade === XBar[i]) {
+                        if (key.grade === XBar[i].value) {
                             obj[i] += key[filter_key];
                         }
                     }
                 }
             }
-            newDataBar[level] = obj;
+            newDataBar[level.key] = obj;
         }
         for (var i = 0; i < XBar.length; i++) {
-            mapBar[i] = XBar[i];
+            mapBar[i] = XBar[i].key;
         }
         mapPie.value = filter_name[filter_key];
         return [{
