@@ -13,7 +13,8 @@ var state = {
         show: false,
         title: '弹窗表格',
         data: null // 表格数据
-    }
+    },
+    currentPageDefaultData: []
 }
 
 var actions = require('./actions.js');
