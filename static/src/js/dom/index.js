@@ -24,7 +24,4 @@ $(function() {
             $("#page-wrapper").css("min-height", (height) + "px");
         }
     });
-    var url = window.location.hash;
-    $('[href="'+ url +'"]').parent().parent().parent().addClass('active');
-    $('[href="'+ url +'"]').parent().parent().addClass('in').attr('aria-expanded', true);
 }); 

@@ -35,6 +35,11 @@ router.beforeEach(function (transition) {
             path: '/dataOverview/app'
         })
     }
+
+
+     var url = window.location.hash;
+    $('[href="'+ url +'"]').parent().parent().parent().addClass('active');
+    $('[href="'+ url +'"]').parent().parent().addClass('in').attr('aria-expanded', true);
 })
 
 router.redirect({
