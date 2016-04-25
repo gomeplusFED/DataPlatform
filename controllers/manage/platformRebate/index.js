@@ -13,6 +13,10 @@ module.exports = (Router) => {
         router : "/platformRebate/platformOrderOne",
         modelName : ["Rebate", "RebateRefund"],
         level_select : true,
+        default : {
+            day_type : 1,
+            category_id : "all"
+        },
         platform : false,
         date_picker_data: 1,
         flexible_btn: [{
@@ -93,6 +97,10 @@ module.exports = (Router) => {
         router : "/platformRebate/platformOrderTwe",
         modelName : [ "RebatetRedencyDetails" ],
         level_select : true,
+        default : {
+            day_type : 1,
+            category_id : "all"
+        },
         platform : false,
         filter_select: [{
             title: '指标选择',
@@ -117,6 +125,10 @@ module.exports = (Router) => {
         router : "/platformRebate/platformOrderThree",
         modelName : [ "RebatetRedencyDetails" ],
         level_select : true,
+        default : {
+            day_type : 1,
+            category_id : "all"
+        },
         platform : false,
         filter_select: [{
             title: '指标选择',
@@ -141,6 +153,10 @@ module.exports = (Router) => {
         router : "/platformRebate/platformOrderFour",
         modelName : [ "RebatetRedencyDetails" ],
         level_select : true,
+        default : {
+            day_type : 1,
+            category_id : "all"
+        },
         platform : false,
         filter_select: [{
             title: '指标选择',

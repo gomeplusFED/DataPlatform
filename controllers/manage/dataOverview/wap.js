@@ -141,7 +141,7 @@ module.exports = (Router) => {
             day_type : 1
         },
         flexible_btn: [{
-            content: '<a href="/terminal/provinces" target="_blank">查看全部</a>',
+            content: '<a href="#!/terminal/provinces">查看全部</a>',
             preMethods: [],
             customMethods: ''
         }],
@@ -181,7 +181,7 @@ module.exports = (Router) => {
             day_type : 1
         },
         flexible_btn: [{
-            content: '<a href="/useAnalysis/accessPage" target="_blank">查看全部</a>',
+            content: '<a href="#!/useAnalysis/accessPage">查看全部</a>',
             preMethods: [],
             customMethods: ''
         }],
