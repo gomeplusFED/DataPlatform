@@ -103,6 +103,7 @@ var DateCom = Vue.extend({
                     }
                     _this.argvs.startTime = picker.startDate.format('YYYY-MM-DD');
                     _this.argvs.endTime = picker.endDate.format('YYYY-MM-DD');
+                    _this.argvs.day_type = picker.dayUnit;
                 })
 
             },
