@@ -54,7 +54,9 @@ Vue.transition('fade', {
 		loadingBeginTime = Date.now();
     },
     enter: function (el, done) {
-    	$(el).css('opacity', 1).animate({ opacity: 1 }, 300, done)
+    	$(el).css('opacity', 1).animate({ 
+            opacity: 1 
+        }, 300, done)
     },
     afterEnter: function (el) {
         
@@ -68,10 +70,14 @@ Vue.transition('fade', {
     leave: function (el, done) {
         if(Date.now() - loadingBeginTime < 300){
         	setTimeout(function(){
-        		$(el).animate({ opacity: 0 }, 300, done)
+        		$(el).animate({ 
+                    opacity: 0 
+                }, 300, done)
         	}, 300);
         }else{
-        	$(el).animate({ opacity: 0 }, 300, done)
+        	$(el).animate({ 
+                opacity: 0 
+            }, 300, done)
         }
     },
     afterLeave: function (el) {

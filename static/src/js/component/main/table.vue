@@ -17,8 +17,8 @@
 var Vue = require('Vue');
 var $ = require('jQuery');
 
-var store = require('../store/store.js');
-var actions = require('../store/actions.js');
+var store = require('../../store/store.js');
+var actions = require('../../store/actions.js');
 
 var utils = require('utils');
 

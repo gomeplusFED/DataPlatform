@@ -28,8 +28,8 @@
 var Vue = require('Vue');
 
 
-var store = require('../store/store.js');
-var actions = require('../store/actions.js');
+var store = require('../../store/store.js');
+var actions = require('../../store/actions.js');
 
 var Alert = Vue.extend({
     name: 'Alert',

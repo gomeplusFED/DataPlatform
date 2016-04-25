@@ -41,15 +41,15 @@
 var Vue = require('Vue');
 var $ = require('jQuery');
 
-var DatePicker = require('./datePicker.vue');
-var DropDown = require('./dropDown.vue');
-var FilterSelect = require('./filterSelect.vue');
+var DatePicker = require('../common/datePicker.vue');
+var DropDown = require('../common/dropDown.vue');
+var FilterSelect = require('../common/filterSelect.vue');
 var Table = require('./table.vue');
 var Chart = require('./chart.vue');
-var Btns = require('./btnGroup.vue');
-var MultiSelect = require('./multiSelect.vue')
+var Btns = require('../common/btnGroup.vue');
+var MultiSelect = require('../common/multiSelect.vue')
 
-var utils = require('../utils/index.js');
+var utils = require('utils');
 
 var Main = Vue.extend({
 	name: 'Main',
