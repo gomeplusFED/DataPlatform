@@ -1,3 +1,8 @@
+<<<<<<< HEAD
 node_modules/
 db/
+=======
+>>>>>>> dev
 .idea/
+node_modules/
+db/
