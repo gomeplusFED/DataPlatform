@@ -15,6 +15,8 @@ function renderApi(Router, options) {
         path: "",
         //跳转页面
         view: "main",
+        //重定向路由
+        router : "/",
         //下拉框表
         modelName: "Configure",
         //页面标题
@@ -106,7 +108,6 @@ renderApi.prototype = {
                 }
             });
         }
-        console.log(page);
         res.render(this.view, {
             //pageTitle: this.name,
             drop_down_default_data: dataParams.types,
@@ -114,7 +115,7 @@ renderApi.prototype = {
         });
     },
     setRouter(Router) {
-        Router.get(this.path, this._sendData.bind(this));
+        Router.get(this.router, this._sendData.bind(this));
         return Router;
     }
 };
