@@ -46,7 +46,7 @@
 .select_con .dialog_main.panel .panel-body .select_group_con .select_group li{cursor: pointer;background: #fff;transition: all ease 0.2s;-webkit-transition: all ease 0.2s;padding: 0 8px;}
 .select_con .dialog_main.panel .panel-body .select_group_con .select_group li:hover{background: rgba(0,0,0,0.1);}
 .select_con .dialog_main.panel .panel-body .select_group_con .select_group li.active{background: #3389d4;color: #fff;}
-.select_con .dialog_main.panel .panel-footer .checked_select{display: inline-block;vertical-align: middle;max-width: 85%;overflow-x: scroll;height: 32px;}
+.select_con .dialog_main.panel .panel-footer .checked_select{display: inline-block;vertical-align: middle;max-width: 85%;height: 32px;}
 </style>
 
 <script>
