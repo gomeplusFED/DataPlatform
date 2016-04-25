@@ -1,0 +1,21 @@
+/* 定位 */
+.vertical_center {position: absolute;top: 50%;-webkit-transform: translateY(-50%);}
+.horizontal_center {position: absolute;left: 50%;-webkit-transform: translateX(-50%);}
+.all_center {position: absolute;top: 50%;left: 50%;-webkit-transform: translate(-50%, -50%);}
+
+/* 过度勾子 */
+// .fade-transition{transition: all ease 0.3s;-webkit-transition: all ease 0.3s;}
+// .fade-enter, .fade-leave{opacity: 0;}
+
+.fade-slow-transition{transition: all ease 0.7s;-webkit-transition: all ease 0.7s;}
+.fade-slow-enter, .fade-slow-leave{opacity: 0;}
+
+.fade-scale-transition{transition: all linear 0.2s;-webkit-transition: all linear 0.2s;}
+.fade-scale-enter, .fade-scale-leave{opacity: 0;transform: scale(1.08);-webkit-transform: scale(1.08);}
+
+.fromRight-transition{transition: all ease 0.2s;-webkit-transition: all ease 0.2s;}
+.fromRight-enter,.fromRight-leave{transform: translateX(100%);-webkit-transform: translateX(100%);}
+
+/* 组件按钮组 */
+.btn-group{margin: 0 5px;}
+
