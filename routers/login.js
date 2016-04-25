@@ -51,7 +51,7 @@ module.exports = function(Router) {
             urlTransToIndex = "",
             fixedUrl = url;
 
-//.match(/^\/.+?\/.+   (?=\?|\/) |  ^\/.+?\/.+ (?=\?|\/)? /);
+        //.match(/^\/.+?\/.+   (?=\?|\/) |  ^\/.+?\/.+ (?=\?|\/)? /);
 
 
         if (fixedUrl) {
