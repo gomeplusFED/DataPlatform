@@ -167,13 +167,23 @@ exports.getDate = function(date){
     return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
 };
 
-exports.times = function(startTime, endTime) {
+exports.times = function(startTime, endTime, day_type) {
     var start = new Date(startTime).getTime(),
         end = new Date(endTime).getTime(),
         array = [];
+    console.log(new Date(start).getDate());
     while(start <= end) {
-        array.push(exports.getDate(new Date(start)));
-        start = start + 24 * 60 * 60 * 1000;
+        if(day_type === '1') {
+            array.push(exports.getDate(new Date(start)));
+            start = start + 24 * 60 * 60 * 1000;
+        } else if(day_type === '2') {
+            if(new Date(start).getDay() === 6) {
+                array.push(exports.getDate(new Date(start)));
+                start = start + 24 * 60 * 60 * 1000;
+            }
+        } else if(day_type === '3') {
+            
+        }
     }
     return array;
 };

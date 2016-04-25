@@ -125,7 +125,7 @@ api.prototype = {
             if((this._checkDate(query.startTime, "startTime参数出错", next)
                 && this._checkDate(query.endTime, "endTime参数出错", next))) {
                 params.date = orm.between(new Date(query.startTime + " 00:00:00"), new Date(query.endTime + " 23:59:59"));
-                dates = utils.times(query.startTime, query.endTime);
+                dates = utils.times(query.startTime, query.endTime, query.day_type);
             }
         }
         Object.keys(query).forEach((key) => {
