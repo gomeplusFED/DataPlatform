@@ -25,9 +25,16 @@ router.map({
     '*': {
         component: App
     }
-})
+});
 
+console.log(111);
 router.beforeEach(function (transition) {
+
+    var url = window.location.hash;
+    $('[href="'+ url +'"]').parent().parent().parent().addClass('active');
+    $('[href="'+ url +'"]').parent().parent().addClass('in').attr('aria-expanded', true);
+    console.log($('[href="'+ url +'"]'));
+
     var key = transition.to.path;
     actions.setCurrentPageDefaultData(store, window.allPageConfig.page[key])
     if(! window.allPageConfig.page[key]){
@@ -36,15 +43,11 @@ router.beforeEach(function (transition) {
         })
     }
 
-
-     var url = window.location.hash;
-    $('[href="'+ url +'"]').parent().parent().parent().addClass('active');
-    $('[href="'+ url +'"]').parent().parent().addClass('in').attr('aria-expanded', true);
-})
+});
 
 router.redirect({
     '/': '/dataOverview/app'
-})
+});
 
 
-router.start(App, '#page-wrapper')
+router.start(App, '#page-wrapper');
