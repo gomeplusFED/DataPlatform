@@ -93,6 +93,10 @@ module.exports = (Router) => {
         modelName : [ "RebatetRedencyDetails" ],
         level_select : true,
         platform : false,
+        default : {
+            day_type : 1,
+            category_id : "all"
+        },
         fixedParams : {
             user_party : "平台基础返利"
         },
@@ -120,6 +124,10 @@ module.exports = (Router) => {
         modelName : [ "RebatetRedencyDetails" ],
         level_select : true,
         platform : false,
+        default : {
+            day_type : 1,
+            category_id : "all"
+        },
         fixedParams : {
             user_party : "平台基础返利"
         },
@@ -147,6 +155,10 @@ module.exports = (Router) => {
         modelName : [ "RebatetRedencyDetails" ],
         level_select : true,
         platform : false,
+        default : {
+            day_type : 1,
+            category_id : "all"
+        },
         fixedParams : {
             user_party : "平台基础返利"
         },

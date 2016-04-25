@@ -92,6 +92,10 @@ module.exports = (Router) => {
         router : "/platformRebate/individualEventTwo",
         modelName : [ "RebatetRedencyDetails" ],
         level_select : true,
+        default : {
+            day_type : 1,
+            category_id : "all"
+        },
         platform : false,
         fixedParams : {
             user_party : "单项单级返利"
@@ -120,6 +124,10 @@ module.exports = (Router) => {
         modelName : [ "RebatetRedencyDetails" ],
         level_select : true,
         platform : false,
+        default : {
+            day_type : 1,
+            category_id : "all"
+        },
         fixedParams : {
             user_party : "单项单级返利"
         },

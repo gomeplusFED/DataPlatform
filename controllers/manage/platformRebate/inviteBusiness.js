@@ -92,6 +92,10 @@ module.exports = (Router) => {
         router : "/platformRebate/inviteBusinessTwo",
         modelName : [ "RebatetRedencyDetails" ],
         level_select : true,
+        default : {
+            day_type : 1,
+            category_id : "all"
+        },
         platform : false,
         fixedParams : {
             user_party : "邀请商户入驻"
@@ -119,6 +123,10 @@ module.exports = (Router) => {
         router : "/platformRebate/inviteBusinessThree",
         modelName : [ "RebatetRedencyDetails" ],
         level_select : true,
+        default : {
+            day_type : 1,
+            category_id : "all"
+        },
         platform : false,
         fixedParams : {
             user_party : "邀请商户入驻"
