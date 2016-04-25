@@ -19,7 +19,6 @@ var Main = require('./main/main.vue');
 
 var App = Vue.extend({
 	name: 'App',
-    el: '#page-wrapper',
 	store: store,
 	data: function(){
 		return {

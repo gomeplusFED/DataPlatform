@@ -57,11 +57,11 @@ var dom = require('./dom/index.js');
     var store = require('./store/store.js');
     var actions = require('./store/actions.js');
 
-    router.map({
-        '*': {
-            component: App
-        }
-    })
+    // router.map({
+    //     '*': {
+    //         component: App
+    //     }
+    // })
 
     router.beforeEach(function (transition) {
         // console.log(transition.to.path);
@@ -77,7 +77,6 @@ var dom = require('./dom/index.js');
     })
 
     router.redirect({
-        // '*': '/dataOverview/app',
         '/': '/dataOverview/app'
     })
 

@@ -2,60 +2,10 @@
     pageTitle: pageTitle
 }) %>
     <script type="text/javascript">
-    var initData = {
-        "pageTitle": <%- JSON.stringify(pageTitle) %>,
-        "drop_down_default_data": <%- JSON.stringify(drop_down_default_data) %>,
-        "defaultData": <%- JSON.stringify(defaultData) %>
-    }
-
     var allPageConfig = {
-        drop_down_default_data: <%- JSON.stringify(drop_down_default_data) %>,
-        page: {
-            '/dataOverview/app': {
-                pageTitle: '数据概览',
-                defaultData: [{
-                    "type": "table",
-                    "title": "数据概览",
-                    "query_api": "/dataOverview/dataOverviewAllOne"
-                }, {
-                    "type": "chart",
-                    "title": "数据趋势",
-                    "query_api": "/dataOverview/dataOverviewAllTwo"
-                }, {
-                    "type": "table",
-                    "title": "地域分布 TOP10",
-                    "query_api": "/dataOverview/dataOverviewAllThree"
-                }, {
-                    "type": "table",
-                    "title": "访问页面 TOP10",
-                    "query_api": "/dataOverview/dataOverviewAllFour"
-                }]
-            },
-            '/dataOverview/wap': {
-                pageTitle: '数据概览 WAP',
-                defaultData: [{
-                    "type": "table",
-                    "title": "数据概览",
-                    "query_api": "/dataOverview/wapOne"
-                }, {
-                    "type": "chart",
-                    "title": "数据趋势",
-                    "query_api": "/dataOverview/wapTwo"
-                }, {
-                    "type": "table",
-                    "title": "地域分布 TOP10",
-                    "query_api": "/dataOverview/wapThree"
-                }, {
-                    "type": "table",
-                    "title": "访问页面 TOP10",
-                    "query_api": "/dataOverview/wapFour"
-                }]
-            }
-        }
-
+        "drop_down_default_data": <%- JSON.stringify(drop_down_default_data) %>,
+        "page": <%- JSON.stringify(page) %>
     }
-
-
     </script>
     <div id="page-wrapper" style="min-height: 1054px;">
         <router-view></router-view>
