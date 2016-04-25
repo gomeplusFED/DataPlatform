@@ -23,10 +23,16 @@ var App = Vue.extend({
 	store: store,
 	data: function(){
 		return {
-			// currentPageDefaultData: null
+
 		}
 	},
-	props: ['currentPageDefaultData'],
+    vuex: {
+        getters: {
+            currentPageDefaultData: function() {
+                return store.state.currentPageDefaultData;
+            }
+        }
+    },
     components: {
         'm-loading': Loading,
         'm-alert': Alert,

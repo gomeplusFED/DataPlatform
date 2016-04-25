@@ -54,14 +54,30 @@ var dom = require('./dom/index.js');
 
     var router = new VueRouter();
 
+    var store = require('./store/store.js');
+    var actions = require('./store/actions.js');
+
     router.map({
-        '/': {
+        '*': {
             component: App
         }
     })
 
     router.beforeEach(function (transition) {
-        console.log(transition.to.path);
+        // console.log(transition.to.path);
+        var key = transition.to.path;
+        console.log(key);
+        // actions.setCurrentPageDefaultData(window.allPageConfig[key])
+        // if(!window.allPageConfig[key]){
+        //     router.go({
+        //         path: '/dataOverview/app'
+        //     })
+        // }
+    })
+
+    router.redirect({
+        // '*': '/dataOverview/app',
+        '/': '/dataOverview/app'
     })
 
     router.start(App, '#page-wrapper')

@@ -76,6 +76,31 @@ app.use(function() {
     }
 });
 
+// var subApp = express();
+app.get('/',function(req,res,next){
+    // console.log(config.limit);
+    // res.send(app.locals.limit);
+    var _result = {};
+    for(var item of config.limit){
+        for(obj in item){
+            // console.log(item[obj].href);
+            var eachPage = item[obj];
+            var href = item[obj].href;
+            if(href === '#' || href === '/'){
+
+            }else{
+                _result[href] = {};
+                _result[href].pageTitle = eachPage.name;
+                console.log(eachPage.routers);
+                // _result[href].defaultData = eachPage.
+            }
+        }
+    }
+
+    res.send('123')
+})
+// app.use(subApp)
+
 
 // app.use((err, req, res, next) => {
 //     res.send({

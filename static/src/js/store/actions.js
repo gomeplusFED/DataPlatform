@@ -15,5 +15,8 @@ actions.hideModalTable = function(store) {
     store.dispatch('HIDEMODALTABLE');
 }
 
+actions.setCurrentPageDefaultData = function(store) {
+    store.dispatch('SETCURRENTPAGEDEFAULTDATA');
+}
 
 module.exports = actions;

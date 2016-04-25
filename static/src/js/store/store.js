@@ -45,6 +45,10 @@ mutations.HIDEMODALTABLE = function(state) {
     state.modalTableData.show = false;
 }
 
+mutations.SETCURRENTPAGEDEFAULTDATA = function(data) {
+    state.currentPageDefaultData = data;
+}
+
 module.exports = new Vuex.Store({
     state,
     mutations,
