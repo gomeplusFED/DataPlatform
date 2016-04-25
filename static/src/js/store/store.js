@@ -45,7 +45,7 @@ mutations.HIDEMODALTABLE = function(state) {
     state.modalTableData.show = false;
 }
 
-mutations.SETCURRENTPAGEDEFAULTDATA = function(data) {
+mutations.SETCURRENTPAGEDEFAULTDATA = function(state, data) {
     state.currentPageDefaultData = data;
 }
 

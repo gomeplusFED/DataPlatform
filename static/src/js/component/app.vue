@@ -2,7 +2,7 @@
     <m-loading :loading.sync="loading"></m-loading>
     <m-alert></m-alert>
     <m-modal></m-modal>
-    <m-main v-for="item in currentPageDefaultData" :index="$index"></m-main>
+    <m-main v-for="item in currentPageDefaultData.defaultData" :index="$index" :current-data="currentPageDefaultData.defaultData[$index]" :loading.sync="loading"></m-main>
 </template>
 
 
@@ -38,6 +38,14 @@ var App = Vue.extend({
         'm-alert': Alert,
         'm-modal': ModalTable,
         'm-main': Main
+    },
+    watch: {
+        'currentPageDefaultData': {
+            handle: function(val){
+                console.log(val);
+            },
+            deep: true
+        }
     }
 
 })

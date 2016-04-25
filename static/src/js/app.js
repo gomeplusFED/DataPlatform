@@ -67,7 +67,8 @@ var dom = require('./dom/index.js');
         // console.log(transition.to.path);
         var key = transition.to.path;
         console.log(key);
-        // actions.setCurrentPageDefaultData(window.allPageConfig[key])
+        actions.setCurrentPageDefaultData(store, window.allPageConfig.page[key])
+        console.log(window.allPageConfig.page[key].defaultData);
         // if(!window.allPageConfig[key]){
         //     router.go({
         //         path: '/dataOverview/app'
