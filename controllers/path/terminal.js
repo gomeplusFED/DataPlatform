@@ -46,6 +46,7 @@ module.exports = {
     provinces() {
         return {
             name : "地域",
+            router : "/terminal/provinces",
             path : "/terminal/provinces",
             display : true,
             defaultData : [

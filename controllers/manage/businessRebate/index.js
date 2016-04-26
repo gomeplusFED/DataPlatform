@@ -91,6 +91,10 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/businessRebate/businessAllTwo",
         modelName : [ "RebateShopTredencyDetails" ],
+        default : {
+            day_type : 1,
+            category_id : "all"
+        },
         level_select : true,
         platform : false,
         filter_select: [{
@@ -117,6 +121,10 @@ module.exports = (Router) => {
         modelName : [ "RebateShopTredencyDetails" ],
         level_select : true,
         platform : false,
+        default : {
+            day_type : 1,
+            category_id : "all"
+        },
         filter_select: [
             {
                 title: '指标选择',
@@ -143,6 +151,10 @@ module.exports = (Router) => {
         modelName : [ "RebateShopTredencyDetails" ],
         level_select : true,
         platform : false,
+        default : {
+            day_type : 1,
+            category_id : "all"
+        },
         filter_select: [
             {
                 title: '指标选择',
@@ -220,7 +232,7 @@ module.exports = (Router) => {
         platform : false,
         flexible_btn : [
             {
-                content: '<a href="/businessRebate/plan" target="_blank">更多</a>',
+                content: '<a href="#!/businessRebate/plan">更多</a>',
                 preMethods: [],
                 customMethods: ''
             }

@@ -63,6 +63,7 @@ module.exports = {
     },
     accessPage() {
         return {
+            router : "/useAnalysis/accessPage",
             path : "/useAnalysis/accessPage",
             name : "访问页面",
             display : true,

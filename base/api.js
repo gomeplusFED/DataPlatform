@@ -106,13 +106,13 @@ api.prototype = {
             this.default.type = "H5";
         }
         if(this.channel) {
-            this.default.channel = "百度";
+            this.default.channel = "ALL";
         }
         if(this.version) {
-            this.default.ver = "1.0.0";
+            this.default.ver = "ALL";
         }
         if(this.coupon) {
-            this.default.coupon_type = "平台优惠券";
+            this.default.coupon_type = "ALL";
         }
     },
     _sendData(type, req, res, next) {
@@ -125,7 +125,7 @@ api.prototype = {
             if((this._checkDate(query.startTime, "startTime参数出错", next)
                 && this._checkDate(query.endTime, "endTime参数出错", next))) {
                 params.date = orm.between(new Date(query.startTime + " 00:00:00"), new Date(query.endTime + " 23:59:59"));
-                dates = utils.times(query.startTime, query.endTime);
+                dates = utils.times(query.startTime, query.endTime, query.day_type);
             }
         }
         Object.keys(query).forEach((key) => {

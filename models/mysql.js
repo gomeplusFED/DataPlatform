@@ -557,7 +557,7 @@ function connect(app) {
                 user_party: String,
                 pay_order_time: Date
             });
-            models.RebatetRegisterSheduleDetails = db.define("tbl_rt_rebate_register_shedule_details", {
+            models.RebatetRegisterSheduleDetails = db.define("tbl_rt_rebate_register_schedule_details", {
                 id: { type: 'number', key: true },
                 date: Date,
                 day_type: Number,

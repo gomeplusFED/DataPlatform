@@ -10,6 +10,7 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/userAnalysis/startUpOne",
         modelName : ["NewAccount"],
+        version : true,
         filter(data, filter_key, dates) {
             return userAnalysis.One(data,
                 [ "start_up" ],
@@ -22,6 +23,7 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/userAnalysis/startUpTwe",
         modelName : ["NewAccount"],
+        version : true,
         rows : [[ 'date', 'start_up', 'active_users', 'active_account', 'startup_per' ]],
         cols : [
             [

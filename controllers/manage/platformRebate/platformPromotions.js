@@ -92,6 +92,10 @@ module.exports = (Router) => {
         router : "/platformRebate/platformPromotionsTwo",
         modelName : [ "RebatetRedencyDetails" ],
         platform : false,
+        default : {
+            day_type : 1,
+            category_id : "all"
+        },
         level_select : true,
         fixedParams : {
             user_party : "平台促销返利"
@@ -120,6 +124,10 @@ module.exports = (Router) => {
         modelName : [ "RebatetRedencyDetails" ],
         platform : false,
         level_select : true,
+        default : {
+            day_type : 1,
+            category_id : "all"
+        },
         fixedParams : {
             user_party : "平台促销返利"
         },
@@ -146,6 +154,10 @@ module.exports = (Router) => {
         router : "/platformRebate/platformPromotionsFour",
         modelName : [ "RebatetRedencyDetails" ],
         platform : false,
+        default : {
+            day_type : 1,
+            category_id : "all"
+        },
         level_select : true,
         fixedParams : {
             user_party : "平台促销返利"

@@ -3,7 +3,7 @@
 	    <div class="modal-dialog modal-lg">
 	        <div class="modal-content">
 	            <div class="modal-header">
-	                <h4 class="modal-title">{{modalTableData.titile}}</h4>
+	                <h4 class="modal-title">{{modalTableData.title}}</h4>
 	            </div>
 	            <div class="modal-body">
 	                <table class="table table-striped table-bordered table-hover"></table>
@@ -19,6 +19,7 @@
 <script>
 
 var Vue = require('Vue');
+var $ = require('jQuery');
 
 var store = require('../../store/store.js');
 var actions = require('../../store/actions.js');
@@ -50,6 +51,15 @@ var ModalTable = Vue.extend({
 				$('#modal_table table').DataTable(data);
 			},
 			deep: true
+		},
+		'modalTableData.show': {
+			handler: function(val){
+				if(val){
+					$('body').css('overflow', 'hidden');
+				}else{
+					$('body').css('overflow', 'auto');
+				}
+			}
 		}
 	}
 })
