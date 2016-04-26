@@ -1,6 +1,8 @@
 <template>
-	<div class="btn-group level_select" v-show="pageComponentsData[componentType]">
-		<p @click="showSelect = !showSelect">选择类目</p>
+	<div class="btn_group level_select" v-show="pageComponentsData[componentType]">
+		<strong>选择类目：</strong>
+		<em>{{showResult.length ? showResult.join('－') : '默认'}}</em>
+		<span @click="showSelect = !showSelect">点击选择</span>
 		<div class="select_con" v-show="showSelect" transition="fade">
 			<div class="dialog_bg" @click="showSelect = !showSelect"></div>
 			<div class="dialog_main all_center panel panel-default">
@@ -19,7 +21,7 @@
 				</div>
 				<div class="panel-footer clearfix">
 					<button class="btn btn-default" style="margin-right: 10px;float: left;" @click="resetAll()">重置</button>
-					<div class="checked_select">当前选择：{{showResult.length ? showResult.join('－') : '无'}}</div>
+					<div class="checked_select">当前选择：{{showResult.length ? showResult.join('－') : '默认'}}</div>
 					<button class="btn btn-default" style="margin-left: 10px;float: right;" @click="showSelect = !showSelect">取消</button>
 					<button class="btn btn-default" style="margin-left: 10px;float: right;" @click="showSelect = !showSelect,submit()">确认</button>
 				</div>
@@ -29,9 +31,11 @@
 </template>
 
 <style>
-.level_select{}
-.level_select p{font-size: 14px;display: inline-block;vertical-align: middle;margin: 0;cursor: pointer;color: #3389d4;}
-.level_select p:hover{text-decoration: underline;}
+.level_select{display: block;margin: 0;}
+.level_select>strong{font-size: 12px;display: inline-block;vertical-align: middle;}
+.level_select>em{font-size: 14px;color: rgba(47,69,84,1);font-style: normal;display: inline-block;vertical-align: middle;}
+.level_select>span{font-size: 12px;color: #333;display: inline-block;vertical-align: middle;margin-left: 10px;border: 1px solid #cacaca;color: #333;padding: 4px 12px;background: #fff;cursor: pointer;border-radius: 2px;}
+.level_select>span:hover{background: #f5f5f5;}
 .select_con{font-size: 14px;position: fixed;top: 0;left: 0;width: 100%;height: 100%;z-index: 9999;}
 .select_con .dialog_bg{position: absolute;top: 0;left: 0;width: 100%;height: 100%;background: rgba(0,0,0,0.6);}
 .select_con .dialog_main{width: 80%;height: 580px;background: #fff;}
