@@ -106,13 +106,13 @@ api.prototype = {
             this.default.type = "H5";
         }
         if(this.channel) {
-            this.default.channel = "百度";
+            this.default.channel = "ALL";
         }
         if(this.version) {
-            this.default.ver = "1.0.0";
+            this.default.ver = "ALL";
         }
         if(this.coupon) {
-            this.default.coupon_type = "平台优惠券";
+            this.default.coupon_type = "ALL";
         }
     },
     _sendData(type, req, res, next) {

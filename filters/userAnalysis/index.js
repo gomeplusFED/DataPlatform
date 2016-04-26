@@ -147,16 +147,18 @@ module.exports = {
             },
             map = {};
         for(var ver of vers) {
-            var obj = {
-                ver : ver,
-                value : 0
-            };
-            for(var key of source) {
-                if(key.ver === ver) {
-                    obj.value += key[filter_key];
+            if(ver !== "ALL") {
+                var obj = {
+                    ver : ver,
+                    value : 0
+                };
+                for(var key of source) {
+                    if(key.ver === ver) {
+                        obj.value += key[filter_key];
+                    }
                 }
+                array.push(obj);
             }
-            array.push(obj);
         }
         array.sort((a, b) => {
             return b.value - a.value;
@@ -198,11 +200,13 @@ module.exports = {
                 }],
             vers = util.uniq(_.pluck(source, "ver"));
         for(var ver of vers) {
-            rows.push(ver.replace(/\./g,''));
-            cols.push({
-                caption : ver + "版本",
-                type : "number"
-            });
+            if(ver !== 'ALL') {
+                rows.push(ver.replace(/\./g,''));
+                cols.push({
+                    caption : ver + "版本",
+                    type : "number"
+                });
+            }
         }
         dates.sort((a, b) => {
             return new Date(b) - new Date(a);
@@ -215,11 +219,13 @@ module.exports = {
                 date : date
             };
             for(var ver of vers) {
-                ver = ver.replace(/\./g,'');
-                obj[ver] = 0;
+                if(ver !== "ALL") {
+                    ver = ver.replace(/\./g,'');
+                    obj[ver] = 0;
+                }
             }
             for(var key of source) {
-                if(date === util.getDate(key.date)) {
+                if(date === util.getDate(key.date) && key.ver !== "ALL") {
                     obj[key.ver.replace(/\./g,'')] += key.total_users;
                 }
             }

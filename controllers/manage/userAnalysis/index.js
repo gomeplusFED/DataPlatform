@@ -11,6 +11,7 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/userAnalysis/newUsersOne",
         modelName : ["NewAccount"],
+        version : true,
         filter(data, filter_key, dates) {
             return userAnalysis.One(data,
                 [ "new_users", "new_account" ],
@@ -23,6 +24,7 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/userAnalysis/newUsersTwe",
         modelName : ["NewAccount"],
+        version : true,
         rows : [['date', 'new_users', 'new_users_rate', 'new_account', 'new_account_rate' ]],
         cols : [
             [
