@@ -184,8 +184,8 @@ module.exports = {
         source.forEach((key, value) => {
             key.id = value + 1;
             key.user_party = user_party[key.user_party];
-            key.correlate_flow = user_party[key.correlate_flow];
-            key.level = user_party[key.level];
+            key.correlate_flow = correlate_flow[key.correlate_flow];
+            key.level = level[key.level];
             key.order_rate = key.new_order_count + "/" + key.order_all_count;
             key.price_rate = key.new_order_amount + "/" + key.order_all_amount;
         });
