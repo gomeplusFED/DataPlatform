@@ -88,7 +88,7 @@ var DateCom = Vue.extend({
                         "firstDay": 1
                     },
                     "ranges": this.pageComponentsData[this.componentType].defaultData === 7 ? range : {"昨天": [yesterday, yesterday]},
-                    "showDayUnit": this.pageComponentsData[this.componentType].showDayUnit ? true : false;
+                    "showDayUnit": this.pageComponentsData[this.componentType].showDayUnit ? true : false
                 }
                 $('#datePicker_' + this.index).find('input').daterangepicker(options);
                 $('#datePicker_' + this.index).find('input').on('cancel.daterangepicker',function(ev, picker){
