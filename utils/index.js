@@ -170,19 +170,29 @@ exports.getDate = function(date){
 exports.times = function(startTime, endTime, day_type) {
     var start = new Date(startTime).getTime(),
         end = new Date(endTime).getTime(),
+        year = new Date(start).getFullYear(),
+        month = new Date(start).getMonth() + 1,
         array = [];
-    console.log(new Date(start).getDate());
     while(start <= end) {
         if(day_type === '1') {
             array.push(exports.getDate(new Date(start)));
             start = start + 24 * 60 * 60 * 1000;
         } else if(day_type === '2') {
-            if(new Date(start).getDay() === 6) {
+            if(new Date(start).getDay() === 0) {
                 array.push(exports.getDate(new Date(start)));
+                start = start + 7 * 24 * 60 * 60 * 1000;
+            } else {
                 start = start + 24 * 60 * 60 * 1000;
             }
         } else if(day_type === '3') {
-            
+            if(new Date(start).getDate() ===
+                new Date(new Date(year, month, 1).getTime() - 24 * 60 * 60 * 1000).getDate()) {
+                month++;
+                array.push(exports.getDate(new Date(start)));
+                start = new Date(year, month, 1).getTime() - 24 * 60 * 60 * 1000;
+            } else {
+                start = new Date(year, month, 1).getTime() - 24 * 60 * 60 * 1000;
+            }
         }
     }
     return array;
