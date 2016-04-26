@@ -14,7 +14,7 @@ module.exports = (Router) => {
         modelName : ["Rebate", "RebateRefund"],
         platform : false,
         fixedParams : {
-            user_party : "平台基础返利"
+            user_party : "1"
         },
         flexible_btn: [{
             content: '<a href="javascript:void(0)" help_url="/platformBasis/help_json">帮助</a>',
@@ -90,7 +90,7 @@ module.exports = (Router) => {
 
     Router = new api(Router, {
         router : "/platformRebate/platformBasisTwo",
-        modelName : [ "RebatetRedencyDetails" ],
+        modelName : [ "RebateOrderTredencyDetails" ],
         level_select : true,
         platform : false,
         default : {
@@ -98,7 +98,7 @@ module.exports = (Router) => {
             category_id : "all"
         },
         fixedParams : {
-            user_party : "平台基础返利"
+            user_party : "1"
         },
         filter_select: [{
             title: '指标选择',
@@ -121,7 +121,7 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/platformRebate/platformBasisThree",
-        modelName : [ "RebatetRedencyDetails" ],
+        modelName : [ "RebateTypeLevelDetails" ],
         level_select : true,
         platform : false,
         default : {
@@ -129,7 +129,7 @@ module.exports = (Router) => {
             category_id : "all"
         },
         fixedParams : {
-            user_party : "平台基础返利"
+            user_party : "1"
         },
         filter_select: [{
             title: '指标选择',
@@ -152,7 +152,7 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/platformRebate/platformBasisFour",
-        modelName : [ "RebatetRedencyDetails" ],
+        modelName : [ "RebateTypeLevelDetails" ],
         level_select : true,
         platform : false,
         default : {
@@ -160,7 +160,7 @@ module.exports = (Router) => {
             category_id : "all"
         },
         fixedParams : {
-            user_party : "平台基础返利"
+            user_party : "1"
         },
         filter_select: [{
             title: '指标选择',
@@ -185,7 +185,7 @@ module.exports = (Router) => {
         router : "/platformRebate/platformBasisFive",
         modelName : [ "RebatetSheduleDetails" ],
         fixedParams : {
-            user_party : "平台基础返利"
+            user_party : "1"
         },
         platform : false,
         excel_export : true,

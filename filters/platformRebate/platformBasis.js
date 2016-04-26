@@ -79,17 +79,23 @@ module.exports = {
     platformBasisTwo(data, filter_key, dates) {
         var source = data.data,
             type = "line",
-            array = [ "分享购买", "邀请好友-购买返利" ],
+            array = [ {
+                key : "分享购买",
+                value : "1"
+            },{
+                key : "邀请好友-购买返利",
+                value : "2"
+            } ],
             newData = {},
             map = {};
-        map[filter_key + "_0"] = array[0];
-        map[filter_key + "_1"] = array[1];
+        map[filter_key + "_0"] = array[0].key;
+        map[filter_key + "_1"] = array[1].key;
         for (var date of dates) {
             var obj = {};
             for (var key of source) {
                 if (date === util.getDate(key.date)) {
                     for (var i = 0; i < array.length; i++) {
-                        if (key.rebate_type === array[i]) {
+                        if (key.correlate_flow === array[i].value) {
                             obj[filter_key + "_" + i] += key[filter_key];
                         }
                     }
@@ -212,17 +218,23 @@ module.exports = {
                 goods_amount_count: "商品总金额",
                 rebate_amount_count: "返利到账金额"
             },
-            XData = ["分享购买", "邀请好友-购买返利"];
+            XData = [ {
+                key : "分享购买",
+                value : "1"
+            },{
+                key : "邀请好友-购买返利",
+                value : "2"
+            } ];
         for (var x of XData) {
             var obj = {
                 value: 0
             };
             for (var key of source) {
-                if (x === key.rebate_type) {
+                if (x.value === key.correlate_flow) {
                     obj.value += key[filter_key];
                 }
             }
-            newData[x] = obj;
+            newData[x.key] = obj;
         }
         map.value = filter_name[filter_key];
         return [{
@@ -242,9 +254,33 @@ module.exports = {
         }]
     },
     platformBasisFive(data) {
-        var source = data.data;
+        var source = data.data,
+        user_party = {
+            1 : "平台基础返利",
+            2 : "平台促销返利",
+            5 : "邀请商家入驻返利",
+            6 : "单项单级返利"
+        },
+        correlate_flow = {
+            1 : "分享购买",
+            2 : "邀请好友-购买返利",
+            8 : "邀请商户入住-固定返利",
+            9 : "邀请商户入住-分享返利",
+            10 : "邀请好友-固定返利",
+            11 : "固定返利",
+            12 : "比例返利"
+        },
+        level ={
+            1 : "1级",
+            2 : "2级",
+            3 : "3级",
+            4 : "4级"
+        };
         source.forEach((key, value) => {
             key.id = value + 1;
+            key.user_party = user_party[key.user_party];
+            key.correlate_flow = user_party[key.correlate_flow];
+            key.level = user_party[key.level];
             key.order_rate = key.new_order_count + "/" + key.order_all_count;
             key.price_rate = key.new_order_amount + "/" + key.order_all_amount;
         });

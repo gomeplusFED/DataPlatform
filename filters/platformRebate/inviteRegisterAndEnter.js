@@ -59,7 +59,16 @@ module.exports = {
     },
     inviteRegisterAndEnterThree(data, filter_key, dates) {
         var source = data.data,
-            array = [ "邀请好友-平台基础返利", "邀请好友-平台促销返利", "邀请商家入驻返利" ],
+            array = [ {
+                key : "邀请好友-平台基础返利",
+                value : "1"
+            },{
+                key : "邀请好友-平台促销返利",
+                value : "2"
+            },{
+                key : "邀请商家入驻返利",
+                value : "5"
+            } ],
             type = "line",
             map = {
                 value_0 : "邀请好友-平台基础返利",
@@ -76,7 +85,7 @@ module.exports = {
             for(var key of source) {
                 if(date === util.getDate(key.date)) {
                     for(var i = 0; i < array.length; i++) {
-                        if(array[i] === key.user_party) {
+                        if(array[i].value === key.user_party) {
                             obj["value_" + i] += key[filter_key];
                         }
                     }
@@ -94,9 +103,26 @@ module.exports = {
         }];
     },
     inviteRegisterAndEnterFour(data) {
-        var source = data.data;
+        var source = data.data,
+            user_party = {
+                1 : "平台基础返利",
+                2 : "平台促销返利",
+                5 : "邀请商家入驻返利",
+                6 : "单项单级返利"
+            },
+            correlate_flow = {
+                1 : "分享购买",
+                2 : "邀请好友-购买返利",
+                8 : "邀请商户入住-固定返利",
+                9 : "邀请商户入住-分享返利",
+                10 : "邀请好友-固定返利",
+                11 : "固定返利",
+                12 : "比例返利"
+            };
         for(var i = 0; i < source.length; i++) {
             source[i].id = i + 1;
+            source[i].user_party = user_party[key.user_party];
+            source[i].correlate_flow = user_party[key.correlate_flow];
         }
         return util.toTable([source], data.rows, data.cols);
     }
