@@ -46,18 +46,6 @@ function connect(app) {
                 name: String,
                 type: String
             });
-            models.Area = db.define("tbl_rt_terminal_area", {
-                id: { type: 'number', key: true },
-                start_up: Number,
-                new_users: Number,
-                country: String,
-                province: String,
-                area: String,
-                date: Date,
-                channel: String,
-                ver: String,
-                type: String
-            });
             models.UsersAccess = db.define("tbl_rt_user_access", {
                 id: { type: 'number', key: true },
                 date: Date,
@@ -70,43 +58,6 @@ function connect(app) {
                 url: String,
                 url_comment: String,
                 bounce_rate: Number
-            });
-            models.CommodityList = db.define("tbl_rt_product_list", {
-                id: { type: 'number', key: true },
-                date: Date,
-                commodity_users: Number,
-                commodity_num: Number,
-                commodity_access_num: Number,
-                order_num: Number,
-                pay_num: Number,
-                order_commodity_num: Number,
-                pay_commodity_num: Number,
-                commodity_times: Number,
-                refund_num: Number,
-                pay_price: Number,
-                sku_type: Number,
-                refund_price: Number,
-                type: String,
-                channel: String,
-                day_type: Number,
-                ver: String
-            });
-            models.CommodityTop = db.define("tbl_rt_product_top", {
-                id: { type: 'number', key: true },
-                date: Date,
-                commodity_name: String,
-                commodity_id: Number,
-                access_num: Number,
-                access_users: Number,
-                share_num: Number,
-                order_users: Number,
-                order_price: Number,
-                refund_num: Number,
-                refund_price: Number,
-                type: String,
-                channel: String,
-                day_type: Number,
-                ver: String
             });
             models.UserCompose = db.define("tbl_rt_use_time", {
                 id: { type: 'number', key: true },
@@ -216,15 +167,6 @@ function connect(app) {
                 share_num: Number,
                 open_num: Number,
                 buy_num: Number
-            });
-            models.verAnalysis = db.define("tbl_rt_useranalysis_version", {
-                id: { type: 'number', key: true },
-                date: Date,
-                day_type: Number,
-                type: String,
-                ver: String,
-                channel: String,
-                users: Number
             });
             models.Rebate = db.define("tbl_rt_rebate", {
                 id: { type: 'number', key: true },
