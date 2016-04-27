@@ -1,10 +1,10 @@
 <template>
-    <div id="page-wrapper" style="min-height: 1054px;">
+    <!-- <div id="page-wrapper" style="min-height: 1054px;"> -->
         <m-loading :loading.sync="loading"></m-loading>
         <m-alert></m-alert>
         <m-modal></m-modal>
         <m-main v-for="item in currentPageDefaultData.defaultData" :index="$index" :init-data="initData" :current-data="currentPageDefaultData.defaultData[$index]" :loading.sync="loading"></m-main>
-    </div>
+    <!-- </div> -->
 </template>
 
 

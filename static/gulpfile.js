@@ -39,6 +39,7 @@ var webpackConfig = {
             pwd + '/src/js/lib/moment.min.js',
             pwd + '/src/js/lib/datePicker.min.js',
             pwd + '/src/js/lib/jquery-table.min.js',
+            'vue-router',
             'echarts/lib/echarts',
             'echarts/lib/chart/bar',
             'echarts/lib/chart/line',
