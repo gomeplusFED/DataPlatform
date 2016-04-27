@@ -69,7 +69,7 @@ module.exports = (Router) => {
                 caption: '平均访问时长(s)',
                 type: 'string'
             }, {
-                caption: '累计访问用户数',
+                caption: '累计启动用户数',
                 type: 'string'
             }, {
                 caption: '累计注册用户数',

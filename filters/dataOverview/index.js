@@ -17,8 +17,7 @@ module.exports = {
             dates = [ zdate, qdate ];
         var obj = {
                 name : '对比效果'
-            },
-            total_new_users = 0;
+            };
         for(var date of dates) {
             var zObj = {
                 name : "",
@@ -56,7 +55,6 @@ module.exports = {
                 }
                 if(new Date(date + " 00:00:00").getTime() < key.date.getTime() &&
                     key.date.getTime() < new Date(date + " 23:59:59")) {
-                    total_new_users += key.new_user;
                     zObj.open_total += key.open_total;
                     zObj.open_user_total += key.open_user_total;
                     zObj.new_user += key.new_user;
@@ -73,8 +71,8 @@ module.exports = {
             newData.push(zObj);
         }
         for(var key of newData) {
-            key.new_user_rate = util.toFixed(key.new_user, total_new_users);
-            key.open_user_avg = (key.open_user_total / (key.open_total === 0 ? 1 : key.open_total) * 100).toFixed(2);
+            key.new_user_rate = util.toFixed(key.new_user, key.open_user_total);
+            key.open_user_avg = (key.open_total / (key.open_user_total === 0 ? 1 : key.open_user_total)).toFixed(2);
             key.register_rate = util.toFixed(key.new_account, key.new_user);
         }
         newData[0].name = "昨天";

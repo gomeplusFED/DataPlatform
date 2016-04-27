@@ -67,7 +67,7 @@ module.exports = (Router) => {
                 caption: '每次使用时长(s)',
                 type: 'string'
             }, {
-                caption: '累计访问用户数',
+                caption: '累计启动用户数',
                 type: 'string'
             }, {
                 caption: '累计注册用户数',
@@ -149,13 +149,13 @@ module.exports = (Router) => {
                 caption : "地区",
                 type : "number"
             },{
-                caption : "访客数",
+                caption : "启动用户数",
                 type : "number"
             },{
-                caption : "浏览量",
+                caption : "启动次数",
                 type : "number"
             },{
-                caption : "浏览量占比",
+                caption : "启动次数占比",
                 type : "number"
             }]
         ],
