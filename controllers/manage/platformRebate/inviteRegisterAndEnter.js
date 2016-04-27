@@ -104,65 +104,51 @@ module.exports = (Router) => {
         filter_select: [{
             title: '使用方',
             filter_key: 'user_party',
-            groups: [{
-                key: '单项单级返利',
-                value: '单项单级返利',
-                cell: {
-                    title: '关联流程',
-                    filter_key : 'correlate_flow',
-                    groups : [{
-                        key: '固定返利',
-                        value: '固定返利'
-                    },{
-                        key: '比例返利',
-                        value: '比例返利'
-                    }]
-                }
-            }, {
-                key: '平台基础返利',
+            groups: [ {
+                key: '1',
                 value: '平台基础返利',
                 cell: {
                     title: '关联流程',
                     filter_key : 'correlate_flow',
                     groups : [{
-                        key: '分享购买',
+                        key: '1',
                         value: '分享购买'
                     },{
-                        key: '邀请好友-购买返利',
+                        key: '2',
                         value: '邀请好友-购买返利'
                     },{
-                        key: '邀请好友-固定返利',
+                        key: '10',
                         value: '邀请好友-固定返利'
                     }]
                 }
             }, {
-                key: '平台促销返利',
+                key: '2',
                 value: '平台促销返利',
                 cell: {
                     title: '关联流程',
                     filter_key : 'correlate_flow',
                     groups : [{
-                        key: '分享购买',
+                        key: '1',
                         value: '分享购买'
                     },{
-                        key: '邀请好友-购买返利',
+                        key: '2',
                         value: '邀请好友-购买返利'
                     },{
-                        key: '邀请好友-固定返利',
+                        key: '10',
                         value: '邀请好友-固定返利'
                     }]
                 }
             }, {
-                key: '邀请商家入驻返利',
+                key: '5',
                 value: '邀请商家入驻返利',
                 cell: {
                     title: '关联流程',
                     filter_key : 'correlate_flow',
                     groups : [{
-                        key: '固定返利',
+                        key: '8',
                         value: '固定返利'
                     }, {
-                        key: '分享购买',
+                        key: '9',
                         value: '分享购买'
                     }]
                 }

@@ -100,7 +100,16 @@ module.exports = {
     businessAllTwe(data, filter_key, dates) {
         var source = data.data,
             type = "line",
-            array = [ "分销购买", "分享购买", "组合返利" ],
+            array = [ {
+                key : "分销购买",
+                value : "14"
+            },{
+                key : "分享购买",
+                value : "13"
+            },{
+                key : "组合返利",
+                value : ""
+            } ],
             map = {},
             newDate = {};
         map[filter_key + "_0"] = "分销购买";
@@ -114,13 +123,13 @@ module.exports = {
             for(var key of source) {
                 if(date === util.getDate(key.date)) {
                     for(var i = 0; i < array.length; i++) {
-                        if(key.rebate_type === array[i]) {
+                        if(key.rebate_type === array[i].value) {
                             obj[filter_key + "_" + i] += key[filter_key];
                         }
                     }
                 }
             }
-            newDate[util.getDate(new Date(date))] = obj;
+            newDate[date] = obj;
         }
         return [{
             type : type,
@@ -237,17 +246,23 @@ module.exports = {
                 item_amount : "商品总金额",
                 rebate_amount : "返利到账金额"
             },
-            XData = ["分销购买","分享购买"];
+            XData = [ {
+                key : "分销购买",
+                value :"14"
+            },{
+                key : "分享购买",
+                value :"13"
+            } ];
         for(var x of XData) {
             var obj = {
                 value : 0
             };
             for(var key of source) {
-                if(x === key.rebate_type) {
+                if(x.value === key.rebate_type) {
                     obj.value += key[filter_key];
                 }
             }
-            newData[x] = obj;
+            newData[x.key] = obj;
         }
         map.value = filter_name[filter_key];
         return [{
@@ -284,7 +299,7 @@ module.exports = {
                 plan_rebate_amount : source[i].plan_rebate_amount,
                 rebate_amount : source[i].rebate_amount,
                 platform_amount : source[i].platform_amount
-            }
+            };
             newData.push(obj);
         }
         return util.toTable([newData], data.rows, data.cols);
@@ -293,7 +308,17 @@ module.exports = {
         var source = data.data,
             newData = [],
             length = source.length,
-            top = length > 50 ? 50 : length;
+            top = length > 50 ? 50 : length,
+            related_flow = {
+                13 : "分享购买",
+                14 : "分销购买"
+            },
+            level ={
+                1 : "1级",
+                2 : "2级",
+                3 : "3级",
+                4 : "4级"
+            };
         source = util.sort(source, "order_num", "pay_order_num");
         for(var i = 0; i < top; i++) {
             var obj = {
@@ -301,8 +326,8 @@ module.exports = {
                 plan_name : source[i].plan_name,
                 shop_name : source[i].shop_name,
                 deadline : source[i].deadline,
-                related_flow : source[i].related_flow,
-                level : source[i].level,
+                related_flow : related_flow[source[i].related_flow],
+                level : level[source[i].level],
                 spu_num : source[i].spu_num,
                 user_num : source[i].user_num,
                 pay_rate : source[i].order_num + "/" + source[i].total_order_num,
@@ -315,9 +340,21 @@ module.exports = {
         return util.toTable([newData], data.rows, data.cols);
     },
     planOne(data) {
-        var source = data.data;
+        var source = data.data,
+            related_flow = {
+                13 : "分享购买",
+                14 : "分销购买"
+            },
+            level ={
+                1 : "1级",
+                2 : "2级",
+                3 : "3级",
+                4 : "4级"
+            };
         for(var i = 0; i < source.length; i++) {
             source[i].id = i + 1;
+            source[i].level = level[source[i].level];
+            source[i].related_flow = related_flow[source[i].related_flow];
             source[i].pay_rate = source[i].order_num + "/" + source[i].total_order_num;
             source[i].pay_price_rate = source[i].order_amount + "/" + source[i].total_order_amount;
             source[i].refund_rate = util.toFixed(source[i].refund_sku_num, source[i].sku_num);

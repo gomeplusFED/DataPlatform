@@ -488,27 +488,6 @@ function connect(app) {
                 rebate_amount_count: Number,
                 pay_order_time: String
             });
-            models.RebatetRedencyDetails = db.define("tbl_rt_rebate_tredency_details", {
-                id: { type: 'number', key: true },
-                date: Date,
-                day_type: Number,
-                type: String,
-                ver: String,
-                channel: String,
-                order_count: Number,
-                order_amount_count: Number,
-                goods_sku_count: Number,
-                goods_amount_count: Number,
-                rebate_amount_count: Number,
-                user_party: String,
-                level: String,
-                grade: String,
-                correlate_flow: String,
-                rebate_type: String,
-                category_id: String,
-                category_name: String,
-                pay_order_time: Date
-            });
             models.RebatetSheduleDetails = db.define("tbl_rt_rebate_schedule_details", {
                 id: { type: 'number', key: true },
                 date: Date,
@@ -625,6 +604,38 @@ function connect(app) {
                 value : Number,
                 value2 : Number,
                 value3 : Number
+            });
+            models.RebateOrderTredencyDetails = db.define("tbl_rt_rebate_order_tredency_details",{
+                id : {type: 'number', key: true},
+                date: Date,
+                day_type: Number,
+                type: String,
+                ver: String,
+                channel: String,
+                order_count: Number,
+                order_amount_count : Number,
+                goods_sku_count : Number,
+                user_party : String,
+                correlate_flow : String,
+                category_id : String,
+                category_name : String
+            });
+            models.RebateTypeLevelDetails = db.define("tbl_rt_rebate_type_level_details",{
+                id : {type: 'number', key: true},
+                date: Date,
+                day_type: Number,
+                type: String,
+                ver: String,
+                channel: String,
+                goods_sku_count: Number,
+                goods_amount_count : Number,
+                rebate_amount_count : Number,
+                user_party : String,
+                level : String,
+                grade : String,
+                correlate_flow : String,
+                category_name : String,
+                category_id : String
             });
             next();
         }

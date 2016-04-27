@@ -90,7 +90,7 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/businessRebate/businessAllTwo",
-        modelName : [ "RebateShopTredencyDetails" ],
+        modelName : [ "RebatetRedencyDetails" ],
         default : {
             day_type : 1,
             category_id : "all"

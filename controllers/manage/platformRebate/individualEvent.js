@@ -13,7 +13,7 @@ module.exports = (Router) => {
         router : "/platformRebate/individualEventOne",
         modelName : ["Rebate", "RebateRefund"],
         fixedParams : {
-            user_party : "单项单级返利"
+            user_party : "6"
         },
         flexible_btn: [{
             content: '<a href="javascript:void(0)" help_url="/individualEvent/help_json">帮助</a>',
@@ -90,7 +90,7 @@ module.exports = (Router) => {
 
     Router = new api(Router, {
         router : "/platformRebate/individualEventTwo",
-        modelName : [ "RebatetRedencyDetails" ],
+        modelName : [ "RebateOrderTredencyDetails" ],
         level_select : true,
         default : {
             day_type : 1,
@@ -98,7 +98,7 @@ module.exports = (Router) => {
         },
         platform : false,
         fixedParams : {
-            user_party : "单项单级返利"
+            user_party : "6"
         },
         filter_select: [{
             title: '指标选择',
@@ -121,7 +121,7 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/platformRebate/individualEventThree",
-        modelName : [ "RebatetRedencyDetails" ],
+        modelName : [ "RebateTypeLevelDetails" ],
         level_select : true,
         platform : false,
         default : {
@@ -129,7 +129,7 @@ module.exports = (Router) => {
             category_id : "all"
         },
         fixedParams : {
-            user_party : "单项单级返利"
+            user_party : "6"
         },
         filter_select: [{
             title: '指标选择',
@@ -154,7 +154,7 @@ module.exports = (Router) => {
         router : "/platformRebate/individualEventFour",
         modelName : [ "RebatetSheduleDetails" ],
         fixedParams : {
-            user_party : "单项单级返利"
+            user_party : "6"
         },
         platform : false,
         excel_export : true,

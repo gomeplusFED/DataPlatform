@@ -13,7 +13,7 @@ module.exports = (Router) => {
         router : "/platformRebate/inviteBusinessOne",
         modelName : ["Rebate", "RebateRefund"],
         fixedParams : {
-            user_party : "邀请商户入驻"
+            user_party : "5"
         },
         platform : false,
         date_picker_data: 1,
@@ -90,7 +90,7 @@ module.exports = (Router) => {
 
     Router = new api(Router, {
         router : "/platformRebate/inviteBusinessTwo",
-        modelName : [ "RebatetRedencyDetails" ],
+        modelName : [ "RebateOrderTredencyDetails" ],
         level_select : true,
         default : {
             day_type : 1,
@@ -98,7 +98,7 @@ module.exports = (Router) => {
         },
         platform : false,
         fixedParams : {
-            user_party : "邀请商户入驻"
+            user_party : "5"
         },
         filter_select: [{
             title: '指标选择',
@@ -121,7 +121,7 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/platformRebate/inviteBusinessThree",
-        modelName : [ "RebatetRedencyDetails" ],
+        modelName : [ "RebateTypeLevelDetails" ],
         level_select : true,
         default : {
             day_type : 1,
@@ -129,7 +129,7 @@ module.exports = (Router) => {
         },
         platform : false,
         fixedParams : {
-            user_party : "邀请商户入驻"
+            user_party : "5"
         },
         filter_select: [{
             title: '指标选择',
@@ -155,7 +155,7 @@ module.exports = (Router) => {
         modelName : [ "RebatetSheduleDetails" ],
         platform : false,
         fixedParams : {
-            user_party : "邀请商户入驻"
+            user_party : "5"
         },
         excel_export : true,
         //flexible_btn : [{
