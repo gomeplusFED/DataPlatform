@@ -86,7 +86,7 @@ gulp.task('clean', function() {
         .pipe(clean({ force: true }))
 });
 
-gulp.task('js', ['clean'], function() {
+gulp.task('js', function() {
     return gulp
         .src('./src/js/app.js')
         .pipe(gulpWebpack(webpackConfig))
@@ -95,7 +95,7 @@ gulp.task('js', ['clean'], function() {
         .pipe(gulp.dest('./dist/js/'))
 })
 
-gulp.task('css', ['clean'], function() {
+gulp.task('css', function() {
     return gulp
         .src('./src/css/*.css')
         .pipe(concat('all.js'))
@@ -105,13 +105,13 @@ gulp.task('css', ['clean'], function() {
         .pipe(gulp.dest('./dist/css/'))
 })
 
-gulp.task('img', ['clean'], function() {
+gulp.task('img', function() {
     return gulp
         .src('./src/img/*')
         .pipe(gulp.dest('./dist/img/'))
 })
 
-gulp.task('font', ['clean'], function() {
+gulp.task('font', function() {
     return gulp
         .src('./src/fonts/*')
         .pipe(gulp.dest('./dist/fonts/'))
@@ -132,6 +132,10 @@ gulp.task('watch', function() {
     gulp.watch('./src/css/*', ['css']);
     gulp.watch('./src/img/*', ['img']);
 })
+
+// gulp.task('build', function() {
+    // gulp.series('clean', gulp.parallel('js', 'css', 'img', 'font'));
+// })
 
 gulp.task('build', ['js', 'css', 'img', 'font']);
 

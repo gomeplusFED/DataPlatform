@@ -46,7 +46,7 @@ var Table = Vue.extend({
     },
     props: ['initData','currentData','loading','index','resultArgvs','pageComponentsData'],
     methods: {
-        fetchData: function(cb){
+        fetchData: function(cb, errcb){
             var _this = this;
             if(_this.resultArgvs.forceChange){
                 delete _this.resultArgvs.forceChange;
@@ -55,6 +55,7 @@ var Table = Vue.extend({
                 url: this.currentData.query_api + '_json',
                 type: 'get',
                 data: _this.resultArgvs,
+                timeout: 5000,
                 success: function(data){
                     if(data.iserro){
                         actions.alert(store,{
@@ -65,6 +66,11 @@ var Table = Vue.extend({
                         return;
                     }
                     cb && cb(data);
+                },
+                error: function(jqXHR, status, errorThrown) {
+                    if(status === 'timeout') {
+                        errcb && errcb();
+                    } 
                 }
             })
         }
@@ -179,6 +185,17 @@ var Table = Vue.extend({
                         }
                         // 重新生成表格页面会回到顶部，重置下
                         $(document).scrollTop(_this.scrollTop);
+                    }, function(){
+                        _this.loading.noLoaded -= 1;
+                        if(_this.loading.noLoaded === 0){
+                            _this.loading.show = false;
+                        }
+                        // erro
+                        actions.alert(store,{
+                            show: true,
+                            msg: '查询超时',
+                            type: 'danger'
+                        })
                     })
                 }
             },
