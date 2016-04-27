@@ -37,6 +37,10 @@ module.exports = (Router) => {
         router : "/useAnalysis/accessWapTwo",
         modelName : ["UrlAccessWap"],
         excel_export : true,
+        platform : false,
+        fixedParams : {
+            type : "H5"
+        },
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
