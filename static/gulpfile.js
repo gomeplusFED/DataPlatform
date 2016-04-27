@@ -10,6 +10,10 @@ var gulpIf = require('gulp-if');
 var concat = require('gulp-concat');
 var rename = require('gulp-rename');
 var minimist = require('minimist');
+var gutil = require("gulp-util");
+var rev = require('gulp-rev-hash');
+var path = require('path');
+
 
 var pwd = __dirname;
 
@@ -82,7 +86,7 @@ gulp.task('clean', function() {
         .pipe(clean({ force: true }))
 });
 
-gulp.task('js', function() {
+gulp.task('js', ['clean'], function() {
     return gulp
         .src('./src/js/app.js')
         .pipe(gulpWebpack(webpackConfig))
@@ -91,7 +95,7 @@ gulp.task('js', function() {
         .pipe(gulp.dest('./dist/js/'))
 })
 
-gulp.task('css', function() {
+gulp.task('css', ['clean'], function() {
     return gulp
         .src('./src/css/*.css')
         .pipe(concat('all.js'))
@@ -101,25 +105,36 @@ gulp.task('css', function() {
         .pipe(gulp.dest('./dist/css/'))
 })
 
-gulp.task('img', function() {
+gulp.task('img', ['clean'], function() {
     return gulp
         .src('./src/img/*')
         .pipe(gulp.dest('./dist/img/'))
 })
 
-gulp.task('font', function() {
+gulp.task('font', ['clean'], function() {
     return gulp
         .src('./src/fonts/*')
         .pipe(gulp.dest('./dist/fonts/'))
 })
 
+gulp.task('rev', function() {
+    return gulp
+        .src(['../views/include/header.html', '../views/include/footer.html'])
+        .pipe(gulpIf(argv.env == 'pro', rev({
+            assetsDir: path.join(pwd)
+        })))
+        .pipe(gulp.dest('../views/include/'));
+})
+
 gulp.task('watch', function() {
     webpackConfig.watch = argv.env != 'pro';
-    gulp.watch('./src/js/*', ['js']);
+    gulp.start('js');
     gulp.watch('./src/css/*', ['css']);
     gulp.watch('./src/img/*', ['img']);
 })
 
-gulp.task('default', ['clean'], function() {
-    gulp.start('js', 'css', 'img','font');
+gulp.task('build', ['js', 'css', 'img', 'font']);
+
+gulp.task('default', ['build'], function() {
+    gulp.start('rev');
 });
