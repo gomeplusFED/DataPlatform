@@ -94,6 +94,9 @@ var MultiSelect = Vue.extend({
 
 
 	},
+	ready: function(){
+		
+	},
 	props: ['index','pageComponentsData','componentType','argvs','initData'],
 	methods: {
 		createNext: function(ev,select_index) {
