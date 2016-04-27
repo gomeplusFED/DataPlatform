@@ -10,7 +10,7 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/achievements/shopOne",
-        modelName : ["ShopList"],
+        modelName : [""],
         platform : false,
         filter_select: [{
             title: '',
@@ -36,7 +36,7 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/achievements/shopTwo",
-        modelName : ["ShopList"],
+        modelName : [""],
         platform : false,
         excel_export : true,
         flexible_btn : [{
@@ -91,7 +91,7 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/achievements/shopThree",
-        modelName : ["ShopTop"],
+        modelName : [""],
         platform : false,
         excel_export : true,
         date_picker_data : 1,
@@ -134,7 +134,7 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/achievements/shopFour",
-        modelName : ["ShopTop"],
+        modelName : [""],
         platform : false,
         excel_export : true,
         flexible_btn : [{

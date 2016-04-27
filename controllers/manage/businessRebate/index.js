@@ -90,7 +90,7 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/businessRebate/businessAllTwo",
-        modelName : [ "RebatetRedencyDetails" ],
+        modelName : [ "RebateShopOrderTredencyDetails" ],
         default : {
             day_type : 1,
             category_id : "all"
@@ -118,7 +118,7 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/businessRebate/businessAllThree",
-        modelName : [ "RebateShopTredencyDetails" ],
+        modelName : [ "RebateShopTypeLevelDetails" ],
         level_select : true,
         platform : false,
         default : {
@@ -148,7 +148,7 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/businessRebate/businessAllFour",
-        modelName : [ "RebateShopTredencyDetails" ],
+        modelName : [ "RebateShopTypeLevelDetails" ],
         level_select : true,
         platform : false,
         default : {

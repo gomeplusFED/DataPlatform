@@ -13,6 +13,7 @@ function connect(app) {
     app.use(orm.express('mysql://' + mysql.username + ':' + mysql.pwd + '@' + mysql.host + '/' + mysql.database + '?timezone=CST', {
         define: function(db, models, next) {
             db.settings.set('instance.cache', false);
+            db.settings.set('instance.autoFetch', false);
             //db.settings.set('instance.cacheSaveCheck', false);
             //db.settings.set('instance.autoSave', true);
             models.Users = db.define("tbl_dataplatform_nodejs_users", {
@@ -45,18 +46,6 @@ function connect(app) {
                 name: String,
                 type: String
             });
-            models.Area = db.define("tbl_rt_terminal_area", {
-                id: { type: 'number', key: true },
-                start_up: Number,
-                new_users: Number,
-                country: String,
-                province: String,
-                area: String,
-                date: Date,
-                channel: String,
-                ver: String,
-                type: String
-            });
             models.UsersAccess = db.define("tbl_rt_user_access", {
                 id: { type: 'number', key: true },
                 date: Date,
@@ -69,136 +58,6 @@ function connect(app) {
                 url: String,
                 url_comment: String,
                 bounce_rate: Number
-            });
-            models.Terminal = db.define("tbl_rt_terminal_device", {
-                id: { type: 'number', key: true },
-                date: Date,
-                new_users: Number,
-                start_up: Number,
-                oname: String,
-                object: String,
-                ver: String,
-                channel: String,
-                type: String,
-                day_type: Number
-            });
-            models.SalesOrder = db.define("tbl_rt_order_list", {
-                id: { type: 'number', key: true },
-                date: Date,
-                users: Number,
-                order_users: Number,
-                pay_users: Number,
-                order_num: Number,
-                pay_num: Number,
-                order_price: Number,
-                pay_price: Number,
-                coupons_num: Number,
-                coupons_use: Number,
-                refund_price: Number,
-                refund_num: Number,
-                type: String,
-                channel: String,
-                day_type: Number,
-                ver: String
-            });
-            models.SalesArea = db.define("tbl_rt_order_area", {
-                id: { type: 'number', key: true },
-                order_price: Number,
-                order_commodity: Number,
-                order_users: Number,
-                country: String,
-                province: String,
-                area: String,
-                date: Date,
-                type: String,
-                channel: String,
-                day_type: Number,
-                ver: String
-            });
-            models.SalesCategory = db.define("tbl_rt_order_category", {
-                id: { type: 'number', key: true },
-                date: Date,
-                category_name: String,
-                category_id: Number,
-                access_num: Number,
-                access_users: Number,
-                commodity_num: Number,
-                order_price: Number,
-                pay_price: Number,
-                category_type: Number,
-                type: String,
-                channel: String,
-                day_type: Number,
-                ver: String
-            });
-            models.ShopList = db.define("tbl_rt_shop_list", {
-                id: { type: 'number', key: true },
-                date: Date,
-                shop_new_num: Number,
-                shop_succ_num: Number,
-                shop_order_num: Number,
-                shop_total_num: Number,
-                shop_order_succ_num: Number,
-                shop_access_num: Number,
-                shop_share_num: Number,
-                type: String,
-                channel: String,
-                day_type: Number,
-                ver: String
-            });
-            models.ShopTop = db.define("tbl_rt_shop_top", {
-                id: { type: 'number', key: true },
-                date: Date,
-                shop_name: String,
-                shop_id: Number,
-                access_num: Number,
-                access_users: Number,
-                share_num: Number,
-                pay_price: Number,
-                sku_type: Number,
-                pay_commodity_num: Number,
-                share_commodity_num: Number,
-                type: String,
-                channel: String,
-                day_type: Number,
-                ver: String
-            });
-            models.CommodityList = db.define("tbl_rt_product_list", {
-                id: { type: 'number', key: true },
-                date: Date,
-                commodity_users: Number,
-                commodity_num: Number,
-                commodity_access_num: Number,
-                order_num: Number,
-                pay_num: Number,
-                order_commodity_num: Number,
-                pay_commodity_num: Number,
-                commodity_times: Number,
-                refund_num: Number,
-                pay_price: Number,
-                sku_type: Number,
-                refund_price: Number,
-                type: String,
-                channel: String,
-                day_type: Number,
-                ver: String
-            });
-            models.CommodityTop = db.define("tbl_rt_product_top", {
-                id: { type: 'number', key: true },
-                date: Date,
-                commodity_name: String,
-                commodity_id: Number,
-                access_num: Number,
-                access_users: Number,
-                share_num: Number,
-                order_users: Number,
-                order_price: Number,
-                refund_num: Number,
-                refund_price: Number,
-                type: String,
-                channel: String,
-                day_type: Number,
-                ver: String
             });
             models.UserCompose = db.define("tbl_rt_use_time", {
                 id: { type: 'number', key: true },
@@ -309,15 +168,6 @@ function connect(app) {
                 open_num: Number,
                 buy_num: Number
             });
-            models.verAnalysis = db.define("tbl_rt_useranalysis_version", {
-                id: { type: 'number', key: true },
-                date: Date,
-                day_type: Number,
-                type: String,
-                ver: String,
-                channel: String,
-                users: Number
-            });
             models.Rebate = db.define("tbl_rt_rebate", {
                 id: { type: 'number', key: true },
                 date: Date,
@@ -407,24 +257,6 @@ function connect(app) {
                 total_amount: Number,
                 amount_actual: Number,
                 total_amount_actual: Number,
-                pay_order_time: Date
-            });
-            models.RebateShopTredencyDetails = db.define("tbl_rt_rebate_shop_tredency_details", {
-                id: { type: 'number', key: true },
-                date: Date,
-                day_type: Number,
-                type: String,
-                ver: String,
-                channel: String,
-                order_num: Number,
-                order_amount: Number,
-                product_sku_num: Number,
-                item_amount: Number,
-                rebate_amount: Number,
-                rebate_type: String,
-                category_id: String,
-                level: String,
-                grade: String,
                 pay_order_time: Date
             });
             models.RebateShopTop = db.define("tbl_rt_rebate_shop_top", {
@@ -636,6 +468,35 @@ function connect(app) {
                 correlate_flow : String,
                 category_name : String,
                 category_id : String
+            });
+            models.RebateShopOrderTredencyDetails = db.define("tbl_rt_rebate_shop_order_tredency_details",{
+                id : {type: 'number', key: true},
+                date: Date,
+                day_type: Number,
+                type: String,
+                ver: String,
+                channel: String,
+                order_num: Number,
+                order_amount : Number,
+                product_sku_num : Number,
+                rebate_type : String,
+                category_id : String
+            });
+            models.RebateShopTypeLevelDetails = db.define("tbl_rt_rebate_shop_type_level_details",{
+                id : {type: 'number', key: true},
+                date: Date,
+                day_type: Number,
+                type: String,
+                ver: String,
+                channel: String,
+                product_sku_num: Number,
+                item_amount : Number,
+                rebate_amount : Number,
+                rebate_type : String,
+                category_id : String,
+                level : String,
+                grade : String,
+                pay_order_time : String
             });
             next();
         }

@@ -297,7 +297,7 @@ api.prototype = {
                 } else {
                     resolve(data);
                 }
-            })
+            });
         });
     }),
     setRouter(Router) {
