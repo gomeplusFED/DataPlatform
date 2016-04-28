@@ -18,7 +18,7 @@ module.exports = {
             "rebate_plan_count": 0,
             "participate_user_count": 0,
             "registered_count": 0,
-            "rebate_amount_count": 0,
+            "rebate_amount_count": 0
         };
         for (var item of source) {
             one.rebate_plan_count += item.rebate_plan_count;

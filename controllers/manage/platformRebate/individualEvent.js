@@ -22,7 +22,7 @@ module.exports = (Router) => {
             customMethods: ''
         }],
         platform : false,
-        date_picker_data: 1,
+        //date_picker_data: 1,
         filter(data, filter_key, dates) {
             return filter.individualEventOne(data);
         },

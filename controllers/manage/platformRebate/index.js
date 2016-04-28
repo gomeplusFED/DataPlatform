@@ -18,7 +18,7 @@ module.exports = (Router) => {
             category_id : "all"
         },
         platform : false,
-        date_picker_data: 1,
+        //date_picker_data: 1,
         flexible_btn: [{
             content: '<a href="javascript:void(0)" help_url="/platformRebate/help_json">帮助</a>',
             preMethods: ["show_help"],

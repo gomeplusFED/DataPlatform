@@ -8,6 +8,8 @@ var api = require("../../../base/api"),
     moment = require("moment"),
     util = require("../../../utils"),
     orm = require("orm"),
+    help = require("../../../base/help"),
+    config = require("../../../utils/config.json"),
     dataOverview = require("../../../filters/dataOverview");
 
 module.exports = (Router) => {
@@ -19,6 +21,11 @@ module.exports = (Router) => {
         modelName: ['OverviewPlatf', "KpiValue"],
         date_picker : false,
         platform : false,
+        flexible_btn: [{
+            content: '<a href="javascript:void(0)" help_url="/dataOverviewWAP/help_json">帮助</a>',
+            preMethods: ["show_help"],
+            customMethods: ''
+        }],
         params : {
             date : orm.between(new Date(qdate + " 00:00:00"), new Date(ydate + " 23:59:59")),
             region : "ALL",
@@ -208,6 +215,58 @@ module.exports = (Router) => {
         ],
         rows : [
             [ "id", "page_url", "page_describe", "pv", "pv_rate" ]
+        ]
+    });
+
+    Router = new help(Router, {
+        router : "/dataOverviewWAP/help",
+        rows : config.help.rows,
+        cols : config.help.cols,
+        data : [
+            {
+                name : "访客数",
+                help : "访问人数"
+            },
+            {
+                name : "浏览量",
+                help : "浏览次数"
+            },
+            {
+                name : "IP数",
+                help : "访问IP数"
+            },
+            {
+                name : "跳出率",
+                help : "访客中访问一个页面用户占比"
+            },
+            {
+                name : "新用户",
+                help : "新访客"
+            },
+            {
+                name : "新用户占比",
+                help : "新用户/访客数"
+            },
+            {
+                name : "新增账户",
+                help : "新注册用户数"
+            },
+            {
+                name : "注册转化率",
+                help : "新增账户/新用户"
+            },
+            {
+                name : "平均访问时长",
+                help : "总时长/访客数"
+            },
+            {
+                name : "访问次数占比",
+                help : "页面访问次数/总访问次数"
+            },
+            {
+                name : "浏览量占比",
+                help : "区域的浏览次数/总浏览次数"
+            }
         ]
     });
 

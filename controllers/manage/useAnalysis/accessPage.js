@@ -4,6 +4,8 @@
  * @fileoverview 访问页面
  */
 var api = require("../../../base/api"),
+    help = require("../../../base/help"),
+    config = require("../../../utils/config.json"),
     filter = require("../../../filters/useAnalysis/accessPage");
 
 module.exports = (Router) => {
@@ -11,6 +13,11 @@ module.exports = (Router) => {
         router : "/useAnalysis/accessPageOne",
         modelName : ["UsersAccess"],
         platform : false,
+        flexible_btn: [{
+            content: '<a href="javascript:void(0)" help_url="/useAnalysis/accessPage/help_json">帮助</a>',
+            preMethods: ["show_help"],
+            customMethods: ''
+        }],
         filter_select: [{
             title: '',
             filter_key : 'filter_key',
@@ -113,6 +120,30 @@ module.exports = (Router) => {
                 caption : "页面跳出率",
                 type : "number"
             } ]
+        ]
+    });
+
+    Router = new help(Router, {
+        router : "/useAnalysis/accessPage/help",
+        rows : config.help.rows,
+        cols : config.help.cols,
+        data : [
+            {
+                name : "访问次数",
+                help : "统计时间内，访问次数"
+            },
+            {
+                name : "平均停留时长",
+                help : "总时长/访问次数"
+            },
+            {
+                name : "访问次数占比",
+                help : "页面访问次数/总访问次数"
+            },
+            {
+                name : "停留时间占比",
+                help : "页面访问时长/总时长"
+            }
         ]
     });
 

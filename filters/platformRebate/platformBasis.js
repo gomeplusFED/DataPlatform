@@ -56,11 +56,11 @@ module.exports = {
             objThree.refund_user_count += key.refund_user_count;
             objThree.refund_goods_amount_count += key.refund_goods_amount_count;
             objThree.refund_goods_amount_actual_count += key.refund_goods_amount_actual_count;
-            objThree.total_spu_num = key.total_spu_num;
-            objThree.total_sku_num = key.total_sku_num;
-            objThree.total_user_num = key.total_user_num;
-            objThree.total_amount = key.total_amount;
-            objThree.total_amount_actual = key.total_amount_actual;
+            objThree.total_spu_num += key.total_spu_num;
+            objThree.total_sku_num += key.total_sku_num;
+            objThree.total_user_num += key.total_user_num;
+            objThree.total_amount += key.total_amount;
+            objThree.total_amount_actual += key.total_amount_actual;
         }
         one.push(objOne);
         objTwo.rate = util.toFixed(objTwo.rebate_amount_count, objTwo.rebate_order_amount_actual_count);

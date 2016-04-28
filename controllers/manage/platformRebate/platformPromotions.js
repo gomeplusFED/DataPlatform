@@ -22,7 +22,7 @@ module.exports = (Router) => {
             preMethods: ["show_help"],
             customMethods: ''
         }],
-        date_picker_data: 1,
+        //date_picker_data: 1,
         filter(data, filter_key, dates) {
             return filter.platformPromotionsOne(data);
         },

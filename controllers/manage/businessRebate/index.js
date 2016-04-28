@@ -12,7 +12,7 @@ module.exports = (Router) => {
     Router = new api(Router, {
         router: "/businessRebate/businessAllOne",
         modelName: ["RebateShopOverview", "RebateShopRefund"],
-        date_picker_data: 1,
+        //date_picker_data: 1,
         platform : false,
         filter(data, filter_key, dates) {
             return businessRebate.businessAllOne(data);
@@ -296,7 +296,7 @@ module.exports = (Router) => {
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
-        date_picker_data: 1,
+        //date_picker_data: 1,
         filter(data, filter_key, dates) {
             return businessRebate.planOne(data);
         },
@@ -340,7 +340,7 @@ module.exports = (Router) => {
                 caption : "返利到账金额",
                 type : "number"
             },{
-                caption : "退出率",
+                caption : "退货率",
                 type : "string"
             }
             ]
