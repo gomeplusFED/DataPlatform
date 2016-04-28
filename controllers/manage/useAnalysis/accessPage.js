@@ -10,6 +10,7 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/useAnalysis/accessPageOne",
         modelName : ["UsersAccess"],
+        platform : false,
         filter_select: [{
             title: '',
             filter_key : 'filter_key',
@@ -32,6 +33,7 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/useAnalysis/accessPageTwo",
         modelName : ["UsersAccess"],
+        platform : false,
         excel_export : true,
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',

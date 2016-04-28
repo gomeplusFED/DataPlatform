@@ -280,7 +280,7 @@ module.exports = (Router) => {
                 caption : "返利到账金额",
                 type : "number"
             },{
-                caption : "退出率",
+                caption : "退货率",
                 type : "string"
             }
             ]

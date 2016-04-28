@@ -77,9 +77,9 @@ module.exports = {
     },
     activeUsersTwe(data, dates) {
         var source = data.data,
-            newData = [],
-            total_users = 0,
-            total_account = 0;
+            newData = [];
+            //total_users = 0,
+            //total_account = 0;
         for(var date of dates) {
             var obj = {
                 date : date,
@@ -88,18 +88,18 @@ module.exports = {
             };
             for(var key of source) {
                 if(date === util.getDate(key.date)) {
-                    total_users += key.active_users;
-                    total_account += key.active_account;
+                    //total_users += key.active_users;
+                    //total_account += key.active_account;
                     obj.active_users += key.active_users;
                     obj.active_account += key.active_account;
                 }
             }
             newData.push(obj);
         }
-        for(var key of newData) {
-            key.active_users_rate = util.toFixed(key.active_users, total_users);
-            key.active_account_rate = util.toFixed(key.active_account, total_account);
-        }
+        //for(var key of newData) {
+        //    key.active_users_rate = util.toFixed(key.active_users, total_users);
+        //    key.active_account_rate = util.toFixed(key.active_account, total_account);
+        //}
         newData.sort((a, b) => {
             return new Date(b.date) - new Date(a.date);
         });
@@ -115,22 +115,22 @@ module.exports = {
             var obj = {
                 date : date,
                 start_up : 0,
-                active_users : 0,
-                active_account : 0,
-                startup_per : 0
+                active_users : 0
+                //active_account : 0,
+                //startup_per : 0
             };
             for(var key of source) {
                 if(date === util.getDate(key.date)) {
                     obj.start_up += key.start_up;
                     obj.active_users += key.active_users;
-                    obj.active_account += key.active_account;
-                    obj.startup_per += key.startup_per;
+                    //obj.active_account += key.active_account;
+                    //obj.startup_per += key.startup_per;
                 }
             }
             newData.push(obj);
         }
         for(var key of newData) {
-            key.startup_per = key.startup_per.toFixed(2);
+            key.startup_per = (key.start_up / (key.active_users === 0 ? 1 : key.active_users)).toFixed(2);
         }
         return util.toTable([newData], data.rows, data.cols);
     },

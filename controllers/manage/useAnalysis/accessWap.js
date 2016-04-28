@@ -12,7 +12,8 @@ module.exports = (Router) => {
         modelName : ["UrlAccessWap"],
         platform : false,
         fixedParams : {
-            type : "H5"
+            type : "H5",
+            url_type : 1
         },
         filter_select: [{
             title: '',
@@ -48,10 +49,7 @@ module.exports = (Router) => {
         filter_select: [{
             title: '',
             filter_key : 'url_type',
-            groups: [{
-                key: '1',
-                value: '页面价值分析'
-            }, {
+            groups: [ {
                 key: '2',
                 value: '入口页面'
             }, {

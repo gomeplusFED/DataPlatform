@@ -34,7 +34,7 @@ module.exports = (Router) => {
         },
         rows : [
             ['name', 'uv', 'pv', 'ip_count', 'jump_loss_rate',
-                'new_user', 'new_user_rate', 'new_account', 'register_rate', 'visit_time_avg',
+                'new_user', 'new_user_rate_two', 'new_account', 'register_rate', 'visit_time_avg',
                 "pv1", "create"]
         ],
         cols : [
@@ -51,7 +51,7 @@ module.exports = (Router) => {
                 caption: 'IP数',
                 type: 'number'
             }, {
-                caption: '跳出率',
+                caption: '跳失率',
                 type: 'number'
             }, {
                 caption: '新用户',
@@ -69,7 +69,7 @@ module.exports = (Router) => {
                 caption: '平均访问时长(s)',
                 type: 'string'
             }, {
-                caption: '累计启动用户数',
+                caption: '累计访问用户数',
                 type: 'string'
             }, {
                 caption: '累计注册用户数',
@@ -146,7 +146,7 @@ module.exports = (Router) => {
             customMethods: ''
         }],
         filter(data, filter_key, dates) {
-            return dataOverview.dataOverviewAllThree(data);
+            return dataOverview.dataOverviewWapThree(data);
         },
         cols : [
             [ {
@@ -186,7 +186,7 @@ module.exports = (Router) => {
             customMethods: ''
         }],
         filter(data, filter_key, dates) {
-            return dataOverview.dataOverviewAllFour(data);
+            return dataOverview.dataOverviewWapFour(data);
         },
         cols : [
             [ {

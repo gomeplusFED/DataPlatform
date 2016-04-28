@@ -24,7 +24,7 @@ module.exports = (Router) => {
         router : "/userAnalysis/startUpTwe",
         modelName : ["NewAccount"],
         version : true,
-        rows : [[ 'date', 'start_up', 'active_users', 'active_account', 'startup_per' ]],
+        rows : [[ 'date', 'start_up', 'startup_per' ]],
         cols : [
             [
                 {
@@ -34,14 +34,6 @@ module.exports = (Router) => {
                 },
                 {
                     caption : '启动次数',
-                    type : 'number'
-                },
-                {
-                    caption : '活跃用户',
-                    type : 'number'
-                },
-                {
-                    caption : '活跃账户',
                     type : 'number'
                 },
                 {

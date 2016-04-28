@@ -13,6 +13,7 @@ module.exports = (Router) => {
         router : "/platformRebate/inviteBusinessOne",
         modelName : ["Rebate", "RebateRefund"],
         fixedParams : {
+            category_id : "all",
             user_party : "5"
         },
         platform : false,

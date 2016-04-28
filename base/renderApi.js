@@ -89,7 +89,7 @@ renderApi.prototype = {
         var page = {};
         for(var key of config.limit) {
             Object.keys(key).forEach((param) => {
-                if(key[param].display && param !== "userManagement" ) {
+                if(key[param].display) {
                     if(key[param].href === "#") {
                         for(var path of key[param].path) {
                             page[path.path] = {

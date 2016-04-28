@@ -24,7 +24,7 @@ module.exports = (Router) => {
         router : "/userAnalysis/activeAccountTwe",
         modelName : ["NewAccount"],
         version : true,
-        rows : [['date', 'active_users', 'active_users_rate', 'active_account', 'active_account_rate' ]],
+        rows : [['date', 'active_users', 'active_account' ]],
         cols : [
             [
                 {
@@ -35,14 +35,8 @@ module.exports = (Router) => {
                 caption: '活跃用户',
                 type: 'number'
             }, {
-                caption: '活跃用户占比',
-                type: 'string'
-            }, {
                 caption: '活跃账户',
                 type: 'number'
-            }, {
-                caption: '活跃账户占比',
-                type: 'string'
             }
             ]
         ],

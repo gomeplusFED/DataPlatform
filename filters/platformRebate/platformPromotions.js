@@ -93,6 +93,8 @@ module.exports = {
         map[filter_key + "_1"] = array[1].key;
         for (var date of dates) {
             var obj = {};
+            obj[filter_key + "_0"] = 0;
+            obj[filter_key + "_1"] = 0;
             for (var key of source) {
                 if (date === util.getDate(key.date)) {
                     for (var i = 0; i < array.length; i++) {

@@ -14,6 +14,7 @@ module.exports = (Router) => {
         modelName : ["Rebate", "RebateRefund"],
         platform : false,
         fixedParams : {
+            category_id : "all",
             user_party : "2"
         },
         flexible_btn: [{

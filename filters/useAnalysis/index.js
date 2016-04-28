@@ -9,6 +9,7 @@ module.exports = {
     useTimeOne(data, array, filter_key) {
         var newData = {},
             source = data.data,
+            total = 0,
             type = "bar",
             map = {
                 value : filter_key
@@ -21,9 +22,12 @@ module.exports = {
             for(var k of source) {
                 if(key === k.distribution) {
                     obj.value += k.num;
+                    total += k.num;
                 }
             }
-            newData[key] = obj;
+            newData[key] = {
+                value : util.percentage(obj.value, total)
+            };
         }
         return [{
             type : type,
