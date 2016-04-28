@@ -14,7 +14,7 @@ var state = {
         title: '弹窗表格',
         data: null // 表格数据
     },
-    currentPageDefaultData: []
+    currentPageDefaultData: null
 }
 
 var actions = require('./actions.js');

@@ -5,7 +5,7 @@ var VueRouter = require('vue-router')
 Vue.use(VueRouter);
 
 
-// for jq plugin
+// for jq plugin and debug
 window.jQuery = $;
 window.$ = $;
 
@@ -32,25 +32,21 @@ router.map({
     }
 });
 
-router.beforeEach(function (transition) {
-    // var url = window.location.hash;
-    // $('[href="'+ url +'"]').parent().parent().parent().addClass('active');
-    // $('[href="'+ url +'"]').parent().parent().addClass('in').attr('aria-expanded', true);
-    // $('[href="'+ url +'"]').focus();
-    // $('#side-menu a').removeClass('active');
-    // $('[href="'+ url +'"]').addClass('active');
+router.start(blankApp, '#page-wrapper');
 
-    // var key = transition.to.path;
-    // actions.setCurrentPageDefaultData(store, window.allPageConfig.page[key])
-    // if(! window.allPageConfig.page[key]){
-    //     router.go({
-    //         path: '/dataOverview/app'
-    //     })
-    // }
+router.afterEach(function (transition) {
+    var url = window.location.hash;
+    $('[href="'+ url +'"]').parent().parent().parent().addClass('active');
+    $('[href="'+ url +'"]').parent().parent().addClass('in').attr('aria-expanded', true);
+    $('[href="'+ url +'"]').focus();
+    $('#side-menu a').removeClass('active');
+    $('[href="'+ url +'"]').addClass('active');
+
+    var key = transition.to.path;
+    actions.setCurrentPageDefaultData(store, window.allPageConfig.page[key])
+    if(! window.allPageConfig.page[key]){
+        router.go({
+            path: '/'
+        })
+    }
 });
-
-// router.redirect({
-//     '/': '/dataOverview/app'
-// });
-
-router.start(blankApp, '#app');

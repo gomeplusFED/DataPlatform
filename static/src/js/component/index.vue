@@ -13,14 +13,11 @@ var Index = Vue.extend({
 	store: store,
 	data: function(){
 		return {
-            loading: {
-                show: true,
-                noLoaded: 0
-            }
+            
 		}
 	},
     ready: function(){
-        console.log(111);
+
     }
 })
 
