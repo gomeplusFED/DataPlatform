@@ -35,6 +35,7 @@ var filePath = async((path) => {
 
 // addRouter('./combine');
 addRouter('./login');
+addRouter('./count');
 addRouter('./user');
 addRouter('./categories');
 

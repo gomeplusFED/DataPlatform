@@ -500,6 +500,12 @@ function connect(app) {
                 grade : String,
                 pay_order_time : String
             });
+            models.Count = db.define("tbl_dataplatform_count",{
+                id : {type: 'number', key: true},
+                pagename : String,
+                username : String,
+                count : Number
+            });
             next();
         }
     }))
