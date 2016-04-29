@@ -44,12 +44,19 @@ var App = Vue.extend({
         'm-modal': ModalTable,
         'm-main': Main
     },
-    watch: {
-        'currentPageDefaultData': {
-            handle: function(val){
-                console.log(val);
-            },
-            deep: true
+    route: {
+        data: function(transition){
+            console.log(transition.to.path);
+
+            // 页面访问统计
+            // $.ajax({
+            //     url: '/dataPlatform/count',
+            //     type: 'get',
+            //     data: {
+            //         pagename: '', // 页面URL
+            //         username: '', // 页面名称 （狗血）
+            //     }
+            // })
         }
     }
 

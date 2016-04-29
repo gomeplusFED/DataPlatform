@@ -27,7 +27,7 @@ router.map({
     }
 });
 
-router.beforeEach(function (transition) {
+router.afterEach(function (transition) {
     var url = window.location.hash;
     $('[href="'+ url +'"]').parent().parent().parent().addClass('active');
     $('[href="'+ url +'"]').parent().parent().addClass('in').attr('aria-expanded', true);
