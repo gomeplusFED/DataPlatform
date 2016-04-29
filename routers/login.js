@@ -40,6 +40,7 @@ module.exports = function(Router) {
         if (remember) {
             maxAge = 1000 * 60 * 60 * 24 * 7; // 一周
         }
+        userInfo.limited =  eval('(' + userInfo.limited + ')');
         req.sessionOptions.maxAge = new Date(Date.now() + maxAge);
         req.session.userInfo = userInfo;
         req.session.isLogin = true;
@@ -129,7 +130,7 @@ module.exports = function(Router) {
                 return;
             } else if (email === superAdminInfo.username && pwd === superAdminInfo.password) {
                 /*超级管理员不进行ldap验证*/
-                req.models.Users.find({
+                req.models.User2.find({
                     username: email
                 }, function(err, ret) {
                     if (err) {
@@ -138,6 +139,24 @@ module.exports = function(Router) {
                         if (ret.length) {
                             saveLogin(req, res, remember, email, ret[0]);
                             res.redirect(from || '/');
+                        } else {
+                            req.models.User2.create({
+                                name : "超级用户",
+                                username : "superAdmin",
+                                role : "超级管理员",
+                                status : 1,
+                                limited : "{0:[0,1,2]}",
+                                is_admin : 99
+                            }, (err, data) => {
+                                if(!err) {
+                                    console.log("=======1");
+                                    saveLogin(req, res, remember, email, ret[0]);
+                                    console.log("=======2");
+                                    res.redirect(from || '/');
+                                } else {
+                                    next(new Error("用户不存在"));
+                                }
+                            })
                         }
                     }
                 });

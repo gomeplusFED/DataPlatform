@@ -506,6 +506,20 @@ function connect(app) {
                 username : String,
                 count : Number
             });
+            models.User2 = db.define("tbl_dataplatform_nodejs_users2",{
+                id : {type: 'number', key: true},
+                name : String,
+                username : String,
+                email : String,
+                department : String,
+                role : String,
+                remark : String,
+                status : Number,
+                limited : String,
+                date : Date,
+                is_admin : Number,
+                export : String
+            });
             next();
         }
     }))
