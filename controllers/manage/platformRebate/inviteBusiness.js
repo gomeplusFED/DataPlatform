@@ -13,10 +13,11 @@ module.exports = (Router) => {
         router : "/platformRebate/inviteBusinessOne",
         modelName : ["Rebate", "RebateRefund"],
         fixedParams : {
+            category_id : "all",
             user_party : "5"
         },
         platform : false,
-        date_picker_data: 1,
+        //date_picker_data: 1,
         filter(data, filter_key, dates) {
             return filter.inviteBusinessOne(data);
         },

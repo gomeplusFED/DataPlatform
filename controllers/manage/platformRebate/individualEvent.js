@@ -13,6 +13,7 @@ module.exports = (Router) => {
         router : "/platformRebate/individualEventOne",
         modelName : ["Rebate", "RebateRefund"],
         fixedParams : {
+            category_id : "all",
             user_party : "6"
         },
         flexible_btn: [{
@@ -21,7 +22,7 @@ module.exports = (Router) => {
             customMethods: ''
         }],
         platform : false,
-        date_picker_data: 1,
+        //date_picker_data: 1,
         filter(data, filter_key, dates) {
             return filter.individualEventOne(data);
         },
@@ -35,7 +36,7 @@ module.exports = (Router) => {
         ],
         cols: [
             [{
-                caption: "返利计划书",
+                caption: "返利计划数",
                 type: "string"
             }, {
                 caption: "参与商户数",

@@ -26,7 +26,9 @@ module.exports = {
             };
         }
         for(var key of source) {
-            newData[util.getDate(key.date)].value += key[filter_key];
+            if(key.type !== "H5") {
+                newData[util.getDate(key.date)].value += key[filter_key];
+            }
         }
         if(filter_key === "bounce_rate") {
             Object.keys(newData).forEach((key) => {
@@ -66,12 +68,14 @@ module.exports = {
             };
         }
         for(var key of source) {
-            total_num += key.acc_num;
-            total_time += key.acc_time;
-            obj[key.url].acc_num += key.acc_num;
-            obj[key.url].acc_time += key.acc_time;
-            obj[key.url].bounce_rate += key.bounce_rate;
-            obj[key.url].url_comment = key.url_comment;
+            if(key.type !== "H5") {
+                total_num += key.acc_num;
+                total_time += key.acc_time;
+                obj[key.url].acc_num += key.acc_num;
+                obj[key.url].acc_time += key.acc_time;
+                obj[key.url].bounce_rate += key.bounce_rate;
+                obj[key.url].url_comment = key.url_comment;
+            }
         }
         for(var i = 0; i < urls.length; i++) {
             newData.push({

@@ -13,7 +13,8 @@ function connect(app) {
     app.use(orm.express('mysql://' + mysql.username + ':' + mysql.pwd + '@' + mysql.host + '/' + mysql.database + '?timezone=CST', {
         define: function(db, models, next) {
             db.settings.set('instance.cache', false);
-            db.settings.set('instance.autoFetch', false);
+            db.settings.set('instance.autoFetch', true);
+            //db.settings.set('instance.autoFetchLimit', 9999);
             //db.settings.set('instance.cacheSaveCheck', false);
             //db.settings.set('instance.autoSave', true);
             models.Users = db.define("tbl_dataplatform_nodejs_users", {
@@ -189,6 +190,7 @@ function connect(app) {
                 total_order_amount: Number,
                 rebate_order_amount_actual_count: Number,
                 rebate_amount_count: Number,
+                productSku_num: Number,
                 pay_order_time: Date,
                 user_party: String,
                 category_id: String,
@@ -498,142 +500,15 @@ function connect(app) {
                 grade : String,
                 pay_order_time : String
             });
+            models.Count = db.define("tbl_dataplatform_count",{
+                id : {type: 'number', key: true},
+                pagename : String,
+                username : String,
+                count : Number
+            });
             next();
         }
     }))
-};
-
-//exports.init = function(options) {
-//  var self = this;
-//  var baseModel = {};
-//  this.connect(options, function(err, db) {
-//    if (err) {
-//      throw err;
-//    } else {
-//      var Users = db.define("dataplatform_nodejs_users", {
-//        id:{type: 'serial', key: true},
-//        username: String,
-//        isAdmin:{type:"number",value:0},
-//        limited:  String,
-//        lastIp: String,
-//        loginInIp: String,
-//        loginInTime: Date,
-//        lastLoginInTime: Date
-//      });
-//      var NewAccount = db.define("rt_new_account",{
-//        id : {type: 'number', key: true},
-//        date : Date,
-//        new_users : Number,
-//        new_account : Number,
-//        active_users : Number,
-//        active_account : Number,
-//        start_up : Number,
-//        type : String,
-//        ver : String,
-//        channel : String,
-//        day_type : String
-//      });
-//      var Configure = db.define("rt_configure",{
-//        id : {type: 'number', key: true},
-//        name : String,
-//        type : String
-//      });
-//      var Area = db.define("rt_area",{
-//        id : {type: 'number', key: true},
-//        pv : Number,
-//        uv : Number,
-//        new_uv : Number,
-//        country : String,
-//        province : String,
-//        area : String,
-//        date : Date,
-//        channel : String
-//      });
-//      var UserCompose = db.define("rt_area",{
-//        id : {type: 'number', key: true},
-//        date : Date,
-//        num : Number,
-//        distribution : String,
-//        use : String,
-//        type : String,
-//        ver : String,
-//        channel : String,
-//        day_type : String
-//      });
-//      db.sync(function(){
-//        //var startTime = new Date('2015-10-01').getTime();
-//        //var endTime = new Date('2015-12-25').getTime();
-//        //var days = parseInt((endTime - startTime) / (24*60*60*1000));
-//        //var total_users_week = 0;
-//        //var total_account_week = 0;
-//        //var total_users_month = 0;
-//        //var total_account_month = 0;
-//        //var month = 8;
-//        //var object = {};
-//        //for(var i = 0 ; i < days; i++){
-//        //  for(var n = 0; n < 5; n++){
-//        //    object = self.getObect(i*24*60*60*1000 + startTime, 'd');
-//        //    if(object.date.getMonth() !== month){
-//        //      object.new_users = total_users_month;
-//        //      object.active_users = total_users_month;
-//        //      object.active_account = total_users_month;
-//        //      object.new_account = total_account_month;
-//        //      object.day_type = 'm';
-//        //      NewAccount.create(object, function(){});
-//        //      total_users_month = 0;
-//        //      total_account_month = 0;
-//        //      month = month + 1;
-//        //    } else {
-//        //      total_users_week = total_users_week + object.new_users;
-//        //      total_users_month = total_users_month + object.new_users;
-//        //      total_account_week = total_account_week + object.new_account;
-//        //      total_account_month = total_account_month + object.new_account;
-//        //      NewAccount.create(object, function(err, data){ console.log('success') });
-//        //    }
-//        //  }
-//        //  if(object.date.getDay() === 0){
-//        //    console.log(object.date.getDay());
-//        //    object.new_users = total_users_week;
-//        //    object.new_account = total_account_week;
-//        //    object.day_type = 'w';
-//        //    NewAccount.create(object, function(){});
-//        //    total_users_week = 0;
-//        //    total_account_week = 0;
-//        //  }
-//        //}
-//        baseModel.Users = Users;
-//        baseModel.NewAccount = NewAccount;
-//        baseModel.Configure = Configure;
-//        baseModel.Area = Area;
-//        baseModel.UserCompose = UserCompose;
-//      });
-//
-//    }
-//  });
-//  return baseModel;
-//};
-//
-//exports.connect = function(options, cb) {
-//  orm.express('mysql://' + options.username + ':' + options.pwd + '@' + options.host + '/' + options.database + '?timezone=CST', cb);
-//};
-
-exports.getObect = function(a, day_type) {
-    var object = {};
-    object.date = new Date(a);
-    object.new_users = Math.random() * 100;
-    object.active_account = Math.random() * 100;
-    object.active_users = Math.random() * 100;
-    object.new_account = Math.random() * 100;
-    object.start_up = Math.random() * 100;
-    object.type = this.getRandom(['ios', 'android', 'H5'], 3);
-    object.ver = this.getRandom(['1.0.0', '1.0.1', '1.0.2'], 3);
-    object.channel = this.getRandom(['百度', '小米', '91助手', '360助手', '华为应用商店', '安智'], 6);
-    object.day_type = day_type;
-    return object;
-};
-
-exports.getRandom = function(array, max) {
-    return array[parseInt(Math.random() * max)];
 };
 
 module.exports = connect;

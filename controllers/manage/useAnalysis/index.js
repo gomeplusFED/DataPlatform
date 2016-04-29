@@ -4,12 +4,19 @@
  * @fileoverview 使用时长
  */
 var api = require("../../../base/api"),
+    help = require("../../../base/help"),
+    config = require("../../../utils/config.json"),
     filter = require("../../../filters/useAnalysis");
 
 module.exports = (Router) => {
     Router = new api(Router,{
         router : "/useAnalysis/useTimeOne",
         modelName : ["UserCompose"],
+        flexible_btn: [{
+            content: '<a href="javascript:void(0)" help_url="/useAnalysis/useTime/help_json">帮助</a>',
+            preMethods: ["show_help"],
+            customMethods: ''
+        }],
         fixedParams : {
             use_type : 1
         },
@@ -100,6 +107,22 @@ module.exports = (Router) => {
                 caption: '用户数比例',
                 type: 'string'
             }]
+        ]
+    });
+
+    Router = new help(Router, {
+        router : "/useAnalysis/useTime/help",
+        rows : config.help.rows,
+        cols : config.help.cols,
+        data : [
+            {
+                name : "单次使用时长",
+                help : "单次使用时长：一次使用应用的时长"
+            },
+            {
+                name : "日使用时长",
+                help : "单日使用时长：用户一天内使用应用的时长"
+            }
         ]
     });
 

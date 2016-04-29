@@ -12,7 +12,7 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/platformRebate/inviteRegisterAndEnterOne",
         modelName : ["RebateInvitepartner"],
-        date_picker_data: 1,
+        //date_picker_data: 1,
         platform : false,
         flexible_btn: [{
             content: '<a href="javascript:void(0)" help_url="/inviteRegisterAndEnter/help_json">帮助</a>',

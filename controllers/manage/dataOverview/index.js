@@ -7,6 +7,8 @@
 var api = require("../../../base/api"),
     util = require("../../../utils"),
     orm = require("orm"),
+    help = require("../../../base/help"),
+    config = require("../../../utils/config.json"),
     dataOverview = require("../../../filters/dataOverview");
 
 module.exports = (Router) => {
@@ -18,6 +20,11 @@ module.exports = (Router) => {
         modelName: ['OverviewPlatf', "KpiValue"],
         date_picker : false,
         platform : false,
+        flexible_btn: [{
+            content: '<a href="javascript:void(0)" help_url="/dataOverviewApp/help_json">帮助</a>',
+            preMethods: ["show_help"],
+            customMethods: ''
+        }],
         params : {
             date : orm.between(new Date(qdate + " 00:00:00"), new Date(ydate + " 23:59:59")),
             region : "ALL",
@@ -67,7 +74,7 @@ module.exports = (Router) => {
                 caption: '每次使用时长(s)',
                 type: 'string'
             }, {
-                caption: '累计访问用户数',
+                caption: '累计启动用户数',
                 type: 'string'
             }, {
                 caption: '累计注册用户数',
@@ -149,13 +156,13 @@ module.exports = (Router) => {
                 caption : "地区",
                 type : "number"
             },{
-                caption : "访客数",
+                caption : "启动用户数",
                 type : "number"
             },{
-                caption : "浏览量",
+                caption : "启动次数",
                 type : "number"
             },{
-                caption : "浏览量占比",
+                caption : "启动次数占比",
                 type : "number"
             }]
         ],
@@ -201,6 +208,54 @@ module.exports = (Router) => {
         ],
         rows : [
             [ "id", "page_url", "page_describe", "pv", "pv_rate" ]
+        ]
+    });
+
+    Router = new help(Router, {
+        router : "/dataOverviewApp/help",
+        rows : config.help.rows,
+        cols : config.help.cols,
+        data : [
+            {
+                name : "启动次数",
+                help : "开启app的次数"
+            },
+            {
+                name : "启动用户",
+                help : "开启app的人数"
+            },
+            {
+                name : "人均启动次数",
+                help : "启动次数/启动人数"
+            },
+            {
+                name : "新用户",
+                help : "新增激活用户"
+            },
+            {
+                name : "新用户占比",
+                help : "新用户/启动用户"
+            },
+            {
+                name : "新增账户",
+                help : "新注册用户数"
+            },
+            {
+                name : "注册转化率",
+                help : "新增账户/新用户"
+            },
+            {
+                name : "每人使用时长",
+                help : "总时长/启动用户数"
+            },
+            {
+                name : "每次使用时长",
+                help : "总时长/启动次数"
+            },
+            {
+                name : "访问次数占比",
+                help : "页面访问次数/总访问次数"
+            }
         ]
     });
 

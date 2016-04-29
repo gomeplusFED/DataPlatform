@@ -24,7 +24,7 @@ module.exports = {
                 rebate_order_amount_count: 0,
                 participate_seller_count: 0,
                 participate_user_count: 0,
-                participate_goods_count: 0
+                productSku_num: 0
             },
             objTwo = {
                 rebate_order_count: 0,
@@ -55,7 +55,7 @@ module.exports = {
             objOne.rebate_order_amount_count += key.rebate_order_amount_count;
             objOne.participate_seller_count += key.participate_seller_count;
             objOne.participate_user_count += key.participate_user_count;
-            objOne.participate_goods_count += key.participate_goods_count;
+            objOne.productSku_num += key.productSku_num;
             objTwo.rebate_order_count += key.rebate_order_count;
             objTwo.rebate_order_amount_count += key.rebate_order_amount_count;
             objTwo.rebate_order_amount_actual_count += key.rebate_order_amount_actual_count;
@@ -67,11 +67,11 @@ module.exports = {
             objThree.refund_user_count += key.refund_user_count;
             objThree.refund_goods_amount_count += key.refund_goods_amount_count;
             objThree.refund_goods_amount_actual_count += key.refund_goods_amount_actual_count;
-            objThree.total_spu_num = key.total_spu_num;
-            objThree.total_sku_num = key.total_sku_num;
-            objThree.total_user_num = key.total_user_num;
-            objThree.total_amount = key.total_amount;
-            objThree.total_amount_actual = key.total_amount_actual;
+            objThree.total_spu_num += key.total_spu_num;
+            objThree.total_sku_num += key.total_sku_num;
+            objThree.total_user_num += key.total_user_num;
+            objThree.total_amount += key.total_amount;
+            objThree.total_amount_actual += key.total_amount_actual;
         }
         one.push(objOne);
         one.push({
@@ -80,7 +80,7 @@ module.exports = {
             rebate_order_amount_count: util.toFixed(objOne.rebate_order_amount_count, oneTwo),
             participate_seller_count: util.toFixed(objOne.participate_seller_count, oneThree),
             participate_user_count: util.toFixed(objOne.participate_user_count, oneFour),
-            participate_goods_count: util.toFixed(objOne.participate_goods_count, oneFive)
+            productSku_num: util.toFixed(objOne.productSku_num, oneFive)
         });
         objTwo.rate = util.toFixed(objTwo.rebate_amount_count, objTwo.rebate_order_amount_actual_count);
         two.push(objTwo);
@@ -125,6 +125,10 @@ module.exports = {
         map[filter_key + "_3"] = array[3].key;
         for (var date of dates) {
             var obj = {};
+            obj[filter_key + "_0"] = 0;
+            obj[filter_key + "_1"] = 0;
+            obj[filter_key + "_2"] = 0;
+            obj[filter_key + "_3"] = 0;
             for (var key of source) {
                 if (date === util.getDate(key.date)) {
                     for (var i = 0; i < array.length; i++) {
