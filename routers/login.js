@@ -210,6 +210,8 @@ module.exports = function(Router) {
                                                         name: entry.object.dn.match(/CN=(.*?)-/)[1],
                                                         username : entry.object.sAMAccountName,
                                                         email : email,
+                                                        limited : "{}",
+                                                        export : "{}",
                                                         department : entry.object.dn.match(/OU=(.*?),/)[1],
                                                         status : 1,
                                                         date : new Date(),
