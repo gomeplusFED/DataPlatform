@@ -185,6 +185,7 @@ module.exports = function(Router) {
                             if (entrys.length === 1) {
                                 var entry = entrys[0];
                                 //console.log('entry: ' + JSON.stringify(entry.object));
+                                //console.log(entry.object);
                                 client.bind(entry.object.dn, pwd, function(err) {
                                     //验证成功
                                     if (err) {
@@ -193,8 +194,8 @@ module.exports = function(Router) {
                                         req.flash('密码和账户不正确');
                                         res.redirect('back');
                                     } else {
-                                        req.models.Users.find({
-                                            username: email
+                                        req.models.User2.find({
+                                            email: email
                                         }, function(err, ret) {
                                             if (err) {
                                                 unbind(client, next);
@@ -205,15 +206,19 @@ module.exports = function(Router) {
                                                     res.redirect(from || '/');
                                                 } else {
                                                     //不存在本地用户,写入本地用户
-                                                    req.models.Users.create({
-                                                        username: email,
-                                                        login_time: new Date(entry.object.lastLogon),
-                                                        lastlogin_time: new Date(entry.object.lastLogonTimestamp)
+                                                    req.models.User2.create({
+                                                        name: entry.object.dn.match(/CN=(.*?)-/)[1],
+                                                        username : entry.object.sAMAccountName,
+                                                        email : email,
+                                                        department : entry.object.dn.match(/OU=(.*?),/)[1],
+                                                        status : 1,
+                                                        date : new Date(),
+                                                        is_admin : 0
                                                     }, function(err, ret) {
                                                         if (err) {
                                                             unbind(client, next);
                                                         } else {
-                                                            saveLogin(req, res, remember, email, ret);
+                                                            saveLogin(req, res, remember, email, ret[0]);
                                                             unbind(client, next);
                                                             res.redirect(from || '/');
                                                         }
