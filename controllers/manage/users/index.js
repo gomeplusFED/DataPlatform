@@ -11,13 +11,11 @@ module.exports = (Router) => {
             limit = query.limit || 10,
             username = query.username || "",
             page = query.page || 1,
-            is_admin = req.session.userInfo.is_admin,
             params = {
-                username : orm.like(username + "%"),
-                is_admin : orm.lt(is_admin)
+                username : orm.like(username + "%")
             },
             sql = "SELECT * FROM tbl_dataplatform_nodejs_users2"
-                + " WHERE username like '" + username + "%' AND is_admin < " + is_admin
+                + " WHERE username like '" + username + "%'"
                 + " LIMIT " + (page - 1) * limit + "," + limit;
         req.models.User2.count(params, (err, count) => {
             if(!err) {

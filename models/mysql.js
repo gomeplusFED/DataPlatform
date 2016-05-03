@@ -520,6 +520,17 @@ function connect(app) {
                 is_admin : Number,
                 export : String
             });
+            models.Role = db.define("tbl_dataplatform_nodejs_role",{
+                id : {type: 'number', key: true},
+                name : String,
+                username : String,
+                remark : String,
+                status : Number,
+                limited : String,
+                date : Date,
+                is_admin : Number,
+                export : String
+            });
             next();
         }
     }))
