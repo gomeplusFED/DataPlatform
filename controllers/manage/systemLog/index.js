@@ -3,14 +3,16 @@
  * @date 20160503
  * @fileoverview 角色管理
  */
+var util = require("../../../utils");
+
 module.exports = (Router) => {
-    Router.get("/role/find", (req, res, next) => {
+    Router.get("/log/find", (req, res, next) => {
         var query = req.query,
-            limit = query.limit || 30,
+            limit = query.limit || 10,
             page = query.page || 1,
-            sql = "SELECT * FROM tbl_dataplatform_nodejs_role"
+            sql = "SELECT * FROM tbl_dataplatform_nodejs_log ORDER BY date DESC"
                 + " LIMIT " + (page - 1) * limit + "," + limit;
-        req.models.Role.count({}, (err, count) => {
+        req.models.Log.count({}, (err, count) => {
             if(!err) {
                 req.db.driver.execQuery(sql, (err, data) => {
                     if(!err) {
@@ -29,28 +31,26 @@ module.exports = (Router) => {
         });
     });
 
-    Router.post("/role/add", (req, res, next) => {
+    Router.post("/log/add", (req, res, next) => {
         var body = req.body,
             params = {
-                name : body.name,
+                username : body.username,
                 date : new Date().getTime(),
-                limited : body.limited || "{}",
-                export : body.export | "{}",
-                status : 1,
-                remark : body.remark
+                ip : util.getClientIp(req),
+                content : body.content || ""
             };
-        req.models.Role.create(params, (err, data) => {
+        req.models.Log.create(params, (err, data) => {
             if(!err) {
                 res.json({
                     code : 200,
                     success : true,
-                    msg : "添加角色成功"
+                    msg : "系统日志添加成功"
                 })
             } else {
                 res.json({
                     code : 400,
                     success : false,
-                    msg : "添加角色失败"
+                    msg : "系统日志添加失败"
                 });
             }
         })

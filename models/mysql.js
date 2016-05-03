@@ -531,6 +531,14 @@ function connect(app) {
                 is_admin : Number,
                 export : String
             });
+            models.Log = db.define("tbl_dataplatform_nodejs_log",{
+                id : {type: 'number', key: true},
+                pagename : String,
+                username : String,
+                ip : String,
+                content : String,
+                date : Number
+            });
             next();
         }
     }))
