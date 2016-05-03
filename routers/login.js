@@ -201,9 +201,15 @@ module.exports = function(Router) {
                                                 unbind(client, next);
                                             } else {
                                                 if (ret.length) {
-                                                    saveLogin(req, res, remember, email, ret[0]);
-                                                    unbind(client, next);
-                                                    res.redirect(from || '/');
+                                                    if(ret[0].status) {
+                                                        saveLogin(req, res, remember, email, ret[0]);
+                                                        unbind(client, next);
+                                                        res.redirect(from || '/');
+                                                    } else {
+                                                        unbind(client, next);
+                                                        req.flash('该用户已被禁用');
+                                                        res.redirect('back');
+                                                    }
                                                 } else {
                                                     //不存在本地用户,写入本地用户
                                                     req.models.User2.create({
