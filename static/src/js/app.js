@@ -29,7 +29,7 @@ router.map({
     },
     '/': {
         component: Index
-    }
+    },
 });
 
 router.start(blankApp, '#page-wrapper');
