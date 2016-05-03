@@ -5,13 +5,10 @@
  */
 
 module.exports = (Router) => {
-    Router.get("/users/all", (req, res, next) => {
-        var params = req.query || {};
-        req.models.User2.find(params, (err, data) => {
-            if(!err) {
-                res.json(data);
-            }
-        });
+    Router.get("/users/find", (req, res, next) => {
+        var limit = req.query.limit || 10,
+            offset = req.query.offset || 0;
+        req.models.User2.find({}).limit(limit).offset();
     });
 
     Router.post("/users/update", (req, res, next) => {
@@ -21,7 +18,9 @@ module.exports = (Router) => {
         }, (err, data) => {
             if(!err) {
                 if(data.length) {
+                    if(params.status) {
 
+                    }
                 } else {
                     res.json({
                         success : false,
