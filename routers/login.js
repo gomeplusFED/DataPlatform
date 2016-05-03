@@ -226,7 +226,7 @@ module.exports = function(Router) {
                                                         if (err) {
                                                             unbind(client, next);
                                                         } else {
-                                                            saveLogin(req, res, remember, email, ret[0]);
+                                                            saveLogin(req, res, remember, email, ret);
                                                             unbind(client, next);
                                                             res.redirect(from || '/');
                                                         }
