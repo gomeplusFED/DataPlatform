@@ -3,8 +3,7 @@
  * @date 20160429
  * @fileoverview 用户管理
  */
-var orm = require("orm"),
-    util = require("../../../utils");
+var orm = require("orm");
 
 module.exports = (Router) => {
     Router.get("/users/find", (req, res, next) => {
