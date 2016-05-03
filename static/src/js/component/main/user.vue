@@ -80,7 +80,7 @@
 	
 }
 .user_table td ,.user_table th {
-	min-width: 180px;
+	width: 180px;
 }
 .user_table td {
 	position: relative;
