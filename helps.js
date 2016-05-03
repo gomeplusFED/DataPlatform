@@ -89,7 +89,30 @@ module.exports = function(app) {
     // };
     app.locals.createNavBarByLimit = function(userInfo,limit){
         var limited = userInfo.limited;
-        console.log(limited);
-        console.log(limit);
+        var str = '';
+        for(limitItem in limited){
+            if(limit[limitItem]){
+                var href = limit[limitItem].href;
+                var name = limit[limitItem].name;
+                var path = limit[limitItem].path;
+                var className = limit[limitItem].className;
+                str += '<li><a href="#!' + href + '"><i class="' + className + '"></i>' + name;
+                if(limited[limitItem].length){
+                    str += '<span class="fa arrow"></span></a><ul class="nav nav-second-level collapse">';
+                    limited[limitItem].forEach(function(v, k){
+                        var pathItem = path[v];
+                        if(pathItem.display){
+                            str += '<li><a href="#!' + pathItem.path + '">' + pathItem.name + '</a></li>';
+                        }
+                    })
+                    str += '</ul>';
+                }else{
+                    str += '</a>';
+                }
+                str += '</li>';
+            }
+        }
+        // return str;
+        console.log(str);
     }
 };
