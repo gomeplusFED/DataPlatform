@@ -17,6 +17,8 @@ var blankApp = Vue.extend({});
 var App = require('./component/app.vue');
 var Index = require('./component/index.vue');
 
+var User = require('./component/main/user.vue');
+
 
 var router = new VueRouter();
 
@@ -30,6 +32,12 @@ router.map({
     '/': {
         component: Index
     },
+    '/user': {
+        component: User
+    },
+    // '/role': {
+
+    // }
 });
 
 router.start(blankApp, '#page-wrapper');

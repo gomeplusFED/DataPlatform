@@ -37,11 +37,11 @@ module.exports = {
             href: "#",
             path: [{
                 name: "帐号列表",
-                path: "/user/all",
+                path: "/user",
                 display: true
             },{
                 name: "角色列表",
-                path: "/user/all",
+                path: "/role",
                 display: true
             }]
         },
