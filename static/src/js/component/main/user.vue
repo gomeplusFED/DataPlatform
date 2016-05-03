@@ -5,9 +5,8 @@
 				<div class="panel-heading">
 					<strong>帐号列表</strong>
 					<div class="search">
-						    <span class="fa fa-search"></span>
-						    <input style="width: 250px;" type="text" class="form-control" placeholder="输入帐号查询" v-model="searchStr" debounce="500">
-						</div>
+						<span class="fa fa-search"></span>
+						<input style="width: 250px;" type="text" class="form-control" placeholder="输入帐号查询" v-model="searchStr" debounce="500">
 					</div>
 				</div>
 				<div class="panel-body">
@@ -63,7 +62,6 @@
 	</div>
 	<m-loading :loading.sync="loading"></m-loading>
 	<m-alert></m-alert>
-
 	<div class="modal" id="modal_table" v-show="modal.show" transtion="fade">
 	    <div class="modal-dialog modal-lg">
 	        <div class="modal-content">
@@ -95,8 +93,6 @@
 	        </div>
 	    </div>
 	</div>
-
-
 </template>
 
 <style scoped>
@@ -228,7 +224,7 @@ var User = Vue.extend({
                 noLoaded: 0
 			},
 			modal: {
-				show: true,
+				show: false,
 				title: '弹出层',
 				type: 'roleList'
 			},
