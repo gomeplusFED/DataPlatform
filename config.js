@@ -20,16 +20,6 @@ module.exports = {
     pageTitle: '',
     js: [],
     limit: {
-        "2": {
-            name: "数据概览",
-            display: true,
-            className: "fa fa-dashboard fa-fw",
-            href: "#",
-            path: [
-                dataOverview.all(),
-                dataOverview.wap()
-            ]
-        },
         "0": {
             name: "用户管理",
             display: true,
@@ -45,6 +35,16 @@ module.exports = {
                 display: true
             }]
         },
+        "2": {
+            name: "数据概览",
+            display: true,
+            className: "fa fa-dashboard fa-fw",
+            href: "#",
+            path: [
+                dataOverview.all(),
+                dataOverview.wap()
+            ]
+        },
         "3": {
             name: "用户分析",
             display: true,
@@ -54,12 +54,13 @@ module.exports = {
                 usersAnalysis.newUsers(),
                 usersAnalysis.activeAccount(),
                 usersAnalysis.startUp(),
-                usersAnalysis.version()
+                usersAnalysis.version(),
+                retainedAnalysis.retained()
             ]
         },
         "4": {
             name: "留存分析",
-            display: true,
+            display: false,
             className: "fa fa-th-list fa-fw",
             href: "/retainedAnalysis",
             path: [],
@@ -69,7 +70,7 @@ module.exports = {
         },
         "5": {
             name: "渠道分析",
-            display: true,
+            display: false,
             className: "fa  fa-laptop fa-fw",
             href: "/channelAnalysis",
             path: [],
@@ -171,12 +172,12 @@ module.exports = {
             name: "商家返利汇总",
             display: true,
             className: "fa fa-desktop fa-fw",
-            href: "/businessRebate",
-            path: [],
-            routers: [
+            href: "#",
+            path: [
                 businessRebate.all(),
                 businessRebate.plan()
-            ]
+            ],
+            routers: []
         }
     }
 };
