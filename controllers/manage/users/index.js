@@ -49,6 +49,7 @@ module.exports = (Router) => {
                     data[0].role = params.role || data[0].role;
                     data[0].remark = params.remark || data[0].remark;
                     data[0].limited = params.limited || data[0].limited;
+                    data[0].export = params.export || data[0].export;
                     //if(params.limited) {
                     //    var limited = eval('(' + data[0].limited + ')');
                     //    params.limited = eval('(' + params.limited + ')');
@@ -80,7 +81,7 @@ module.exports = (Router) => {
                     res.json({
                         code : 400,
                         success : false,
-                        msg : "未查找到该用户"
+                        msg : "无该用户,无法修改"
                     })
                 }
             } else {
