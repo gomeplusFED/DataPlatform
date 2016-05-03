@@ -61,17 +61,26 @@ module.exports = (Router) => {
                     }
                     data[0].save((err) => {
                         if(!err) {
-                            res.json()
+                            res.json({
+                                code : 200,
+                                success : true,
+                                msg : "修改成功"
+                            })
                         }
                     })
                 } else {
                     res.json({
+                        code : 400,
                         success : false,
                         msg : "未查找到该用户"
                     })
                 }
             } else {
-                next(err);
+                res.json({
+                    code : 400,
+                    success : false,
+                    msg : "查询错误"
+                })
             }
         });
     });
