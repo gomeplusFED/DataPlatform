@@ -3,7 +3,8 @@
  * @date 20160429
  * @fileoverview 用户管理
  */
-var orm = require("orm");
+var orm = require("orm"),
+    util = require("../../../utils");
 
 module.exports = (Router) => {
     Router.get("/users/find", (req, res, next) => {
@@ -46,8 +47,23 @@ module.exports = (Router) => {
             if(!err) {
                 if(data.length) {
                     data[0].status = params.status || data[0].status;
-                    var limited = eval('(' + data[0].limited + ')');
-                    
+                    data[0].role = params.role || data[0].role;
+                    data[0].remark = params.remark || data[0].remark;
+                    if(params.limited) {
+                        var limited = eval('(' + data[0].limited + ')');
+                        Object.keys(params.limited).forEach((key) => {
+                            var limit = params.limit[key].concat(limited[key]);
+                            limited[key] = util.uniq(limit).sort((a, b) => {
+                                return a - b;
+                            });
+                        });
+                        data[0].limited = limited;
+                    }
+                    data[0].save((err) => {
+                        if(!err) {
+                            res.json()
+                        }
+                    })
                 } else {
                     res.json({
                         success : false,
