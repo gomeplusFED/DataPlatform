@@ -95,7 +95,7 @@
 	</div>
 </template>
 
-<style scoped>
+<style>
 .search{
 	position: absolute;
 	right: 20px;
