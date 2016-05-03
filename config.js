@@ -36,8 +36,12 @@ module.exports = {
             className: "fa fa-user fa-fw",
             href: "#",
             path: [{
-                name: "用户列表",
-                path: "/user/all",
+                name: "帐号列表",
+                path: "/user",
+                display: true
+            },{
+                name: "角色列表",
+                path: "/role",
                 display: true
             }]
         },
