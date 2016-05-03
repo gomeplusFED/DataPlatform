@@ -80,7 +80,7 @@ module.exports = (Router) => {
         var body = req.body,
             params = {
                 name : body.name,
-                date : new Date(),
+                date : new Date().getTime(),
                 limited : body.limited || "{}",
                 export : body.export | "{}",
                 status : 1,
