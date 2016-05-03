@@ -20,10 +20,19 @@ module.exports = (Router) => {
             email : req.session.userInfo.email
         }, (err, data) => {
             if(!err) {
-                
+                if(data.length) {
+
+                } else {
+                    res.json({
+                        success : false,
+                        msg : "未查找到该用户"
+                    })
+                }
             } else {
                 next(err);
             }
         });
     });
+
+     return Router;
 };
