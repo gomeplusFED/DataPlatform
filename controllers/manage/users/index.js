@@ -49,22 +49,31 @@ module.exports = (Router) => {
                     data[0].status = params.status || data[0].status;
                     data[0].role = params.role || data[0].role;
                     data[0].remark = params.remark || data[0].remark;
-                    if(params.limited) {
-                        var limited = eval('(' + data[0].limited + ')');
-                        Object.keys(params.limited).forEach((key) => {
-                            var limit = params.limit[key].concat(limited[key]);
-                            limited[key] = util.uniq(limit).sort((a, b) => {
-                                return a - b;
-                            });
-                        });
-                        data[0].limited = limited;
-                    }
+                    data[0].limited = params.limited || data[0].limited;
+                    //if(params.limited) {
+                    //    var limited = eval('(' + data[0].limited + ')');
+                    //    params.limited = eval('(' + params.limited + ')');
+                    //    Object.keys(params.limited).forEach((key) => {
+                    //        var limit = params.limited[key].concat(limited[key]);
+                    //        limited[key] = util.uniq(limit).sort((a, b) => {
+                    //            return a - b;
+                    //        });
+                    //    });
+                    //    data[0].limited = JSON.stringify(limited);
+                    //}
                     data[0].save((err) => {
                         if(!err) {
+                            req.session.userInfo = data[0];
                             res.json({
                                 code : 200,
                                 success : true,
                                 msg : "修改成功"
+                            })
+                        } else {
+                            res.json({
+                                code : 400,
+                                success : false,
+                                msg : "修改失败"
                             })
                         }
                     })
