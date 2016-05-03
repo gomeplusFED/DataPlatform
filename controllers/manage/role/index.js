@@ -3,8 +3,6 @@
  * @date 20160503
  * @fileoverview 角色管理
  */
-var orm = require("orm");
-
 module.exports = (Router) => {
     Router.get("/role/find", (req, res, next) => {
         var query = req.query,
