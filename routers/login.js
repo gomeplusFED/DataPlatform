@@ -220,7 +220,7 @@ module.exports = function(Router) {
                                                         export : "{}",
                                                         department : entry.object.dn.match(/OU=(.*?),/)[1],
                                                         status : 1,
-                                                        date : new Date(),
+                                                        date : new Date().getTime(),
                                                         is_admin : 0
                                                     }, function(err, ret) {
                                                         if (err) {

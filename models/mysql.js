@@ -516,7 +516,7 @@ function connect(app) {
                 remark : String,
                 status : Number,
                 limited : String,
-                date : Date,
+                date : Number,
                 is_admin : Number,
                 export : String
             });
@@ -527,7 +527,7 @@ function connect(app) {
                 remark : String,
                 status : Number,
                 limited : String,
-                date : Date,
+                date : Number,
                 is_admin : Number,
                 export : String
             });
