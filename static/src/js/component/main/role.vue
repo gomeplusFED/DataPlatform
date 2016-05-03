@@ -47,6 +47,40 @@
 	</div>
 	<m-loading :loading.sync="loading"></m-loading>
 	<m-alert></m-alert>
+
+
+	<div class="modal" id="modal_table" v-show="modal.show" transtion="fade">
+	    <div class="modal-dialog modal-lg">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <h4 class="modal-title">{{modal.title}}</h4>
+	            </div>
+	            <div class="modal-body">
+	            	<m-limit-list :limited="limited"></m-limit-list>
+	                <table class="table table-striped table-bordered table-hover">
+	                	<thead>
+	                		<tr>
+	                			<th></th>
+	                			<th>序号</th>
+	                			<th>角色名称</th>
+	                			<th>创建时间</th>
+	                			<th>备注</th>
+	                		</tr>
+	                	</thead>
+	                	<tbody>
+	                		<!-- <tr v-for="item in userListData"> -->
+
+	                		<!-- </tr> -->
+	                	</tbody>
+	                </table>
+	            </div>
+	            <div class="modal-footer">
+	                <button type="button" class="btn default" data-dismiss="modal" @click="apply()">确定</button>
+	                <button type="button" class="btn default" data-dismiss="modal" @click="modal.show = false">取消</button>
+	            </div>
+	        </div>
+	    </div>
+	</div>
 </template>
 
 <style>
@@ -91,6 +125,7 @@ var actions = require('../../store/actions.js');
 var Loading = require('../common/loading.vue');
 var Alert = require('../common/alert.vue');
 
+var LimitList = require('../common/limitList.vue');
 
 var Role = Vue.extend({
 	name: 'Role',
@@ -110,7 +145,12 @@ var Role = Vue.extend({
 			loading: {
 				show: true,
                 noLoaded: 0
-			}
+			},
+			modal: {
+				show: true,
+				title: '弹出层'
+			},
+			limited: null
 		}
 	},
 	store: store,
@@ -126,6 +166,7 @@ var Role = Vue.extend({
 		'm-pagination': Pagination,
 		'm-loading': Loading,
 		'm-alert': Alert,
+		'm-limit-list': LimitList
 	},
 	created: function(){
 		this.createTableBySearchStr();
@@ -146,6 +187,15 @@ var Role = Vue.extend({
 					_this.loading.show = false;
 				}
 			})
+		},
+		addRole: function(){
+
+		},
+		modifyRole: function(){
+
+		},
+		showModal: function(){
+
 		}
 	},
 })
