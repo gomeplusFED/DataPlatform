@@ -63,7 +63,40 @@
 	</div>
 	<m-loading :loading.sync="loading"></m-loading>
 	<m-alert></m-alert>
-	<m-modal></m-modal>
+
+	<div class="modal" id="modal_table" v-show="modal.show" transtion="fade">
+	    <div class="modal-dialog modal-lg">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <h4 class="modal-title">{{modal.title}}</h4>
+	            </div>
+	            <div class="modal-body">
+	                <table v-if="modal.type === 'roleList'" class="table table-striped table-bordered table-hover">
+	                	<thead>
+	                		<tr>
+	                			<th></th>
+	                			<th>序号</th>
+	                			<th>角色名称</th>
+	                			<th>创建时间</th>
+	                			<th>备注</th>
+	                		</tr>
+	                	</thead>
+	                	<tbody>
+	                		<!-- <tr v-for="item in userListData"> -->
+
+	                		<!-- </tr> -->
+	                	</tbody>
+	                </table>
+	            </div>
+	            <div class="modal-footer">
+	                <button type="button" class="btn default" data-dismiss="modal" @click="apply()">确定</button>
+	                <button type="button" class="btn default" data-dismiss="modal" @click="modal.show = false">取消</button>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+
+
 </template>
 
 <style scoped>
@@ -185,7 +218,6 @@ var User = Vue.extend({
 				pagesLength: 5,     // 显示几页( 1,2,3 / 1,2,3,4,5)
 				onChange: function() {
 					// 回调
-					// console.log();
 					UserVm.createTableBySearchStr();
 				}
 			},
@@ -194,7 +226,13 @@ var User = Vue.extend({
 			loading: {
 				show: true,
                 noLoaded: 0
-			}
+			},
+			modal: {
+				show: true,
+				title: '弹出层',
+				type: 'roleList'
+			},
+			roleList: null
 		}
 	},
 	store: store,
@@ -265,6 +303,19 @@ var User = Vue.extend({
 					_this.paginationConf.totalItems = data.count;
 					_this.userListData = data.data;
 					_this.loading.show = false;
+				}
+			})
+		},
+		showRoleList: function(){
+			var _this = this;
+			$.ajax({
+				url: '/role/find',
+				type: 'get',
+				data: {
+
+				},
+				success: function(data){
+
 				}
 			})
 		}
