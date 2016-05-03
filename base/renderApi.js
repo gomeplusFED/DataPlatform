@@ -87,27 +87,26 @@ renderApi.prototype = {
     },
     _renderData(res, dataParams) {
         var page = {};
-        for(var key of config.limit) {
-            Object.keys(key).forEach((param) => {
-                if(key[param].display) {
-                    if(key[param].href === "#") {
-                        for(var path of key[param].path) {
-                            page[path.path] = {
-                                pageTitle : path.name,
-                                defaultData : path.defaultData
-                            }
+        Object.keys(config.limit).forEach((key) => {
+            var limit = config.limit[key];
+            if(limit.display) {
+                if(limit.href === "#") {
+                    for(var path of limit.path) {
+                        page[path.path] = {
+                            pageTitle : path.name,
+                            defaultData : path.defaultData
                         }
-                    } else {
-                        for(var path of key[param].routers) {
-                            page[path.path] = {
-                                pageTitle : path.name,
-                                defaultData : path.defaultData
-                            }
+                    }
+                } else {
+                    for(var path of limit.routers) {
+                        page[path.path] = {
+                            pageTitle : path.name,
+                            defaultData : path.defaultData
                         }
                     }
                 }
-            });
-        }
+            }
+        });
         res.render(this.view, {
             //pageTitle: this.name,
             drop_down_default_data: dataParams.types,
