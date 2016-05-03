@@ -94,9 +94,11 @@ renderApi.prototype = {
             if(limited[key]) {
                 for(var value of limited[key]) {
                     var path = limit.path[value];
-                    page[path.path] = {
-                        pageTitle : path.name,
-                        defaultData : path.defaultData
+                    if(path) {
+                        page[path.path] = {
+                            pageTitle : path.name,
+                            defaultData : path.defaultData
+                        };
                     }
                 }
             }
