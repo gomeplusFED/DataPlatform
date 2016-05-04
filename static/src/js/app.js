@@ -18,6 +18,7 @@ var App = require('./component/app.vue');
 var Index = require('./component/index.vue');
 
 var User = require('./component/main/user.vue');
+var Role = require('./component/main/role.vue');
 
 
 var router = new VueRouter();
@@ -35,9 +36,9 @@ router.map({
     '/user': {
         component: User
     },
-    // '/role': {
-
-    // }
+    '/role': {
+        component: Role
+    }
 });
 
 router.start(blankApp, '#page-wrapper');
