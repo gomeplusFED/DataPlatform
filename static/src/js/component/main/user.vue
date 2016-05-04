@@ -45,8 +45,8 @@
 									<td>
 										<ul>
 											<li v-show="item.status"><a @click="showLimitList(item.id, item.limited, item.export)" class="btn btn-default" href="javascript:void(0)">权限修改<i class="fa fa-pencil-square-o"></i></a></li>
-											<li v-show="item.status"><a class="btn btn-default" href="javascript:void(0)">禁用<i class="fa fa-remove"></i></a></li>
-											<li v-show="!item.status"><a class="btn btn-default" href="javascript:void(0)">启用<i class="fa fa-check-square-o"></i></a></li>
+											<li v-show="item.status"><a @click="forbidden(item.id)" class="btn btn-default" href="javascript:void(0)">禁用<i class="fa fa-remove"></i></a></li>
+											<li v-show="!item.status"><a @click="startUsing(item.id)" class="btn btn-default" href="javascript:void(0)">启用<i class="fa fa-check-square-o"></i></a></li>
 										</ul>
 									</td>
 								</tr>
@@ -210,6 +210,8 @@ var ModalTable = require('../common/modalTable.vue');
 
 var LimitList = require('../common/limitList.vue');
 
+var utils = require('utils');
+
 // fileter
 require('../../filter/index.js');
 
@@ -346,11 +348,13 @@ var User = Vue.extend({
 				},
 				success: function(data){
 					_this.roleList = data.data;
+					var currentUserRoleNameArr = _this.currentUserRoleName.split(';');
 					for(var item in _this.roleList){
-						// Vue.set(_this.roleList[item], 'checked', false);
-						console.log(_this.roleList[item].name);
-						if(_this.roleList[item].name === _this.currentUserRoleName){
-							// Vue.set(_this.roleList[item], 'checked', true);
+						Vue.set(_this.roleList[item], 'checked', false);
+						if(currentUserRoleNameArr.filter(function(v, index){
+							return _this.roleList[item].name === v;
+						}).length > 0){
+							Vue.set(_this.roleList[item], 'checked', true);
 						}
 					}
 				}
@@ -369,16 +373,82 @@ var User = Vue.extend({
 		apply: function(){
 			var _this = this;
 			if(this.modal.type === 'roleList'){
+				var resultLimited = {};
+				for(var item in _this.roleList){
+					if(_this.roleList[item]['checked']){
+						var obj = eval('(' + _this.roleList[item]['limited'] + ')');
+						for(var k in obj){
+							if(!resultLimited[k]){
+								resultLimited[k] = obj[k];
+							}else{
+								for(var i = 0; i < obj[k].length; i++){
+									resultLimited[k].push(obj[k][i]);
+								}
+								resultLimited[k] = utils.uniqueArray(resultLimited[k]);
+								resultLimited[k].sort(function(a, b){
+									return a - b;
+								})
+							}
+						}
+					}
+				}
+				var resultExportLimited = {};
+				for(var item in _this.roleList){
+					if(_this.roleList[item]['checked']){
+						var obj = eval('(' + _this.roleList[item]['export'] + ')');
+						for(var k in obj){
+							if(!resultExportLimited[k]){
+								resultExportLimited[k] = obj[k];
+							}else{
+								for(var i = 0; i < obj[k].length; i++){
+									resultExportLimited[k].push(obj[k][i]);
+								}
+								resultExportLimited[k] = utils.uniqueArray(resultExportLimited[k]);
+								resultExportLimited[k].sort(function(a, b){
+									return a - b;
+								})
+							}
+						}
+					}
+				}
+				var roleName = [];
+				for(var item in _this.roleList){
+					if(_this.roleList[item]['checked']){
+						roleName.push(_this.roleList[item].name);
+					}
+				}
 
-				// $.ajax({
-				// 	url: '/users/update',
-				// 	type: 'post',
-				// 	data: {
-				// 		id: _this.currentID,
-				// 		role: _this.currentUserRoleName
-				// 	}
-				// })
-				console.log(this.currentCheckRoleName);
+				for(var item in resultLimited){
+					if(resultLimited[item].length === 0){
+						delete resultLimited[item];
+					}
+				}
+
+				for(var item in resultExportLimited){
+					if(resultExportLimited[item].length === 0){
+						delete resultExportLimited[item];
+					}
+				}
+
+				$.ajax({
+					url: '/users/update',
+					type: 'post',
+					data: {
+						id: _this.currentID,
+						limited: JSON.stringify(resultLimited),
+						export: JSON.stringify(resultExportLimited),
+						role: roleName.join(';')
+					},
+					success: function(){
+						actions.alert(store, {
+							show: true,
+							msg: '修改成功',
+							type: 'success'
+						})
+						_this.modal.show = false;
+						_this.createTableBySearchStr();
+					}
+				})
 			}else if(this.modal.type === 'limitList'){
 				var _this = this;
 				$.ajax({

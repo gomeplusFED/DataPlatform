@@ -221,6 +221,16 @@ var Role = Vue.extend({
 				return;
 			}
 			if(this.modifyType === 'modify'){
+				for(var item in _this.modifyLimited){
+					if(_this.modifyLimited[item].length === 0){
+						Vue.delete(_this.modifyLimited, item);
+					}
+				}
+				for(var item in _this.modifyExportLimited){
+					if(_this.modifyExportLimited[item].length === 0){
+						Vue.delete(_this.modifyExportLimited, item);
+					}
+				}
 				$.ajax({
 					url: '/role/update',
 					type: 'post',
