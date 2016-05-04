@@ -33,11 +33,11 @@
 									<td>{{item.department}}</td>
 									<td>
 										<span style="width: 160px;display: inline-block;">{{item.role === null ? '无' : item.role}}</span>
-										<a @click="showRoleList(item.role, item.id, item.limited, item.export)" href="javascript:;" class="btn btn-default" data-role="0">修改<i class="fa fa-pencil-square-o"></i></a>
+										<a v-show="item.status" @click="showRoleList(item.role, item.id, item.limited, item.export)" href="javascript:;" class="btn btn-default" data-role="0">修改<i class="fa fa-pencil-square-o"></i></a>
 									</td>
 									<td style="width: 300px;">
 										<span style="width: 300px;display: inline-block;">{{item.remark === null ? '无' : item.remark}}</span>
-										<form class="form-inline remark" @submit.prevent="editRemark(item.id,item.remark)">
+										<form v-show="item.status" class="form-inline remark" @submit.prevent="editRemark(item.id,item.remark)">
 											<input type="text" class="form-control" id="remark" v-model="item.remark">
 											<a @click="showRemark($event, item.id, item.remark)" href="javascript:void(0);" class="btn btn-default">修改<i class="fa fa-pencil-square-o"></i></a>
 										</form>
