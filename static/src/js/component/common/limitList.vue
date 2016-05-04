@@ -72,6 +72,7 @@ label input{
 .con>li>div{
 	font-size: 0;
 	background-color: rgb(204,204,255);
+	cursor: pointer;
 }
 .con>li:last-child span{
 	border-bottom: none;
@@ -84,8 +85,6 @@ label input{
 .con>li>ul>li{
 	font-size: 0px;
 }
-
-
 
 </style>
 
@@ -102,8 +101,7 @@ var LimitList = Vue.extend({
 	},
 	props: ['limited'],
 	created: function(){
-		// console.log(this.limited);
-
+		console.log(this.limited);
 	}
 })
 
