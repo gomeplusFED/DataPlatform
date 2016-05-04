@@ -254,6 +254,14 @@ var User = Vue.extend({
 	},
 	methods: {
 		showRemark: function(ev,id,remark){
+
+			$(document).bind('click',function(ev){
+			    var obj = $(ev.target);
+			    if (obj.parents('.remark').length === 0) {
+			    	$('.remark').find('input').css('display','none');
+			    }
+			})
+			
 			if($(ev.target).parents('.remark').find('input').css('display') === 'inline-block'){
 				$(ev.target).parents('.remark').find('input').css('display','none');
 				this.editRemark(id,remark);
@@ -263,7 +271,6 @@ var User = Vue.extend({
 		},
 		editRemark: function(id,remark){
 			var _this = this;
-			// _this.loading.show = true;
 			$.ajax({
 				url: '/users/update',
 				type: 'post',
@@ -278,7 +285,6 @@ var User = Vue.extend({
 							msg: '修改成功',
 							type: 'success'
 						})
-						// _this.loading.show = false;
 						$('.remark').find('input').css('display','none');
 					}
 				}

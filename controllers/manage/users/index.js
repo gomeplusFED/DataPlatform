@@ -15,7 +15,7 @@ module.exports = (Router) => {
                 username : orm.like("%" + username + "%")
             },
             sql = "SELECT * FROM tbl_dataplatform_nodejs_users2"
-                + " WHERE username like '%" + username + "%"
+                + " WHERE username like '%" + username + "%'"
                 + " LIMIT " + (page - 1) * limit + "," + limit;
         req.models.User2.count(params, (err, count) => {
             if(!err) {

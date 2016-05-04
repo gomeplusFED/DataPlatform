@@ -29,7 +29,7 @@
 									<td>{{item.remark}}</td>
 									<td>
 										<ul>
-											<li v-show="item.status"><a class="btn btn-default" href="javascript:void(0)">修改<i class="fa fa-pencil-square-o"></i></a></li>
+											<li v-show="item.status"><a @click="modifyRole(item.id, item.limited, item.export)" class="btn btn-default" href="javascript:void(0)">修改<i class="fa fa-pencil-square-o"></i></a></li>
 											<li v-show="item.status"><a class="btn btn-default" href="javascript:void(0)">禁用<i class="fa fa-remove"></i></a></li>
 											<li v-show="!item.status"><a class="btn btn-default" href="javascript:void(0)">启用<i class="fa fa-check-square-o"></i></a></li>
 										</ul>
@@ -47,8 +47,6 @@
 	</div>
 	<m-loading :loading.sync="loading"></m-loading>
 	<m-alert></m-alert>
-
-
 	<div class="modal" id="modal_table" v-show="modal.show" transtion="fade">
 	    <div class="modal-dialog modal-lg">
 	        <div class="modal-content">
@@ -56,7 +54,7 @@
 	                <h4 class="modal-title">{{modal.title}}</h4>
 	            </div>
 	            <div class="modal-body">
-	            	<m-limit-list :limited="limited"></m-limit-list>
+	            	<m-limit-list :id="id" :limited="limited" :export-limit="exportLimit"></m-limit-list>
 	                <table class="table table-striped table-bordered table-hover">
 	                	<thead>
 	                		<tr>
@@ -147,10 +145,12 @@ var Role = Vue.extend({
                 noLoaded: 0
 			},
 			modal: {
-				show: true,
+				show: false,
 				title: '弹出层'
 			},
-			limited: null
+			id: null,
+			limited: null,
+			exportLimit: null
 		}
 	},
 	store: store,
@@ -191,8 +191,12 @@ var Role = Vue.extend({
 		addRole: function(){
 
 		},
-		modifyRole: function(){
-
+		modifyRole: function(id, limited, exportLimit){
+			this.id = id;
+			this.exportLimit = eval('(' + exportLimit + ')');
+			this.limited = eval('(' + limited + ')');
+			this.modal.show = true;
+			this.modal.title = '修改角色';
 		},
 		showModal: function(){
 

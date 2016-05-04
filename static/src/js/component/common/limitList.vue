@@ -6,19 +6,19 @@
 		<span>二级目录／页面</span>
 		<span>导出权限</span>
 	</li>
-	<li v-for="item1 in pageAll">
-		<div>
-			<span><input type="checkbox"></input></span>
+	<li v-for="(key,item1) in pageAll">
+		<div @click.stop="showLevel($event, $index)">
+			<span><input @click.stop="parseLimitAll()" type="checkbox"></input></span>
 			<span>{{item1.name}}</span>
 			<span>&nbsp;</span>
-			<span><label><input type="checkbox"/>数据导出</label></span>
+			<span><label><input type="checkbox" v-model="exportLimit[key].length === item1.path.length"/>数据导出</label></span>
 		</div>
-		<ul>
+		<ul v-show="levelShow[$index]">
 			<li v-for="item2 in item1.path">
-				<span><input type="checkbox"></input></span>
+				<span><input type="checkbox" v-model="limitedObj[key][$index]"></input></span>
 				<span>&nbsp;</span>
 				<span>{{item2.name}}</span>
-				<span><label><input type="checkbox"/>数据导出</label></span>
+				<span><label><input type="checkbox" v-model="exportLimitObj[key][$index]"/>数据导出</label></span>
 			</li>
 		</ul>
 	</li>
@@ -96,12 +96,65 @@ var LimitList = Vue.extend({
 	name: 'LimitList',
 	data: function(){
 		return {
-			pageAll: window.allPageConfig.pageAll
+			pageAll: window.allPageConfig.pageAll,
+			levelShow: {},
+			limitedObj: {},
+			exportLimitObj: {}
 		}
 	},
-	props: ['limited'],
+	props: ['id', 'limited', 'exportLimit'],
 	created: function(){
-		console.log(this.limited);
+		var count = 0;
+		for(var item in this.pageAll){
+			if(count === 0){
+				Vue.set(this.levelShow, count, true);	
+			}else{
+				Vue.set(this.levelShow, count, false);
+			}
+			count += 1;
+		}
+	},
+	methods: {
+		showLevel: function(ev, index){
+			if(ev.target.tagName === 'INPUT' || ev.target.tagName === 'LABEL'){
+				return;
+			}
+			this.levelShow[index] = !this.levelShow[index];
+		},
+		parseLimitAll: function(){
+			
+			return true;
+		},
+		parseLimit: function(key, index){
+
+		},
+		parseArrayToObject: function(array){
+			var result = {};
+			for(var i = 0; i < array.length; i++){
+				result[array[i]] = true;
+			}
+			return result;
+		}
+	},
+	watch: {
+		limited: {
+			handler: function(val){
+				for(var item in this.limited){
+					var _curretnObj = this.parseArrayToObject(this.limited[item]);
+					Vue.set(this.limitedObj, item, _curretnObj);
+				}
+			},
+			deep: true
+		},
+		exportLimit: {
+			handler: function(val){
+				for(var item in this.exportLimit){
+					var _curretnObj = this.parseArrayToObject(this.exportLimit[item]);
+					Vue.set(this.exportLimitObj, item, _curretnObj);
+				}
+			},
+			deep: true
+		}
 	}
 })
 
