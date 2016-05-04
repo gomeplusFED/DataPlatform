@@ -19,6 +19,7 @@ var Index = require('./component/index.vue');
 
 var User = require('./component/main/user.vue');
 var Role = require('./component/main/role.vue');
+var Log = require('./component/main/log.vue');
 
 
 var router = new VueRouter();
@@ -38,7 +39,10 @@ router.map({
     },
     '/role': {
         component: Role
-    }
+    },
+    '/log': {
+        component: Log
+    },
 });
 
 router.start(blankApp, '#page-wrapper');
