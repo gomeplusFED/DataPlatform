@@ -39,6 +39,7 @@ module.exports = (Router) => {
     Router.post("/users/update", (req, res, next) => {
         var params = req.body,
             content = [];
+        console.log(params);
         req.models.User2.find({
             id : params.id
         }, (err, data) => {
@@ -66,7 +67,7 @@ module.exports = (Router) => {
                     }
                     if(params.remark === "") {
                         content.push(username + "的备注被清空");
-                    } else if(params.remark !== "") {
+                    } else if(params.remark !== "" && params.remark) {
                         content.push(username + "被修改备注");
                     }
                     _save();
