@@ -62,7 +62,7 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="juese_remark" class="col-sm-2 control-label">Password</label>
+							<label for="juese_remark" class="col-sm-2 control-label">角色备注</label>
 							<div class="col-sm-10">
 								<input type="text" class="form-control" id="juese_remark" placeholder="请输入角色备注" v-model="modifyRemark">
 							</div>
