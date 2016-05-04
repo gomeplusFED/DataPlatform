@@ -8,8 +8,12 @@ module.exports = (Router) => {
         var query = req.query,
             limit = query.limit || 30,
             page = query.page || 1,
-            sql = "SELECT * FROM tbl_dataplatform_nodejs_role"
-                + " LIMIT " + (page - 1) * limit + "," + limit;
+            status = query.status,
+            sql = "SELECT * FROM tbl_dataplatform_nodejs_role";
+        if(status) {
+            sql += " WHERE status=" + status;
+        }
+        sql += " LIMIT " + (page - 1) * limit + "," + limit;
         req.models.Role.count({}, (err, count) => {
             if(!err) {
                 req.db.driver.execQuery(sql, (err, data) => {

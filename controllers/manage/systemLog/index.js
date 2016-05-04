@@ -31,30 +31,5 @@ module.exports = (Router) => {
         });
     });
 
-    Router.post("/log/add", (req, res, next) => {
-        var body = req.body,
-            params = {
-                username : body.username,
-                date : new Date().getTime(),
-                ip : util.getClientIp(req),
-                content : body.content || ""
-            };
-        req.models.Log.create(params, (err, data) => {
-            if(!err) {
-                res.json({
-                    code : 200,
-                    success : true,
-                    msg : "系统日志添加成功"
-                })
-            } else {
-                res.json({
-                    code : 400,
-                    success : false,
-                    msg : "系统日志添加失败"
-                });
-            }
-        })
-    });
-
     return Router;
 };
