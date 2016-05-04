@@ -65,7 +65,9 @@ module.exports = (Router) => {
                     if(params.limited) {
                         content.push(username + "被授予权限");
                     }
-                    if(params.remark) {
+                    if(params.remark === "") {
+                        content.push(username + "的备注被清空");
+                    } else if(params.remark !== "") {
                         content.push(username + "被修改备注");
                     }
                     _save();
