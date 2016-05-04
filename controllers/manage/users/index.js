@@ -12,19 +12,18 @@ module.exports = (Router) => {
             limit = query.limit || 10,
             username = query.username || "",
             page = query.page || 1,
-            params = {
-                username : orm.like("%" + username + "%")
-            },
+            count = "SELECT count(1) FROM tbl_dataplatform_nodejs_users2"
+                + " WHERE username like '%" + username + "%' OR role like '%" +  username + "%'",
             sql = "SELECT * FROM tbl_dataplatform_nodejs_users2"
-                + " WHERE username like '%" + username + "%'"
+                + " WHERE username like '%" + username + "%' OR role like '%" +  username + "%'"
                 + " LIMIT " + (page - 1) * limit + "," + limit;
-        req.models.User2.count(params, (err, count) => {
+        req.db.driver.execQuery(count, (err, count) => {
             if(!err) {
                 req.db.driver.execQuery(sql, (err, data) => {
                         if(!err) {
                             res.json({
                                 code : 200,
-                                count : count,
+                                count : count[0]["count(1)"],
                                 data : data
                             });
                         } else {
