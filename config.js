@@ -31,6 +31,10 @@ module.exports = {
                 name: "角色列表",
                 path: "/role",
                 display: true
+            },{
+                name: "系统日志",
+                path: "/log",
+                display: true
             }]
         },
         "2": {
