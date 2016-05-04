@@ -214,6 +214,9 @@ var LimitList = Vue.extend({
 				}
 			}
 
+		},
+		dispatchParams: function(){
+
 		}
 	},
 	watch: {
@@ -225,9 +228,6 @@ var LimitList = Vue.extend({
 					var _curretnObj = this.parseArrayToObject(this.limited[item]);
 					Vue.set(this.limitedObj, item, _curretnObj);
 				}
-				this.parseLimitAll('limit');
-				var realLimit = this.parseObjectToLimitObj(this.limitedObj);
-				this.$dispatch('borcastLimit', realLimit)
 			},
 			deep: true
 		},
@@ -239,6 +239,19 @@ var LimitList = Vue.extend({
 					var _curretnObj = this.parseArrayToObject(this.exportLimit[item]);
 					Vue.set(this.exportLimitObj, item, _curretnObj);
 				}
+			},
+			deep: true
+		},
+		limitedObj: {
+			handler: function(){
+				this.parseLimitAll('limit');
+				var realLimit = this.parseObjectToLimitObj(this.limitedObj);
+				this.$dispatch('borcastLimit', realLimit);
+			},
+			deep: true
+		},
+		exportLimitObj: {
+			handler: function(){
 				this.parseLimitAll('exportLimit');
 				var realLimit = this.parseObjectToLimitObj(this.exportLimitObj);
 				this.$dispatch('borcastExportLimit', realLimit)

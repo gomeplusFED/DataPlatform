@@ -28,6 +28,12 @@ utils.isInObj = function(source, target) {
     return false;
 }
 
+utils.isInArray = function(item, array){
+    for(var i = 0; i < array.length; i++){
+        
+    }
+}
+
 utils.getObjLen = function(obj){
     var _count = 0;
     for(var item in obj){

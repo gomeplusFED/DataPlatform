@@ -33,18 +33,18 @@
 									<td>{{item.department}}</td>
 									<td>
 										<span style="width: 160px;display: inline-block;">{{item.role === null ? '无' : item.role}}</span>
-										<a href="javascript:;" class="btn btn-default" data-role="0">修改<i class="fa fa-pencil-square-o"></i></a>
+										<a @click="showRoleList(item.role, item.id, item.limited, item.export)" href="javascript:;" class="btn btn-default" data-role="0">修改<i class="fa fa-pencil-square-o"></i></a>
 									</td>
 									<td style="width: 300px;">
 										<span style="width: 300px;display: inline-block;">{{item.remark === null ? '无' : item.remark}}</span>
 										<form class="form-inline remark" @submit.prevent="editRemark(item.id,item.remark)">
 											<input type="text" class="form-control" id="remark" v-model="item.remark">
-											<a @click="showRemark($event,item.id,item.remark)" href="javascript:void(0);" class="btn btn-default">修改<i class="fa fa-pencil-square-o"></i></a>
+											<a @click="showRemark($event, item.id, item.remark)" href="javascript:void(0);" class="btn btn-default">修改<i class="fa fa-pencil-square-o"></i></a>
 										</form>
 									</td>
 									<td>
 										<ul>
-											<li v-show="item.status"><a class="btn btn-default" href="javascript:void(0)">权限修改<i class="fa fa-pencil-square-o"></i></a></li>
+											<li v-show="item.status"><a @click="showLimitList(item.id, item.limited, item.export)" class="btn btn-default" href="javascript:void(0)">权限修改<i class="fa fa-pencil-square-o"></i></a></li>
 											<li v-show="item.status"><a class="btn btn-default" href="javascript:void(0)">禁用<i class="fa fa-remove"></i></a></li>
 											<li v-show="!item.status"><a class="btn btn-default" href="javascript:void(0)">启用<i class="fa fa-check-square-o"></i></a></li>
 										</ul>
@@ -80,11 +80,16 @@
 	                		</tr>
 	                	</thead>
 	                	<tbody>
-	                		<!-- <tr v-for="item in userListData"> -->
-
-	                		<!-- </tr> -->
+	                		<tr v-for="item in roleList">
+								<th><span><input type="checkbox" :value="item.name" v-model="item.checked"></input></span></th>
+								<th><span>{{item.id}}</span></th>
+								<th><span>{{item.name}}</span></th>
+								<th><span>{{item.date | Date 'yyyy-MM-dd hh:mm:ss'}}</span></th>
+								<th><span>{{item.remark}}</span></th>
+	                		</tr>
 	                	</tbody>
 	                </table>
+	                <m-limit-list v-show="modal.type === 'limitList'" :id="id" :limited="limited" :export-limit="exportLimit"></m-limit-list>
 	            </div>
 	            <div class="modal-footer">
 	                <button type="button" class="btn default" data-dismiss="modal" @click="apply()">确定</button>
@@ -203,6 +208,11 @@ var Loading = require('../common/loading.vue');
 var Alert = require('../common/alert.vue');
 var ModalTable = require('../common/modalTable.vue');
 
+var LimitList = require('../common/limitList.vue');
+
+// fileter
+require('../../filter/index.js');
+
 var User = Vue.extend({
 	name: 'User',
 	data: function(){
@@ -228,7 +238,17 @@ var User = Vue.extend({
 				title: '弹出层',
 				type: 'roleList'
 			},
-			roleList: null
+			id: null,
+			limited: {},
+			exportLimit: {},
+			roleList: null,
+			currentID: null,
+			currentCheckRoleName: null,
+			currentUserRoleName: null,
+			curretnLimited: null,
+			currentExportLimited: null,
+			modifyLimited: {},
+			modifyExportLimited: {}
 		}
 	},
 	store: store,
@@ -244,7 +264,8 @@ var User = Vue.extend({
 		'm-pagination': Pagination,
 		'm-loading': Loading,
 		'm-alert': Alert,
-		'm-modal': ModalTable
+		'm-modal': ModalTable,
+		'm-limit-list': LimitList
 	},
 	init: function(){
 		UserVm = this;
@@ -308,25 +329,132 @@ var User = Vue.extend({
 				}
 			})
 		},
-		showRoleList: function(){
+		showRoleList: function(role, id, limited, exportLimited){
 			var _this = this;
+			_this.modal.show = true;
+			_this.modal.title = '修改角色';
+			_this.modal.type = 'roleList';
+			_this.currentUserRoleName = role;
+			_this.currentID = id;
+			_this.curretnLimited = limited;
+			_this.currentExportLimited = exportLimited;
 			$.ajax({
 				url: '/role/find',
 				type: 'get',
-				data: {
-
+				data:{
+					status: 1
 				},
 				success: function(data){
-
+					_this.roleList = data.data;
+					for(var item in _this.roleList){
+						// Vue.set(_this.roleList[item], 'checked', false);
+						console.log(_this.roleList[item].name);
+						if(_this.roleList[item].name === _this.currentUserRoleName){
+							// Vue.set(_this.roleList[item], 'checked', true);
+						}
+					}
 				}
 			})
-		}
+		},
+		showLimitList: function(id, limited, exportLimit){
+			var _this = this;
+			_this.currentID = id;
+			_this.modal.show = true;
+			_this.modal.title = '修改权限';
+			_this.modal.type = 'limitList';
+			_this.id = id;
+			_this.exportLimit = eval('(' + exportLimit + ')');
+			_this.limited = eval('(' + limited + ')');
+		},
+		apply: function(){
+			var _this = this;
+			if(this.modal.type === 'roleList'){
+
+				// $.ajax({
+				// 	url: '/users/update',
+				// 	type: 'post',
+				// 	data: {
+				// 		id: _this.currentID,
+				// 		role: _this.currentUserRoleName
+				// 	}
+				// })
+				console.log(this.currentCheckRoleName);
+			}else if(this.modal.type === 'limitList'){
+				var _this = this;
+				$.ajax({
+					url: '/users/update',
+					type: 'post',
+					data: {
+						id: _this.currentID,
+						limited: JSON.stringify(_this.modifyLimited),
+						export: JSON.stringify(_this.modifyExportLimited)
+					},
+					success: function(data){
+						actions.alert(store, {
+							show: true,
+							msg: '修改成功',
+							type: 'success'
+						})
+						_this.modal.show = false;
+						_this.createTableBySearchStr();
+					}
+				})
+			}
+		},
+		forbidden: function(id){
+			var _this = this;
+			$.ajax({
+				url: '/users/update',
+				type: 'post',
+				data: {
+					id: id,
+					status: 0
+				},
+				success: function(data){
+					actions.alert(store, {
+						show: true,
+						msg: '禁用成功',
+						type: 'success'
+					})
+					_this.createTableBySearchStr();
+					_this.modal.show = false;
+				}
+			})
+		},
+		startUsing: function(id){
+			var _this = this;
+			$.ajax({
+				url: '/users/update',
+				type: 'post',
+				data: {
+					id: id,
+					status: 1
+				},
+				success: function(data){
+					actions.alert(store, {
+						show: true,
+						msg: '启用成功',
+						type: 'success'
+					})
+					_this.createTableBySearchStr();
+					_this.modal.show = false;
+				}
+			})
+		},
 	},
 	watch: {
 		searchStr: {
 			handler: function(val){
 				this.createTableBySearchStr();
 			}
+		}
+	},
+	events: {
+		borcastLimit: function(limit){
+			this.modifyLimited = limit;
+		},
+		borcastExportLimit: function(limit){
+			this.modifyExportLimited = limit;
 		}
 	}
 })
