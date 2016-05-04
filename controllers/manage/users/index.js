@@ -13,9 +13,11 @@ module.exports = (Router) => {
             username = query.username || "",
             page = query.page || 1,
             count = "SELECT count(1) FROM tbl_dataplatform_nodejs_users2"
-                + " WHERE username like '%" + username + "%' OR role like '%" +  username + "%'",
+                + " WHERE is_admin < 50  AND"
+                + " username like '%" + username + "%' OR role like '%" +  username + "%'",
             sql = "SELECT * FROM tbl_dataplatform_nodejs_users2"
-                + " WHERE username like '%" + username + "%' OR role like '%" +  username + "%'"
+                + " WHERE is_admin < 50 AND"
+                + " username like '%" + username + "%' OR role like '%" +  username + "%'"
                 + " LIMIT " + (page - 1) * limit + "," + limit;
         req.db.driver.execQuery(count, (err, count) => {
             if(!err) {
