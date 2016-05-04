@@ -167,23 +167,14 @@ module.exports = {
             return b.open_total - a.open_total;
         });
         for(var key of source) {
-            if(key.region === "ALL" || key.type === "H5") {
-                continue;
-            }
             total_open_total += key.open_total;
         }
         for(var i = 0; i < top; i++) {
-            if(source[i]) {
-                if(source[i].region === "ALL" && source[i].type === "H5") {
-                    top++;
-                } else {
-                    newData.push(source[i]);
-                }
-            }
+            newData.push(source[i]);
         }
         for(var i = 0; i < newData.length; i++) {
             newData[i].id = i + 1;
-            newData[i].pv_rate = util.toFixed(newData[i].open_total, total_open_total);
+            newData[i].open_total_rate = util.toFixed(newData[i].open_total, total_open_total);
         }
         return util.toTable([newData], data.rows, data.cols);
     },
@@ -196,9 +187,6 @@ module.exports = {
             return b.pv - a.pv;
         });
         for(var key of source) {
-            if(key.type === "H5") {
-                continue;
-            }
             total_pv += key.pv;
         }
         for(var i = 0; i < top; i++) {
@@ -220,19 +208,10 @@ module.exports = {
             return b.pv - a.pv;
         });
         for(var key of source) {
-            if(key.region === "ALL" || key.type !== "H5") {
-                continue;
-            }
             total_pv += key.pv;
         }
         for(var i = 0; i < top; i++) {
-            if(source[i]) {
-                if(source[i].region === "ALL" && source[i].type === "H5") {
-                    top++;
-                } else {
-                    newData.push(source[i]);
-                }
-            }
+            newData.push(source[i]);
         }
         for(var i = 0; i < newData.length; i++) {
             newData[i].id = i + 1;

@@ -155,6 +155,8 @@ module.exports = (Router) => {
                 ydate = util.getDate(new Date(now.getTime() - 24 * 60 * 60 * 1000));
             return {
                 date : orm.between(new Date(ydate + " 00:00:00"), new Date(ydate + " 23:59:59")),
+                type : "H5",
+                region : orm.not_in(["ALL"]),
                 day_type : 1
             }
         },
@@ -199,6 +201,7 @@ module.exports = (Router) => {
                 ydate = util.getDate(new Date(now.getTime() - 24 * 60 * 60 * 1000));
             return {
                 date : orm.between(new Date(ydate + " 00:00:00"), new Date(ydate + " 23:59:59")),
+                type : "H5",
                 day_type : 1
             }
         },
