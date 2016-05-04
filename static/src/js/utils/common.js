@@ -28,4 +28,12 @@ utils.isInObj = function(source, target) {
     return false;
 }
 
+utils.getObjLen = function(obj){
+    var _count = 0;
+    for(var item in obj){
+        _count += 1;
+    }
+    return _count;
+}
+
 module.exports = utils;

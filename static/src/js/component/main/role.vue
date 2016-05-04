@@ -6,7 +6,7 @@
 					<strong>角色列表</strong>
 					<div class="add_role">
 						<span class="fa fa-plus"></span>
-						<input type="button" class="btn btn-default" value="增加角色">
+						<input type="button" class="btn btn-default" value="新增角色" @click="addRole()">
 					</div>
 				</div>
 				<div class="panel-body">
@@ -29,9 +29,9 @@
 									<td>{{item.remark}}</td>
 									<td>
 										<ul>
-											<li v-show="item.status"><a @click="modifyRole(item.id, item.limited, item.export)" class="btn btn-default" href="javascript:void(0)">修改<i class="fa fa-pencil-square-o"></i></a></li>
-											<li v-show="item.status"><a class="btn btn-default" href="javascript:void(0)">禁用<i class="fa fa-remove"></i></a></li>
-											<li v-show="!item.status"><a class="btn btn-default" href="javascript:void(0)">启用<i class="fa fa-check-square-o"></i></a></li>
+											<li v-show="item.status"><a @click="modifyRole(item.id, item.limited, item.export, item.name, item.remark)" class="btn btn-default" href="javascript:void(0)">修改<i class="fa fa-pencil-square-o"></i></a></li>
+											<li v-show="item.status"><a @click="forbidden(item.id)" class="btn btn-default" href="javascript:void(0)">禁用<i class="fa fa-remove"></i></a></li>
+											<li v-show="!item.status"><a @click="startUsing(item.id)" class="btn btn-default" href="javascript:void(0)">启用<i class="fa fa-check-square-o"></i></a></li>
 										</ul>
 									</td>
 								</tr>
@@ -54,27 +54,25 @@
 	                <h4 class="modal-title">{{modal.title}}</h4>
 	            </div>
 	            <div class="modal-body">
+					<form class="form-horizontal">
+						<div class="form-group">
+							<label class="col-sm-2 control-label" for="juese_name">角色名称</label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" id="juese_name" placeholder="请输入角色名称" v-model="modifyName">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="juese_remark" class="col-sm-2 control-label">Password</label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" id="juese_remark" placeholder="请输入角色备注" v-model="modifyRemark">
+							</div>
+						</div>
+					</form>
 	            	<m-limit-list :id="id" :limited="limited" :export-limit="exportLimit"></m-limit-list>
-	                <table class="table table-striped table-bordered table-hover">
-	                	<thead>
-	                		<tr>
-	                			<th></th>
-	                			<th>序号</th>
-	                			<th>角色名称</th>
-	                			<th>创建时间</th>
-	                			<th>备注</th>
-	                		</tr>
-	                	</thead>
-	                	<tbody>
-	                		<!-- <tr v-for="item in userListData"> -->
-
-	                		<!-- </tr> -->
-	                	</tbody>
-	                </table>
 	            </div>
 	            <div class="modal-footer">
 	                <button type="button" class="btn default" data-dismiss="modal" @click="apply()">确定</button>
-	                <button type="button" class="btn default" data-dismiss="modal" @click="modal.show = false">取消</button>
+	                <button type="button" class="btn default" data-dismiss="modal" @click="hideModal()">取消</button>
 	            </div>
 	        </div>
 	    </div>
@@ -149,8 +147,13 @@ var Role = Vue.extend({
 				title: '弹出层'
 			},
 			id: null,
-			limited: null,
-			exportLimit: null
+			limited: {},
+			exportLimit: {},
+			modifyName: '',
+			modifyRemark: '',
+			modifyType: null,
+			modifyLimited: {},
+			modifyExportLimited: {}
 		}
 	},
 	store: store,
@@ -189,19 +192,138 @@ var Role = Vue.extend({
 			})
 		},
 		addRole: function(){
-
+			this.exportLimit = {};
+			this.limited = {};
+			this.modal.show = true;
+			this.modal.title = '新增角色';
+			this.modifyRemark = '';
+			this.modifyName = '';
+			this.modifyType = 'add';
 		},
-		modifyRole: function(id, limited, exportLimit){
+		modifyRole: function(id, limited, exportLimit, name, remark){
 			this.id = id;
 			this.exportLimit = eval('(' + exportLimit + ')');
 			this.limited = eval('(' + limited + ')');
 			this.modal.show = true;
 			this.modal.title = '修改角色';
+			this.modifyRemark = remark;
+			this.modifyName = name;
+			this.modifyType = 'modify';
 		},
-		showModal: function(){
-
+		apply: function(){
+			var _this = this;
+			if(_this.modifyName === '' || _this.modifyRemark === ''){
+				actions.alert(store, {
+					show: true,
+					msg: '角色名或备注不能为空',
+					type: 'danger'
+				})
+				return;
+			}
+			if(this.modifyType === 'modify'){
+				$.ajax({
+					url: '/role/update',
+					type: 'post',
+					data: {
+						id: _this.id,
+						name: _this.modifyName,
+						remark: _this.modifyRemark,
+						limited: JSON.stringify(_this.modifyLimited),
+						export: JSON.stringify(_this.modifyExportLimited)
+					},
+					success: function(data){
+						actions.alert(store, {
+							show: true,
+							msg: '修改成功',
+							type: 'success'
+						})
+						_this.createTableBySearchStr();
+						_this.modal.show = false;
+					}
+				})
+			}else if(this.modifyType === 'add'){
+				$.ajax({
+					url: '/role/add',
+					type: 'post',
+					data: {
+						name: _this.modifyName,
+						remark: _this.modifyRemark,
+						limited: JSON.stringify(_this.modifyLimited),
+						export: JSON.stringify(_this.modifyExportLimited)
+					},
+					success: function(data){
+						actions.alert(store, {
+							show: true,
+							msg: '新增成功',
+							type: 'success'
+						})
+						_this.createTableBySearchStr();
+						_this.modal.show = false;
+					}
+				})
+			}
+		},
+		forbidden: function(id){
+			var _this = this;
+			$.ajax({
+				url: '/role/update',
+				type: 'post',
+				data: {
+					id: id,
+					status: 0
+				},
+				success: function(data){
+					actions.alert(store, {
+						show: true,
+						msg: '禁用成功',
+						type: 'success'
+					})
+					_this.createTableBySearchStr();
+					_this.modal.show = false;
+				}
+			})
+		},
+		startUsing: function(id){
+			var _this = this;
+			$.ajax({
+				url: '/role/update',
+				type: 'post',
+				data: {
+					id: id,
+					status: 1
+				},
+				success: function(data){
+					actions.alert(store, {
+						show: true,
+						msg: '启用成功',
+						type: 'success'
+					})
+					_this.createTableBySearchStr();
+					_this.modal.show = false;
+				}
+			})
+		},
+		hideModal: function(){
+			// 隐藏弹窗，初始化数据
+			this.modal.show = false;
+			this.id = null;
+			this.limited = {};
+			this.exportLimit = {};
+			this.modifyName = '';
+			this.modifyRemark = '';
+			this.modifyType = null;
+			this.modifyLimited = {};
+			this.modifyExportLimited = {};
 		}
 	},
+	events: {
+		borcastLimit: function(limit){
+			this.modifyLimited = limit
+		},
+		borcastExportLimit: function(limit){
+			this.modifyExportLimited = limit;
+		}
+	}
 })
 
 module.exports = Role;
