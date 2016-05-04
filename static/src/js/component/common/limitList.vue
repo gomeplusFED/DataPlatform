@@ -8,10 +8,10 @@
 	</li>
 	<li v-for="(key,item1) in pageAll">
 		<div @click.stop="showLevel($event, $index)">
-			<span><input @click.stop="parseLimitAll()" type="checkbox"></input></span>
+			<span><input @click.stop="parseLimitAll()" type="checkbox" v-model="limitAll"></input></span>
 			<span>{{item1.name}}</span>
 			<span>&nbsp;</span>
-			<span><label><input type="checkbox" v-model="exportLimit[key].length === item1.path.length"/>数据导出</label></span>
+			<span><label><input type="checkbox" v-model="exportLimitAll"/>数据导出</label></span>
 		</div>
 		<ul v-show="levelShow[$index]">
 			<li v-for="item2 in item1.path">
@@ -99,7 +99,9 @@ var LimitList = Vue.extend({
 			pageAll: window.allPageConfig.pageAll,
 			levelShow: {},
 			limitedObj: {},
-			exportLimitObj: {}
+			exportLimitObj: {},
+			limitAll: false,
+			exportLimitAll: false
 		}
 	},
 	props: ['id', 'limited', 'exportLimit'],
@@ -143,6 +145,7 @@ var LimitList = Vue.extend({
 					var _curretnObj = this.parseArrayToObject(this.limited[item]);
 					Vue.set(this.limitedObj, item, _curretnObj);
 				}
+				this.parseLimitAll();
 			},
 			deep: true
 		},
