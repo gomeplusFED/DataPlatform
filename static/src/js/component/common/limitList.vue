@@ -23,8 +23,6 @@
 		</ul>
 	</li>
 </ul>
-
-
 </template>
 
 <style scoped>
