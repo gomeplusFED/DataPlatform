@@ -39,15 +39,14 @@ module.exports = (Router) => {
     Router.post("/users/update", (req, res, next) => {
         var params = req.body,
             content = [];
-        console.log(params);
         req.models.User2.find({
             id : params.id
         }, (err, data) => {
             if(!err) {
                 if(data.length) {
                     data[0].status = params.status || data[0].status;
-                    data[0].role = params.role || data[0].role;
-                    data[0].remark = params.remark || data[0].remark;
+                    data[0].role = params.role !== "undefined" ? params.role : data[0].role;
+                    data[0].remark = params.remark !== "undefined" ? params.remark : data[0].remark;
                     data[0].limited = params.limited || data[0].limited;
                     data[0].export = params.export || data[0].export;
                     var username = data[0].username;
