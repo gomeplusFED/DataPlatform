@@ -9,21 +9,9 @@ var obj = {},
     fs = require("fs"),
     files = fs.readdirSync(filePath);
 
-//for(var key of files) {
-//    console.log(key.match(/*.js/));
-//}
-
-var dataOverview = require("./controllers/path/dataOverview"),
-    usersAnalysis = require("./controllers/path/usersAnalysis"),
-    platformRebate = require("./controllers/path/platformRebate"),
-    businessRebate = require("./controllers/path/businessRebate"),
-    useAnalysis = require("./controllers/path/useAnalysis"),
-    marketingAnalysis = require("./controllers/path/marketingAnalysis"),
-    channelAnalysis = require("./controllers/path/channelAnalysis"),
-    share = require("./controllers/path/share"),
-    achievements = require("./controllers/path/achievements"),
-    terminal = require("./controllers/path/terminal"),
-    retainedAnalysis = require("./controllers/path/retainedAnalysis");
+for(var key of files) {
+    obj[key.match(/(.*).js/)[1]] = require(filePath + "/" + key);
+}
 
 module.exports = {
     siteName: '美信数据平台',
@@ -51,8 +39,8 @@ module.exports = {
             className: "fa fa-dashboard fa-fw",
             href: "#",
             path: [
-                dataOverview.all(),
-                dataOverview.wap()
+                obj.dataOverview.all(),
+                obj.dataOverview.wap()
             ]
         },
         "3": {
@@ -61,11 +49,11 @@ module.exports = {
             className: "fa fa-bar-chart-o fa-fw",
             href: "#",
             path: [
-                usersAnalysis.newUsers(),
-                usersAnalysis.activeAccount(),
-                usersAnalysis.startUp(),
-                usersAnalysis.version(),
-                retainedAnalysis.retained()
+                obj.usersAnalysis.newUsers(),
+                obj.usersAnalysis.activeAccount(),
+                obj.usersAnalysis.startUp(),
+                obj.usersAnalysis.version(),
+                obj.retainedAnalysis.retained()
             ]
         },
         "4": {
@@ -75,7 +63,7 @@ module.exports = {
             href: "/retainedAnalysis",
             path: [],
             routers: [
-                retainedAnalysis.retained()
+                obj.retainedAnalysis.retained()
             ]
         },
         "5": {
@@ -85,7 +73,7 @@ module.exports = {
             href: "/channelAnalysis",
             path: [],
             routers: [
-                channelAnalysis.channel()
+                obj.channelAnalysis.channel()
             ]
         },
         "6": {
@@ -94,11 +82,11 @@ module.exports = {
             className: "fa fa-th fa-fw",
             href: "#",
             path: [
-                useAnalysis.useTime(),
-                useAnalysis.useFrequency(),
-                useAnalysis.accessPage(),
-                useAnalysis.accessWap(),
-                useAnalysis.accessPageNum()
+                obj.useAnalysis.useTime(),
+                obj.useAnalysis.useFrequency(),
+                obj.useAnalysis.accessPage(),
+                obj.useAnalysis.accessWap(),
+                obj.useAnalysis.accessPageNum()
             ]
         },
         "8": {
@@ -107,9 +95,9 @@ module.exports = {
             className: "fa fa-tablet fa-fw",
             href: "#",
             path: [
-                terminal.model(),
-                terminal.network(),
-                terminal.provinces()
+                obj.terminal.model(),
+                obj.terminal.network(),
+                obj.terminal.provinces()
             ]
         },
         "9": {
@@ -118,8 +106,8 @@ module.exports = {
             className: "fa fa-external-link fa-fw",
             href: "#",
             path: [
-                share.inside(),
-                share.outer()
+                obj.share.inside(),
+                obj.share.outer()
             ]
         },
         "10": {
@@ -149,7 +137,7 @@ module.exports = {
             className: "fa fa-flag-checkered fa-fw",
             href: "#",
             path: [
-                achievements.shop()
+                obj.achievements.shop()
             ]
         },
         "14": {
@@ -158,9 +146,9 @@ module.exports = {
             className: "fa fa-bar-chart-o fa-fw fa-fw",
             href: "#",
             path: [
-                marketingAnalysis.overview(),
-                marketingAnalysis.activityFlow(),
-                marketingAnalysis.couponInfo()
+                obj.marketingAnalysis.overview(),
+                obj.marketingAnalysis.activityFlow(),
+                obj.marketingAnalysis.couponInfo()
             ]
         },
         "15": {
@@ -169,12 +157,12 @@ module.exports = {
             className: "fa fa-bar-chart-o fa-fw fa-fw",
             href: "#",
             path: [
-                platformRebate.platformOrder(),
-                platformRebate.individualEvent(),
-                platformRebate.platformPromotions(),
-                platformRebate.platformBasis(),
-                platformRebate.inviteBusiness(),
-                platformRebate.inviteRegisterAndEnter()
+                obj.platformRebate.platformOrder(),
+                obj.platformRebate.individualEvent(),
+                obj.platformRebate.platformPromotions(),
+                obj.platformRebate.platformBasis(),
+                obj.platformRebate.inviteBusiness(),
+                obj.platformRebate.inviteRegisterAndEnter()
             ],
             routers: []
         },
@@ -184,8 +172,8 @@ module.exports = {
             className: "fa fa-desktop fa-fw",
             href: "#",
             path: [
-                businessRebate.all(),
-                businessRebate.plan()
+                obj.businessRebate.all(),
+                obj.businessRebate.plan()
             ],
             routers: []
         }
