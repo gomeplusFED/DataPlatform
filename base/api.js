@@ -146,7 +146,7 @@ api.prototype = {
             query[key] = this.fixedParams[key];
         });
         if(this.params) {
-            params = this.params;
+            params = this.params();
         }
         this._getCache(type, res, req, query, next, params, dates);
     },
@@ -200,7 +200,7 @@ api.prototype = {
                 sendData.data = await (this._findDatabase(req, this.modelName[0], query));
                 if (this.modelName[1]) {
                     if(this.orderParams) {
-                        query = this.orderParams;
+                        query = this.orderParams();
                     }
                     sendData.orderData = await (this._findDatabase(req, this.modelName[1], query));
                 }
