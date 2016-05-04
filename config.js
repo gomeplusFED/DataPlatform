@@ -3,6 +3,16 @@
  * @date 20151128
  * @fileoverview 全站统一配置
  */
+
+var obj = {},
+    filePath = "./controllers/path",
+    fs = require("fs"),
+    files = fs.readdirSync(filePath);
+
+//for(var key of files) {
+//    console.log(key.match(/*.js/));
+//}
+
 var dataOverview = require("./controllers/path/dataOverview"),
     usersAnalysis = require("./controllers/path/usersAnalysis"),
     platformRebate = require("./controllers/path/platformRebate"),
