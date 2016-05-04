@@ -41,6 +41,7 @@ module.exports = function(Router) {
             maxAge = 1000 * 60 * 60 * 24 * 7; // 一周
         }
         userInfo.limited =  eval('(' + userInfo.limited + ')');
+        userInfo.export =  eval('(' + userInfo.export + ')');
         req.sessionOptions.maxAge = new Date(Date.now() + maxAge);
         req.session.userInfo = userInfo;
         req.session.isLogin = true;
@@ -149,7 +150,7 @@ module.exports = function(Router) {
                                 is_admin : 99
                             }, (err, data) => {
                                 if(!err) {
-                                    saveLogin(req, res, remember, email, ret[0]);
+                                    saveLogin(req, res, remember, email, data);
                                     res.redirect(from || '/');
                                 } else {
                                     next(new Error("用户不存在"));
