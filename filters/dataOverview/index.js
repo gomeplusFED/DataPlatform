@@ -133,10 +133,14 @@ module.exports = {
                 continue;
             }
             if(filter_key === "register_rate") {
-                newData[util.getDate(key.date)].value += key.new_account /
-                    (key.new_user === 0 ? 1 : key.new_user) * 100;
+                if(newData[util.getDate(key.date)]) {
+                    newData[util.getDate(key.date)].value += key.new_account /
+                        (key.new_user === 0 ? 1 : key.new_user) * 100;
+                }
             } else {
-                newData[util.getDate(key.date)].value += key[filter_key];
+                if(newData[util.getDate(key.date)]) {
+                    newData[util.getDate(key.date)].value += key[filter_key];
+                }
             }
         }
         if(filter_key === "register_rate") {
