@@ -55,11 +55,6 @@ app.use(function(req, res, next) {
     next();
 });
 
-app.get('/', function(req, res, next){
-   // 检测
-   console.log(1111);
-   next();
-})
 
 //载入view helps
 require('./helps')(app);

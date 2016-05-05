@@ -25,7 +25,8 @@
                     </div>
                     <div class="panel-body">
                         <form role="form" action="/login" method="post">
-                          <input type="hidden" value="<%= from %>" name="from">
+                            <input type="hidden" value="<%= from %>" name="from">
+                            <input type="hidden" value="" name="hash" id="hash">
                             <fieldset>
                                 <div class="form-group">
                                     <input class="form-control" placeholder="E-mail" name="email" type="text" autofocus>
@@ -47,9 +48,9 @@
         </div>
     </div>
 </body>
-
 <script type="text/javascript">
-    
-</script>
 
+document.getElementById('hash').value = window.location.hash;
+
+</script>
 </html>
