@@ -50,7 +50,7 @@ var Btns = Vue.extend({
         excel_export: function(){
             var resultQuery = [];
             for(var item in this.resultArgvs){
-                resultQuery.push(item + '=' + this.resultArgvs[item]);
+                resultQuery.push(item + '=' + JSON.stringify(this.resultArgvs[item]));
             }
             var key = location.hash.replace('#!','');
             window.open(window.allPageConfig.page[key].defaultData[this.index].query_api + '_excel?' +  resultQuery.join('&'));
