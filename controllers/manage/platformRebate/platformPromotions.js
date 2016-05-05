@@ -36,7 +36,7 @@ module.exports = (Router) => {
         ],
         cols: [
             [{
-                caption: "返利计划书",
+                caption: "返利计划数",
                 type: "string"
             }, {
                 caption: "参与商户数",
