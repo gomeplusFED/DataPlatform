@@ -283,7 +283,7 @@ api.prototype = {
         Object.keys(query).forEach((value) => {
             if(value !== "startTime" && value !== "endTime") {
                 if(!params.hasOwnProperty(value)) {
-                    params[value] = eval("(" + query[value] + ")");
+                    params[value] = query[value];
                 }
             }
         });
