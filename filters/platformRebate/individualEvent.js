@@ -81,10 +81,10 @@ module.exports = {
             type = "line",
             array = [ {
                 key : "分享购买",
-                value : "1"
+                value : "11"
             },{
                 key : "邀请好友-购买返利",
-                value : "2"
+                value : "12"
             } ],
             newData = {},
             map = {};
