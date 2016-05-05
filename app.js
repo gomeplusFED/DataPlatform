@@ -77,12 +77,12 @@ app.use(function() {
     }
 });
 
- app.use((err, req, res, next) => {
-     if(err) {
-         res.render("include/404", {
-             iserro: true
-         });
-     }
- });
+app.use((err, req, res, next) => {
+    if (err) {
+        res.render("include/404", {
+            iserro: true
+        });
+    }
+});
 
 app.listen(7879);
