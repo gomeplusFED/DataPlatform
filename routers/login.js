@@ -40,8 +40,8 @@ module.exports = function(Router) {
         if (remember) {
             maxAge = 1000 * 60 * 60 * 24 * 7; // 一周
         }
-        userInfo.limited =  eval('(' + userInfo.limited + ')');
-        userInfo.export =  eval('(' + userInfo.export + ')');
+        userInfo.limited =  JSON.parse(userInfo.limited);
+        userInfo.export =  JSON.parse(userInfo.export);
         req.sessionOptions.maxAge = new Date(Date.now() + maxAge);
         req.session.userInfo = userInfo;
         req.session.isLogin = true;
@@ -85,7 +85,7 @@ module.exports = function(Router) {
                                 username : "superAdmin",
                                 role : "超级管理员",
                                 status : 1,
-                                limited : "{0:[0,1,2]}",
+                                limited : '{"0":[0,1,2]}',
                                 is_admin : 99
                             }, (err, data) => {
                                 if(!err) {
