@@ -21,7 +21,6 @@ module.exports = function(Router) {
         if (req.session.isLogin) {
             res.redirect('/');
         } else {
-            console.log(req.url);
             res.render('login/login', {
                 from: req.query.from
             });
@@ -61,7 +60,9 @@ module.exports = function(Router) {
             var email = req.body.email,
                 pwd = req.body.password,
                 from = req.body.from,
-                remember = req.body.remember;
+                remember = req.body.remember,
+                hash = req.body.hash;
+
             //直接去ldap交换验证
             if (!email || !pwd) {
                 req.flash('密码和账户不正确');
@@ -77,7 +78,7 @@ module.exports = function(Router) {
                     } else {
                         if (ret.length) {
                             saveLogin(req, res, remember, email, ret[0]);
-                            res.redirect(from || '/');
+                            res.redirect(from + hash || '/');
                         } else {
                             req.models.User2.create({
                                 name : "超级用户",
@@ -89,7 +90,7 @@ module.exports = function(Router) {
                             }, (err, data) => {
                                 if(!err) {
                                     saveLogin(req, res, remember, email, data);
-                                    res.redirect(from || '/');
+                                    res.redirect(from + hash || '/');
                                 } else {
                                     next(new Error("用户不存在"));
                                 }
@@ -140,7 +141,7 @@ module.exports = function(Router) {
                                                     if(ret[0].status) {
                                                         saveLogin(req, res, remember, email, ret[0]);
                                                         unbind(client, next);
-                                                        res.redirect(from || '/');
+                                                        res.redirect(from + hash || '/');
                                                     } else {
                                                         unbind(client, next);
                                                         req.flash('该用户已被禁用');
@@ -164,7 +165,7 @@ module.exports = function(Router) {
                                                         } else {
                                                             saveLogin(req, res, remember, email, ret);
                                                             unbind(client, next);
-                                                            res.redirect(from || '/');
+                                                            res.redirect(from + hash || '/');
                                                         }
                                                     });
                                                 }
