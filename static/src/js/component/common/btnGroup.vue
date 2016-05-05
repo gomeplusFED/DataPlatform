@@ -65,6 +65,7 @@ var Btns = Vue.extend({
             for(var item in this.resultArgvs){
                 resultQuery.push(item + '=' + this.resultArgvs[item]);
             }
+            var key = location.hash.replace('#!','');
             window.open(window.allPageConfig.page[key].defaultData[this.index].query_api + '_excel?' +  resultQuery.join('&'));
         },
         show_help: function(ev){
