@@ -21,6 +21,7 @@ module.exports = function(Router) {
         if (req.session.isLogin) {
             res.redirect('/');
         } else {
+            console.log(req.url);
             res.render('login/login', {
                 from: req.query.from
             });
@@ -46,69 +47,6 @@ module.exports = function(Router) {
         req.session.userInfo = userInfo;
         req.session.isLogin = true;
     }
-
-    //function authorityRouteFromBrowserUrl(req, res, next) {
-    //    var url = req.originalUrl,
-    //        limitedStr = "",
-    //        urlTransToIndex = "",
-    //        fixedUrl = url;
-    //
-    //    //.match(/^\/.+?\/.+   (?=\?|\/) |  ^\/.+?\/.+ (?=\?|\/)? /);
-    //
-    //
-    //    if (fixedUrl) {
-    //        var limitedConfigArr = config.limit;
-    //        limitedStr = req.session.userInfo.limited;
-    //        // fixedUrl = fixedUrl[0];
-    //        lodash.forEach(limitedConfigArr, function(item) {
-    //            var key = Object.keys(item)[0];
-    //            var obj = item[key];
-    //            var href = obj.href;
-    //            var path = obj.path;
-    //            if (href === fixedUrl) {
-    //                urlTransToIndex = obj.id;
-    //            } else if (obj.path.length) {
-    //                var flag = true;
-    //                lodash.forEach(path, function(v, k) {
-    //                    if (v.path === fixedUrl && flag) {
-    //                        urlTransToIndex = obj.id + "-" + k;
-    //                        flag = false; //类似break功能
-    //                    } else if (flag) {
-    //                        /*serverConfig读取权限*/
-    //                        if (v.serverConfig && v.serverConfig.links) {
-    //                            var links = v.serverConfig.links;
-    //                            lodash.forEach(links, function(v1) {
-    //                                if (v1.href === fixedUrl) {
-    //                                    urlTransToIndex = obj.id + "-" + k;
-    //                                    flag = false;
-    //                                }
-    //                            });
-    //                        }
-    //                    }
-    //                });
-    //            }
-    //        });
-    //    }
-    //    /*路由不存在或者无权限时urlTransToIndex为空字符串*/
-    //    if (urlTransToIndex) {
-    //        urlTransToIndex = urlTransToIndex.toString();
-    //        var parent = urlTransToIndex.split("-")[0];
-    //        var children = urlTransToIndex.split("-")[1];
-    //        if (limitedStr.split(',').some(function(item) {
-    //                var arrs = item.split("-");
-    //                var arrsFirstItem = arrs.shift();
-    //                return arrsFirstItem === parent || arrs.indexOf(children) >= 0;
-    //            })) {
-    //            /*实现三级菜单所处的index保存到session*/
-    //            req.session.thirdMenuIndex = urlTransToIndex;
-    //            next();
-    //        } else {
-    //            res.render("include/authority");
-    //        }
-    //    } else {
-    //        next();
-    //    }
-    //}
 
     Router.post('/logout', function(req, res) {
         req.session = null;
@@ -185,12 +123,9 @@ module.exports = function(Router) {
                         resp.on('end', function() {
                             if (entrys.length === 1) {
                                 var entry = entrys[0];
-                                //console.log('entry: ' + JSON.stringify(entry.object));
-                                //console.log(entry.object);
                                 client.bind(entry.object.dn, pwd, function(err) {
                                     //验证成功
                                     if (err) {
-                                        //console.log(err);
                                         unbind(client, next);
                                         req.flash('密码和账户不正确');
                                         res.redirect('back');
