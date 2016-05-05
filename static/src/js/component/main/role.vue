@@ -202,8 +202,10 @@ var Role = Vue.extend({
 		},
 		modifyRole: function(id, limited, exportLimit, name, remark){
 			this.id = id;
-			this.exportLimit = eval('(' + exportLimit + ')');
-			this.limited = eval('(' + limited + ')');
+			// this.exportLimit = eval('(' + exportLimit + ')');
+			// this.limited = eval('(' + limited + ')');
+			this.exportLimit = JSON.parse(exportLimit);
+			this.limited = JSON.parse(limited);
 			this.modal.show = true;
 			this.modal.title = '修改角色';
 			this.modifyRemark = remark;
