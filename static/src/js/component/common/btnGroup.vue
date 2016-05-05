@@ -62,10 +62,21 @@ var Btns = Vue.extend({
                 return;
             }
             var resultQuery = [];
+            var result = '';
             for(var item in this.resultArgvs){
-                resultQuery.push(item + '=' + JSON.stringify(this.resultArgvs[item]));
+                var ret = this.resultArgvs[item];
+                if(ret instanceof Array){
+                    ret = ret.map(function(i){
+                        return item + '[]=' + i;
+                    }).join('&');
+                    resultQuery.push(ret);
+                }else{
+                    resultQuery.push(item + '=' + ret);
+                }
+                
             }
-            var key = location.hash.replace('#!','');
+
+            var key = location.hash.replace('#!', '');
             window.open(window.allPageConfig.page[key].defaultData[this.index].query_api + '_excel?' +  resultQuery.join('&'));
         },
         show_help: function(ev){
