@@ -5,6 +5,7 @@
  */
 var api = require("../../../base/api"),
     help = require("../../../base/help"),
+    orm = require("orm"),
     config = require("../../../utils/config.json"),
     filter = require("../../../filters/platformRebate");
 
@@ -190,12 +191,26 @@ module.exports = (Router) => {
             title: '使用方',
             filter_key: 'user_party',
             groups: [{
+                key: [1, 2, 5, 6],
+                value: '全部使用方',
+                cell: {
+                    title: '关联流程',
+                    filter_key : 'correlate_flow',
+                    groups : [{
+                        key: '',
+                        value: '全部相关流程'
+                    }]
+                }
+            }, {
                 key: '6',
                 value: '单项单级返利',
                 cell: {
                     title: '关联流程',
                     filter_key : 'correlate_flow',
                     groups : [{
+                        key: '',
+                        value: '全部相关流程'
+                    }, {
                         key: '11',
                         value: '固定返利'
                     },{
@@ -210,6 +225,9 @@ module.exports = (Router) => {
                     title: '关联流程',
                     filter_key : 'correlate_flow',
                     groups : [{
+                        key: '',
+                        value: '全部相关流程'
+                    },{
                         key: '1',
                         value: '分享购买'
                     },{
@@ -227,6 +245,9 @@ module.exports = (Router) => {
                     title: '关联流程',
                     filter_key : 'correlate_flow',
                     groups : [{
+                        key: '',
+                        value: '全部相关流程'
+                    },{
                         key: '1',
                         value: '分享购买'
                     },{
@@ -244,6 +265,9 @@ module.exports = (Router) => {
                     title: '关联流程',
                     filter_key : 'correlate_flow',
                     groups : [{
+                        key: '',
+                        value: '全部相关流程'
+                    },{
                         key: '8',
                         value: '固定返利'
                     }, {
