@@ -1,5 +1,5 @@
 <template>
-    <button v-show="item.content.match('导出') && exportLimit" class="btn btn-default flexible_btn" v-for="item in pageComponentsData.flexible_btn" @click="resolveMethods(item, $event)">{{{item.content}}}</button>   
+    <button class="btn btn-default flexible_btn" v-for="item in pageComponentsData.flexible_btn" @click="resolveMethods(item, $event)">{{{item.content}}}</button>   
 </template>
 <style>
 .flexible_btn{margin: 0 5px;padding: 0;box-sizing: border-box;}
@@ -48,18 +48,24 @@ var Btns = Vue.extend({
     },
     props: ['index','pageComponentsData','componentType','argvs','initData','resultArgvs'],
     created: function(){
-        var key = window.location.hash.replace('#!','');
-        if (window.allPageConfig.userInfo.export[window.allPageConfig.page[key].id] && window.allPageConfig.userInfo.export[window.allPageConfig.page[key].id].length) {
-            this.exportLimit = true;
-        }
+        
     },
     methods: {
-        excel_export: function(){
+        excel_export: function(ev){
+            var key = window.location.hash.replace('#!','');
+            if (!(window.allPageConfig.userInfo.export[window.allPageConfig.page[key].id] && window.allPageConfig.userInfo.export[window.allPageConfig.page[key].id].length)) {
+                actions.alert(store, {
+                    show: true,
+                    msg: '无权限',
+                    type: 'danger'
+                })
+                return;
+            }
             var resultQuery = [];
             for(var item in this.resultArgvs){
                 resultQuery.push(item + '=' + this.resultArgvs[item]);
             }
-            // window.open(this.initData.defaultData[this.index].query_api + '_excel?' +  resultQuery.join('&'));
+            window.open(window.allPageConfig.page[key].defaultData[this.index].query_api + '_excel?' +  resultQuery.join('&'));
         },
         show_help: function(ev){
             var _this = this;
