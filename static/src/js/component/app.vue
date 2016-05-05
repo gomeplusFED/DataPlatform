@@ -40,7 +40,7 @@ var App = Vue.extend({
         }
     },
     created: function(){
-        actions.setCurrentPageDefaultData(store, window.allPageConfig.page[this.$route.path])
+        actions.setCurrentPageDefaultData(store, window.allPageConfig.page[this.$route.path]);
     },
     components: {
         'm-loading': Loading,

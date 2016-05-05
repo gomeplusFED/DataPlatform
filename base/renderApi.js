@@ -96,6 +96,7 @@ renderApi.prototype = {
                     var path = limit.path[value];
                     if(path) {
                         page[path.path] = {
+                            id: key,
                             pageTitle : path.name,
                             defaultData : path.defaultData
                         };
@@ -113,7 +114,8 @@ renderApi.prototype = {
             //pageTitle: this.name,
             drop_down_default_data: dataParams.types,
             pageAll : pageAll,
-            page : page
+            page : page,
+            userInfo: req.session.userInfo
         });
     },
     setRouter(Router) {

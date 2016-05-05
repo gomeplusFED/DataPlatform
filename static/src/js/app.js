@@ -47,17 +47,17 @@ router.map({
 
 router.start(blankApp, '#page-wrapper');
 
-router.afterEach(function (transition) {
+router.afterEach(function(transition) {
     var url = window.location.hash;
-    $('[href="'+ url +'"]').parent().parent().parent().addClass('active');
-    $('[href="'+ url +'"]').parent().parent().addClass('in').attr('aria-expanded', true);
-    $('[href="'+ url +'"]').focus();
+    $('[href="' + url + '"]').parent().parent().parent().addClass('active');
+    $('[href="' + url + '"]').parent().parent().addClass('in').attr('aria-expanded', true);
+    $('[href="' + url + '"]').focus();
     $('#side-menu a').removeClass('active');
-    $('[href="'+ url +'"]').addClass('active');
+    $('[href="' + url + '"]').addClass('active');
 
     var key = transition.to.path;
     actions.setCurrentPageDefaultData(store, window.allPageConfig.page[key])
-    if(! window.allPageConfig.page[key]){
+    if (!window.allPageConfig.page[key]) {
         router.go({
             path: '/'
         })
