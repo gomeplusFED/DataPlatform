@@ -4,6 +4,7 @@
  * @fileoverview 商家返利汇总
  */
 var util = require("../../utils"),
+    config = require("../../utils/config.json")
     _ = require("lodash");
 
 module.exports = {
@@ -153,42 +154,8 @@ module.exports = {
             },
             typePie = "pie",
             typeBar = "bar",
-            XPie = [
-                {
-                    key : "1级",
-                    value : "1"
-                },
-                {
-                    key : "2级",
-                    value : "2"
-                },
-                {
-                    key : "3级",
-                    value : "3"
-                },
-                {
-                    key : "4级",
-                    value : "4"
-                }
-            ],
-            XBar = [
-                {
-                    key : "层级1",
-                    value : "1"
-                },
-                {
-                    key : "层级2",
-                    value : "2"
-                },
-                {
-                    key : "层级3",
-                    value : "3"
-                },
-                {
-                    key : "层级4",
-                    value : "4"
-                }
-            ];
+            XPie = config.level,
+            XBar = config.grade;
         for(var level of XPie) {
             var obj = {};
             obj.value = 0;
@@ -312,12 +279,6 @@ module.exports = {
             related_flow = {
                 13 : "分享购买",
                 14 : "分销购买"
-            },
-            level ={
-                1 : "1级",
-                2 : "2级",
-                3 : "3级",
-                4 : "4级"
             };
         source = util.sort(source, "order_num", "pay_order_num");
         for(var i = 0; i < top; i++) {
@@ -327,7 +288,7 @@ module.exports = {
                 shop_name : source[i].shop_name,
                 deadline : source[i].deadline,
                 related_flow : related_flow[source[i].related_flow],
-                level : level[source[i].level],
+                level : source[i].level,
                 spu_num : source[i].spu_num,
                 user_num : source[i].user_num,
                 pay_rate : source[i].order_num + "/" + source[i].total_order_num,
