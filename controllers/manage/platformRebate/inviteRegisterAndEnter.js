@@ -97,6 +97,7 @@ module.exports = (Router) => {
         router : "/platformRebate/inviteRegisterAndEnterFour",
         platform : false,
         modelName : ["RebatetRegisterSheduleDetails"],
+        excel_export : true,
         flexible_btn: [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
