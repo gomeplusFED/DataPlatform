@@ -47,7 +47,7 @@ module.exports = {
                 rebate_amount_count : 0
             };
         for(var key of source) {
-            registered_all_count = key.registered_all_count;
+            registered_all_count += key.registered_all_count;
             obj.rebate_plan_count += key.rebate_plan_count;
             obj.participate_user_count += key.participate_user_count;
             obj.registered_count += key.registered_count;
@@ -121,8 +121,8 @@ module.exports = {
             };
         for(var i = 0; i < source.length; i++) {
             source[i].id = i + 1;
-            source[i].user_party = user_party[key.user_party];
-            source[i].correlate_flow = user_party[key.correlate_flow];
+            source[i].user_party = user_party[source[i].user_party];
+            source[i].correlate_flow = correlate_flow[source[i].correlate_flow];
         }
         return util.toTable([source], data.rows, data.cols);
     }
