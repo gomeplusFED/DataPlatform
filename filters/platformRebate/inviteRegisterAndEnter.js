@@ -47,7 +47,7 @@ module.exports = {
                 rebate_amount_count : 0
             };
         for(var key of source) {
-            registered_all_count = key.registered_all_count;
+            registered_all_count += key.registered_all_count;
             obj.rebate_plan_count += key.rebate_plan_count;
             obj.participate_user_count += key.participate_user_count;
             obj.registered_count += key.registered_count;

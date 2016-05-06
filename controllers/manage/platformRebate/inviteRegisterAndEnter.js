@@ -43,7 +43,7 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/platformRebate/inviteRegisterAndEnterTwo",
-        date_picker_data: 1,
+        //date_picker_data: 1,
         platform : false,
         modelName : [ "RebatetInviteseller" ],
         filter(data, filter_key, dates) {
