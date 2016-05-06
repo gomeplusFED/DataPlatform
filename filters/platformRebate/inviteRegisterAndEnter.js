@@ -121,8 +121,8 @@ module.exports = {
             };
         for(var i = 0; i < source.length; i++) {
             source[i].id = i + 1;
-            source[i].user_party = user_party[key.user_party];
-            source[i].correlate_flow = user_party[key.correlate_flow];
+            source[i].user_party = user_party[source[i].user_party];
+            source[i].correlate_flow = correlate_flow[source[i].correlate_flow];
         }
         return util.toTable([source], data.rows, data.cols);
     }
