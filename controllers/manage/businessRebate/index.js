@@ -292,6 +292,20 @@ module.exports = (Router) => {
         modelName : [ "RebateShopPlanTop" ],
         excel_export : true,
         platform : false,
+        filter_select: [{
+            title: '关联流程',
+            filter_key: 'related_flow',
+            groups: [{
+                key: [13, 14],
+                value: '全部返利'
+            }, {
+                key: '13',
+                value: '分享购买'
+            }, {
+                key: '14',
+                value: '分销购买'
+            }]
+        }],
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
