@@ -27,7 +27,9 @@ module.exports = (Router) => {
             ["rebate_order_num",
                 //"rebate_amount_total", "rebate_amount_actual",
                 "rebate_amount", "rate", "platform_amount"],
-            ["name", "spu_num", "sku_num", "user_num", "amount", "amount_actual"]
+            ["name", "spu_num", "sku_num", "user_num", "amount",
+                //"amount_actual"
+            ]
         ],
         cols: [
             [{
@@ -83,9 +85,9 @@ module.exports = (Router) => {
             }, {
                 caption: "退货商品总金额",
                 type: "string"
-            }, {
-                caption: "实际退货金额",
-                type: "string"
+            //}, {
+            //    caption: "实际退货金额",
+            //    type: "string"
             }]
         ]
     });

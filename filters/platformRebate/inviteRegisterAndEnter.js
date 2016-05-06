@@ -104,21 +104,8 @@ module.exports = {
     },
     inviteRegisterAndEnterFour(data) {
         var source = data.data,
-            user_party = {
-                1 : "平台基础返利",
-                2 : "平台促销返利",
-                5 : "邀请商家入驻返利",
-                6 : "单项单级返利"
-            },
-            correlate_flow = {
-                1 : "分享购买",
-                2 : "邀请好友-购买返利",
-                8 : "邀请商户入住-固定返利",
-                9 : "邀请商户入住-分享返利",
-                10 : "邀请好友-固定返利",
-                11 : "固定返利",
-                12 : "比例返利"
-            };
+            user_party = config.user_party,
+            correlate_flow = config.correlate_flow;
         for(var i = 0; i < source.length; i++) {
             source[i].id = i + 1;
             source[i].user_party = user_party[source[i].user_party];
