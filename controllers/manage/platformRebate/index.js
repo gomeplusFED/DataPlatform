@@ -31,7 +31,8 @@ module.exports = (Router) => {
         rows: [
             ["name", "order_count", "rebate_order_amount_count", "participate_seller_count",
                 "participate_user_count", "productSku_num"],
-            ["rebate_order_count", "rebate_order_amount_count", "rebate_order_amount_actual_count",
+            ["rebate_order_count",
+                //"rebate_order_amount_count", "rebate_order_amount_actual_count",
                 "rebate_amount_count", "rate"],
             ["name", "spu_count", "sku_count", "refund_user_count", "refund_goods_amount_count",
                 "refund_goods_amount_actual_count"]
@@ -59,12 +60,12 @@ module.exports = (Router) => {
             [{
                 caption: "返利到账订单数",
                 type: "string"
-            }, {
-                caption: "返利到账订单总金额",
-                type: "string"
-            }, {
-                caption: "返利到账订单实付金额",
-                type: "string"
+            //}, {
+            //    caption: "返利到账订单总金额",
+            //    type: "string"
+            //}, {
+            //    caption: "返利到账订单实付金额",
+            //    type: "string"
             }, {
                 caption: "返利到账金额",
                 type: "string"
