@@ -24,7 +24,9 @@ module.exports = (Router) => {
         }],
         rows: [
             ["name", "order_num", "order_amount", "shop_num", "user_num", "product_sku_num"],
-            ["rebate_order_num", "rebate_amount_total", "rebate_amount_actual", "rebate_amount", "rate", "platform_amount"],
+            ["rebate_order_num",
+                //"rebate_amount_total", "rebate_amount_actual",
+                "rebate_amount", "rate", "platform_amount"],
             ["name", "spu_num", "sku_num", "user_num", "amount", "amount_actual"]
         ],
         cols: [
@@ -50,12 +52,12 @@ module.exports = (Router) => {
             [{
                 caption: "返利到账订单数",
                 type: "string"
-            }, {
-                caption: "返利到账订单总金额",
-                type: "string"
-            }, {
-                caption: "返利到账订单实付金额",
-                type: "string"
+            //}, {
+            //    caption: "返利到账订单总金额",
+            //    type: "string"
+            //}, {
+            //    caption: "返利到账订单实付金额",
+            //    type: "string"
             }, {
                 caption: "返利到账金额",
                 type: "string"
