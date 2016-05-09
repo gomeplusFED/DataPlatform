@@ -107,15 +107,15 @@ module.exports = {
             },{
                 key : "分享购买",
                 value : "13"
-            },{
-                key : "组合返利",
-                value : ""
+            //},{
+            //    key : "组合返利",
+            //    value : ""
             } ],
             map = {},
             newDate = {};
         map[filter_key + "_0"] = "分销购买";
         map[filter_key + "_1"] = "分享购买";
-        map[filter_key + "_2"] = "组合返利";
+        //map[filter_key + "_2"] = "组合返利";
         for(var date of dates) {
             var obj = {};
             for(var i = 0; i < array.length; i++) {
