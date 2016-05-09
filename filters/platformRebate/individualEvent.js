@@ -4,6 +4,7 @@
  * @fileoverview 单项单级返利
  */
 var util = require("../../utils"),
+    config = require("../../utils/config.json"),
     _ = require("lodash");
 
 module.exports = {
