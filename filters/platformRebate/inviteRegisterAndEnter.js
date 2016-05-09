@@ -4,6 +4,7 @@
  * @fileoverview 平台返利汇总
  */
 var _ = require("lodash"),
+    config = require("../../utils/config.json"),
     util = require("../../utils");
 
 module.exports = {
