@@ -52,9 +52,6 @@ module.exports = (Router) => {
                     data[0].limited = params.limited || data[0].limited;
                     data[0].export = params.export || data[0].export;
                     var username = data[0].username;
-                    if(params.export) {
-                        content.push(username + "被给予下载权限");
-                    }
                     if(params.status === "1") {
                         content.push(username + "被启用");
                     } else if(params.status === "0") {
@@ -65,6 +62,9 @@ module.exports = (Router) => {
                     }
                     if(params.limited) {
                         content.push(username + "被授予权限");
+                    }
+                    if(params.export) {
+                        content.push(username + "被给予下载权限");
                     }
                     if(params.remark === "") {
                         content.push(username + "的备注被清空");
