@@ -21,15 +21,19 @@ function api(Router, options) {
         //数据库
         modelName: [],
         //filter过滤数据时对应表数据存储名字
-        sendDataName : ["data", "orderData"],
+        sendDataName : ["data", "orderData", "thirdData"],
         //是否固定参数
-        paramsName : ["params", "orderParams"],
+        paramsName : ["params", "orderParams", "thirdParams"],
         //固定参数
         fixedParams : {},
         //固定查询数据库参数
         params : null,
         //固定查询数据库参数
         orderParams : null,
+        //固定查询数据库参数
+        thirdParams : null,
+        //辅助表数据整理
+        selectFilter : null,
         //行
         rows: [],
         //列
@@ -217,7 +221,10 @@ api.prototype = {
             }
 
             if (this.filter) {
-                sendData = this.filter(sendData, this.filter_key, dates);
+                sendData = this.filter(sendData, this.filter_key, dates, "adf");
+            }
+            if(this.selectFilter) {
+                this.filter_select = this.selectFilter(req);
             }
             if(isErr) {
                 next(error);

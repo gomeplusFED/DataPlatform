@@ -4,10 +4,11 @@
  * @date 20151201
  */
 
-var orm = require('orm');
-var config = require('../db/config.json');
-var db = require('../db/mysql.json');
-var mysql = db[config.db];
+var orm = require('orm'),
+    config = require('../db/config.json'),
+    db = require('../db/mysql.json'),
+    mysql = db[config.db],
+    rebate = require("../db/rebate.json");
 
 function connect(app) {
     app.use(orm.express('mysql://' + mysql.username + ':' + mysql.pwd + '@' + mysql.host + '/' + mysql.database + '?timezone=CST', {
@@ -542,6 +543,39 @@ function connect(app) {
             next();
         }
     }))
+    //app.use(orm.express('mysql://' + rebate.username + ':' + rebate.pwd + '@' + rebate.host + '/' + rebate.database + '?timezone=CST', {
+    //    define: function(db, models, next) {
+    //        db.settings.set('instance.cache', false);
+    //        db.settings.set('instance.autoFetch', true);
+    //        models.TypeFlow = db.define("t_rebate_type_flow", {
+    //            type_code : Number,
+    //            flow_code : Number,
+    //            rebate_level : Number,
+    //            create_time : Date,
+    //            update_time : Date,
+    //            status : Number
+    //        });
+    //        models.PlanFlow = db.define("t_rebate_plan_flow", {
+    //            id: { type: 'number', key: true },
+    //            code : Number,
+    //            name : String,
+    //            create_time : Date,
+    //            update_time : Date,
+    //            status : Number
+    //        });
+    //        models.PlanType = db.define("t_rebate_plan_type", {
+    //            id: { type: 'number', key: true },
+    //            code : Number,
+    //            rebate_level : Number,
+    //            name : String,
+    //            type : Number,
+    //            create_time : Date,
+    //            update_time : Date,
+    //            status : Number
+    //        });
+    //        next();
+    //    }
+    //}))
 };
 
 module.exports = connect;

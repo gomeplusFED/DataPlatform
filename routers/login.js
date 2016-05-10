@@ -36,7 +36,7 @@ module.exports = function(Router) {
     }
 
     function saveLogin(req, res, remember, email, userInfo) {
-        var maxAge = 1000 * 60 * 60 * 2; //2小时
+        var maxAge = 1000 * 60 * 60 * 24; //2小时
         if (remember) {
             maxAge = 1000 * 60 * 60 * 24 * 7; // 一周
         }
