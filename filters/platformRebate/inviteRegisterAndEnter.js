@@ -4,6 +4,7 @@
  * @fileoverview 平台返利汇总
  */
 var _ = require("lodash"),
+    config = require("../../utils/config.json"),
     util = require("../../utils");
 
 module.exports = {
@@ -47,7 +48,7 @@ module.exports = {
                 rebate_amount_count : 0
             };
         for(var key of source) {
-            registered_all_count = key.registered_all_count;
+            registered_all_count += key.registered_all_count;
             obj.rebate_plan_count += key.rebate_plan_count;
             obj.participate_user_count += key.participate_user_count;
             obj.registered_count += key.registered_count;
@@ -104,25 +105,12 @@ module.exports = {
     },
     inviteRegisterAndEnterFour(data) {
         var source = data.data,
-            user_party = {
-                1 : "平台基础返利",
-                2 : "平台促销返利",
-                5 : "邀请商家入驻返利",
-                6 : "单项单级返利"
-            },
-            correlate_flow = {
-                1 : "分享购买",
-                2 : "邀请好友-购买返利",
-                8 : "邀请商户入住-固定返利",
-                9 : "邀请商户入住-分享返利",
-                10 : "邀请好友-固定返利",
-                11 : "固定返利",
-                12 : "比例返利"
-            };
+            user_party = config.user_party,
+            correlate_flow = config.correlate_flow;
         for(var i = 0; i < source.length; i++) {
             source[i].id = i + 1;
-            source[i].user_party = user_party[key.user_party];
-            source[i].correlate_flow = user_party[key.correlate_flow];
+            source[i].user_party = user_party[source[i].user_party];
+            source[i].correlate_flow = correlate_flow[source[i].correlate_flow];
         }
         return util.toTable([source], data.rows, data.cols);
     }
