@@ -367,8 +367,8 @@ var User = Vue.extend({
 			_this.modal.title = '修改权限';
 			_this.modal.type = 'limitList';
 			_this.id = id;
-			_this.exportLimit = eval('(' + exportLimit + ')');
-			_this.limited = eval('(' + limited + ')');
+			_this.exportLimit = JSON.parse(exportLimit);
+			_this.limited = JSON.parse(limited);
 		},
 		apply: function(){
 			var _this = this;
@@ -376,7 +376,7 @@ var User = Vue.extend({
 				var resultLimited = {};
 				for(var item in _this.roleList){
 					if(_this.roleList[item]['checked']){
-						var obj = eval('(' + _this.roleList[item]['limited'] + ')');
+						var obj = JSON.parse(_this);
 						for(var k in obj){
 							if(!resultLimited[k]){
 								resultLimited[k] = obj[k];
@@ -395,7 +395,7 @@ var User = Vue.extend({
 				var resultExportLimited = {};
 				for(var item in _this.roleList){
 					if(_this.roleList[item]['checked']){
-						var obj = eval('(' + _this.roleList[item]['export'] + ')');
+						var obj = JSON.parse(_this);
 						for(var k in obj){
 							if(!resultExportLimited[k]){
 								resultExportLimited[k] = obj[k];
