@@ -20,6 +20,8 @@ module.exports = {
                 t7 : "0.00%",
                 t14 : "0.00%",
                 t30 : "0.00%"
+
+
             };
             for(var key of source) {
                 if(date === util.getDate(key.date)) {

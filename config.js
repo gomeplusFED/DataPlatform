@@ -13,7 +13,9 @@ var dataOverview = require("./controllers/path/dataOverview"),
     share = require("./controllers/path/share"),
     achievements = require("./controllers/path/achievements"),
     terminal = require("./controllers/path/terminal"),
-    retainedAnalysis = require("./controllers/path/retainedAnalysis");
+    retainedAnalysis = require("./controllers/path/retainedAnalysis"),
+    socialAnalysis = require("./controllers/path/socialAnalysis");
+
 
 module.exports = {
     siteName: '美信数据平台',
@@ -203,5 +205,20 @@ module.exports = {
                 businessRebate.plan()
             ]
         }
-    }]
+    }, {
+        "socialAnalysis": {
+            name: "社交分析",
+            id: 17,
+            display: true,
+            className: "fa fa-random fa-fw",
+            href: "#",
+            path: [
+                socialAnalysis.circle(),
+                socialAnalysis.topics(),
+                socialAnalysis.circleHost()
+            ],
+            routers : []
+        }
+    }
+    ]
 };
