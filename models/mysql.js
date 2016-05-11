@@ -7,8 +7,7 @@
 var orm = require('orm'),
     config = require('../db/config.json'),
     db = require('../db/mysql.json'),
-    mysql = db[config.db],
-    rebate = require("../db/rebate.json");
+    mysql = db[config.db];
 
 function connect(app) {
     app.use(orm.express('mysql://' + mysql.username + ':' + mysql.pwd + '@' + mysql.host + '/' + mysql.database + '?timezone=CST', {
