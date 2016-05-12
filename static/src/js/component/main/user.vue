@@ -357,7 +357,7 @@ var User = Vue.extend({
 				},
 				success: function(data){
 					_this.roleList = data.data;
-					var currentUserRoleNameArr = _this.currentUserRoleName.split(';');
+					var currentUserRoleNameArr = _this.currentUserRoleName ? _this.currentUserRoleName.split(';') : [];
 					for(var item in _this.roleList){
 						Vue.set(_this.roleList[item], 'checked', false);
 						if(currentUserRoleNameArr.filter(function(v, index){
@@ -385,7 +385,7 @@ var User = Vue.extend({
 				var resultLimited = {};
 				for(var item in _this.roleList){
 					if(_this.roleList[item]['checked']){
-						var obj = JSON.parse(_this);
+						var obj = JSON.parse(_this.roleList[item]['limited']);
 						for(var k in obj){
 							if(!resultLimited[k]){
 								resultLimited[k] = obj[k];
@@ -404,7 +404,7 @@ var User = Vue.extend({
 				var resultExportLimited = {};
 				for(var item in _this.roleList){
 					if(_this.roleList[item]['checked']){
-						var obj = JSON.parse(_this);
+						var obj = JSON.parse(_this.roleList[item]['export']);
 						for(var k in obj){
 							if(!resultExportLimited[k]){
 								resultExportLimited[k] = obj[k];
