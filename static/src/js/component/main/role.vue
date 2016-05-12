@@ -22,7 +22,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr v-for="item in roleListData">
+								<tr v-for="item in roleListData" :class="{active: !item.status}">
 									<td>{{item.id}}</td>
 									<td>{{item.name}}</td>
 									<td>{{item.date | Date 'yyyy-MM-dd hh:mm:ss'}}</td>

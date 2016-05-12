@@ -25,21 +25,21 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr v-for="item in userListData">
+								<tr v-for="item in userListData" :class="{active: !item.status}">
 									<td>{{item.id}}</td>
 									<td>{{item.name}}</td>
 									<td>{{item.username}}</td>
 									<td>{{item.email}}</td>
 									<td>{{item.department}}</td>
-									<td>
-										<span style="width: 160px;display: inline-block;padding-right: 100px;box-sizing: border-box;">{{item.role ? item.role : '无'}}</span>
-										<a v-show="item.status" @click="showRoleList(item.role, item.id, item.limited, item.export)" href="javascript:;" class="btn btn-default" data-role="0">修改<i class="fa fa-pencil-square-o"></i></a>
+									<td style="min-width: 300px;">
+										<span style="padding-right: 100px;">{{item.role ? item.role : '无'}}</span>
+										<a v-show="item.status" @click="showRoleList(item.role, item.id, item.limited, item.export, $index)" href="javascript:;" class="btn btn-default" data-role="0">修改<i class="fa fa-pencil-square-o"></i></a>
 									</td>
-									<td style="width: 300px;">
-										<span style="width: 300px;padding-right: 100px;box-sizing: border-box;">{{item.remark ? item.remark : '无'}}</span>
+									<td style="min-width: 350px;">
+										<span style="padding-right: 100px;">{{item.remark ? item.remark : '无'}}</span>
 										<form v-show="item.status" class="form-inline remark" @submit.prevent="editRemark(item.id,item.remark)">
-											<input type="text" maxlength="128" class="form-control" id="remark" v-model="item.remark">
-											<!-- <span v-show="showRemarkLen">{{item.remark | length}}/20</span> -->
+											<input type="text" maxlength="20" class="form-control" id="remark" v-model="item.remark">
+											<span v-show="showRemarkLen" style="font-size: 12px;">{{item.remark | length}}/20</span>
 											<a @click="showRemark($event, item.id, item.remark)" href="javascript:void(0);" class="btn btn-default">修改<i class="fa fa-pencil-square-o"></i></a>
 										</form>
 									</td>
@@ -246,12 +246,12 @@ var User = Vue.extend({
 			id: null,
 			limited: {},
 			exportLimit: {},
-			roleList: null,
+			roleList: [],
 			currentID: null,
 			currentCheckRoleName: null,
 			currentUserRoleName: null,
-			curretnLimited: null,
-			currentExportLimited: null,
+			// curretnLimited: null,
+			// currentExportLimited: null,
 			modifyLimited: {},
 			modifyExportLimited: {},
 			showRemarkLen: false
@@ -282,12 +282,12 @@ var User = Vue.extend({
 	},
 	methods: {
 		showRemark: function(ev,id,remark){
-
+			var _this = this;
 			$(document).bind('click',function(ev){
 			    var obj = $(ev.target);
 			    if (obj.parents('.remark').length === 0) {
 			    	$('.remark').find('input').css('display','none');
-			    	this.showRemarkLen = false;
+			    	_this.showRemarkLen = false;
 			    }
 			})
 			
@@ -346,15 +346,15 @@ var User = Vue.extend({
 				}
 			})
 		},
-		showRoleList: function(role, id, limited, exportLimited){
+		showRoleList: function(role, id, limited, exportLimited, index){
 			var _this = this;
 			_this.modal.show = true;
 			_this.modal.title = '修改角色';
 			_this.modal.type = 'roleList';
 			_this.currentUserRoleName = role;
 			_this.currentID = id;
-			_this.curretnLimited = limited;
-			_this.currentExportLimited = exportLimited;
+			// _this.curretnLimited = limited;
+			// _this.currentExportLimited = exportLimited;
 			$.ajax({
 				url: '/role/find',
 				type: 'get',
@@ -372,6 +372,8 @@ var User = Vue.extend({
 							Vue.set(_this.roleList[item], 'checked', true);
 						}
 					}
+					_this.limited = JSON.parse(_this.userListData[index].limited);
+					_this.exportLimit = JSON.parse(_this.userListData[index].export);
 				}
 			})
 		},
@@ -388,44 +390,40 @@ var User = Vue.extend({
 		apply: function(){
 			var _this = this;
 			if(this.modal.type === 'roleList'){
-				var resultLimited = {};
+
+				var currentUserRoleNameArr = _this.currentUserRoleName ? _this.currentUserRoleName.split(';') : [];
+
+				var resultLimited = utils.mixin(_this.limited, {});
+				var resultExportLimited = utils.mixin(_this.exportLimit, {});
+
 				for(var item in _this.roleList){
-					if(_this.roleList[item]['checked']){
-						var obj = JSON.parse(_this.roleList[item]['limited']);
-						for(var k in obj){
+					if(_this.roleList[item]['checked'] && !utils.isInArry(_this.roleList[item]['name'], currentUserRoleNameArr)){
+						var obj1 = JSON.parse(_this.roleList[item]['limited']);
+						for(var k in obj1){
 							if(!resultLimited[k]){
-								resultLimited[k] = obj[k];
-							}else{
-								for(var i = 0; i < obj[k].length; i++){
-									resultLimited[k].push(obj[k][i]);
-								}
-								resultLimited[k] = utils.uniqueArray(resultLimited[k]);
-								resultLimited[k].sort(function(a, b){
-									return a - b;
-								})
+								resultLimited[k] = obj1[k];
 							}
+							var _currentArr = resultLimited[k].concat(obj1[k]);
+							resultLimited[k] = utils.uniqueArray(resultLimited[k]);
+							resultLimited[k].sort(function(a, b){
+								return a - b;
+							})
 						}
-					}
-				}
-				var resultExportLimited = {};
-				for(var item in _this.roleList){
-					if(_this.roleList[item]['checked']){
-						var obj = JSON.parse(_this.roleList[item]['export']);
-						for(var k in obj){
+
+						var obj2 = JSON.parse(_this.roleList[item]['export']);
+						for(var k in obj2){
 							if(!resultExportLimited[k]){
-								resultExportLimited[k] = obj[k];
-							}else{
-								for(var i = 0; i < obj[k].length; i++){
-									resultExportLimited[k].push(obj[k][i]);
-								}
-								resultExportLimited[k] = utils.uniqueArray(resultExportLimited[k]);
-								resultExportLimited[k].sort(function(a, b){
-									return a - b;
-								})
+								resultExportLimited[k] = obj2[k];
 							}
+							var _currentArr = resultExportLimited[k].concat(obj2[k]);
+							resultExportLimited[k] = utils.uniqueArray(resultExportLimited[k]);
+							resultExportLimited[k].sort(function(a, b){
+								return a - b;
+							})
 						}
 					}
 				}
+
 				var roleName = [];
 				for(var item in _this.roleList){
 					if(_this.roleList[item]['checked']){
@@ -434,13 +432,13 @@ var User = Vue.extend({
 				}
 
 				for(var item in resultLimited){
-					if(resultLimited[item].length === 0){
+					if(resultLimited[item] === undefined || resultLimited[item].length === 0){
 						delete resultLimited[item];
 					}
 				}
 
 				for(var item in resultExportLimited){
-					if(resultExportLimited[item].length === 0){
+					if(resultExportLimited[item] === undefined || resultExportLimited[item].length === 0){
 						delete resultExportLimited[item];
 					}
 				}
@@ -474,6 +472,17 @@ var User = Vue.extend({
 				})
 			}else if(this.modal.type === 'limitList'){
 				var _this = this;
+				for(var item in _this.modifyLimited){
+					if(_this.modifyLimited[item] === undefined || _this.modifyLimited[item].length === 0){
+						delete _this.modifyLimited[item];
+					}
+				}
+
+				for(var item in _this.modifyExportLimited){
+					if(_this.modifyExportLimited[item] === undefined || _this.modifyExportLimited[item].length === 0){
+						delete _this.modifyExportLimited[item];
+					}
+				}
 				$.ajax({
 					url: '/users/update',
 					type: 'post',
