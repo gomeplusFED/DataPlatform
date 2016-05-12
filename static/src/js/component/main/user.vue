@@ -305,14 +305,20 @@ var User = Vue.extend({
 					remark: remark
 				},
 				success: function(data){
-					if(data.success){
+					if(!data.success){
 						actions.alert(store, {
 							show: true,
-							msg: '修改成功',
-							type: 'success'
+							msg: data.msg,
+							type: 'danger'
 						})
-						$('.remark').find('input').css('display','none');
+						return;
 					}
+					actions.alert(store, {
+						show: true,
+						msg: '修改成功',
+						type: 'success'
+					})
+					$('.remark').find('input').css('display','none');
 				}
 			})
 		},
@@ -442,7 +448,15 @@ var User = Vue.extend({
 						export: JSON.stringify(resultExportLimited),
 						role: roleName.join(';')
 					},
-					success: function(){
+					success: function(data){
+						if(!data.success){
+							actions.alert(store, {
+								show: true,
+								msg: data.msg,
+								type: 'danger'
+							})
+							return;
+						}
 						actions.alert(store, {
 							show: true,
 							msg: '修改成功',
@@ -463,6 +477,14 @@ var User = Vue.extend({
 						export: JSON.stringify(_this.modifyExportLimited)
 					},
 					success: function(data){
+						if(!data.success){
+							actions.alert(store, {
+								show: true,
+								msg: data.msg,
+								type: 'danger'
+							})
+							return;
+						}
 						actions.alert(store, {
 							show: true,
 							msg: '修改成功',
@@ -478,7 +500,7 @@ var User = Vue.extend({
 			var _this = this;
 			actions.confirm(store, {
 				show: true,
-				msg: '是否禁用账户' + email + '？',
+				msg: '是否禁用账户 ' + email + '？',
 				apply: function(){
 					$.ajax({
 						url: '/users/update',
@@ -488,6 +510,14 @@ var User = Vue.extend({
 							status: 0
 						},
 						success: function(data){
+							if(!data.success){
+								actions.alert(store, {
+									show: true,
+									msg: data.msg,
+									type: 'danger'
+								})
+								return;
+							}
 							actions.alert(store, {
 								show: true,
 								msg: '禁用成功',
@@ -504,7 +534,7 @@ var User = Vue.extend({
 			var _this = this;
 			actions.confirm(store, {
 				show: true,
-				msg: '是否禁用账户' + email + '？',
+				msg: '是否启用账户 ' + email + '？',
 				apply: function(){
 					$.ajax({
 						url: '/users/update',
@@ -514,6 +544,14 @@ var User = Vue.extend({
 							status: 1
 						},
 						success: function(data){
+							if(!data.success){
+								actions.alert(store, {
+									show: true,
+									msg: data.msg,
+									type: 'danger'
+								})
+								return;
+							}
 							actions.alert(store, {
 								show: true,
 								msg: '启用成功',
