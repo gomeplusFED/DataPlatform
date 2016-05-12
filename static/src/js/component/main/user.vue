@@ -45,8 +45,8 @@
 									<td>
 										<ul>
 											<li v-show="item.status"><a @click="showLimitList(item.id, item.limited, item.export)" class="btn btn-default" href="javascript:void(0)">权限修改<i class="fa fa-pencil-square-o"></i></a></li>
-											<li v-show="item.status"><a @click="forbidden(item.id)" class="btn btn-default" href="javascript:void(0)">禁用<i class="fa fa-remove"></i></a></li>
-											<li v-show="!item.status"><a @click="startUsing(item.id)" class="btn btn-default" href="javascript:void(0)">启用<i class="fa fa-check-square-o"></i></a></li>
+											<li v-show="item.status"><a @click="forbidden(item.id, item.email)" class="btn btn-default" href="javascript:void(0)">禁用<i class="fa fa-remove"></i></a></li>
+											<li v-show="!item.status"><a @click="startUsing(item.id, item.email)" class="btn btn-default" href="javascript:void(0)">启用<i class="fa fa-check-square-o"></i></a></li>
 										</ul>
 									</td>
 								</tr>
@@ -98,6 +98,7 @@
 	        </div>
 	    </div>
 	</div>
+	<m-confirm></m-confirm>
 </template>
 
 <style>
@@ -207,6 +208,7 @@ var actions = require('../../store/actions.js');
 var Loading = require('../common/loading.vue');
 var Alert = require('../common/alert.vue');
 var ModalTable = require('../common/modalTable.vue');
+var Confirm = require('../common/confirm.vue');
 
 var LimitList = require('../common/limitList.vue');
 
@@ -267,7 +269,8 @@ var User = Vue.extend({
 		'm-loading': Loading,
 		'm-alert': Alert,
 		'm-modal': ModalTable,
-		'm-limit-list': LimitList
+		'm-limit-list': LimitList,
+		'm-confirm': Confirm
 	},
 	init: function(){
 		UserVm = this;
@@ -471,43 +474,55 @@ var User = Vue.extend({
 				})
 			}
 		},
-		forbidden: function(id){
+		forbidden: function(id, email){
 			var _this = this;
-			$.ajax({
-				url: '/users/update',
-				type: 'post',
-				data: {
-					id: id,
-					status: 0
-				},
-				success: function(data){
-					actions.alert(store, {
-						show: true,
-						msg: '禁用成功',
-						type: 'success'
+			actions.confirm(store, {
+				show: true,
+				msg: '是否禁用账户' + email + '？',
+				apply: function(){
+					$.ajax({
+						url: '/users/update',
+						type: 'post',
+						data: {
+							id: id,
+							status: 0
+						},
+						success: function(data){
+							actions.alert(store, {
+								show: true,
+								msg: '禁用成功',
+								type: 'success'
+							})
+							_this.createTableBySearchStr();
+							_this.modal.show = false;
+						}
 					})
-					_this.createTableBySearchStr();
-					_this.modal.show = false;
 				}
 			})
 		},
-		startUsing: function(id){
+		startUsing: function(id, email){
 			var _this = this;
-			$.ajax({
-				url: '/users/update',
-				type: 'post',
-				data: {
-					id: id,
-					status: 1
-				},
-				success: function(data){
-					actions.alert(store, {
-						show: true,
-						msg: '启用成功',
-						type: 'success'
+			actions.confirm(store, {
+				show: true,
+				msg: '是否禁用账户' + email + '？',
+				apply: function(){
+					$.ajax({
+						url: '/users/update',
+						type: 'post',
+						data: {
+							id: id,
+							status: 1
+						},
+						success: function(data){
+							actions.alert(store, {
+								show: true,
+								msg: '启用成功',
+								type: 'success'
+							})
+							_this.createTableBySearchStr();
+							_this.modal.show = false;
+						}
 					})
-					_this.createTableBySearchStr();
-					_this.modal.show = false;
 				}
 			})
 		},
