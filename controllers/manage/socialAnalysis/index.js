@@ -13,11 +13,7 @@ var api = require("../../../base/api"),
 module.exports = (Router) => {
     Router = new api(Router,{
         router : "/socialAnalysis/groupOne",
-        modelName : ["Group", "SocialOverview"],
-        level_select : true,
-        default : {
-            day_type : 1,
-        },
+        modelName : ["Group"],
         platform : false,
         //date_picker_data: 1,
         filter(data, filter_key, dates) {
@@ -54,10 +50,6 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/socialAnalysis/groupTwo",
         modelName : [ "GroupDataTendency" ],
-        default : {
-            day_type : 1,
-
-        },
         level_select : true,
         platform : false,
         filter_select: [{
@@ -87,10 +79,6 @@ module.exports = (Router) => {
         modelName : [ "GroupDataDistribution" ],
         level_select : true,
         platform : false,
-        default : {
-            day_type : 1,
-            category_id : "all"
-        },
         filter_select: [
             {
                 title: '指标选择',
@@ -113,10 +101,6 @@ module.exports = (Router) => {
         router : "/socialAnalysis/groupFour",
         modelName : [ "GroupTop100" ],
         level_select : true,
-        default : {
-            day_type : 1,
-            category_id : "all"
-        },
         platform : false,
         //date_picker_data: 1,
         filter(data, filter_key, dates) {

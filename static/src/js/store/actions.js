@@ -19,4 +19,8 @@ actions.setCurrentPageDefaultData = function(store, data) {
     store.dispatch('SETCURRENTPAGEDEFAULTDATA', data);
 }
 
+actions.confirm = function(store, params) {
+	store.dispatch('CONFIRM', params);
+}
+
 module.exports = actions;

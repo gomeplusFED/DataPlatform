@@ -87,7 +87,8 @@ var DateCom = Vue.extend({
                         "monthNames": ["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"],
                         "firstDay": 1
                     },
-                    "ranges": this.pageComponentsData[this.componentType].defaultData === 7 ? range : {"昨天": [yesterday, yesterday]}
+                    "ranges": this.pageComponentsData[this.componentType].defaultData === 7 ? range : {"昨天": [yesterday, yesterday]},
+                    "showDayUnit": this.pageComponentsData[this.componentType].showDayUnit ? true : false
                 }
                 $('#datePicker_' + this.index).find('input').daterangepicker(options);
                 $('#datePicker_' + this.index).find('input').on('cancel.daterangepicker',function(ev, picker){
@@ -103,6 +104,7 @@ var DateCom = Vue.extend({
                     }
                     _this.argvs.startTime = picker.startDate.format('YYYY-MM-DD');
                     _this.argvs.endTime = picker.endDate.format('YYYY-MM-DD');
+                    _this.argvs.day_type = picker.dayUnit;
                 })
 
             },

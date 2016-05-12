@@ -1,5 +1,5 @@
 <template>
-    <button class="btn btn-default flexible_btn" v-for="item in pageComponentsData.flexible_btn" @click="resolveMethods(item, $event)">{{{item.content}}}</button>
+    <button class="btn btn-default flexible_btn" v-for="item in pageComponentsData.flexible_btn" @click="resolveMethods(item, $event)">{{{item.content}}}</button>   
 </template>
 <style>
 .flexible_btn{margin: 0 5px;padding: 0;box-sizing: border-box;}
@@ -32,6 +32,7 @@ var Btns = Vue.extend({
                 show_help: true
             },
             hasRequestUrl: null,
+            exportLimit: false
         }
     },
     vuex: {
@@ -46,9 +47,22 @@ var Btns = Vue.extend({
         btnsVm = this;
     },
     props: ['index','pageComponentsData','componentType','argvs','initData','resultArgvs'],
+    created: function(){
+        
+    },
     methods: {
-        excel_export: function(){
+        excel_export: function(ev){
+            var key = window.location.hash.replace('#!','');
+            if (!(window.allPageConfig.userInfo.export[window.allPageConfig.page[key].id] && window.allPageConfig.userInfo.export[window.allPageConfig.page[key].id].length)) {
+                actions.alert(store, {
+                    show: true,
+                    msg: '无权限',
+                    type: 'danger'
+                })
+                return;
+            }
             var resultQuery = [];
+            var result = '';
             for(var item in this.resultArgvs){
                 var ret = this.resultArgvs[item];
                 if(ret instanceof Array){
@@ -61,8 +75,7 @@ var Btns = Vue.extend({
                 }
                 
             }
-
-            var key = location.hash.replace('#!','');
+            var key = location.hash.replace('#!', '');
             window.open(window.allPageConfig.page[key].defaultData[this.index].query_api + '_excel?' +  resultQuery.join('&'));
         },
         show_help: function(ev){
