@@ -4,7 +4,14 @@
 			<div class="group">
 				<strong>{{item.title}}{{item.title === '' ? '' : '：'}}</strong>
 				<div class="btn_group" v-if="!isCell">
-					<button v-for="group in item.groups" @click="getArgv(item.filter_key,group.key,$event)" track-by="$index">{{group.value}}</button>
+					<div v-if="item.groups.length < 5">
+						<button v-for="group in item.groups" @click="getArgv(item.filter_key,group.key,$event)" track-by="$index">{{group.value}}</button>						
+					</div>
+					<div v-else>
+						<select @change="getArgvSelect(item.filter_key, $event)">
+							<option v-for="group in item.groups" :value="group.key">{{group.value}}</option>
+						</select>
+					</div>
 				</div>
 				<div class="btn_group" v-else>
 					<select @change="extraSelect($event,pageComponentsDataIndex)">
@@ -71,6 +78,10 @@ var FilterSelect = Vue.extend({
 	},
 	methods: {
 		getArgv: function(key,value,ev){
+			Vue.set(this.argvs, key, value);
+		},
+		getArgvSelect: function(key, ev){
+			var value = $(ev.target).find('option:selected').val();
 			Vue.set(this.argvs, key, value);
 		},
 		extraSelect: function(ev,pageComponentsDataIndex){
