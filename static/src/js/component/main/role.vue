@@ -30,8 +30,8 @@
 									<td>
 										<ul>
 											<li v-show="item.status"><a @click="modifyRole(item.id, item.limited, item.export, item.name, item.remark)" class="btn btn-default" href="javascript:void(0)">修改<i class="fa fa-pencil-square-o"></i></a></li>
-											<li v-show="item.status"><a @click="forbidden(item.id)" class="btn btn-default" href="javascript:void(0)">禁用<i class="fa fa-remove"></i></a></li>
-											<li v-show="!item.status"><a @click="startUsing(item.id)" class="btn btn-default" href="javascript:void(0)">启用<i class="fa fa-check-square-o"></i></a></li>
+											<li v-show="item.status"><a @click="forbidden(item.id, item.name)" class="btn btn-default" href="javascript:void(0)">禁用<i class="fa fa-remove"></i></a></li>
+											<li v-show="!item.status"><a @click="startUsing(item.id, item.name)" class="btn btn-default" href="javascript:void(0)">启用<i class="fa fa-check-square-o"></i></a></li>
 										</ul>
 									</td>
 								</tr>
@@ -77,6 +77,7 @@
 	        </div>
 	    </div>
 	</div>
+	<m-confirm></m-confirm>
 </template>
 
 <style>
@@ -122,6 +123,8 @@ var Loading = require('../common/loading.vue');
 var Alert = require('../common/alert.vue');
 
 var LimitList = require('../common/limitList.vue');
+
+var Confirm = require('../common/confirm.vue');
 
 var Role = Vue.extend({
 	name: 'Role',
@@ -169,7 +172,8 @@ var Role = Vue.extend({
 		'm-pagination': Pagination,
 		'm-loading': Loading,
 		'm-alert': Alert,
-		'm-limit-list': LimitList
+		'm-limit-list': LimitList,
+		'm-confirm': Confirm
 	},
 	created: function(){
 		this.createTableBySearchStr();
@@ -273,43 +277,55 @@ var Role = Vue.extend({
 				})
 			}
 		},
-		forbidden: function(id){
+		forbidden: function(id, name){
 			var _this = this;
-			$.ajax({
-				url: '/role/update',
-				type: 'post',
-				data: {
-					id: id,
-					status: 0
-				},
-				success: function(data){
-					actions.alert(store, {
-						show: true,
-						msg: '禁用成功',
-						type: 'success'
+			actions.confirm(store, {
+				show: true,
+				msg: '是否禁用角色 ' + name + '？',
+				apply: function(){
+					$.ajax({
+						url: '/role/update',
+						type: 'post',
+						data: {
+							id: id,
+							status: 0
+						},
+						success: function(data){
+							actions.alert(store, {
+								show: true,
+								msg: '禁用成功',
+								type: 'success'
+							})
+							_this.createTableBySearchStr();
+							_this.modal.show = false;
+						}
 					})
-					_this.createTableBySearchStr();
-					_this.modal.show = false;
 				}
 			})
 		},
-		startUsing: function(id){
+		startUsing: function(id, name){
 			var _this = this;
-			$.ajax({
-				url: '/role/update',
-				type: 'post',
-				data: {
-					id: id,
-					status: 1
-				},
-				success: function(data){
-					actions.alert(store, {
-						show: true,
-						msg: '启用成功',
-						type: 'success'
+			actions.confirm(store, {
+				show: true,
+				msg: '是否启用角色 ' + name + '？',
+				apply: function(){
+					$.ajax({
+						url: '/role/update',
+						type: 'post',
+						data: {
+							id: id,
+							status: 1
+						},
+						success: function(data){
+							actions.alert(store, {
+								show: true,
+								msg: '启用成功',
+								type: 'success'
+							})
+							_this.createTableBySearchStr();
+							_this.modal.show = false;
+						}
 					})
-					_this.createTableBySearchStr();
-					_this.modal.show = false;
 				}
 			})
 		},
