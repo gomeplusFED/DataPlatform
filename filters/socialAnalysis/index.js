@@ -67,5 +67,23 @@ module.exports = {
         var source = data.data,
             type = "bar",
             map = {}
+    },
+    groupFour(data) {
+        var source = data.data,
+            newData = [],
+            top = source.length > 100 ? 100 : source.length;
+        for(var key of source) {
+            key.rate = (key.DAU /
+                (key.accumulated_group_user_all_count === 0 ? 1 : key.accumulated_group_user_all_count) * 100)
+                .toFixed(2);
+        }
+        source.sort((a, b) => {
+            return b.rate - a.rate;
+        });
+        for(var i = 0; i < top; i++) {
+            source[i].id = i +1;
+            newData.push(source[i]);
+        }
+        return util.toTable([newData], data.rows, data.cols);
     }
 };

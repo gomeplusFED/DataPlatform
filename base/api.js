@@ -238,7 +238,8 @@ api.prototype = {
                         flexible_btn: this.flexible_btn,
                         date_picker: {
                             show: this.date_picker,
-                            defaultData: this.date_picker_data
+                            defaultData: this.date_picker_data,
+                            showDayUnit : this.showDayUnit
                         },
                         drop_down: {
                             platform: this.platform,
@@ -304,7 +305,6 @@ api.prototype = {
         return true;
     },
     _findDatabase: async((req, modelName, params) => {
-        console.log(params);
         return new Promise((resolve, reject) => {
             req.models[modelName].find(params, (err, data) => {
                 if (err) {
