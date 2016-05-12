@@ -32,13 +32,14 @@
 									<td>{{item.email}}</td>
 									<td>{{item.department}}</td>
 									<td>
-										<span style="width: 160px;display: inline-block;">{{item.role ? item.role : '无'}}</span>
+										<span style="width: 160px;display: inline-block;padding-right: 100px;box-sizing: border-box;">{{item.role ? item.role : '无'}}</span>
 										<a v-show="item.status" @click="showRoleList(item.role, item.id, item.limited, item.export)" href="javascript:;" class="btn btn-default" data-role="0">修改<i class="fa fa-pencil-square-o"></i></a>
 									</td>
 									<td style="width: 300px;">
-										<span style="width: 300px;display: inline-block;">{{item.remark ? item.remark : '无'}}</span>
+										<span style="width: 300px;padding-right: 100px;box-sizing: border-box;">{{item.remark ? item.remark : '无'}}</span>
 										<form v-show="item.status" class="form-inline remark" @submit.prevent="editRemark(item.id,item.remark)">
-											<input type="text" class="form-control" id="remark" v-model="item.remark">
+											<input type="text" maxlength="128" class="form-control" id="remark" v-model="item.remark">
+											<!-- <span v-show="showRemarkLen">{{item.remark | length}}/20</span> -->
 											<a @click="showRemark($event, item.id, item.remark)" href="javascript:void(0);" class="btn btn-default">修改<i class="fa fa-pencil-square-o"></i></a>
 										</form>
 									</td>
@@ -252,7 +253,8 @@ var User = Vue.extend({
 			curretnLimited: null,
 			currentExportLimited: null,
 			modifyLimited: {},
-			modifyExportLimited: {}
+			modifyExportLimited: {},
+			showRemarkLen: false
 		}
 	},
 	store: store,
@@ -285,15 +287,19 @@ var User = Vue.extend({
 			    var obj = $(ev.target);
 			    if (obj.parents('.remark').length === 0) {
 			    	$('.remark').find('input').css('display','none');
+			    	this.showRemarkLen = false;
 			    }
 			})
 			
 			if($(ev.target).parents('.remark').find('input').css('display') === 'inline-block'){
 				$(ev.target).parents('.remark').find('input').css('display','none');
+				this.showRemarkLen = false;
 				this.editRemark(id,remark);
 			}else{
 				$(ev.target).parents('.remark').find('input').css('display','inline-block');
+				this.showRemarkLen = true;
 			}
+
 		},
 		editRemark: function(id,remark){
 			var _this = this;

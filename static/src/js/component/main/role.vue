@@ -64,7 +64,8 @@
 						<div class="form-group">
 							<label for="juese_remark" class="col-sm-2 control-label">角色备注</label>
 							<div class="col-sm-10">
-								<input type="text" class="form-control" id="juese_remark" placeholder="请输入角色备注" v-model="modifyRemark">
+								<input type="text" class="form-control" id="juese_remark" maxlength="128" placeholder="请输入角色备注" v-model="modifyRemark">
+								<span>{{modifyRemark | length}}/128</span>
 							</div>
 						</div>
 					</form>
