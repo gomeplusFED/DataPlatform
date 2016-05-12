@@ -10,7 +10,9 @@ var obj = {},
     files = fs.readdirSync(filePath);
 
 for(var key of files) {
-    obj[key.match(/(.*).js/)[1]] = require(filePath + "/" + key);
+    if(key.indexOf(".js") > -1) {
+        obj[key.match(/(.*).js/)[1]] = require(filePath + "/" + key);
+    }
 }
 
 module.exports = {
