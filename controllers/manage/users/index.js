@@ -47,8 +47,8 @@ module.exports = (Router) => {
             if(!err) {
                 if(data.length) {
                     data[0].status = params.status || data[0].status;
-                    data[0].role = params.role !== "undefined" ? params.role : data[0].role;
-                    data[0].remark = params.remark !== "undefined" ? params.remark : data[0].remark;
+                    data[0].role = params.role === "undefined" ? params.role : data[0].role;
+                    data[0].remark = params.remark === "undefined" ? params.remark : data[0].remark;
                     data[0].limited = params.limited || data[0].limited;
                     data[0].export = params.export || data[0].export;
                     var username = data[0].username;
