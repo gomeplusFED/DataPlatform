@@ -246,6 +246,14 @@ var Role = Vue.extend({
 						export: JSON.stringify(_this.modifyExportLimited)
 					},
 					success: function(data){
+						if(!data.success){
+							actions.alert(store, {
+								show: true,
+								msg: data.msg,
+								type: 'danger'
+							})
+							return;
+						}
 						actions.alert(store, {
 							show: true,
 							msg: '修改成功',
@@ -266,6 +274,14 @@ var Role = Vue.extend({
 						export: JSON.stringify(_this.modifyExportLimited)
 					},
 					success: function(data){
+						if(!data.success){
+							actions.alert(store, {
+								show: true,
+								msg: data.msg,
+								type: 'danger'
+							})
+							return;
+						}
 						actions.alert(store, {
 							show: true,
 							msg: '新增成功',

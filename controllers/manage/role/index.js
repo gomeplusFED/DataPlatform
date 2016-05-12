@@ -3,8 +3,6 @@
  * @date 20160503
  * @fileoverview 角色管理
  */
-var role = require("./uniq");
-
 module.exports = (Router) => {
     Router.get("/role/find", (req, res, next) => {
         var query = req.query,
@@ -38,7 +36,7 @@ module.exports = (Router) => {
     Router.post("/role/update", (req, res, next) => {
         var body = req.body;
         if(body.name) {
-           role.uniq(req, body, (err, roles) => {
+           _uniq(req, body, (err, roles) => {
                 if(!err) {
                     if(roles.length > 0) {
                         res.json({
@@ -111,7 +109,7 @@ module.exports = (Router) => {
                 remark : body.remark
             };
         if(body.name) {
-            role.uniq(req, params, (err, data) => {
+            _uniq(req, params, (err, data) => {
                 if(!err) {
                     if(data.length > 0) {
                         res.json({
@@ -153,6 +151,18 @@ module.exports = (Router) => {
         }
 
     });
+
+    function _uniq(req, params, cb) {
+        req.models.Role.find({
+            name : params.name
+        }, (err, data) => {
+            if(err) {
+                cb(err);
+            } else {
+                cb(null, data);
+            }
+        })
+    }
 
     return Router;
 };
