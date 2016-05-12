@@ -1,37 +1,64 @@
 /**
  * @author yanglei
  * @date 20160415
- * @fileoverview 店铺分析
+ * @fileoverview 商品分析
  */
 var api = require("../../../base/api"),
-    filter = require("../../../filters/achievements");
+    filter = require("../../../filters/achievements/product");
 
 module.exports = (Router) => {
 
     Router = new api(Router,{
-        router : "/achievements/shopOne",
+        router : "/achievements/productOne",
         modelName : ["KeyValue"],
         platform : false,
+        fixedParams : {
+            key_type : [ "products_acc", "products_order",
+                "products_cars", "products_pay", "products_scan" ]
+        },
         filter_select: [{
             title: '',
-            filter_key : 'filter_key',
+            filter_key : 'key_name',
             groups: [{
-                key: 'shop_new_num',
-                value: '新增注册店铺'
+                key: ['sku', "sku_spu"],
+                value: 'SKU'
             }, {
-                key: 'shop_succ_num',
-                value: '成功入驻店铺'
-            }, {
-                key: 'shop_order_succ_num',
-                value: '成功交易店铺'
-            }, {
-                key: 'shop_access_num',
-                value: '被访问店铺数'
+                key: ['spu', "sku_spu"],
+                value: '合并SKU'
             }]
         }],
         filter(data, filter_key, dates) {
-            return filter.shopOne(data, filter_key, dates);
-        }
+            return filter.productOne(data, filter_key, dates);
+        },
+        cols : [
+            [
+                {
+                    caption: '商品访客数',
+                    type: 'number'
+                }, {
+                    caption: '商品访问量',
+                    type: 'number'
+                }, {
+                    caption: '商品页平均停留时长(s)',
+                    type: 'number'
+                },{
+                    caption: '被访问的商品数',
+                    type: 'number'
+                },{
+                    caption: '加购商品（数/件数）',
+                    type: 'number'
+                }, {
+                    caption: '下单商品（数/件数）',
+                    type: 'number'
+                }, {
+                    caption: '支付商品（数/件数）',
+                    type: 'number'
+                }
+            ]
+        ],
+        rows : [
+            [ 'one', 'two', 'three', "four", "five", "six", "seven" ]
+        ]
     });
 
     Router = new api(Router,{
