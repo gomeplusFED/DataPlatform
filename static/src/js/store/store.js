@@ -14,7 +14,14 @@ var state = {
         title: '弹窗表格',
         data: null // 表格数据
     },
-    currentPageDefaultData: []
+    currentPageDefaultData: null,
+    confirmConfig: {
+        show: false,
+        title: '弹出对话框',
+        msg: '提示信息',
+        apply: 'func',
+        cancle: 'func'
+    }
 }
 
 var actions = require('./actions.js');
@@ -47,6 +54,18 @@ mutations.HIDEMODALTABLE = function(state) {
 
 mutations.SETCURRENTPAGEDEFAULTDATA = function(state, data) {
     state.currentPageDefaultData = data;
+}
+
+mutations.CONFIRM = function(state, params){
+    state.confirmConfig.show = params.show;
+    state.confirmConfig.title = params.title || '弹窗';
+    state.confirmConfig.msg = params.msg || '';
+    state.confirmConfig.apply = params.apply || function(){};
+    state.confirmConfig.cancle = params.cancle || function(){};
+}
+
+mutations.HIDECONFIRM = function(state){
+    state.confirmConfig.show = false;
 }
 
 module.exports = new Vuex.Store({

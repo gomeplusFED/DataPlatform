@@ -1,18 +1,18 @@
 <template>
-    <div id="page-wrapper" style="min-height: 1054px;">
-        <m-loading :loading.sync="loading"></m-loading>
-        <m-alert></m-alert>
-        <m-modal></m-modal>
-        <m-main v-for="item in currentPageDefaultData.defaultData" :index="$index" :init-data="initData" :current-data="currentPageDefaultData.defaultData[$index]" :loading.sync="loading"></m-main>
-    </div>
+    <m-loading :loading.sync="loading"></m-loading>
+    <m-alert></m-alert>
+    <m-modal></m-modal>
+    <m-main v-for="item in currentPageDefaultData.defaultData" :index="$index" :init-data="initData" :current-data="currentPageDefaultData.defaultData[$index]" :loading.sync="loading"></m-main>
 </template>
 
 
 <script>
 
 var Vue = require('Vue');
+var $ = require('jQuery');
 
 var store = require('../store/store.js');
+var actions = require('../store/actions.js');
 
 var Loading = require('./common/loading.vue');
 var Alert = require('./common/alert.vue');
@@ -35,8 +35,12 @@ var App = Vue.extend({
         getters: {
             currentPageDefaultData: function() {
                 return store.state.currentPageDefaultData;
-            }
+            },
+            actions: actions
         }
+    },
+    created: function(){
+        actions.setCurrentPageDefaultData(store, window.allPageConfig.page[this.$route.path]);
     },
     components: {
         'm-loading': Loading,
@@ -46,17 +50,15 @@ var App = Vue.extend({
     },
     route: {
         data: function(transition){
-            console.log(transition.to.path);
-
             // 页面访问统计
-            // $.ajax({
-            //     url: '/dataPlatform/count',
-            //     type: 'get',
-            //     data: {
-            //         pagename: '', // 页面URL
-            //         username: '', // 页面名称 （狗血）
-            //     }
-            // })
+            $.ajax({
+                url: '/dataPlatform/count',
+                type: 'get',
+                data: {
+                    pagename: transition.to.path, // 页面URL
+                    username: window.allPageConfig.page[transition.to.path].pageTitle, // 页面名称 （狗血）
+                }
+            })
         }
     }
 

@@ -30,61 +30,31 @@ module.exports = function(app) {
             });
         return str;
     };
-
-    app.locals.createNavBarByLimit = function(limits, limit, thirdMenuIndex) {
-        var limitItemArray = limits.split(","),
-            subLimitItemArray = null,
-            href = null,
-            className = null,
-            limitItem = null,
-            limitItemKey = null,
-            name = null,
-            path = null,
-            str = '',
-            i = 0,
-            parent = -1000,
-            children = -1000;
-        if (thirdMenuIndex) {
-            parent = parseInt(thirdMenuIndex.split("-")[0]);
-            children = parseInt(thirdMenuIndex.split("-")[1]);
-        }
-        limitItemArray.forEach(function(item, index) {
-            subLimitItemArray = item.split("-");
-            for (i = 0; i < limit.length; i++) {
-                limitItemKey = Object.keys(limit[i])[0];
-                if (limit[i][limitItemKey].id === (subLimitItemArray[0] - 0) && limit[i][limitItemKey].display) {
-                    limitItem = limit[i];
-                    break;
-                }
-            }
-            if (limitItem && limitItem[limitItemKey]) {
-                href = limitItem[limitItemKey].href;
-                className = limitItem[limitItemKey].className;
-                name = limitItem[limitItemKey].name;
-                path = limitItem[limitItemKey].path;
-
-                var isActive = function(isChildren) {
-                    return limitItem[limitItemKey].id === parent ? 'active' : ''
-                }
+    app.locals.createNavBarByLimit = function(userInfo,limit){
+        var limited = userInfo.limited;
+        var str = '';
+        for(limitItem in limited){
+            if(limit[limitItem]){
+                var href = limit[limitItem].href;
+                var name = limit[limitItem].name;
+                var path = limit[limitItem].path;
+                var className = limit[limitItem].className;
                 str += '<li><a href="#!' + href + '"><i class="' + className + '"></i>' + name;
-                if (path.length > 0) {
+                if(limited[limitItem].length){
                     str += '<span class="fa arrow"></span></a><ul class="nav nav-second-level collapse">';
-                    path.forEach(function(v, k) {
-                        for (var i = 1; i < subLimitItemArray.length; i++) {
-                            if (k === parseInt(subLimitItemArray[i])) {
-                                if (v.display) {
-                                    str += '<li><a href="#!' + v.path + '">' + v.name + '</a></li>';
-                                }
-                            }
+                    limited[limitItem].forEach(function(v, k){
+                        var pathItem = path[v];
+                        if(pathItem && pathItem.display){
+                            str += '<li><a href="#!' + pathItem.path + '">' + pathItem.name + '</a></li>';
                         }
-                    });
+                    })
                     str += '</ul>';
-                } else {
+                }else{
                     str += '</a>';
                 }
                 str += '</li>';
             }
-        });
+        }
         return str;
-    };
+    }
 };

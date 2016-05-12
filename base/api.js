@@ -20,12 +20,20 @@ function api(Router, options) {
         router: "",
         //数据库
         modelName: [],
+        //filter过滤数据时对应表数据存储名字
+        sendDataName : ["data", "orderData", "thirdData"],
+        //是否固定参数
+        paramsName : ["params", "orderParams", "thirdParams"],
         //固定参数
         fixedParams : {},
         //固定查询数据库参数
         params : null,
         //固定查询数据库参数
         orderParams : null,
+        //固定查询数据库参数
+        thirdParams : null,
+        //辅助表数据整理
+        selectFilter : null,
         //行
         rows: [],
         //列
@@ -138,16 +146,13 @@ api.prototype = {
                 this[key] = query[key];
                 delete query[key];
             }
-            if(key === "key_type") {
-                this[key] = query[key];
-            }
+            //if(key === "key_type") {
+            //    this[key] = query[key];
+            //}
         });
         Object.keys(this.fixedParams).forEach((key) => {
             query[key] = this.fixedParams[key];
         });
-        if(this.params) {
-            params = this.params();
-        }
         this._getCache(type, res, req, query, next, params, dates);
     },
     _checkDate(option, errorMassage, next) {
@@ -191,26 +196,35 @@ api.prototype = {
     _findData(type, res, req, query, next, dates) {
         async(() => {
             var isErr = false,
-                error = "";
-            var sendData = {
-                rows: this.rows,
-                cols: this.cols
-            };
+                error = "",
+                sendData = {
+                    rows: this.rows,
+                    cols: this.cols
+                };
             try {
-                sendData.data = await (this._findDatabase(req, this.modelName[0], query));
-                if (this.modelName[1]) {
-                    if(this.orderParams) {
-                        query = this.orderParams();
+                for(var i = 0; i < this.modelName.length; i++) {
+                    if(this[this.paramsName[i]]) {
+                        query = this[this.paramsName[i]];
                     }
-                    sendData.orderData = await (this._findDatabase(req, this.modelName[1], query));
+                    sendData[this.sendDataName[i]] = await (this._findDatabase(req, this.modelName[i], query));
                 }
+                //sendData.data = await (this._findDatabase(req, this.modelName[0], query));
+                //if (this.modelName[1]) {
+                //    if(this.orderParams) {
+                //        query = this.orderParams();
+                //    }
+                //    sendData.orderData = await (this._findDatabase(req, this.modelName[1], query));
+                //}
             }catch(err) {
                 isErr = true;
                 error = err;
             }
 
             if (this.filter) {
-                sendData = this.filter(sendData, this.filter_key||this.key_type, dates);
+                sendData = this.filter(sendData, this.filter_key, dates, "adf");
+            }
+            if(this.selectFilter) {
+                this.filter_select = this.selectFilter(req);
             }
             if(isErr) {
                 next(error);
