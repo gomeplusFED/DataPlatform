@@ -25,7 +25,7 @@
 								<tr v-for="item in roleListData">
 									<td>{{item.id}}</td>
 									<td>{{item.name}}</td>
-									<td>{{item.date}}</td>
+									<td>{{item.date | Date 'yyyy-MM-dd hh:mm:ss'}}</td>
 									<td>{{item.remark}}</td>
 									<td>
 										<ul>
