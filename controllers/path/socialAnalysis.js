@@ -68,7 +68,7 @@ module.exports = {
             name : "圈主数据",
             path : "/socialAnalysis/groupHost",
             display : true,
-            ddefaultData : [
+            defaultData : [
                 {
                     type : "table",
                     title : "圈主数据总览",

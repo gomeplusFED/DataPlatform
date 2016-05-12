@@ -17,7 +17,6 @@ module.exports = (Router) => {
         level_select : true,
         default : {
             day_type : 1,
-            category_id : "all"
         },
         platform : false,
         //date_picker_data: 1,
@@ -26,7 +25,7 @@ module.exports = (Router) => {
         },
         rows: [
             ["new_group_count", "new_group_user_count", "new_group_user_rate",
-            "accumulated_group_all_count0", "accumulated_group_user_all_count",
+            "accumulated_group_all_count", "accumulated_group_user_all_count",
             "user_join_group_rate"]
         ],
         cols: [
@@ -57,7 +56,7 @@ module.exports = (Router) => {
         modelName : [ "GroupDataTendency" ],
         default : {
             day_type : 1,
-            category_id : "all"
+
         },
         level_select : true,
         platform : false,
