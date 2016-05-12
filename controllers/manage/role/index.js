@@ -45,46 +45,7 @@ module.exports = (Router) => {
                             msg : "角色名称重复"
                         });
                     } else {
-                        req.models.Role.find({
-                            id : body.id
-                        }, (err, data) => {
-                            if(!err) {
-                                if(data.length) {
-                                    data[0].name = body.name || data[0].name;
-                                    data[0].limited = body.limited || data[0].limited;
-                                    data[0].export = body.export || data[0].export;
-                                    data[0].status = body.status || data[0].status;
-                                    data[0].remark = body.remark || data[0].remark;
-                                    data[0].save((err) => {
-                                        if(!err) {
-                                            res.json({
-                                                code : 200,
-                                                success : true,
-                                                msg : "修改成功"
-                                            });
-                                        } else {
-                                            res.json({
-                                                code : 400,
-                                                success : false,
-                                                msg : "修改失败"
-                                            });
-                                        }
-                                    });
-                                } else {
-                                    res.json({
-                                        code : 400,
-                                        success : false,
-                                        msg : "无该角色，无法修改"
-                                    });
-                                }
-                            } else {
-                                res.json({
-                                    code : 400,
-                                    success : false,
-                                    msg : "修改角色失败"
-                                });
-                            }
-                        });
+                        _update(req, res, body);
                     }
                 } else {
                     res.json({
@@ -94,8 +55,9 @@ module.exports = (Router) => {
                     });
                 }
            })
+        } else {
+            _update(req, res, body);
         }
-
     });
 
     Router.post("/role/add", (req, res, next) => {
@@ -162,6 +124,48 @@ module.exports = (Router) => {
                 cb(null, data);
             }
         })
+    }
+    function _update(req, res, body) {
+        req.models.Role.find({
+            id : body.id
+        }, (err, data) => {
+            if(!err) {
+                if(data.length) {
+                    data[0].name = body.name || data[0].name;
+                    data[0].limited = body.limited || data[0].limited;
+                    data[0].export = body.export || data[0].export;
+                    data[0].status = body.status || data[0].status;
+                    data[0].remark = body.remark || data[0].remark;
+                    data[0].save((err) => {
+                        if(!err) {
+                            res.json({
+                                code : 200,
+                                success : true,
+                                msg : "修改成功"
+                            });
+                        } else {
+                            res.json({
+                                code : 400,
+                                success : false,
+                                msg : "修改失败"
+                            });
+                        }
+                    });
+                } else {
+                    res.json({
+                        code : 400,
+                        success : false,
+                        msg : "无该角色，无法修改"
+                    });
+                }
+            } else {
+                res.json({
+                    code : 400,
+                    success : false,
+                    msg : "修改角色失败"
+                });
+            }
+        });
     }
 
     return Router;
