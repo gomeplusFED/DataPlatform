@@ -5,31 +5,31 @@
  */
 
 module.exports = {
-    circle() {
+    group() {
         return {
             name : "圈子数据",
-            path : "/socialAnalysis/circle",
+            path : "/socialAnalysis/group",
             display : true,
             defaultData : [
                 {
                     type : "table",
                     title : "圈子数据总览",
-                    query_api : "/share/insideOne"
+                    query_api : "/socialAnalysis/groupOne"
                 },
                 {
                     type : "chart",
                     title : "圈子数据趋势",
-                    query_api : "/share/insideOne"
+                    query_api : "/socialAnalysis/groupTwo"
                 },
                 {
                     type : "chart",
                     title : "圈子类型分布",
-                    query_api : "/share/insideOne"
+                    query_api : "/socialAnalysis/groupThree"
                 },
                 {
                     type : "table",
-                    title : "站内分享计数据详情",
-                    query_api : "/share/insideTwo"
+                    title : "热门圈子排行TOP100",
+                    query_api : "/socialAnalysis/groupFour"
                 }
             ]
         }
@@ -41,33 +41,53 @@ module.exports = {
             display : true,
             defaultData : [
                 {
+                    type : "table",
+                    title : "话题数据总览",
+                    query_api : "/socialAnalysis/topicsOne"
+                },
+                {
                     type : "chart",
-                    title : "站内分享趋势",
-                    query_api : "/share/insideOne"
+                    title : "话题数据趋势",
+                    query_api : "/socialAnalysis/topicsTwo"
+                },
+                {
+                    type : "chart",
+                    title : "圈子类型分布",
+                    query_api : "/socialAnalysis/topicsThree"
                 },
                 {
                     type : "table",
-                    title : "站内分享计数据详情",
-                    query_api : "/share/insideTwo"
+                    title : "热门话题排行TOP100",
+                    query_api : "/socialAnalysis/topicsFour"
                 }
             ]
         }
     },
-    circleHost() {
+    groupHost() {
         return {
             name : "圈主数据",
-            path : "/socialAnalysis/circleHost",
+            path : "/socialAnalysis/groupHost",
             display : true,
-            defaultData : [
+            ddefaultData : [
+                {
+                    type : "table",
+                    title : "圈主数据总览",
+                    query_api : "/socialAnalysis/groupHostOne"
+                },
                 {
                     type : "chart",
-                    title : "站内分享趋势",
-                    query_api : "/share/outerOne"
+                    title : "圈主数据趋势",
+                    query_api : "/socialAnalysis/groupHostTwo"
+                },
+                {
+                    type : "chart",
+                    title : "圈主类型分布",
+                    query_api : "/socialAnalysis/groupHostThree"
                 },
                 {
                     type : "table",
-                    title : "站内分享计数据详情",
-                    query_api : "/share/outerTwo"
+                    title : "热门圈主排行TOP100",
+                    query_api : "/socialAnalysis/groupHostFour"
                 }
             ]
         }

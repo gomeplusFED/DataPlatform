@@ -506,6 +506,58 @@ function connect(app) {
                 username : String,
                 count : Number
             });
+            models.GroupDataOverview = db.define("tbl_rt_group",{
+                id : {type: 'number', key: true},
+                new_group_count: Number,
+                new_group_user_count: Number,
+                new_register_user_count: Number,
+                accumulated_group_all_count: Number,
+                accumulated_group_user_all_count: Number,
+                register_user_all_count: Number,
+                day_type: Number,
+                date: Date,
+                ver: String,
+                channel: String,
+                type: String
+            });
+            models.GroupDataTendency = db.define("tbl_rt_group_tendency",{
+                id : {type: 'number', key: true},
+                new_group_count: Number,
+                new_group_user_count: Number,
+                DAU: Number,
+                group_type: String,
+                day_type: Number,
+                date: Date,
+                ver: String,
+                channel: String,
+                type: String
+            });
+            models.GroupDataDistribution = db.define("tbl_rt_group_distribution",{
+                id : {type: 'number', key: true},
+                group_count: Number,
+                DAU: Number,
+                group_type: String,
+                day_type: Number,
+                date: Date,
+                ver: String,
+                channel: String,
+                type: String
+            });
+            models.GroupDataTop = db.define("tbl_rt_group_top",{
+                id : {type: 'number', key: true},
+                group_id: String,
+                group_name: String,
+                group_type: String,
+                new_group_user_count: Number,
+                new_group_topic_count: Number,
+                DAU: Number,
+                accumulated_group_user_all_count: Number,
+                day_type: Number,
+                date: Date,
+                ver: String,
+                channel: String,
+                type: String
+            });
             next();
         }
     }))

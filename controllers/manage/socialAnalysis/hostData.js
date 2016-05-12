@@ -1,7 +1,7 @@
 /**
  * @author Hao Sun
  * @date 20160511
- * @fileoverview 圈子数据
+ * @fileoverview 圈主数据
  */
 
 var api = require("../../../base/api"),
@@ -26,8 +26,8 @@ module.exports = (Router) => {
         },
         rows: [
             ["new_group_count", "new_group_user_count", "new_group_user_rate",
-            "accumulated_group_all_count0", "accumulated_group_user_all_count",
-            "user_join_group_rate"]
+                "accumulated_group_all_count0", "accumulated_group_user_all_count",
+                "user_join_group_rate"]
         ],
         cols: [
             [{
@@ -130,7 +130,7 @@ module.exports = (Router) => {
         }],
         rows: [
             ["group_ranking", "group_name", "group_type", "group_new_member",
-            "group_new_topics", "group_participation"]
+                "group_new_topics", "group_participation"]
         ],
         cols: [
             [{

@@ -210,12 +210,12 @@ module.exports = {
             name: "社交分析",
             id: 17,
             display: true,
-            className: "fa fa-random fa-fw",
+            className: "fa fa-social fa-fw",
             href: "#",
             path: [
-                socialAnalysis.circle(),
+                socialAnalysis.group(),
                 socialAnalysis.topics(),
-                socialAnalysis.circleHost()
+                socialAnalysis.groupHost()
             ],
             routers : []
         }
