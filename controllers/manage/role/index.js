@@ -36,9 +36,9 @@ module.exports = (Router) => {
     Router.post("/role/update", (req, res, next) => {
         var body = req.body;
         if(body.name) {
-           _uniq(req, body, (err, roles) => {
+           _uniq(req, {name:body.name}, (err, roles) => {
                 if(!err) {
-                    if(roles.length > 0) {
+                    if(roles.length > 1) {
                         res.json({
                             code : 400,
                             success : false,
@@ -71,7 +71,7 @@ module.exports = (Router) => {
                 remark : body.remark
             };
         if(body.name) {
-            _uniq(req, params, (err, data) => {
+            _uniq(req, {name: body.name}, (err, data) => {
                 if(!err) {
                     if(data.length > 0) {
                         res.json({
@@ -115,9 +115,7 @@ module.exports = (Router) => {
     });
 
     function _uniq(req, params, cb) {
-        req.models.Role.find({
-            name : params.name
-        }, (err, data) => {
+        req.models.Role.find(params, (err, data) => {
             if(err) {
                 cb(err);
             } else {
