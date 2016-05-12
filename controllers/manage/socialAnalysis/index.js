@@ -13,12 +13,7 @@ var api = require("../../../base/api"),
 module.exports = (Router) => {
     Router = new api(Router,{
         router : "/socialAnalysis/groupOne",
-        modelName : ["Group", "SocialOverview"],
-        level_select : true,
-        default : {
-            day_type : 1,
-            category_id : "all"
-        },
+        modelName : ["Group"],
         platform : false,
         //date_picker_data: 1,
         filter(data, filter_key, dates) {
@@ -26,7 +21,7 @@ module.exports = (Router) => {
         },
         rows: [
             ["new_group_count", "new_group_user_count", "new_group_user_rate",
-            "accumulated_group_all_count0", "accumulated_group_user_all_count",
+            "accumulated_group_all_count", "accumulated_group_user_all_count",
             "user_join_group_rate"]
         ],
         cols: [
@@ -55,10 +50,6 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/socialAnalysis/groupTwo",
         modelName : [ "GroupDataTendency" ],
-        default : {
-            day_type : 1,
-            category_id : "all"
-        },
         level_select : true,
         platform : false,
         filter_select: [{
@@ -88,10 +79,6 @@ module.exports = (Router) => {
         modelName : [ "GroupDataDistribution" ],
         level_select : true,
         platform : false,
-        default : {
-            day_type : 1,
-            category_id : "all"
-        },
         filter_select: [
             {
                 title: '指标选择',
@@ -114,10 +101,6 @@ module.exports = (Router) => {
         router : "/socialAnalysis/groupFour",
         modelName : [ "GroupTop100" ],
         level_select : true,
-        default : {
-            day_type : 1,
-            category_id : "all"
-        },
         platform : false,
         //date_picker_data: 1,
         filter(data, filter_key, dates) {

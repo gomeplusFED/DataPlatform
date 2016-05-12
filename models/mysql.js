@@ -540,7 +540,7 @@ function connect(app) {
                 content : String,
                 date : Number
             });
-            models.GroupDataOverview = db.define("tbl_rt_group",{
+            models.Group = db.define("tbl_rt_group",{
                 id : {type: 'number', key: true},
                 new_group_count: Number,
                 new_group_user_count: Number,

@@ -7,54 +7,33 @@ var util = require("../../utils"),
     _ = require("lodash");
 
 module.exports = {
-    channelOne(data, filter_key, dates) {
+    groupOne(data) {
         var source = data.data,
-            channels = util.uniq(_.pluck(source, "channel")),
-            array = [],
-            type = "line",
-            map = {},
-            newData = {};
-        for(var channel of channels) {
-            var obj = {
-                channel : channel,
-                value : 0
+            newData = {
+                new_group_count : 0,
+                new_group_user_count : 0,
+                accumulated_group_all_count : 0,
+                accumulated_group_user_all_count : 0,
+                user_join_group_rate : 0,
+                new_register_user_count : 0,
+                register_user_all_count : 0
             };
-            for(var key of source) {
-                if(channel === key.channel) {
-                    obj.value += key[filter_key];
-                }
-            }
-            array.push(obj);
+        //console.log(source);
+        for(var key of source) {
+            newData.new_group_count += key.new_group_count;
+            newData.new_group_user_count += key.new_group_user_count;
+            newData.new_register_user_count += key.new_register_user_count;
+            newData.accumulated_group_all_count += key.accumulated_group_all_count;
+            newData.accumulated_group_user_all_count += key.accumulated_group_user_all_count;
+            newData.register_user_all_count += key.register_user_all_count;
         }
-        array.sort((a, b) => {
-            return b.value - a.value;
-        });
-        var top = array.length > 10 ? 10 : array.length;
-        for(var i = 0; i < top; i++) {
-            map[array[i].channel] = array[i].channel;
-        }
-        for(var date of dates) {
-            var obj = {};
-            for(var i = 0; i< top; i++) {
-                obj[array[i].channel] = 0;
-            }
-            for(var key of source) {
-                if(date === util.getDate(key.date)) {
-                    obj[key.channel] += key[filter_key];
-                }
-            }
-            newData[date] = obj;
-        }
-        return [{
-            type : type,
-            map : map,
-            data : newData,
-            config: { // 配置信息
-                stack: false // 图的堆叠
-            }
-        }]
+        newData.new_group_user_rate = util.toFixed(newData.new_group_user_count,
+            newData.new_register_user_count);
+        newData.user_join_group_rate = util.toFixed(newData.accumulated_group_user_all_count,
+            newData.register_user_all_count);
+        return util.toTable([[newData]], data.rows, data.cols);
     },
-    channelTwo(data) {
+    groupTwo(data) {
         var source = data.data,
             channels = util.uniq(_.pluck(source, "channel")),
             total_new_users = 0,
@@ -83,5 +62,10 @@ module.exports = {
             });
         }
         return util.toTable([newData], data.rows, data.cols);
+    },
+    groupThree(data) {
+        var source = data.data,
+            type = "bar",
+            map = {}
     }
 };

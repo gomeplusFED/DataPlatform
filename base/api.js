@@ -304,6 +304,7 @@ api.prototype = {
         return true;
     },
     _findDatabase: async((req, modelName, params) => {
+        console.log(params);
         return new Promise((resolve, reject) => {
             req.models[modelName].find(params, (err, data) => {
                 if (err) {
