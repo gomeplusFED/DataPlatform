@@ -478,7 +478,7 @@ var User = Vue.extend({
 			var _this = this;
 			actions.confirm(store, {
 				show: true,
-				msg: '是否禁用账户' + email + '？',
+				msg: '是否禁用账户 ' + email + '？',
 				apply: function(){
 					$.ajax({
 						url: '/users/update',
@@ -504,7 +504,7 @@ var User = Vue.extend({
 			var _this = this;
 			actions.confirm(store, {
 				show: true,
-				msg: '是否启用账户' + email + '？',
+				msg: '是否启用账户 ' + email + '？',
 				apply: function(){
 					$.ajax({
 						url: '/users/update',
