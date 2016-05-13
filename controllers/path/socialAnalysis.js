@@ -62,34 +62,34 @@ module.exports = {
                 }
             ]
         }
-    }//,
-    // groupHost() {
-    //     return {
-    //         name : "圈主数据",
-    //         path : "/socialAnalysis/groupHost",
-    //         display : true,
-    //         defaultData : [
-    //             {
-    //                 type : "table",
-    //                 title : "圈主数据总览",
-    //                 query_api : "/socialAnalysis/groupHostOne"
-    //             },
-    //             {
-    //                 type : "chart",
-    //                 title : "圈主数据趋势",
-    //                 query_api : "/socialAnalysis/groupHostTwo"
-    //             },
-    //             {
-    //                 type : "chart",
-    //                 title : "圈主类型分布",
-    //                 query_api : "/socialAnalysis/groupHostThree"
-    //             },
-    //             {
-    //                 type : "table",
-    //                 title : "热门圈主排行TOP100",
-    //                 query_api : "/socialAnalysis/groupHostFour"
-    //             }
-    //         ]
-    //     }
-    // }
+    },
+    groupHost() {
+        return {
+            name : "圈主数据",
+            path : "/socialAnalysis/host",
+            display : true,
+            defaultData : [
+                {
+                    type : "table",
+                    title : "圈主数据总览",
+                    query_api : "/socialAnalysis/hostOne"
+                },
+                {
+                    type : "chart",
+                    title : "圈主数据趋势",
+                    query_api : "/socialAnalysis/hostTwo"
+                },
+                {
+                    type : "chart",
+                    title : "圈主类型分布",
+                    query_api : "/socialAnalysis/hostThree"
+                },
+                {
+                    type : "table",
+                    title : "热门圈主排行TOP100",
+                    query_api : "/socialAnalysis/hostFour"
+                }
+            ]
+        }
+    }
 };

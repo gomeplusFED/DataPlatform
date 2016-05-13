@@ -635,6 +635,55 @@ function connect(app) {
                 channel: String,
                 type: String
             });
+            models.Host = db.define("tbl_rt_group_topic",{
+                id : {type: 'number', key: true},
+                new_owner_num: Number,
+                total_new_owner_num: Number,
+                fans_num: Number,
+                accum_owner_num: Number,
+                day_type: Number,
+                date: Date,
+                ver: String,
+                channel: String,
+                type: String
+            });
+            models.HostTendency = db.define("tbl_rt_group_owner_tendency",{
+                id : {type: 'number', key: true},
+                new_owner_num: Number,
+                total_new_owner_num: Number,
+                fans_num: Number,
+                group_type: String,
+                day_type: Number,
+                date: Date,
+                ver: String,
+                channel: String,
+                type: String
+            });
+            models.HostDistribution = db.define("tbl_rt_group_owner_distribution",{
+                id : {type: 'number', key: true},
+                new_owner_num: Number,
+                fans_num: Number,
+                group_type: String,
+                date: Date,
+                day_type: Number,
+                ver: String,
+                channel: String,
+                type: String
+            });
+            models.HostTop = db.define("tbl_rt_group_owner_top",{
+                id : {type: 'number', key: true},
+                owner_id: Number,
+                owner_name: String,
+                new_fans_num: Number,
+                new_group_num: Number,
+                group_num: Number,
+                fans_num: Number,
+                date: Date,
+                day_type: Number,
+                ver: String,
+                channel: String,
+                type: String
+            });
             next();
         }
     }));
