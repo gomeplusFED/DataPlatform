@@ -592,6 +592,59 @@ function connect(app) {
                 channel: String,
                 type: String
             });
+            models.Topics = db.define("tbl_rt_group_topic",{
+                id : {type: 'number', key: true},
+                new_topic_count: Number,
+                new_reply_count: Number,
+                new_reply_new_topic_count: Number,
+                reply_topic_all_count: Number,
+                topic_all_count: Number,
+                accumulated_topic_all_count: Number,
+                day_type: Number,
+                date: Date,
+                ver: String,
+                channel: String,
+                type: String
+            });
+            models.TopicsTendency = db.define("tbl_rt_topic_tendency",{
+                id : {type: 'number', key: true},
+                new_topic_count: Number,
+                reply_topic_all_count: Number,
+                topic_all_count: Number,
+                topic_clicked_count: Number,
+                topic_viewed_count: Number,
+                group_type: String,
+                day_type: Number,
+                date: Date,
+                ver: String,
+                channel: String,
+                type: String
+            });
+            models.TopicsDistribution = db.define("tbl_rt_group_topic_distribution",{
+                id : {type: 'number', key: true},
+                topic_num: Number,
+                replay_num: Number,
+                group_type: String,
+                date: Date,
+                day_type: Number,
+                ver: String,
+                channel: String,
+                type: String
+            });
+            models.TopicsTop = db.define("tbl_rt_group_topic_top",{
+                id : {type: 'number', key: true},
+                topic_id: Number,
+                topic_name: Number,
+                click_num: Number,
+                click_user_num: Number,
+                replay_user_num: Number,
+                replay_num: Number,
+                date: Date,
+                day_type: Number,
+                ver: String,
+                channel: String,
+                type: String
+            });
             next();
         }
     }))
