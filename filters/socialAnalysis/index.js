@@ -4,6 +4,7 @@
  * @fileoverview 圈子数据
  */
 var util = require("../../utils"),
+    config = require("../../utils/config.json").socialCategory,
     _ = require("lodash");
 
 module.exports = {
@@ -32,40 +33,31 @@ module.exports = {
             newData.register_user_all_count);
         return util.toTable([[newData]], data.rows, data.cols);
     },
-    groupTwo(data, filter_key, dates) {
+    groupTwo(data, dates) {
         var source = data.data,
             type = "line",
-            array = [{
-                key : "新增圈子数",
-                value: "6"
-            }, {
-                key : "新增入圈户数",
-                value: "1"
-            }, {
-                key : "新增话题数",
-                value: "2"
-            }, {
-                key : "DAU",
-                value : "5"
-            }],
             newData = {},
-            map = {};
-        map[filter_key + "_0"] = array[0].key;
-        map[filter_key + "_1"] = array[1].key;
-        map[filter_key + "_2"] = array[2].key;
-        map[filter_key + "_3"] = array[3].key;
+            map = {
+                new_group_count : "新增圈子数",
+                new_group_user_count : "新增入圈户数",
+                new_group_topic_count : "新增话题数",
+                DAU : "DAU"
+            };
         for(var date of dates) {
-            var obj = {};
-            obj[filter_key + "_0"] = 0;
-            obj[filter_key + "_1"] = 0;
-            obj[filter_key + "_2"] = 0;
-            obj[filter_key + "_3"] = 0;
-            for(var key of source) {
-                newData[util.getDate(key.date)].value += key[filter_key];
-            }
-            newData[date] = obj;
+            newData[date] = {
+                new_group_count : 0,
+                new_group_user_count : 0,
+                new_group_topic_count : 0,
+                DAU : 0
+            };
         }
-
+        for(var key of source) {
+            var date = util.getDate(key.date);
+            newData[date].new_group_count += key.new_group_count;
+            newData[date].new_group_user_count += key.new_group_user_count;
+            newData[date].new_group_topic_count += key.new_group_topic_count;
+            newData[date].DAU += key.DAU;
+        }
         return [{
             type : type,
             map : map,
@@ -76,13 +68,71 @@ module.exports = {
             }
         }];
     },
-    groupThree(data) {
+    groupThree(data, filter_key) {
         var source = data.data,
-            type = "bar",
-            map = {};
-        
+            type = "pie",
+            obj = {},
+            filter_name = {
+                accumulated_group_all_count : "圈子数",
+                DAU : "DAU"
+            },
+            map = {
+                value : filter_name[filter_key]
+            },
+            newData = {};
+        for(var key in config) {
+            obj[key] = {
+                value : 0
+            }
+        }
+        for(var key of source) {
+            obj[key.group_type].value += key[filter_key];
+        }
+        for(var key in obj) {
+            newData[config[key].name] = obj[key].value;
+        }
+        return [{
+            type : type,
+            map : map,
+            data : newData,
+            config: {
+                stack: false
+            }
+        }]
     },
-    groupFour(data) {
+    groupFour(data, filter_key) {
+        var source = data.data,
+            type = "pie",
+            obj = {},
+            filter_name = {
+                accumulated_group_all_count : "圈子数",
+                DAU : "DAU"
+            },
+            map = {
+                value : filter_name[filter_key]
+            },
+            newData = {};
+        for(var key in config) {
+            obj[key] = {
+                value : 0
+            }
+        }
+        for(var key of source) {
+            obj[key.group_type].value += key[filter_key];
+        }
+        for(var key in obj) {
+            newData[config[key].name] = obj[key].value;
+        }
+        return [{
+            type : type,
+            map : map,
+            data : newData,
+            config: {
+                stack: false
+            }
+        }]
+    },
+    groupFive(data) {
         var source = data.data,
             newData = [],
             top = source.length > 100 ? 100 : source.length;

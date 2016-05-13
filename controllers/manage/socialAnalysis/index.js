@@ -7,7 +7,7 @@
 var api = require("../../../base/api"),
     help = require("../../../base/help"),
     orm = require("orm"),
-    config = require("../../../utils/config.json"),
+    config = require("../../../utils/config.json").socialCategory,
     filter = require("../../../filters/socialAnalysis");
 
 module.exports = (Router) => {
@@ -56,33 +56,18 @@ module.exports = (Router) => {
         router : "/socialAnalysis/groupTwo",
         modelName : [ "GroupDataTendency" ],
         platform : false,
-        filter_select: [{
-            title: '指标',
-            filter_key: 'filter_key',
-            groups: [{
-                key: 'new_group_count',
-                value: '新增圈子数'
-            }, {
-                key: 'new_group_user_count',
-                value: '新增入圈户数'
-            }, {
-                key: 'new_group_topic_count', //"圈子新增话题数"
-                value: '新增话题数' //"圈子新增话题数"
-            }, {
-                key: 'DAU',
-                value: 'DAU'
-            }]
-        }],
         filter(data, filter_key, dates) {
-            return filter.groupTwo(data, filter_key, dates);
+            return filter.groupTwo(data, dates);
         }
     });
 
-    Router = new api(Router,{ //暂无头绪。。。
+    Router = new api(Router,{
         router : "/socialAnalysis/groupThree",
         modelName : [ "GroupDataDistribution" ],
-        level_select : true,
         platform : false,
+        fixedParams : {
+            group_type : [ "-1", "-2", "-3", "-4", "-5", "-6", "-7", "-8", "-9", "-10", "-11", "-12" ]
+        },
         filter_select: [
             {
                 title: '指标选择',
@@ -103,12 +88,41 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/socialAnalysis/groupFour",
+        modelName : [ "GroupDataDistribution" ],
+        platform : false,
+        fixedParams : {
+            group_type :
+                orm.not_in([ "-1", "-2", "-3", "-4", "-5", "-6", "-7", "-8", "-9", "-10", "-11", "-12" ])
+        },
+        selectFilter() {
+            var filter_select = {
+                title: '一级分类',
+                filter_key: 'filter_key',
+                groups: []
+            };
+            for(var key in config) {
+                var obj = {
+                    key : key,
+                    value : config[key].name
+                };
+                filter_select.groups.push(obj);
+            }
+            return [filter_select];
+        },
+        filter_select: [],
+        filter(data, filter_key, dates) {
+            return filter.groupThree(data, filter_key);
+        }
+    });
+
+    Router = new api(Router,{
+        router : "/socialAnalysis/groupFive",
         modelName : [ "GroupDataTop" ],
         platform : false,
         showDayUnit : true,
         date_picker_data: 1,
         filter(data, filter_key, dates) {
-            return filter.groupFour(data);
+            return filter.groupFive(data);
         },
         excel_export : true,
         flexible_btn : [{

@@ -20,16 +20,21 @@ module.exports = {
                     type : "chart",
                     title : "圈子数据趋势",
                     query_api : "/socialAnalysis/groupTwo"
-                //},
-                //{
-                //    type : "chart",
-                //    title : "圈子类型分布",
-                //    query_api : "/socialAnalysis/groupThree"
+                },
+                {
+                    type : "chart",
+                    title : "圈子类型分布",
+                    query_api : "/socialAnalysis/groupThree"
+                },
+                {
+                    type : "chart",
+                    title : "圈子类型分布",
+                    query_api : "/socialAnalysis/groupFour"
                 },
                 {
                     type : "table",
                     title : "热门圈子排行TOP100",
-                    query_api : "/socialAnalysis/groupFour"
+                    query_api : "/socialAnalysis/groupFive"
                 }
             ]
         }
