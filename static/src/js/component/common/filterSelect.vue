@@ -122,14 +122,21 @@ var FilterSelect = Vue.extend({
 
 				// 纯按钮事件处理
 				if(this.isFirstHandler && !this.isCell){
+					// if(){}
+
 					for(var i = 0;i < this.pageComponentsData[this.componentType].length;i++){
-						(function(filterIndex){
-							$('#filter_group_' + _this.index + '_' + filterIndex).find('button').bind('click',function(){
-								$('#filter_group_' + _this.index + '_' + filterIndex).find('button').removeClass('active');
-								$(this).addClass('active');
-							})
-						})(i)
-						$('#filter_group_' + this.index + '_' + i).find('button').eq(0).trigger('click');
+						var _curr = this.pageComponentsData[this.componentType][i];
+						if(_curr.groups.length > 5){
+							Vue.set(this.argvs, this.pageComponentsData[this.componentType][0].filter_key, _curr.groups[0].key);
+						}else{
+							(function(filterIndex){
+								$('#filter_group_' + _this.index + '_' + filterIndex).find('button').bind('click',function(){
+									$('#filter_group_' + _this.index + '_' + filterIndex).find('button').removeClass('active');
+									$(this).addClass('active');
+								})
+							})(i)
+							$('#filter_group_' + this.index + '_' + i).find('button').eq(0).trigger('click');
+						}
 					}
 				}
 				// 级联菜单事件处理
