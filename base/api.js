@@ -146,9 +146,9 @@ api.prototype = {
                 this[key] = query[key];
                 delete query[key];
             }
-            //if(key === "key_type") {
-            //    this[key] = query[key];
-            //}
+            if(key === "key_type") {
+                this[key] = query[key];
+            }
         });
         Object.keys(this.fixedParams).forEach((key) => {
             query[key] = this.fixedParams[key];
@@ -219,9 +219,8 @@ api.prototype = {
                 isErr = true;
                 error = err;
             }
-
             if (this.filter) {
-                sendData = this.filter(sendData, this.filter_key, dates, "adf");
+                sendData = this.filter(sendData, this.filter_key || this.key_type, dates);
             }
             if(this.selectFilter) {
                 this.filter_select = this.selectFilter(req);
