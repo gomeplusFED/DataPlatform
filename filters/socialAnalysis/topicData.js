@@ -70,7 +70,7 @@ module.exports = {
             }
         }];
     },
-    groupThree(data) {
+    topicsThree(data) {
         var source = data.data,
             type = "bar",
             map = {}
