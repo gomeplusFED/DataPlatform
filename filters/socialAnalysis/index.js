@@ -1,7 +1,7 @@
 /**
- * @author yanglei
- * @date 20160414
- * @fileoverview 渠道分析
+ * @author Hao Sun
+ * @date 20160512
+ * @fileoverview 圈子数据
  */
 var util = require("../../utils"),
     _ = require("lodash");
@@ -66,7 +66,8 @@ module.exports = {
     groupThree(data) {
         var source = data.data,
             type = "bar",
-            map = {}
+            map = {};
+        
     },
     groupFour(data) {
         var source = data.data,
