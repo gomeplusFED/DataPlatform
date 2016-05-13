@@ -186,7 +186,7 @@ module.exports = {
         "17" : {
             name : "社交分析",
             display : true,
-            className : "fa fa-social fa-fw",
+            className : "fa  fa-laptop fa-fw",
             href : "#",
             path : [
                 obj.socialAnalysis.group(),
