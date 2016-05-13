@@ -35,24 +35,37 @@ module.exports = {
     groupTwo(data, filter_key, dates) {
         var source = data.data,
             type = "line",
-            filter_name = {
-                new_group_count : "新增圈子数",
-                new_group_user_count : "新增入圈户数",
-                new_group_topic_count : "新增话题数",
-                DAU : "DAU"
-            },
-            map = {
-                value : filter_name[filter_key]
-            },
-            newData = {};
+            array = [{
+                key : "新增圈子数",
+                value: "6"
+            }, {
+                key : "新增入圈户数",
+                value: "1"
+            }, {
+                key : "新增话题数",
+                value: "2"
+            }, {
+                key : "DAU",
+                value : "5"
+            }],
+            newData = {},
+            map = {};
+        map[filter_key + "_0"] = array[0].key;
+        map[filter_key + "_1"] = array[1].key;
+        map[filter_key + "_2"] = array[2].key;
+        map[filter_key + "_3"] = array[3].key;
         for(var date of dates) {
-            newData[date] = {
-                value : 0
-            };
+            var obj = {};
+            obj[filter_key + "_0"] = 0;
+            obj[filter_key + "_1"] = 0;
+            obj[filter_key + "_2"] = 0;
+            obj[filter_key + "_3"] = 0;
+            for(var key of source) {
+                newData[util.getDate(key.date)].value += key[filter_key];
+            }
+            newData[date] = obj;
         }
-        for(var key of source) {
-            newData[util.getDate(key.date)].value += key[filter_key];
-        }
+
         return [{
             type : type,
             map : map,
