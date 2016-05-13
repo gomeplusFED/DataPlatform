@@ -33,10 +33,10 @@ module.exports = (Router) => {
                 type: "number"
             }, {
                 caption: "新圈主占比", // = 首次建圈圈主数 / 当日总建圈圈主数
-                type: "number"
+                type: "string"
             }, {
                 caption: "人均粉丝数", // = 总圈主粉丝数 / 总圈主数
-                type: "string"
+                type: "number"
             }, {
                 caption: "累计圈主数",
                 type: "number"
@@ -55,14 +55,11 @@ module.exports = (Router) => {
                 key: 'new_owner_num',
                 value: '新增圈主数'
             }, {
-                key: 'avg_fan',
-                value: '人均粉丝数'
+                key: 'new_owner_rate',
+                value: '新圈主占比'
             }, {
-                key: 'new_owner_rate', 
-                value: '新圈主占比' 
-            }, {
-                key: 'DAU',
-                value: 'DAU'
+                key: 'avg_fan', 
+                value: '人均粉丝数' 
             }]
         }],
         filter(data, filter_key, dates) {
@@ -100,7 +97,7 @@ module.exports = (Router) => {
         showDayUnit : true,
         date_picker_data: 1,
         filter(data, filter_key, dates) {
-            return filter.hostFour(data);
+            return filter.hostFour(data,dates);
         },
         excel_export : true,
         flexible_btn : [{
@@ -108,28 +105,28 @@ module.exports = (Router) => {
             preMethods: ['excel_export']
         }],
         rows: [
-            [ "id", "group_name", "group_type", "group_new_member",
-            "group_new_topics", "rate"]
+            [ "id", "owner_name", "new_fans_num", "new_group_num",
+            "group_num", "fans_num"]
         ],
         cols: [
             [{
                 caption: "排名",
                 type: "number"
             }, {
-                caption: "圈子名称",
+                caption: "圈主名称",
                 type: "string"
             }, {
-                caption: "圈子归属分类",
+                caption: "圈主新增粉丝数",
                 type: "string"
             }, {
-                caption: "圈子新增成员数",
+                caption: "新增圈子数",
                 type: "number"
             }, {
-                caption: "圈子新增话题数",
+                caption: "圈子数",
                 type: "number"
             }, {
-                caption: "圈子参与度(%)", // （发布/回复）任意行为用户去重后数量 / 圈子成员数
-                type: "string"
+                caption: "粉丝数",
+                type: "number"
             }]
         ]
     });
