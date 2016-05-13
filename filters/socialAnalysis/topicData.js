@@ -75,7 +75,7 @@ module.exports = {
             key.avg_reply = (key.replay_num / key.replay_user_num).toFixed(2);
         }
         source.sort((a, b) => {
-            return b.click_num - a.click_num0;
+            return b.click_num - a.click_num;
         });
         for(var i = 0; i < top; i++) {
             source[i].id = i +1;
