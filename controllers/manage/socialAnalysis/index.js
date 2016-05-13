@@ -55,10 +55,9 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/socialAnalysis/groupTwo",
         modelName : [ "GroupDataTendency" ],
-        level_select : true,
         platform : false,
         filter_select: [{
-            title: '指标选择',
+            title: '指标',
             filter_key: 'filter_key',
             groups: [{
                 key: 'new_group_count',

@@ -388,7 +388,7 @@ function connect(app) {
                 rebate_amount_count: Number,
                 pay_order_time: Date
             });
-            models.ConfCategories = db.define("tbl_rt_conf_categories", {
+            models.ConfCategories = db.define("ecp_back_categories", {
                 id: { type: 'number', key: true },
                 pid: Number,
                 name: String,
