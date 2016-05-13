@@ -139,11 +139,11 @@ module.exports = {
         },
         "13": {
             name: "销售业绩",
-            display: false,
+            display: true,
             className: "fa fa-flag-checkered fa-fw",
             href: "#",
             path: [
-                obj.achievements.shop()
+                obj.achievements.product()
             ]
         },
         "14": {

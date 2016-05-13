@@ -34,21 +34,36 @@ module.exports = {
             ]
         }
     },
-    outer() {
+    product() {
         return {
-            name : "站外分享",
-            path : "/share/outer",
+            name : "商品分析",
+            path : "/achievements/product",
             display : true,
             defaultData : [
                 {
-                    type : "chart",
-                    title : "站内分享趋势",
-                    query_api : "/share/outerOne"
+                    type : "table",
+                    title : "商品信息总览",
+                    query_api : "/achievements/productOne"
                 },
                 {
-                    type : "table",
-                    title : "站内分享计数据详情",
-                    query_api : "/share/outerTwo"
+                    type : "chart",
+                    title : "商品销售趋势",
+                    query_api : "/achievements/productTwo"
+                //},
+                //{
+                //    type : "table",
+                //    title : "商品销售明细",
+                //    query_api : "/achievements/productThree"
+                //},
+                //{
+                //    type : "table",
+                //    title : "商品流量排行TOP100",
+                //    query_api : "/achievements/productFour"
+                //},
+                //{
+                //    type : "table",
+                //    title : "商品销售排行TOP100",
+                //    query_api : "/achievements/productFive"
                 }
             ]
         }

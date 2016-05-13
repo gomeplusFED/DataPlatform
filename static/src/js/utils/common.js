@@ -27,6 +27,14 @@ utils.isInObj = function(source, target) {
     }
     return false;
 }
+utils.isInArry = function(source, target) {
+    for (var item of target) {
+        if (item === source) {
+            return true;
+        }
+    }
+    return false;
+}
 
 utils.uniqueArray = function(a) {
     var hash = {},
