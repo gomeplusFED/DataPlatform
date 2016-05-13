@@ -7,7 +7,7 @@
 var api = require("../../../base/api"),
     help = require("../../../base/help"),
     orm = require("orm"),
-    config = require("../../../utils/config.json").socialCategory,
+    config = require("../../../utils/config.json"),
     filter = require("../../../filters/socialAnalysis");
 
 module.exports = (Router) => {
@@ -100,10 +100,11 @@ module.exports = (Router) => {
                 filter_key: 'filter_key',
                 groups: []
             };
-            for(var key in config) {
+            var socialCategory = config.socialCategory;
+            for(var key in socialCategory) {
                 var obj = {
                     key : key,
-                    value : config[key].name
+                    value : socialCategory[key].name
                 };
                 filter_select.groups.push(obj);
             }
