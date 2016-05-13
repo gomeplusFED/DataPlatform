@@ -18,7 +18,6 @@ module.exports = {
                 new_register_user_count : 0,
                 register_user_all_count : 0
             };
-        //console.log(source);
         for(var key of source) {
             newData.new_group_count += key.new_group_count;
             newData.new_group_user_count += key.new_group_user_count;
@@ -33,35 +32,36 @@ module.exports = {
             newData.register_user_all_count);
         return util.toTable([[newData]], data.rows, data.cols);
     },
-    groupTwo(data) {
+    groupTwo(data, filter_key, dates) {
         var source = data.data,
-            channels = util.uniq(_.pluck(source, "channel")),
-            total_new_users = 0,
-            obj = {},
-            newData = [];
-        for(var channel of channels) {
-            obj[channel] = {
-                new_users : 0,
-                active_users : 0,
-                start_up : 0
-            }
+            type = "line",
+            filter_name = {
+                new_group_count : "新增圈子数",
+                new_group_user_count : "新增入圈户数",
+                new_group_topic_count : "新增话题数",
+                DAU : "DAU"
+            },
+            map = {
+                value : filter_name[filter_key]
+            },
+            newData = {};
+        for(var date of dates) {
+            newData[date] = {
+                value : 0
+            };
         }
         for(var key of source) {
-            total_new_users += key.new_users;
-            obj[key.channel].new_users += key.new_users;
-            obj[key.channel].active_users += key.active_users;
-            obj[key.channel].start_up += key.start_up;
+            newData[util.getDate(key.date)].value += key[filter_key];
         }
-        for(var channel of channels) {
-            newData.push({
-                channel : channel,
-                new_users : obj[channel].new_users,
-                active_users : obj[channel].active_users,
-                start_up : obj[channel].start_up,
-                new_users_rate : util.toFixed(obj[channel].new_users, total_new_users)
-            });
-        }
-        return util.toTable([newData], data.rows, data.cols);
+        return [{
+            type : type,
+            map : map,
+            data : newData,
+            config: { // 配置信息
+                stack: false, // 图的堆叠
+                categoryY : false //柱状图竖着
+            }
+        }];
     },
     groupThree(data) {
         var source = data.data,
