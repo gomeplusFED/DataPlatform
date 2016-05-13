@@ -190,8 +190,8 @@ module.exports = {
             href : "#",
             path : [
                 obj.socialAnalysis.group(),
-                obj.socialAnalysis.topics()//,
-                //obj.socialAnalysis.groupHost()
+                obj.socialAnalysis.topics(),
+                obj.socialAnalysis.groupHost()
             ]
         }
     }
