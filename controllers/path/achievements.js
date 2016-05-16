@@ -49,11 +49,11 @@ module.exports = {
                     type : "chart",
                     title : "商品销售趋势",
                     query_api : "/achievements/productTwo"
-                //},
-                //{
-                //    type : "table",
-                //    title : "商品销售明细",
-                //    query_api : "/achievements/productThree"
+                },
+                {
+                    type : "table",
+                    title : "商品销售明细",
+                    query_api : "/achievements/productThree"
                 //},
                 //{
                 //    type : "table",

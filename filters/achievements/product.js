@@ -80,5 +80,51 @@ module.exports = {
                 categoryY : false //柱状图竖着
             }
         }]
+    },
+    productThree(data, dates) {
+        var source = data.data,
+            obj = {},
+            newData = [];
+        for(var date of dates) {
+            obj[date] = {
+                products_scan : {
+                    value : 0,
+                    value2 : 0
+                },
+                products_order : {
+                    value : 0,
+                    value2 : 0
+                },
+                products_pay : {
+                    value : 0,
+                    value2 : 0
+                },
+                products_return : {
+                    value : 0,
+                    value2 : 0
+                },
+                products_fee : {
+                    value : 0,
+                    value2 : 0
+                }
+            };
+        }
+        for(var key of source) {
+            var date = util.getDate(key.date);
+            obj[date][key.key_type].value += key.value;
+            obj[date][key.key_type].value2 += key.value2;
+        }
+        for(var date of dates) {
+            newData.push({
+                one : date,
+                two : obj[date].products_scan.value,
+                three : obj[date].products_order.value,
+                four : obj[date].products_pay.value,
+                five : obj[date].products_return.value,
+                six : obj[date].products_fee.value,
+                seven : obj[date].products_fee.value2
+            })
+        }
+        return util.toTable([newData], data.rows, data.cols);
     }
 };
