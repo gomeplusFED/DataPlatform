@@ -12,9 +12,6 @@ var api = require("../../../base/api"),
     dataOverview = require("../../../filters/dataOverview");
 
 module.exports = (Router) => {
-    var now = new Date(),
-        ydate = util.getDate(new Date(now.getTime() - 24 * 60 * 60 * 1000)),
-        qdate = util.getDate(new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000));
     Router = new api(Router, {
         router: "/dataOverview/dataOverviewAllOne",
         modelName: ['OverviewPlatf', "KpiValue"],
@@ -25,14 +22,24 @@ module.exports = (Router) => {
             preMethods: ["show_help"],
             customMethods: ''
         }],
-        params : {
-            date : orm.between(new Date(qdate + " 00:00:00"), new Date(ydate + " 23:59:59")),
-            region : "ALL",
-            day_type : 1
+        params() {
+            var now = new Date(),
+                ydate = util.getDate(new Date(now.getTime() - 24 * 60 * 60 * 1000)),
+                qdate = util.getDate(new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000));
+            return {
+                date : orm.between(new Date(qdate + " 00:00:00"), new Date(ydate + " 23:59:59")),
+                region : "ALL",
+                day_type : 1
+            }
         },
-        orderParams : {
-            date : orm.between(new Date(qdate + " 00:00:00"), new Date(ydate + " 23:59:59")),
-            day_type : 1
+        orderParams() {
+            var now = new Date(),
+                ydate = util.getDate(new Date(now.getTime() - 24 * 60 * 60 * 1000)),
+                qdate = util.getDate(new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000));
+            return {
+                date : orm.between(new Date(qdate + " 00:00:00"), new Date(ydate + " 23:59:59")),
+                day_type : 1
+            }
         },
         filter(data, filter_key, dates) {
             return dataOverview.dataOverviewAllOne(data, "H5");
@@ -136,9 +143,15 @@ module.exports = (Router) => {
         modelName: ["OverviewPlatf"],
         platform : false,
         date_picker : false,
-        params : {
-            date : orm.between(new Date(ydate + " 00:00:00"), new Date(ydate + " 23:59:59")),
-            day_type : 1
+        params() {
+            var now = new Date(),
+                ydate = util.getDate(new Date(now.getTime() - 24 * 60 * 60 * 1000));
+            return {
+                date : orm.between(new Date(ydate + " 00:00:00"), new Date(ydate + " 23:59:59")),
+                type : orm.not_in(["H5"]),
+                region : orm.not_in(["ALL"]),
+                day_type : 1
+            }
         },
         flexible_btn: [{
             content: '<a href="#!/terminal/provinces">查看全部</a>',
@@ -167,7 +180,7 @@ module.exports = (Router) => {
             }]
         ],
         rows : [
-            [ "id", "region", "uv", "pv", "pv_rate" ]
+            [ "id", "region", "open_user_total", "open_total", "open_total_rate" ]
         ]
     });
 
@@ -176,9 +189,14 @@ module.exports = (Router) => {
         modelName: ["OverviewPage"],
         platform : false,
         date_picker : false,
-        params : {
-            date : orm.between(new Date(ydate + " 00:00:00"), new Date(ydate + " 23:59:59")),
-            day_type : 1
+        params() {
+            var now = new Date(),
+                ydate = util.getDate(new Date(now.getTime() - 24 * 60 * 60 * 1000));
+            return {
+                date : orm.between(new Date(ydate + " 00:00:00"), new Date(ydate + " 23:59:59")),
+                type : orm.not_in(["H5"]),
+                day_type : 1
+            }
         },
         flexible_btn: [{
             content: '<a href="#!/useAnalysis/accessPage" target="_blank">查看全部</a>',

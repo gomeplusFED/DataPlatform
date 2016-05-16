@@ -1,5 +1,5 @@
 <template>
-    <h1>首页</h1>
+    <h2>{{userInfo.name}}，欢迎来到数据平台！</h2>
 </template>
 
 <script>
@@ -13,7 +13,7 @@ var Index = Vue.extend({
 	store: store,
 	data: function(){
 		return {
-            
+            userInfo: window.allPageConfig.userInfo
 		}
 	},
     ready: function(){

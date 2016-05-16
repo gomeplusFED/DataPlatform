@@ -40,13 +40,7 @@ var App = Vue.extend({
         }
     },
     created: function(){
-        var url = window.location.hash;
-        $('[href="'+ url +'"]').parent().parent().parent().addClass('active');
-        $('[href="'+ url +'"]').parent().parent().addClass('in').attr('aria-expanded', true);
-        $('[href="'+ url +'"]').focus();
-        $('#side-menu a').removeClass('active');
-        $('[href="'+ url +'"]').addClass('active');
-        actions.setCurrentPageDefaultData(store, window.allPageConfig.page[this.$route.path])
+        actions.setCurrentPageDefaultData(store, window.allPageConfig.page[this.$route.path]);
     },
     components: {
         'm-loading': Loading,

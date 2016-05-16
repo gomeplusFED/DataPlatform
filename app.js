@@ -55,6 +55,7 @@ app.use(function(req, res, next) {
     next();
 });
 
+
 //载入view helps
 require('./helps')(app);
 
@@ -76,12 +77,12 @@ app.use(function() {
     }
 });
 
- app.use((err, req, res, next) => {
-     if(err) {
-         res.send({
-             iserro: true
-         });
-     }
- });
+app.use((err, req, res, next) => {
+    if (err) {
+        res.render("include/404", {
+            iserro: true
+        });
+    }
+});
 
 app.listen(7879);

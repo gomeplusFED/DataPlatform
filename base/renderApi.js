@@ -48,7 +48,7 @@ renderApi.prototype = {
         cache.cacheGet(this.modelName, (err, types) => {
             if (!err) {
                 if (types) {
-                    this._renderData(res, {
+                    this._renderData(req, res, {
                         types: types
                     });
                 } else {
@@ -73,7 +73,7 @@ renderApi.prototype = {
                 }
                 cache.cacheSet(this.modelName, types, cacheTime, (err, success) => {
                     if (!err && success) {
-                        this._renderData(res, {
+                        this._renderData(req, res, {
                             types: types
                         });
                     } else {
@@ -85,32 +85,37 @@ renderApi.prototype = {
             }
         })
     },
-    _renderData(res, dataParams) {
-        var page = {};
+    _renderData(req, res, dataParams) {
+        var pageAll = {},
+            page = {},
+            limited = req.session.userInfo.limited;
         Object.keys(config.limit).forEach((key) => {
             var limit = config.limit[key];
-            if(limit.display) {
-                if(limit.href === "#") {
-                    for(var path of limit.path) {
+            if(limited[key]) {
+                for(var value of limited[key]) {
+                    var path = limit.path[value];
+                    if(path) {
                         page[path.path] = {
+                            id: key,
                             pageTitle : path.name,
                             defaultData : path.defaultData
-                        }
-                    }
-                } else {
-                    for(var path of limit.routers) {
-                        page[path.path] = {
-                            pageTitle : path.name,
-                            defaultData : path.defaultData
-                        }
+                        };
                     }
                 }
+            }
+            if(limit.display) {
+                pageAll[key] = {
+                    name : limit.name,
+                    path : limit.path
+                };
             }
         });
         res.render(this.view, {
             //pageTitle: this.name,
             drop_down_default_data: dataParams.types,
-            page : page
+            pageAll : pageAll,
+            page : page,
+            userInfo: req.session.userInfo
         });
     },
     setRouter(Router) {

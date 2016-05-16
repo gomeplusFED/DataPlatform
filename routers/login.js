@@ -36,78 +36,16 @@ module.exports = function(Router) {
     }
 
     function saveLogin(req, res, remember, email, userInfo) {
-        var maxAge = 1000 * 60 * 60 * 2; //2小时
+        var maxAge = 1000 * 60 * 60 * 24; //2小时
         if (remember) {
             maxAge = 1000 * 60 * 60 * 24 * 7; // 一周
         }
-        userInfo.limited =  eval('(' + userInfo.limited + ')');
+        userInfo.limited =  JSON.parse(userInfo.limited);
+        userInfo.export =  JSON.parse(userInfo.export);
         req.sessionOptions.maxAge = new Date(Date.now() + maxAge);
         req.session.userInfo = userInfo;
         req.session.isLogin = true;
     }
-
-    //function authorityRouteFromBrowserUrl(req, res, next) {
-    //    var url = req.originalUrl,
-    //        limitedStr = "",
-    //        urlTransToIndex = "",
-    //        fixedUrl = url;
-    //
-    //    //.match(/^\/.+?\/.+   (?=\?|\/) |  ^\/.+?\/.+ (?=\?|\/)? /);
-    //
-    //
-    //    if (fixedUrl) {
-    //        var limitedConfigArr = config.limit;
-    //        limitedStr = req.session.userInfo.limited;
-    //        // fixedUrl = fixedUrl[0];
-    //        lodash.forEach(limitedConfigArr, function(item) {
-    //            var key = Object.keys(item)[0];
-    //            var obj = item[key];
-    //            var href = obj.href;
-    //            var path = obj.path;
-    //            if (href === fixedUrl) {
-    //                urlTransToIndex = obj.id;
-    //            } else if (obj.path.length) {
-    //                var flag = true;
-    //                lodash.forEach(path, function(v, k) {
-    //                    if (v.path === fixedUrl && flag) {
-    //                        urlTransToIndex = obj.id + "-" + k;
-    //                        flag = false; //类似break功能
-    //                    } else if (flag) {
-    //                        /*serverConfig读取权限*/
-    //                        if (v.serverConfig && v.serverConfig.links) {
-    //                            var links = v.serverConfig.links;
-    //                            lodash.forEach(links, function(v1) {
-    //                                if (v1.href === fixedUrl) {
-    //                                    urlTransToIndex = obj.id + "-" + k;
-    //                                    flag = false;
-    //                                }
-    //                            });
-    //                        }
-    //                    }
-    //                });
-    //            }
-    //        });
-    //    }
-    //    /*路由不存在或者无权限时urlTransToIndex为空字符串*/
-    //    if (urlTransToIndex) {
-    //        urlTransToIndex = urlTransToIndex.toString();
-    //        var parent = urlTransToIndex.split("-")[0];
-    //        var children = urlTransToIndex.split("-")[1];
-    //        if (limitedStr.split(',').some(function(item) {
-    //                var arrs = item.split("-");
-    //                var arrsFirstItem = arrs.shift();
-    //                return arrsFirstItem === parent || arrs.indexOf(children) >= 0;
-    //            })) {
-    //            /*实现三级菜单所处的index保存到session*/
-    //            req.session.thirdMenuIndex = urlTransToIndex;
-    //            next();
-    //        } else {
-    //            res.render("include/authority");
-    //        }
-    //    } else {
-    //        next();
-    //    }
-    //}
 
     Router.post('/logout', function(req, res) {
         req.session = null;
@@ -122,7 +60,9 @@ module.exports = function(Router) {
             var email = req.body.email,
                 pwd = req.body.password,
                 from = req.body.from,
-                remember = req.body.remember;
+                remember = req.body.remember,
+                hash = req.body.hash;
+
             //直接去ldap交换验证
             if (!email || !pwd) {
                 req.flash('密码和账户不正确');
@@ -138,19 +78,19 @@ module.exports = function(Router) {
                     } else {
                         if (ret.length) {
                             saveLogin(req, res, remember, email, ret[0]);
-                            res.redirect(from || '/');
+                            res.redirect(from + hash || '/');
                         } else {
                             req.models.User2.create({
                                 name : "超级用户",
                                 username : "superAdmin",
                                 role : "超级管理员",
                                 status : 1,
-                                limited : "{0:[0,1,2]}",
+                                limited : '{"0":[0,1,2]}',
                                 is_admin : 99
                             }, (err, data) => {
                                 if(!err) {
-                                    saveLogin(req, res, remember, email, ret[0]);
-                                    res.redirect(from || '/');
+                                    saveLogin(req, res, remember, email, data);
+                                    res.redirect(from + hash || '/');
                                 } else {
                                     next(new Error("用户不存在"));
                                 }
@@ -184,12 +124,9 @@ module.exports = function(Router) {
                         resp.on('end', function() {
                             if (entrys.length === 1) {
                                 var entry = entrys[0];
-                                //console.log('entry: ' + JSON.stringify(entry.object));
-                                //console.log(entry.object);
                                 client.bind(entry.object.dn, pwd, function(err) {
                                     //验证成功
                                     if (err) {
-                                        //console.log(err);
                                         unbind(client, next);
                                         req.flash('密码和账户不正确');
                                         res.redirect('back');
@@ -204,7 +141,7 @@ module.exports = function(Router) {
                                                     if(ret[0].status) {
                                                         saveLogin(req, res, remember, email, ret[0]);
                                                         unbind(client, next);
-                                                        res.redirect(from || '/');
+                                                        res.redirect(from + hash || '/');
                                                     } else {
                                                         unbind(client, next);
                                                         req.flash('该用户已被禁用');
@@ -220,7 +157,7 @@ module.exports = function(Router) {
                                                         export : "{}",
                                                         department : entry.object.dn.match(/OU=(.*?),/)[1],
                                                         status : 1,
-                                                        date : new Date(),
+                                                        date : new Date().getTime(),
                                                         is_admin : 0
                                                     }, function(err, ret) {
                                                         if (err) {
@@ -228,7 +165,7 @@ module.exports = function(Router) {
                                                         } else {
                                                             saveLogin(req, res, remember, email, ret);
                                                             unbind(client, next);
-                                                            res.redirect(from || '/');
+                                                            res.redirect(from + hash || '/');
                                                         }
                                                     });
                                                 }

@@ -24,8 +24,12 @@ module.exports = (Router) => {
         }],
         rows: [
             ["name", "order_num", "order_amount", "shop_num", "user_num", "product_sku_num"],
-            ["rebate_order_num", "rebate_amount_total", "rebate_amount_actual", "rebate_amount", "rate", "platform_amount"],
-            ["name", "spu_num", "sku_num", "user_num", "amount", "amount_actual"]
+            ["rebate_order_num",
+                //"rebate_amount_total", "rebate_amount_actual",
+                "rebate_amount", "rate", "platform_amount"],
+            ["name", "spu_num", "sku_num", "user_num", "amount",
+                //"amount_actual"
+            ]
         ],
         cols: [
             [{
@@ -50,12 +54,12 @@ module.exports = (Router) => {
             [{
                 caption: "返利到账订单数",
                 type: "string"
-            }, {
-                caption: "返利到账订单总金额",
-                type: "string"
-            }, {
-                caption: "返利到账订单实付金额",
-                type: "string"
+            //}, {
+            //    caption: "返利到账订单总金额",
+            //    type: "string"
+            //}, {
+            //    caption: "返利到账订单实付金额",
+            //    type: "string"
             }, {
                 caption: "返利到账金额",
                 type: "string"
@@ -81,9 +85,9 @@ module.exports = (Router) => {
             }, {
                 caption: "退货商品总金额",
                 type: "string"
-            }, {
-                caption: "实际退货金额",
-                type: "string"
+            //}, {
+            //    caption: "实际退货金额",
+            //    type: "string"
             }]
         ]
     });
@@ -292,6 +296,20 @@ module.exports = (Router) => {
         modelName : [ "RebateShopPlanTop" ],
         excel_export : true,
         platform : false,
+        filter_select: [{
+            title: '关联流程',
+            filter_key: 'related_flow',
+            groups: [{
+                key: [13, 14],
+                value: '全部返利'
+            }, {
+                key: '13',
+                value: '分享购买'
+            }, {
+                key: '14',
+                value: '分销购买'
+            }]
+        }],
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']

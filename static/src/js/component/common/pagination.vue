@@ -27,6 +27,7 @@
 <style>
 .page-list {color: #333;text-align: center;}
 .page-list .pagination {display: inline-block;vertical-align: middle;*display: inline;*zoom: 1;margin: 0 auto;}
+
 /*.page-list {font-size: 0;color: #333;text-align: center;}
 
 .page-list .pagination li {display: inline-block;vertical-align: middle;font-size: 14px;text-align: center;border: 1px solid #ddd;margin: 0 5px;cursor: pointer;background: #fff;transition: all ease 0.3s;-webkit-transition: all ease 0.3s;-o-transition: all ease 0.3s;-moz-transition: all ease 0.3s;}
@@ -59,7 +60,6 @@ vm.$data.paginationConf = {
 
 
 var Vue = require('Vue');
-var $ = require('jQuery');
 
 var Pagination = Vue.extend({
 	name: 'Pagination',
@@ -101,7 +101,7 @@ var Pagination = Vue.extend({
 		    _this.paginationConf.currentPage = parseInt(_this.paginationConf.currentPage) ? parseInt(_this.paginationConf.currentPage) : 1;
 		    _this.paginationConf.totalItems = parseInt(_this.paginationConf.totalItems) ? parseInt(_this.paginationConf.totalItems) : 0;
 		    _this.paginationConf.itemsPerPage = parseInt(_this.paginationConf.itemsPerPage) ? parseInt(_this.paginationConf.itemsPerPage) : 8;
-		    _this.paginationConf.numberOfPages = Math.ceil(_this.paginationConf.totalItems / _this.paginationConf.itemsPerPage);
+		    Vue.set(_this.paginationConf, 'numberOfPages',  Math.ceil(_this.paginationConf.totalItems / _this.paginationConf.itemsPerPage));
 		    if (_this.paginationConf.currentPage < 1) {
 		        _this.paginationConf.currentPage = 1;
 		    }

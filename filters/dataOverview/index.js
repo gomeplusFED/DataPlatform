@@ -60,8 +60,8 @@ module.exports = {
                     zObj.open_user_total += key.open_user_total;
                     zObj.new_user += key.new_user;
                     zObj.new_account += key.new_account;
-                    zObj.stay_time_avg += Math.round(key.stay_time_avg);
-                    zObj.using_time_avg += Math.round(key.using_time_avg);
+                    zObj.stay_time_avg += Math.round(key.stay_time_avg / 60);
+                    zObj.using_time_avg += Math.round(key.using_time_avg / 60);
                     zObj.uv += key.uv;
                     zObj.pv += key.pv;
                     zObj.ip_count += key.ip_count;
@@ -133,10 +133,14 @@ module.exports = {
                 continue;
             }
             if(filter_key === "register_rate") {
-                newData[util.getDate(key.date)].value += key.new_account /
-                    (key.new_user === 0 ? 1 : key.new_user) * 100;
+                if(newData[util.getDate(key.date)]) {
+                    newData[util.getDate(key.date)].value += key.new_account /
+                        (key.new_user === 0 ? 1 : key.new_user) * 100;
+                }
             } else {
-                newData[util.getDate(key.date)].value += key[filter_key];
+                if(newData[util.getDate(key.date)]) {
+                    newData[util.getDate(key.date)].value += key[filter_key];
+                }
             }
         }
         if(filter_key === "register_rate") {
@@ -163,23 +167,14 @@ module.exports = {
             return b.open_total - a.open_total;
         });
         for(var key of source) {
-            if(key.region === "ALL" || key.type === "H5") {
-                continue;
-            }
             total_open_total += key.open_total;
         }
         for(var i = 0; i < top; i++) {
-            if(source[i]) {
-                if(source[i].region === "ALL" && source[i].type === "H5") {
-                    top++;
-                } else {
-                    newData.push(source[i]);
-                }
-            }
+            newData.push(source[i]);
         }
         for(var i = 0; i < newData.length; i++) {
             newData[i].id = i + 1;
-            newData[i].pv_rate = util.toFixed(newData[i].open_total, total_open_total);
+            newData[i].open_total_rate = util.toFixed(newData[i].open_total, total_open_total);
         }
         return util.toTable([newData], data.rows, data.cols);
     },
@@ -192,9 +187,6 @@ module.exports = {
             return b.pv - a.pv;
         });
         for(var key of source) {
-            if(key.type === "H5") {
-                continue;
-            }
             total_pv += key.pv;
         }
         for(var i = 0; i < top; i++) {
@@ -216,19 +208,10 @@ module.exports = {
             return b.pv - a.pv;
         });
         for(var key of source) {
-            if(key.region === "ALL" || key.type !== "H5") {
-                continue;
-            }
             total_pv += key.pv;
         }
         for(var i = 0; i < top; i++) {
-            if(source[i]) {
-                if(source[i].region === "ALL" && source[i].type === "H5") {
-                    top++;
-                } else {
-                    newData.push(source[i]);
-                }
-            }
+            newData.push(source[i]);
         }
         for(var i = 0; i < newData.length; i++) {
             newData[i].id = i + 1;

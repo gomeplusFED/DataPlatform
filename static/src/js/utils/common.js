@@ -20,12 +20,42 @@ utils.formatDate = function(date, fmt) {
 }
 
 utils.isInObj = function(source, target) {
-    for(var item in target){
-        if(item === source){
+    for (var item in target) {
+        if (item === source) {
             return true;
         }
     }
     return false;
+}
+utils.isInArry = function(source, target) {
+    for (var item of target) {
+        if (item === source) {
+            return true;
+        }
+    }
+    return false;
+}
+
+utils.uniqueArray = function(a) {
+    var hash = {},
+        len = a.length,
+        result = [];
+
+    for (var i = 0; i < len; i++) {
+        if (!hash[a[i]]) {
+            hash[a[i]] = true;
+            result.push(a[i]);
+        }
+    }
+    return result;
+}
+
+utils.getObjLen = function(obj) {
+    var _count = 0;
+    for (var item in obj) {
+        _count += 1;
+    }
+    return _count;
 }
 
 module.exports = utils;

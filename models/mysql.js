@@ -4,10 +4,11 @@
  * @date 20151201
  */
 
-var orm = require('orm');
-var config = require('../db/config.json');
-var db = require('../db/mysql.json');
-var mysql = db[config.db];
+var orm = require('orm'),
+    config = require('../db/config.json'),
+    db = require('../db/mysql.json'),
+    mysql = db[config.db];
+    // rebate = require("../db/rebate.json");
 
 function connect(app) {
     app.use(orm.express('mysql://' + mysql.username + ':' + mysql.pwd + '@' + mysql.host + '/' + mysql.database + '?timezone=CST', {
@@ -17,16 +18,6 @@ function connect(app) {
             //db.settings.set('instance.autoFetchLimit', 9999);
             //db.settings.set('instance.cacheSaveCheck', false);
             //db.settings.set('instance.autoSave', true);
-            models.Users = db.define("tbl_dataplatform_nodejs_users", {
-                id: { type: 'serial', key: true },
-                username: String,
-                is_admin: { type: "number", defaultValue: 0 },
-                limited: { type: "text", defaultValue: "2-0-1,3-0-1-2-3,4,5,6-0-1-2-3-4,8-0-1-2,9-0-1,10,11,12,13-0-1-2,14-0-1-2,15-0-1-2-3-4-5,16" },
-                last_ip: String,
-                login_ip: String,
-                login_time: Date,
-                lastlogin_time: Date
-            });
             models.NewAccount = db.define("tbl_rt_useranalysis_newuser", {
                 id: { type: 'number', key: true },
                 date: Date,
@@ -387,7 +378,7 @@ function connect(app) {
                 rebate_amount_count: Number,
                 pay_order_time: Date
             });
-            models.ConfCategories = db.define("tbl_rt_conf_categories", {
+            models.ConfCategories = db.define("ecp_back_categories", {
                 id: { type: 'number', key: true },
                 pid: Number,
                 name: String,
@@ -516,13 +507,65 @@ function connect(app) {
                 remark : String,
                 status : Number,
                 limited : String,
-                date : Date,
+                date : Number,
                 is_admin : Number,
                 export : String
+            });
+            models.Role = db.define("tbl_dataplatform_nodejs_role",{
+                id : {type: 'number', key: true},
+                name : String,
+                username : String,
+                remark : String,
+                status : Number,
+                limited : String,
+                date : Number,
+                is_admin : Number,
+                export : String
+            });
+            models.Log = db.define("tbl_dataplatform_nodejs_log",{
+                id : {type: 'number', key: true},
+                pagename : String,
+                username : String,
+                ip : String,
+                content : String,
+                date : Number
             });
             next();
         }
     }))
+    //app.use(orm.express('mysql://' + rebate.username + ':' + rebate.pwd + '@' + rebate.host + '/' + rebate.database + '?timezone=CST', {
+    //    define: function(db, models, next) {
+    //        db.settings.set('instance.cache', false);
+    //        db.settings.set('instance.autoFetch', true);
+    //        models.TypeFlow = db.define("t_rebate_type_flow", {
+    //            type_code : Number,
+    //            flow_code : Number,
+    //            rebate_level : Number,
+    //            create_time : Date,
+    //            update_time : Date,
+    //            status : Number
+    //        });
+    //        models.PlanFlow = db.define("t_rebate_plan_flow", {
+    //            id: { type: 'number', key: true },
+    //            code : Number,
+    //            name : String,
+    //            create_time : Date,
+    //            update_time : Date,
+    //            status : Number
+    //        });
+    //        models.PlanType = db.define("t_rebate_plan_type", {
+    //            id: { type: 'number', key: true },
+    //            code : Number,
+    //            rebate_level : Number,
+    //            name : String,
+    //            type : Number,
+    //            create_time : Date,
+    //            update_time : Date,
+    //            status : Number
+    //        });
+    //        next();
+    //    }
+    //}))
 };
 
 module.exports = connect;
