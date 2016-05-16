@@ -128,6 +128,44 @@ module.exports = {
         return util.toTable([newData], data.rows, data.cols);
     },
     productFour(data) {
-        var source = data.data;
+        var source = data.data,
+            newData = [],
+            access_num_total = 0,
+            access_users_total = 0,
+            length = source.length,
+            top = length > 100 ? 100 : length;
+        source.sort((a, b) => {
+            return b.access_num - a.access_num;
+        });
+        for(var key of source) {
+            access_num_total += key.access_num;
+            access_users_total += key.access_users;
+        }
+        for(var i = 0; i < top; i++) {
+            source[i].id = i + 1;
+            source[i].access_num_rate = util.toFixed(source[i].access_num, access_num_total);
+            source[i].access_users_rate = util.toFixed(source[i].access_users, access_users_total);
+            newData.push(source[i]);
+        }
+        return util.toTable([newData], data.rows, data.cols);
+    },
+    productFive(data) {
+        var source = data.data,
+            newData = [],
+            order_price_total = 0,
+            length = source.length,
+            top = length > 100 ? 100 : length;
+        source.sort((a, b) => {
+            return b.order_price - a.order_price;
+        });
+        for(var key of source) {
+            order_price_total += key.order_price;
+        }
+        for(var i = 0; i < top; i++) {
+            source[i].id = i + 1;
+            source[i].order_price_rate = util.toFixed(source[i].order_price, order_price_total);
+            newData.push(source[i]);
+        }
+        return util.toTable([newData], data.rows, data.cols);
     }
 };

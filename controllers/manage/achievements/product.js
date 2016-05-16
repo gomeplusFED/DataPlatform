@@ -10,7 +10,7 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/achievements/productOne",
-        modelName : ["KeyValue"],
+        modelName : ["SalesPerfKeyValue"],
         platform : false,
         fixedParams : {
             key_type : [ "products_acc", "products_order",
@@ -63,7 +63,7 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/achievements/productTwo",
-        modelName : ["KeyValue"],
+        modelName : ["SalesPerfKeyValue"],
         platform : false,
         filter_select: [{
             title: '',
@@ -111,7 +111,7 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/achievements/productThree",
-        modelName : ["KeyValue"],
+        modelName : ["SalesPerfKeyValue"],
         platform : false,
         excel_export : true,
         filter_select: [{
@@ -165,6 +165,8 @@ module.exports = (Router) => {
         router : "/achievements/productFour",
         modelName : ["ProductTop"],
         platform : false,
+        date_picker_data : 1,
+        showDayUnit : true,
         excel_export : true,
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
@@ -196,6 +198,53 @@ module.exports = (Router) => {
             }, {
                 caption: '访客数占比',
                 type: 'string'
+            }, {
+                caption: '被分享商品数',
+                type: 'number'
+            }]
+        ]
+    });
+
+    Router = new api(Router,{
+        router : "/achievements/productFive",
+        modelName : ["ProductTop"],
+        platform : false,
+        date_picker_data : 1,
+        showDayUnit : true,
+        excel_export : true,
+        flexible_btn : [{
+            content: '<a href="javascript:void(0)">导出</a>',
+            preMethods: ['excel_export']
+        }],
+        filter(data, filter_key, dates) {
+            return filter.productFive(data);
+        },
+        rows : [
+            [ 'top', 'commodity_name', 'order_users', 'oder_products', 'order_price',
+                'order_price_rate', "refund_num", 'share_num']
+        ],
+        cols : [
+            [{
+                caption: '排名',
+                type: 'number'
+            }, {
+                caption: '商品名称',
+                type: 'string'
+            }, {
+                caption: '下单人数',
+                type: 'number'
+            }, {
+                caption: '下单件数',
+                type: 'number'
+            }, {
+                caption: '成交金额',
+                type: 'number'
+            }, {
+                caption: '成交金额占比',
+                type: 'string'
+            }, {
+                caption: '退货数',
+                type: 'number'
             }, {
                 caption: '被分享商品数',
                 type: 'number'
