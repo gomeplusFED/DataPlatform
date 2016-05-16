@@ -138,7 +138,7 @@ module.exports = (Router) => {
         cols : [
             [{
                 caption: '日期',
-                type: 'date'
+                type: 'string'
             }, {
                 caption: '被访问商品数',
                 type: 'number'
@@ -162,8 +162,8 @@ module.exports = (Router) => {
     });
 
     Router = new api(Router,{
-        router : "/achievements/shopFour",
-        modelName : [""],
+        router : "/achievements/productFour",
+        modelName : ["ProductTop"],
         platform : false,
         excel_export : true,
         flexible_btn : [{
@@ -171,41 +171,30 @@ module.exports = (Router) => {
             preMethods: ['excel_export']
         }],
         filter(data, filter_key, dates) {
-            return filter.shopFour(data);
+            return filter.productFour(data);
         },
-        filter_select: [{
-            title: '',
-            filter_key : 'filter_key',
-            groups: [{
-                key: '1',
-                value: '合并SKU'
-            }, {
-                key: '2',
-                value: 'SKU'
-            }]
-        }],
         rows : [
-            [ 'top', 'shop_name', 'pay_price', 'pay_price_rate', 'pay_commodity_num',
-                'pay_commodity_rate', 'share_commodity_num']
+            [ 'top', 'commodity_name', 'access_num', 'access_num_rate', 'access_users',
+                'access_users_rate', 'share_num']
         ],
         cols : [
             [{
                 caption: '排名',
                 type: 'number'
             }, {
-                caption: '店铺名称',
+                caption: '商品名称',
                 type: 'string'
             }, {
-                caption: '支付金额',
+                caption: '浏览量',
                 type: 'number'
             }, {
-                caption: '支付金额占比',
+                caption: '浏览量占比',
                 type: 'string'
             }, {
-                caption: '支付商品数',
+                caption: '访客数',
                 type: 'number'
             }, {
-                caption: '支付商品数占比',
+                caption: '访客数占比',
                 type: 'string'
             }, {
                 caption: '被分享商品数',

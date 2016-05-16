@@ -126,5 +126,8 @@ module.exports = {
             })
         }
         return util.toTable([newData], data.rows, data.cols);
+    },
+    productFour(data) {
+        var source = data.data;
     }
 };

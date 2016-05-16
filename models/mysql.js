@@ -684,6 +684,24 @@ function connect(app) {
                 channel: String,
                 type: String
             });
+            models.ProductTop = db.define("tbl_rt_product_top",{
+                id : {type: 'number', key: true},
+                date : Date,
+                commodity_name : String,
+                commodity_id : Number,
+                access_num : Number,
+                access_users : Number,
+                share_num : Number,
+                order_users : Number,
+                order_price : Number,
+                refund_num : Number,
+                refund_price : Number,
+                sku_type : Number,
+                type : String,
+                ver : String,
+                channel : String,
+                day_type : Number
+        });
             next();
         }
     }));
