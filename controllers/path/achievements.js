@@ -54,16 +54,16 @@ module.exports = {
                     type : "table",
                     title : "商品销售明细",
                     query_api : "/achievements/productThree"
-                //},
-                //{
-                //    type : "table",
-                //    title : "商品流量排行TOP100",
-                //    query_api : "/achievements/productFour"
-                //},
-                //{
-                //    type : "table",
-                //    title : "商品销售排行TOP100",
-                //    query_api : "/achievements/productFive"
+                },
+                {
+                    type : "table",
+                    title : "商品流量排行TOP100",
+                    query_api : "/achievements/productFour"
+                },
+                {
+                    type : "table",
+                    title : "商品销售排行TOP100",
+                    query_api : "/achievements/productFive"
                 }
             ]
         }

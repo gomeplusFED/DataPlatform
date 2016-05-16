@@ -78,6 +78,7 @@ app.use(function() {
 });
 
 app.use((err, req, res, next) => {
+    console.log(err);
     if (err) {
         res.render("include/404", {
             iserro: true

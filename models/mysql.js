@@ -430,6 +430,20 @@ function connect(app) {
                 value2 : Number,
                 value3 : Number
             });
+            models.SalesPerfKeyValue = db.define("tbl_rt_sales_perf_key_value",{
+                id : {type: 'number', key: true},
+                date: Date,
+                day_type: Number,
+                type: String,
+                ver: String,
+                channel: String,
+                key_type : String,
+                key_name : String,
+                key_desc : String,
+                value : Number,
+                value2 : Number,
+                value3 : Number
+            });
             models.RebateOrderTredencyDetails = db.define("tbl_rt_rebate_order_tredency_details",{
                 id : {type: 'number', key: true},
                 date: Date,
@@ -684,6 +698,32 @@ function connect(app) {
                 channel: String,
                 type: String
             });
+            models.ProductTop = db.define("tbl_rt_sales_perf_product_top",{
+                id : {type: 'number', key: true},
+                date : Date,
+                commodity_name : String,
+                commodity_id : Number,
+                access_num : Number,
+                access_users : Number,
+                share_num : Number,
+                order_users : Number,
+                order_price : Number,
+                oder_products : Number,
+                refund_num : Number,
+                refund_price : Number,
+                sku_type : Number,
+                type : String,
+                ver : String,
+                channel : String,
+                day_type : Number
+        });
+            models.SocialCategory = db.define("tbl_social_category",{
+                id : String,
+                pid : String,
+                name : String,
+                createtime : Date,
+                updatetime : Date
+        });
             next();
         }
     }));

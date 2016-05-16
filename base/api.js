@@ -151,13 +151,20 @@ api.prototype = {
             }
         });
         if(typeof this.fixedParams === "function") {
-            query = this.fixedParams(query, this.filter_key);
+            this.fixedParams(query, this.filter_key, req, (err, data) => {
+                if(!err) {
+                    query = data;
+                    this._getCache(type, res, req, query, next, params, dates);
+                } else {
+                    next(err);
+                }
+            });
         } else {
             Object.keys(this.fixedParams).forEach((key) => {
                 query[key] = this.fixedParams[key];
             });
+            this._getCache(type, res, req, query, next, params, dates);
         }
-        this._getCache(type, res, req, query, next, params, dates);
     },
     _checkDate(option, errorMassage, next) {
         if (!validator.isDate(option)) {
@@ -171,7 +178,11 @@ api.prototype = {
             if (!err) {
                 if (cacheData) {
                     if (this._checkQuery(query, cacheData, next, params)) {
-                        this._findData(type, res, req, params, next, dates);
+                        if(this._selectFilter) {
+                            this._selectFilter(type, res, req, params, next, dates)
+                        } else {
+                            this._findData(type, res, req, params, next, dates);
+                        }
                     }
                 } else {
                     cacheData = {};
@@ -197,6 +208,20 @@ api.prototype = {
             }
         });
     },
+    _selectFilter(type, res, req, query, next, dates) {
+        if(typeof this.selectFilter === "function") {
+            this.selectFilter(req, (err, data) => {
+                if(!err) {
+                    this.filter_select = data;
+                    this._findData(type, res, req, query, next, dates);
+                } else {
+                    next(err);
+                }
+            });
+        } else {
+            this._findData(type, res, req, query, next, dates);
+        }
+    },
     _findData(type, res, req, query, next, dates) {
         async(() => {
             var isErr = false,
@@ -212,22 +237,12 @@ api.prototype = {
                     }
                     sendData[this.sendDataName[i]] = await (this._findDatabase(req, this.modelName[i], query));
                 }
-                //sendData.data = await (this._findDatabase(req, this.modelName[0], query));
-                //if (this.modelName[1]) {
-                //    if(this.orderParams) {
-                //        query = this.orderParams();
-                //    }
-                //    sendData.orderData = await (this._findDatabase(req, this.modelName[1], query));
-                //}
             }catch(err) {
                 isErr = true;
                 error = err;
             }
             if (this.filter) {
                 sendData = this.filter(sendData, this.filter_key || this.key_type, dates, this.filter_key2);
-            }
-            if(this.selectFilter) {
-                this.filter_select = this.selectFilter(req);
             }
             if(isErr) {
                 next(error);
@@ -266,7 +281,11 @@ api.prototype = {
     _setCache(type, req, res, params, data, next, dates) {
         cache.cacheSet(cacheName, data, cacheTime, (err, success) => {
             if (!err && success) {
-                this._findData(type, res, req, params, next, dates);
+                if(this._selectFilter) {
+                    this._selectFilter(type, res, req, params, next, dates);
+                } else {
+                    this._findData(type, res, req, params, next, dates);
+                }
             } else {
                 next(err);
             }
