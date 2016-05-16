@@ -70,38 +70,84 @@ module.exports = (Router) => {
             return filter.topicsTwo(data, filter_key, dates);
         }
     });
-
-    // Router = new api(Router,{ //暂无头绪。。。
-    //     router : "/socialAnalysis/topicsThree",
-    //     modelName : [ "GroupDataDistribution" ],
-    //     level_select : true,
-    //     platform : false,
-    //     filter_select: [
-    //         {
-    //             title: '指标选择',
-    //             filter_key: 'filter_key',
-    //             groups: [{
-    //                 key: 'accumulated_group_all_count',
-    //                 value: '圈子数'
-    //             }, {
-    //                 key: 'DAU',
-    //                 value: 'DAU'
-    //             }]
-    //         }
-    //     ],
-    //     filter(data, filter_key, dates) {
-    //         return filter.groupThree(data, filter_key);
-    //     }
-    // });
-
+    
+    Router = new api(Router,{
+        router : "/socialAnalysis/topicsThree",
+        modelName : [ "TopicsDistribution" ],
+        platform : false,
+        fixedParams : {
+            group_type : [ "-1", "-2", "-3", "-4", "-5", "-6", "-7", "-8", "-9", "-10", "-11", "-12" ]
+        },
+        filter_select: [
+            {
+                title: '指标选择',
+                filter_key: 'filter_key',
+                groups: [{
+                    key: 'accumulated_group_all_count',
+                    value: '圈子数'
+                }, {
+                    key: 'DAU',
+                    value: 'DAU'
+                }]
+            }
+        ],
+        filter(data, filter_key) {
+            return filter.topicsThree(data, filter_key);
+        }
+    });
+    
     Router = new api(Router,{
         router : "/socialAnalysis/topicsFour",
+        modelName : [ "TopicsDistribution" ],
+        platform : false,
+        fixedParams(query, filter_key) {
+            var socialCategory = config.socialCategory,
+                filter_key = filter_key || "-1";
+            array = Object.keys(socialCategory[filter_key].cell);
+            query.group_type = array;
+            return query;
+        },
+        selectFilter() {
+            var filter_select = {
+                title: '一级分类',
+                filter_key: 'filter_key',
+                groups: []
+            };
+            var socialCategory = config.socialCategory;
+            for(var key in socialCategory) {
+                var obj = {
+                    key : key,
+                    value : socialCategory[key].name,
+                    cell : {
+                        title: '指标类型',
+                        filter_key: 'filter_key2',
+                        groups: [{
+                            key: 'topic_num',
+                            value: '话题'
+                        }, {
+                            key: 'replay_num',
+                            value: '回复'
+                        }]
+                    }
+                };
+                filter_select.groups.push(obj);
+            }
+            return [filter_select];
+        },
+        filter_select: [],
+        filter(data, filter_key, filter_key2) {
+            return filter.topicsFour(data, filter_key, filter_key2);
+        }
+    });
+    
+    Router = new api(Router,{
+        router : "/socialAnalysis/topicsFive",
         modelName : [ "TopicsTop" ],
         platform : false,
         showDayUnit : true,
         date_picker_data: 1,
         filter(data, filter_key, dates) {
-            return filter.topicsFour(data);
+            return filter.topicsFive(data);
         },
         excel_export : true,
         flexible_btn : [{

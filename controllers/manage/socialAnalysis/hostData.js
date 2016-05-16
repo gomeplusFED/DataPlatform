@@ -67,36 +67,83 @@ module.exports = (Router) => {
         }
     });
 
-    Router = new api(Router,{ //暂无头绪。。。
-        router : "/socialAnalysis/groupThree",
+    Router = new api(Router,{
+        router : "/socialAnalysis/hostThree",
         modelName : [ "HostDistribution" ],
         platform : false,
+        fixedParams : {
+            group_type : [ "-1", "-2", "-3", "-4", "-5", "-6", "-7", "-8", "-9", "-10", "-11", "-12" ]
+        },
         filter_select: [
             {
                 title: '指标选择',
                 filter_key: 'filter_key',
                 groups: [{
-                    key: 'accumulated_group_all_count',
-                    value: '圈子数'
+                    key: 'new_owner_num',
+                    value: '圈主'
                 }, {
-                    key: 'DAU',
-                    value: 'DAU'
+                    key: 'fans_num',
+                    value: '粉丝数'
                 }]
             }
         ],
-        filter(data, filter_key, dates) {
-            return filter.groupThree(data, filter_key);
+        filter(data, filter_key) {
+            return filter.hostThree(data, filter_key);
         }
     });
 
     Router = new api(Router,{
         router : "/socialAnalysis/hostFour",
+        modelName : [ "HostDistribution" ],
+        platform : false,
+        fixedParams(query, filter_key) {
+            var socialCategory = config.socialCategory,
+                filter_key = filter_key || "-1";
+            array = Object.keys(socialCategory[filter_key].cell);
+            query.group_type = array;
+            return query;
+        },
+        selectFilter() {
+            var filter_select = {
+                title: '一级分类',
+                filter_key: 'filter_key',
+                groups: []
+            };
+            var socialCategory = config.socialCategory;
+            for(var key in socialCategory) {
+                var obj = {
+                    key : key,
+                    value : socialCategory[key].name,
+                    cell : {
+                        title: '圈子类型',
+                        filter_key: 'filter_key2',
+                        groups: [{
+                            key: 'new_owner_num',
+                            value: '圈主'
+                        }, {
+                            key: 'fans_num',
+                            value: '粉丝数'
+                        }]
+                    }
+                };
+                filter_select.groups.push(obj);
+            }
+            return [filter_select];
+        },
+        filter_select: [],
+        filter(data, filter_key, filter_key2) {
+            return filter.hostFour(data, filter_key, filter_key2);
+        }
+    });
+
+    Router = new api(Router,{
+        router : "/socialAnalysis/hostFive",
         modelName : [ "HostTop" ],
         platform : false,
         showDayUnit : true,
         date_picker_data: 1,
-        filter(data, filter_key, dates) {
-            return filter.hostFour(data,dates);
+        filter(data, dates) {
+            return filter.hostFive(data,dates);
         },
         excel_export : true,
         flexible_btn : [{
@@ -131,53 +178,32 @@ module.exports = (Router) => {
     });
 
     Router = new help(Router, {
-        router : "/socialAnalysis/help",
+        router : "/socialAnalysis/helpThree",
         rows : config.help.rows,
         cols : config.help.cols,
         data : [
             {
-                name : "新增圈子数",
-                help : "新增圈子的数量"
+                name : "新增圈主数",
+                help : "首次建立圈子的圈主数"
             },{
-                name : "新增入圈用户数",
-                help : "首次加入圈子的用户去重"
+                name : "新圈主占比",
+                help : "首次建立圈子的圈主数 / 当日总建圈圈主数"
             },{
-                name : "新增用户入圈率",
-                help : "新增入圈用户数/当天新增注册用户数"
+                name : "人均粉丝数",
+                help : "总圈主粉丝 / 总圈主数"
             },{
-                name : "累计圈子数",
-                help : "圈子总数"
+                name : "累计圈主数",
+                help : "累计圈主数"
             },{
-                name : "累计入圈用户数",
-                help : "入圈用户数去重"
+                name : "圈主粉丝数（排名字段）",
+                help : "圈主本时间区间新关注粉丝数"
             },{
-                name : "用户入圈率",
-                help : "累计入圈用户数/注册用户数"
+                name : "圈子数",
+                help : "此圈主下圈子数"
             },{
-                name : "新增话题数",
-                help : "圈子新增的话题数"
-            },{
-                name : "DAU",
-                help : "（发布话题/回复）任一一个行为的用户去重"
-            },{
-                name : "被分享圈子数",
-                help : "被分享的圈子数去重"
-            },{
-                name : "圈子名称",
-                help : "圈子的名称"
-            },{
-                name : "圈子归属分类",
-                help : "圈子归属的二级分类"
-            },{
-                name : "圈子新增成员数",
-                help : "圈子新增成员数"
-            },{
-                name : "圈子新增话题数",
-                help : "本期圈子的新增话题数"
-            },{
-                name : "圈子参与度【%】（排名字段）",
-                help : "（发布话题/回复）任一一个行为的用户去重/圈子成员数"
-            },
+                name : "粉丝数",
+                help : "当前累积的关注粉丝数"
+            }
         ]
     });
 
