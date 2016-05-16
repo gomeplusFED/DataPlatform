@@ -4,6 +4,7 @@
  * @fileoverview 话题数据
  */
 var util = require("../../utils"),
+    config = require("../../utils/config.json").socialCategory,
     _ = require("lodash");
 
 module.exports = {
@@ -31,21 +32,15 @@ module.exports = {
             newData.topic_all_count);
         return util.toTable([[newData]], data.rows, data.cols);
     },
-    topicsTwo(data,filter_key) {
+    topicsTwo(data, dates, filter_key) {
         var source = data.data,
             type = "line",
-            array = [{
-                key : "新增话题数",
-                value: "1"
-            }, {
-                key : "话题回复率",
-                value: "2"
-            }, {
-                key : "话题点击率",
-                value: "3"
-            }],
             newData = {},
-            map = {};
+            map = {
+                new_topic_count : "新增话题数",
+                reply_rate : "话题回复率",
+                avg_fan : "话题点击率"
+            };
         map[filter_key + "_0"] = array[0].key;
         map[filter_key + "_1"] = array[1].key;
         map[filter_key + "_2"] = array[2].key;

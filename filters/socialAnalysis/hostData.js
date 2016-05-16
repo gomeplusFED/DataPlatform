@@ -4,6 +4,7 @@
  * @fileoverview 话题数据
  */
 var util = require("../../utils"),
+    config = require("../../utils/config.json").socialCategory,
     _ = require("lodash");
 
 module.exports = {
@@ -30,33 +31,35 @@ module.exports = {
             newData.accum_owner_num);
         return util.toTable([[newData]], data.rows, data.cols);
     },
-    hostTwo(data,filter_key) {
+    hostTwo(data, dates) {
         var source = data.data,
             type = "line",
-            array = [{
-                key : "新增圈主数",
-                value: "1"
-            }, {
-                key : "新圈主占比",
-                value: "2"
-            }, {
-                key : "人均粉丝数",
-                value: "3"
-            }],
             newData = {},
-            map = {};
-        map[filter_key + "_0"] = array[0].key;
-        map[filter_key + "_1"] = array[1].key;
-        map[filter_key + "_2"] = array[2].key;
+            map = {
+                new_owner_num : "新增圈主数",
+                new_owner_rate : "新圈主占比",
+                avg_fan : "人均粉丝数"
+            };
         for(var date of dates) {
-            var obj = {};
-            obj[filter_key + "_0"] = 0;
-            obj[filter_key + "_1"] = 0;
-            obj[filter_key + "_2"] = 0;
-            for(var key of source) {
-                newData[util.getDate(key.date)].value += key[filter_key];
-            }
-            newData[date] = obj;
+            newData[date] = {
+                new_owner_num : 0,
+                new_owner_rate : 0,
+                avg_fan : 0
+            };
+        }
+
+        for(var key of source) {
+            var date = util.getDate(key.date);
+            newData[date].new_owner_num += key.new_owner_num;
+            newData[date].total_new_owner_num += key.total_new_owner_num;
+            newData[date].fans_num += key.fans_num;
+        }
+
+        for(var key in newData) {
+            newData[key].new_owner_rate = util.toFixed(newData[key].new_owner_num,
+                newData[key].total_new_owner_num);
+            newData[key].avg_fan = util.toFixed(newData[key].fans_num,
+                newData[key].accum_owner_num);
         }
 
         return [{

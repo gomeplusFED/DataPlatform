@@ -8,7 +8,7 @@ var api = require("../../../base/api"),
     help = require("../../../base/help"),
     orm = require("orm"),
     config = require("../../../utils/config.json"),
-    filter = require("../../../filters/socialAnalysis");
+    filter = require("../../../filters/socialAnalysis/topicData");
 
 module.exports = (Router) => {
     Router = new api(Router,{
@@ -56,7 +56,7 @@ module.exports = (Router) => {
             title: '指标选择',
             filter_key: 'filter_key',
             groups: [{
-                key: 'new_group_count',
+                key: 'new_topic_count',
                 value: '新增话题数'
             }, {
                 key: 'new_group_user_count',

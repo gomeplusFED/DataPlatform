@@ -8,7 +8,7 @@ var api = require("../../../base/api"),
     help = require("../../../base/help"),
     orm = require("orm"),
     config = require("../../../utils/config.json"),
-    filter = require("../../../filters/socialAnalysis");
+    filter = require("../../../filters/socialAnalysis/hostData");
 
 module.exports = (Router) => {
     Router = new api(Router,{
@@ -16,7 +16,7 @@ module.exports = (Router) => {
         modelName : ["Host"],
         platform : false,
         //date_picker_data: 1,
-        filter(data, filter_key, dates) {
+        filter(data) {
             return filter.hostOne(data);
         },
         flexible_btn: [{
@@ -48,22 +48,8 @@ module.exports = (Router) => {
         router : "/socialAnalysis/hostTwo",
         modelName : [ "HostTendency" ],
         platform : false,
-        filter_select: [{
-            title: '指标',
-            filter_key: 'filter_key',
-            groups: [{
-                key: 'new_owner_num',
-                value: '新增圈主数'
-            }, {
-                key: 'new_owner_rate',
-                value: '新圈主占比'
-            }, {
-                key: 'avg_fan', 
-                value: '人均粉丝数' 
-            }]
-        }],
         filter(data, filter_key, dates) {
-            return filter.hostTwo(data, filter_key, dates);
+            return filter.hostTwo(data, dates);
         }
     });
 
