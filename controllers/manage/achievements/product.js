@@ -114,39 +114,48 @@ module.exports = (Router) => {
         modelName : ["KeyValue"],
         platform : false,
         excel_export : true,
-        date_picker_data : 1,
+        filter_select: [{
+            title: '',
+            filter_key : 'key_name',
+            groups: [{
+                key: ['sku', "sku_spu"],
+                value: 'SKU'
+            }, {
+                key: ['spu', "sku_spu"],
+                value: '合并SKU'
+            }]
+        }],
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
         filter(data, filter_key, dates) {
-            return filter.productThree(data);
+            return filter.productThree(data, dates);
         },
         rows : [
-            [ 'top', 'shop_name', 'access_num', 'access_num_rate', 'access_users', 'access_users_rate',
-                'share_commodity_num']
+            [ 'one', 'two', 'three', "four", "five", "six", "seven" ]
         ],
         cols : [
             [{
-                caption: '排名',
+                caption: '日期',
+                type: 'date'
+            }, {
+                caption: '被访问商品数',
                 type: 'number'
             }, {
-                caption: '店铺名称',
-                type: 'string'
-            }, {
-                caption: '浏览量',
+                caption: '下单商品数/件数',
                 type: 'number'
             }, {
-                caption: '浏览量占比',
-                type: 'string'
-            }, {
-                caption: '访客数',
+                caption: '支付商品数/件数',
                 type: 'number'
             }, {
-                caption: '访客数占比',
-                type: 'string'
+                caption: '退货商品数/件数',
+                type: 'number'
             }, {
-                caption: '被分享商品数',
+                caption: '支付金额',
+                type: 'number'
+            }, {
+                caption: '退货金额',
                 type: 'number'
             }]
         ]
