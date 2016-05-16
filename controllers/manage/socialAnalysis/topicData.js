@@ -26,7 +26,7 @@ module.exports = (Router) => {
         }],
         rows: [
             ["new_topic_count", "new_reply_count", "new_reply_rate",
-            "reply_rate", "ttl_topics"]
+                "reply_rate", "accumulated_topic_all_count"]
         ],
         cols: [
             [{
@@ -59,10 +59,10 @@ module.exports = (Router) => {
                 key: 'new_topic_count',
                 value: '新增话题数'
             }, {
-                key: 'new_group_user_count',
+                key: 'topic_reply_rate',
                 value: '话题回复率'
             }, {
-                key: 'new_group_topic_count',
+                key: 'topic_click_rate',
                 value: '话题点击率'
             }]
         }],

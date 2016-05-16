@@ -15,7 +15,10 @@ module.exports = {
                 new_reply_count : 0,
                 new_reply_rate : 0,
                 reply_rate : 0,
-                ttl_topics : 0
+                new_reply_new_topic_count : 0,
+                reply_topic_all_count : 0,
+                topic_all_count : 0,
+                accumulated_topic_all_count : 0
             };
         
         for(var key of source) {
@@ -32,27 +35,41 @@ module.exports = {
             newData.topic_all_count);
         return util.toTable([[newData]], data.rows, data.cols);
     },
-    topicsTwo(data, dates, filter_key) {
+    topicsTwo(data, dates) {
         var source = data.data,
             type = "line",
             newData = {},
             map = {
-                new_topic_count : "新增话题数",
-                reply_rate : "话题回复率",
-                avg_fan : "话题点击率"
+                new_topic_count: "新增话题数",
+                topic_reply_rate: "话题回复率",
+                topic_click_rate: "话题点击率"
             };
-        map[filter_key + "_0"] = array[0].key;
-        map[filter_key + "_1"] = array[1].key;
-        map[filter_key + "_2"] = array[2].key;
-        for(var date of dates) {
-            var obj = {};
-            obj[filter_key + "_0"] = 0;
-            obj[filter_key + "_1"] = 0;
-            obj[filter_key + "_2"] = 0;
-            for(var key of source) {
-                newData[util.getDate(key.date)].value += key[filter_key];
-            }
-            newData[date] = obj;
+        for (var date of dates) {
+            newData[date] = {
+                new_topic_count: 0,
+                topic_reply_rate: 0,
+                topic_click_rate: 0,
+                reply_topic_all_count: 0,
+                topic_all_count: 0,
+                topic_clicked_count: 0,
+                topic_viewed_count: 0
+            };
+        }
+
+        for (var key of source) {
+            var date = util.getDate(key.date);
+            newData[date].new_topic_count += key.new_topic_count;
+            newData[date].reply_topic_all_count += key.reply_topic_all_count;
+            newData[date].topic_all_count += key.topic_all_count;
+            newData[date].topic_clicked_count += key.topic_clicked_count;
+            newData[date].topic_viewed_count += key.topic_viewed_count;
+        }
+
+        for (var key in newData) {
+            newData[key].topic_reply_rate = util.toFixed(newData[key].reply_topic_all_count,
+                newData[key].topic_all_count);
+            newData[key].topic_click_rate = util.toFixed(newData[key].topic_clicked_count,
+                newData[key].topic_viewed_count);
         }
 
         return [{

@@ -12,13 +12,13 @@ module.exports = {
         var source = data.data,
             newData = {
                 new_owner_num : 0,
+                new_owner_rate : 0,
+                avg_fan : 0,
                 accum_owner_num : 0,
                 total_new_owner_num : 0,
-                fans_num : 0,
-                new_owner_rate : 0,
-                avg_fan : 0
+                fans_num : 0
             };
-        
+
         for(var key of source) {
             newData.new_owner_num += key.new_owner_num;
             newData.accum_owner_num += key.accum_owner_num;
@@ -53,6 +53,7 @@ module.exports = {
             newData[date].new_owner_num += key.new_owner_num;
             newData[date].total_new_owner_num += key.total_new_owner_num;
             newData[date].fans_num += key.fans_num;
+            newData[date].accum_owner_num += key.accum_owner_num;
         }
 
         for(var key in newData) {
