@@ -4,7 +4,6 @@
  * @fileoverview 圈子数据
  */
 var util = require("../../utils"),
-    config = require("../../utils/config.json").socialCategory,
     _ = require("lodash");
 
 module.exports = {
@@ -70,6 +69,7 @@ module.exports = {
     },
     groupThree(data, filter_key) {
         var source = data.data,
+            orderData = data.orderData,
             type = "pie",
             obj = {},
             filter_name = {
@@ -80,16 +80,16 @@ module.exports = {
                 value : filter_name[filter_key]
             },
             newData = {};
-        for(var key in config) {
-            obj[key] = {
+        for(var key of orderData) {
+            obj[key.id] = {
                 value : 0
             }
         }
         for(var key of source) {
             obj[key.group_type].value += key[filter_key];
         }
-        for(var key in obj) {
-            newData[config[key].name] = obj[key].value;
+        for(var key of orderData) {
+            newData[key.name] = obj[key.id].value;
         }
         return [{
             type : type,
@@ -102,6 +102,7 @@ module.exports = {
     },
     groupFour(data, filter_key, filter_key2) {
         var source = data.data,
+            orderData = data.orderData,
             type = "pie",
             obj = {},
             filter_name = {
@@ -112,18 +113,21 @@ module.exports = {
             map = {
                 value : filter_name[filter_key2]
             },
-            newData = {},
-            cell = config[filter_key].cell;
-        for(var key in cell) {
-            obj[key] = {
-                value : 0
+            newData = {};
+        for(var key of orderData) {
+            if(key.pid === filter_key) {
+                obj[key.id] = {
+                    value : 0
+                }
             }
         }
         for(var key of source) {
             obj[key.group_type].value += key[filter_key2];
         }
-        for(var key in cell) {
-            newData[cell[key]] = obj[key].value;
+        for(var key of orderData) {
+            if(key.pid === filter_key) {
+                newData[key.name] = obj[key.id].value;
+            }
         }
         return [{
             type : type,

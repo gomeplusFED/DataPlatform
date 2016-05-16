@@ -702,6 +702,13 @@ function connect(app) {
                 channel : String,
                 day_type : Number
         });
+            models.SocialCategory = db.define("tbl_social_category",{
+                id : String,
+                pid : String,
+                name : String,
+                createtime : Date,
+                updatetime : Date
+        });
             next();
         }
     }));

@@ -63,10 +63,26 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/socialAnalysis/groupThree",
-        modelName : [ "GroupDataDistribution" ],
+        modelName : [ "GroupDataDistribution", "SocialCategory" ],
         platform : false,
-        fixedParams : {
-            group_type : [ "-1", "-2", "-3", "-4", "-5", "-6", "-7", "-8", "-9", "-10", "-11", "-12" ]
+        orderParams : {
+            pid : ""
+        },
+        fixedParams(query, filter_key, req, cb) {
+            var group_type = [];
+            req.models.SocialCategory.find({
+                pid : ""
+            }, (err, data) => {
+                if(!err) {
+                    for(var key of data) {
+                        group_type.push(key.id);
+                    }
+                    query.group_type = group_type;
+                    cb(null, query);
+                } else {
+                    cb(err);
+                }
+            });
         },
         filter_select: [
             {
@@ -88,41 +104,59 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/socialAnalysis/groupFour",
-        modelName : [ "GroupDataDistribution" ],
+        modelName : [ "GroupDataDistribution", "SocialCategory" ],
         platform : false,
-        fixedParams(query, filter_key) {
-            var socialCategory = config.socialCategory,
-                filter_key = filter_key || "-1";
-                array = Object.keys(socialCategory[filter_key].cell);
-            query.group_type = array;
-            return query;
+        orderParams : {},
+        fixedParams(query, filter_key, req, cb) {
+            var filter_key = filter_key || "-1",
+                group_type = [];
+            req.models.SocialCategory.find({
+                pid : filter_key
+            }, (err, data) => {
+                if(!err) {
+                    for(var key of data) {
+                        group_type.push(key.id);
+                    }
+                    query.group_type = group_type;
+                    cb(null, query);
+                } else {
+                    cb(err);
+                }
+            });
         },
-        selectFilter() {
+        selectFilter(req, cb) {
             var filter_select = {
                 title: '一级分类',
                 filter_key: 'filter_key',
                 groups: []
             };
-            var socialCategory = config.socialCategory;
-            for(var key in socialCategory) {
-                var obj = {
-                    key : key,
-                    value : socialCategory[key].name,
-                    cell : {
-                        title: '圈子类型',
-                        filter_key: 'filter_key2',
-                        groups: [{
-                            key: 'accumulated_group_all_count',
-                            value: '圈子数'
-                        }, {
-                            key: 'DAU',
-                            value: 'DAU'
-                        }]
+            req.models.SocialCategory.find({
+                pid : ""
+            }, (err, data) => {
+                if(!err) {
+                    for(var key of data) {
+                        var obj = {
+                            key : key.id,
+                            value : key.name,
+                            cell : {
+                                title: '圈子类型',
+                                filter_key: 'filter_key2',
+                                groups: [{
+                                    key: 'accumulated_group_all_count',
+                                    value: '圈子数'
+                                }, {
+                                    key: 'DAU',
+                                    value: 'DAU'
+                                }]
+                            }
+                        };
+                        filter_select.groups.push(obj);
                     }
-                };
-                filter_select.groups.push(obj);
-            }
-            return [filter_select];
+                    cb(null,[filter_select]);
+                } else {
+                    cb(err);
+                }
+            });
         },
         filter_select: [],
         filter(data, filter_key, dates, filter_key2) {
