@@ -153,6 +153,9 @@ api.prototype = {
         Object.keys(this.fixedParams).forEach((key) => {
             query[key] = this.fixedParams[key];
         });
+        if(typeof this.fixedParams === "function") {
+            query = this.fixedParams(query);
+        }
         this._getCache(type, res, req, query, next, params, dates);
     },
     _checkDate(option, errorMassage, next) {

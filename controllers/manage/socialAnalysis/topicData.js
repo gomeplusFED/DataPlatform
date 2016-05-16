@@ -51,7 +51,6 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/socialAnalysis/topicsTwo",
         modelName : [ "TopicsTendency" ],
-        level_select : true,
         platform : false,
         filter_select: [{
             title: '指标选择',

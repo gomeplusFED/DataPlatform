@@ -70,7 +70,6 @@ module.exports = (Router) => {
     Router = new api(Router,{ //暂无头绪。。。
         router : "/socialAnalysis/groupThree",
         modelName : [ "HostDistribution" ],
-        level_select : true,
         platform : false,
         filter_select: [
             {
