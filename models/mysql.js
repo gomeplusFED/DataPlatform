@@ -18,16 +18,6 @@ function connect(app) {
             //db.settings.set('instance.autoFetchLimit', 9999);
             //db.settings.set('instance.cacheSaveCheck', false);
             //db.settings.set('instance.autoSave', true);
-            models.Users = db.define("tbl_dataplatform_nodejs_users", {
-                id: { type: 'serial', key: true },
-                username: String,
-                is_admin: { type: "number", defaultValue: 0 },
-                limited: { type: "text", defaultValue: "2-0-1,3-0-1-2-3,4,5,6-0-1-2-3-4,8-0-1-2,9-0-1,10,11,12,13-0-1-2,14-0-1-2,15-0-1-2-3-4-5,16" },
-                last_ip: String,
-                login_ip: String,
-                login_time: Date,
-                lastlogin_time: Date
-            });
             models.NewAccount = db.define("tbl_rt_useranalysis_newuser", {
                 id: { type: 'number', key: true },
                 date: Date,
@@ -388,7 +378,7 @@ function connect(app) {
                 rebate_amount_count: Number,
                 pay_order_time: Date
             });
-            models.ConfCategories = db.define("tbl_rt_conf_categories", {
+            models.ConfCategories = db.define("ecp_back_categories", {
                 id: { type: 'number', key: true },
                 pid: Number,
                 name: String,
