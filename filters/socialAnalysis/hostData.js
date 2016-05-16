@@ -69,12 +69,73 @@ module.exports = {
             }
         }];
     },
-    hostThree(data,filter_key,date) {
+    hostThree(data, filter_key) {
         var source = data.data,
-            type = "bar",
-            map = {}
+            type = "pie",
+            obj = {},
+            filter_name = {
+                new_owner_num : "圈主",
+                fans_num : "粉丝数"
+            },
+            map = {
+                value : filter_name[filter_key]
+            },
+            newData = {};
+        for(var key in config) {
+            obj[key] = {
+                value : 0
+            }
+        }
+        for(var key of source) {
+            obj[key.group_type].value += key[filter_key];
+        }
+        for(var key in obj) {
+            newData[config[key].name] = obj[key].value;
+        }
+        return [{
+            type : type,
+            map : map,
+            data : newData,
+            config: {
+                stack: false
+            }
+        }]
     },
-    hostFour(data,date) {
+    hostFour(data, filter_key, filter_key2) {
+        var source = data.data,
+            type = "pie",
+            obj = {},
+            filter_name = {
+                new_owner_num : "圈主",
+                fans_num : "粉丝数"
+            },
+            filter_key = filter_key || "-1",
+            map = {
+                value : filter_name[filter_key2]
+            },
+            newData = {},
+            cell = config[filter_key].cell;
+        for(var key in cell) {
+            obj[key] = {
+                value : 0
+            }
+        }
+        for(var key of source) {
+            obj[key.group_type].value += key[filter_key2];
+        }
+        for(var key in cell) {
+            newData[cell[key]] = obj[key].value;
+        }
+        return [{
+            type : type,
+            map : map,
+            data : newData,
+            config: {
+                stack: false
+            }
+        }]
+    },
+    hostFive(data,date) {
         var source = data.data,
             newData = [],
             top = source.length > 100 ? 100 : source.length;

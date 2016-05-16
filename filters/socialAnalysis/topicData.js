@@ -70,12 +70,76 @@ module.exports = {
             }
         }];
     },
-    topicsThree(data) {
+
+    topicsThree(data, filter_key) {
         var source = data.data,
-            type = "bar",
-            map = {}
+            type = "pie",
+            obj = {},
+            filter_name = {
+                topic_num : "话题",
+                replay_num : "回复"
+            },
+            map = {
+                value : filter_name[filter_key]
+            },
+            newData = {};
+        for(var key in config) {
+            obj[key] = {
+                value : 0
+            }
+        }
+        for(var key of source) {
+            obj[key.group_type].value += key[filter_key];
+        }
+        for(var key in obj) {
+            newData[config[key].name] = obj[key].value;
+        }
+        return [{
+            type : type,
+            map : map,
+            data : newData,
+            config: {
+                stack: false
+            }
+        }]
     },
-    topicsFour(data) {
+
+    topicsFour(data, filter_key, filter_key2) {
+        var source = data.data,
+            type = "pie",
+            obj = {},
+            filter_name = {
+                topic_num : "话题",
+                replay_num : "回复"
+            },
+            filter_key = filter_key || "-1",
+            map = {
+                value : filter_name[filter_key2]
+            },
+            newData = {},
+            cell = config[filter_key].cell;
+        for(var key in cell) {
+            obj[key] = {
+                value : 0
+            }
+        }
+        for(var key of source) {
+            obj[key.group_type].value += key[filter_key2];
+        }
+        for(var key in cell) {
+            newData[cell[key]] = obj[key].value;
+        }
+        return [{
+            type : type,
+            map : map,
+            data : newData,
+            config: {
+                stack: false
+            }
+        }]
+    },
+
+    topicsFive(data) {
         var source = data.data,
             newData = [],
             top = source.length > 100 ? 100 : source.length;
