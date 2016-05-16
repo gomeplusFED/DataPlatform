@@ -150,11 +150,12 @@ api.prototype = {
                 this[key] = query[key];
             }
         });
-        Object.keys(this.fixedParams).forEach((key) => {
-            query[key] = this.fixedParams[key];
-        });
         if(typeof this.fixedParams === "function") {
-            query = this.fixedParams(query);
+            query = this.fixedParams(query, this.filter_key);
+        } else {
+            Object.keys(this.fixedParams).forEach((key) => {
+                query[key] = this.fixedParams[key];
+            });
         }
         this._getCache(type, res, req, query, next, params, dates);
     },
@@ -223,7 +224,7 @@ api.prototype = {
                 error = err;
             }
             if (this.filter) {
-                sendData = this.filter(sendData, this.filter_key || this.key_type, dates);
+                sendData = this.filter(sendData, this.filter_key || this.key_type, dates, this.filter_key2);
             }
             if(this.selectFilter) {
                 this.filter_select = this.selectFilter(req);

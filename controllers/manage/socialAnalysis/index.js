@@ -90,9 +90,12 @@ module.exports = (Router) => {
         router : "/socialAnalysis/groupFour",
         modelName : [ "GroupDataDistribution" ],
         platform : false,
-        fixedParams : {
-            group_type :
-                orm.not_in([ "-1", "-2", "-3", "-4", "-5", "-6", "-7", "-8", "-9", "-10", "-11", "-12" ])
+        fixedParams(query, filter_key) {
+            var socialCategory = config.socialCategory,
+                filter_key = filter_key || "-1";
+                array = Object.keys(socialCategory[filter_key].cell);
+            query.group_type = array;
+            return query;
         },
         selectFilter() {
             var filter_select = {
@@ -104,15 +107,26 @@ module.exports = (Router) => {
             for(var key in socialCategory) {
                 var obj = {
                     key : key,
-                    value : socialCategory[key].name
+                    value : socialCategory[key].name,
+                    cell : {
+                        title: '圈子类型',
+                        filter_key: 'filter_key2',
+                        groups: [{
+                            key: 'accumulated_group_all_count',
+                            value: '圈子数'
+                        }, {
+                            key: 'DAU',
+                            value: 'DAU'
+                        }]
+                    }
                 };
                 filter_select.groups.push(obj);
             }
             return [filter_select];
         },
         filter_select: [],
-        filter(data, filter_key, dates) {
-            return filter.groupThree(data, filter_key);
+        filter(data, filter_key, dates, filter_key2) {
+            return filter.groupFour(data, filter_key, filter_key2);
         }
     });
 

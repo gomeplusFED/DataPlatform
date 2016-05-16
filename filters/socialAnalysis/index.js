@@ -100,7 +100,7 @@ module.exports = {
             }
         }]
     },
-    groupFour(data, filter_key) {
+    groupFour(data, filter_key, filter_key2) {
         var source = data.data,
             type = "pie",
             obj = {},
@@ -108,20 +108,22 @@ module.exports = {
                 accumulated_group_all_count : "圈子数",
                 DAU : "DAU"
             },
+            filter_key = filter_key || "-1",
             map = {
-                value : filter_name[filter_key]
+                value : filter_name[filter_key2]
             },
-            newData = {};
-        for(var key in config) {
+            newData = {},
+            cell = config[filter_key].cell;
+        for(var key in cell) {
             obj[key] = {
                 value : 0
             }
         }
         for(var key of source) {
-            obj[key.group_type].value += key[filter_key];
+            obj[key.group_type].value += key[filter_key2];
         }
-        for(var key in obj) {
-            newData[config[key].name] = obj[key].value;
+        for(var key in cell) {
+            newData[cell[key]] = obj[key].value;
         }
         return [{
             type : type,
