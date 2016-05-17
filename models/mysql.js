@@ -610,7 +610,7 @@ function connect(app) {
                 channel: String,
                 type: String
             });
-            models.TopicsTendency = db.define("tbl_rt_topic_tendency",{
+            models.TopicsTendency = db.define("tbl_rt_group_topic_tendency",{
                 id : {type: 'number', key: true},
                 new_topic_count: Number,
                 reply_topic_all_count: Number,
@@ -649,7 +649,7 @@ function connect(app) {
                 channel: String,
                 type: String
             });
-            models.Host = db.define("tbl_rt_group_topic",{
+            models.Host = db.define("tbl_rt_group_owner",{
                 id : {type: 'number', key: true},
                 new_owner_num: Number,
                 total_new_owner_num: Number,
