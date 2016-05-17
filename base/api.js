@@ -233,7 +233,11 @@ api.prototype = {
             try {
                 for(var i = 0; i < this.modelName.length; i++) {
                     if(this[this.paramsName[i]]) {
-                        query = this[this.paramsName[i]];
+                        if(typeof this[this.paramsName[i]] === "function") {
+                            query = this[this.paramsName[i]]();
+                        } else {
+                            query = this[this.paramsName[i]];
+                        }
                     }
                     sendData[this.sendDataName[i]] = await (this._findDatabase(req, this.modelName[i], query));
                 }
