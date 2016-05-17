@@ -721,6 +721,7 @@ function connect(app) {
                 id : String,
                 pid : String,
                 name : String,
+                categorylevel : String,
                 createtime : Date,
                 updatetime : Date
         });
