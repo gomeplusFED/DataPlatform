@@ -16,7 +16,8 @@ module.exports = {
                 accumulated_group_user_all_count : 0,
                 user_join_group_rate : 0,
                 new_register_user_count : 0,
-                register_user_all_count : 0
+                register_user_all_count : 0,
+                new_group_user_rate: 0
             };
         for(var key of source) {
             newData.new_group_count += key.new_group_count;

@@ -48,11 +48,7 @@ module.exports = {
             newData[date] = {
                 new_topic_count: 0,
                 topic_reply_rate: 0,
-                topic_click_rate: 0,
-                reply_topic_all_count: 0,
-                topic_all_count: 0,
-                topic_clicked_count: 0,
-                topic_viewed_count: 0
+                topic_click_rate: 0
             };
         }
 
@@ -85,6 +81,7 @@ module.exports = {
 
     topicsThree(data, filter_key) {
         var source = data.data,
+            orderData = data.orderData,
             type = "pie",
             obj = {},
             filter_name = {
@@ -95,16 +92,16 @@ module.exports = {
                 value : filter_name[filter_key]
             },
             newData = {};
-        for(var key in config) {
-            obj[key] = {
+        for(var key of orderData) {
+            obj[key.id] = {
                 value : 0
             }
         }
         for(var key of source) {
             obj[key.group_type].value += key[filter_key];
         }
-        for(var key in obj) {
-            newData[config[key].name] = obj[key].value;
+        for(var key of orderData) {
+            newData[key.name] = obj[key.id].value;
         }
         return [{
             type : type,
@@ -118,6 +115,7 @@ module.exports = {
 
     topicsFour(data, filter_key, filter_key2) {
         var source = data.data,
+            orderData = data.orderData,
             type = "pie",
             obj = {},
             filter_name = {
@@ -128,18 +126,21 @@ module.exports = {
             map = {
                 value : filter_name[filter_key2]
             },
-            newData = {},
-            cell = config[filter_key].cell;
-        for(var key in cell) {
-            obj[key] = {
-                value : 0
+            newData = {};
+        for(var key of orderData) {
+            if(key.pid === filter_key) {
+                obj[key.id] = {
+                    value : 0
+                }
             }
         }
         for(var key of source) {
             obj[key.group_type].value += key[filter_key2];
         }
-        for(var key in cell) {
-            newData[cell[key]] = obj[key].value;
+        for(var key of orderData) {
+            if(key.pid === filter_key) {
+                newData[key.name] = obj[key.id].value;
+            }
         }
         return [{
             type : type,
@@ -150,7 +151,6 @@ module.exports = {
             }
         }]
     },
-
     topicsFive(data) {
         var source = data.data,
             newData = [],
