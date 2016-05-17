@@ -163,17 +163,54 @@ exports.toFixed = function(one, two) {
     return (one / (two === 0 ? 1 : two) * 100).toFixed(2) + "%";
 };
 
+exports.percentage = function(one, two) {
+    return (one / (two === 0 ? 1 : two) * 100).toFixed(2);
+};
+
 exports.getDate = function(date){
     return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
 };
 
-exports.times = function(startTime, endTime) {
+exports.times = function(startTime, endTime, day_type) {
     var start = new Date(startTime).getTime(),
         end = new Date(endTime).getTime(),
+        year = new Date(start).getFullYear(),
+        month = new Date(start).getMonth() + 1,
         array = [];
     while(start <= end) {
-        array.push(exports.getDate(new Date(start)));
-        start = start + 24 * 60 * 60 * 1000;
+        if(day_type === '1') {
+            array.push(exports.getDate(new Date(start)));
+            start = start + 24 * 60 * 60 * 1000;
+        } else if(day_type === '2') {
+            if(new Date(start).getDay() === 0) {
+                array.push(exports.getDate(new Date(start)));
+                start = start + 7 * 24 * 60 * 60 * 1000;
+            } else {
+                start = start + 24 * 60 * 60 * 1000;
+            }
+        } else if(day_type === '3') {
+            if(new Date(start).getDate() ===
+                new Date(new Date(year, month, 1).getTime() - 24 * 60 * 60 * 1000).getDate()) {
+                month++;
+                array.push(exports.getDate(new Date(start)));
+                start = new Date(year, month, 1).getTime() - 24 * 60 * 60 * 1000;
+            } else {
+                start = new Date(year, month, 1).getTime() - 24 * 60 * 60 * 1000;
+            }
+        }
     }
     return array;
+};
+
+exports.getClientIp = function(req) {
+    var ipAddress;
+    var forwardedIpsStr = req.header('x-forwarded-for');
+    if (forwardedIpsStr) {
+        var forwardedIps = forwardedIpsStr.split(',');
+        ipAddress = forwardedIps[0];
+    }
+    if (!ipAddress) {
+        ipAddress = req.connection.remoteAddress;
+    }
+    return ipAddress;
 };

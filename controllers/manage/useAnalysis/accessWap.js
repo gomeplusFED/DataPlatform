@@ -4,6 +4,8 @@
  * @fileoverview 访问页面-wap
  */
 var api = require("../../../base/api"),
+    help = require("../../../base/help"),
+    config = require("../../../utils/config.json"),
     filter = require("../../../filters/useAnalysis/accessWap");
 
 module.exports = (Router) => {
@@ -12,8 +14,14 @@ module.exports = (Router) => {
         modelName : ["UrlAccessWap"],
         platform : false,
         fixedParams : {
-            type : "H5"
+            type : "H5",
+            url_type : 1
         },
+        flexible_btn: [{
+            content: '<a href="javascript:void(0)" help_url="/useAnalysis/accessWap/help_json">帮助</a>',
+            preMethods: ["show_help"],
+            customMethods: ''
+        }],
         filter_select: [{
             title: '',
             filter_key : 'filter_key',
@@ -37,6 +45,10 @@ module.exports = (Router) => {
         router : "/useAnalysis/accessWapTwo",
         modelName : ["UrlAccessWap"],
         excel_export : true,
+        platform : false,
+        fixedParams : {
+            type : "H5"
+        },
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
@@ -44,10 +56,7 @@ module.exports = (Router) => {
         filter_select: [{
             title: '',
             filter_key : 'url_type',
-            groups: [{
-                key: '1',
-                value: '页面价值分析'
-            }, {
+            groups: [ {
                 key: '2',
                 value: '入口页面'
             }, {
@@ -116,6 +125,34 @@ module.exports = (Router) => {
                 caption : "平均停留时间",
                 type : "number"
             } ]
+        ]
+    });
+
+    Router = new help(Router, {
+        router : "/useAnalysis/accessWap/help",
+        rows : config.help.rows,
+        cols : config.help.cols,
+        data : [
+            {
+                name : "访问次数",
+                help : "统计时间内，访问次数"
+            },
+            {
+                name : "平均停留时长",
+                help : "总时长/访问次数"
+            },
+            {
+                name : "访问次数占比",
+                help : "页面访问次数/总访问次数"
+            },
+            {
+                name : "停留时间占比",
+                help : "页面访问时长/总时长"
+            },
+            {
+                name : "贡献下游流量",
+                help : "访客数-访问一个页面即跳走的人数"
+            }
         ]
     });
 

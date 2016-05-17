@@ -35,6 +35,7 @@ var filePath = async((path) => {
 
 // addRouter('./combine');
 addRouter('./login');
+addRouter('./count');
 addRouter('./user');
 addRouter('./categories');
 
@@ -57,18 +58,17 @@ async(() => {
 })();
 
 
-for (var key of config.limit) {
-    Object.keys(key).forEach((data) => {
-        if (key[data].display) {
-            if (key[data].path.length > 0) {
-                for (var k of key[data].path) {
-                    module.exports.push(new renderApi(router, k));
-                }
-            } else if (key[data].routers && key[data].routers.length > 0) {
-                for (var k of key[data].routers) {
-                    module.exports.push(new renderApi(router, k));
-                }
+Object.keys(config.limit).forEach((key) => {
+    var limit = config.limit[key];
+    if(limit.display) {
+        if (limit.path.length > 0) {
+            for (var k of limit.path) {
+                module.exports.push(new renderApi(router, k));
+            }
+        } else if (limit.routers && limit.routers.length > 0) {
+            for (var k of limit.routers) {
+                module.exports.push(new renderApi(router, k));
             }
         }
-    });
-}
+    }
+});

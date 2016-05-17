@@ -22,7 +22,7 @@ module.exports = (Router) => {
                 value: '活跃用户'
             }, {
                 key: 'start_up',
-                value: '启动次数'
+                value: '次数'
             }]
         }],
         filter(data, filter_key, dates) {

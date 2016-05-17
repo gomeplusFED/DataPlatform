@@ -25,9 +25,9 @@ module.exports = {
                 value : 0
             };
         }
-        for(var key of source) {
+        source.forEach((key) => {
             newData[util.getDate(key.date)].value += key[filter_key];
-        }
+        });
         return [{
             type : type,
             map : map,

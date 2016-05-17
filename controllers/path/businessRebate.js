@@ -47,6 +47,7 @@ module.exports = {
     plan() {
         return {
             name : "商家返利计划",
+            router : "/businessRebate/plan",
             path : "/businessRebate/plan",
             display : true,
             defaultData : [

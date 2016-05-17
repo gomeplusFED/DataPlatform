@@ -17,8 +17,7 @@ module.exports = {
             dates = [ zdate, qdate ];
         var obj = {
                 name : '对比效果'
-            },
-            total_new_users = 0;
+            };
         for(var date of dates) {
             var zObj = {
                 name : "",
@@ -27,6 +26,7 @@ module.exports = {
                 open_user_avg : 0,
                 new_user : 0,
                 new_user_rate : "",
+                new_user_rate_two : "",
                 new_account : 0,
                 register_rate : 0,
                 using_time_avg : 0,
@@ -56,13 +56,12 @@ module.exports = {
                 }
                 if(new Date(date + " 00:00:00").getTime() < key.date.getTime() &&
                     key.date.getTime() < new Date(date + " 23:59:59")) {
-                    total_new_users += key.new_user;
                     zObj.open_total += key.open_total;
                     zObj.open_user_total += key.open_user_total;
                     zObj.new_user += key.new_user;
                     zObj.new_account += key.new_account;
-                    zObj.stay_time_avg += Math.round(key.stay_time_avg);
-                    zObj.using_time_avg += Math.round(key.using_time_avg);
+                    zObj.stay_time_avg += Math.round(key.stay_time_avg / 60);
+                    zObj.using_time_avg += Math.round(key.using_time_avg / 60);
                     zObj.uv += key.uv;
                     zObj.pv += key.pv;
                     zObj.ip_count += key.ip_count;
@@ -73,8 +72,9 @@ module.exports = {
             newData.push(zObj);
         }
         for(var key of newData) {
-            key.new_user_rate = util.toFixed(key.new_user, total_new_users);
-            key.open_user_avg = (key.open_user_total / (key.open_total === 0 ? 1 : key.open_total) * 100).toFixed(2);
+            key.new_user_rate = util.toFixed(key.new_user, key.open_user_total);
+            key.new_user_rate_two = util.toFixed(key.new_user, key.uv);
+            key.open_user_avg = (key.open_total / (key.open_user_total === 0 ? 1 : key.open_user_total)).toFixed(2);
             key.register_rate = util.toFixed(key.new_account, key.new_user);
         }
         newData[0].name = "昨天";
@@ -107,6 +107,8 @@ module.exports = {
             - newData[1].register_rate.replace("%", "")).toFixed(2) + "%";
         obj.new_user_rate = (newData[0].new_user_rate.replace("%", "")
             - newData[1].new_user_rate.replace("%", "")).toFixed(2) + "%";
+        obj.new_user_rate_two = (newData[0].new_user_rate_two.replace("%", "")
+            - newData[1].new_user_rate_two.replace("%", "")).toFixed(2) + "%";
         obj.pv1 = ((newData[0].pv1 - newData[1].pv1) /
             (newData[0].pv1 === 0 ? 1 : newData[0].pv1) * 100).toFixed(2) + "%";
         obj.create = ((newData[0].create - newData[1].create) /
@@ -131,10 +133,14 @@ module.exports = {
                 continue;
             }
             if(filter_key === "register_rate") {
-                newData[util.getDate(key.date)].value += key.new_account /
-                    (key.new_user === 0 ? 1 : key.new_user) * 100;
+                if(newData[util.getDate(key.date)]) {
+                    newData[util.getDate(key.date)].value += key.new_account /
+                        (key.new_user === 0 ? 1 : key.new_user) * 100;
+                }
             } else {
-                newData[util.getDate(key.date)].value += key[filter_key];
+                if(newData[util.getDate(key.date)]) {
+                    newData[util.getDate(key.date)].value += key[filter_key];
+                }
             }
         }
         if(filter_key === "register_rate") {
@@ -154,30 +160,21 @@ module.exports = {
     dataOverviewAllThree(data) {
         var source = data.data,
             newData = [],
-            total_pv = 0,
+            total_open_total = 0,
             length = source.length,
             top = length > 10 ? 10 : length;
         source.sort((a, b) => {
-            return b.pv - a.pv;
+            return b.open_total - a.open_total;
         });
         for(var key of source) {
-            if(key.region === "ALL") {
-                continue;
-            }
-            total_pv += key.pv;
+            total_open_total += key.open_total;
         }
         for(var i = 0; i < top; i++) {
-            if(source[i]) {
-                if(source[i].region === "ALL") {
-                    top++;
-                } else {
-                    newData.push(source[i]);
-                }
-            }
+            newData.push(source[i]);
         }
         for(var i = 0; i < newData.length; i++) {
             newData[i].id = i + 1;
-            newData[i].pv_rate = util.toFixed(newData[i].pv, total_pv);
+            newData[i].open_total_rate = util.toFixed(newData[i].open_total, total_open_total);
         }
         return util.toTable([newData], data.rows, data.cols);
     },
@@ -190,6 +187,50 @@ module.exports = {
             return b.pv - a.pv;
         });
         for(var key of source) {
+            total_pv += key.pv;
+        }
+        for(var i = 0; i < top; i++) {
+            source[i].id = i + 1;
+            newData.push(source[i]);
+        }
+        for(var key of newData) {
+            key.pv_rate = util.toFixed(key.pv, total_pv);
+        }
+        return util.toTable([newData], data.rows, data.cols);
+    },
+    dataOverviewWapThree(data) {
+        var source = data.data,
+            newData = [],
+            total_pv = 0,
+            length = source.length,
+            top = length > 10 ? 10 : length;
+        source.sort((a, b) => {
+            return b.pv - a.pv;
+        });
+        for(var key of source) {
+            total_pv += key.pv;
+        }
+        for(var i = 0; i < top; i++) {
+            newData.push(source[i]);
+        }
+        for(var i = 0; i < newData.length; i++) {
+            newData[i].id = i + 1;
+            newData[i].pv_rate = util.toFixed(newData[i].pv, total_pv);
+        }
+        return util.toTable([newData], data.rows, data.cols);
+    },
+    dataOverviewWapFour(data) {
+        var source = data.data,
+            top = source.length > 10 ? 10 : source.length,
+            total_pv = 0,
+            newData = [];
+        source.sort((a, b) => {
+            return b.pv - a.pv;
+        });
+        for(var key of source) {
+            if(key.type !== "H5") {
+                continue;
+            }
             total_pv += key.pv;
         }
         for(var i = 0; i < top; i++) {

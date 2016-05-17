@@ -4,6 +4,7 @@
  * @fileoverview 单项单级返利
  */
 var util = require("../../utils"),
+    config = require("../../utils/config.json"),
     _ = require("lodash");
 
 module.exports = {
@@ -56,11 +57,11 @@ module.exports = {
             objThree.refund_user_count += key.refund_user_count;
             objThree.refund_goods_amount_count += key.refund_goods_amount_count;
             objThree.refund_goods_amount_actual_count += key.refund_goods_amount_actual_count;
-            objThree.total_spu_num = key.total_spu_num;
-            objThree.total_sku_num = key.total_sku_num;
-            objThree.total_user_num = key.total_user_num;
-            objThree.total_amount = key.total_amount;
-            objThree.total_amount_actual = key.total_amount_actual;
+            objThree.total_spu_num += key.total_spu_num;
+            objThree.total_sku_num += key.total_sku_num;
+            objThree.total_user_num += key.total_user_num;
+            objThree.total_amount += key.total_amount;
+            objThree.total_amount_actual += key.total_amount_actual;
         }
         one.push(objOne);
         objTwo.rate = util.toFixed(objTwo.rebate_amount_count, objTwo.rebate_order_amount_actual_count);
@@ -79,17 +80,25 @@ module.exports = {
     individualEventTwo(data, filter_key, dates) {
         var source = data.data,
             type = "line",
-            array = [ "分享购买", "邀请好友-购买返利" ],
+            array = [ {
+                key : "分享购买",
+                value : "11"
+            },{
+                key : "邀请好友-购买返利",
+                value : "12"
+            } ],
             newData = {},
             map = {};
-        map[filter_key + "_0"] = array[0];
-        map[filter_key + "_1"] = array[1];
+        map[filter_key + "_0"] = array[0].key;
+        map[filter_key + "_1"] = array[1].key;
         for (var date of dates) {
             var obj = {};
+            obj[filter_key + "_0"] = 0;
+            obj[filter_key + "_1"] = 0;
             for (var key of source) {
                 if (date === util.getDate(key.date)) {
                     for (var i = 0; i < array.length; i++) {
-                        if (key.rebate_type === array[i]) {
+                        if (key.correlate_flow === array[i].value) {
                             obj[filter_key + "_" + i] += key[filter_key];
                         }
                     }
@@ -117,17 +126,23 @@ module.exports = {
                 goods_amount_count: "商品总金额",
                 rebate_amount_count: "返利到账金额"
             },
-            XData = ["比例返利", "固定返利"];
+            XData = [{
+                key : "比例返利",
+                value : "12"
+            },{
+                key : "固定返利",
+                value : "11"
+            }];
         for (var x of XData) {
             var obj = {
                 value: 0
             };
             for (var key of source) {
-                if (x === key.rebate_type) {
+                if (x.value === key.correlate_flow) {
                     obj.value += key[filter_key];
                 }
             }
-            newData[x] = obj;
+            newData[x.key] = obj;
         }
         map.value = filter_name[filter_key];
         return [{
@@ -147,9 +162,13 @@ module.exports = {
         }]
     },
     individualEventFour(data) {
-        var source = data.data;
+        var source = data.data,
+            user_party = config.user_party,
+            correlate_flow = config.correlate_flow;
         source.forEach((key, value) => {
             key.id = value + 1;
+            key.user_party = user_party[key.user_party];
+            key.correlate_flow = correlate_flow[key.correlate_flow];
             key.order_rate = key.new_order_count + "/" + key.order_all_count;
             key.price_rate = key.new_order_amount + "/" + key.order_all_amount;
         });

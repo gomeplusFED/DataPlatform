@@ -5,7 +5,7 @@ var VueRouter = require('vue-router')
 Vue.use(VueRouter);
 
 
-// for jq plugin
+// for jq plugin and debug
 window.jQuery = $;
 window.$ = $;
 
@@ -15,6 +15,12 @@ var dom = require('./dom/index.js');
 var blankApp = Vue.extend({});
 
 var App = require('./component/app.vue');
+var Index = require('./component/index.vue');
+
+var User = require('./component/main/user.vue');
+var Role = require('./component/main/role.vue');
+var Log = require('./component/main/log.vue');
+
 
 var router = new VueRouter();
 
@@ -24,22 +30,36 @@ var actions = require('./store/actions.js');
 router.map({
     '*': {
         component: App
-    }
-})
+    },
+    '/': {
+        component: Index
+    },
+    '/user': {
+        component: User
+    },
+    '/role': {
+        component: Role
+    },
+    '/log': {
+        component: Log
+    },
+});
 
-router.beforeEach(function (transition) {
+router.start(blankApp, '#page-wrapper');
+
+router.afterEach(function(transition) {
+    var url = window.location.hash;
+    $('[href="' + url + '"]').parent().parent().parent().addClass('active');
+    $('[href="' + url + '"]').parent().parent().addClass('in').attr('aria-expanded', true);
+    $('[href="' + url + '"]').focus();
+    $('#side-menu a').removeClass('active');
+    $('[href="' + url + '"]').addClass('active');
+
     var key = transition.to.path;
     actions.setCurrentPageDefaultData(store, window.allPageConfig.page[key])
-    if(! window.allPageConfig.page[key]){
+    if (!window.allPageConfig.page[key]) {
         router.go({
-            path: '/dataOverview/app'
+            path: '/'
         })
     }
-})
-
-router.redirect({
-    '/': '/dataOverview/app'
-})
-
-
-router.start(App, '#page-wrapper')
+});

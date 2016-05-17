@@ -13,7 +13,8 @@ module.exports = (Router) => {
         router : "/platformRebate/individualEventOne",
         modelName : ["Rebate", "RebateRefund"],
         fixedParams : {
-            user_party : "单项单级返利"
+            category_id : "all",
+            user_party : "6"
         },
         flexible_btn: [{
             content: '<a href="javascript:void(0)" help_url="/individualEvent/help_json">帮助</a>',
@@ -21,21 +22,23 @@ module.exports = (Router) => {
             customMethods: ''
         }],
         platform : false,
-        date_picker_data: 1,
+        //date_picker_data: 1,
         filter(data, filter_key, dates) {
             return filter.individualEventOne(data);
         },
         rows: [
             ["defate_plan_count", "participate_seller_count", "participate_goods_count", "order_count",
                 "participate_user_count" ],
-            ["rebate_order_count", "rebate_order_amount_count", "rebate_order_amount_actual_count",
+            ["rebate_order_count", "rebate_order_amount_count",
+                //"rebate_order_amount_actual_count",
                 "rebate_amount_count", "rate"],
             ["name", "spu_count", "sku_count", "refund_user_count", "refund_goods_amount_count",
-                "refund_goods_amount_actual_count"]
+                //"refund_goods_amount_actual_count"
+            ]
         ],
         cols: [
             [{
-                caption: "返利计划书",
+                caption: "返利计划数",
                 type: "string"
             }, {
                 caption: "参与商户数",
@@ -56,9 +59,9 @@ module.exports = (Router) => {
             }, {
                 caption: "返利订单总金额",
                 type: "string"
-            }, {
-                caption: "返利订单实付金额",
-                type: "string"
+            //}, {
+            //    caption: "返利订单实付金额",
+            //    type: "string"
             }, {
                 caption: "返利到账金额",
                 type: "string"
@@ -81,20 +84,24 @@ module.exports = (Router) => {
             }, {
                 caption: "退货商品总金额",
                 type: "string"
-            }, {
-                caption: "实际退货金额",
-                type: "string"
+            //}, {
+            //    caption: "实际退货金额",
+            //    type: "string"
             }]
         ]
     });
 
     Router = new api(Router, {
         router : "/platformRebate/individualEventTwo",
-        modelName : [ "RebatetRedencyDetails" ],
+        modelName : [ "RebateOrderTredencyDetails" ],
         level_select : true,
+        default : {
+            day_type : 1,
+            category_id : "all"
+        },
         platform : false,
         fixedParams : {
-            user_party : "单项单级返利"
+            user_party : "6"
         },
         filter_select: [{
             title: '指标选择',
@@ -117,11 +124,15 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/platformRebate/individualEventThree",
-        modelName : [ "RebatetRedencyDetails" ],
+        modelName : [ "RebateTypeLevelDetails" ],
         level_select : true,
         platform : false,
+        default : {
+            day_type : 1,
+            category_id : "all"
+        },
         fixedParams : {
-            user_party : "单项单级返利"
+            user_party : "6"
         },
         filter_select: [{
             title: '指标选择',
@@ -146,7 +157,7 @@ module.exports = (Router) => {
         router : "/platformRebate/individualEventFour",
         modelName : [ "RebatetSheduleDetails" ],
         fixedParams : {
-            user_party : "单项单级返利"
+            user_party : "6"
         },
         platform : false,
         excel_export : true,

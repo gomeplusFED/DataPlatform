@@ -4,6 +4,7 @@
  * @fileoverview 平台返利汇总
  */
 var _ = require("lodash"),
+    config = require("../../utils/config.json"),
     util = require("../../utils");
 
 module.exports = {
@@ -18,7 +19,7 @@ module.exports = {
             "rebate_plan_count": 0,
             "participate_user_count": 0,
             "registered_count": 0,
-            "rebate_amount_count": 0,
+            "rebate_amount_count": 0
         };
         for (var item of source) {
             one.rebate_plan_count += item.rebate_plan_count;
@@ -47,7 +48,7 @@ module.exports = {
                 rebate_amount_count : 0
             };
         for(var key of source) {
-            registered_all_count = key.registered_all_count;
+            registered_all_count += key.registered_all_count;
             obj.rebate_plan_count += key.rebate_plan_count;
             obj.participate_user_count += key.participate_user_count;
             obj.registered_count += key.registered_count;
@@ -59,7 +60,16 @@ module.exports = {
     },
     inviteRegisterAndEnterThree(data, filter_key, dates) {
         var source = data.data,
-            array = [ "邀请好友-平台基础返利", "邀请好友-平台促销返利", "邀请商家入驻返利" ],
+            array = [ {
+                key : "邀请好友-平台基础返利",
+                value : "1"
+            },{
+                key : "邀请好友-平台促销返利",
+                value : "2"
+            },{
+                key : "邀请商家入驻返利",
+                value : "5"
+            } ],
             type = "line",
             map = {
                 value_0 : "邀请好友-平台基础返利",
@@ -76,7 +86,7 @@ module.exports = {
             for(var key of source) {
                 if(date === util.getDate(key.date)) {
                     for(var i = 0; i < array.length; i++) {
-                        if(array[i] === key.user_party) {
+                        if(array[i].value === key.user_party) {
                             obj["value_" + i] += key[filter_key];
                         }
                     }
@@ -94,9 +104,13 @@ module.exports = {
         }];
     },
     inviteRegisterAndEnterFour(data) {
-        var source = data.data;
+        var source = data.data,
+            user_party = config.user_party,
+            correlate_flow = config.correlate_flow;
         for(var i = 0; i < source.length; i++) {
             source[i].id = i + 1;
+            source[i].user_party = user_party[source[i].user_party];
+            source[i].correlate_flow = correlate_flow[source[i].correlate_flow];
         }
         return util.toTable([source], data.rows, data.cols);
     }

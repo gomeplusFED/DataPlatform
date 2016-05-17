@@ -5,6 +5,7 @@
  */
 var api = require("../../../base/api"),
     help = require("../../../base/help"),
+    orm = require("orm"),
     config = require("../../../utils/config.json"),
     filter = require("../../../filters/platformRebate");
 
@@ -13,8 +14,12 @@ module.exports = (Router) => {
         router : "/platformRebate/platformOrderOne",
         modelName : ["Rebate", "RebateRefund"],
         level_select : true,
+        default : {
+            day_type : 1,
+            category_id : "all"
+        },
         platform : false,
-        date_picker_data: 1,
+        //date_picker_data: 1,
         flexible_btn: [{
             content: '<a href="javascript:void(0)" help_url="/platformRebate/help_json">帮助</a>',
             preMethods: ["show_help"],
@@ -25,11 +30,13 @@ module.exports = (Router) => {
         },
         rows: [
             ["name", "order_count", "rebate_order_amount_count", "participate_seller_count",
-                "participate_user_count", "participate_goods_count"],
-            ["rebate_order_count", "rebate_order_amount_count", "rebate_order_amount_actual_count",
+                "participate_user_count", "productSku_num"],
+            ["rebate_order_count",
+                //"rebate_order_amount_count", "rebate_order_amount_actual_count",
                 "rebate_amount_count", "rate"],
             ["name", "spu_count", "sku_count", "refund_user_count", "refund_goods_amount_count",
-                "refund_goods_amount_actual_count"]
+                //"refund_goods_amount_actual_count"
+            ]
         ],
         cols: [
             [{
@@ -54,12 +61,12 @@ module.exports = (Router) => {
             [{
                 caption: "返利到账订单数",
                 type: "string"
-            }, {
-                caption: "返利到账订单总金额",
-                type: "string"
-            }, {
-                caption: "返利到账订单实付金额",
-                type: "string"
+            //}, {
+            //    caption: "返利到账订单总金额",
+            //    type: "string"
+            //}, {
+            //    caption: "返利到账订单实付金额",
+            //    type: "string"
             }, {
                 caption: "返利到账金额",
                 type: "string"
@@ -82,17 +89,21 @@ module.exports = (Router) => {
             }, {
                 caption: "退货商品总金额",
                 type: "string"
-            }, {
-                caption: "实际退货金额",
-                type: "string"
+            //}, {
+            //    caption: "实际退货金额",
+            //    type: "string"
             }]
         ]
     });
 
     Router = new api(Router,{
         router : "/platformRebate/platformOrderTwe",
-        modelName : [ "RebatetRedencyDetails" ],
+        modelName : [ "RebateOrderTredencyDetails" ],
         level_select : true,
+        default : {
+            day_type : 1,
+            category_id : "all"
+        },
         platform : false,
         filter_select: [{
             title: '指标选择',
@@ -115,8 +126,12 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/platformRebate/platformOrderThree",
-        modelName : [ "RebatetRedencyDetails" ],
+        modelName : [ "RebateTypeLevelDetails" ],
         level_select : true,
+        default : {
+            day_type : 1,
+            category_id : "all"
+        },
         platform : false,
         filter_select: [{
             title: '指标选择',
@@ -139,8 +154,12 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/platformRebate/platformOrderFour",
-        modelName : [ "RebatetRedencyDetails" ],
+        modelName : [ "RebateTypeLevelDetails" ],
         level_select : true,
+        default : {
+            day_type : 1,
+            category_id : "all"
+        },
         platform : false,
         filter_select: [{
             title: '指标选择',
@@ -174,64 +193,87 @@ module.exports = (Router) => {
             title: '使用方',
             filter_key: 'user_party',
             groups: [{
-                key: '单项单级返利',
+                key: [1, 2, 5, 6],
+                value: '全部使用方',
+                cell: {
+                    title: '关联流程',
+                    filter_key : 'correlate_flow',
+                    groups : [{
+                        key: '',
+                        value: '全部相关流程'
+                    }]
+                }
+            }, {
+                key: '6',
                 value: '单项单级返利',
                 cell: {
                     title: '关联流程',
                     filter_key : 'correlate_flow',
                     groups : [{
-                        key: '固定返利',
+                        key: '',
+                        value: '全部相关流程'
+                    }, {
+                        key: '11',
                         value: '固定返利'
                     },{
-                        key: '比例返利',
+                        key: '12',
                         value: '比例返利'
                     }]
                 }
             }, {
-                key: '平台基础返利',
+                key: '1',
                 value: '平台基础返利',
                 cell: {
                     title: '关联流程',
                     filter_key : 'correlate_flow',
                     groups : [{
-                        key: '分享购买',
+                        key: '',
+                        value: '全部相关流程'
+                    },{
+                        key: '1',
                         value: '分享购买'
                     },{
-                        key: '邀请好友-购买返利',
+                        key: '2',
                         value: '邀请好友-购买返利'
                     },{
-                        key: '邀请好友-固定返利',
+                        key: '10',
                         value: '邀请好友-固定返利'
                     }]
                 }
             }, {
-                key: '平台促销返利',
+                key: '2',
                 value: '平台促销返利',
                 cell: {
                     title: '关联流程',
                     filter_key : 'correlate_flow',
                     groups : [{
-                        key: '分享购买',
+                        key: '',
+                        value: '全部相关流程'
+                    },{
+                        key: '1',
                         value: '分享购买'
                     },{
-                        key: '邀请好友-购买返利',
+                        key: '2',
                         value: '邀请好友-购买返利'
                     },{
-                        key: '邀请好友-固定返利',
+                        key: '10',
                         value: '邀请好友-固定返利'
                     }]
                 }
             }, {
-                key: '邀请商家入驻返利',
+                key: '5',
                 value: '邀请商家入驻返利',
                 cell: {
                     title: '关联流程',
                     filter_key : 'correlate_flow',
                     groups : [{
-                        key: '固定返利',
+                        key: '',
+                        value: '全部相关流程'
+                    },{
+                        key: '8',
                         value: '固定返利'
                     }, {
-                        key: '分享购买',
+                        key: '9',
                         value: '分享购买'
                     }]
                 }

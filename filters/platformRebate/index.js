@@ -4,6 +4,7 @@
  * @fileoverview 平台返利汇总
  */
 var _ = require("lodash"),
+    config = require("../../utils/config.json"),
     util = require("../../utils");
 
 module.exports = {
@@ -24,7 +25,7 @@ module.exports = {
                 rebate_order_amount_count: 0,
                 participate_seller_count: 0,
                 participate_user_count: 0,
-                participate_goods_count: 0
+                productSku_num: 0
             },
             objTwo = {
                 rebate_order_count: 0,
@@ -55,7 +56,7 @@ module.exports = {
             objOne.rebate_order_amount_count += key.rebate_order_amount_count;
             objOne.participate_seller_count += key.participate_seller_count;
             objOne.participate_user_count += key.participate_user_count;
-            objOne.participate_goods_count += key.participate_goods_count;
+            objOne.productSku_num += key.productSku_num;
             objTwo.rebate_order_count += key.rebate_order_count;
             objTwo.rebate_order_amount_count += key.rebate_order_amount_count;
             objTwo.rebate_order_amount_actual_count += key.rebate_order_amount_actual_count;
@@ -67,11 +68,11 @@ module.exports = {
             objThree.refund_user_count += key.refund_user_count;
             objThree.refund_goods_amount_count += key.refund_goods_amount_count;
             objThree.refund_goods_amount_actual_count += key.refund_goods_amount_actual_count;
-            objThree.total_spu_num = key.total_spu_num;
-            objThree.total_sku_num = key.total_sku_num;
-            objThree.total_user_num = key.total_user_num;
-            objThree.total_amount = key.total_amount;
-            objThree.total_amount_actual = key.total_amount_actual;
+            objThree.total_spu_num += key.total_spu_num;
+            objThree.total_sku_num += key.total_sku_num;
+            objThree.total_user_num += key.total_user_num;
+            objThree.total_amount += key.total_amount;
+            objThree.total_amount_actual += key.total_amount_actual;
         }
         one.push(objOne);
         one.push({
@@ -80,7 +81,7 @@ module.exports = {
             rebate_order_amount_count: util.toFixed(objOne.rebate_order_amount_count, oneTwo),
             participate_seller_count: util.toFixed(objOne.participate_seller_count, oneThree),
             participate_user_count: util.toFixed(objOne.participate_user_count, oneFour),
-            participate_goods_count: util.toFixed(objOne.participate_goods_count, oneFive)
+            productSku_num: util.toFixed(objOne.productSku_num, oneFive)
         });
         objTwo.rate = util.toFixed(objTwo.rebate_amount_count, objTwo.rebate_order_amount_actual_count);
         two.push(objTwo);
@@ -98,19 +99,41 @@ module.exports = {
     platformOrderTwe(data, filter_key, dates) {
         var source = data.data,
             type = "line",
-            array = ["单项单级返利", "平台基础返利", "平台促销返利", "邀请商家入驻返利"],
+            //array = {
+            //    1 : "平台基础返利",
+            //    2 : "平台促销返利",
+            //    5 : "邀请商家入驻返利",
+            //    6 : "单项单级返利"
+            //},
+            array = [ {
+                key : "单项单级返利",
+                value : "6"
+            },{
+                key : "平台基础返利",
+                value : "1"
+            },{
+                key : "平台促销返利",
+                value : "2"
+            },{
+                key : "邀请商家入驻返利",
+                value : "5"
+            } ],
             newData = {},
             map = {};
-        map[filter_key + "_0"] = array[0];
-        map[filter_key + "_1"] = array[1];
-        map[filter_key + "_2"] = array[2];
-        map[filter_key + "_3"] = array[3];
+        map[filter_key + "_0"] = array[0].key;
+        map[filter_key + "_1"] = array[1].key;
+        map[filter_key + "_2"] = array[2].key;
+        map[filter_key + "_3"] = array[3].key;
         for (var date of dates) {
             var obj = {};
+            obj[filter_key + "_0"] = 0;
+            obj[filter_key + "_1"] = 0;
+            obj[filter_key + "_2"] = 0;
+            obj[filter_key + "_3"] = 0;
             for (var key of source) {
                 if (date === util.getDate(key.date)) {
                     for (var i = 0; i < array.length; i++) {
-                        if (key.rebate_type === array[i]) {
+                        if (key.user_party === array[i].value) {
                             obj[filter_key + "_" + i] += key[filter_key];
                         }
                     }
@@ -140,17 +163,17 @@ module.exports = {
                 goods_amount_count: "商品总金额",
                 rebate_amount_count: "返利到账金额"
             },
-            XPie = ["1级", "2级", "3级", "4级"],
-            XBar = ["层级1", "层级2", "层级3", "层级4"];
+            XPie = config.level,
+            XBar = config.grade;
         for (var level of XPie) {
             var obj = {};
             obj.value = 0;
             for (var key of source) {
-                if (level === key.grade) {
+                if (level.value === key.grade) {
                     obj.value += key[filter_key];
                 }
             }
-            newDataPie[level] = obj;
+            newDataPie[level.key] = obj;
         }
         for (var level of XPie) {
             var obj = {};
@@ -158,18 +181,18 @@ module.exports = {
                 obj[i] = 0;
             }
             for (var key of source) {
-                if (key.level === level) {
+                if (key.level === level.value) {
                     for (var i = 0; i < XBar.length; i++) {
-                        if (key.grade === XBar[i]) {
+                        if (key.grade === XBar[i].value) {
                             obj[i] += key[filter_key];
                         }
                     }
                 }
             }
-            newDataBar[level] = obj;
+            newDataBar[level.key] = obj;
         }
         for (var i = 0; i < XBar.length; i++) {
-            mapBar[i] = XBar[i];
+            mapBar[i] = XBar[i].key;
         }
         mapPie.value = filter_name[filter_key];
         return [{
@@ -199,17 +222,29 @@ module.exports = {
                 goods_amount_count: "商品总金额",
                 rebate_amount_count: "返利到账金额"
             },
-            XData = ["单项单级返利", "平台基础返利", "平台促销返利", "邀请商家入驻返利"];
+            XData = [ {
+                key : "单项单级返利",
+                value : "6"
+            },{
+                key : "平台基础返利",
+                value : "1"
+            },{
+                key : "平台促销返利",
+                value : "2"
+            },{
+                key : "邀请商家入驻返利",
+                value : "5"
+            } ];
         for (var x of XData) {
             var obj = {
                 value: 0
             };
             for (var key of source) {
-                if (x === key.rebate_type) {
+                if (x.value === key.user_party) {
                     obj.value += key[filter_key];
                 }
             }
-            newData[x] = obj;
+            newData[x.key] = obj;
         }
         map.value = filter_name[filter_key];
         return [{
@@ -229,9 +264,13 @@ module.exports = {
         }]
     },
     platformOrderFive(data) {
-        var source = data.data;
+        var source = data.data,
+            user_party = config.user_party,
+            correlate_flow = config.correlate_flow;
         source.forEach((key, value) => {
             key.id = value + 1;
+            key.user_party = user_party[key.user_party];
+            key.correlate_flow = correlate_flow[key.correlate_flow];
             key.order_rate = key.new_order_count + "/" + key.order_all_count;
             key.price_rate = key.new_order_amount + "/" + key.order_all_amount;
         });
