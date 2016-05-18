@@ -249,8 +249,12 @@ api.prototype = {
                 error = err;
             }
             if (this.filter) {
-                sendData = this.filter(sendData, this.filter_key || this.key_type || this.sku_type,
-                    dates, this.filter_key2);
+                sendData = this.filter(
+                    sendData,
+                    this.filter_key || this.key_type || this.sku_type,
+                    dates,
+                    this.filter_key2
+                );
             }
             if(isErr) {
                 next(error);

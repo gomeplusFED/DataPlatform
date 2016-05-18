@@ -716,7 +716,7 @@ function connect(app) {
                 ver : String,
                 channel : String,
                 day_type : Number
-        });
+            });
             models.SocialCategory = db.define("tbl_social_category",{
                 id : String,
                 pid : String,
@@ -724,7 +724,7 @@ function connect(app) {
                 categorylevel : String,
                 createtime : Date,
                 updatetime : Date
-        });
+            });
             models.ShopPayTop = db.define("tbl_rt_shop_pay_top",{
                 id : {type: 'number', key: true},
                 date : Date,
@@ -740,7 +740,7 @@ function connect(app) {
                 ver : String,
                 channel : String,
                 day_type : Number
-        });
+            });
             models.ShopAccesTop = db.define("tbl_rt_shop_acces_top",{
                 id : {type: 'number', key: true},
                 date : Date,
@@ -753,7 +753,7 @@ function connect(app) {
                 ver : String,
                 channel : String,
                 day_type : Number
-        });
+            });
             models.TradeCaty = db.define("tbl_rt_deal_caty",{
                 id : {type: 'number', key: true},
                 date : Date,

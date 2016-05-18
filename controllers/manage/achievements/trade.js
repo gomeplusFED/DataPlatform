@@ -13,6 +13,12 @@ module.exports = (Router) => {
         router : "/achievements/tradeOne",
         modelName : ["SalesPerfKeyValue"],
         platform : false,
+        fixedParams : {
+            key_type : [ "tran_acc_pro_num", "tran_cart_pro_num", "tran_order_pro_num",
+                "tran_pay_pro_num", "tran_order_user_num", "tran_order_money_amount",
+                "tran_pay_user_num", "tran_pay_money_amount", "tran_cus_unit_price",
+                "tran_refund_pro_num" ]
+        },
         filter(data, filter_key, dates) {
             return filter.tradeOne(data, dates);
         },
@@ -79,7 +85,7 @@ module.exports = (Router) => {
         platform : false,
         filter_select: [{
             title: '指标选择',
-            filter_key: 'filter_key',
+            filter_key: 'key_type',
             groups: [{
                 key: 'tred_acc_shop_num',
                 value: '浏览店铺数'
@@ -301,4 +307,5 @@ module.exports = (Router) => {
         ]
     });
 
+    return Router;
 };
