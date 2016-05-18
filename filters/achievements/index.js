@@ -81,46 +81,34 @@ module.exports = {
     },
     shopThree(data) {
         var source = data.data,
-            ids = util.uniq(_.pluck(source, "shop_id")),
             newData = [],
-            oldData = [],
-            total_access_num = 0,
-            total_access_users = 0;
-        for(var id of ids) {
-            var obj = {
-                shop_id : id,
-                shop_name : "",
-                access_num : 0,
-                access_users : 0,
-                share_commodity_num : 0
-            };
-            for(var key of source) {
-                if(id === key.shop_id) {
-                    total_access_num += key.access_num;
-                    total_access_users += key.access_users;
-                    obj.shop_name = key.shop_name;
-                    obj.access_num += key.access_num;
-                    obj.access_users += key.access_users;
-                    obj.share_commodity_num += key.share_commodity_num;
-                }
-            }
-            oldData.push(obj);
-        }
-        oldData.sort((a, b) => {
+            two_total = 0,
+            three_total = 0,
+            length = source.length,
+            top = length > 50 ? 50 : length;
+
+        source.sort((a, b) => {
             return b.access_num - a.access_num;
         });
-        var top = oldData.length > 50 ? 50 : oldData.length;
+
+        for(var key of source) {
+            two_total += key.access_num;
+            three_total += key.access_users;
+        }
+
         for(var i = 0; i < top; i++) {
+            key = source[i];
             newData.push({
                 top : i + 1,
-                shop_name : oldData[i].shop_name,
-                access_num : oldData[i].access_num,
-                access_users : oldData[i].access_users,
-                share_commodity_num : oldData[i].share_commodity_num,
-                access_num_rate : util.toFixed(oldData[i].access_num, total_access_num),
-                access_users_rate : util.toFixed(oldData[i].access_users, total_access_users)
+                one : key.shop_id,
+                two : key.access_num,
+                two_rate : util.toFixed(key.access_num, two_total),
+                three : key.access_users,
+                three_rate : util.toFixed(key.access_users, three_total),
+                four : key.share_num
             });
         }
+
         return util.toTable([newData], data.rows, data.cols);
     },
     shopFour(data) {
