@@ -10,22 +10,22 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/achievements/shopOne",
-        modelName : ["KeyValue"],
+        modelName : ["SalesPerfKeyValue"],
         platform : false,
         filter_select: [{
             title: '',
-            filter_key : 'filter_key',
+            filter_key : 'key_type',
             groups: [{
-                key: 'shop_new_num',
+                key: 'xpop_shops_num_add_al',
                 value: '新增注册店铺'
             }, {
-                key: 'shop_succ_num',
+                key: 'xpop_shops_num_succ_add_al',
                 value: '成功入驻店铺'
             }, {
-                key: 'shop_order_succ_num',
+                key: 'xpop_shops_num_succ_deal_al',
                 value: '成功交易店铺'
             }, {
-                key: 'shop_access_num',
+                key: 'xpop_shops_num_share_al',
                 value: '被访问店铺数'
             }]
         }],
@@ -36,19 +36,24 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/achievements/shopTwo",
-        modelName : [""],
+        modelName : ["SalesPerfKeyValue"],
         platform : false,
         excel_export : true,
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
+        fixedParams : {
+            key_type : [ "xpop_shops_num_add_al", "xpop_shops_num_succ_add_al",
+                "xpop_shops_num_acc_al", "xpop_shops_num_succ_tot_al", "xpop_shops_num_share_al",
+                "xpop_shops_num_succ_order_al", "xpop_shops_num_succ_deal_al"]
+        },
         filter(data, filter_key, dates) {
             return filter.shopTwo(data, dates);
         },
         rows : [
-            [ 'date', 'shop_new_num', 'shop_succ_num', 'shop_total_num', 'shop_order_num',
-                'shop_order_succ_num', 'shop_access_num', 'shop_share_num' ]
+            [ 'date', 'one', 'two', 'three', 'four',
+                'five', 'six', 'seven' ]
         ],
         cols : [
             [
