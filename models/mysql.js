@@ -725,6 +725,14 @@ function connect(app) {
                 createtime : Date,
                 updatetime : Date
         });
+            models.SocialCategory = db.define("tbl_social_category",{
+                id : String,
+                pid : String,
+                name : String,
+                categorylevel : String,
+                createtime : Date,
+                updatetime : Date
+        });
             next();
         }
     }));
