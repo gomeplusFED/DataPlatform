@@ -100,7 +100,7 @@ module.exports = {
             key = source[i];
             newData.push({
                 top : i + 1,
-                one : key.shop_id,
+                one : key.shop_name,
                 two : key.access_num,
                 two_rate : util.toFixed(key.access_num, two_total),
                 three : key.access_users,
@@ -111,48 +111,44 @@ module.exports = {
 
         return util.toTable([newData], data.rows, data.cols);
     },
-    shopFour(data) {
+    shopFour(data, sku_type) {
         var source = data.data,
-            ids = util.uniq(_.pluck(source, "shop_id")),
             newData = [],
-            oldData = [],
             total_pay_price = 0,
-            total_pay_commodity_num = 0;
-        for(var id of ids) {
-            var obj = {
-                shop_id : id,
-                shop_name : "",
-                pay_price : 0,
-                pay_commodity_num : 0,
-                share_commodity_num : 0
-            };
-            for(var key of source) {
-                if(id === key.shop_id) {
-                    total_pay_price += key.pay_price;
-                    total_pay_commodity_num += key.pay_commodity_num;
-                    obj.shop_name = key.shop_name;
-                    obj.pay_price += key.pay_price;
-                    obj.pay_commodity_num += key.pay_commodity_num;
-                    obj.share_commodity_num += key.share_commodity_num;
-                }
-            }
-            oldData.push(obj);
-        }
-        oldData.sort((a, b) => {
+            total_pay_commodity_num = 0,
+            length = source.length,
+            top = length > 50 ? 50 : length;
+
+        source.sort((a, b) => {
             return b.pay_price - a.pay_price;
         });
-        var top = oldData.length > 50 ? 50 : oldData.length;
-        for(var i = 0; i < top; i++) {
-            newData.push({
-                top : i + 1,
-                shop_name : oldData[i].shop_name,
-                pay_price : oldData[i].pay_price.toFixed(2),
-                pay_commodity_num : oldData[i].pay_commodity_num,
-                share_commodity_num : oldData[i].share_commodity_num,
-                pay_price_rate : util.toFixed(oldData[i].pay_price, total_pay_price),
-                pay_commodity_rate : util.toFixed(oldData[i].share_commodity_num, total_pay_commodity_num)
-            });
+
+        for(var key of source) {
+            total_pay_price += key.pay_price;
+            total_pay_commodity_num += key.pay_commodity_num;
         }
+
+        if(sku_type === "2") {
+            data.cols[0][4].caption = "支付商品件数";
+            data.cols[0][5].caption = "支付商品件数占比";
+        } else {
+            data.cols[0][4].caption = "支付商品数";
+            data.cols[0][5].caption = "支付商品数占比";
+        }
+
+        for(var i = 0; i < top; i++) {
+            key = source[i];
+            newData.push({
+                top : 1 + i,
+                shop_name : key.shop_name,
+                pay_price : key.pay_price,
+                pay_price_rate : util.toFixed(key.price_rate, total_pay_price),
+                pay_commodity_num : key.pay_commodity_num,
+                pay_commodity_rate : util.toFixed(key.pay_commodity_num, total_pay_commodity_num),
+                share_commodity_num : key.share_commodity_num
+            })
+        }
+
         return util.toTable([newData], data.rows, data.cols);
     }
 };

@@ -37,6 +37,7 @@ module.exports = {
                 visit_time_avg : 0,
                 stay_time_avg : 0,
                 pv1 : 0,
+                pv2 : 0,
                 create : 0
             };
             for(var key of orderData) {
@@ -47,6 +48,9 @@ module.exports = {
                     }
                     if(key.kpi_type === 2) {
                         zObj.create += key.kpi_value;
+                    }
+                    if(key.kpi_type === 3) {
+                        zObj.pv2 += key.kpi_value;
                     }
                 }
             }
@@ -111,6 +115,8 @@ module.exports = {
             - newData[1].new_user_rate_two.replace("%", "")).toFixed(2) + "%";
         obj.pv1 = ((newData[0].pv1 - newData[1].pv1) /
             (newData[0].pv1 === 0 ? 1 : newData[0].pv1) * 100).toFixed(2) + "%";
+        obj.pv2 = ((newData[0].pv2 - newData[1].pv2) /
+            (newData[0].pv2 === 0 ? 1 : newData[0].pv2) * 100).toFixed(2) + "%";
         obj.create = ((newData[0].create - newData[1].create) /
             (newData[0].create === 0 ? 1 : newData[0].create) * 100).toFixed(2) + "%";
         newData.push(obj);

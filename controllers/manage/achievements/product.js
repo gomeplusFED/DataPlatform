@@ -28,7 +28,7 @@ module.exports = (Router) => {
             }]
         }],
         filter(data, filter_key, dates) {
-            return filter.productOne(data, filter_key, dates);
+            return filter.productOne(data);
         },
         cols : [
             [

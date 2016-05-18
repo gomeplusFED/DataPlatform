@@ -139,19 +139,14 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/achievements/shopFour",
-        modelName : [""],
+        modelName : ["ShopPayTop"],
         platform : false,
+        showDayUnit : true,
         excel_export : true,
-        flexible_btn : [{
-            content: '<a href="javascript:void(0)">导出</a>',
-            preMethods: ['excel_export']
-        }],
-        filter(data, filter_key, dates) {
-            return filter.shopFour(data);
-        },
+        date_picker_data : 1,
         filter_select: [{
             title: '',
-            filter_key : 'filter_key',
+            filter_key : 'sku_type',
             groups: [{
                 key: '1',
                 value: '合并SKU'
@@ -160,6 +155,13 @@ module.exports = (Router) => {
                 value: 'SKU'
             }]
         }],
+        flexible_btn : [{
+            content: '<a href="javascript:void(0)">导出</a>',
+            preMethods: ['excel_export']
+        }],
+        filter(data, filter_key, dates) {
+            return filter.shopFour(data, filter_key);
+        },
         rows : [
             [ 'top', 'shop_name', 'pay_price', 'pay_price_rate', 'pay_commodity_num',
                 'pay_commodity_rate', 'share_commodity_num']

@@ -25,11 +25,11 @@ module.exports = {
                     type : "table",
                     title : "店铺流量排行TOP 50",
                     query_api : "/achievements/shopThree"
-                //},
-                //{
-                //    type : "table",
-                //    title : "店铺交易排行TOP 50",
-                //    query_api : "/achievements/shopFour"
+                },
+                {
+                    type : "table",
+                    title : "店铺交易排行TOP 50",
+                    query_api : "/achievements/shopFour"
                 }
             ]
         }
