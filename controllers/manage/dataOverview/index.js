@@ -47,7 +47,7 @@ module.exports = (Router) => {
         rows : [
             ['name', 'open_total', 'open_user_total', 'open_user_avg', 'new_user',
                 'new_user_rate', 'new_account', 'register_rate', 'stay_time_avg', 'using_time_avg',
-                "pv1", "create"]
+                "pv2", "create"]
         ],
         cols : [
             [{
