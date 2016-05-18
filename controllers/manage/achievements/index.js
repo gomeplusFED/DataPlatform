@@ -96,8 +96,9 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/achievements/shopThree",
-        modelName : [""],
+        modelName : ["ShopAccesTop"],
         platform : false,
+        showDayUnit : true,
         excel_export : true,
         date_picker_data : 1,
         flexible_btn : [{
@@ -108,8 +109,7 @@ module.exports = (Router) => {
             return filter.shopThree(data);
         },
         rows : [
-            [ 'top', 'shop_name', 'access_num', 'access_num_rate', 'access_users', 'access_users_rate',
-                'share_commodity_num']
+            [ 'top', 'one', 'two', 'two_rate', 'three', 'three_rate', 'four']
         ],
         cols : [
             [{

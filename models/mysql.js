@@ -725,13 +725,32 @@ function connect(app) {
                 createtime : Date,
                 updatetime : Date
         });
-            models.SocialCategory = db.define("tbl_social_category",{
-                id : String,
-                pid : String,
-                name : String,
-                categorylevel : String,
-                createtime : Date,
-                updatetime : Date
+            models.ShopPayTop = db.define("tbl_rt_shop_pay_top",{
+                id : {type: 'number', key: true},
+                date : Date,
+                shop_id : Number,
+                order_price : Number,
+                pay_price : Number,
+                order_commodity_num : Number,
+                pay_commodity_num : Number,
+                share_commodity_num : Number,
+                sku_type : Number,
+                type : String,
+                ver : String,
+                channel : String,
+                day_type : Number
+        });
+            models.ShopAccesTop = db.define("tbl_rt_shop_acces_top",{
+                id : {type: 'number', key: true},
+                date : Date,
+                shop_id : Number,
+                access_num : Number,
+                access_users : Number,
+                share_num : Number,
+                type : String,
+                ver : String,
+                channel : String,
+                day_type : Number
         });
             next();
         }
