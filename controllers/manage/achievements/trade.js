@@ -4,10 +4,10 @@
  * @fileoverview 交易分析
  */
 
-var api = require("../../../base/api"),
-    filter = require("../../../filters/achievements/trade");
+var api = require("../../../base/api");
+    //filter = require("../../../filters/achievements/trade");
 
-model.exports = (Router) => {
+module.exports = (Router) => {
     
     Router = new api(Router, {
         router : "/achievements/tradeOne",
@@ -79,5 +79,7 @@ model.exports = (Router) => {
                 //    type: "string"
             }]
         ]
-    })
-}
+    });
+
+    return Router;
+};
