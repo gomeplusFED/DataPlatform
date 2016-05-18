@@ -752,6 +752,38 @@ function connect(app) {
                 channel : String,
                 day_type : Number
         });
+            models.TradeCaty = db.define("tbl_rt_deal_caty",{
+                id : {type: 'number', key: true},
+                date : Date,
+                caty_level : Number,
+                caty_name : String,
+                access_num : Number,
+                access_users : Number,
+                sales_pro_num : Number,
+                pay_money_amount : Number,
+                pay_money_amount_ratio : Number,
+                type : String,
+                ver : String,
+                channel : String,
+                day_type : Number
+            });
+            models.TradeUser = db.define("tbl_rt_deal_user", {
+                id : {type: 'number', key: true},
+                date : Date,
+                area : String,
+                deal_money_amount : Number,
+                deal_money_ratio : Number,
+                deal_pro_num : Number,
+                deal_pro_ratio : Number,
+                order_amount : Number,
+                order_number: Number,
+                cus_unit_price: Number,
+                type : String,
+                ver : String,
+                channel : String,
+                day_type : Number
+            });
+
             next();
         }
     }));

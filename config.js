@@ -144,7 +144,8 @@ module.exports = {
             href: "#",
             path: [
                 obj.achievements.shop(),
-                obj.achievements.product()
+                obj.achievements.product(),
+                obj.achievements.trade()
             ]
         },
         "14": {
