@@ -143,7 +143,9 @@ module.exports = {
             className: "fa fa-flag-checkered fa-fw",
             href: "#",
             path: [
-                obj.achievements.product()
+                obj.achievements.shop(),
+                obj.achievements.product(),
+                obj.achievements.trade()
             ]
         },
         "14": {

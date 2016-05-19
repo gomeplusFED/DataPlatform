@@ -149,6 +149,9 @@ api.prototype = {
             if(key === "key_type") {
                 this[key] = query[key];
             }
+            if(key === "sku_type") {
+                this[key] = query[key];
+            }
         });
         if(typeof this.fixedParams === "function") {
             this.fixedParams(query, this.filter_key, req, (err, data) => {
@@ -233,7 +236,11 @@ api.prototype = {
             try {
                 for(var i = 0; i < this.modelName.length; i++) {
                     if(this[this.paramsName[i]]) {
-                        query = this[this.paramsName[i]];
+                        if(typeof this[this.paramsName[i]] === "function") {
+                            query = this[this.paramsName[i]]();
+                        } else {
+                            query = this[this.paramsName[i]];
+                        }
                     }
                     sendData[this.sendDataName[i]] = await (this._findDatabase(req, this.modelName[i], query));
                 }
@@ -242,7 +249,12 @@ api.prototype = {
                 error = err;
             }
             if (this.filter) {
-                sendData = this.filter(sendData, this.filter_key || this.key_type, dates, this.filter_key2);
+                sendData = this.filter(
+                    sendData,
+                    this.filter_key || this.key_type || this.sku_type,
+                    dates,
+                    this.filter_key2
+                );
             }
             if(isErr) {
                 next(error);

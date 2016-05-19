@@ -716,7 +716,7 @@ function connect(app) {
                 ver : String,
                 channel : String,
                 day_type : Number
-        });
+            });
             models.SocialCategory = db.define("tbl_social_category",{
                 id : String,
                 pid : String,
@@ -724,7 +724,68 @@ function connect(app) {
                 categorylevel : String,
                 createtime : Date,
                 updatetime : Date
-        });
+            });
+            models.ShopPayTop = db.define("tbl_rt_shop_pay_top",{
+                id : {type: 'number', key: true},
+                date : Date,
+                shop_id : Number,
+                shop_name : String,
+                order_price : Number,
+                pay_price : Number,
+                order_commodity_num : Number,
+                pay_commodity_num : Number,
+                share_commodity_num : Number,
+                sku_type : Number,
+                type : String,
+                ver : String,
+                channel : String,
+                day_type : Number
+            });
+            models.ShopAccesTop = db.define("tbl_rt_shop_acces_top",{
+                id : {type: 'number', key: true},
+                date : Date,
+                shop_id : Number,
+                shop_name : String,
+                access_num : Number,
+                access_users : Number,
+                share_num : Number,
+                type : String,
+                ver : String,
+                channel : String,
+                day_type : Number
+            });
+            models.TradeCaty = db.define("tbl_rt_deal_caty",{
+                id : {type: 'number', key: true},
+                date : Date,
+                caty_level : Number,
+                caty_name : String,
+                access_num : Number,
+                access_users : Number,
+                sales_pro_num : Number,
+                pay_money_amount : Number,
+                pay_money_amount_ratio : Number,
+                type : String,
+                ver : String,
+                channel : String,
+                day_type : Number
+            });
+            models.TradeUser = db.define("tbl_rt_deal_user", {
+                id : {type: 'number', key: true},
+                date : Date,
+                area : String,
+                deal_money_amount : Number,
+                deal_money_ratio : Number,
+                deal_pro_num : Number,
+                deal_pro_ratio : Number,
+                order_amount : Number,
+                order_number: Number,
+                cus_unit_price: Number,
+                type : String,
+                ver : String,
+                channel : String,
+                day_type : Number
+            });
+
             next();
         }
     }));

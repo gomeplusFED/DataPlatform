@@ -16,7 +16,7 @@ module.exports = (Router) => {
             use_type : 2
         },
         filter(data, filter_key, dates) {
-            return filter.useFrequencyOne(data, frequency, "日启动次数");
+            return filter.useFrequencyOne(data, frequency, "日启动次数(%)");
         }
     });
 
@@ -59,7 +59,7 @@ module.exports = (Router) => {
             day_type : 2
         },
         filter(data, filter_key, dates) {
-            return filter.useFrequencyOne(data, frequency, "周启动次数");
+            return filter.useFrequencyOne(data, frequency, "周启动次数(%)");
         }
     });
 
@@ -103,7 +103,7 @@ module.exports = (Router) => {
             day_type : 3
         },
         filter(data, filter_key, dates) {
-            return filter.useFrequencyOne(data, frequency, "月启动次数");
+            return filter.useFrequencyOne(data, frequency, "月启动次数(%)");
         }
     });
 
