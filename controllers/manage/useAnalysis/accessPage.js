@@ -4,6 +4,7 @@
  * @fileoverview 访问页面
  */
 var api = require("../../../base/api"),
+    orm = require("orm"),
     help = require("../../../base/help"),
     config = require("../../../utils/config.json"),
     filter = require("../../../filters/useAnalysis/accessPage");
@@ -13,6 +14,9 @@ module.exports = (Router) => {
         router : "/useAnalysis/accessPageOne",
         modelName : ["UsersAccess"],
         platform : false,
+        fixedParams : {
+            type : orm.not_in(["H5"])
+        },
         flexible_btn: [{
             content: '<a href="javascript:void(0)" help_url="/useAnalysis/accessPage/help_json">帮助</a>',
             preMethods: ["show_help"],
@@ -42,6 +46,9 @@ module.exports = (Router) => {
         modelName : ["UsersAccess"],
         platform : false,
         excel_export : true,
+        fixedParams : {
+            type : orm.not_in(["H5"])
+        },
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
