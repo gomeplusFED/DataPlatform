@@ -14,16 +14,18 @@ module.exports = (Router) => {
         modelName : ["SalesPerfKeyValue"],
         platform : false,
         fixedParams : {
-            key_type : [ "tran_acc_pro_num", "tran_cart_pro_num", "tran_order_pro_num",
-                "tran_pay_pro_num", "tran_order_user_num", "tran_order_money_amount",
-                "tran_pay_user_num", "tran_pay_money_amount", "tran_cus_unit_price",
-                "tran_refund_pro_num" ]
+            key_type : [ "tran_acc_pro_num", "tran_order_pro_num", "tran_order_pro_num_j",
+                "tran_pay_pro_num", "tran_pay_pro_num_j", "tran_order_user_num",
+                "tran_order_money_amount", "tran_pay_user_num", "tran_pay_money_amount",
+                "tran_refund_pro_num", "tran_refund_pro_num_j" ]
         },
         filter(data, filter_key, dates) {
             return filter.tradeOne(data, dates);
         },
         rows: [
-            ["tran_acc_pro_num", "tran_cart_pro_num", "tran_cart_pro_num_j", "tran_order_pro_num",
+            ["tran_acc_pro_num",
+                //"tran_cart_pro_num", "tran_cart_pro_num_j",
+                "tran_order_pro_num",
                 "tran_order_pro_num_j", "tran_pay_pro_num", "tran_pay_pro_num_j"
             ],
             ["tran_order_user_num", "tran_order_money_amount", "tran_pay_user_num",
@@ -35,12 +37,12 @@ module.exports = (Router) => {
             [{
                 caption: "浏览商品数",
                 type: "number"
-            }, {
-                caption: "加购商品数",
-                type: "number"
-            }, {
-                caption: "加购商品件数",
-                type: "number"
+            //}, {
+            //    caption: "加购商品数",
+            //    type: "number"
+            //}, {
+            //    caption: "加购商品件数",
+            //    type: "number"
             }, {
                 caption: "下单商品数",
                 type: "number"
@@ -95,12 +97,12 @@ module.exports = (Router) => {
             }, {
                 key: 'tran_acc_pro_num',
                 value: '浏览商品数'
-            }, {
-                key: 'tran_cart_pro_num',
-                value: '加购商品数'
-            }, {
-                key: 'tran_cart_pro_num_j',
-                value: '加购商品件数'
+            //}, {
+            //    key: 'tran_cart_pro_num',
+            //    value: '加购商品数'
+            //}, {
+            //    key: 'tran_cart_pro_num_j',
+            //    value: '加购商品件数'
             }, {
                 key: 'tran_order_money_amount',
                 value: '下单金额'
@@ -126,10 +128,10 @@ module.exports = (Router) => {
                 key: 'tran_order_pro_num_j',
                 value: '下单商品件数'
             }, {
-                key: 'tred_cus_unit_price',
+                key: [ "tran_order_money_amount", "tred_order_all_amount" ],
                 value: '客单价'
             }, {
-                key: 'tred_gro_unit_price',
+                key: [ "tran_order_money_amount", "tran_order_user_num" ],
                 value: '笔单价'
             }]
         }],
@@ -143,6 +145,11 @@ module.exports = (Router) => {
         modelName : ["SalesPerfKeyValue"],
         platform : false,
         excel_export : true,
+        fixedParams : {
+            key_type : [ 'tred_order_all_amount', 'tred_pay_all_amount', 'tran_order_money_amount',
+                'tred_pay_money_amount', 'del_use_coupon_rate', 'del_refund_amount',
+                'tran_refund_pro_num', "tran_order_money_amount", "tran_order_user_num" ]
+        },
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
@@ -152,7 +159,7 @@ module.exports = (Router) => {
         },
         rows : [
             [ 'date', 'tred_order_all_amount', 'tred_pay_all_amount', 'tran_order_money_amount',
-                'tred_pay_money_amount', 'tred_cus_unit_price', 'del_use_coupon_rate', 
+                'tran_pay_money_amount', 'tred_cus_unit_price', 'del_use_coupon_rate',
                 'del_refund_amount','tran_refund_pro_num'
             ]
         ],
