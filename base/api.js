@@ -39,9 +39,7 @@ function api(Router, options) {
         //列
         cols: [],
         //初始化数据
-        default: {
-            day_type: 1
-        },
+        default: {},
         //是否显示平台
         platform: true,
         //是否显示渠道
@@ -110,6 +108,7 @@ api.prototype = {
         var startTime = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
         var endTime = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate();
         this.default.date = orm.between(new Date(startTime + ' 00:00:00'), new Date(endTime + ' 23:59:59'));
+        this.default.day_type = 1;
         if(this.platform) {
             this.default.type = "H5";
         }
