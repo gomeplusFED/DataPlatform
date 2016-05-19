@@ -106,7 +106,7 @@ api.prototype = {
     constructor: api,
     setDefaultOptionDate() {
         var now = new Date();
-        var date = new Date(now.getTime() - 7 * 24 * 60 * 1000);
+        var date = new Date(now.getTime() - 24 * 60 * 1000);
         var startTime = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
         var endTime = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate();
         this.default.date = orm.between(new Date(startTime + ' 00:00:00'), new Date(endTime + ' 23:59:59'));
