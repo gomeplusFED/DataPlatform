@@ -122,8 +122,6 @@ var FilterSelect = Vue.extend({
 
 				// 纯按钮事件处理
 				if(this.isFirstHandler && !this.isCell){
-					// if(){}
-
 					for(var i = 0;i < this.pageComponentsData[this.componentType].length;i++){
 						var _curr = this.pageComponentsData[this.componentType][i];
 						if(_curr.groups.length > 5){
