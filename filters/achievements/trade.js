@@ -5,46 +5,36 @@
 var util = require("../../utils");
 
 module.exports = {
-    tradeOne(data) {
+    tradeOne(data, array) {
         var source = data.data,
             one = [],
             two = [],
-            objOne = {
-                tran_acc_pro_num: 0,
-                //tran_cart_pro_num: 0,
-                //tran_cart_pro_num_j: 0,
-                tran_order_pro_num: 0,
-                tran_order_pro_num_j: 0,
-                tran_pay_pro_num: 0,
-                tran_pay_pro_num_j: 0
-            },
-            objTwo = {
-                tran_order_user_num: 0,
-                tran_order_money_amount: 0,
-                tran_pay_user_num: 0,
-                tran_pay_money_amount: 0,
-                tran_cus_unit_price: 0,
-                tran_refund_pro_num: 0,
-                tran_refund_pro_num_j: 0
-            };
-        for (var key of source) {
-            objOne.tran_acc_pro_num += key.tran_acc_pro_num;
-            //objOne.tran_cart_pro_num += key.tran_cart_pro_num;
-            //objOne.tran_cart_pro_num_j += key.tran_cart_pro_num_j;
-            objOne.tran_order_pro_num += key.tran_order_pro_num;
-            objOne.tran_order_pro_num_j += key.tran_order_pro_num_j;
-            objOne.tran_pay_pro_num += key.tran_pay_pro_num;
-            objOne.tran_pay_pro_num_j += key.tran_pay_pro_num_j;
-            objTwo.tran_order_user_num += key.tran_order_user_num;
-            objTwo.tran_order_money_amount += key.tran_order_money_amount;
-            objTwo.tran_pay_user_num += key.tran_pay_user_num;
-            objTwo.tran_pay_money_amount += key.tran_pay_money_amount;
-            objTwo.tran_cus_unit_price += key.tran_cus_unit_price;
-            objTwo.tran_refund_pro_num += key.tran_refund_pro_num;
-            objTwo.tran_refund_pro_num_j += key.tran_refund_pro_num_j;
+            obj = {};
+        for(var key of array) {
+            obj[key] = 0;
         }
-        one.push(objOne);
-        two.push(objTwo);
+        for (var key of source) {
+            obj[key.key_type] += key.value;
+        }
+        one.push({
+            tran_acc_pro_num : obj.tran_acc_pro_num,
+            tran_order_pro_num : obj.tran_order_pro_num,
+            tran_order_pro_num_j : obj.tran_order_pro_num_j,
+            tran_pay_pro_num : obj.tran_pay_pro_num,
+            tran_pay_pro_num_j : obj.tran_pay_pro_num_j
+        });
+        two.push({
+            tran_order_user_num : obj.tran_order_user_num,
+            tran_order_money_amount : obj.tran_order_money_amount,
+            tran_pay_user_num : obj.tran_pay_user_num,
+            tran_pay_money_amount : obj.tran_pay_money_amount,
+            tran_cus_unit_price : util.percentage(
+                obj.tran_order_money_amount,
+                obj.tran_order_user_num
+            ),
+            tran_refund_pro_num : obj.tran_refund_pro_num,
+            tran_refund_pro_num_j : obj.tran_refund_pro_num_j
+        });
         return util.toTable([one, two], data.rows, data.cols);
     },
 
@@ -63,19 +53,15 @@ module.exports = {
                 tred_pay_all_amount : "付款订单量",
                 tred_pay_user_num : "付款人数",
                 tran_order_pro_num : "下单商品数",
-                tran_order_pro_num_j : "下单商品件数"
-                //tred_cus_unit_price : "客单价",
-                //tred_gro_unit_price : "笔单价"
+                tran_order_pro_num_j : "下单商品件数",
+                tran_guest_unit_price : "客单价",
+                tran_row_unit_price : "笔单价"
             },
             type = "line",
             map = {
-                value : filter_name["tran_order_pro_num_j"]
+                value : filter_name[filter_key]
             },
             newData = {};
-        //console.log(filter_key.length);
-        //if(filter_key.length === 2) {
-        //    console.log("===");
-        //}
         for(var date of dates) {
             newData[date] = {
                 value : 0
@@ -118,7 +104,11 @@ module.exports = {
                     value : 0,
                     value2 : 0
                 },
-                tred_pay_money_amount : {
+                tran_pay_money_amount : {
+                    value : 0,
+                    value2 : 0
+                },
+                tran_guest_unit_price : {
                     value : 0,
                     value2 : 0
                 },
@@ -126,19 +116,7 @@ module.exports = {
                     value : 0,
                     value2 : 0
                 },
-                del_refund_amount : {
-                    value : 0,
-                    value2 : 0
-                },
-                tran_refund_pro_num: {
-                    value : 0,
-                    value2 : 0
-                },
-                tran_order_money_amount : {
-                    value : 0,
-                    value2 : 0
-                },
-                tran_order_user_num : {
+                del_refund_amount: {
                     value : 0,
                     value2 : 0
                 }
@@ -154,20 +132,17 @@ module.exports = {
         for(var date of dates) {
             newData.push({
                 date: date,
-                tred_order_all_amount : obj[date].tred_order_all_amount.value,
-                tred_pay_all_amount : obj[date].tred_pay_all_amount.value,
-                tran_order_money_amount : obj[date].tran_order_money_amount.value,
-                tran_pay_money_amount : obj[date].tred_pay_money_amount.value,
-                tred_cus_unit_price : util.percentage(
-                    obj[date].tran_order_money_amount.value,
-                    obj[date].tran_order_user_num.value
-                ),
-                del_use_coupon_rate : util.toFixed(
+                one : obj[date].tred_order_all_amount.value,
+                two : obj[date].tred_pay_all_amount.value,
+                three : obj[date].tran_order_money_amount.value,
+                four : obj[date].tran_pay_money_amount.value,
+                five : obj[date].tran_guest_unit_price.value,
+                six : util.toFixed(
                     obj[date].del_use_coupon_rate.value2,
                     obj[date].del_use_coupon_rate.value
                 ),
-                del_refund_amount: obj[date].del_refund_amount.value,
-                tran_refund_pro_num : obj[date].tran_refund_pro_num.value
+                seven: obj[date].del_refund_amount.value,
+                eight : obj[date].del_refund_amount.value2
             });
         }
 

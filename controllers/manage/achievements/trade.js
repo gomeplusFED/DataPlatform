@@ -14,13 +14,25 @@ module.exports = (Router) => {
         modelName : ["SalesPerfKeyValue"],
         platform : false,
         fixedParams : {
-            key_type : [ "tran_acc_pro_num", "tran_order_pro_num", "tran_order_pro_num_j",
+            key_type : [
+                "tran_acc_pro_num", "tran_order_pro_num", "tran_order_pro_num_j",
                 "tran_pay_pro_num", "tran_pay_pro_num_j", "tran_order_user_num",
-                "tran_order_money_amount", "tran_pay_user_num", "tran_pay_money_amount",
-                "tran_refund_pro_num", "tran_refund_pro_num_j" ]
+                "tred_order_all_amount", "tran_order_money_amount",
+                "tran_pay_user_num", "tran_pay_money_amount",
+                "tran_refund_pro_num", "tran_refund_pro_num_j"
+            ]
         },
         filter(data, filter_key, dates) {
-            return filter.tradeOne(data, dates);
+            return filter.tradeOne(
+                data,
+                [
+                    "tran_acc_pro_num", "tran_order_pro_num", "tran_order_pro_num_j",
+                    "tran_pay_pro_num", "tran_pay_pro_num_j",
+                    "tran_order_user_num", "tred_order_all_amount", "tran_order_money_amount",
+                    "tran_pay_user_num", "tran_pay_money_amount",
+                    "tran_refund_pro_num", "tran_refund_pro_num_j"
+                ]
+            );
         },
         rows: [
             ["tran_acc_pro_num",
@@ -28,7 +40,9 @@ module.exports = (Router) => {
                 "tran_order_pro_num",
                 "tran_order_pro_num_j", "tran_pay_pro_num", "tran_pay_pro_num_j"
             ],
-            ["tran_order_user_num", "tran_order_money_amount", "tran_pay_user_num",
+            [
+                "tran_order_user_num", "tran_order_money_amount",
+                "tran_pay_user_num",
                 "tran_pay_money_amount", "tran_cus_unit_price", "tran_refund_pro_num",
                 "tran_refund_pro_num_j"
             ]
@@ -128,10 +142,10 @@ module.exports = (Router) => {
                 key: 'tran_order_pro_num_j',
                 value: '下单商品件数'
             }, {
-                key: [ "tran_order_money_amount", "tred_order_all_amount" ],
+                key: "tran_guest_unit_price",
                 value: '客单价'
             }, {
-                key: [ "tran_order_money_amount", "tran_order_user_num" ],
+                key: "tran_row_unit_price",
                 value: '笔单价'
             }]
         }],
@@ -146,9 +160,11 @@ module.exports = (Router) => {
         platform : false,
         excel_export : true,
         fixedParams : {
-            key_type : [ 'tred_order_all_amount', 'tred_pay_all_amount', 'tran_order_money_amount',
-                'tred_pay_money_amount', 'del_use_coupon_rate', 'del_refund_amount',
-                'tran_refund_pro_num', "tran_order_money_amount", "tran_order_user_num" ]
+            key_type : [
+                'tred_order_all_amount', 'tred_pay_all_amount', 'tran_order_money_amount',
+                'tran_pay_money_amount', 'tran_guest_unit_price', 'del_use_coupon_rate',
+                'del_refund_amount'
+            ]
         },
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
@@ -158,10 +174,7 @@ module.exports = (Router) => {
             return filter.tradeThree(data, dates);
         },
         rows : [
-            [ 'date', 'tred_order_all_amount', 'tred_pay_all_amount', 'tran_order_money_amount',
-                'tran_pay_money_amount', 'tred_cus_unit_price', 'del_use_coupon_rate',
-                'del_refund_amount','tran_refund_pro_num'
-            ]
+            [ 'date', 'one', 'two', 'three', 'four', 'five', 'six', 'seven','eight']
         ],
         cols : [
             [

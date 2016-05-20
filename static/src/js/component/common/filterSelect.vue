@@ -119,7 +119,6 @@ var FilterSelect = Vue.extend({
 				}
 				// 检测filter是否是级联选择
 				this.checkHasCell();
-				console.log(this.pageComponentsData[this.componentType]);
 				// 纯按钮事件处理
 				if(this.isFirstHandler && !this.isCell){
 					for(var i = 0;i < this.pageComponentsData[this.componentType].length;i++){

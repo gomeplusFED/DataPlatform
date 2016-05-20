@@ -109,7 +109,7 @@ var Table = Vue.extend({
                                 responsive: false,
                                 lengthChange: false,
                                 retrieve: true,
-                                "language": {
+                                language: {
                                     "emptyTable": "暂无数据",
                                     "paginate": {
                                         "previous": "上一页",
@@ -160,7 +160,7 @@ var Table = Vue.extend({
                                            responsive: false,
                                            lengthChange: false,
                                            retrieve: true,
-                                           "language": {
+                                           language: {
                                                "emptyTable": "暂无数据",
                                                "paginate": {
                                                    "previous": "上一页",
