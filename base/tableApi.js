@@ -34,8 +34,6 @@ function api(Router, options) {
         thirdParams : null,
         //辅助表数据整理
         selectFilter : null,
-        //表查询接口
-        tableApi : null,
         //行
         rows: [],
         //列
@@ -227,36 +225,6 @@ api.prototype = {
         }
     },
     _findData(type, res, req, query, next, dates) {
-        if(this.tableApi && type !== "excel") {
-            var modelData = [];
-            for(var i = 0; i < this.modelName.length; i++) {
-                modelData.push({
-                    rows : this.rows[i],
-                    cols : this.cols[i],
-                    data : this.tableApi[i]
-                })
-            }
-            return res[type]({
-                code: 200,
-                modelData: modelData,
-                components: {
-                    flexible_btn: this.flexible_btn,
-                    date_picker: {
-                        show: this.date_picker,
-                        defaultData: this.date_picker_data,
-                        showDayUnit : this.showDayUnit
-                    },
-                    drop_down: {
-                        platform: this.platform,
-                        channel: this.channel,
-                        version: this.version,
-                        coupon: this.coupon
-                    },
-                    level_select: this.level_select,
-                    filter_select: this.filter_select
-                }
-            });
-        }
         async(() => {
             var isErr = false,
                 error = "",
@@ -380,12 +348,20 @@ api.prototype = {
             });
         });
     }),
+    _findCountDatabase: async((req, modelName, params) => {
+        return new Promise((resolve, reject) => {
+            req.models[modelName].count(params, (err, data) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(data);
+                }
+            });
+        });
+    }),
     setRouter(Router) {
         Router.get(this.router + '_json', this._sendData.bind(this, 'json'));
         Router.get(this.router + '_jsonp', this._sendData.bind(this, 'jsonp'));
-        if (this.excel_export) {
-            Router.get(this.router + '_excel', this._sendData.bind(this, 'excel'));
-        }
         return Router;
     }
 };

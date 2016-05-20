@@ -142,7 +142,7 @@ module.exports = {
             access_users_total += key.access_users;
         }
         for(var i = 0; i < top; i++) {
-            source[i].id = i + 1;
+            source[i].top = i + 1;
             source[i].access_num_rate = util.toFixed(source[i].access_num, access_num_total);
             source[i].access_users_rate = util.toFixed(source[i].access_users, access_users_total);
             newData.push(source[i]);
@@ -162,7 +162,7 @@ module.exports = {
             order_price_total += key.order_price;
         }
         for(var i = 0; i < top; i++) {
-            source[i].id = i + 1;
+            source[i].top = i + 1;
             source[i].order_price_rate = util.toFixed(source[i].order_price, order_price_total);
             newData.push(source[i]);
         }

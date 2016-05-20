@@ -38,14 +38,14 @@ module.exports = {
             type = "line",
             newData = {},
             map = {
-                new_group_count : "新增圈子数",
+                //new_group_count : "新增圈子数",
                 new_group_user_count : "新增入圈户数",
                 new_group_topic_count : "新增话题数",
                 DAU : "DAU"
             };
         for(var date of dates) {
             newData[date] = {
-                new_group_count : 0,
+                //new_group_count : 0,
                 new_group_user_count : 0,
                 new_group_topic_count : 0,
                 DAU : 0
@@ -53,7 +53,7 @@ module.exports = {
         }
         for(var key of source) {
             var date = util.getDate(key.date);
-            newData[date].new_group_count += key.new_group_count;
+            //newData[date].new_group_count += key.new_group_count;
             newData[date].new_group_user_count += key.new_group_user_count;
             newData[date].new_group_topic_count += key.new_group_topic_count;
             newData[date].DAU += key.DAU;

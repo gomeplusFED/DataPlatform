@@ -79,8 +79,8 @@ app.use(function() {
 
 app.use((err, req, res, next) => {
     if (err) {
-        res.render("include/404", {
-            iserro: true
+        res.json({
+            iserr: true
         });
     }
 });
