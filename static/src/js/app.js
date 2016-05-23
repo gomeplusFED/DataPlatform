@@ -21,6 +21,7 @@ var User = require('./component/main/user.vue');
 var Role = require('./component/main/role.vue');
 var Log = require('./component/main/log.vue');
 
+var Erro = require('./component/common/404.vue');
 
 var router = new VueRouter();
 
@@ -42,6 +43,9 @@ router.map({
     },
     '/log': {
         component: Log
+    },
+    '/error': {
+        component: Erro  
     }
 });
 
@@ -59,7 +63,7 @@ router.afterEach(function(transition) {
     actions.setCurrentPageDefaultData(store, window.allPageConfig.page[key])
     if (!window.allPageConfig.page[key]) {
         router.go({
-            path: '/'
+            path: '/error'
         })
     }
 });
@@ -67,9 +71,12 @@ router.afterEach(function(transition) {
 $.ajaxSetup({
     global: true,
     complete: function(XMLHttpRequest, status) {
-        var res = JSON.parse(XMLHttpRequest.responseText);
-        if(res.iserr){
-            // router.go('');
+        var res = {};
+        try{
+            res = JSON.parse(XMLHttpRequest.responseText);
+        }catch(e){};
+        if(res.iserro){
+            router.go('/error');
         }
     }
 })

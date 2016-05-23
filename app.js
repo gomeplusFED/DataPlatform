@@ -80,7 +80,7 @@ app.use(function() {
 app.use((err, req, res, next) => {
     if (err) {
         res.json({
-            iserr: true
+            iserro: true
         });
     }
 });

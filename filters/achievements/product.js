@@ -85,44 +85,32 @@ module.exports = {
         var source = data.data,
             obj = {},
             newData = [];
+        dates.sort((a, b) => {
+            return new Date(b) - new Date(a);
+        });
         for(var date of dates) {
             obj[date] = {
-                products_scan : {
-                    value : 0,
-                    value2 : 0
-                },
-                products_order : {
-                    value : 0,
-                    value2 : 0
-                },
-                products_pay : {
-                    value : 0,
-                    value2 : 0
-                },
-                products_return : {
-                    value : 0,
-                    value2 : 0
-                },
-                products_fee : {
-                    value : 0,
-                    value2 : 0
-                }
+                products_scan : 0,
+                products_order : 0,
+                products_pay : 0,
+                products_return : 0,
+                products_fee : 0,
+                refund_fee : 0
             };
         }
         for(var key of source) {
             var date = util.getDate(key.date);
-            obj[date][key.key_type].value += key.value;
-            obj[date][key.key_type].value2 += key.value2;
+            obj[date][key.key_type] += key.value;
         }
         for(var date of dates) {
             newData.push({
                 one : date,
-                two : obj[date].products_scan.value,
-                three : obj[date].products_order.value,
-                four : obj[date].products_pay.value,
-                five : obj[date].products_return.value,
-                six : obj[date].products_fee.value,
-                seven : obj[date].products_fee.value2
+                two : obj[date].products_scan,
+                three : obj[date].products_order,
+                four : obj[date].products_pay,
+                five : obj[date].products_return,
+                six : obj[date].products_fee,
+                seven : obj[date].refund_fee
             })
         }
         return util.toTable([newData], data.rows, data.cols);
