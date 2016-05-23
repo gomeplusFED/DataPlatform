@@ -42,8 +42,6 @@
 
 var Vue = require('Vue');
 
-var LogVm = null;
-
 var Pagination = require('../common/pagination.vue');
 
 // fileter
@@ -59,18 +57,17 @@ var Log = Vue.extend({
 				itemsPerPage: 10,    // 每页条数
 				pagesLength: 5,     // 显示几页( 1,2,3 / 1,2,3,4,5)
 				onChange: function() {
-					// 回调
-					LogVm.createdList();
+
 				}
 			},
 			logDate: null
 		}
 	},
-	init: function(){
-		LogVm = this;
-	},
 	created: function(){
 		this.createdList();
+	},
+	ready: function(){
+		this.paginationConf.onChange = this.createdList;
 	},
 	components: {
 		'm-pagination': Pagination,
@@ -82,7 +79,7 @@ var Log = Vue.extend({
 				url: '/log/find',
 				type: 'get',
 				data: {
-					limit: 10,
+					limit: _this.paginationConf.itemsPerPage,
 					page: _this.paginationConf.currentPage
 				},
 				success: function(data){
