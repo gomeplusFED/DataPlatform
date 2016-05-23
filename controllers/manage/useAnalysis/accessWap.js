@@ -122,7 +122,7 @@ module.exports = (Router) => {
                 caption : "贡献下游浏览",
                 type : "number"
             },{
-                caption : "平均停留时间",
+                caption : "平均停留时间(s)",
                 type : "number"
             } ]
         ]
