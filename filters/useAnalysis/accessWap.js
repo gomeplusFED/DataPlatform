@@ -68,6 +68,7 @@ module.exports = {
         for(var i = 0; i < source.length; i++) {
             source[i].id = i + 1;
             source[i].date = moment(source[i].date).format("YYYY-MM-DD");
+            source[i].avg_stay_time = Math.round(source[i].avg_stay_time);
         }
         return util.toTable([source], data.rows, data.cols);
     }

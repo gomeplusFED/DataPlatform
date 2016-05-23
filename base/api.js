@@ -34,8 +34,10 @@ function api(Router, options) {
         thirdParams : null,
         //辅助表数据整理
         selectFilter : null,
-        //表查询接口
-        tableApi : null,
+        //是否分页
+        page : false,
+        //每页最大条数
+        limit : 10,
         //行
         rows: [],
         //列
@@ -227,36 +229,6 @@ api.prototype = {
         }
     },
     _findData(type, res, req, query, next, dates) {
-        if(this.tableApi && type !== "excel") {
-            var modelData = [];
-            for(var i = 0; i < this.modelName.length; i++) {
-                modelData.push({
-                    rows : this.rows[i],
-                    cols : this.cols[i],
-                    data : this.tableApi[i]
-                })
-            }
-            return res[type]({
-                code: 200,
-                modelData: modelData,
-                components: {
-                    flexible_btn: this.flexible_btn,
-                    date_picker: {
-                        show: this.date_picker,
-                        defaultData: this.date_picker_data,
-                        showDayUnit : this.showDayUnit
-                    },
-                    drop_down: {
-                        platform: this.platform,
-                        channel: this.channel,
-                        version: this.version,
-                        coupon: this.coupon
-                    },
-                    level_select: this.level_select,
-                    filter_select: this.filter_select
-                }
-            });
-        }
         async(() => {
             var isErr = false,
                 error = "",
@@ -273,7 +245,12 @@ api.prototype = {
                             query = this[this.paramsName[i]];
                         }
                     }
-                    sendData[this.sendDataName[i]] = await (this._findDatabase(req, this.modelName[i], query));
+                    if(this.page) {
+                        sendData[this.sendDataName[i] + "Count"] = await (this._findCountDatabase(req, this.modelName[i], query));
+                        sendData[this.sendDataName[i]] = await (this._findPageDatabase(req, this.modelName[i], query));
+                    } else {
+                        sendData[this.sendDataName[i]] = await (this._findDatabase(req, this.modelName[i], query));
+                    }
                 }
             }catch(err) {
                 isErr = true;
@@ -370,8 +347,50 @@ api.prototype = {
         return true;
     },
     _findDatabase: async((req, modelName, params) => {
+        var _params = {};
+        for(var key in params) {
+            if(key !== "limit" && key !== "page") {
+                _params[key] = params[key];
+            }
+        }
         return new Promise((resolve, reject) => {
-            req.models[modelName].find(params, (err, data) => {
+            req.models[modelName].find(_params, (err, data) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(data);
+                }
+            });
+        });
+    }),
+    _findPageDatabase: async((req, modelName, params) => {
+        var _params = {},
+            limit = params.limit || this.limit,
+            page = params.page || 1;
+        for(var key in params) {
+            if(key !== "limit" && key !== "page") {
+                _params[key] = params[key];
+            }
+        }
+        return new Promise((resolve, reject) => {
+            req.models[modelName].find(_params).limit(limit * (page - 1)).offset(limit).all((err, data) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(data);
+                }
+            });
+        });
+    }),
+    _findCountDatabase: async((req, modelName, params) => {
+        var _params = {};
+        for(var key in params) {
+            if(key !== "limit" && key !== "page") {
+                _params[key] = params[key];
+            }
+        }
+        return new Promise((resolve, reject) => {
+            req.models[modelName].count(_params, (err, data) => {
                 if (err) {
                     reject(err);
                 } else {

@@ -125,14 +125,18 @@ exports.uniq = function(dates){
     return result;
 };
 
-exports.toTable = function(data, rows, cols) {
+exports.toTable = function(data, rows, cols, count) {
     var newData = [];
     for(var i = 0; i < data.length; i++) {
-        newData.push({
+        var obj = {
             data : data[i],
             rows : rows[i],
             cols : cols[i]
-        });
+        };
+        if(count[i]) {
+            obj.count = count[i];
+        }
+        newData.push(obj);
     }
     return newData;
 };
