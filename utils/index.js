@@ -133,7 +133,7 @@ exports.toTable = function(data, rows, cols, count) {
             rows : rows[i],
             cols : cols[i]
         };
-        if(count[i]) {
+        if(count && count[i]) {
             obj.count = count[i];
         }
         newData.push(obj);

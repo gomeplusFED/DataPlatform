@@ -8,7 +8,6 @@ var obj = {},
     filePath = "./controllers/path",
     fs = require("fs"),
     files = fs.readdirSync(filePath);
-
 for(var key of files) {
     if(key.indexOf(".js") > -1) {
         obj[key.match(/(.*).js/)[1]] = require(filePath + "/" + key);
