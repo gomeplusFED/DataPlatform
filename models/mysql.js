@@ -785,7 +785,6 @@ function connect(app) {
                 channel : String,
                 day_type : Number
             });
-
             next();
         }
     }));
