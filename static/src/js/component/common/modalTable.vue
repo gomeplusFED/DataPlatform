@@ -6,7 +6,23 @@
 	                <h4 class="modal-title">{{modalTableData.title}}</h4>
 	            </div>
 	            <div class="modal-body">
-	                <table class="table table-striped table-bordered table-hover"></table>
+					<table class="table table-bordered table-hover" role="grid" aria-describedby="dataTables_info">
+					    <thead>
+					        <tr>
+					            <th v-for="captionItem in modalTableData.data.cols">{{captionItem.caption}}</th>
+					        </tr>
+					    </thead>
+					    <tbody v-if="modalTableData.data.data.length !== 0">
+					        <tr v-for="tableBody in modalTableData.data.data">
+					            <td v-for="(tableKey, tableCell) in modalTableData.data.rows"><span @click="tableOperation(tableBody[tableCell], tableBody, modalTableData.data.rows[1])">{{{tableBody[tableCell]}}}</span></td>
+					        </tr>
+					    </tbody>
+					    <tbody v-else>
+					        <tr>
+					            <td :colspan="modalTableData.data.cols.length">暂无数据</td>
+					        </tr>
+					    </tbody>
+					</table>
 	            </div>
 	            <div class="modal-footer">
 	                <button type="button" class="btn default" data-dismiss="modal" @click="hideModal()">确定</button>
@@ -45,13 +61,6 @@ var ModalTable = Vue.extend({
 		}
 	},
 	watch: {
-		'modalTableData.data': {
-			handler: function(data){
-				$('#modal_table .modal-body').html('<table class="table table-striped table-bordered table-hover"></table>');
-				$('#modal_table table').DataTable(data);
-			},
-			deep: true
-		},
 		'modalTableData.show': {
 			handler: function(val){
 				if(val){

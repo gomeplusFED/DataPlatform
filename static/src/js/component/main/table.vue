@@ -1,5 +1,24 @@
 <template>
-    <div :id="'table_'+index" class="table_con table-responsive" v-show="currentData.type.indexOf('table') !== -1"></div>    
+    <div :id="'table_'+index" class="table_con table-responsive" v-show="currentData.type.indexOf('table') !== -1">
+        <table v-for="tableItem in tableData" class="table table-bordered table-hover" role="grid" aria-describedby="dataTables_info">
+            <thead>
+                <tr>
+                    <th v-for="captionItem in tableItem.cols">{{captionItem.caption}}</th>
+                </tr>
+            </thead>
+            <tbody v-if="tableItem.data.length !== 0">
+                <tr v-for="tableBody in tableItem.data">
+                    <td v-for="(tableKey, tableCell) in tableItem.rows"><span @click="tableOperation(tableBody[tableCell], tableBody, tableItem.rows[1])">{{{tableBody[tableCell]}}}</span></td>
+                </tr>
+            </tbody>
+            <tbody v-else>
+                <tr>
+                    <td :colspan="tableItem.cols.length">暂无数据</td>
+                </tr>
+            </tbody>
+        </table>
+        <m-pagination :pagination-conf="paginationConf"></m-pagination>
+    </div>    
 </template>
 <style>
 .table_con{}
@@ -22,6 +41,8 @@ var actions = require('../../store/actions.js');
 
 var utils = require('utils');
 
+var Pagination = require('../common/pagination.vue');
+
 var Table = Vue.extend({
     name: 'Table',
     data: function() {
@@ -31,6 +52,15 @@ var Table = Vue.extend({
             tableExample: [],
             scrollTop: null,
             hasRequestUrl: null,
+            paginationConf: {
+                currentPage: 1,     // 当前页
+                totalItems: 0,     // 总条数
+                itemsPerPage: 10,    // 每页条数
+                pagesLength: 5,     // 显示几页( 1,2,3 / 1,2,3,4,5)
+                onChange: function() {
+
+                }
+            }
         }
     },
     vuex: {
@@ -44,6 +74,9 @@ var Table = Vue.extend({
     created: function(){
         this.initEd = true;
     },
+    components: {
+        'm-pagination': Pagination,
+    },
     props: ['initData','currentData','loading','index','resultArgvs','pageComponentsData'],
     methods: {
         fetchData: function(cb, errcb){
@@ -51,6 +84,14 @@ var Table = Vue.extend({
             if(_this.resultArgvs.forceChange){
                 delete _this.resultArgvs.forceChange;
             }
+
+            var _current = this.resultArgvs;
+            
+            utils.mixin(_current, {
+                limit: this.paginationConf.itemsPerPage,
+                page: this.paginationConf.currentPage
+            });
+
             $.ajax({
                 url: this.currentData.query_api + '_json',
                 type: 'get',
@@ -73,131 +114,79 @@ var Table = Vue.extend({
                     } 
                 }
             })
+        },
+        tableOperation: function(item, tableBody, detailParam){
+            var _this = this;
+            if(item.indexOf('url_detail') !== -1){
+                var urlDetail = item.match(/url_detail=(?:\'|\")(.*)(?:\'|\")/i)[1];
+                var url = tableBody[detailParam];
+                var params = {};
+
+                params[detailParam] = url;
+                utils.mixin(params,this.resultArgvs);
+
+                if(this.hasRequestUrl !== null && this.hasRequestUrl === url){
+                    actions.modalTable(store, {
+                        show: true,
+                    });
+                    return;
+                }
+
+                $.ajax({
+                    url: urlDetail + '_json',
+                    type: 'get',
+                    data: params,
+                    success: function(data) {
+                        _this.hasRequestUrl = url;
+                        var tableData = data.modelData[0];
+                        actions.modalTable(store, {
+                            show: true,
+                            title: '帮助信息',
+                            data: tableData
+                        });
+                    }
+                })
+            }
+        },
+        generatorTable: function(){
+            var _this = this;
+            if(this.currentData.type.indexOf('table') !== -1){
+                var tableTpl = '<table class="table table-bordered table-hover" role="grid" aria-describedby="dataTables_info"></table>'
+                this.loading.show = true;
+                this.loading.noLoaded += 1;
+                this.scrollTop = $(document).scrollTop(),
+                this.fetchData(function(data){
+                    _this.tableData = data.modelData;
+
+                    _this.paginationConf.totalItems = data.modelData.count || 0;
+
+                    // 所有组件加载完毕之后loading消失
+                    _this.loading.noLoaded -= 1;
+                    if(_this.loading.noLoaded === 0){
+                        _this.loading.show = false;
+                    }
+                    // 重新生成表格页面会回到顶部，重置下
+                    $(document).scrollTop(_this.scrollTop);
+                }, function(){
+                    _this.loading.noLoaded -= 1;
+                    if(_this.loading.noLoaded === 0){
+                        _this.loading.show = false;
+                    }
+                    // erro
+                    actions.alert(store,{
+                        show: true,
+                        msg: '查询超时',
+                        type: 'danger'
+                    })
+                })
+            }
         }
     },
     watch: {
         'resultArgvs': {
             handler: function(val){
                 // 参数改了 请求数据，进行渲染
-                var _this = this;
-                if(this.currentData.type.indexOf('table') !== -1){
-                    var tableTpl = '<table class="table table-bordered table-hover" role="grid" aria-describedby="dataTables_info"></table>'
-                    this.loading.show = true;
-                    this.loading.noLoaded += 1;
-                    this.scrollTop = $(document).scrollTop(),
-                    this.fetchData(function(data){
-                        _this.tableData = data.modelData;
-                        var htmlresult = '';
-                        _this.tableData.forEach(function(item){
-                            htmlresult += tableTpl;
-                        })
-                        $('#table_' + _this.index).html(htmlresult);
-                        _this.tableData.forEach(function(eachTableData,tableIndex){
-                            var columns = [];
-                            eachTableData.rows.forEach(function(item,index){
-                                columns.push({
-                                    data: item,
-                                    title: eachTableData.cols[index].caption
-                                })
-                            })
-                            var setConfig = {
-                                data: eachTableData.data,
-                                columns: columns,
-                                ordering: false,
-                                info: false,
-                                searching: false,
-                                responsive: false,
-                                lengthChange: false,
-                                retrieve: true,
-                                language: {
-                                    "emptyTable": "暂无数据",
-                                    "paginate": {
-                                        "previous": "上一页",
-                                        "next": "下一页"
-                                    }
-                                }
-                            }
-                            eachTableData.data.length > 10 ? setConfig.paging = true : setConfig.paging = false;
-                            var t = $('#table_' + _this.index).children().eq(tableIndex).DataTable(setConfig);
-
-                            // 为表格中查看详情的按钮绑定弹窗事件
-                            $('#table_' + _this.index).children().eq(tableIndex).on('click', '[url_detail]',function(){
-                                var api = $(this).attr('url_detail');
-                                var url = $(this).parents('tr').find('td').eq(1).text();
-                                var params = {};
-
-                                params[columns[1].data] = url;
-                                utils.mixin(params,_this.resultArgvs);
-
-                                if(_this.hasRequestUrl !== null && _this.hasRequestUrl === url){
-                                    actions.modalTable(store, {
-                                        show: true,
-                                    });
-                                    return;
-                                }
-
-                                $.ajax({
-                                    url: api + '_json',
-                                    type: 'get',
-                                    data: params,
-                                    success: function(data) {
-                                        _this.hasRequestUrl = url;
-                                        var tableData = data.modelData[0];
-                                        // 生成弹窗图表
-                                        var modalColumns = [];
-                                        tableData.rows.forEach(function(item,index){
-                                           modalColumns.push({
-                                               data: item,
-                                               title: tableData.cols[index].caption
-                                           })
-                                        })
-                                        var config = {
-                                           data: tableData.data,
-                                           columns: modalColumns,
-                                           ordering: false,
-                                           info: false,
-                                           searching: false,
-                                           responsive: false,
-                                           lengthChange: false,
-                                           retrieve: true,
-                                           language: {
-                                               "emptyTable": "暂无数据",
-                                               "paginate": {
-                                                   "previous": "上一页",
-                                                   "next": "下一页"
-                                               }
-                                           }
-                                        }
-                                        
-                                        actions.modalTable(store, {
-                                            show: true,
-                                            title: '帮助信息',
-                                            data: config
-                                        });
-                                    }
-                                })
-                            })
-                        })
-                        // 所有组件加载完毕之后loading消失
-                        _this.loading.noLoaded -= 1;
-                        if(_this.loading.noLoaded === 0){
-                            _this.loading.show = false;
-                        }
-                        // 重新生成表格页面会回到顶部，重置下
-                        $(document).scrollTop(_this.scrollTop);
-                    }, function(){
-                        _this.loading.noLoaded -= 1;
-                        if(_this.loading.noLoaded === 0){
-                            _this.loading.show = false;
-                        }
-                        // erro
-                        actions.alert(store,{
-                            show: true,
-                            msg: '查询超时',
-                            type: 'danger'
-                        })
-                    })
-                }
+                this.generatorTable();
             },
             deep: true
         }
