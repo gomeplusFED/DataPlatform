@@ -45,7 +45,7 @@ router.map({
         component: Log
     },
     '/error': {
-        component: Erro  
+        component: Erro
     }
 });
 
