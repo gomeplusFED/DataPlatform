@@ -63,3 +63,13 @@ router.afterEach(function(transition) {
         })
     }
 });
+
+$.ajaxSetup({
+    global: true,
+    complete: function(XMLHttpRequest, status) {
+        var res = JSON.parse(XMLHttpRequest.responseText);
+        if(res.iserro){
+            
+        }
+    }
+})
