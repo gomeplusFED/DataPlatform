@@ -347,8 +347,14 @@ api.prototype = {
         return true;
     },
     _findDatabase: async((req, modelName, params) => {
+        var _params = {};
+        for(var key in params) {
+            if(key !== "limit" && key !== "page") {
+                _params[key] = params[key];
+            }
+        }
         return new Promise((resolve, reject) => {
-            req.models[modelName].find(params, (err, data) => {
+            req.models[modelName].find(_params, (err, data) => {
                 if (err) {
                     reject(err);
                 } else {
