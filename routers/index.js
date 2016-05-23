@@ -53,7 +53,7 @@ async(() => {
             }
         }
     } catch (err) {
-        console.log(err);
+        console.log(err, "ERROR in router/index");
     }
 })();
 
