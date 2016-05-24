@@ -74,6 +74,9 @@ var Table = Vue.extend({
     created: function(){
         this.initEd = true;
     },
+    ready: function(){
+        this.paginationConf.onChange = this.fetchData;
+    },
     components: {
         'm-pagination': Pagination,
     },
