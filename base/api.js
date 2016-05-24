@@ -36,8 +36,10 @@ function api(Router, options) {
         selectFilter : null,
         //是否分页
         page : false,
-        //每页最大条数
-        limit : 10,
+        //求和字段数组
+        sum : null,
+        //排序字段数组
+        order : null,
         //行
         rows: [],
         //列
@@ -246,10 +248,17 @@ api.prototype = {
                         }
                     }
                     if(this.page) {
-                        sendData[this.sendDataName[i] + "Count"] = await (this._findCountDatabase(req, this.modelName[i], query));
-                        sendData[this.sendDataName[i]] = await (this._findPageDatabase(req, this.modelName[i], query));
+                        sendData[this.sendDataName[i] + "Count"] =
+                            await (this._findCountDatabase(req, this.modelName[i], query));
+                        sendData[this.sendDataName[i]] =
+                            await (this._findPageDatabase(req, this.modelName[i], query, this.order));
                     } else {
-                        sendData[this.sendDataName[i]] = await (this._findDatabase(req, this.modelName[i], query));
+                        sendData[this.sendDataName[i]] =
+                            await (this._findDatabase(req, this.modelName[i], query));
+                    }
+                    if(this.sum) {
+                        sendData[this.sendDataName[i] + "Sum"] =
+                            await (this._findSumDatabase(req, this.modelName[i], query, this.sum));
                     }
                 }
             }catch(err) {
@@ -363,17 +372,24 @@ api.prototype = {
             });
         });
     }),
-    _findPageDatabase: async((req, modelName, params) => {
+    _findPageDatabase: async((req, modelName, params, orderArray) => {
         var _params = {},
-            limit = params.limit || this.limit,
-            page = params.page || 1;
+            limit = +params.limit || 10,
+            page = params.page || 1,
+            offset = limit * (page - 1);
         for(var key in params) {
             if(key !== "limit" && key !== "page") {
                 _params[key] = params[key];
             }
         }
         return new Promise((resolve, reject) => {
-            req.models[modelName].find(_params).limit(limit * (page - 1)).offset(limit).all((err, data) => {
+            var sql = req.models[modelName].find(_params).limit(limit).offset(offset);
+            if(orderArray) {
+                for(var key of orderArray) {
+                    sql.order("-" + key);
+                }
+            }
+            sql.run((err, data) => {
                 if (err) {
                     reject(err);
                 } else {
@@ -395,6 +411,30 @@ api.prototype = {
                     reject(err);
                 } else {
                     resolve(data);
+                }
+            });
+        });
+    }),
+    _findSumDatabase: async((req, modelName, params, sumArray) => {
+        var _params = {};
+        for(var key in params) {
+            if(key !== "limit" && key !== "page") {
+                _params[key] = params[key];
+            }
+        }
+        return new Promise((resolve, reject) => {
+            var sql =  req.models[modelName].aggregate(_params);
+            if(sumArray) {
+                for(var key of sumArray) {
+                    sql.sum(key);
+                }
+            }
+            sql.get(function(){
+                var args = arguments;
+                if (args[0]) {
+                    reject(args[0]);
+                } else {
+                    resolve(args);
                 }
             });
         });

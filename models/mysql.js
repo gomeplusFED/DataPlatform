@@ -637,7 +637,7 @@ function connect(app) {
             });
             models.TopicsTop = db.define("tbl_rt_group_topic_top",{
                 id : {type: 'number', key: true},
-                topic_id: Number,
+                topic_id: String,
                 topic_name: Number,
                 click_num: Number,
                 click_user_num: Number,

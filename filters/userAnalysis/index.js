@@ -4,6 +4,7 @@
  * @fileoverview 用户分析
  */
 var _ = require("lodash"),
+    moment = require("moment"),
     util = require("../../utils");
 
 module.exports = {
@@ -47,33 +48,21 @@ module.exports = {
     },
     newUsersTwe(data, dates) {
         var source = data.data,
+            count = data.dataCount,
+            sum = data.dataSum,
             newData = [],
-            total_users = 0,
-            total_account = 0;
-        for(var date of dates) {
-            var obj = {
-                date : date,
-                new_users : 0,
-                new_account : 0
-            };
-            for(var key of source) {
-                if(date === util.getDate(key.date)) {
-                    total_users += key.new_users;
-                    total_account += key.new_account;
-                    obj.new_users += key.new_users;
-                    obj.new_account += key.new_account;
-                }
-            }
-            newData.push(obj);
+            total_users = sum["1"] ? sum["1"] : 0,
+            total_account = sum["2"] ? sum["2"] : 0;
+        for(var key of source) {
+            newData.push({
+                date : moment(key.date).format("YYYY-MM-DD"),
+                new_users : key.new_users,
+                new_users_rate : util.toFixed(key.new_users, total_users),
+                new_account : key.new_account,
+                new_account_rate : util.toFixed(key.new_account, total_account)
+            });
         }
-        for(var key of newData) {
-            key.new_users_rate = util.toFixed(key.new_users, total_users);
-            key.new_account_rate = util.toFixed(key.new_account, total_account);
-        }
-        newData.sort((a, b) => {
-            return new Date(b.date) - new Date(a.date);
-        });
-        return util.toTable([newData], data.rows, data.cols);
+        return util.toTable([newData], data.rows, data.cols, [count]);
     },
     activeUsersTwe(data, dates) {
         var source = data.data,
