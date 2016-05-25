@@ -60,13 +60,12 @@ router.afterEach(function(transition) {
     $('[href="' + url + '"]').addClass('active');
 
     var key = transition.to.path;
-    if(window.allPageConfig.page[key]){
-        actions.setCurrentPageDefaultData(store, window.allPageConfig.page[key])
-        return;
+    actions.setCurrentPageDefaultData(store, window.allPageConfig.page[key])
+    if (!window.allPageConfig.page[key]) {
+        router.go({
+            path: '/'
+        })
     }
-    router.redirect({
-        '*': '/'
-    })
 });
 
 $.ajaxSetup({
