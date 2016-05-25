@@ -142,7 +142,7 @@ module.exports = {
                 top : 1 + i,
                 shop_name : key.shop_name,
                 pay_price : key.pay_price,
-                pay_price_rate : util.toFixed(key.price_rate, total_pay_price),
+                pay_price_rate : util.toFixed(key.pay_price, total_pay_price),
                 pay_commodity_num : key.pay_commodity_num,
                 pay_commodity_rate : util.toFixed(key.pay_commodity_num, total_pay_commodity_num),
                 share_commodity_num : key.share_commodity_num

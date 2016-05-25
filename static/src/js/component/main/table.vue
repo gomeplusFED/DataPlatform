@@ -74,6 +74,9 @@ var Table = Vue.extend({
     created: function(){
         this.initEd = true;
     },
+    ready: function(){
+        this.paginationConf.onChange = this.generatorTable;
+    },
     components: {
         'm-pagination': Pagination
     },
@@ -151,14 +154,14 @@ var Table = Vue.extend({
         generatorTable: function(){
             var _this = this;
             if(this.currentData.type.indexOf('table') !== -1){
-                var tableTpl = '<table class="table table-bordered table-hover" role="grid" aria-describedby="dataTables_info"></table>'
+                
                 this.loading.show = true;
                 this.loading.noLoaded += 1;
                 this.scrollTop = $(document).scrollTop(),
                 this.fetchData(function(data){
                     _this.tableData = data.modelData;
 
-                    _this.paginationConf.totalItems = data.modelData.count || 0;
+                    _this.paginationConf.totalItems = data.modelData[0].count || 0;
 
                     // 所有组件加载完毕之后loading消失
                     _this.loading.noLoaded -= 1;

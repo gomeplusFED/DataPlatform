@@ -29,8 +29,8 @@ module.exports = {
             tran_pay_user_num : obj.tran_pay_user_num,
             tran_pay_money_amount : obj.tran_pay_money_amount,
             tran_cus_unit_price : util.percentage(
-                obj.tran_order_money_amount,
-                obj.tran_order_user_num
+                obj.tran_pay_money_amount,
+                obj.tran_pay_user_num
             ),
             tran_refund_pro_num : obj.tran_refund_pro_num,
             tran_refund_pro_num_j : obj.tran_refund_pro_num_j
