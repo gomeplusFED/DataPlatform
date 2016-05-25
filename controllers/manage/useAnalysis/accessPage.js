@@ -108,7 +108,6 @@ module.exports = (Router) => {
         router : "/useAnalysis/page",
         modelName : ["UsersAccess"],
         page : true,
-        sum : [ "acc_num" ],
         order : [ "-date" ],
         filter(data, filter_key, dates, filter_key2, page) {
             return filter.page(data, page);
