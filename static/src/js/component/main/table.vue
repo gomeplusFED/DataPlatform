@@ -75,7 +75,7 @@ var Table = Vue.extend({
         this.initEd = true;
     },
     components: {
-        'm-pagination': Pagination,
+        'm-pagination': Pagination
     },
     props: ['initData','currentData','loading','index','resultArgvs','pageComponentsData'],
     methods: {
