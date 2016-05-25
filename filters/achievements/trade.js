@@ -25,9 +25,9 @@ module.exports = {
         });
         two.push({
             tran_order_user_num : obj.tran_order_user_num,
-            tran_order_money_amount : obj.tran_order_money_amount,
+            tran_order_money_amount : obj.tran_order_money_amount.toFixed(2),
             tran_pay_user_num : obj.tran_pay_user_num,
-            tran_pay_money_amount : obj.tran_pay_money_amount,
+            tran_pay_money_amount : obj.tran_pay_money_amount.toFixed(2),
             tran_cus_unit_price : util.percentage(
                 obj.tran_pay_money_amount,
                 obj.tran_pay_user_num
@@ -37,7 +37,6 @@ module.exports = {
         });
         return util.toTable([one, two], data.rows, data.cols);
     },
-
     tradeTwo(data, filter_key, dates) {
         var source = data.data,
             filter_name = {
@@ -69,7 +68,7 @@ module.exports = {
         }
         for(var key of source) {
             date = util.getDate(key.date);
-            newData[date].value += key.value;
+            newData[date].value += Math.round(key.value);
         }
         return [{
             type : type,
@@ -80,7 +79,6 @@ module.exports = {
             }
         }]
     },
-
     tradeThree(data, dates) {
         var source = data.data,
             obj = {},
@@ -134,21 +132,20 @@ module.exports = {
                 date: date,
                 one : obj[date].tred_order_all_amount.value,
                 two : obj[date].tred_pay_all_amount.value,
-                three : obj[date].tran_order_money_amount.value,
-                four : obj[date].tran_pay_money_amount.value,
-                five : obj[date].tran_guest_unit_price.value,
+                three : obj[date].tran_order_money_amount.value.toFixed(2),
+                four : obj[date].tran_pay_money_amount.value.toFixed(2),
+                five : obj[date].tran_guest_unit_price.value.toFixed(2),
                 six : util.toFixed(
                     obj[date].del_use_coupon_rate.value2,
                     obj[date].del_use_coupon_rate.value
                 ),
-                seven: obj[date].del_refund_amount.value,
+                seven: obj[date].del_refund_amount.value.toFixed(2),
                 eight : obj[date].del_refund_amount.value2
             });
         }
 
         return util.toTable([newData], data.rows, data.cols);
     },
-
     tradeFour(data) {
         var source = data.data,
             total = 0;
@@ -156,11 +153,11 @@ module.exports = {
             total += key.pay_money_amount;
         }
         for(var key of source) {
+            key.pay_money_amount = key.pay_money_amount.toFixed(2);
             key.pay_money_amount_ratio = util.toFixed(key.pay_money_amount, total);
         }
         return util.toTable([source], data.rows, data.cols);
     },
-
     tradeFive(data) {
         var source = data.data,
             pay_ttl = 0,
@@ -170,6 +167,7 @@ module.exports = {
             product_ttl += key.deal_pro_num;
         }
         for (var key of source) {
+            key.deal_money_amount = key.deal_money_amount.toFixed(2);
             key.deal_money_ratio = util.toFixed(key.deal_money_amount, pay_ttl);
             key.deal_pro_ratio = util.toFixed(key.deal_pro_num, product_ttl);
             key.cus_unit_price = util.percentage(key.order_amount, key.order_number);

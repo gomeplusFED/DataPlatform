@@ -141,7 +141,7 @@ module.exports = {
             newData.push({
                 top : 1 + i,
                 shop_name : key.shop_name,
-                pay_price : key.pay_price,
+                pay_price : key.pay_price.toFixed(2),
                 pay_price_rate : util.toFixed(key.pay_price, total_pay_price),
                 pay_commodity_num : key.pay_commodity_num,
                 pay_commodity_rate : util.toFixed(key.pay_commodity_num, total_pay_commodity_num),

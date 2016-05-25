@@ -31,6 +31,8 @@ module.exports = (Router) => {
         router : "/userAnalysis/activeAccountTwe",
         modelName : ["NewAccount"],
         version : true,
+        paging : true,
+        order : [ "-date" ],
         rows : [['date', 'active_users', 'active_account' ]],
         cols : [
             [

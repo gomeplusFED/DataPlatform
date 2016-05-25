@@ -109,8 +109,8 @@ module.exports = {
                 three : obj[date].products_order,
                 four : obj[date].products_pay,
                 five : obj[date].products_return,
-                six : obj[date].products_fee,
-                seven : obj[date].refund_fee
+                six : obj[date].products_fee.toFixed(2),
+                seven : obj[date].refund_fee.toFixed(2)
             })
         }
         return util.toTable([newData], data.rows, data.cols);
@@ -151,6 +151,7 @@ module.exports = {
         }
         for(var i = 0; i < top; i++) {
             source[i].top = i + 1;
+            source[i].order_price = source[i].order_price.toFixed(2);
             source[i].order_price_rate = util.toFixed(source[i].order_price, order_price_total);
             newData.push(source[i]);
         }

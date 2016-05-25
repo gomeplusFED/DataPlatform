@@ -101,7 +101,9 @@ module.exports = {
             obj[key.group_type].value += key[filter_key];
         }
         for(var key of orderData) {
-            newData[key.name] = obj[key.id].value;
+            newData[key.name] = {
+                value : obj[key.id].value
+            };
         }
         return [{
             type : type,
@@ -139,7 +141,9 @@ module.exports = {
         }
         for(var key of orderData) {
             if(key.pid === filter_key) {
-                newData[key.name] = obj[key.id].value;
+                newData[key.name] = {
+                    value : obj[key.id].value
+                };
             }
         }
         return [{
@@ -156,8 +160,8 @@ module.exports = {
             newData = [],
             top = source.length > 100 ? 100 : source.length;
         for(var key of source) {
-            key.user_reply_rate = (key.replay_user_num / key.click_user_num * 100).toFixed(2);
-            key.avg_reply = (key.replay_num / key.replay_user_num).toFixed(2);
+            key.user_reply_rate = util.division(key.replay_user_num, key.click_user_num);
+            key.avg_reply = util.division(key.replay_num, key.replay_user_num);
         }
         source.sort((a, b) => {
             return b.click_num - a.click_num;

@@ -66,62 +66,20 @@ module.exports = {
     },
     activeUsersTwe(data, dates) {
         var source = data.data,
-            newData = [];
-            //total_users = 0,
-            //total_account = 0;
-        for(var date of dates) {
-            var obj = {
-                date : date,
-                active_users : 0,
-                active_account : 0
-            };
-            for(var key of source) {
-                if(date === util.getDate(key.date)) {
-                    //total_users += key.active_users;
-                    //total_account += key.active_account;
-                    obj.active_users += key.active_users;
-                    obj.active_account += key.active_account;
-                }
-            }
-            newData.push(obj);
+            count = data.dataCount;
+        for(var key of source) {
+            key.date = moment(key.date).format("YYYY-MM-DD");
         }
-        //for(var key of newData) {
-        //    key.active_users_rate = util.toFixed(key.active_users, total_users);
-        //    key.active_account_rate = util.toFixed(key.active_account, total_account);
-        //}
-        newData.sort((a, b) => {
-            return new Date(b.date) - new Date(a.date);
-        });
-        return util.toTable([newData], data.rows, data.cols);
+        return util.toTable([source], data.rows, data.cols, [count]);
     },
     startUp(data, dates) {
         var source = data.data,
-            newData = [];
-        dates.sort((a, b) => {
-            return new Date(b) - new Date(a);
-        });
-        for(var date of dates) {
-            var obj = {
-                date : date,
-                start_up : 0,
-                active_users : 0
-                //active_account : 0,
-                //startup_per : 0
-            };
-            for(var key of source) {
-                if(date === util.getDate(key.date)) {
-                    obj.start_up += key.start_up;
-                    obj.active_users += key.active_users;
-                    //obj.active_account += key.active_account;
-                    //obj.startup_per += key.startup_per;
-                }
-            }
-            newData.push(obj);
+            count = data.dataCount;
+        for(var key of source) {
+            key.date = moment(key.date).format("YYYY-MM-DD");
+            key.startup_per = util.division(key.start_up, key.active_users);
         }
-        for(var key of newData) {
-            key.startup_per = (key.start_up / (key.active_users === 0 ? 1 : key.active_users)).toFixed(2);
-        }
-        return util.toTable([newData], data.rows, data.cols);
+        return util.toTable([source], data.rows, data.cols, [count]);
     },
     versionOne(data, filter_key, dates) {
         var source = data.data,
@@ -179,47 +137,10 @@ module.exports = {
     },
     versionTwo(data, dates) {
         var source = data.data,
-            newData = [],
-            rows = [ "date" ],
-            cols = [
-                {
-                    caption : '时间',
-                    type : 'string',
-                    width : 20
-                }],
-            vers = util.uniq(_.pluck(source, "ver"));
-        for(var ver of vers) {
-            if(ver !== 'ALL') {
-                rows.push(ver.replace(/\./g,''));
-                cols.push({
-                    caption : ver + "版本",
-                    type : "number"
-                });
-            }
+           count = data.dataCount;
+        for(var key of source) {
+            key.date = moment(key.date).format("YYYY-MM-DD");
         }
-        dates.sort((a, b) => {
-            return new Date(b) - new Date(a);
-        });
-
-        data.rows[0] = rows;
-        data.cols[0] = cols;
-        for(var date of dates) {
-            var obj = {
-                date : date
-            };
-            for(var ver of vers) {
-                if(ver !== "ALL") {
-                    ver = ver.replace(/\./g,'');
-                    obj[ver] = 0;
-                }
-            }
-            for(var key of source) {
-                if(date === util.getDate(key.date) && key.ver !== "ALL") {
-                    obj[key.ver.replace(/\./g,'')] += key.total_users;
-                }
-            }
-            newData.push(obj);
-        }
-        return util.toTable([newData], data.rows, data.cols);
+        return util.toTable([source], data.rows, data.cols, [count]);
     }
 };
