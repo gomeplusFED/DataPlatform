@@ -185,8 +185,10 @@ module.exports = (Router) => {
         modelName : [ "RebateShopTop" ],
         date_picker_data: 1,
         platform : false,
-        filter(data, filter_key, dates) {
-            return businessRebate.businessAllFive(data);
+        paging : true,
+        order : ["-order_num", "-pay_order_num"],
+        filter(data, filter_key, dates, filter_key2, page) {
+            return businessRebate.businessAllFive(data, page);
         },
         rows : [
             [ "id", "shop_name", "plan_num", "spu_num", "user_num", "pay_rate", "pay_price_rate",
@@ -234,6 +236,8 @@ module.exports = (Router) => {
         modelName : [ "RebateShopPlanTop" ],
         date_picker_data: 1,
         platform : false,
+        paging : true,
+        order : ["-order_num", "-pay_order_num"],
         flexible_btn : [
             {
                 content: '<a href="#!/businessRebate/plan">更多</a>',
@@ -241,8 +245,8 @@ module.exports = (Router) => {
                 customMethods: ''
             }
         ],
-        filter(data, filter_key, dates) {
-            return businessRebate.businessAllSix(data);
+        filter(data, filter_key, dates, filter_key2, page) {
+            return businessRebate.businessAllSix(data, page);
         },
         rows : [
             [ "id", "plan_name", "shop_name", "deadline", "related_flow", "level", "spu_num", "user_num",
@@ -296,6 +300,8 @@ module.exports = (Router) => {
         modelName : [ "RebateShopPlanTop" ],
         excel_export : true,
         platform : false,
+        paging : true,
+        order : ["-date"],
         filter_select: [{
             title: '关联流程',
             filter_key: 'related_flow',
@@ -315,8 +321,8 @@ module.exports = (Router) => {
             preMethods: ['excel_export']
         }],
         //date_picker_data: 1,
-        filter(data, filter_key, dates) {
-            return businessRebate.planOne(data);
+        filter(data, filter_key, dates, filter_key2, page) {
+            return businessRebate.planOne(data, page);
         },
         rows : [
             [ "id", "plan_name", "shop_name", "deadline", "related_flow", "level", "spu_num", "user_num",

@@ -143,27 +143,22 @@ module.exports = {
             }
         }]
     },
-    groupFive(data) {
+    groupFive(data, page) {
         var source = data.data,
+            count = data.dataCount,
             orderData = data.orderData,
+            page = page || 1,
             newData = [],
-            type = {},
-            top = source.length > 100 ? 100 : source.length;
+            type = {};
         for(var key of orderData) {
             type[key.id] = key.name;
         }
-        for(var key of source) {
-            key.rate = util.percentage(key.DAU, key.accumulated_group_user_all_count);
-        }
-        source.sort((a, b) => {
-            return b.rate - a.rate;
-        });
-        for(var i = 0; i < top; i++) {
+        for(var i = 0; i < source.length; i++) {
             key = source[i];
-            source[i].id = i +1;
-            source[i].group_type = type[key.group_type];
-            newData.push(source[i]);
+            key.id = (page - 1) * 10 + i +1;
+            key.group_type = type[key.group_type];
+            newData.push(key);
         }
-        return util.toTable([newData], data.rows, data.cols);
+        return util.toTable([newData], data.rows, data.cols, [count]);
     }
 };

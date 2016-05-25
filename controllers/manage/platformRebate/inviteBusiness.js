@@ -160,13 +160,15 @@ module.exports = (Router) => {
         fixedParams : {
             user_party : "5"
         },
+        paging : true,
+        order : ["-date"],
         excel_export : true,
         //flexible_btn : [{
         //    content: '<a href="javascript:void(0)">导出</a>',
         //    preMethods: ['excel_export']
         //}],
-        filter(data, filter_key, dates) {
-            return filter.inviteBusinessFour(data);
+        filter(data, filter_key, dates, filter_key2, page) {
+            return filter.inviteBusinessFour(data, page);
         },
         rows : [
             [ "id", "rebate_plan_name", "user_party", "deadline", "correlate_flow", "level", "participate_seller_count",

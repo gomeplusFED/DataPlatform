@@ -248,15 +248,15 @@ module.exports = {
             }
         }]
     },
-    businessAllFive(data) {
+    businessAllFive(data, page) {
         var source = data.data,
+            count = data.dataCount,
+            page = page || 1,
             newData = [],
-            length = source.length,
-            top = length > 50 ? 50 : length;
-        source = util.sort(source, "order_num", "pay_order_num");
-        for(var i = 0; i < top; i++) {
+            length = source.length;
+        for(var i = 0; i < length; i++) {
             var obj = {
-                id : i + 1,
+                id : (page - 1) * 10 + i + 1,
                 shop_name : source[i].shop_name,
                 plan_num : source[i].plan_num,
                 spu_num : source[i].spu_num,
@@ -269,21 +269,21 @@ module.exports = {
             };
             newData.push(obj);
         }
-        return util.toTable([newData], data.rows, data.cols);
+        return util.toTable([newData], data.rows, data.cols, [count]);
     },
-    businessAllSix(data) {
+    businessAllSix(data, page) {
         var source = data.data,
+            count = data.dataCount,
+            page = page || 1,
             newData = [],
             length = source.length,
-            top = length > 50 ? 50 : length,
             related_flow = {
                 13 : "分享购买",
                 14 : "分销购买"
             };
-        source = util.sort(source, "order_num", "pay_order_num");
-        for(var i = 0; i < top; i++) {
+        for(var i = 0; i < length; i++) {
             var obj = {
-                id : i + 1,
+                id : (page - 1) * 10 + i + 1,
                 plan_name : source[i].plan_name,
                 shop_name : source[i].shop_name,
                 deadline : source[i].deadline,
@@ -298,13 +298,13 @@ module.exports = {
             };
             newData.push(obj);
         }
-        return util.toTable([newData], data.rows, data.cols);
+        return util.toTable([newData], data.rows, data.cols, [count]);
     },
-    planOne(data) {
+    planOne(data, page) {
         var source = data.data,
-            plan_names = util.uniq(_.pluck(source, "plan_name")),
+            count = data.dataCount,
+            page = page || 1,
             newData = [],
-            obj = {},
             related_flow = {
                 13 : "分享购买",
                 14 : "分销购买"
@@ -315,51 +315,16 @@ module.exports = {
                 3 : "3级",
                 4 : "4级"
             };
-        for(var plan_name of plan_names) {
-            obj[plan_name] = {
-                spu_num : 0,
-                user_num : 0,
-                order_num : 0,
-                total_order_num : 0,
-                order_amount : 0,
-                total_order_amount : 0,
-                rebate_amount : 0,
-                refund_sku_num : 0,
-                sku_num : 0
-            };
+        for(var i = 0; i < source.length; i++) {
+            var key = source[i];
+            key.id = (page - 1) * 10 + i + 1;
+            key.related_flow = related_flow[key.related_flow];
+            key.level = level[key.level];
+            key.pay_rate = key.order_num + "/" + key.total_order_num;
+            key.pay_price_rate = key.order_amount + "/" + key.total_order_amount;
+            key.refund_rate = util.toFixed(key.refund_sku_num, key.sku_num);
+            newData.push(key);
         }
-        for(var key of source) {
-            var plan_name = key.plan_name;
-            obj[plan_name].shop_name = key.shop_name;
-            obj[plan_name].deadline = key.deadline;
-            obj[plan_name].related_flow = key.related_flow;
-            obj[plan_name].level = key.level;
-            obj[plan_name].spu_num += key.spu_num;
-            obj[plan_name].user_num += key.user_num;
-            obj[plan_name].order_num += key.order_num;
-            obj[plan_name].total_order_num += key.total_order_num;
-            obj[plan_name].order_amount += key.order_amount;
-            obj[plan_name].total_order_amount += key.total_order_amount;
-            obj[plan_name].rebate_amount += key.rebate_amount;
-            obj[plan_name].refund_sku_num += key.refund_sku_num;
-            obj[plan_name].sku_num += key.sku_num;
-        }
-        Object.keys(obj).forEach((key, value) => {
-            newData.push({
-                id : value + 1,
-                plan_name : key,
-                shop_name : obj[key].shop_name,
-                deadline : obj[key].deadline,
-                related_flow : related_flow[obj[key].related_flow],
-                level : level[obj[key].level],
-                spu_num : obj[key].spu_num,
-                user_num : obj[key].user_num,
-                pay_rate : obj[key].order_num + "/" + obj[key].total_order_num,
-                pay_price_rate : obj[key].order_amount + "/" + obj[key].total_order_amount,
-                rebate_amount : obj[key].rebate_amount,
-                refund_rate : util.toFixed(obj[key].refund_sku_num, obj[key].sku_num)
-            });
-        });
-        return util.toTable([newData], data.rows, data.cols);
+        return util.toTable([newData], data.rows, data.cols, [count]);
     }
 };

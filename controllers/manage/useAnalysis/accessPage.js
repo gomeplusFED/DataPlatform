@@ -107,8 +107,12 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/useAnalysis/page",
         modelName : ["UsersAccess"],
-        page : true,
+        paging : true,
         order : [ "-date" ],
+        platform : false,
+        fixedParams : {
+            type : orm.not_in(["H5"])
+        },
         filter(data, filter_key, dates, filter_key2, page) {
             return filter.page(data, page);
         },

@@ -103,15 +103,17 @@ module.exports = {
             }
         }];
     },
-    inviteRegisterAndEnterFour(data) {
+    inviteRegisterAndEnterFour(data, page) {
         var source = data.data,
+            count = data.dataCount,
+            page = page || 1,
             user_party = config.user_party,
             correlate_flow = config.correlate_flow;
         for(var i = 0; i < source.length; i++) {
-            source[i].id = i + 1;
+            source[i].id = (page - 1) * 10 + i + 1;
             source[i].user_party = user_party[source[i].user_party];
             source[i].correlate_flow = correlate_flow[source[i].correlate_flow];
         }
-        return util.toTable([source], data.rows, data.cols);
+        return util.toTable([source], data.rows, data.cols, [count]);
     }
 };

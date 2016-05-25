@@ -74,12 +74,11 @@ module.exports = {
     page(data, page) {
         var source = data.data,
             count = data.dataCount,
-            sum = data.dataSum,
             page = page || 1;
         for(var i = 0; i < source.length; i++) {
             source[i].id = (page - 1) * 10 + i + 1;
             source[i].date = moment(source[i].date).format("YYYY-MM-DD");
         }
-        return util.toTable([source], data.rows, data.cols);
+        return util.toTable([source], data.rows, data.cols, [count]);
     }
 };

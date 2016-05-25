@@ -98,6 +98,8 @@ module.exports = (Router) => {
         platform : false,
         modelName : ["RebatetRegisterSheduleDetails"],
         excel_export : true,
+        paging : true,
+        order : ["-date"],
         flexible_btn: [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
@@ -175,8 +177,8 @@ module.exports = (Router) => {
                 }
             }]
         }],
-        filter(data, filter_key, dates) {
-            return filter.inviteRegisterAndEnterFour(data);
+        filter(data, filter_key, dates, filter_key2, page) {
+            return filter.inviteRegisterAndEnterFour(data. page);
         },
         rows : [
             ["id", "rebate_plan_name", "user_party", "deadline", "correlate_flow", "participate_user_count",

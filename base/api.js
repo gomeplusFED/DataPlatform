@@ -24,6 +24,12 @@ function api(Router, options) {
         sendDataName : ["data", "orderData", "thirdData"],
         //是否固定参数
         paramsName : ["params", "orderParams", "thirdParams"],
+        //分页名字
+        pagingName : ["paging", "orderPaging"],
+        //排序名字
+        orderName : ["order", "orderOrder"],
+        //求和名字
+        sumName : ["sum", "orderSum"],
         //固定参数
         fixedParams : {},
         //固定查询数据库参数
@@ -252,18 +258,18 @@ api.prototype = {
                             query = this[this.paramsName[i]];
                         }
                     }
-                    if(this.paging) {
+                    if(this[this.pagingName[i]]) {
                         sendData[this.sendDataName[i] + "Count"] =
                             await (this._findCountDatabase(req, this.modelName[i], query));
                         sendData[this.sendDataName[i]] =
-                            await (this._findPageDatabase(req, this.modelName[i], query, this.order));
+                            await (this._findPageDatabase(req, this.modelName[i], query, this[this.orderName[i]]));
                     } else {
                         sendData[this.sendDataName[i]] =
                             await (this._findDatabase(req, this.modelName[i], query));
                     }
-                    if(this.sum) {
+                    if(this[this.sumName[i]]) {
                         sendData[this.sendDataName[i] + "Sum"] =
-                            await (this._findSumDatabase(req, this.modelName[i], query, this.sum));
+                            await (this._findSumDatabase(req, this.modelName[i], query, this[this.sumName[i]]));
                     }
                 }
             }catch(err) {

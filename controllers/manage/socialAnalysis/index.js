@@ -169,10 +169,12 @@ module.exports = (Router) => {
         modelName : [ "GroupDataTop", "SocialCategory" ],
         platform : false,
         showDayUnit : true,
+        paging : true,
+        order : ["-new_group_user_count", "accumulated_group_user_all_count"],
         orderParams : {},
         date_picker_data: 1,
-        filter(data, filter_key, dates) {
-            return filter.groupFive(data);
+        filter(data, filter_key, dates, filter_key2, page) {
+            return filter.groupFive(data, page);
         },
         excel_export : true,
         flexible_btn : [{
@@ -181,7 +183,7 @@ module.exports = (Router) => {
         }],
         rows: [
             [ "id", "group_name", "group_type", "new_group_user_count",
-            "new_group_topic_count", "rate"]
+            "new_group_topic_count", "accumulated_group_user_all_count"]
         ],
         cols: [
             [{
@@ -200,8 +202,8 @@ module.exports = (Router) => {
                 caption: "圈子新增话题数",
                 type: "number"
             }, {
-                caption: "圈子参与度(%)", // （发布/回复）任意行为用户去重后数量 / 圈子成员数
-                type: "string"
+                caption: "圈子成员数", // （发布/回复）任意行为用户去重后数量 / 圈子成员数
+                type: "number"
             }]
         ]
     });

@@ -155,21 +155,18 @@ module.exports = {
             }
         }]
     },
-    topicsFive(data) {
+    topicsFive(data, page) {
         var source = data.data,
-            newData = [],
-            top = source.length > 100 ? 100 : source.length;
-        for(var key of source) {
+            count = data.dataCount,
+            page = page || 1,
+            newData = [];
+        for(var i = 0; i < source.lenght; i++) {
+            var key = source[i];
+            key.id = (page - 1) * 10 + i + 1;
             key.user_reply_rate = util.division(key.replay_user_num, key.click_user_num);
             key.avg_reply = util.division(key.replay_num, key.replay_user_num);
+            newData.push(key);
         }
-        source.sort((a, b) => {
-            return b.click_num - a.click_num;
-        });
-        for(var i = 0; i < top; i++) {
-            source[i].id = i +1;
-            newData.push(source[i]);
-        }
-        return util.toTable([newData], data.rows, data.cols);
+        return util.toTable([newData], data.rows, data.cols, [count]);
     }
 };

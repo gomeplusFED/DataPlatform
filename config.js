@@ -58,7 +58,7 @@ module.exports = {
                 obj.usersAnalysis.activeAccount(),
                 obj.usersAnalysis.startUp(),
                 obj.usersAnalysis.version(),
-                obj.retainedAnalysis.retained()
+                //obj.retainedAnalysis.retained()
             ]
         },
         "4": {
@@ -138,7 +138,7 @@ module.exports = {
         },
         "13": {
             name: "销售业绩",
-            display: true,
+            display: false,
             className: "fa fa-flag-checkered fa-fw",
             href: "#",
             path: [

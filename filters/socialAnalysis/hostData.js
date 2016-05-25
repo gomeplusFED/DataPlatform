@@ -147,18 +147,15 @@ module.exports = {
             }
         }]
     },
-    hostFive(data,date) {
+    hostFive(data, page) {
         var source = data.data,
-            newData = [],
-            top = source.length > 100 ? 100 : source.length;
-
-        source.sort((a, b) => {
-            return b.new_fans_num - a.new_fans_num;
-        });
-        for(var i = 0; i < top; i++) {
-            source[i].id = i +1;
+            page = page || 1,
+            count = data.dataCount,
+            newData = [];
+        for(var i = 0; i < source.length; i++) {
+            source[i].id = (page - 1) * 10 + i +1;
             newData.push(source[i]);
         }
-        return util.toTable([newData], data.rows, data.cols);
+        return util.toTable([newData], data.rows, data.cols, [count]);
     }
 };
