@@ -94,7 +94,9 @@ module.exports = {
             obj[key.group_type].value += key[filter_key];
         }
         for(var key of orderData) {
-            newData[key.name] = obj[key.id].value;
+            newData[key.name] = {
+                value : obj[key.id].value
+            };
         }
         return [{
             type : type,
@@ -131,7 +133,9 @@ module.exports = {
         }
         for(var key of orderData) {
             if(key.pid === filter_key) {
-                newData[key.name] = obj[key.id].value;
+                newData[key.name] = {
+                    value : obj[key.id].value
+                };
             }
         }
         return [{

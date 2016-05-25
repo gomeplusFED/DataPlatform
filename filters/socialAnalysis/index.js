@@ -74,7 +74,7 @@ module.exports = {
             type = "pie",
             obj = {},
             filter_name = {
-                accumulated_group_all_count : "圈子数",
+                group_count : "圈子数",
                 DAU : "DAU"
             },
             map = {
@@ -90,7 +90,9 @@ module.exports = {
             obj[key.group_type].value += key[filter_key];
         }
         for(var key of orderData) {
-            newData[key.name] = obj[key.id].value;
+            newData[key.name] = {
+                value : obj[key.id].value
+            };
         }
         return [{
             type : type,
@@ -107,7 +109,7 @@ module.exports = {
             type = "pie",
             obj = {},
             filter_name = {
-                accumulated_group_all_count : "圈子数",
+                group_count : "圈子数",
                 DAU : "DAU"
             },
             filter_key = filter_key || "-1",
@@ -127,7 +129,9 @@ module.exports = {
         }
         for(var key of orderData) {
             if(key.pid === filter_key) {
-                newData[key.name] = obj[key.id].value;
+                newData[key.name] = {
+                    value : obj[key.id].value
+                };
             }
         }
         return [{
@@ -141,18 +145,23 @@ module.exports = {
     },
     groupFive(data) {
         var source = data.data,
+            orderData = data.orderData,
             newData = [],
+            type = {},
             top = source.length > 100 ? 100 : source.length;
+        for(var key of orderData) {
+            type[key.id] = key.name;
+        }
         for(var key of source) {
-            key.rate = (key.DAU /
-                (key.accumulated_group_user_all_count === 0 ? 1 : key.accumulated_group_user_all_count) * 100)
-                .toFixed(2);
+            key.rate = util.percentage(key.DAU, key.accumulated_group_user_all_count);
         }
         source.sort((a, b) => {
             return b.rate - a.rate;
         });
         for(var i = 0; i < top; i++) {
+            key = source[i];
             source[i].id = i +1;
+            source[i].group_type = type[key.group_type];
             newData.push(source[i]);
         }
         return util.toTable([newData], data.rows, data.cols);
