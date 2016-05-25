@@ -60,17 +60,13 @@ router.afterEach(function(transition) {
     $('[href="' + url + '"]').addClass('active');
 
     var key = transition.to.path;
-    actions.setCurrentPageDefaultData(store, window.allPageConfig.page[key])
-    if (!window.allPageConfig.page[key]) {
-        actions.alert(store, {
-            show: true,
-            msg: '路径有误',
-            type: 'danger'
-        })
-        router.go({
-            path: '/'
-        })
+    if(window.allPageConfig.page[key]){
+        actions.setCurrentPageDefaultData(store, window.allPageConfig.page[key])
+        return;
     }
+    router.redirect({
+        '*': '/'
+    })
 });
 
 $.ajaxSetup({
