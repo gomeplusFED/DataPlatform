@@ -40,12 +40,20 @@ mutations.HIDEALERT = function(state) {
     state.alertConfig.show = false;
 }
 
-mutations.MODALTABLE = function(state, params) {
-    state.modalTableData.title = params.title || '';
-    state.modalTableData.data = params.data || null;
-    state.modalTableData.show = params.show || false;
-    state.modalTableData.query_api = params.query_api || null;
-    state.modalTableData.query_parmas = params.query_parmas || null;
+mutations.MODALTABLE = function(state, params){
+    if (param.title) {
+        state.modalTableData.title = params.title;
+    }
+    if (params.data) {
+        state.modalTableData.data = params.data;
+    }
+    state.modalTableData.show = params.show;
+    if (params.query_api) {
+        state.modalTableData.query_api = params.query_api;
+    }
+    if (params.query_parmas) {
+        state.modalTableData.query_parmas = params.query_parmas;
+    }
 }
 
 mutations.HIDEMODALTABLE = function(state) {

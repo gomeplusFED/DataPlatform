@@ -125,7 +125,9 @@ var Btns = Vue.extend({
                     actions.modalTable(store, {
                         show: true,
                         title: '帮助信息',
-                        data: tableData
+                        data: tableData,
+                        query_api: _this.modalTableData.query_api,
+                        query_parmas: _this.modalTableData.query_parmas
                     });
                 }
             })
