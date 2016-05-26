@@ -36,26 +36,11 @@ module.exports = {
     },
     outerTwo(data) {
         var source = data.data,
-            obj = {},
-            total_open_num = 0,
-            newData = [],
-            channels = util.uniq(_.pluck(source, "channel"));
-        for(var channel of channels) {
-            obj[channel] = {
-                open_num : 0
-            };
-        }
+            count = data.dataCount,
+            sum = data.dataSum;
         for(var key of source) {
-            total_open_num += key.open_num;
-            obj[channel].open_num += key.open_num;
+            key.open_num_rate = util.toFixed(key.open_num, sum[1]);
         }
-        for(var channel of channels) {
-            newData.push({
-                channel : channel,
-                open_num : obj[channel].open_num,
-                open_num_rate : util.toFixed(obj[channel.open_num, total_open_num])
-            });
-        }
-        return util.toTable([newData], data.rows, data.cols);
+        return util.toTable([source], data.rows, data.cols, [count]);
     }
 };

@@ -74,7 +74,7 @@ module.exports = {
             type = "pie",
             obj = {},
             filter_name = {
-                accumulated_group_all_count : "圈子数",
+                group_count : "圈子数",
                 DAU : "DAU"
             },
             map = {
@@ -90,7 +90,9 @@ module.exports = {
             obj[key.group_type].value += key[filter_key];
         }
         for(var key of orderData) {
-            newData[key.name] = obj[key.id].value;
+            newData[key.name] = {
+                value : obj[key.id].value
+            };
         }
         return [{
             type : type,
@@ -107,7 +109,7 @@ module.exports = {
             type = "pie",
             obj = {},
             filter_name = {
-                accumulated_group_all_count : "圈子数",
+                group_count : "圈子数",
                 DAU : "DAU"
             },
             filter_key = filter_key || "-1",
@@ -127,7 +129,9 @@ module.exports = {
         }
         for(var key of orderData) {
             if(key.pid === filter_key) {
-                newData[key.name] = obj[key.id].value;
+                newData[key.name] = {
+                    value : obj[key.id].value
+                };
             }
         }
         return [{
@@ -139,22 +143,22 @@ module.exports = {
             }
         }]
     },
-    groupFive(data) {
+    groupFive(data, page) {
         var source = data.data,
+            count = data.dataCount,
+            orderData = data.orderData,
+            page = page || 1,
             newData = [],
-            top = source.length > 100 ? 100 : source.length;
-        for(var key of source) {
-            key.rate = (key.DAU /
-                (key.accumulated_group_user_all_count === 0 ? 1 : key.accumulated_group_user_all_count) * 100)
-                .toFixed(2);
+            type = {};
+        for(var key of orderData) {
+            type[key.id] = key.name;
         }
-        source.sort((a, b) => {
-            return b.rate - a.rate;
-        });
-        for(var i = 0; i < top; i++) {
-            source[i].id = i +1;
-            newData.push(source[i]);
+        for(var i = 0; i < source.length; i++) {
+            key = source[i];
+            key.id = (page - 1) * 10 + i +1;
+            key.group_type = type[key.group_type];
+            newData.push(key);
         }
-        return util.toTable([newData], data.rows, data.cols);
+        return util.toTable([newData], data.rows, data.cols, [count]);
     }
 };

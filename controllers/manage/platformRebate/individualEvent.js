@@ -159,14 +159,16 @@ module.exports = (Router) => {
         fixedParams : {
             user_party : "6"
         },
+        paging : true,
+        order : ["-date"],
         platform : false,
         excel_export : true,
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
-        filter(data, filter_key, dates) {
-            return filter.individualEventFour(data);
+        filter(data, filter_key, dates, filter_key2, page) {
+            return filter.individualEventFour(data, page);
         },
         rows : [
             [ "id", "rebate_plan_name", "user_party", "deadline", "correlate_flow", "level", "participate_seller_count",

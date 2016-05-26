@@ -97,35 +97,35 @@ var Btns = Vue.extend({
                     _this.hasRequestUrl = helpUrl;
                     var tableData = data.modelData[0];
                     // 生成弹窗图表
-                    var modalColumns = [];
-                    tableData.rows.forEach(function(item,index){
-                       modalColumns.push({
-                           data: item,
-                           title: tableData.cols[index].caption
-                       })
-                    })
-                    var config = {
-                       data: tableData.data,
-                       columns: modalColumns,
-                       ordering: false,
-                       info: false,
-                       searching: false,
-                       responsive: false,
-                       lengthChange: false,
-                       retrieve: true,
-                       "language": {
-                           "emptyTable": "暂无数据",
-                           "paginate": {
-                               "previous": "上一页",
-                               "next": "下一页"
-                           }
-                       }
-                    }
+                    // var modalColumns = [];
+                    // tableData.rows.forEach(function(item,index){
+                    //    modalColumns.push({
+                    //        data: item,
+                    //        title: tableData.cols[index].caption
+                    //    })
+                    // })
+                    // var config = {
+                    //    data: tableData.data,
+                    //    columns: modalColumns,
+                    //    ordering: false,
+                    //    info: false,
+                    //    searching: false,
+                    //    responsive: false,
+                    //    lengthChange: false,
+                    //    retrieve: true,
+                    //    "language": {
+                    //        "emptyTable": "暂无数据",
+                    //        "paginate": {
+                    //            "previous": "上一页",
+                    //            "next": "下一页"
+                    //        }
+                    //    }
+                    // }
                     
                     actions.modalTable(store, {
                         show: true,
                         title: '帮助信息',
-                        data: config
+                        data: tableData
                     });
                 }
             })

@@ -223,17 +223,19 @@ module.exports = {
             }
         }]
     },
-    platformPromotionsFive(data) {
+    platformPromotionsFive(data, page) {
         var source = data.data,
+            count = data.dataCount,
+            page = page || 1,
             user_party = config.user_party,
             correlate_flow = config.correlate_flow;
         source.forEach((key, value) => {
-            key.id = value + 1;
+            key.id = (page - 1) * 10 + value + 1;
             key.user_party = user_party[key.user_party];
             key.correlate_flow = correlate_flow[key.correlate_flow];
             key.order_rate = key.new_order_count + "/" + key.order_all_count;
             key.price_rate = key.new_order_amount + "/" + key.order_all_amount;
         });
-        return util.toTable([source], data.rows, data.cols);
+        return util.toTable([source], data.rows, data.cols, [count]);
     }
 };

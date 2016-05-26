@@ -53,39 +53,19 @@ module.exports = {
     },
     provincesTwo(data, filter_key) {
         var source = data.data,
-            newData = [],
-            obj = {},
-            cols_name = "",
-            total_new_users = 0,
-            total_start_up = 0,
-            array = util.uniq(_.pluck(source, "key_name"));
+            count = data.dataCount,
+            sum = data.dataSum,
+            cols_name = "";
         if(filter_key === "terminal_province") {
             cols_name = "省市";
         } else {
             cols_name = "国家";
         }
         data.cols[0][0].caption = cols_name;
-        for(var key of array) {
-            obj[key] = {
-                new_users : 0,
-                start_up : 0
-            };
-        }
         for(var key of source) {
-            total_new_users += key.value;
-            total_start_up += key.value3;
-            obj[key.key_name] . new_users += key.value;
-            obj[key.key_name] . start_up += key.value3;
+            key.new_users_rate = util.toFixed(key.value, sum[1]);
+            key.start_up_rate = util.toFixed(key.value3, sum[2]);
         }
-        for(var key of array) {
-            newData.push({
-                name : key,
-                new_users : obj[key].new_users,
-                start_up : obj[key].start_up,
-                new_users_rate : util.toFixed(obj[key].new_users, total_new_users),
-                start_up_rate : util.toFixed(obj[key].start_up, total_start_up)
-            });
-        }
-        return util.toTable([newData], data.rows, data.cols);
+        return util.toTable([source], data.rows, data.cols, [count]);
     }
 };

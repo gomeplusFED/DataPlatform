@@ -165,9 +165,11 @@ module.exports = (Router) => {
         modelName : [ "TopicsTop" ],
         platform : false,
         showDayUnit : true,
+        paging : true,
+        order : ["-click_num"],
         date_picker_data: 1,
-        filter(data, filter_key, dates) {
-            return filter.topicsFive(data);
+        filter(data, filter_key, dates, filter_key2, page) {
+            return filter.topicsFive(data, page);
         },
         excel_export : true,
         flexible_btn : [{

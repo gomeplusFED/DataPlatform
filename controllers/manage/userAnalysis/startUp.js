@@ -31,6 +31,8 @@ module.exports = (Router) => {
         router : "/userAnalysis/startUpTwe",
         modelName : ["NewAccount"],
         version : true,
+        paging : true,
+        order : [ "-date" ],
         rows : [[ 'date', 'start_up', 'startup_per' ]],
         cols : [
             [

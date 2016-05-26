@@ -38,6 +38,8 @@ module.exports = (Router) => {
         router : "/share/insideTwo",
         modelName : ["ShareAnalysis"],
         excel_export : true,
+        paging : true,
+        order : ["-date"],
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']

@@ -46,6 +46,8 @@ module.exports = (Router) => {
         modelName : ["UrlAccessWap"],
         excel_export : true,
         platform : false,
+        paging : true,
+        order : ["-date"],
         fixedParams : {
             type : "H5"
         },
@@ -64,8 +66,8 @@ module.exports = (Router) => {
                 value: '出口页面'
             }]
         }],
-        filter(data, filter_key, dates) {
-            return filter.accessWapTwo(data);
+        filter(data, filter_key, dates, filter_key2, page) {
+            return filter.accessWapTwo(data, page);
         },
         rows : [
             [ 'id', 'url', 'page_view', 'access_num','down_browse', 'avg_stay_time',
@@ -99,6 +101,8 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/useAnalysis/wap",
         modelName : ["UrlAccessWap"],
+        paging : true,
+        order : ["-date"],
         filter(data, filter_key, dates) {
             return filter.wap(data);
         },

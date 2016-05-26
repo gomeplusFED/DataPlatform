@@ -160,10 +160,12 @@ module.exports = (Router) => {
         router : "/socialAnalysis/hostFive",
         modelName : [ "HostTop" ],
         platform : false,
+        paging : true,
+        order : ["-new_fans_num"],
         showDayUnit : true,
         date_picker_data: 1,
-        filter(data, dates) {
-            return filter.hostFive(data,dates);
+        filter(data, filter_key, dates, filter_key2, page) {
+            return filter.hostFive(data, page);
         },
         excel_export : true,
         flexible_btn : [{

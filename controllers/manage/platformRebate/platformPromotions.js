@@ -188,6 +188,8 @@ module.exports = (Router) => {
         router : "/platformRebate/platformPromotionsFive",
         modelName : [ "RebatetSheduleDetails" ],
         platform : false,
+        paging : true,
+        order : ["-date"],
         fixedParams : {
             user_party : "2"
         },
@@ -196,8 +198,8 @@ module.exports = (Router) => {
         //    content: '<a href="javascript:void(0)">导出</a>',
         //    preMethods: ['excel_export']
         //}],
-        filter(data, filter_key, dates) {
-            return filter.platformPromotionsFive(data);
+        filter(data, filter_key, dates, filter_key2, page) {
+            return filter.platformPromotionsFive(data, page);
         },
         rows : [
             [ "id", "rebate_plan_name", "user_party", "deadline", "correlate_flow", "level", "participate_seller_count",

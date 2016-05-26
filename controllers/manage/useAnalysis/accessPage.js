@@ -46,6 +46,9 @@ module.exports = (Router) => {
         modelName : ["UsersAccess"],
         platform : false,
         excel_export : true,
+        paging : true,
+        sum : ["acc_num", "acc_time"],
+        order : ["-date"],
         fixedParams : {
             type : orm.not_in(["H5"])
         },
@@ -53,8 +56,8 @@ module.exports = (Router) => {
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
-        filter(data, filter_key, dates) {
-            return filter.accessPageTwo(data);
+        filter(data, filter_key, dates, filter_key2, page) {
+            return filter.accessPageTwo(data, page);
         },
         rows : [
             [ 'id','url','url_comment','acc_num', 'acc_num_rate', 'acc_time', 'acc_time_rate', 'bounce_rate',
@@ -104,8 +107,14 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/useAnalysis/page",
         modelName : ["UsersAccess"],
-        filter(data, filter_key, dates) {
-            return filter.page(data);
+        paging : true,
+        order : [ "-date" ],
+        platform : false,
+        fixedParams : {
+            type : orm.not_in(["H5"])
+        },
+        filter(data, filter_key, dates, filter_key2, page) {
+            return filter.page(data, page);
         },
         rows : [
             [ "id", "date", "acc_num", "acc_time", "bounce_rate" ]

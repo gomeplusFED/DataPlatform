@@ -62,11 +62,6 @@ router.afterEach(function(transition) {
     var key = transition.to.path;
     actions.setCurrentPageDefaultData(store, window.allPageConfig.page[key])
     if (!window.allPageConfig.page[key]) {
-        actions.alert(store, {
-            show: true,
-            msg: '路径有误',
-            type: 'danger'
-        })
         router.go({
             path: '/'
         })

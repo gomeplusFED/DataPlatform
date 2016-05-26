@@ -27,6 +27,9 @@ module.exports = (Router) => {
         router : "/share/outerTwo",
         modelName : ["ShareAnalysis"],
         excel_export : true,
+        paging : true,
+        order : ["-date"],
+        sum : ["open_num"],
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']

@@ -126,7 +126,13 @@ var Table = Vue.extend({
                 var params = {};
 
                 params[detailParam] = url;
-                utils.mixin(params,this.resultArgvs);
+                utils.mixin(params, this.resultArgvs);
+
+                for(var item in params){
+                    if(item === 'limit' || item === 'page'){
+                        delete params[item];
+                    }
+                }
 
                 if(this.hasRequestUrl !== null && this.hasRequestUrl === url){
                     actions.modalTable(store, {
@@ -145,7 +151,9 @@ var Table = Vue.extend({
                         actions.modalTable(store, {
                             show: true,
                             title: '帮助信息',
-                            data: tableData
+                            data: tableData,
+                            query_api: urlDetail + '_json',
+                            query_parmas: params
                         });
                     }
                 })

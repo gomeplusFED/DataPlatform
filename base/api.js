@@ -24,6 +24,12 @@ function api(Router, options) {
         sendDataName : ["data", "orderData", "thirdData"],
         //是否固定参数
         paramsName : ["params", "orderParams", "thirdParams"],
+        //分页名字
+        pagingName : ["paging", "orderPaging"],
+        //排序名字
+        orderName : ["order", "orderOrder"],
+        //求和名字
+        sumName : ["sum", "orderSum"],
         //固定参数
         fixedParams : {},
         //固定查询数据库参数
@@ -35,7 +41,7 @@ function api(Router, options) {
         //辅助表数据整理
         selectFilter : null,
         //是否分页
-        page : false,
+        paging : false,
         //求和字段数组
         sum : null,
         //排序字段数组
@@ -157,6 +163,9 @@ api.prototype = {
             if(key === "sku_type") {
                 this[key] = query[key];
             }
+            if(key === "page") {
+                this[key] = query[key];
+            }
         });
         if(typeof this.fixedParams === "function") {
             this.fixedParams(query, this.filter_key, req, (err, data) => {
@@ -195,19 +204,21 @@ api.prototype = {
                 } else {
                     cacheData = {};
                     async(() => {
-                        var data = await (this._findDatabase(req, cacheName, {}).catch((err) => {
-                            next(err);
-                        }));
-                        for (var key of this.defaultCache) {
-                            cacheData[key.value] = [];
-                            for (var k of data) {
-                                if (k.type === key.key) {
-                                    cacheData[key.value].push(k.name);
+                        try {
+                            var data = await (this._findDatabase(req, cacheName, {}));
+                            for (var key of this.defaultCache) {
+                                cacheData[key.value] = [];
+                                for (var k of data) {
+                                    if (k.type === key.key) {
+                                        cacheData[key.value].push(k.name);
+                                    }
                                 }
                             }
-                        }
-                        if (this._checkQuery(query, cacheData, next, params)) {
-                            this._setCache(type, req, res, params, cacheData, next, dates);
+                            if (this._checkQuery(query, cacheData, next, params)) {
+                                this._setCache(type, req, res, params, cacheData, next, dates);
+                            }
+                        }catch(err) {
+                            next(err);
                         }
                     })();
                 }
@@ -247,18 +258,18 @@ api.prototype = {
                             query = this[this.paramsName[i]];
                         }
                     }
-                    if(this.page) {
+                    if(this[this.pagingName[i]]) {
                         sendData[this.sendDataName[i] + "Count"] =
                             await (this._findCountDatabase(req, this.modelName[i], query));
                         sendData[this.sendDataName[i]] =
-                            await (this._findPageDatabase(req, this.modelName[i], query, this.order));
+                            await (this._findPageDatabase(req, this.modelName[i], query, this[this.orderName[i]]));
                     } else {
                         sendData[this.sendDataName[i]] =
                             await (this._findDatabase(req, this.modelName[i], query));
                     }
-                    if(this.sum) {
+                    if(this[this.sumName[i]]) {
                         sendData[this.sendDataName[i] + "Sum"] =
-                            await (this._findSumDatabase(req, this.modelName[i], query, this.sum));
+                            await (this._findSumDatabase(req, this.modelName[i], query, this[this.sumName[i]]));
                     }
                 }
             }catch(err) {
@@ -270,7 +281,8 @@ api.prototype = {
                     sendData,
                     this.filter_key || this.key_type || this.sku_type,
                     dates,
-                    this.filter_key2
+                    this.filter_key2,
+                    this.page
                 );
             }
             if(isErr) {
@@ -348,7 +360,7 @@ api.prototype = {
         }
         Object.keys(query).forEach((value) => {
             if(value !== "startTime" && value !== "endTime") {
-                if(!params.hasOwnProperty(value)) {
+                if(params[value] !== query[value]) {
                     params[value] = query[value];
                 }
             }
@@ -386,7 +398,7 @@ api.prototype = {
             var sql = req.models[modelName].find(_params).limit(limit).offset(offset);
             if(orderArray) {
                 for(var key of orderArray) {
-                    sql.order("-" + key);
+                    sql.order(key);
                 }
             }
             sql.run((err, data) => {
@@ -431,8 +443,8 @@ api.prototype = {
             }
             sql.get(function(){
                 var args = arguments;
-                if (args[0]) {
-                    reject(args[0]);
+                if (args["0"]) {
+                    reject(args["0"]);
                 } else {
                     resolve(args);
                 }

@@ -57,10 +57,8 @@ module.exports = {
         }]
     },
     couponInfoTwo(data) {
-        var source = data.data;
-        source.sort((a, b) => {
-            return b.date - a.date;
-        });
-        return util.toTable([source], data.rows, data.cols);
+        var source = data.data,
+            count = data.dataCount;
+        return util.toTable([source], data.rows, data.cols, [count]);
     }
 };
