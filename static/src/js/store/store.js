@@ -12,7 +12,9 @@ var state = {
     modalTableData: {
         show: false,
         title: '弹窗表格',
-        data: null // 表格数据
+        data: null, // 表格数据
+        query_api: null,
+        query_parmas: null
     },
     currentPageDefaultData: null,
     confirmConfig: {
@@ -39,13 +41,11 @@ mutations.HIDEALERT = function(state) {
 }
 
 mutations.MODALTABLE = function(state, params) {
-    if(params.title){
-        state.modalTableData.title = params.title;
-    }
-    if(params.data){
-        state.modalTableData.data = params.data;
-    }
-    state.modalTableData.show = params.show;
+    state.modalTableData.title = params.title || '';
+    state.modalTableData.data = params.data || null;
+    state.modalTableData.show = params.show || false;
+    state.modalTableData.query_api = params.query_api || null;
+    state.modalTableData.query_parmas = params.query_parmas || null;
 }
 
 mutations.HIDEMODALTABLE = function(state) {
