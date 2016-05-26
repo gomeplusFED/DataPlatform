@@ -58,7 +58,7 @@ module.exports = {
                 obj.usersAnalysis.activeAccount(),
                 obj.usersAnalysis.startUp(),
                 obj.usersAnalysis.version(),
-                //obj.retainedAnalysis.retained()
+                obj.retainedAnalysis.retained()
             ]
         },
         "4": {
