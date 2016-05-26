@@ -23,6 +23,7 @@
 					        </tr>
 					    </tbody>
 					</table>
+					<m-pagination :pagination-conf="paginationConf"></m-pagination>
 	            </div>
 	            <div class="modal-footer">
 	                <button type="button" class="btn default" data-dismiss="modal" @click="hideModal()">确定</button>
@@ -40,11 +41,23 @@ var $ = require('jQuery');
 var store = require('../../store/store.js');
 var actions = require('../../store/actions.js');
 
+var Pagination = require('../common/pagination.vue');
+
+var utils = require('utils');
+
 var ModalTable = Vue.extend({
 	name: 'ModalTable',
 	data: function(){
 		return {
+			paginationConf: {
+			    currentPage: 1,     // 当前页
+			    totalItems: 20,     // 总条数
+			    itemsPerPage: 10,    // 每页条数
+			    pagesLength: 5,     // 显示几页( 1,2,3 / 1,2,3,4,5)
+			    onChange: function() {
 
+			    }
+			}
 		}
 	},
 	vuex: {
@@ -59,6 +72,36 @@ var ModalTable = Vue.extend({
 		hideModal: function(){
 			actions.hideModalTable(store);
 		}
+	},
+	ready: function(){
+		var _this = this;
+		this.paginationConf.onChange = function(){
+			var resultPrams = _this.modalTableData.query_parmas;
+
+			utils.mixin(resultPrams, {
+			    limit: _this.paginationConf.itemsPerPage,
+			    page: _this.paginationConf.currentPage
+			});
+
+			$.ajax({
+			    url: _this.modalTableData.query_api,
+			    type: 'get',
+			    data: resultPrams,
+			    success: function(data) {
+			    	actions.modalTable(store, {
+			    	    show: true,
+			    	    title: '帮助信息',
+			    	    data: data.modelData,
+			    	    query_api: _this.modalTableData.query_api,
+			    	    query_parmas: _this.modalTableData.query_parmas
+			    	});
+			    	_this.paginationConf.totalItems = data.modelData[0].count || 0;
+			    }
+			})
+		}
+	},
+	components: {
+		'm-pagination': Pagination
 	},
 	watch: {
 		'modalTableData.show': {
