@@ -128,12 +128,12 @@ var MultiSelect = Vue.extend({
 		    if(this.argvs[this.pageComponentsData[this.componentType].name] === undefined || this.argvs[this.pageComponentsData[this.componentType].name] === 'all'){
 		    	return;
 		    }
-		    Vue.set(argvs, this.pageComponentsData[this.componentType].name, 'all');
+		    Vue.set(this.argvs, this.pageComponentsData[this.componentType].name, 'all');
 		    // this.$set('argvs.category_id', 'all');
 		},
 		submit: function(){
 			// 设置参数
-			Vue.set(argvs, this.pageComponentsData[this.componentType].name, this.checkedId);
+			Vue.set(this.argvs, this.pageComponentsData[this.componentType].name, this.checkedId);
 			// this.$set('argvs.category_id', this.checkedId);
 		}
 	},
