@@ -786,6 +786,22 @@ function connect(app) {
                 channel : String,
                 day_type : Number
             });
+            models.SalesPerfProductKv = db.define("tbl_rt_sales_perf_product_kv", {
+                id : {type: 'number', key: true},
+                date : Date,
+                day_type : Number,
+                sku_type : Number,
+                product_acc_uv : Number,
+                product_acc_pv : Number,
+                product_acc_avg_time : Number,
+                product_scan : Number,
+                pay_fee : Number,
+                refund_fee : Number,
+                products_order : Number,
+                products_pay : Number,
+                products_cars : Number,
+                products_return : Number
+            });
             next();
         }
     }));

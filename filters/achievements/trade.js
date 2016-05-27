@@ -167,10 +167,10 @@ module.exports = {
             product_ttl += key.deal_pro_num;
         }
         for (var key of source) {
+            key.cus_unit_price = util.percentage(key.deal_money_amount, key.order_number);
             key.deal_money_amount = key.deal_money_amount.toFixed(2);
             key.deal_money_ratio = util.toFixed(key.deal_money_amount, pay_ttl);
             key.deal_pro_ratio = util.toFixed(key.deal_pro_num, product_ttl);
-            key.cus_unit_price = util.percentage(key.order_amount, key.order_number);
         }
         return util.toTable([source], data.rows, data.cols);
 

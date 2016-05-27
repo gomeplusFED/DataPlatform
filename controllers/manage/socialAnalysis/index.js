@@ -56,6 +56,8 @@ module.exports = (Router) => {
         router : "/socialAnalysis/groupTwo",
         modelName : [ "GroupDataTendency" ],
         platform : false,
+        level_select : true,
+        level_select_url : "/api/socialAnalysisCategories",
         filter(data, filter_key, dates) {
             return filter.groupTwo(data, dates);
         }
