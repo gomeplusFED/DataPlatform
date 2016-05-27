@@ -802,6 +802,20 @@ function connect(app) {
                 products_cars : Number,
                 products_return : Number
             });
+            models.SalesPerfShopKv = db.define("tbl_rt_sales_perf_shop_kv", {
+                id : {type: 'number', key: true},
+                date : Date,
+                day_type : Number,
+                xpop_shops_num_add_al : Number,
+                xpop_shops_num_succ_add_al : Number,
+                xpop_shops_num_acc_al : Number,
+                xpop_shops_num_succ_tot_al : Number,
+                xpop_shops_num_share_al : Number,
+                order_shops_num : Number,
+                deal_shops_num : Number,
+                order_num : Number,
+                deal_shops_order_num : Number,
+            });
             next();
         }
     }));

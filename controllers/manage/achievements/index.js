@@ -10,7 +10,7 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/achievements/shopOne",
-        modelName : ["SalesPerfKeyValue"],
+        modelName : ["SalesPerfShopKv"],
         platform : false,
         filter_select: [{
             title: '',
