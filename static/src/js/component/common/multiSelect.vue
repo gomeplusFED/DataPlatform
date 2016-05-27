@@ -142,7 +142,8 @@ var MultiSelect = Vue.extend({
 				if(val){
 					$('body').css('overflow','hidden');
 					$.ajax({
-						url: '/api/categories',
+						// url: '/api/categories',
+						url: this.pageComponentsData[this.componentType].url,
 						type: 'get',
 						data: {
 							pid: 0
