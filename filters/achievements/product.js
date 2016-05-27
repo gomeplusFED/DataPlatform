@@ -8,7 +8,6 @@ var util = require("../../utils");
 module.exports = {
     productOne(data) {
         var source = data.data,
-            count = data.dataCount,
             newData = {
                 one : 0,
                 two : 0,
@@ -27,13 +26,13 @@ module.exports = {
             newData.six += key.products_order;
             newData.seven += key.products_pay;
         }
-        return util.toTable([[newData]], data.rows, data.cols, [count]);
+        return util.toTable([[newData]], data.rows, data.cols);
     },
     productTwo(data, filter_key, dates) {
         var source = data.data,
             type = "line",
             filter_name = {
-                products_scan : "浏览商品数",
+                product_scan : "浏览商品数",
                 products_cars : "加购商品数",
                 products_pay : "支付商品",
                 products_order : "下单商品"
@@ -62,6 +61,7 @@ module.exports = {
     },
     productThree(data, dates) {
         var source = data.data,
+            count = data.dataCount,
             obj = {},
             newData = [];
         dates.sort((a, b) => {
@@ -69,30 +69,35 @@ module.exports = {
         });
         for(var date of dates) {
             obj[date] = {
-                products_scan : 0,
+                product_scan : 0,
                 products_order : 0,
                 products_pay : 0,
                 products_return : 0,
-                products_fee : 0,
+                pay_fee : 0,
                 refund_fee : 0
             };
         }
         for(var key of source) {
             var date = util.getDate(key.date);
-            obj[date][key.key_type] += key.value;
+            obj[date].product_scan += key.product_scan;
+            obj[date].products_order += key.products_order;
+            obj[date].products_pay += key.products_pay;
+            obj[date].products_return += key.products_return;
+            obj[date].pay_fee += key.pay_fee;
+            obj[date].refund_fee += key.refund_fee;
         }
         for(var date of dates) {
             newData.push({
                 one : date,
-                two : obj[date].products_scan,
+                two : obj[date].product_scan,
                 three : obj[date].products_order,
                 four : obj[date].products_pay,
                 five : obj[date].products_return,
-                six : obj[date].products_fee.toFixed(2),
+                six : obj[date].pay_fee.toFixed(2),
                 seven : obj[date].refund_fee.toFixed(2)
             })
         }
-        return util.toTable([newData], data.rows, data.cols);
+        return util.toTable([newData], data.rows, data.cols, [count]);
     },
     productFour(data) {
         var source = data.data,

@@ -12,8 +12,6 @@ module.exports = (Router) => {
         router : "/achievements/productOne",
         modelName : ["SalesPerfProductKv"],
         platform : false,
-        paging : true,
-        order : ["-date"],
         //fixedParams : {
         //    key_type : [ "products_acc", "products_order",
         //        "products_cars", "products_pay", "products_scan" ]
@@ -65,7 +63,7 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/achievements/productTwo",
-        modelName : ["SalesPerfKeyValue"],
+        modelName : ["SalesPerfProductKv"],
         platform : false,
         filter_select: [{
             title: '',
@@ -94,7 +92,7 @@ module.exports = (Router) => {
                     title: '',
                     filter_key : 'filter_key',
                     groups: [{
-                        key: "products_scan",
+                        key: "product_scan",
                         value: '浏览商品数'
                     },{
                         key: "products_order",
@@ -113,8 +111,10 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/achievements/productThree",
-        modelName : ["SalesPerfKeyValue"],
+        modelName : ["SalesPerfProductKv"],
         platform : false,
+        paging : true,
+        order : ["-date"],
         excel_export : true,
         filter_select: [{
             title: '',
