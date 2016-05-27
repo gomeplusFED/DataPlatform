@@ -223,6 +223,7 @@ module.exports = (Router) => {
         router : "/achievements/tradeFour",
         modelName : ["TradeCaty"],
         platform : false,
+        date_picker_data : 1,
         excel_export : true,
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
@@ -284,6 +285,7 @@ module.exports = (Router) => {
         router : "/achievements/tradeFive",
         modelName : ["TradeUser"],
         platform : false,
+        date_picker_data : 1,
         excel_export : true,
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
