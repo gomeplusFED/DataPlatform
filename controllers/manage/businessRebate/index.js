@@ -100,6 +100,8 @@ module.exports = (Router) => {
             category_id : "all"
         },
         level_select : true,
+        level_select_name : "category_id",
+        level_select_url : "/api/categories",
         platform : false,
         filter_select: [{
             title: '指标选择',
@@ -124,6 +126,8 @@ module.exports = (Router) => {
         router : "/businessRebate/businessAllThree",
         modelName : [ "RebateShopTypeLevelDetails" ],
         level_select : true,
+        level_select_name : "category_id",
+        level_select_url : "/api/categories",
         platform : false,
         default : {
             day_type : 1,
@@ -154,6 +158,8 @@ module.exports = (Router) => {
         router : "/businessRebate/businessAllFour",
         modelName : [ "RebateShopTypeLevelDetails" ],
         level_select : true,
+        level_select_name : "category_id",
+        level_select_url : "/api/categories",
         platform : false,
         default : {
             day_type : 1,

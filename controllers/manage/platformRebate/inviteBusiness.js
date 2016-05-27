@@ -95,6 +95,8 @@ module.exports = (Router) => {
         router : "/platformRebate/inviteBusinessTwo",
         modelName : [ "RebateOrderTredencyDetails" ],
         level_select : true,
+        level_select_name : "category_id",
+        level_select_url : "/api/categories",
         default : {
             day_type : 1,
             category_id : "all"
@@ -126,6 +128,8 @@ module.exports = (Router) => {
         router : "/platformRebate/inviteBusinessThree",
         modelName : [ "RebateTypeLevelDetails" ],
         level_select : true,
+        level_select_name : "category_id",
+        level_select_url : "/api/categories",
         default : {
             day_type : 1,
             category_id : "all"

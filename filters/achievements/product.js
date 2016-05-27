@@ -48,7 +48,7 @@ module.exports = {
             };
         }
         for(var key of source) {
-            newData[util.getDate(key.date)].value += key.value;
+            newData[util.getDate(key.date)].value += key[filter_key];
         }
         return [{
             map : map,

@@ -48,6 +48,9 @@ module.exports = (Router) => {
         router : "/socialAnalysis/hostTwo",
         modelName : [ "HostTendency" ],
         platform : false,
+        level_select : true,
+        level_select_name : "group_type",
+        level_select_url : "/api/socialAnalysisCategories",
         filter(data, filter_key, dates) {
             return filter.hostTwo(data, dates);
         }

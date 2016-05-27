@@ -95,6 +95,8 @@ module.exports = (Router) => {
         router : "/platformRebate/platformBasisTwo",
         modelName : [ "RebateOrderTredencyDetails" ],
         level_select : true,
+        level_select_name : "category_id",
+        level_select_url : "/api/categories",
         platform : false,
         default : {
             day_type : 1,
@@ -126,6 +128,8 @@ module.exports = (Router) => {
         router : "/platformRebate/platformBasisThree",
         modelName : [ "RebateTypeLevelDetails" ],
         level_select : true,
+        level_select_name : "category_id",
+        level_select_url : "/api/categories",
         platform : false,
         default : {
             day_type : 1,
@@ -157,6 +161,8 @@ module.exports = (Router) => {
         router : "/platformRebate/platformBasisFour",
         modelName : [ "RebateTypeLevelDetails" ],
         level_select : true,
+        level_select_name : "category_id",
+        level_select_url : "/api/categories",
         platform : false,
         default : {
             day_type : 1,

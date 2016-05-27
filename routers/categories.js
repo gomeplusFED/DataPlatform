@@ -8,7 +8,10 @@ module.exports = function(Router) {
     });
 
     Router.get('/api/socialAnalysisCategories', function(req, res, next) {
-        var pid = req.query.pid || "";
+        var pid = "";
+        if(req.query.pid !== "0") {
+            pid = req.query.pid;
+        }
         req.models["SocialCategory"].find({ pid: pid }, function(err, data) {
             res.send(data);
         })

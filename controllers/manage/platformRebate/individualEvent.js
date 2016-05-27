@@ -95,6 +95,7 @@ module.exports = (Router) => {
         router : "/platformRebate/individualEventTwo",
         modelName : [ "RebateOrderTredencyDetails" ],
         level_select : true,
+        level_select_name : "category_id",
         level_select_url : "/api/categories",
         default : {
             day_type : 1,
@@ -127,6 +128,7 @@ module.exports = (Router) => {
         router : "/platformRebate/individualEventThree",
         modelName : [ "RebateTypeLevelDetails" ],
         level_select : true,
+        level_select_name : "category_id",
         level_select_url : "/api/categories",
         platform : false,
         default : {

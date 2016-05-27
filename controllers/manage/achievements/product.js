@@ -116,18 +116,14 @@ module.exports = (Router) => {
         modelName : ["SalesPerfKeyValue"],
         platform : false,
         excel_export : true,
-        fixedParams : {
-            key_type : [ "products_scan", "products_order",
-                "products_pay", "products_return", "products_fee", "refund_fee" ]
-        },
         filter_select: [{
             title: '',
-            filter_key : 'key_name',
+            filter_key : 'sku_type',
             groups: [{
-                key: ['sku', "sku_spu"],
+                key: 2,
                 value: 'SKU'
             }, {
-                key: ['spu', "sku_spu"],
+                key: 1,
                 value: '合并SKU'
             }]
         }],

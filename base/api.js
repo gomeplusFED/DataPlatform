@@ -72,6 +72,8 @@ function api(Router, options) {
         level_select: false,
         //联动菜单url
         level_select_url: null,
+        //查询字段名称
+        level_select_name: null,
         //单选
         filter_select: [],
         //过滤数据
@@ -315,7 +317,8 @@ api.prototype = {
                         },
                         level_select: {
                             show : this.level_select,
-                            url : this.level_select_url
+                            url : this.level_select_url,
+                            name : this.level_select_name
                         },
                         filter_select: this.filter_select
                     }

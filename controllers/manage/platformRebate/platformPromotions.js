@@ -100,6 +100,8 @@ module.exports = (Router) => {
             category_id : "all"
         },
         level_select : true,
+        level_select_name : "category_id",
+        level_select_url : "/api/categories",
         fixedParams : {
             user_party : "2"
         },
@@ -127,6 +129,8 @@ module.exports = (Router) => {
         modelName : [ "RebateTypeLevelDetails" ],
         platform : false,
         level_select : true,
+        level_select_name : "category_id",
+        level_select_url : "/api/categories",
         default : {
             day_type : 1,
             category_id : "all"
@@ -162,6 +166,8 @@ module.exports = (Router) => {
             category_id : "all"
         },
         level_select : true,
+        level_select_name : "category_id",
+        level_select_url : "/api/categories",
         fixedParams : {
             user_party : "2"
         },
