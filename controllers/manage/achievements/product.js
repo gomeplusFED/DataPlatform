@@ -10,20 +10,22 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/achievements/productOne",
-        modelName : ["SalesPerfKeyValue"],
+        modelName : ["SalesPerfProductKv"],
         platform : false,
-        fixedParams : {
-            key_type : [ "products_acc", "products_order",
-                "products_cars", "products_pay", "products_scan" ]
-        },
+        paging : true,
+        order : ["-date"],
+        //fixedParams : {
+        //    key_type : [ "products_acc", "products_order",
+        //        "products_cars", "products_pay", "products_scan" ]
+        //},
         filter_select: [{
             title: '',
-            filter_key : 'key_name',
+            filter_key : 'sku_type',
             groups: [{
-                key: ['sku', "sku_spu"],
+                key: 2,
                 value: 'SKU'
             }, {
-                key: ['spu', "sku_spu"],
+                key: 1,
                 value: '合并SKU'
             }]
         }],
@@ -67,13 +69,13 @@ module.exports = (Router) => {
         platform : false,
         filter_select: [{
             title: '',
-            filter_key : 'key_name',
+            filter_key : 'sku_type',
             groups: [{
-                key: 'sku',
+                key: 2,
                 value: 'SKU',
                 cell : {
                     title: '',
-                    filter_key : 'key_type',
+                    filter_key : 'filter_key',
                     groups: [{
                         key: "products_cars",
                         value: '加购商品件数'
@@ -86,11 +88,11 @@ module.exports = (Router) => {
                     }]
                 }
             }, {
-                key: ['spu', "sku_spu"],
+                key: 1,
                 value: '合并SKU',
                 cell : {
                     title: '',
-                    filter_key : 'key_type',
+                    filter_key : 'filter_key',
                     groups: [{
                         key: "products_scan",
                         value: '浏览商品数'

@@ -70,6 +70,8 @@ function api(Router, options) {
         date_picker_data: 7,
         //联动菜单
         level_select: false,
+        //联动菜单url
+        level_select_url: null,
         //单选
         filter_select: [],
         //过滤数据
@@ -119,20 +121,25 @@ api.prototype = {
         var date = new Date(now.getTime() - 24 * 60 * 1000);
         var startTime = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
         var endTime = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate();
-        this.default.date = orm.between(new Date(startTime + ' 00:00:00'), new Date(endTime + ' 23:59:59'));
-        this.default.day_type = 1;
+        var _object = this.default;
+        _object.date = orm.between(new Date(startTime + ' 00:00:00'), new Date(endTime + ' 00:00:01'));
+        _object.day_type = 1;
         if(this.platform) {
-            this.default.type = "H5";
+            _object.type = "H5";
         }
         if(this.channel) {
-            this.default.channel = "ALL";
+            _object.channel = "ALL";
         }
         if(this.version) {
-            this.default.ver = "ALL";
+            _object.ver = "ALL";
         }
         if(this.coupon) {
-            this.default.coupon_type = "平台优惠券";
+            _object.coupon_type = "平台优惠券";
         }
+        for(var key in this.default) {
+            _object[key] = this.default[key];
+        }
+        this.default = _object;
     },
     _sendData(type, req, res, next) {
         var query = req.query,
@@ -306,7 +313,10 @@ api.prototype = {
                             version: this.version,
                             coupon: this.coupon
                         },
-                        level_select: this.level_select,
+                        level_select: {
+                            show : this.level_select,
+                            url : this.level_select_url
+                        },
                         filter_select: this.filter_select
                     }
                 });

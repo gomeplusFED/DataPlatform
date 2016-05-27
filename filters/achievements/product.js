@@ -8,47 +8,26 @@ var util = require("../../utils");
 module.exports = {
     productOne(data) {
         var source = data.data,
-            obj = {
-                products_acc : {
-                    value : 0,
-                    value2 : 0,
-                    value3 : 0
-                },
-                products_scan : {
-                    value : 0,
-                    value2 : 0,
-                    value3 : 0
-                },
-                products_cars : {
-                    value : 0,
-                    value2 : 0,
-                    value3 : 0
-                },
-                products_order : {
-                    value : 0,
-                    value2 : 0,
-                    value3 : 0
-                },
-                products_pay : {
-                    value : 0,
-                    value2 : 0,
-                    value3 : 0
-                }
-            },
-            newData = {};
+            count = data.dataCount,
+            newData = {
+                one : 0,
+                two : 0,
+                three : 0,
+                four : 0,
+                five : 0,
+                six : 0,
+                seven : 0
+            };
         for(var key of source) {
-            obj[key.key_type].value += key.value;
-            obj[key.key_type].value2 += key.value2;
-            obj[key.key_type].value3 += key.value3;
+            newData.one += key.product_acc_uv;
+            newData.two += key.product_acc_pv;
+            newData.three += Math.round(key.product_acc_avg_time);
+            newData.four += key.product_scan;
+            newData.five += key.products_cars;
+            newData.six += key.products_order;
+            newData.seven += key.products_pay;
         }
-        newData.one = obj.products_acc.value;
-        newData.two = obj.products_acc.value2;
-        newData.three = obj.products_acc.value3;
-        newData.four = obj.products_scan.value;
-        newData.five = obj.products_cars.value;
-        newData.six = obj.products_order.value;
-        newData.seven = obj.products_pay.value;
-        return util.toTable([[newData]], data.rows, data.cols);
+        return util.toTable([[newData]], data.rows, data.cols, [count]);
     },
     productTwo(data, filter_key, dates) {
         var source = data.data,

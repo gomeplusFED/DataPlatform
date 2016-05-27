@@ -172,9 +172,9 @@ module.exports = {
                 obj[i] = 0;
             }
             for(var key of source) {
-                if(key.level === level.value) {
+                if(key.grade === level.value) {
                     for(var i = 0; i < XBar.length; i++) {
-                        if(key.grade === XBar[i].value) {
+                        if(key.level === XBar[i].value) {
                             obj[i] += key[filter_key];
                         }
                     }

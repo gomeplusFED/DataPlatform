@@ -74,6 +74,7 @@ module.exports = {
             objThree.total_amount += key.total_amount;
             objThree.total_amount_actual += key.total_amount_actual;
         }
+        objOne.rebate_order_amount_count = Math.round(objOne.rebate_order_amount_count);
         one.push(objOne);
         one.push({
             name: "总占比",
@@ -181,9 +182,9 @@ module.exports = {
                 obj[i] = 0;
             }
             for (var key of source) {
-                if (key.level === level.value) {
+                if (key.grade === level.value) {
                     for (var i = 0; i < XBar.length; i++) {
-                        if (key.grade === XBar[i].value) {
+                        if (key.level === XBar[i].value) {
                             obj[i] += key[filter_key];
                         }
                     }
