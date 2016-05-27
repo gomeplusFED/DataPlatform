@@ -1,5 +1,5 @@
 <template>
-	<div class="btn_group level_select" v-show="pageComponentsData[componentType]">
+	<div class="btn_group level_select" v-show="pageComponentsData[componentType].show">
 		<strong>选择类目：</strong>
 		<em>{{showResult.length ? showResult.join('－') : '默认'}}</em>
 		<ul>
@@ -108,7 +108,8 @@ var MultiSelect = Vue.extend({
 			this.checkedId = $(ev.target).attr('key');
 			var _this = this;
 			$.ajax({
-				url: '/api/categories',
+				// url: '/api/categories',
+				url: this.pageComponentsData[this.componentType].url,
 				type: 'get',
 				data: {
 					pid: $(ev.target).attr('key')
@@ -141,7 +142,8 @@ var MultiSelect = Vue.extend({
 				if(val){
 					$('body').css('overflow','hidden');
 					$.ajax({
-						url: '/api/categories',
+						// url: '/api/categories',
+						url: this.pageComponentsData[this.componentType].url,
 						type: 'get',
 						data: {
 							pid: 0
