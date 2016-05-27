@@ -125,14 +125,16 @@ var MultiSelect = Vue.extend({
 		    this.level.splice(1);
 		    $('.select_group li').removeClass('active');
 		    this.showResult = [];
-		    if(this.argvs.category_id === undefined || this.argvs.category_id === 'all'){
+		    if(this.argvs[this.pageComponentsData[this.componentType].name] === undefined || this.argvs[this.pageComponentsData[this.componentType].name] === 'all'){
 		    	return;
 		    }
-		    this.$set('argvs.category_id', 'all');
+		    Vue.set(argvs, this.pageComponentsData[this.componentType].name, 'all');
+		    // this.$set('argvs.category_id', 'all');
 		},
 		submit: function(){
 			// 设置参数
-			this.$set('argvs.category_id',this.checkedId);
+			Vue.set(argvs, this.pageComponentsData[this.componentType].name, this.checkedId);
+			// this.$set('argvs.category_id', this.checkedId);
 		}
 	},
 	watch: {
