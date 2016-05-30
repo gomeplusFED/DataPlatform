@@ -129,6 +129,7 @@ var Chart = Vue.extend({
 				legend.push(map[item]);
 				var _currentObj = {};
 				_currentObj.type = chartType;
+				chartType === 'pie' ? _currentObj.roseType = 'area' : null;
 				_currentObj.stack = config.stack ? 'stack' : '';
 				_currentObj.data = [];
 				_currentObj.name = map[item];
