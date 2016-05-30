@@ -66,7 +66,10 @@ module.exports = {
         }
         one.push(objOne);
         objTwo.rate = util.toFixed(objTwo.rebate_amount_count, objTwo.rebate_order_amount_actual_count);
+        objTwo.rebate_amount_count = objTwo.rebate_amount_count.toFixed(2);
+        objTwo.rebate_order_amount_count = objTwo.rebate_order_amount_count.toFixed(2);
         two.push(objTwo);
+        objThree.refund_goods_amount_count = objThree.refund_goods_amount_count.toFixed(2);
         three.push(objThree);
         three.push({
             name: "返利退货订单占比",
