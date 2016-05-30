@@ -41,7 +41,7 @@ mutations.HIDEALERT = function(state) {
 }
 
 mutations.MODALTABLE = function(state, params){
-    if (param.title) {
+    if (params.title) {
         state.modalTableData.title = params.title;
     }
     if (params.data) {
