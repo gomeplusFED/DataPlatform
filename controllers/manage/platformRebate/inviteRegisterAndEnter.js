@@ -178,7 +178,7 @@ module.exports = (Router) => {
             }]
         }],
         filter(data, filter_key, dates, filter_key2, page) {
-            return filter.inviteRegisterAndEnterFour(data. page);
+            return filter.inviteRegisterAndEnterFour(data, page);
         },
         rows : [
             ["id", "rebate_plan_name", "user_party", "deadline", "correlate_flow", "participate_user_count",
