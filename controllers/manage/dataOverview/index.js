@@ -29,7 +29,8 @@ module.exports = (Router) => {
             return {
                 date : orm.between(new Date(qdate + " 00:00:00"), new Date(ydate + " 23:59:59")),
                 region : "ALL",
-                day_type : 1
+                day_type : 1,
+                type : "app"
             }
         },
         orderParams() {
