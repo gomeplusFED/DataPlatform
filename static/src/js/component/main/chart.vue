@@ -142,6 +142,11 @@ var Chart = Vue.extend({
 				series.push(_currentObj);
 			}
 			
+
+			if(xAxis.length > 10){
+				options.legend.orient = 'vertical';
+				options.legend.left = 0;
+			}
 			options.legend.data = legend;
 			options.xAxis.data = xAxis;
 			options.series = series;
