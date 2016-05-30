@@ -699,25 +699,6 @@ function connect(app) {
                 channel: String,
                 type: String
             });
-            models.ProductTop = db.define("tbl_rt_sales_perf_product_top",{
-                id : {type: 'number', key: true},
-                date : Date,
-                commodity_name : String,
-                commodity_id : Number,
-                access_num : Number,
-                access_users : Number,
-                share_num : Number,
-                order_users : Number,
-                order_price : Number,
-                oder_products : Number,
-                refund_num : Number,
-                refund_price : Number,
-                sku_type : Number,
-                type : String,
-                ver : String,
-                channel : String,
-                day_type : Number
-            });
             models.SocialCategory = db.define("tbl_social_category",{
                 id : String,
                 pid : String,
@@ -840,6 +821,34 @@ function connect(app) {
                 tran_pay_user_num : Number,
                 tran_pay_money_amount : Number,
                 tran_refund_pro_num_spu : Number
+            });
+            models.SalesProductMarketTop = db.define("tbl_rt_sales_product_market_top", {
+                id : {type: 'number', key: true},
+                date : Date,
+                commodity_name : String,
+                commodity_id : Number,
+                order_users : Number,
+                oder_products : Number,
+                order_price : Number,
+                refund_num : Number,
+                refund_price : Number,
+                type : String,
+                ver : String,
+                channel : String,
+                day_type : Number
+            });
+            models.SalesProductFlowtTop = db.define("tbl_rt_sales_product_flow_top", {
+                id : {type: 'number', key: true},
+                date : Date,
+                commodity_name : String,
+                commodity_id : Number,
+                access_num : Number,
+                access_users : Number,
+                share_num : Number,
+                type : String,
+                ver : String,
+                channel : String,
+                day_type : Number
             });
             next();
         }

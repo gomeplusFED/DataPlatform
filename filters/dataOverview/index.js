@@ -122,7 +122,7 @@ module.exports = {
         newData.push(obj);
         return util.toTable([newData], data.rows, data.cols);
     },
-    dataOverviewAllTwo(data, filter_key, filter_name, dates, type_key) {
+    dataOverviewAllTwo(data, filter_key, filter_name, dates) {
         var source = data.data,
             newData = {},
             type = "line",
@@ -135,9 +135,6 @@ module.exports = {
             };
         }
         for(var key of source) {
-            if(type_key && key.type === type_key) {
-                continue;
-            }
             if(filter_key === "register_rate") {
                 if(newData[util.getDate(key.date)]) {
                     newData[util.getDate(key.date)].value += key.new_account /
@@ -165,87 +162,45 @@ module.exports = {
     },
     dataOverviewAllThree(data) {
         var source = data.data,
-            newData = [],
-            total_open_total = 0,
-            length = source.length,
-            top = length > 10 ? 10 : length;
-        source.sort((a, b) => {
-            return b.open_total - a.open_total;
-        });
-        for(var key of source) {
-            total_open_total += key.open_total;
+            sum = data.dataSum;
+
+        for(var i = 0; i < source.length; i++) {
+            source[i].id = i + 1;
+            source[i].open_total_rate = util.toFixed(source[i].open_total, sum[1]);
         }
-        for(var i = 0; i < top; i++) {
-            newData.push(source[i]);
-        }
-        for(var i = 0; i < newData.length; i++) {
-            newData[i].id = i + 1;
-            newData[i].open_total_rate = util.toFixed(newData[i].open_total, total_open_total);
-        }
-        return util.toTable([newData], data.rows, data.cols);
+        return util.toTable([source], data.rows, data.cols);
     },
     dataOverviewAllFour(data) {
         var source = data.data,
-            top = source.length > 10 ? 10 : source.length,
-            total_pv = 0,
-            newData = [];
-        source.sort((a, b) => {
-            return b.pv - a.pv;
-        });
-        for(var key of source) {
-            total_pv += key.pv;
-        }
-        for(var i = 0; i < top; i++) {
+            sum = data.dataSum;
+
+        for(var i = 0; i < source.length; i++) {
             source[i].id = i + 1;
-            newData.push(source[i]);
+            source[i].pv_rate = util.toFixed(source[i].pv, sum[1]);
         }
-        for(var key of newData) {
-            key.pv_rate = util.toFixed(key.pv, total_pv);
-        }
-        return util.toTable([newData], data.rows, data.cols);
+
+        return util.toTable([source], data.rows, data.cols);
     },
     dataOverviewWapThree(data) {
         var source = data.data,
-            newData = [],
-            total_pv = 0,
-            length = source.length,
-            top = length > 10 ? 10 : length;
-        source.sort((a, b) => {
-            return b.pv - a.pv;
-        });
-        for(var key of source) {
-            total_pv += key.pv;
+            sum = data.dataSum;
+
+        for(var i = 0; i < source.length; i++) {
+            source[i].id = i + 1;
+            source[i].pv_rate = util.toFixed(source[i].pv, sum[1]);
         }
-        for(var i = 0; i < top; i++) {
-            newData.push(source[i]);
-        }
-        for(var i = 0; i < newData.length; i++) {
-            newData[i].id = i + 1;
-            newData[i].pv_rate = util.toFixed(newData[i].pv, total_pv);
-        }
-        return util.toTable([newData], data.rows, data.cols);
+
+        return util.toTable([source], data.rows, data.cols);
     },
     dataOverviewWapFour(data) {
         var source = data.data,
-            top = source.length > 10 ? 10 : source.length,
-            total_pv = 0,
-            newData = [];
-        source.sort((a, b) => {
-            return b.pv - a.pv;
-        });
-        for(var key of source) {
-            if(key.type !== "H5") {
-                continue;
-            }
-            total_pv += key.pv;
-        }
-        for(var i = 0; i < top; i++) {
+            sum = data.dataSum;
+
+        for(var i = 0; i < source.length; i++) {
             source[i].id = i + 1;
-            newData.push(source[i]);
+            source[i].pv_rate = util.toFixed(source[i].pv, sum[1]);
         }
-        for(var key of newData) {
-            key.pv_rate = util.toFixed(key.pv, total_pv);
-        }
-        return util.toTable([newData], data.rows, data.cols);
+
+        return util.toTable([source], data.rows, data.cols);
     }
 };

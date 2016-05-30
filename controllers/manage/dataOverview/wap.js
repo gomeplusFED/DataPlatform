@@ -139,8 +139,7 @@ module.exports = (Router) => {
                     visit_time_avg : "平均访问时长(s)",
                     register_rate : "注册转化率(%)"
                 },
-                dates,
-                ""
+                dates
             );
         }
     });
@@ -148,6 +147,9 @@ module.exports = (Router) => {
     Router = new api(Router, {
         router: "/dataOverview/wapThree",
         modelName: ["OverviewPlatf"],
+        paging : true,
+        order : ["-pv"],
+        sum : ["pv"],
         date_picker : false,
         platform : false,
         params() {
@@ -195,6 +197,9 @@ module.exports = (Router) => {
         router: "/dataOverview/wapFour",
         modelName: ["OverviewPage"],
         date_picker : false,
+        paging : true,
+        order : ["-pv"],
+        sum : ["pv"],
         platform : false,
         params() {
             var now = new Date(),
