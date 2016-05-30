@@ -1,4 +1,4 @@
-/**
+    /**
  * @author yanglei
  * @date 20160405
  * @fileoverview 商家返利汇总
@@ -76,6 +76,7 @@ module.exports = {
             objThree.amount_actual += key.amount_actual;
             objThree.total_amount_actual += key.total_amount_actual;
         }
+        objOne.order_amount = objOne.order_amount.toFixed(2);
         one.push(objOne);
         one.push({
             name: "总占比",
@@ -86,7 +87,10 @@ module.exports = {
             product_sku_num: util.toFixed(objOne.product_sku_num, total_product_sku_num)
         });
         objTwe.rate = util.toFixed(objTwe.rebate_amount, objTwe.rebate_amount_actual);
+        objTwe.rebate_amount = objTwe.rebate_amount.toFixed(2);
+        objTwe.platform_amount = objTwe.platform_amount.toFixed(2);
         twe.push(objTwe);
+        objThree.amount = objThree.amount.toFixed(2);
         three.push(objThree);
         three.push({
             name: "返利退货订单占比",
