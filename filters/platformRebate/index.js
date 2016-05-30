@@ -74,7 +74,8 @@ module.exports = {
             objThree.total_amount += key.total_amount;
             objThree.total_amount_actual += key.total_amount_actual;
         }
-        objOne.rebate_order_amount_count = Math.round(objOne.rebate_order_amount_count);
+        //objOne.rebate_order_amount_count = Math.round(objOne.rebate_order_amount_count);
+        objOne.rebate_order_amount_count = objOne.rebate_order_amount_count.toFixed(2);
         one.push(objOne);
         one.push({
             name: "总占比",
@@ -85,7 +86,9 @@ module.exports = {
             productSku_num: util.toFixed(objOne.productSku_num, oneFive)
         });
         objTwo.rate = util.toFixed(objTwo.rebate_amount_count, objTwo.rebate_order_amount_actual_count);
+        objTwo.rebate_amount_count = objTwo.rebate_amount_count.toFixed(2);
         two.push(objTwo);
+        objThree.refund_goods_amount_count = objThree.refund_goods_amount_count.toFixed(2);
         three.push(objThree);
         three.push({
             name: "返利退货订单占比",

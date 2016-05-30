@@ -34,6 +34,7 @@ module.exports = {
             "registered_rate": util.toFixed(one.registered_count, one.participate_user_count),
             "rebate_amount_count": one.rebate_amount_count
         });
+        one.rebate_amount_count = one.rebate_amount_count.toFixed(2);
         resultData.push(_current);
         return resultData;
     },
@@ -55,6 +56,7 @@ module.exports = {
             obj.rebate_amount_count += key.rebate_amount_count;
         }
         obj.registered_rate = util.toFixed(obj.registered_count, registered_all_count);
+        obj.rebate_amount_count = obj.rebate_amount_count.toFixed(2);
         newData.push(obj);
         return util.toTable([newData], data.rows, data.cols);
     },
