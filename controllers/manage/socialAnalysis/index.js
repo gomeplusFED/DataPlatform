@@ -59,6 +59,12 @@ module.exports = (Router) => {
         level_select : true,
         level_select_name : "group_type",
         level_select_url : "/api/socialAnalysisCategories",
+        fixedParams(query, filter_key, req, cb) {
+            if(query.group_type === undefined) {
+                query.group_type = "all";
+            }
+            cb(null, query);
+        },
         filter(data, filter_key, dates) {
             return filter.groupTwo(data, dates);
         }

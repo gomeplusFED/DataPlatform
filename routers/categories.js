@@ -14,7 +14,7 @@ module.exports = function(Router) {
         }
         req.models["SocialCategory"].find({ pid: pid }, function(err, data) {
             res.send(data);
-        })
+        });
     });
     return Router;
 };

@@ -14,7 +14,7 @@ module.exports = (Router) => {
         platform : false,
         filter_select: [{
             title: '',
-            filter_key : 'key_type',
+            filter_key : 'filter_key',
             groups: [{
                 key: 'xpop_shops_num_add_al',
                 value: '新增注册店铺'
@@ -22,10 +22,10 @@ module.exports = (Router) => {
                 key: 'xpop_shops_num_succ_add_al',
                 value: '成功入驻店铺'
             }, {
-                key: 'xpop_shops_num_succ_deal_al',
+                key: 'deal_shops_num',
                 value: '成功交易店铺'
             }, {
-                key: 'xpop_shops_num_share_al',
+                key: 'xpop_shops_num_acc_al',
                 value: '被访问店铺数'
             }]
         }],
@@ -36,24 +36,26 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/achievements/shopTwo",
-        modelName : ["SalesPerfKeyValue"],
+        modelName : ["SalesPerfShopKv"],
         platform : false,
+        paging : true,
+        order : ["-date"],
         excel_export : true,
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
-        fixedParams : {
-            key_type : [ "xpop_shops_num_add_al", "xpop_shops_num_succ_add_al",
-                "xpop_shops_num_acc_al", "xpop_shops_num_succ_tot_al", "xpop_shops_num_share_al",
-                "xpop_shops_num_succ_order_al", "xpop_shops_num_succ_deal_al"]
-        },
+        //fixedParams : {
+        //    key_type : [ "xpop_shops_num_add_al", "xpop_shops_num_succ_add_al",
+        //        "xpop_shops_num_acc_al", "xpop_shops_num_succ_tot_al", "xpop_shops_num_share_al",
+        //        "xpop_shops_num_succ_order_al", "xpop_shops_num_succ_deal_al"]
+        //},
         filter(data, filter_key, dates) {
-            return filter.shopTwo(data, dates);
+            return filter.shopTwo(data);
         },
         rows : [
-            [ 'date', 'one', 'two', 'three', 'four',
-                'five', 'six', 'seven' ]
+            [ 'date', 'xpop_shops_num_add_al', 'xpop_shops_num_succ_add_al', 'xpop_shops_num_succ_tot_al',
+                'order_shops_num', 'deal_shops_num', 'xpop_shops_num_acc_al', 'xpop_shops_num_share_al' ]
         ],
         cols : [
             [
@@ -99,17 +101,21 @@ module.exports = (Router) => {
         modelName : ["ShopAccesTop"],
         platform : false,
         showDayUnit : true,
+        paging : true,
+        order : ["-access_num"],
+        sum : ["access_num", "access_users"],
         excel_export : true,
         date_picker_data : 1,
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
-        filter(data, filter_key, dates) {
-            return filter.shopThree(data);
+        filter(data, filter_key, dates, filter_key2, page) {
+            return filter.shopThree(data, page);
         },
         rows : [
-            [ 'top', 'one', 'two', 'two_rate', 'three', 'three_rate', 'four']
+            [ 'top', 'shop_name', 'access_num', 'access_num_rate', 'access_users',
+                'access_users_rate', 'share_num']
         ],
         cols : [
             [{
@@ -142,6 +148,9 @@ module.exports = (Router) => {
         modelName : ["ShopPayTop"],
         platform : false,
         showDayUnit : true,
+        paging : true,
+        order : ["-pay_price"],
+        sum : ["pay_price", "pay_commodity_num"],
         excel_export : true,
         date_picker_data : 1,
         filter_select: [{
@@ -159,8 +168,8 @@ module.exports = (Router) => {
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
-        filter(data, filter_key, dates) {
-            return filter.shopFour(data, filter_key);
+        filter(data, filter_key, dates, filter_key2, page) {
+            return filter.shopFour(data, filter_key, page);
         },
         rows : [
             [ 'top', 'shop_name', 'pay_price', 'pay_price_rate', 'pay_commodity_num',

@@ -4,6 +4,7 @@
  * @fileoverview 店铺分析
  */
 var util = require("../../utils"),
+    moment = require("moment"),
     _ = require("lodash");
 
 module.exports = {
@@ -12,7 +13,7 @@ module.exports = {
             filter_name = {
                 xpop_shops_num_add_al : "新增注册店铺",
                 xpop_shops_num_succ_add_al : "成功入驻店铺",
-                xpop_shops_num_succ_deal_al : "成功交易店铺",
+                deal_shops_num : "成功交易店铺",
                 xpop_shops_num_share_al : "被访问店铺数"
             },
             type = "line",
@@ -27,7 +28,7 @@ module.exports = {
         }
         for(var key of source) {
             date = util.getDate(key.date);
-            newData[date].value += key.value;
+            newData[date].value += key[filter_key];
         }
         return [{
             type : type,
@@ -40,92 +41,43 @@ module.exports = {
     },
     shopTwo(data, dates) {
         var source = data.data,
-            obj = {},
-            newData = [];
-
-        dates.sort((a, b) => {
-            return new Date(b) - new Date(a);
-        });
-
-        for(var date of dates) {
-            obj[date] = {
-                xpop_shops_num_add_al : 0,
-                xpop_shops_num_succ_add_al : 0,
-                xpop_shops_num_acc_al : 0,
-                xpop_shops_num_succ_tot_al : 0,
-                xpop_shops_num_share_al : 0,
-                xpop_shops_num_succ_order_al : 0,
-                xpop_shops_num_succ_deal_al : 0
-            };
-        }
+            count = data.dataCount;
 
         for(var key of source) {
-            date = util.getDate(key.date);
-            obj[date][key.key_type] += key.value;
+            key.date = moment(key.data).format("YYYY-MM-DD");
         }
 
-        for(var date of dates) {
-            newData.push({
-                date : date,
-                one : obj[date].xpop_shops_num_add_al,
-                two : obj[date].xpop_shops_num_succ_add_al,
-                three : obj[date].xpop_shops_num_succ_tot_al,
-                four : obj[date].xpop_shops_num_succ_order_al,
-                five : obj[date].xpop_shops_num_succ_deal_al,
-                six : obj[date].xpop_shops_num_acc_al,
-                seven : obj[date].xpop_shops_num_share_al
-            });
-        }
-
-        return util.toTable([newData], data.rows, data.cols);
+        return util.toTable([source], data.rows, data.cols, [count]);
     },
-    shopThree(data) {
+    shopThree(data, page) {
         var source = data.data,
-            newData = [],
-            two_total = 0,
-            three_total = 0,
-            length = source.length,
-            top = length > 50 ? 50 : length;
+            page = page || 1,
+            count = data.dataCount > 50 ? 50 : data.dataCount,
+            sum = data.dataSum;
 
-        source.sort((a, b) => {
-            return b.access_num - a.access_num;
-        });
-
-        for(var key of source) {
-            two_total += key.access_num;
-            three_total += key.access_users;
+        for(var i = 0; i < source.length; i++) {
+            var key = source[i];
+            key.top = (page - 1) * 10 + i + 1;
+            key.access_num_rate = util.toFixed(key.access_num, sum[1]);
+            key.access_users_rate = util.toFixed(key.access_users, sum[2]);
+            source[i] = key;
         }
 
-        for(var i = 0; i < top; i++) {
-            key = source[i];
-            newData.push({
-                top : i + 1,
-                one : key.shop_name,
-                two : key.access_num,
-                two_rate : util.toFixed(key.access_num, two_total),
-                three : key.access_users,
-                three_rate : util.toFixed(key.access_users, three_total),
-                four : key.share_num
-            });
-        }
-
-        return util.toTable([newData], data.rows, data.cols);
+        return util.toTable([source], data.rows, data.cols, [count]);
     },
-    shopFour(data, sku_type) {
+    shopFour(data, sku_type, page) {
         var source = data.data,
-            newData = [],
-            total_pay_price = 0,
-            total_pay_commodity_num = 0,
-            length = source.length,
-            top = length > 50 ? 50 : length;
+            sum = data.dataSum,
+            page = page || 1,
+            count = data.dataCount > 50 ? 50 : data.dataCount;
 
-        source.sort((a, b) => {
-            return b.pay_price - a.pay_price;
-        });
-
-        for(var key of source) {
-            total_pay_price += key.pay_price;
-            total_pay_commodity_num += key.pay_commodity_num;
+        for(var i = 0; i < source.length; i++) {
+            var key = source[i];
+            key.top = (page - 1) * 10 + i + 1;
+            key.pay_price = key.pay_price.toFixed(2);
+            key.pay_price_rate = util.toFixed(key.pay_price, sum[1]);
+            key.pay_commodity_rate = util.toFixed(key.pay_commodity, sum[2]);
+            source[i] = key;
         }
 
         if(sku_type === "2") {
@@ -136,19 +88,6 @@ module.exports = {
             data.cols[0][5].caption = "支付商品数占比";
         }
 
-        for(var i = 0; i < top; i++) {
-            key = source[i];
-            newData.push({
-                top : 1 + i,
-                shop_name : key.shop_name,
-                pay_price : key.pay_price.toFixed(2),
-                pay_price_rate : util.toFixed(key.pay_price, total_pay_price),
-                pay_commodity_num : key.pay_commodity_num,
-                pay_commodity_rate : util.toFixed(key.pay_commodity_num, total_pay_commodity_num),
-                share_commodity_num : key.share_commodity_num
-            })
-        }
-
-        return util.toTable([newData], data.rows, data.cols);
+        return util.toTable([source], data.rows, data.cols, [count]);
     }
 };

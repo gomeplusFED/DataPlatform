@@ -431,20 +431,20 @@ function connect(app) {
                 value2 : Number,
                 value3 : Number
             });
-            models.SalesPerfKeyValue = db.define("tbl_rt_sales_perf_key_value",{
-                id : {type: 'number', key: true},
-                date: Date,
-                day_type: Number,
-                type: String,
-                ver: String,
-                channel: String,
-                key_type : String,
-                key_name : String,
-                key_desc : String,
-                value : Number,
-                value2 : Number,
-                value3 : Number
-            });
+            //models.SalesPerfKeyValue = db.define("tbl_rt_sales_perf_key_value",{
+            //    id : {type: 'number', key: true},
+            //    date: Date,
+            //    day_type: Number,
+            //    type: String,
+            //    ver: String,
+            //    channel: String,
+            //    key_type : String,
+            //    key_name : String,
+            //    key_desc : String,
+            //    value : Number,
+            //    value2 : Number,
+            //    value3 : Number
+            //});
             models.RebateOrderTredencyDetails = db.define("tbl_rt_rebate_order_tredency_details",{
                 id : {type: 'number', key: true},
                 date: Date,
@@ -814,7 +814,32 @@ function connect(app) {
                 order_shops_num : Number,
                 deal_shops_num : Number,
                 order_num : Number,
-                deal_shops_order_num : Number,
+                deal_shops_order_num : Number
+            });
+            models.SalesPerfTranKv = db.define("tbl_rt_sales_perf_tran_kv", {
+                id : {type: 'number', key: true},
+                date : Date,
+                day_type : Number,
+                tran_acc_pro_num : Number,
+                tran_order_pro_num_spu : Number,
+                tran_refund_pro_num_sku : Number,
+                tred_acc_shop_num : Number,
+                tred_deal_shop_num : Number,
+                tred_deal_money_amount : Number,
+                tred_order_all_amount : Number,
+                tred_pay_all_amount : Number,
+                tred_pay_user_num : Number,
+                del_use_coupon_rate : Number,
+                del_refund_amount : Number,
+                del_refund_num : Number,
+                tran_order_pro_num_sku : Number,
+                tran_pay_pro_num_spu : Number,
+                tran_pay_pro_num_sku : Number,
+                tran_order_user_num : Number,
+                tran_order_money_amount : Number,
+                tran_pay_user_num : Number,
+                tran_pay_money_amount : Number,
+                tran_refund_pro_num_spu : Number
             });
             next();
         }

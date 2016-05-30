@@ -28,7 +28,7 @@ module.exports = (Router) => {
             }]
         }],
         filter(data, filter_key, dates) {
-            return filter.productOne(data);
+            return filter.productOne(data, filter_key);
         },
         cols : [
             [
@@ -132,10 +132,11 @@ module.exports = (Router) => {
             preMethods: ['excel_export']
         }],
         filter(data, filter_key, dates) {
-            return filter.productThree(data, dates);
+            return filter.productThree(data, filter_key);
         },
         rows : [
-            [ 'one', 'two', 'three', "four", "five", "six", "seven" ]
+            [ 'date', 'product_scan', 'products_order', "products_pay", "products_return",
+                "pay_fee", "refund_fee" ]
         ],
         cols : [
             [{
@@ -166,6 +167,9 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/achievements/productFour",
         modelName : ["ProductTop"],
+        paging : true,
+        order : ["-access_num"],
+        sum : ["access_num", "access_users"],
         platform : false,
         date_picker_data : 1,
         showDayUnit : true,
@@ -174,8 +178,8 @@ module.exports = (Router) => {
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
-        filter(data, filter_key, dates) {
-            return filter.productFour(data);
+        filter(data, filter_key, dates, filter_key2, page) {
+            return filter.productFour(data, page);
         },
         rows : [
             [ 'top', 'commodity_name', 'access_num', 'access_num_rate', 'access_users',
@@ -211,6 +215,9 @@ module.exports = (Router) => {
         router : "/achievements/productFive",
         modelName : ["ProductTop"],
         platform : false,
+        paging : true,
+        order : ["-order_price"],
+        sum : ["order_price"],
         date_picker_data : 1,
         showDayUnit : true,
         excel_export : true,
@@ -218,8 +225,8 @@ module.exports = (Router) => {
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
-        filter(data, filter_key, dates) {
-            return filter.productFive(data);
+        filter(data, filter_key, dates, filter_key2, page) {
+            return filter.productFive(data, page);
         },
         rows : [
             [ 'top', 'commodity_name', 'order_users', 'oder_products', 'order_price',

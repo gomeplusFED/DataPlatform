@@ -11,40 +11,31 @@ module.exports = (Router) => {
    
     Router = new api(Router, {
         router : "/achievements/tradeOne",
-        modelName : ["SalesPerfKeyValue"],
+        modelName : ["SalesPerfTranKv"],
         platform : false,
-        fixedParams : {
-            key_type : [
-                "tran_acc_pro_num", "tran_order_pro_num", "tran_order_pro_num_j",
-                "tran_pay_pro_num", "tran_pay_pro_num_j", "tran_order_user_num",
-                "tred_order_all_amount", "tran_order_money_amount",
-                "tran_pay_user_num", "tran_pay_money_amount",
-                "tran_refund_pro_num", "tran_refund_pro_num_j"
-            ]
-        },
+        //fixedParams : {
+        //    key_type : [
+        //        "tran_acc_pro_num", "tran_order_pro_num", "tran_order_pro_num_j",
+        //        "tran_pay_pro_num", "tran_pay_pro_num_j", "tran_order_user_num",
+        //        "tred_order_all_amount", "tran_order_money_amount",
+        //        "tran_pay_user_num", "tran_pay_money_amount",
+        //        "tran_refund_pro_num", "tran_refund_pro_num_j"
+        //    ]
+        //},
         filter(data, filter_key, dates) {
-            return filter.tradeOne(
-                data,
-                [
-                    "tran_acc_pro_num", "tran_order_pro_num", "tran_order_pro_num_j",
-                    "tran_pay_pro_num", "tran_pay_pro_num_j",
-                    "tran_order_user_num", "tred_order_all_amount", "tran_order_money_amount",
-                    "tran_pay_user_num", "tran_pay_money_amount",
-                    "tran_refund_pro_num", "tran_refund_pro_num_j"
-                ]
-            );
+            return filter.tradeOne(data);
         },
         rows: [
             ["tran_acc_pro_num",
                 //"tran_cart_pro_num", "tran_cart_pro_num_j",
-                "tran_order_pro_num",
-                "tran_order_pro_num_j", "tran_pay_pro_num", "tran_pay_pro_num_j"
+                "tran_order_pro_num_spu",
+                "tran_order_pro_num_sku", "tran_pay_pro_num_spu", "tran_pay_pro_num_sku"
             ],
             [
                 "tran_order_user_num", "tran_order_money_amount",
                 "tran_pay_user_num",
-                "tran_pay_money_amount", "tran_cus_unit_price", "tran_refund_pro_num",
-                "tran_refund_pro_num_j"
+                "tran_pay_money_amount", "tran_cus_unit_price", "tran_refund_pro_num_spu",
+                "tran_refund_pro_num_sku"
             ]
         ],
         cols: [
@@ -97,11 +88,11 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/achievements/tradeTwo",
-        modelName : ["SalesPerfKeyValue"],
+        modelName : ["SalesPerfTranKv"],
         platform : false,
         filter_select: [{
             title: '指标选择',
-            filter_key: 'key_type',
+            filter_key: 'filter_key',
             groups: [{
                 key: 'tred_acc_shop_num',
                 value: '浏览店铺数'
@@ -124,7 +115,7 @@ module.exports = (Router) => {
                 key: 'tred_deal_money_amount',
                 value: '成交金额'
             }, {
-                key: 'tred_pay_money_amount',
+                key: 'tran_order_money_amount',
                 value: '付款金额'
             }, {
                 key: 'tred_order_all_amount',
@@ -136,10 +127,10 @@ module.exports = (Router) => {
                 key: 'tred_pay_user_num',
                 value: '付款人数'
             }, {
-                key: 'tran_order_pro_num',
+                key: 'tran_order_pro_num_spu',
                 value: '下单商品数'
             }, {
-                key: 'tran_order_pro_num_j',
+                key: 'tran_order_pro_num_sku',
                 value: '下单商品件数'
             }, {
                 key: "tran_guest_unit_price",
@@ -156,16 +147,18 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/achievements/tradeThree",
-        modelName : ["SalesPerfKeyValue"],
+        modelName : ["SalesPerfTranKv"],
         platform : false,
         excel_export : true,
-        fixedParams : {
-            key_type : [
-                'tred_order_all_amount', 'tred_pay_all_amount', 'tran_order_money_amount',
-                'tran_pay_money_amount', 'tran_guest_unit_price', 'del_use_coupon_rate',
-                'del_refund_amount'
-            ]
-        },
+        paging : true,
+        order : ["-date"],
+        //fixedParams : {
+        //    key_type : [
+        //        'tred_order_all_amount', 'tred_pay_all_amount', 'tran_order_money_amount',
+        //        'tran_pay_money_amount', 'tran_guest_unit_price', 'del_use_coupon_rate',
+        //        'del_refund_amount'
+        //    ]
+        //},
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
@@ -174,7 +167,9 @@ module.exports = (Router) => {
             return filter.tradeThree(data, dates);
         },
         rows : [
-            [ 'date', 'one', 'two', 'three', 'four', 'five', 'six', 'seven','eight']
+            [ 'date', 'tred_order_all_amount', 'tred_pay_all_amount', 'tran_order_money_amount',
+                'tran_pay_user_num', 'tran_guest_unit_price', 'del_use_coupon_rate',
+                'del_refund_amount','del_refund_num']
         ],
         cols : [
             [
@@ -223,6 +218,7 @@ module.exports = (Router) => {
         router : "/achievements/tradeFour",
         modelName : ["TradeCaty"],
         platform : false,
+        paging : true,
         date_picker_data : 1,
         excel_export : true,
         flexible_btn : [{
@@ -286,6 +282,7 @@ module.exports = (Router) => {
         modelName : ["TradeUser"],
         platform : false,
         date_picker_data : 1,
+        paging : true,
         excel_export : true,
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',

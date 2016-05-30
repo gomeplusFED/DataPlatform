@@ -3,10 +3,11 @@
  * @date 20160415
  * @fileoverview 商品分析
  */
-var util = require("../../utils");
+var util = require("../../utils"),
+    moment = require("moment");
 
 module.exports = {
-    productOne(data) {
+    productOne(data, filter_key) {
         var source = data.data,
             newData = {
                 one : 0,
@@ -25,6 +26,16 @@ module.exports = {
             newData.five += key.products_cars;
             newData.six += key.products_order;
             newData.seven += key.products_pay;
+        }
+        if(filter_key === "2") {
+            data.cols[0][4].caption = "加购商品件数";
+            data.cols[0][5].caption = "下单商品件数";
+            data.cols[0][6].caption = "支付商品件数";
+        }
+        if(filter_key === "1") {
+            data.cols[0][4].caption = "加购商品数";
+            data.cols[0][5].caption = "下单商品数";
+            data.cols[0][6].caption = "支付商品数";
         }
         return util.toTable([[newData]], data.rows, data.cols);
     },
@@ -59,86 +70,59 @@ module.exports = {
             }
         }]
     },
-    productThree(data, dates) {
+    productThree(data, filter_key) {
         var source = data.data,
-            count = data.dataCount,
-            obj = {},
-            newData = [];
-        dates.sort((a, b) => {
-            return new Date(b) - new Date(a);
-        });
-        for(var date of dates) {
-            obj[date] = {
-                product_scan : 0,
-                products_order : 0,
-                products_pay : 0,
-                products_return : 0,
-                pay_fee : 0,
-                refund_fee : 0
-            };
-        }
+            count = data.dataCount;
+
         for(var key of source) {
-            var date = util.getDate(key.date);
-            obj[date].product_scan += key.product_scan;
-            obj[date].products_order += key.products_order;
-            obj[date].products_pay += key.products_pay;
-            obj[date].products_return += key.products_return;
-            obj[date].pay_fee += key.pay_fee;
-            obj[date].refund_fee += key.refund_fee;
+            key.date = moment(key.date).format("YYYY-MM-DD");
+            key.pay_fee = key.pay_fee.toFixed(2);
+            key.refund_fee = key.refund_fee.toFixed(2);
         }
-        for(var date of dates) {
-            newData.push({
-                one : date,
-                two : obj[date].product_scan,
-                three : obj[date].products_order,
-                four : obj[date].products_pay,
-                five : obj[date].products_return,
-                six : obj[date].pay_fee.toFixed(2),
-                seven : obj[date].refund_fee.toFixed(2)
-            })
+
+        if(filter_key === "2") {
+            data.cols[0][2].caption = "下单商品件数";
+            data.cols[0][3].caption = "支付商品件数";
+            data.cols[0][4].caption = "退货商品件数";
         }
-        return util.toTable([newData], data.rows, data.cols, [count]);
+
+        if(filter_key === "1") {
+            data.cols[0][2].caption = "下单商品数";
+            data.cols[0][3].caption = "支付商品数";
+            data.cols[0][4].caption = "退货商品数";
+        }
+
+        return util.toTable([source], data.rows, data.cols, [count]);
     },
-    productFour(data) {
+    productFour(data, page) {
         var source = data.data,
-            newData = [],
-            access_num_total = 0,
-            access_users_total = 0,
-            length = source.length,
-            top = length > 100 ? 100 : length;
-        source.sort((a, b) => {
-            return b.access_num - a.access_num;
-        });
-        for(var key of source) {
-            access_num_total += key.access_num;
-            access_users_total += key.access_users;
+            page = page || 1,
+            count = data.dataCount > 100 ? 100 : data.dataCount,
+            sum = data.dataSum;
+
+        for(var i = 0; i < source.length; i++) {
+            var key = source[i];
+            key.top = (page - 1) * 10 + i + 1;
+            key.access_num_rate = util.toFixed(key.access_num, sum[1]);
+            key.access_users_rate = util.toFixed(key.access_users, sum[2]);
+            source[i] = key;
         }
-        for(var i = 0; i < top; i++) {
-            source[i].top = i + 1;
-            source[i].access_num_rate = util.toFixed(source[i].access_num, access_num_total);
-            source[i].access_users_rate = util.toFixed(source[i].access_users, access_users_total);
-            newData.push(source[i]);
-        }
-        return util.toTable([newData], data.rows, data.cols);
+
+        return util.toTable([source], data.rows, data.cols, [count]);
     },
-    productFive(data) {
+    productFive(data, page) {
         var source = data.data,
-            newData = [],
-            order_price_total = 0,
-            length = source.length,
-            top = length > 100 ? 100 : length;
-        source.sort((a, b) => {
-            return b.order_price - a.order_price;
-        });
-        for(var key of source) {
-            order_price_total += key.order_price;
+            page = page || 1,
+            count = data.dataCount > 100 ? 100 : data.dataCount,
+            sum = data.dataSum;
+
+        for(var i = 0; i < source.length; i++) {
+            var key = source[i];
+            key.top = (page - 1) * 10 + i + 1;
+            key.order_price = key.order_price.toFixed(2);
+            key.order_price_rate = util.toFixed(key.order_price, sum[1]);
         }
-        for(var i = 0; i < top; i++) {
-            source[i].top = i + 1;
-            source[i].order_price = source[i].order_price.toFixed(2);
-            source[i].order_price_rate = util.toFixed(source[i].order_price, order_price_total);
-            newData.push(source[i]);
-        }
-        return util.toTable([newData], data.rows, data.cols);
+
+        return util.toTable([source], data.rows, data.cols, [count]);
     }
 };

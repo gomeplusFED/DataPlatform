@@ -175,6 +175,10 @@ exports.division = function(one, two) {
     return (one / (two === 0 ? 1 : two)).toFixed(2);
 };
 
+exports.round = function(one, two) {
+    return Math.round((one / (two === 0 ? 1 : two)));
+};
+
 exports.getDate = function(date){
     return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
 };
