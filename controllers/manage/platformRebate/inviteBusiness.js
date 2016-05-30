@@ -97,14 +97,15 @@ module.exports = (Router) => {
         level_select : true,
         level_select_name : "category_id",
         level_select_url : "/api/categories",
-        default : {
-            day_type : 1,
-            category_id : "all"
+        fixedParams(query, filter_key, req, cb) {
+            if(query.category_id === undefined) {
+                query.category_id = "all";
+            }
+            query.user_party = "5";
+            query.day_type = 1;
+            cb(null, query);
         },
         platform : false,
-        fixedParams : {
-            user_party : "5"
-        },
         filter_select: [{
             title: '指标选择',
             filter_key: 'filter_key',
@@ -130,14 +131,15 @@ module.exports = (Router) => {
         level_select : true,
         level_select_name : "category_id",
         level_select_url : "/api/categories",
-        default : {
-            day_type : 1,
-            category_id : "all"
+        fixedParams(query, filter_key, req, cb) {
+            if(query.category_id === undefined) {
+                query.category_id = "all";
+            }
+            query.user_party = "5";
+            query.day_type = 1;
+            cb(null, query);
         },
         platform : false,
-        fixedParams : {
-            user_party : "5"
-        },
         filter_select: [{
             title: '指标选择',
             filter_key: 'filter_key',

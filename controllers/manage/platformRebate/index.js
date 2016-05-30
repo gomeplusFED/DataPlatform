@@ -16,6 +16,12 @@ module.exports = (Router) => {
         level_select : true,
         level_select_name : "category_id",
         level_select_url : "/api/categories",
+        fixedParams(query, filter_key, req, cb) {
+            if(query.category_id === undefined) {
+                query.category_id = "all";
+            }
+            cb(null, query);
+        },
         default : {
             day_type : 1,
             category_id : "all"
@@ -104,6 +110,12 @@ module.exports = (Router) => {
         level_select : true,
         level_select_name : "category_id",
         level_select_url : "/api/categories",
+        fixedParams(query, filter_key, req, cb) {
+            if(query.category_id === undefined) {
+                query.category_id = "all";
+            }
+            cb(null, query);
+        },
         default : {
             day_type : 1,
             category_id : "all"
@@ -134,6 +146,12 @@ module.exports = (Router) => {
         level_select : true,
         level_select_name : "category_id",
         level_select_url : "/api/categories",
+        fixedParams(query, filter_key, req, cb) {
+            if(query.category_id === undefined) {
+                query.category_id = "all";
+            }
+            cb(null, query);
+        },
         default : {
             day_type : 1,
             category_id : "all"
@@ -164,6 +182,12 @@ module.exports = (Router) => {
         level_select : true,
         level_select_name : "category_id",
         level_select_url : "/api/categories",
+        fixedParams(query, filter_key, req, cb) {
+            if(query.category_id === undefined) {
+                query.category_id = "all";
+            }
+            cb(null, query);
+        },
         default : {
             day_type : 1,
             category_id : "all"

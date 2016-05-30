@@ -95,15 +95,16 @@ module.exports = (Router) => {
         router : "/platformRebate/platformPromotionsTwo",
         modelName : [ "RebateOrderTredencyDetails" ],
         platform : false,
-        default : {
-            day_type : 1,
-            category_id : "all"
-        },
         level_select : true,
         level_select_name : "category_id",
         level_select_url : "/api/categories",
-        fixedParams : {
-            user_party : "2"
+        fixedParams(query, filter_key, req, cb) {
+            if(query.category_id === undefined) {
+                query.category_id = "all";
+            }
+            query.user_party = "2";
+            query.day_type = 1;
+            cb(null, query);
         },
         filter_select: [{
             title: '指标选择',
@@ -131,12 +132,13 @@ module.exports = (Router) => {
         level_select : true,
         level_select_name : "category_id",
         level_select_url : "/api/categories",
-        default : {
-            day_type : 1,
-            category_id : "all"
-        },
-        fixedParams : {
-            user_party : "2"
+        fixedParams(query, filter_key, req, cb) {
+            if(query.category_id === undefined) {
+                query.category_id = "all";
+            }
+            query.user_party = "2";
+            query.day_type = 1;
+            cb(null, query);
         },
         filter_select: [{
             title: '指标选择',
@@ -161,15 +163,16 @@ module.exports = (Router) => {
         router : "/platformRebate/platformPromotionsFour",
         modelName : [ "RebateTypeLevelDetails" ],
         platform : false,
-        default : {
-            day_type : 1,
-            category_id : "all"
-        },
         level_select : true,
         level_select_name : "category_id",
         level_select_url : "/api/categories",
-        fixedParams : {
-            user_party : "2"
+        fixedParams(query, filter_key, req, cb) {
+            if(query.category_id === undefined) {
+                query.category_id = "all";
+            }
+            query.user_party = "2";
+            query.day_type = 1;
+            cb(null, query);
         },
         filter_select: [{
             title: '指标选择',

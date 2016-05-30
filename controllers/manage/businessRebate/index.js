@@ -95,13 +95,16 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/businessRebate/businessAllTwo",
         modelName : [ "RebateShopOrderTredencyDetails" ],
-        default : {
-            day_type : 1,
-            category_id : "all"
-        },
         level_select : true,
         level_select_name : "category_id",
         level_select_url : "/api/categories",
+        fixedParams(query, filter_key, req, cb) {
+            if(query.category_id === undefined) {
+                query.category_id = "all";
+            }
+            query.day_type = 1;
+            cb(null, query);
+        },
         platform : false,
         filter_select: [{
             title: '指标选择',
@@ -128,11 +131,14 @@ module.exports = (Router) => {
         level_select : true,
         level_select_name : "category_id",
         level_select_url : "/api/categories",
-        platform : false,
-        default : {
-            day_type : 1,
-            category_id : "all"
+        fixedParams(query, filter_key, req, cb) {
+            if(query.category_id === undefined) {
+                query.category_id = "all";
+            }
+            query.day_type = 1;
+            cb(null, query);
         },
+        platform : false,
         filter_select: [
             {
                 title: '指标选择',
@@ -160,11 +166,14 @@ module.exports = (Router) => {
         level_select : true,
         level_select_name : "category_id",
         level_select_url : "/api/categories",
-        platform : false,
-        default : {
-            day_type : 1,
-            category_id : "all"
+        fixedParams(query, filter_key, req, cb) {
+            if(query.category_id === undefined) {
+                query.category_id = "all";
+            }
+            query.day_type = 1;
+            cb(null, query);
         },
+        platform : false,
         filter_select: [
             {
                 title: '指标选择',
