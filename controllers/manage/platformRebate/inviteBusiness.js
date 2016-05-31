@@ -170,6 +170,8 @@ module.exports = (Router) => {
         },
         paging : true,
         order : ["-date"],
+        showDayUnit : true,
+        date_picker_data : 1,
         excel_export : true,
         //flexible_btn : [{
         //    content: '<a href="javascript:void(0)">导出</a>',

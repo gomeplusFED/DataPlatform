@@ -205,6 +205,8 @@ module.exports = (Router) => {
             user_party : "2"
         },
         excel_export : true,
+        showDayUnit : true,
+        date_picker_data : 1,
         //flexible_btn : [{
         //    content: '<a href="javascript:void(0)">导出</a>',
         //    preMethods: ['excel_export']

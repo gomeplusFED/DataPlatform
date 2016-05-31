@@ -21,7 +21,7 @@ module.exports = (Router) => {
         filter(data, filter_key, dates) {
             return userAnalysis.One(data,
                 [ "start_up" ],
-                [ "启动次数" ],
+                [ "启动次数/浏览量" ],
                 dates
             );
         }
@@ -42,11 +42,11 @@ module.exports = (Router) => {
                     width : 20
                 },
                 {
-                    caption : '启动次数',
+                    caption : '启动次数/浏览量',
                     type : 'number'
                 },
                 {
-                    caption : '人均启动次数',
+                    caption : '启动次数/浏览量(人均)',
                     type : 'number'
                 }
             ]

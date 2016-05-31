@@ -82,7 +82,7 @@ module.exports = (Router) => {
             filter_key: 'filter_key',
             groups: [{
                 key: 'registered_count',
-                value: '邀请成功'
+                value: '邀请成功数'
             }, {
                 key: 'rebate_amount_count',
                 value: '返利到账金额'
@@ -100,6 +100,8 @@ module.exports = (Router) => {
         excel_export : true,
         paging : true,
         order : ["-date"],
+        showDayUnit : true,
+        date_picker_data : 1,
         flexible_btn: [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']

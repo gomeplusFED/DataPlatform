@@ -26,7 +26,9 @@ module.exports = (Router) => {
             ["name", "order_num", "order_amount", "shop_num", "user_num", "product_sku_num"],
             ["rebate_order_num",
                 //"rebate_amount_total", "rebate_amount_actual",
-                "rebate_amount", "rate", "platform_amount"],
+                "rebate_amount",
+                //"rate",
+                "platform_amount"],
             ["name", "spu_num", "sku_num", "user_num", "amount",
                 //"amount_actual"
             ]
@@ -63,9 +65,9 @@ module.exports = (Router) => {
             }, {
                 caption: "返利到账金额",
                 type: "string"
-            }, {
-                caption: "返利比率",
-                type: "string"
+            //}, {
+            //    caption: "返利比率",
+            //    type: "string"
             }, {
                 caption: "平台到账金额",
                 type: "string"
@@ -198,7 +200,8 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/businessRebate/businessAllFive",
         modelName : [ "RebateShopTop" ],
-        date_picker_data: 1,
+        showDayUnit : true,
+        date_picker_data : 1,
         platform : false,
         paging : true,
         order : ["-order_num", "-pay_order_num"],
@@ -249,10 +252,11 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/businessRebate/businessAllSix",
         modelName : [ "RebateShopPlanTop" ],
-        date_picker_data: 1,
         platform : false,
         paging : true,
         order : ["-order_num", "-pay_order_num"],
+        showDayUnit : true,
+        date_picker_data : 1,
         flexible_btn : [
             {
                 content: '<a href="#!/businessRebate/plan">更多</a>',
@@ -317,6 +321,8 @@ module.exports = (Router) => {
         platform : false,
         paging : true,
         order : ["-date"],
+        showDayUnit : true,
+        date_picker_data : 1,
         filter_select: [{
             title: '关联流程',
             filter_key: 'related_flow',

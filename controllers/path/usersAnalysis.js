@@ -40,15 +40,15 @@ module.exports = {
     startUp() {
         return {
             path : "/userAnalysis/startUp",
-            name : "启动次数",
+            name : "启动次数/浏览量",
             display : true,
             defaultData : [{
                 type : "chart",
-                title : "启动次数趋势",
+                title : "启动次数/浏览量趋势",
                 query_api : "/userAnalysis/startUpOne"
             }, {
                 type : "table",
-                title : "启动次数明细",
+                title : "启动次数/浏览量明细",
                 query_api : "/userAnalysis/startUpTwe"
             }]
         };
