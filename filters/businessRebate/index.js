@@ -1,4 +1,4 @@
-    /**
+/**
  * @author yanglei
  * @date 20160405
  * @fileoverview 商家返利汇总
