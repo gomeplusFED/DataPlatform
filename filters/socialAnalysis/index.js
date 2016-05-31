@@ -145,7 +145,7 @@ module.exports = {
     },
     groupFive(data, page) {
         var source = data.data,
-            count = data.dataCount,
+            count = data.dataCount > 100 ? 100 : data.dataCount,
             orderData = data.orderData,
             page = page || 1,
             newData = [],

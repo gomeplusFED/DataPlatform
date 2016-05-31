@@ -150,7 +150,7 @@ module.exports = {
     hostFive(data, page) {
         var source = data.data,
             page = page || 1,
-            count = data.dataCount,
+            count = data.dataCount > 100 ? 100 : data.dataCount,
             newData = [];
         for(var i = 0; i < source.length; i++) {
             source[i].id = (page - 1) * 10 + i +1;

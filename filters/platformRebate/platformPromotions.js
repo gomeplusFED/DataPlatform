@@ -132,33 +132,26 @@ module.exports = {
                 goods_amount_count: "商品总金额",
                 rebate_amount_count: "返利到账金额"
             },
+            objPie = {},
+            objBar = {},
             XPie = config.level,
             XBar = config.grade;
         for (var level of XPie) {
-            var obj = {};
-            obj.value = 0;
-            for (var key of source) {
-                if (level.value === key.grade) {
-                    obj.value += key[filter_key];
-                }
-            }
-            newDataPie[level.key] = obj;
-        }
-        for (var level of XPie) {
-            var obj = {};
+            objPie[level.value] = {
+                value : 0
+            };
+            objBar[level.value] = {};
             for (var i = 0; i < XBar.length; i++) {
-                obj[i] = 0;
+                objBar[level.value][i] = 0;
             }
-            for (var key of source) {
-                if (key.grade === level.value) {
-                    for (var i = 0; i < XBar.length; i++) {
-                        if (key.level === XBar[i].value) {
-                            obj[i] += key[filter_key];
-                        }
-                    }
-                }
-            }
-            newDataBar[level.key] = obj;
+        }
+        for(var key of source) {
+            objPie[key.level].value += key[filter_key];
+            objBar[key.level][key.grade] += key[filter_key];
+        }
+        for(var level of XPie) {
+            newDataPie[level.key] = objPie[level.value];
+            newDataBar[level.key] = objBar[level.value];
         }
         for (var i = 0; i < XBar.length; i++) {
             mapBar[i] = XBar[i].key;

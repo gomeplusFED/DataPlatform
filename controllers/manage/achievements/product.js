@@ -166,7 +166,7 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/achievements/productFour",
-        modelName : ["ProductTop"],
+        modelName : ["SalesProductFlowtTop"],
         paging : true,
         order : ["-access_num"],
         sum : ["access_num", "access_users"],
@@ -213,7 +213,7 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/achievements/productFive",
-        modelName : ["ProductTop"],
+        modelName : ["SalesProductMarketTop"],
         platform : false,
         paging : true,
         order : ["-order_price"],
@@ -230,7 +230,7 @@ module.exports = (Router) => {
         },
         rows : [
             [ 'top', 'commodity_name', 'order_users', 'oder_products', 'order_price',
-                'order_price_rate', "refund_num", 'share_num']
+                'order_price_rate', "refund_num" ]
         ],
         cols : [
             [{
@@ -253,9 +253,6 @@ module.exports = (Router) => {
                 type: 'string'
             }, {
                 caption: '退货数',
-                type: 'number'
-            }, {
-                caption: '被分享商品数',
                 type: 'number'
             }]
         ]

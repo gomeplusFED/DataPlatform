@@ -403,9 +403,10 @@ api.prototype = {
             page = params.page || 1,
             offset = limit * (page - 1);
         for(var key in params) {
-            if(key !== "limit" && key !== "page") {
-                _params[key] = params[key];
+            if(key === "limit" || key === "page") {
+                continue;
             }
+            _params[key] = params[key];
         }
         return new Promise((resolve, reject) => {
             var sql = req.models[modelName].find(_params).limit(limit).offset(offset);

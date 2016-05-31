@@ -83,13 +83,13 @@ module.exports = {
     individualEventTwo(data, filter_key, dates) {
         var source = data.data,
             type = "line",
-            array = [ {
-                key : "分享购买",
-                value : "11"
-            },{
-                key : "邀请好友-购买返利",
+            array = [{
+                key : "比例返利",
                 value : "12"
-            } ],
+            },{
+                key : "固定返利",
+                value : "11"
+            }],
             newData = {},
             map = {};
         map[filter_key + "_0"] = array[0].key;

@@ -254,7 +254,7 @@ module.exports = {
     },
     businessAllFive(data, page) {
         var source = data.data,
-            count = data.dataCount,
+            count = data.dataCount > 50 ? 50 : data.dataCount,
             page = page || 1,
             newData = [],
             length = source.length;
@@ -277,7 +277,7 @@ module.exports = {
     },
     businessAllSix(data, page) {
         var source = data.data,
-            count = data.dataCount,
+            count = data.dataCount > 50 ? 50 : data.dataCount,
             page = page || 1,
             newData = [],
             length = source.length,

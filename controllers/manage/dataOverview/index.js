@@ -96,7 +96,8 @@ module.exports = (Router) => {
         modelName: ["OverviewPlatf"],
         platform : false,
         fixedParams : {
-            region : "ALL"
+            region : "ALL",
+            type : "app"
         },
         filter_select: [{
             title: '指标选择',
@@ -133,8 +134,7 @@ module.exports = (Router) => {
                     register_rate : "注册转化率(%)",
                     using_time_avg : "每次使用时长(s)"
                 },
-                dates,
-                "H5"
+                dates
             );
         }
     });
@@ -142,6 +142,9 @@ module.exports = (Router) => {
     Router = new api(Router, {
         router: "/dataOverview/dataOverviewAllThree",
         modelName: ["OverviewPlatf"],
+        paging : true,
+        order : [ "-open_total" ],
+        sum : ["open_total"],
         platform : false,
         date_picker : false,
         params() {
@@ -149,7 +152,7 @@ module.exports = (Router) => {
                 ydate = util.getDate(new Date(now.getTime() - 24 * 60 * 60 * 1000));
             return {
                 date : orm.between(new Date(ydate + " 00:00:00"), new Date(ydate + " 23:59:59")),
-                type : orm.not_in(["H5"]),
+                type : "app",
                 region : orm.not_in(["ALL"]),
                 day_type : 1
             }
@@ -190,6 +193,9 @@ module.exports = (Router) => {
         modelName: ["OverviewPage"],
         platform : false,
         date_picker : false,
+        paging : true,
+        order : ["-pv"],
+        sum : ["pv"],
         params() {
             var now = new Date(),
                 ydate = util.getDate(new Date(now.getTime() - 24 * 60 * 60 * 1000));
