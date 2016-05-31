@@ -14,7 +14,7 @@ module.exports = {
                 xpop_shops_num_add_al : "新增注册店铺",
                 xpop_shops_num_succ_add_al : "成功入驻店铺",
                 deal_shops_num : "成功交易店铺",
-                xpop_shops_num_share_al : "被访问店铺数"
+                xpop_shops_num_acc_al : "被访问店铺数"
             },
             type = "line",
             map = {
@@ -44,7 +44,7 @@ module.exports = {
             count = data.dataCount;
 
         for(var key of source) {
-            key.date = moment(key.data).format("YYYY-MM-DD");
+            key.date = moment(key.date).format("YYYY-MM-DD");
         }
 
         return util.toTable([source], data.rows, data.cols, [count]);
@@ -76,7 +76,7 @@ module.exports = {
             key.top = (page - 1) * 10 + i + 1;
             key.pay_price = key.pay_price.toFixed(2);
             key.pay_price_rate = util.toFixed(key.pay_price, sum[1]);
-            key.pay_commodity_rate = util.toFixed(key.pay_commodity, sum[2]);
+            key.pay_commodity_rate = util.toFixed(key.pay_commodity_num, sum[2]);
             source[i] = key;
         }
 

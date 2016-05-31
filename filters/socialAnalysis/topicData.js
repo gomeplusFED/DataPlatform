@@ -157,7 +157,7 @@ module.exports = {
     },
     topicsFive(data, page) {
         var source = data.data,
-            count = data.dataCount,
+            count = data.dataCount > 100 ? 100 : data.dataCount,
             page = page || 1,
             newData = [];
         for(var i = 0; i < source.lenght; i++) {

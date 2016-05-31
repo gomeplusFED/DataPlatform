@@ -20,11 +20,9 @@ module.exports = (Router) => {
             if(query.category_id === undefined) {
                 query.category_id = "all";
             }
+            query.day_type = 1;
+            query.user_party = "all";
             cb(null, query);
-        },
-        default : {
-            day_type : 1,
-            category_id : "all"
         },
         platform : false,
         //date_picker_data: 1,
@@ -41,7 +39,9 @@ module.exports = (Router) => {
                 "participate_user_count", "productSku_num"],
             ["rebate_order_count",
                 //"rebate_order_amount_count", "rebate_order_amount_actual_count",
-                "rebate_amount_count", "rate"],
+                "rebate_amount_count"
+                //, "rate"
+            ],
             ["name", "spu_count", "sku_count", "refund_user_count", "refund_goods_amount_count",
                 //"refund_goods_amount_actual_count"
             ]
@@ -78,9 +78,9 @@ module.exports = (Router) => {
             }, {
                 caption: "返利到账金额",
                 type: "string"
-            }, {
-                caption: "返利比率",
-                type: "string"
+            //}, {
+            //    caption: "返利比率",
+            //    type: "string"
             }],
             [{
                 caption: "",
