@@ -95,7 +95,12 @@ module.exports = (Router) => {
 
     Router = new api(Router, {
         router : "/platformRebate/platformPromotionsTwo",
-        modelName : [ "RebateOrderTredencyDetails" ],
+        modelName : [ "RebateOrderTredencyDetails", "TypeFlow" ],
+        orderParams : {
+            type_code : 2,
+            type : 1,
+            status : 1
+        },
         platform : false,
         level_select : true,
         level_select_name : "category_id",
@@ -129,7 +134,12 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/platformRebate/platformPromotionsThree",
-        modelName : [ "RebateTypeLevelDetails" ],
+        modelName : [ "RebateTypeLevelDetails", "TypeFlow" ],
+        orderParams : {
+            type_code : 2,
+            type : 1,
+            status : 1
+        },
         platform : false,
         level_select : true,
         level_select_name : "category_id",
@@ -163,7 +173,12 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/platformRebate/platformPromotionsFour",
-        modelName : [ "RebateTypeLevelDetails" ],
+        modelName : [ "RebateTypeLevelDetails", "TypeFlow" ],
+        orderParams : {
+            type_code : 2,
+            type : 1,
+            status : 1
+        },
         platform : false,
         level_select : true,
         level_select_name : "category_id",
@@ -197,7 +212,13 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/platformRebate/platformPromotionsFive",
-        modelName : [ "RebatetSheduleDetails" ],
+        modelName : [ "RebatetSheduleDetails", "TypeFlow" ],
+        orderParams : {
+            type_code : 2,
+            type : 1,
+            status : 1,
+            limit : 100
+        },
         platform : false,
         paging : true,
         order : ["-date"],
