@@ -19,9 +19,9 @@ module.exports = (Router) => {
                 + " WHERE is_admin<99 AND"
                 + " (username like '%" + username + "%' OR role like '%" +  username + "%')"
                 + " LIMIT " + (page - 1) * limit + "," + limit;
-        req.db.driver.execQuery(count, (err, count) => {
+        req.models.db1.driver.execQuery(count, (err, count) => {
             if(!err) {
-                req.db.driver.execQuery(sql, (err, data) => {
+                req.models.db1.driver.execQuery(sql, (err, data) => {
                         if(!err) {
                             res.json({
                                 code : 200,

@@ -850,6 +850,7 @@ function connect(app) {
                 channel : String,
                 day_type : Number
             });
+            models.db1 = db;
             next();
         }
     }));
@@ -883,6 +884,7 @@ function connect(app) {
                 update_time : Date,
                 status : Number
             });
+            models.db2 = db;
             next();
         }
     }));

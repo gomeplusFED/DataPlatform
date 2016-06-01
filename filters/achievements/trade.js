@@ -50,7 +50,7 @@ module.exports = {
             tran_order_money_amount : obj.tran_order_money_amount.toFixed(2),
             tran_pay_user_num : obj.tran_pay_user_num,
             tran_pay_money_amount : obj.tran_pay_money_amount.toFixed(2),
-            tran_cus_unit_price : util.division(obj.tred_deal_money_amount, obj.tran_pay_user_num),
+            tran_cus_unit_price : util.division(obj.tran_pay_money_amount, obj.tran_pay_user_num),
             tran_refund_pro_num_spu : obj.tran_refund_pro_num_spu,
             tran_refund_pro_num_sku : obj.tran_refund_pro_num_sku
         });
@@ -86,9 +86,9 @@ module.exports = {
         for(var key of source) {
             date = util.getDate(key.date);
             if(filter_key === "tran_guest_unit_price") {
-                newData[date].value = util.round(key.tred_deal_money_amount, key.tran_pay_user_num);
+                newData[date].value = util.round(key.tran_pay_money_amount, key.tran_pay_user_num);
             } else if(filter_key === "tran_row_unit_price") {
-                newData[date].value = util.round(key.tred_deal_money_amount, key.tred_pay_all_amount)
+                newData[date].value = util.round(key.tran_pay_money_amount, key.tred_pay_all_amount)
             } else {
                 newData[date].value += Math.round(key[filter_key]);
             }
@@ -108,7 +108,7 @@ module.exports = {
 
         for(var key of source) {
             key.date = moment(key.date).format("YYYY-MM-DD");
-            key.tran_guest_unit_price = util.division(key.tred_deal_money_amount, key.tran_pay_user_num);
+            key.tran_guest_unit_price = util.division(key.tran_pay_money_amount, key.tran_pay_user_num);
             key.del_use_coupon_rate = key.del_use_coupon_rate.toFixed(2) + "%";
         }
 

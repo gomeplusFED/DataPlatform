@@ -35,25 +35,25 @@ module.exports = (Router) => {
         router : "/userAnalysis/versionTwo",
         modelName : ["NewAccount"],
         paging : true,
-        order : [ "-date" ],
+        sum : ["total_users"],
+        date_picker_data : 1,
         fixedParams : {
             ver : orm.not_in(["ALL"])
         },
         rows : [
-            ["date", "ver", "total_users"]
+            ["ver", "total_users", "total_users_rate"]
         ],
         cols : [
             [
                 {
-                    caption : '时间',
-                    type : 'string',
-                    width : 20
-                },{
                     caption : '版本',
                     type : 'string'
                 },{
-                    caption : '总用户数',
+                    caption : '当天用户数',
                     type : 'number'
+                },{
+                    caption : '当天用户占比',
+                    type : 'string'
                 }
             ]
         ],
@@ -63,7 +63,7 @@ module.exports = (Router) => {
             preMethods: ['excel_export']
         }],
         filter(data, filter_key, dates) {
-            return userAnalysis.versionTwo(data, dates);
+            return userAnalysis.versionTwo(data);
         }
     });
 

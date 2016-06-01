@@ -262,15 +262,15 @@ module.exports = (Router) => {
                     type : 'number'
                 },
                 {
-                    caption : '销售商品数',
+                    caption : '销量',
                     type : 'number'
                 },
                 {
-                    caption : '支付金额',
+                    caption : '销售金额',
                     type : 'number'
                 },
                 {
-                    caption : '支付金额占比',
+                    caption : '销售金额占比',
                     type : 'string'
                 }
             ]

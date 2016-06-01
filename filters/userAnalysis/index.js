@@ -135,11 +135,12 @@ module.exports = {
             }
         }]
     },
-    versionTwo(data, dates) {
+    versionTwo(data) {
         var source = data.data,
-           count = data.dataCount;
+            count = data.dataCount,
+            sum = data.dataSum[1] ? data.dataSum[1] : 1;
         for(var key of source) {
-            key.date = moment(key.date).format("YYYY-MM-DD");
+            key.total_users_rate = util.toFixed(key.total_users, sum);
         }
         return util.toTable([source], data.rows, data.cols, [count]);
     }

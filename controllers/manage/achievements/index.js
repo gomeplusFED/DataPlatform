@@ -137,7 +137,7 @@ module.exports = (Router) => {
                 caption: '访客数占比',
                 type: 'string'
             }, {
-                caption: '被分享商品数',
+                caption: '被分享次数',
                 type: 'number'
             }]
         ]

@@ -102,7 +102,7 @@ module.exports = {
                 if (date === util.getDate(key.date)) {
                     for (var i = 0; i < array.length; i++) {
                         if (key.correlate_flow === array[i].value) {
-                            obj[filter_key + "_" + i] += key[filter_key];
+                            obj[filter_key + "_" + i] += Math.round(key[filter_key]);
                         }
                     }
                 }
@@ -142,7 +142,7 @@ module.exports = {
             };
             for (var key of source) {
                 if (x.value === key.correlate_flow) {
-                    obj.value += key[filter_key];
+                    obj.value += Math.round(key[filter_key]);
                 }
             }
             newData[x.key] = obj;
@@ -175,7 +175,8 @@ module.exports = {
             key.user_party = user_party[key.user_party];
             key.correlate_flow = correlate_flow[key.correlate_flow];
             key.order_rate = key.new_order_count + "/" + key.order_all_count;
-            key.price_rate = key.new_order_amount + "/" + key.order_all_amount;
+            key.price_rate = key.new_order_amount.toFixed(2) + "/" + key.order_all_amount.toFixed(2);
+            key.rebate_amount = key.rebate_amount.toFixed(2);
         });
         return util.toTable([source], data.rows, data.cols, [count]);
     }

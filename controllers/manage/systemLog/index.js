@@ -1,7 +1,7 @@
 /**
  * @author yanglei
  * @date 20160503
- * @fileoverview 角色管理
+ * @fileoverview 系统日志
  */
 var util = require("../../../utils");
 
@@ -14,7 +14,7 @@ module.exports = (Router) => {
                 + " LIMIT " + (page - 1) * limit + "," + limit;
         req.models.Log.count({}, (err, count) => {
             if(!err) {
-                req.db.driver.execQuery(sql, (err, data) => {
+                req.models.db1.driver.execQuery(sql, (err, data) => {
                     if(!err) {
                         res.json({
                             code : 200,

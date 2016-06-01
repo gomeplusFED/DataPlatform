@@ -16,7 +16,7 @@ module.exports = (Router) => {
         sql += " LIMIT " + (page - 1) * limit + "," + limit;
         req.models.Role.count({}, (err, count) => {
             if(!err) {
-                req.db.driver.execQuery(sql, (err, data) => {
+                req.models.db1.driver.execQuery(sql, (err, data) => {
                     if(!err) {
                         res.json({
                             code : 200,

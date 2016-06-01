@@ -32,9 +32,8 @@ module.exports = {
             "participate_user_count": one.participate_user_count,
             "registered_count": one.registered_count,
             "registered_rate": util.toFixed(one.registered_count, one.participate_user_count),
-            "rebate_amount_count": one.rebate_amount_count
+            "rebate_amount_count": one.rebate_amount_count.toFixed(2)
         });
-        one.rebate_amount_count = one.rebate_amount_count.toFixed(2);
         resultData.push(_current);
         return resultData;
     },
@@ -89,7 +88,7 @@ module.exports = {
                 if(date === util.getDate(key.date)) {
                     for(var i = 0; i < array.length; i++) {
                         if(array[i].value === key.user_party) {
-                            obj["value_" + i] += key[filter_key];
+                            obj["value_" + i] += Math.round(key[filter_key]);
                         }
                     }
                 }
@@ -115,6 +114,7 @@ module.exports = {
             source[i].id = (page - 1) * 10 + i + 1;
             source[i].user_party = user_party[source[i].user_party];
             source[i].correlate_flow = correlate_flow[source[i].correlate_flow];
+            source[i].rebate_amount_count = source[i].rebate_amount_count.toFixed(2);
         }
         return util.toTable([source], data.rows, data.cols, [count]);
     }

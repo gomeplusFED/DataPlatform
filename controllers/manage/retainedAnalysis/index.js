@@ -22,7 +22,7 @@ module.exports = (Router) => {
             preMethods: ['excel_export']
         }],
         rows: [
-            [ 'date', 'new_user', 'keep', 'keep_type']
+            [ 'date', 'new_user', 'keep1', 'keep2', "keep3", "keep4"]
         ],
         cols: [
             [
@@ -34,10 +34,16 @@ module.exports = (Router) => {
                     caption: '新增用户',
                     type: 'number'
                 }, {
-                    caption: '留存率',
+                    caption: '次日留存率',
                     type: 'string'
                 }, {
-                    caption: '留存类型',
+                    caption: '7日留存率',
+                    type: 'string'
+                }, {
+                    caption: '14日留存率',
+                    type: 'string'
+                }, {
+                    caption: '30日留存率',
                     type: 'string'
                 }
             ]

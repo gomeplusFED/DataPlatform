@@ -64,7 +64,7 @@ module.exports = {
                 query_api : "/userAnalysis/versionOne"
             }, {
                 type : "table",
-                title : "版本累计用户",
+                title : "版本用户分布",
                 query_api : "/userAnalysis/versionTwo"
             }]
         };
