@@ -112,6 +112,13 @@ var ModalTable = Vue.extend({
 					$('body').css('overflow', 'auto');
 				}
 			}
+		},
+		'modalTableData.data': {
+			handler: function(val){
+				if(val){
+					this.paginationConf.totalItems = this.modalTableData.data.count ?  this.modalTableData.data.count : 0;
+				}
+			}
 		}
 	}
 })

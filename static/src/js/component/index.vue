@@ -1,6 +1,6 @@
 <template>
     <h2>{{userInfo.name}}，欢迎来到数据平台！</h2>
-    <h3>需要权限修改请联系：<a href="mailto:peijingjuan@gomeplus.com">裴静娟</a></h3>
+    <h3>需要权限修改请联系：<a href="mailto:chenjuan@gomeplus.com">陈娟</a></h3>
 </template>
 
 <script>

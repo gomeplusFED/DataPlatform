@@ -853,39 +853,39 @@ function connect(app) {
             next();
         }
     }));
-    app.use(orm.express('mysql://' + rebate.username + ':' + rebate.pwd + '@' + rebate.host + '/' + rebate.database + '?timezone=CST', {
-        define: function(db, models, next) {
-            db.settings.set('instance.cache', false);
-            db.settings.set('instance.autoFetch', true);
-            models.TypeFlow = db.define("t_rebate_type_flow", {
-                type_code : Number,
-                flow_code : Number,
-                rebate_level : Number,
-                create_time : Date,
-                update_time : Date,
-                status : Number
-            });
-            models.PlanFlow = db.define("t_rebate_plan_flow", {
-                id: { type: 'number', key: true },
-                code : Number,
-                name : String,
-                create_time : Date,
-                update_time : Date,
-                status : Number
-            });
-            models.PlanType = db.define("t_rebate_plan_type", {
-                id: { type: 'number', key: true },
-                code : Number,
-                rebate_level : Number,
-                name : String,
-                type : Number,
-                create_time : Date,
-                update_time : Date,
-                status : Number
-            });
-            next();
-        }
-    }));
+    // app.use(orm.express('mysql://' + rebate.username + ':' + rebate.pwd + '@' + rebate.host + '/' + rebate.database + '?timezone=CST', {
+    //     define: function(db, models, next) {
+    //         db.settings.set('instance.cache', false);
+    //         db.settings.set('instance.autoFetch', true);
+    //         models.TypeFlow = db.define("t_rebate_type_flow", {
+    //             type_code : Number,
+    //             flow_code : Number,
+    //             rebate_level : Number,
+    //             create_time : Date,
+    //             update_time : Date,
+    //             status : Number
+    //         });
+    //         models.PlanFlow = db.define("t_rebate_plan_flow", {
+    //             id: { type: 'number', key: true },
+    //             code : Number,
+    //             name : String,
+    //             create_time : Date,
+    //             update_time : Date,
+    //             status : Number
+    //         });
+    //         models.PlanType = db.define("t_rebate_plan_type", {
+    //             id: { type: 'number', key: true },
+    //             code : Number,
+    //             rebate_level : Number,
+    //             name : String,
+    //             type : Number,
+    //             create_time : Date,
+    //             update_time : Date,
+    //             status : Number
+    //         });
+    //         next();
+    //     }
+    // }));
 };
 
 module.exports = connect;
