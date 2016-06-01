@@ -73,7 +73,6 @@ var Btns = Vue.extend({
                 }else{
                     resultQuery.push(item + '=' + ret);
                 }
-                
             }
             var key = location.hash.replace('#!', '');
             window.open(window.allPageConfig.page[key].defaultData[this.index].query_api + '_excel?' +  resultQuery.join('&'));
