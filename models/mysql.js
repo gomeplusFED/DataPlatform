@@ -859,27 +859,13 @@ function connect(app) {
             db.settings.set('instance.cache', false);
             db.settings.set('instance.autoFetch', true);
             models.TypeFlow = db.define("t_rebate_type_flow", {
+                id : {type: 'number', key: true},
+                type : Number,
                 type_code : Number,
                 flow_code : Number,
+                type_name : String,
+                flow_name : String,
                 rebate_level : Number,
-                create_time : Date,
-                update_time : Date,
-                status : Number
-            });
-            models.PlanFlow = db.define("t_rebate_plan_flow", {
-                id: { type: 'number', key: true },
-                code : Number,
-                name : String,
-                create_time : Date,
-                update_time : Date,
-                status : Number
-            });
-            models.PlanType = db.define("t_rebate_plan_type", {
-                id: { type: 'number', key: true },
-                code : Number,
-                rebate_level : Number,
-                name : String,
-                type : Number,
                 create_time : Date,
                 update_time : Date,
                 status : Number

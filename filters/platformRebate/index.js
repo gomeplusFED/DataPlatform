@@ -103,6 +103,7 @@ module.exports = {
     platformOrderTwe(data, filter_key, dates) {
         var source = data.data,
             type = "line",
+            orderSource = data.orderData,
             //array = {
             //    1 : "平台基础返利",
             //    2 : "平台促销返利",
@@ -124,26 +125,36 @@ module.exports = {
             } ],
             newData = {},
             map = {};
-        map[filter_key + "_0"] = array[0].key;
-        map[filter_key + "_1"] = array[1].key;
-        map[filter_key + "_2"] = array[2].key;
-        map[filter_key + "_3"] = array[3].key;
+        for(var key of orderSource) {
+            map[filter_key + "_" + key.type_code] = key.type_name;
+        }
+        //map[filter_key + "_1"] = array["1"].name;
+        //map[filter_key + "_2"] = array["2"].name;
+        //map[filter_key + "_5"] = array["5"].name;
+        //map[filter_key + "_6"] = array["6"].name;
         for (var date of dates) {
-            var obj = {};
-            obj[filter_key + "_0"] = 0;
-            obj[filter_key + "_1"] = 0;
-            obj[filter_key + "_2"] = 0;
-            obj[filter_key + "_3"] = 0;
-            for (var key of source) {
-                if (date === util.getDate(key.date)) {
-                    for (var i = 0; i < array.length; i++) {
-                        if (key.user_party === array[i].value) {
-                            obj[filter_key + "_" + i] += Math.round(key[filter_key]);
-                        }
-                    }
-                }
+            newData[date] = {};
+            for(var k in map) {
+                newData[date][k] = 0;
             }
-            newData[date] = obj;
+            //newData[date][filter_key + "_1"] = 0;
+            //newData[date][filter_key + "_2"] = 0;
+            //newData[date][filter_key + "_5"] = 0;
+            //newData[date][filter_key + "_6"] = 0;
+            //for (var key of source) {
+            //    if (date === util.getDate(key.date)) {
+            //        for (var i = 0; i < array.length; i++) {
+            //            if (key.user_party === array[i].value) {
+            //                obj[filter_key + "_" + i] += Math.round(key[filter_key]);
+            //            }
+            //        }
+            //    }
+            //}
+            //newData[date] = obj;
+        }
+        for(var key of source) {
+            date = util.getDate(key.date);
+            newData[date][filter_key + "_" + key.user_party] += Math.round(key[filter_key]);
         }
         return [{
             type: type,
