@@ -144,7 +144,7 @@ var Chart = Vue.extend({
 			}
 			
 
-			if(xAxis.length > 10){
+			if(legend.length > 10){
 				options.legend.orient = 'vertical';
 				options.legend.left = 0;
 			}
