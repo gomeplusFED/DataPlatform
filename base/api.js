@@ -383,6 +383,12 @@ api.prototype = {
     _findDatabase: async((req, modelName, params) => {
         var _params = {};
         for(var key in params) {
+            if(key === "from") {
+                continue;
+            }
+            if(key === "to") {
+                continue;
+            }
             if(key !== "limit" && key !== "page") {
                 _params[key] = params[key];
             }
@@ -406,6 +412,14 @@ api.prototype = {
             if(key === "limit" || key === "page") {
                 continue;
             }
+            if(key === "from") {
+                offset = params[key];
+                continue;
+            }
+            if(key === "to") {
+                limit = params[key];
+                continue;
+            }
             _params[key] = params[key];
         }
         return new Promise((resolve, reject) => {
@@ -427,6 +441,12 @@ api.prototype = {
     _findCountDatabase: async((req, modelName, params) => {
         var _params = {};
         for(var key in params) {
+            if(key === "from") {
+                continue;
+            }
+            if(key === "to") {
+                continue;
+            }
             if(key !== "limit" && key !== "page") {
                 _params[key] = params[key];
             }
@@ -444,6 +464,12 @@ api.prototype = {
     _findSumDatabase: async((req, modelName, params, sumArray) => {
         var _params = {};
         for(var key in params) {
+            if(key === "from") {
+                continue;
+            }
+            if(key === "to") {
+                continue;
+            }
             if(key !== "limit" && key !== "page") {
                 _params[key] = params[key];
             }

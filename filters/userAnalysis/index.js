@@ -51,8 +51,8 @@ module.exports = {
             count = data.dataCount,
             sum = data.dataSum,
             newData = [],
-            total_users = sum["1"] ? sum["1"] : 0,
-            total_account = sum["2"] ? sum["2"] : 0;
+            total_users = sum[1] ? sum[1] : 0,
+            total_account = sum[2] ? sum[2] : 0;
         for(var key of source) {
             newData.push({
                 date : moment(key.date).format("YYYY-MM-DD"),
