@@ -36,27 +36,27 @@ module.exports = {
             display : true,
             defaultData : [{
                 type : "chart",
-                title : "日启动次数分布",
+                title : "日启动/浏览次数分布",
                 query_api : "/useAnalysis/useFrequencyOne"
             },{
                 type : "table",
-                title : "日启动次数分布明细",
+                title : "日启动/浏览次数分布明细",
                 query_api : "/useAnalysis/useFrequencyTwo"
             },{
                 type : "chart",
-                title : "周启动次数分布",
+                title : "周启动/浏览次数分布",
                 query_api : "/useAnalysis/useFrequencyThree"
             },{
                 type : "table",
-                title : "周启动次数分布明细",
+                title : "周启动/浏览次数分布明细",
                 query_api : "/useAnalysis/useFrequencyFour"
             },{
                 type : "chart",
-                title : "月启动次数分布",
+                title : "月启动/浏览次数分布",
                 query_api : "/useAnalysis/useFrequencyFive"
             },{
                 type : "table",
-                title : "月启动次数分布明细",
+                title : "月启动/浏览次数分布明细",
                 query_api : "/useAnalysis/useFrequencySix"
             }]
         };
