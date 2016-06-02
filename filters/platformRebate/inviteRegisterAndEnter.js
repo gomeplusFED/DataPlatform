@@ -61,39 +61,23 @@ module.exports = {
     },
     inviteRegisterAndEnterThree(data, filter_key, dates) {
         var source = data.data,
-            array = [ {
-                key : "邀请好友-平台基础返利",
-                value : "1"
-            },{
-                key : "邀请好友-平台促销返利",
-                value : "2"
-            },{
-                key : "邀请商家入驻返利",
-                value : "5"
-            } ],
+            orderSource = data.orderData,
             type = "line",
-            map = {
-                value_0 : "邀请好友-平台基础返利",
-                value_1 : "邀请好友-平台促销返利",
-                value_2 : "邀请商家入驻返利"
-            },
+            map = {},
             newData = {};
+        for(var key of orderSource) {
+            map[key.type_code] = key.type_name;
+        }
         for(var date of dates) {
-            var obj = {
-                value_0 : 0,
-                value_1 : 0,
-                value_2 : 0
-            };
-            for(var key of source) {
-                if(date === util.getDate(key.date)) {
-                    for(var i = 0; i < array.length; i++) {
-                        if(array[i].value === key.user_party) {
-                            obj["value_" + i] += Math.round(key[filter_key]);
-                        }
-                    }
-                }
+            var obj = {};
+            for(key of orderSource) {
+                obj[key.type_code] = 0;
             }
             newData[date] = obj;
+        }
+        for(key of source) {
+            date = util.getDate(key.date);
+            newData[date][key.user_party] += Math.round(key[filter_key]);
         }
         return [{
             type : type,
@@ -106,10 +90,15 @@ module.exports = {
     },
     inviteRegisterAndEnterFour(data, page) {
         var source = data.data,
+            orderSource = data.orderData,
             count = data.dataCount,
             page = page || 1,
-            user_party = config.user_party,
-            correlate_flow = config.correlate_flow;
+            user_party = {},
+            correlate_flow = {};
+        for(var key of orderSource) {
+            user_party[key.type_code] = key.type_name;
+            correlate_flow[key.flow_code] = key.flow_name;
+        }
         for(var i = 0; i < source.length; i++) {
             source[i].id = (page - 1) * 10 + i + 1;
             source[i].user_party = user_party[source[i].user_party];

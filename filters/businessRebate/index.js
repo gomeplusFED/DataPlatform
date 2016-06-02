@@ -104,37 +104,23 @@ module.exports = {
     },
     businessAllTwe(data, filter_key, dates) {
         var source = data.data,
+            orderSource = data.orderData,
             type = "line",
-            array = [ {
-                key : "分销购买",
-                value : "14"
-            },{
-                key : "分享购买",
-                value : "13"
-            //},{
-            //    key : "组合返利",
-            //    value : ""
-            } ],
             map = {},
             newDate = {};
-        map[filter_key + "_0"] = "分销购买";
-        map[filter_key + "_1"] = "分享购买";
-        //map[filter_key + "_2"] = "组合返利";
+        for(var key of orderSource) {
+            map[key.flow_code] = key.flow_name;
+        }
         for(var date of dates) {
             var obj = {};
-            for(var i = 0; i < array.length; i++) {
-                obj[filter_key + "_" + i] = 0;
-            }
-            for(var key of source) {
-                if(date === util.getDate(key.date)) {
-                    for(var i = 0; i < array.length; i++) {
-                        if(key.rebate_type === array[i].value) {
-                            obj[filter_key + "_" + i] += key[filter_key];
-                        }
-                    }
-                }
+            for(key of orderSource) {
+                obj[key.flow_code] = 0;
             }
             newDate[date] = obj;
+        }
+        for(key of source) {
+            date = util.getDate(key.date);
+            newDate[date][key.rebate_type] += Math.round(key[filter_key]);
         }
         return [{
             type : type,
@@ -147,6 +133,7 @@ module.exports = {
     },
     businessAllThree(data, filter_key) {
         var source = data.data,
+            orderSource = data.orderData,
             newDataPie = {},
             newDataBar = {},
             mapPie = {},
@@ -158,8 +145,18 @@ module.exports = {
             },
             typePie = "pie",
             typeBar = "bar",
-            XPie = config.level,
-            XBar = config.grade;
+            XPie = [],
+            XBar = [];
+        for(var i = 0; i < orderSource[0].rebate_level; i++) {
+            XPie.push({
+                key : i + 1 + "级",
+                value : i + 1
+            });
+            XBar.push({
+                key : i + 1 + "层级",
+                value : i + 1
+            });
+        }
         for(var level of XPie) {
             var obj = {};
             obj.value = 0;
@@ -208,6 +205,7 @@ module.exports = {
     },
     businessAllFour(data, filter_key) {
         var source = data.data,
+            orderSource = data.orderData,
             newData = {},
             map = {},
             typePie = "pie",
@@ -217,13 +215,13 @@ module.exports = {
                 item_amount : "商品总金额",
                 rebate_amount : "返利到账金额"
             },
-            XData = [ {
-                key : "分销购买",
-                value :"14"
-            },{
-                key : "分享购买",
-                value :"13"
-            } ];
+            XData = [];
+        for(var key of orderSource) {
+            XData.push({
+                key : key.flow_name,
+                value : key.flow_code
+            });
+        }
         for(var x of XData) {
             var obj = {
                 value : 0
@@ -266,10 +264,10 @@ module.exports = {
                 spu_num : source[i].spu_num,
                 user_num : source[i].user_num,
                 pay_rate : source[i].order_num + "/" + source[i].total_order_num,
-                pay_price_rate : source[i].order_amount + "/" + source[i].total_order_amount,
-                plan_rebate_amount : source[i].plan_rebate_amount,
-                rebate_amount : source[i].rebate_amount,
-                platform_amount : source[i].platform_amount
+                pay_price_rate : source[i].order_amount.toFixed(2) + "/" + source[i].total_order_amount.toFixed(2),
+                plan_rebate_amount : source[i].plan_rebate_amount.toFixed(2),
+                rebate_amount : source[i].rebate_amount.toFixed(2),
+                platform_amount : source[i].platform_amount.toFixed(2)
             };
             newData.push(obj);
         }
@@ -277,14 +275,15 @@ module.exports = {
     },
     businessAllSix(data, page) {
         var source = data.data,
+            orderSource = data.orderData,
             count = data.dataCount > 50 ? 50 : data.dataCount,
             page = page || 1,
             newData = [],
             length = source.length,
-            related_flow = {
-                13 : "分享购买",
-                14 : "分销购买"
-            };
+            related_flow = {};
+        for(var key of orderSource) {
+            related_flow[key.flow_code] = key.flow_name;
+        }
         for(var i = 0; i < length; i++) {
             var obj = {
                 id : (page - 1) * 10 + i + 1,
@@ -296,8 +295,8 @@ module.exports = {
                 spu_num : source[i].spu_num,
                 user_num : source[i].user_num,
                 pay_rate : source[i].order_num + "/" + source[i].total_order_num,
-                pay_price_rate : source[i].order_amount + "/" + source[i].total_order_amount,
-                rebate_amount : source[i].rebate_amount,
+                pay_price_rate : source[i].order_amount.toFixed(2) + "/" + source[i].total_order_amount.toFixed(2),
+                rebate_amount : source[i].rebate_amount.toFixed(2),
                 refund_rate : util.toFixed(source[i].refund_sku_num, source[i].sku_num)
             };
             newData.push(obj);
@@ -306,26 +305,21 @@ module.exports = {
     },
     planOne(data, page) {
         var source = data.data,
+            orderSource = data.orderData,
             count = data.dataCount,
             page = page || 1,
             newData = [],
-            related_flow = {
-                13 : "分享购买",
-                14 : "分销购买"
-            },
-            level ={
-                1 : "1级",
-                2 : "2级",
-                3 : "3级",
-                4 : "4级"
-            };
+            related_flow = {};
+        for(var key of orderSource) {
+            related_flow[key.flow_code] = key.flow_name;
+        }
         for(var i = 0; i < source.length; i++) {
             var key = source[i];
             key.id = (page - 1) * 10 + i + 1;
             key.related_flow = related_flow[key.related_flow];
-            key.level = level[key.level];
             key.pay_rate = key.order_num + "/" + key.total_order_num;
-            key.pay_price_rate = key.order_amount + "/" + key.total_order_amount;
+            key.pay_price_rate = key.order_amount.toFixed(2) + "/" + key.total_order_amount.toFixed(2);
+            key.rebate_amount = key.rebate_amount.toFixed(2);
             key.refund_rate = util.toFixed(key.refund_sku_num, key.sku_num);
             newData.push(key);
         }

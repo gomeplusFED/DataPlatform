@@ -52,10 +52,10 @@ module.exports = (Router) => {
                 caption: '访问页面',
                 type: 'string'
             }, {
-                caption: '启动次数',
+                caption: '启动/浏览次数',
                 type: 'number'
             }, {
-                caption: '启动次数占比',
+                caption: '启动/浏览次数占比',
                 type: 'string'
             }]
         ]
@@ -101,10 +101,10 @@ module.exports = (Router) => {
                 caption: '访问页面',
                 type: 'string'
             }, {
-                caption: '用户数',
+                caption: ' 用户数',
                 type: 'number'
             }, {
-                caption: '用户数比例',
+                caption: ' 用户数占比',
                 type: 'string'
             }]
         ]

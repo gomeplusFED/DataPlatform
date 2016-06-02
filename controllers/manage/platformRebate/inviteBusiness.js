@@ -95,7 +95,12 @@ module.exports = (Router) => {
 
     Router = new api(Router, {
         router : "/platformRebate/inviteBusinessTwo",
-        modelName : [ "RebateOrderTredencyDetails" ],
+        modelName : [ "RebateOrderTredencyDetails", "TypeFlow" ],
+        orderParams : {
+            type_code : 5,
+            type : 1,
+            status : 1
+        },
         level_select : true,
         level_select_name : "category_id",
         level_select_url : "/api/categories",
@@ -129,7 +134,12 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/platformRebate/inviteBusinessThree",
-        modelName : [ "RebateTypeLevelDetails" ],
+        modelName : [ "RebateTypeLevelDetails", "TypeFlow"],
+        orderParams : {
+            type_code : 5,
+            type : 1,
+            status : 1
+        },
         level_select : true,
         level_select_name : "category_id",
         level_select_url : "/api/categories",
@@ -163,7 +173,13 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/platformRebate/inviteBusinessFour",
-        modelName : [ "RebatetSheduleDetails" ],
+        modelName : [ "RebatetSheduleDetails", "TypeFlow" ],
+        orderParams : {
+            type_code : 5,
+            type : 1,
+            status : 1,
+            limit : 100
+        },
         platform : false,
         fixedParams : {
             user_party : "5"

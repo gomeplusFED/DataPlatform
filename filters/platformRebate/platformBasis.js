@@ -100,21 +100,6 @@ module.exports = {
             date = util.getDate(key.date);
             newData[date][key.correlate_flow] += Math.round(key[filter_key]);
         }
-        //for (var date of dates) {
-        //    var obj = {};
-        //    obj[filter_key + "_0"] = 0;
-        //    obj[filter_key + "_1"] = 0;
-        //    for (var key of source) {
-        //        if (date === util.getDate(key.date)) {
-        //            for (var i = 0; i < array.length; i++) {
-        //                if (key.correlate_flow === array[i].value) {
-        //                    obj[filter_key + "_" + i] += Math.round(key[filter_key]);
-        //                }
-        //            }
-        //        }
-        //    }
-        //    newData[date] = obj;
-        //}
         return [{
             type: type,
             map: map,
@@ -126,6 +111,7 @@ module.exports = {
     },
     platformBasisThree(data, filter_key) {
         var source = data.data,
+            orderSource = data.orderData,
             typePie = "pie",
             typeBar = "bar",
             mapPie = {},
@@ -139,8 +125,18 @@ module.exports = {
             },
             objPie = {},
             objBar = {},
-            XPie = config.level,
-            XBar = config.grade;
+            XPie = [],
+            XBar = [];
+        for(var i = 0; i < orderSource[0].rebate_level; i++) {
+            XPie.push({
+                key : i + 1 + "级",
+                value : i + 1
+            });
+            XBar.push({
+                key : i + 1 + "层级",
+                value : i + 1
+            });
+        }
         for (var level of XPie) {
             objPie[level.value] = {
                 value : 0
@@ -180,32 +176,29 @@ module.exports = {
     },
     platformBasisFour(data, filter_key) {
         var source = data.data,
+            orderSource = data.orderData,
             newData = {},
             map = {},
+            obj = {},
             typePie = "pie",
             typeBar = "bar",
             filter_name = {
                 goods_sku_count: "商品件数",
                 goods_amount_count: "商品总金额",
                 rebate_amount_count: "返利到账金额"
-            },
-            XData = [ {
-                key : "分享购买",
-                value : "1"
-            },{
-                key : "邀请好友-购买返利",
-                value : "2"
-            } ];
-        for (var x of XData) {
-            var obj = {
+            };
+        for(var key of orderSource) {
+            obj[key.flow_code] = {
                 value: 0
             };
-            for (var key of source) {
-                if (x.value === key.correlate_flow) {
-                    obj.value += Math.round(key[filter_key]);
-                }
-            }
-            newData[x.key] = obj;
+        }
+        for(key of source) {
+            obj[key.correlate_flow].value += Math.round(key[filter_key]);
+        }
+        for(key of orderSource) {
+            newData[key.flow_name] = {
+                value : obj[key.flow_code].value
+            };
         }
         map.value = filter_name[filter_key];
         return [{
@@ -227,9 +220,14 @@ module.exports = {
     platformBasisFive(data, page) {
         var source = data.data,
             count = data.dataCount,
+            orderSource = data.orderData,
             page = page || 1,
-            user_party = config.user_party,
-            correlate_flow = config.correlate_flow;
+            user_party = {},
+            correlate_flow = {};
+        for(var key of orderSource) {
+            user_party[key.type_code] = key.type_name;
+            correlate_flow[key.flow_code] = key.flow_name;
+        }
         source.forEach((key, value) => {
             key.id = (page - 1) * 10 + value + 1;
             key.user_party = user_party[key.user_party];

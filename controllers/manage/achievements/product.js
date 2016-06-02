@@ -12,6 +12,7 @@ module.exports = (Router) => {
         router : "/achievements/productOne",
         modelName : ["SalesPerfProductKv"],
         platform : false,
+        date_picker_data : 1,
         //fixedParams : {
         //    key_type : [ "products_acc", "products_order",
         //        "products_cars", "products_pay", "products_scan" ]
@@ -205,7 +206,7 @@ module.exports = (Router) => {
                 caption: '访客数占比',
                 type: 'string'
             }, {
-                caption: '被分享商品数',
+                caption: '商品被分享次数',
                 type: 'number'
             }]
         ]

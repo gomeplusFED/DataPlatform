@@ -16,17 +16,17 @@ module.exports = {
             };
         //var array = [ '1-3秒', '4-10秒', '11-30秒', '31-60秒', '1-3分', '4-10分', '11-30分', '30分+' ];
         for(var key of array) {
-            var obj = {
+            newData[key] = {
                 value : 0
             };
-            for(var k of source) {
-                if(key === k.distribution) {
-                    obj.value += k.num;
-                    total += k.num;
-                }
-            }
+        }
+        for(key of source) {
+            newData[key.distribution].value += key.num;
+            total += key.num;
+        }
+        for(key of array) {
             newData[key] = {
-                value : util.percentage(obj.value, total)
+                value : util.percentage(newData[key].value, total)
             };
         }
         return [{
@@ -41,25 +41,23 @@ module.exports = {
     useTimeTwo(data, array) {
         var newData = [],
             total_num = 0,
+            obj = {},
             count = array.length;
             source = data.data;
         //var array = [ '1-3秒', '4-10秒', '11-30秒', '31-60秒', '1-3分', '4-10分', '11-30分', '30分+' ];
         for(var key of array) {
-            var obj = {
-                distribution : key,
-                num : 0,
-                num_rate : ""
-            };
-            for(var k of source) {
-                if(key === k.distribution) {
-                    total_num += k.num;
-                    obj.num += k.num;
-                }
-            }
-            newData.push(obj);
+            obj[key] = 0;
         }
-        for(var key of newData) {
-            key.num_rate = util.toFixed(key.num, total_num);
+        for(key of source) {
+            obj[key.distribution] += key.num;
+            total_num += key.num;
+        }
+        for(key of array) {
+            newData.push({
+                distribution : key,
+                num : obj[key],
+                num_rate : util.toFixed(obj[key], total_num)
+            });
         }
         return util.toTable([newData], data.rows, data.cols, [count]);
     }

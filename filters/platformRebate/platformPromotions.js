@@ -234,8 +234,8 @@ module.exports = {
             orderSource = data.orderData,
             count = data.dataCount,
             page = page || 1,
-            user_party = [],
-            correlate_flow = [];
+            user_party = {},
+            correlate_flow = {};
         for(var key of orderSource) {
             user_party[key.type_code] = key.type_name;
             correlate_flow[key.flow_code] = key.flow_name;

@@ -5,6 +5,7 @@
  */
 var api = require("../../../base/api"),
     help = require("../../../base/help"),
+    _ = require("lodash"),
     config = require("../../../utils/config.json"),
     businessRebate = require("../../../filters/businessRebate");
 
@@ -96,7 +97,12 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/businessRebate/businessAllTwo",
-        modelName : [ "RebateShopOrderTredencyDetails" ],
+        modelName : [ "RebateShopOrderTredencyDetails", "TypeFlow" ],
+        orderParams : {
+            type : 2,
+            type_code : 3,
+            status : 1
+        },
         level_select : true,
         level_select_name : "category_id",
         level_select_url : "/api/categories",
@@ -129,7 +135,12 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/businessRebate/businessAllThree",
-        modelName : [ "RebateShopTypeLevelDetails" ],
+        modelName : [ "RebateShopTypeLevelDetails", "TypeFlow" ],
+        orderParams : {
+            type : 2,
+            type_code : 3,
+            status : 1
+        },
         level_select : true,
         level_select_name : "category_id",
         level_select_url : "/api/categories",
@@ -164,7 +175,12 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/businessRebate/businessAllFour",
-        modelName : [ "RebateShopTypeLevelDetails" ],
+        modelName : [ "RebateShopTypeLevelDetails", "TypeFlow" ],
+        orderParams : {
+            type : 2,
+            type_code : 3,
+            status : 1
+        },
         level_select : true,
         level_select_name : "category_id",
         level_select_url : "/api/categories",
@@ -251,7 +267,13 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/businessRebate/businessAllSix",
-        modelName : [ "RebateShopPlanTop" ],
+        modelName : [ "RebateShopPlanTop", "TypeFlow" ],
+        orderParams : {
+            type : 2,
+            type_code : 3,
+            status : 1,
+            limit : 100
+        },
         platform : false,
         paging : true,
         order : ["-order_num", "-pay_order_num"],
@@ -316,27 +338,48 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/businessRebate/planOne",
-        modelName : [ "RebateShopPlanTop" ],
+        modelName : [ "RebateShopPlanTop", "TypeFlow" ],
+        orderParams : {
+            type : 2,
+            type_code : 3,
+            status : 1,
+            limit : 100
+        },
         excel_export : true,
         platform : false,
         paging : true,
         order : ["-date"],
         showDayUnit : true,
         date_picker_data : 1,
-        filter_select: [{
-            title: '关联流程',
-            filter_key: 'related_flow',
-            groups: [{
-                key: [13, 14],
-                value: '全部返利'
-            }, {
-                key: '13',
-                value: '分享购买'
-            }, {
-                key: '14',
-                value: '分销购买'
-            }]
-        }],
+        selectFilter(req, cb) {
+            req.models.TypeFlow.find({
+                type : 2,
+                type_code : 3,
+                status : 1
+            }, (err, data) => {
+                if(err) {
+                    cb(err);
+                } else {
+                    var filter_select = [],
+                        related_flow = _.uniq(_.pluck(data, "flow_code"));
+                    filter_select.push({
+                        title: '关联流程',
+                        filter_key: 'related_flow',
+                        groups: [{
+                            key: related_flow,
+                            value: '全部返利'
+                        }]
+                    });
+                    for(var key of data) {
+                        filter_select[0].groups.push({
+                            key : key.flow_code,
+                            value : key.flow_name
+                        })
+                    }
+                    cb(null, filter_select);
+                }
+            });
+        },
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']

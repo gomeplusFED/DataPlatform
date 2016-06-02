@@ -82,27 +82,23 @@ module.exports = {
     },
     inviteBusinessTwo(data, filter_key, dates) {
         var source = data.data,
+            orderSource = data.orderData,
             type = "line",
-            array = [ {
-                key : "分享返利",
-                value : "9"
-            } ],
             newData = {},
             map = {};
-        map[filter_key + "_0"] = array[0].key;
-        for (var date of dates) {
+        for(var key of orderSource) {
+            map[key.flow_code] = key.flow_name;
+        }
+        for(var date of dates) {
             var obj = {};
-            obj[filter_key + "_0"] = 0
-            for (var key of source) {
-                if (date === util.getDate(key.date)) {
-                    for (var i = 0; i < array.length; i++) {
-                        if (key.correlate_flow === array[i].value) {
-                            obj[filter_key + "_" + i] += Math.round(key[filter_key]);
-                        }
-                    }
-                }
+            for(key of orderSource) {
+                obj[key.flow_code] = 0;
             }
             newData[date] = obj;
+        }
+        for(key of source) {
+            date = util.getDate(key.date);
+            newData[date][key.correlate_flow] += Math.round(key[filter_key]);
         }
         return [{
             type: type,
@@ -115,6 +111,7 @@ module.exports = {
     },
     inviteBusinessThree(data, filter_key) {
         var source = data.data,
+            orderSource = data.orderData,
             typePie = "pie",
             typeBar = "bar",
             mapPie = {},
@@ -128,8 +125,18 @@ module.exports = {
             },
             objPie = {},
             objBar = {},
-            XPie = config.level,
-            XBar = config.grade;
+            XPie = [],
+            XBar = [];
+        for(var i = 0; i < orderSource[0].rebate_level; i++) {
+            XPie.push({
+                key : i + 1 + "级",
+                value : i + 1
+            });
+            XBar.push({
+                key : i + 1 + "层级",
+                value : i + 1
+            });
+        }
         for (var level of XPie) {
             objPie[level.value] = {
                 value : 0
@@ -170,9 +177,14 @@ module.exports = {
     inviteBusinessFour(data, page) {
         var source = data.data,
             count = data.dataCount,
+            orderSource = data.orderData,
             page = page || 1,
-            user_party = config.user_party,
-            correlate_flow = config.correlate_flow;
+            user_party = {},
+            correlate_flow = {};
+        for(var key of orderSource) {
+            user_party[key.type_code] = key.type_name;
+            correlate_flow[key.flow_code] = key.flow_name;
+        }
         source.forEach((key, value) => {
             key.id = (page - 1) * 10 + value + 1;
             key.user_party = user_party[key.user_party];
