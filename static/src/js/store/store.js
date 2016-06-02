@@ -23,6 +23,13 @@ var state = {
         msg: '提示信息',
         apply: 'func',
         cancle: 'func'
+    },
+    exportConfirmConfig: {
+        show: false,
+        title: '请选择导出数据范围（<1000）',
+        len: 0,
+        apply: 'func',
+        cancle: 'func'
     }
 }
 
@@ -70,6 +77,14 @@ mutations.CONFIRM = function(state, params){
     state.confirmConfig.msg = params.msg || '';
     state.confirmConfig.apply = params.apply || function(){};
     state.confirmConfig.cancle = params.cancle || function(){};
+}
+
+mutations.EXPORTCONFIRM = function(state, params){
+    state.exportConfirmConfig.show = params.show;
+    state.exportConfirmConfig.title = params.title || '弹窗';
+    state.exportConfirmConfig.len = params.len || 0;
+    state.exportConfirmConfig.apply = params.apply || function(){};
+    state.exportConfirmConfig.cancle = params.cancle || function(){};
 }
 
 mutations.HIDECONFIRM = function(state){

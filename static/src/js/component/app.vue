@@ -2,6 +2,8 @@
     <m-loading :loading.sync="loading"></m-loading>
     <m-alert></m-alert>
     <m-modal></m-modal>
+    <m-confirm></m-confirm>
+    <m-export-confirm></m-export-confirm>
     <m-main v-for="item in currentPageDefaultData.defaultData" :index="$index" :init-data="initData" :current-data="currentPageDefaultData.defaultData[$index]" :loading.sync="loading"></m-main>
 </template>
 
@@ -18,6 +20,8 @@ var Loading = require('./common/loading.vue');
 var Alert = require('./common/alert.vue');
 var ModalTable = require('./common/modalTable.vue');
 var Main = require('./main/main.vue');
+var Confirm = require('./common/confirm.vue');
+var ExportConfirm = require('./common/exportConfirm.vue');
 
 var App = Vue.extend({
 	name: 'App',
@@ -46,7 +50,9 @@ var App = Vue.extend({
         'm-loading': Loading,
         'm-alert': Alert,
         'm-modal': ModalTable,
-        'm-main': Main
+        'm-main': Main,
+        'm-confirm': Confirm,
+        'm-export-confirm': ExportConfirm
     },
     route: {
         data: function(transition){

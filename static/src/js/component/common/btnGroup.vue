@@ -32,7 +32,7 @@ var Btns = Vue.extend({
                 show_help: true
             },
             hasRequestUrl: null,
-            exportLimit: false
+            dataTableLen: 0
         }
     },
     vuex: {
@@ -47,9 +47,6 @@ var Btns = Vue.extend({
         btnsVm = this;
     },
     props: ['index','pageComponentsData','componentType','argvs','initData','resultArgvs'],
-    created: function(){
-        
-    },
     methods: {
         excel_export: function(ev){
             var key = window.location.hash.replace('#!','');
@@ -61,21 +58,37 @@ var Btns = Vue.extend({
                 })
                 return;
             }
-            var resultQuery = [];
-            var result = '';
-            for(var item in this.resultArgvs){
-                var ret = this.resultArgvs[item];
-                if(ret instanceof Array){
-                    ret = ret.map(function(i){
-                        return item + '[]=' + i;
-                    }).join('&');
-                    resultQuery.push(ret);
-                }else{
-                    resultQuery.push(item + '=' + ret);
-                }
-            }
+            
             var key = location.hash.replace('#!', '');
-            window.open(window.allPageConfig.page[key].defaultData[this.index].query_api + '_excel?' +  resultQuery.join('&'));
+
+            actions.exportConfirm(store, {
+                show: true,
+                title: '请选择导出数据范围（<1000）',
+                len: this.dataTableLen,
+                apply: (type, from, to) => {
+                    var resultQuery = [];
+                    var result = '';
+                    for(var item in this.resultArgvs){
+                        var ret = this.resultArgvs[item];
+                        if(type === 'b' && (item === 'limit' || item === 'page') ){
+                            continue;
+                        }
+                        if(ret instanceof Array){
+                            ret = ret.map(function(i){
+                                return item + '[]=' + i;
+                            }).join('&');
+                            resultQuery.push(ret);
+                        }else{
+                            resultQuery.push(item + '=' + ret);
+                        }
+                    }
+                    if(type === 'b'){
+                        resultQuery.push('from=' + from);
+                        resultQuery.push('to=' + to);
+                    }
+                    window.open(window.allPageConfig.page[key].defaultData[this.index].query_api + '_excel?' +  resultQuery.join('&'));
+                }
+            })
         },
         show_help: function(ev){
             var _this = this;
@@ -119,6 +132,11 @@ var Btns = Vue.extend({
                 eval(item.customMethods);
             }
     	}
+    },
+    events: {
+        sendTableDataLen(len) {
+            this.dataTableLen = len;
+        }
     }
 })
 

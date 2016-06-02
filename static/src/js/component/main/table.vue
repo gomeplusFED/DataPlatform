@@ -171,6 +171,8 @@ var Table = Vue.extend({
 
                     _this.paginationConf.totalItems = data.modelData[0].count || 0;
 
+                    _this.$dispatch('getTableDataLen', data.modelData[0].count || data.modelData[0].data.length);
+
                     // 所有组件加载完毕之后loading消失
                     _this.loading.noLoaded -= 1;
                     if(_this.loading.noLoaded === 0){
