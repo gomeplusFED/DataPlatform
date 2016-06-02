@@ -82,33 +82,39 @@ module.exports = {
     },
     platformBasisTwo(data, filter_key, dates) {
         var source = data.data,
+            orderSource = data.orderData,
             type = "line",
-            array = [ {
-                key : "分享购买",
-                value : "1"
-            },{
-                key : "邀请好友-购买返利",
-                value : "2"
-            } ],
             newData = {},
             map = {};
-        map[filter_key + "_0"] = array[0].key;
-        map[filter_key + "_1"] = array[1].key;
-        for (var date of dates) {
+        for(var key of orderSource) {
+            map[key.flow_code] = key.flow_name
+        }
+        for(var date of dates) {
             var obj = {};
-            obj[filter_key + "_0"] = 0;
-            obj[filter_key + "_1"] = 0;
-            for (var key of source) {
-                if (date === util.getDate(key.date)) {
-                    for (var i = 0; i < array.length; i++) {
-                        if (key.correlate_flow === array[i].value) {
-                            obj[filter_key + "_" + i] += Math.round(key[filter_key]);
-                        }
-                    }
-                }
+            for(key of orderSource) {
+                obj[key.flow_code] = 0;
             }
             newData[date] = obj;
         }
+        for(key of source) {
+            date = util.getDate(key.date);
+            newData[date][key.correlate_flow] += Math.round(key[filter_key]);
+        }
+        //for (var date of dates) {
+        //    var obj = {};
+        //    obj[filter_key + "_0"] = 0;
+        //    obj[filter_key + "_1"] = 0;
+        //    for (var key of source) {
+        //        if (date === util.getDate(key.date)) {
+        //            for (var i = 0; i < array.length; i++) {
+        //                if (key.correlate_flow === array[i].value) {
+        //                    obj[filter_key + "_" + i] += Math.round(key[filter_key]);
+        //                }
+        //            }
+        //        }
+        //    }
+        //    newData[date] = obj;
+        //}
         return [{
             type: type,
             map: map,

@@ -95,7 +95,12 @@ module.exports = (Router) => {
 
     Router = new api(Router, {
         router : "/platformRebate/platformBasisTwo",
-        modelName : [ "RebateOrderTredencyDetails" ],
+        modelName : [ "RebateOrderTredencyDetails", "TypeFlow" ],
+        orderParams : {
+            type_code : 1,
+            type : 1,
+            status : 1
+        },
         level_select : true,
         level_select_name : "category_id",
         level_select_url : "/api/categories",
