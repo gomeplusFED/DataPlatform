@@ -8,7 +8,7 @@
             </thead>
             <tbody v-if="tableItem.data.length !== 0">
                 <tr v-for="tableBody in tableItem.data">
-                    <td v-for="(tableKey, tableCell) in tableItem.rows"><span @click="tableOperation(tableBody[tableCell], tableBody, tableItem.rows[1])">{{{tableBody[tableCell]}}}</span></td>
+                    <td v-for="(tableKey, tableCell) in tableItem.rows"><span @click="tableOperation(tableBody[tableCell], tableBody, tableItem.rows[1])">{{{tableBody[tableCell] | toThousands}}}</span></td>
                 </tr>
             </tbody>
             <tbody v-else>
