@@ -55,7 +55,7 @@ var Table = Vue.extend({
             paginationConf: {
                 currentPage: 1,     // 当前页
                 totalItems: 0,     // 总条数
-                itemsPerPage: 10,    // 每页条数
+                itemsPerPage: 20,    // 每页条数
                 pagesLength: 5,     // 显示几页( 1,2,3 / 1,2,3,4,5)
                 onChange: function() {
 
@@ -170,6 +170,8 @@ var Table = Vue.extend({
                     _this.tableData = data.modelData;
 
                     _this.paginationConf.totalItems = data.modelData[0].count || 0;
+
+                    _this.$dispatch('getTableDataLen', data.modelData[0].count || data.modelData[0].data.length);
 
                     // 所有组件加载完毕之后loading消失
                     _this.loading.noLoaded -= 1;

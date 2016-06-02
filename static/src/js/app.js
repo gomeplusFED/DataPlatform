@@ -28,6 +28,9 @@ var router = new VueRouter();
 var store = require('./store/store.js');
 var actions = require('./store/actions.js');
 
+window.store = store;
+window.actions = actions;
+
 router.map({
     '*': {
         component: App

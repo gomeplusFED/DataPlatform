@@ -23,4 +23,8 @@ actions.confirm = function(store, params) {
 	store.dispatch('CONFIRM', params);
 }
 
+actions.exportConfirm = function(store, params) {
+	store.dispatch('EXPORTCONFIRM', params);
+}
+
 module.exports = actions;

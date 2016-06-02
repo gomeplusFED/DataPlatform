@@ -118,6 +118,11 @@ var Main = Vue.extend({
 			deep: true
 		}
 	},
+	events: {
+		getTableDataLen(len) {
+			this.$broadcast('sendTableDataLen', len);
+		}
+	}
 })
 
 module.exports = Main;
