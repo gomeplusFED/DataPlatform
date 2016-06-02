@@ -15,7 +15,7 @@
 				<div class="panel-body">
 					<div class="select_group_con clearfix">
 						<div class="select_group" v-for="(index,item) in level">
-							<h2>{{numberMap[index] + '级目录'}}</h2>
+							<h2>{{numberMap[index] + '级'}}</h2>
 							<ul>
 								<li v-for="value in item" :key="value.id" track-by="$index" @click="createNext($event,index)">{{value.name}}</li>							
 							</ul>
