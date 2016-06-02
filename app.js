@@ -78,7 +78,7 @@ app.use(function() {
 });
 
 app.use((err, req, res, next) => {
-    console.log(err);
+    console.log(err, "======");
     if (err) {
         res.json({
             iserro: true

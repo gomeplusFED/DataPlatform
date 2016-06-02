@@ -103,47 +103,21 @@ module.exports = {
     platformOrderTwe(data, filter_key, dates) {
         var source = data.data,
             type = "line",
-            //array = {
-            //    1 : "平台基础返利",
-            //    2 : "平台促销返利",
-            //    5 : "邀请商家入驻返利",
-            //    6 : "单项单级返利"
-            //},
-            array = [ {
-                key : "单项单级返利",
-                value : "6"
-            },{
-                key : "平台基础返利",
-                value : "1"
-            },{
-                key : "平台促销返利",
-                value : "2"
-            },{
-                key : "邀请商家入驻返利",
-                value : "5"
-            } ],
+            orderSource = data.orderData,
             newData = {},
             map = {};
-        map[filter_key + "_0"] = array[0].key;
-        map[filter_key + "_1"] = array[1].key;
-        map[filter_key + "_2"] = array[2].key;
-        map[filter_key + "_3"] = array[3].key;
+        for(var key of orderSource) {
+            map[filter_key + "_" + key.type_code] = key.type_name;
+        }
         for (var date of dates) {
-            var obj = {};
-            obj[filter_key + "_0"] = 0;
-            obj[filter_key + "_1"] = 0;
-            obj[filter_key + "_2"] = 0;
-            obj[filter_key + "_3"] = 0;
-            for (var key of source) {
-                if (date === util.getDate(key.date)) {
-                    for (var i = 0; i < array.length; i++) {
-                        if (key.user_party === array[i].value) {
-                            obj[filter_key + "_" + i] += Math.round(key[filter_key]);
-                        }
-                    }
-                }
+            newData[date] = {};
+            for(var k in map) {
+                newData[date][k] = 0;
             }
-            newData[date] = obj;
+        }
+        for(var key of source) {
+            date = util.getDate(key.date);
+            newData[date][filter_key + "_" + key.user_party] += Math.round(key[filter_key]);
         }
         return [{
             type: type,
@@ -156,6 +130,7 @@ module.exports = {
     },
     platformOrderThree(data, filter_key) {
         var source = data.data,
+            orderSource = data.orderData,
             typePie = "pie",
             typeBar = "bar",
             mapPie = {},
@@ -169,8 +144,21 @@ module.exports = {
             },
             objPie = {},
             objBar = {},
-            XPie = config.level,
-            XBar = config.grade;
+            XPie = [],
+            XBar = [];
+        orderSource.sort((a, b) => {
+            return b.rebate_level - a.rebate_level;
+        });
+        for(var i = 0; i < orderSource[0].rebate_level; i++) {
+            XPie.push({
+                key :  i + 1 + "级",
+                value : i + 1
+            });
+            XBar.push({
+                key :  i + 1 + "层级",
+                value : i + 1
+            });
+        }
         for (var level of XPie) {
             objPie[level.value] = {
                 value : 0
@@ -180,15 +168,15 @@ module.exports = {
                 objBar[level.value][i] = 0;
             }
         }
-        for(var key of source) {
+        for(key of source) {
             objPie[key.level].value += Math.round(key[filter_key]);
             objBar[key.level][key.grade] += Math.round(key[filter_key]);
         }
-        for(var level of XPie) {
+        for(level of XPie) {
             newDataPie[level.key] = objPie[level.value];
             newDataBar[level.key] = objBar[level.value];
         }
-        for (var i = 0; i < XBar.length; i++) {
+        for (i = 0; i < XBar.length; i++) {
             mapBar[i] = XBar[i].key;
         }
         mapPie.value = filter_name[filter_key];
@@ -210,38 +198,29 @@ module.exports = {
     },
     platformOrderFour(data, filter_key) {
         var source = data.data,
+            orderSource = data.orderData,
             newData = {},
             map = {},
+            obj = {},
             typePie = "pie",
             typeBar = "bar",
             filter_name = {
                 goods_sku_count: "商品件数",
                 goods_amount_count: "商品总金额",
                 rebate_amount_count: "返利到账金额"
-            },
-            XData = [ {
-                key : "单项单级返利",
-                value : "6"
-            },{
-                key : "平台基础返利",
-                value : "1"
-            },{
-                key : "平台促销返利",
-                value : "2"
-            },{
-                key : "邀请商家入驻返利",
-                value : "5"
-            } ];
-        for (var x of XData) {
-            var obj = {
-                value: 0
             };
-            for (var key of source) {
-                if (x.value === key.user_party) {
-                    obj.value += Math.round(key[filter_key]);
-                }
+        for(var key of orderSource) {
+            obj[key.type_code] = {
+                value : 0
+            };
+        }
+        for(key of source) {
+            if(obj[key.user_party]) {
+                obj[key.user_party].value += Math.round(key[filter_key]);
             }
-            newData[x.key] = obj;
+        }
+        for(key of orderSource) {
+            newData[key.type_name] = obj[key.type_code];
         }
         map.value = filter_name[filter_key];
         return [{
@@ -263,9 +242,14 @@ module.exports = {
     platformOrderFive(data, page) {
         var source = data.data,
             count = data.dataCount,
+            orderSource = data.orderData,
             page = page || 1,
-            user_party = config.user_party,
-            correlate_flow = config.correlate_flow;
+            user_party = {},
+            correlate_flow = {};
+        for(var key of orderSource) {
+            user_party[key.type_code] = key.type_name;
+            correlate_flow[key.flow_code] = key.flow_name;
+        }
         source.forEach((key, value) => {
             key.id = (page - 1) * 10 + value + 1;
             key.user_party = user_party[key.user_party];

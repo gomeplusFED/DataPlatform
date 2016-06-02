@@ -82,16 +82,17 @@ module.exports = {
     },
     individualEventTwo(data, filter_key, dates) {
         var source = data.data,
+            orderData = data.orderData,
             type = "line",
-            array = [{
-                key : "比例返利",
-                value : "12"
-            },{
-                key : "固定返利",
-                value : "11"
-            }],
+            array = [],
             newData = {},
             map = {};
+        for(var key of orderData) {
+            array.push({
+                key : key.flow_name,
+                value : key.flow_code
+            })
+        }
         map[filter_key + "_0"] = array[0].key;
         map[filter_key + "_1"] = array[1].key;
         for (var date of dates) {
@@ -120,6 +121,7 @@ module.exports = {
     },
     individualEventThree(data, filter_key) {
         var source = data.data,
+            orderData = data.orderData,
             newData = {},
             map = {},
             typePie = "pie",
@@ -129,13 +131,13 @@ module.exports = {
                 goods_amount_count: "商品总金额",
                 rebate_amount_count: "返利到账金额"
             },
-            XData = [{
-                key : "比例返利",
-                value : "12"
-            },{
-                key : "固定返利",
-                value : "11"
-            }];
+            XData = [];
+        for(var key of orderData) {
+            XData.push({
+                key : key.flow_name,
+                value : key.flow_code
+            })
+        }
         for (var x of XData) {
             var obj = {
                 value: 0
@@ -166,10 +168,15 @@ module.exports = {
     },
     individualEventFour(data,page) {
         var source = data.data,
+            orderSource = data.orderData,
             count = data.dataCount,
             page = page || 1,
-            user_party = config.user_party,
-            correlate_flow = config.correlate_flow;
+            user_party = [],
+            correlate_flow = [];
+        for(var key of orderSource) {
+            user_party[key.type_code] = key.type_name;
+            correlate_flow[key.flow_code] = key.flow_name;
+        }
         source.forEach((key, value) => {
             key.id = (page - 1) * 10 + value + 1;
             key.user_party = user_party[key.user_party];
