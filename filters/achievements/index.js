@@ -45,7 +45,6 @@ module.exports = {
 
         for(var key of source) {
             key.date = moment(key.date).format("YYYY-MM-DD");
-            key.one = 0;
         }
 
         return util.toTable([source], data.rows, data.cols, [count]);

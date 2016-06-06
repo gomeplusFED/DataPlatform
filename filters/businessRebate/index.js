@@ -136,6 +136,8 @@ module.exports = {
             orderSource = data.orderData,
             newDataPie = {},
             newDataBar = {},
+            objPie = {},
+            objBar = {},
             mapPie = {},
             mapBar = {},
             filter_name = {
@@ -149,39 +151,30 @@ module.exports = {
             XBar = [];
         for(var i = 0; i < orderSource[0].rebate_level; i++) {
             XPie.push({
-                key : i + 1 + "级",
+                key :  i + 1 + "级",
                 value : i + 1
             });
             XBar.push({
-                key : i + 1 + "层级",
+                key :  i + 1 + "层级",
                 value : i + 1
             });
         }
-        for(var level of XPie) {
-            var obj = {};
-            obj.value = 0;
-            for(var key of source) {
-                if(level.value === key.grade) {
-                    obj.value += key[filter_key];
-                }
+        for (var level of XPie) {
+            objPie[level.value] = {
+                value : 0
+            };
+            objBar[level.value] = {};
+            for (var i = 0; i < XBar.length; i++) {
+                objBar[level.value][i] = 0;
             }
-            newDataPie[level.key] = obj;
         }
-        for(var level of XPie) {
-            var obj = {};
-            for(var i = 0; i < XBar.length; i++) {
-                obj[i] = 0;
-            }
-            for(var key of source) {
-                if(key.grade === level.value) {
-                    for(var i = 0; i < XBar.length; i++) {
-                        if(key.level === XBar[i].value) {
-                            obj[i] += key[filter_key];
-                        }
-                    }
-                }
-            }
-            newDataBar[level.key] = obj;
+        for(key of source) {
+            objPie[key.grade].value += Math.round(key[filter_key]);
+            objBar[key.grade][key.level] += Math.round(key[filter_key]);
+        }
+        for(level of XPie) {
+            newDataPie[level.key] = objPie[level.value];
+            newDataBar[level.key] = objBar[level.value];
         }
         for(var i = 0; i < XBar.length; i++) {
             mapBar[i] = XBar[i].key;
@@ -207,6 +200,7 @@ module.exports = {
         var source = data.data,
             orderSource = data.orderData,
             newData = {},
+            obj = {},
             map = {},
             typePie = "pie",
             typeBar = "bar",
@@ -223,15 +217,15 @@ module.exports = {
             });
         }
         for(var x of XData) {
-            var obj = {
+            obj[x.value] = {
                 value : 0
             };
-            for(var key of source) {
-                if(x.value === key.rebate_type) {
-                    obj.value += key[filter_key];
-                }
-            }
-            newData[x.key] = obj;
+        }
+        for(var key of source) {
+            obj[key.rebate_type].value += key[filter_key];
+        }
+        for(x of XData) {
+            newData[x.key] = obj[x.value];
         }
         map.value = filter_name[filter_key];
         return [{

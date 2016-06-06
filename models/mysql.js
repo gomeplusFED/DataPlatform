@@ -406,17 +406,6 @@ function connect(app) {
                 down_browse : Number,
                 avg_stay_time : Number
             });
-            models.UserKeep = db.define("tbl_rt_user_keep",{
-                id : {type: 'number', key: true},
-                date: Date,
-                day_type: Number,
-                type: String,
-                ver: String,
-                channel: String,
-                keep_type : String,
-                new_user : Number,
-                keep_num : Number
-            });
             models.KeyValue = db.define("tbl_rt_key_value",{
                 id : {type: 'number', key: true},
                 date: Date,
@@ -431,20 +420,6 @@ function connect(app) {
                 value2 : Number,
                 value3 : Number
             });
-            //models.SalesPerfKeyValue = db.define("tbl_rt_sales_perf_key_value",{
-            //    id : {type: 'number', key: true},
-            //    date: Date,
-            //    day_type: Number,
-            //    type: String,
-            //    ver: String,
-            //    channel: String,
-            //    key_type : String,
-            //    key_name : String,
-            //    key_desc : String,
-            //    value : Number,
-            //    value2 : Number,
-            //    value3 : Number
-            //});
             models.RebateOrderTredencyDetails = db.define("tbl_rt_rebate_order_tredency_details",{
                 id : {type: 'number', key: true},
                 date: Date,
@@ -795,6 +770,7 @@ function connect(app) {
                 order_shops_num : Number,
                 deal_shops_num : Number,
                 order_num : Number,
+                xpop_shops_num_effective_al : Number,
                 deal_shops_order_num : Number
             });
             models.SalesPerfTranKv = db.define("tbl_rt_sales_perf_tran_kv", {
@@ -849,6 +825,17 @@ function connect(app) {
                 ver : String,
                 channel : String,
                 day_type : Number
+            });
+            models.UserKeepResult = db.define("tbl_rt_user_keep_result", {
+                id : {type: 'number', key: true},
+                date : Date,
+                type : String,
+                day_type : Number,
+                new_user : Number,
+                last_1_keep : Number,
+                last_7_keep : Number,
+                last_14_keep : Number,
+                last_30_keep : Number
             });
             models.db1 = db;
             next();

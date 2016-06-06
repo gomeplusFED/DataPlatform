@@ -110,6 +110,8 @@ module.exports = {
             key.date = moment(key.date).format("YYYY-MM-DD");
             key.tran_guest_unit_price = util.division(key.tran_pay_money_amount, key.tran_pay_user_num);
             key.del_use_coupon_rate = key.del_use_coupon_rate.toFixed(2) + "%";
+            key.tran_order_money_amount = key.tran_order_money_amount.toFixed(2);
+            key.tran_pay_money_amount = key.tran_pay_money_amount.toFixed(2);
         }
 
         return util.toTable([source], data.rows, data.cols, [count]);

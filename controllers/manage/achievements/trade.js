@@ -168,7 +168,7 @@ module.exports = (Router) => {
         },
         rows : [
             [ 'date', 'tred_order_all_amount', 'tred_pay_all_amount', 'tran_order_money_amount',
-                'tran_pay_user_num', 'tran_guest_unit_price', 'del_use_coupon_rate',
+                'tran_pay_money_amount', 'tran_guest_unit_price', 'del_use_coupon_rate',
                 'del_refund_amount','del_refund_num']
         ],
         cols : [
