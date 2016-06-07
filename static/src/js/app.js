@@ -10,6 +10,9 @@ window.jQuery = $;
 window.$ = $;
 
 
+// fileter
+require('./filter/index.js');
+
 var dom = require('./dom/index.js');
 
 var blankApp = Vue.extend({});
