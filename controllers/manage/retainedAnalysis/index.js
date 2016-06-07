@@ -10,9 +10,10 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/retainedAnalysis/retainedOne",
-        modelName : ["UserKeep"],
+        modelName : ["UserKeepResult"],
+        platform : true,
         paging : true,
-        order : ["-date", "keep_type"],
+        order : ["-date"],
         filter(data, filter_key, dates) {
             return filter.retainedOne(data);
         },
@@ -22,7 +23,7 @@ module.exports = (Router) => {
             preMethods: ['excel_export']
         }],
         rows: [
-            [ 'date', 'new_user', 'keep1', 'keep2', "keep3", "keep4"]
+            [ 'date', 'new_user', 'last_1_keep', 'last_7_keep', "last_14_keep", "last_30_keep"]
         ],
         cols: [
             [

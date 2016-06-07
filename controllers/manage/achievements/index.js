@@ -55,7 +55,7 @@ module.exports = (Router) => {
         },
         rows : [
             [ 'date', 'xpop_shops_num_add_al', 'xpop_shops_num_succ_add_al', 'xpop_shops_num_succ_tot_al',
-                "one",'order_shops_num', 'deal_shops_num', 'xpop_shops_num_acc_al',
+                "xpop_shops_num_effective_al",'order_shops_num', 'deal_shops_num', 'xpop_shops_num_acc_al',
                 'xpop_shops_num_share_al' ]
         ],
         cols : [

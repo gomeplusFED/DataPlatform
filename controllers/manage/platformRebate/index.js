@@ -120,6 +120,7 @@ module.exports = (Router) => {
                 query.category_id = "all";
             }
             query.day_type = 1;
+            query.correlate_flow = "all";
             cb(null, query);
         },
         platform : false,
