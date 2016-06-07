@@ -198,6 +198,9 @@ var Table = Vue.extend({
     watch: {
         'resultArgvs': {
             handler: function(val){
+                // for debug
+                this.$log('resultArgvs');
+                
                 // 参数改了 请求数据，进行渲染
                 this.generatorTable();
             },

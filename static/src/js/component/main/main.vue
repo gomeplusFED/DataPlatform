@@ -62,7 +62,7 @@ var Main = Vue.extend({
 				coupon_type: '',
 				startTime: '',
 				endTime: '',
-				day_type: 1, // 摒弃的默认参数，默认1，不用更改
+				day_type: 1
 			},
 			pageComponentsData: null,
 			resultArgvs: ''
@@ -88,6 +88,7 @@ var Main = Vue.extend({
 				
 				if(_this.isnoComponent(data.components)){
 					_this.$set('argvs.forceChange',true);
+					// Vue.set(this.argvs, 'ceshi', '123');
 				}
 			}
 		})
@@ -112,8 +113,6 @@ var Main = Vue.extend({
 					}
 				}
 				this.resultArgvs = result;
-				// for debug
-				this.$log('resultArgvs');
 			},
 			deep: true
 		}
