@@ -129,14 +129,10 @@ gulp.task('rev', function() {
 
 gulp.task('watch', function() {
     webpackConfig.watch = argv.env != 'pro';
-    gulp.start('js');
+    gulp.start('js', 'css', 'img', 'font');
     gulp.watch('./src/css/*', ['css']);
     gulp.watch('./src/img/*', ['img']);
 })
-
-// gulp.task('build', function() {
-    // gulp.series('clean', gulp.parallel('js', 'css', 'img', 'font'));
-// })
 
 gulp.task('build', ['js', 'css', 'img', 'font']);
 
