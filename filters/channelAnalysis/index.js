@@ -96,32 +96,41 @@ module.exports = {
     },
     channelTwo(data) {
         var source = data.data,
-            channels = util.uniq(_.pluck(source, "channel")),
-            total_new_users = 0,
+            orderSource = data.orderData,
             obj = {},
+            channel = {},
             newData = [];
-        for(var channel of channels) {
-            obj[channel] = {
-                new_users : 0,
-                active_users : 0,
-                start_up : 0
+
+        for(var key of orderSource) {
+            obj[key.channel_id] = [];
+            channel[key.channel_id] = key.channel_name;
+        }
+
+        for(key of source) {
+            obj[key.channel_id].push(key);
+        }
+
+        for(key in obj) {
+            var _obj = {
+                channel_id : key,
+                new_users_num : 0,
+                new_account_num : 0,
+                active_users_num : 0,
+                start_count : 0,
+                consume_users_num : 0
+            };
+            for(var k of obj[key]) {
+                _obj.new_users_num += k.new_users_num;
+                _obj.new_account_num += k.new_account_num;
+                _obj.active_users_num += k.active_users_num;
+                _obj.start_count += k.start_count;
+                _obj.consume_users_num += k.consume_users_num;
             }
+            _obj.channel_name = channel[key];
+            _obj.rate = util.toFixed(_obj.consume_users_num, _obj.active_users_num);
+            newData.push(_obj);
         }
-        for(var key of source) {
-            total_new_users += key.new_users;
-            obj[key.channel].new_users += key.new_users;
-            obj[key.channel].active_users += key.active_users;
-            obj[key.channel].start_up += key.start_up;
-        }
-        for(var channel of channels) {
-            newData.push({
-                channel : channel,
-                new_users : obj[channel].new_users,
-                active_users : obj[channel].active_users,
-                start_up : obj[channel].start_up,
-                new_users_rate : util.toFixed(obj[channel].new_users, total_new_users)
-            });
-        }
-        return util.toTable([newData], data.rows, data.cols);
+
+        return util.toTable([newData], data.rows, data.cols, [newData.length]);
     }
 };

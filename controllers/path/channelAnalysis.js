@@ -14,10 +14,10 @@ module.exports = {
                 type: "chart",
                 title: "TOP 10渠道",
                 query_api: "/channelAnalysis/channelOne"
-            //},{
-            //    type: "table",
-            //    title: "渠道数据明细",
-            //    query_api: "/channelAnalysis/channelTwo"
+            },{
+                type: "table",
+                title: "渠道数据明细",
+                query_api: "/channelAnalysis/channelTwo"
             }]
         };
     }
