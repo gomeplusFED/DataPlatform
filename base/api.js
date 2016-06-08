@@ -413,11 +413,11 @@ api.prototype = {
                 continue;
             }
             if(key === "from") {
-                offset = params[key];
+                offset = params[key]-1;
                 continue;
             }
             if(key === "to") {
-                limit = params[key];
+                limit = params[key]-1;
                 continue;
             }
             _params[key] = params[key];

@@ -9,6 +9,7 @@ module.exports = (Router) => {
     Router.get("/dataPlatform/count", (req, res, next) => {
         var params = req.query,
             count = req.models.Count;
+        params.username = req.session.userInfo.name;
         count.find(params, (err, data) => {
             if(!err) {
                 if(data.length) {
@@ -17,7 +18,7 @@ module.exports = (Router) => {
                         if(!err) {
                             res.send("success");
                         } else {
-                            next(err);
+                            res.send("fail");
                         }
                     });
                 } else {
@@ -26,12 +27,12 @@ module.exports = (Router) => {
                         if(!err) {
                             res.send("success");
                         } else {
-                            next(err);
+                            res.send("fail");
                         }
                     });
                 }
             } else {
-                next(err);
+                res.send("fail");
             }
         })
     });

@@ -3,8 +3,6 @@
  * @date 20160503
  * @fileoverview 系统日志
  */
-var util = require("../../../utils");
-
 module.exports = (Router) => {
     Router.get("/log/find", (req, res, next) => {
         var query = req.query,
