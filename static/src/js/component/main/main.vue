@@ -62,7 +62,7 @@ var Main = Vue.extend({
 				coupon_type: '',
 				startTime: '',
 				endTime: '',
-				day_type: 1, // 摒弃的默认参数，默认1，不用更改
+				day_type: 1
 			},
 			pageComponentsData: null,
 			resultArgvs: ''
@@ -88,13 +88,14 @@ var Main = Vue.extend({
 				
 				if(_this.isnoComponent(data.components)){
 					_this.$set('argvs.forceChange',true);
+					// Vue.set(this.argvs, 'ceshi', '123');
 				}
 			}
 		})
 	},
 	methods: {
 		isnoComponent: function(componentData){
-			// 如果没有组件，强制更新argvs，然后触发脏检查使得图表组件请求数据
+			// 如果没有组件，强制更新argvs
 			if(!componentData.date_picker.show && !componentData.drop_down.channel && !componentData.drop_down.coupon && !componentData.drop_down.platform && !componentData.drop_down.version && !componentData.filter_select.length){
 				return true;
 			}
@@ -112,8 +113,6 @@ var Main = Vue.extend({
 					}
 				}
 				this.resultArgvs = result;
-				// for debug
-				this.$log('resultArgvs');
 			},
 			deep: true
 		}

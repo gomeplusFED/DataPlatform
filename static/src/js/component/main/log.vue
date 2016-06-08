@@ -44,9 +44,6 @@ var Vue = require('Vue');
 
 var Pagination = require('../common/pagination.vue');
 
-// fileter
-require('../../filter/index.js');
-
 var Log = Vue.extend({
 	name: 'Log',
 	data: function(){
