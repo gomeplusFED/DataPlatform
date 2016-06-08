@@ -33,8 +33,5 @@ Vue.filter('toThousands', function(num){
     if(typeof num === 'number'){
         return (num || 0).toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,');
     }
-    // if(!isNaN(new Number(num))){
-        
-    // }
     return num;
 })

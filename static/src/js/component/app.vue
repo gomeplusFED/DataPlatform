@@ -63,11 +63,11 @@ var App = Vue.extend({
                 return;
             }
 
-            $('[href="' + url + '"]').parent().parent().parent().addClass('active');
-            $('[href="' + url + '"]').parent().parent().addClass('in').attr('aria-expanded', true);
-            $('[href="' + url + '"]').focus();
+            $('[href="#!' + url + '"]').parent().parent().parent().addClass('active');
+            $('[href="#!' + url + '"]').parent().parent().addClass('in').attr('aria-expanded', true);
+            $('[href="#!' + url + '"]').focus();
             $('#side-menu a').removeClass('active');
-            $('[href="' + url + '"]').addClass('active');
+            $('[href="#!' + url + '"]').addClass('active');
 
             actions.setCurrentPageDefaultData(store, window.allPageConfig.page[url]);
 
