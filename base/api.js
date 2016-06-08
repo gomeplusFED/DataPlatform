@@ -30,7 +30,7 @@ function api(Router, options) {
         orderName : ["order", "orderOrder"],
         //求和名字
         sumName : ["sum", "orderSum"],
-        //固定参数
+        //部分固定参数
         fixedParams : {},
         //固定查询数据库参数
         params : null,

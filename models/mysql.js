@@ -837,6 +837,48 @@ function connect(app) {
                 last_14_keep : Number,
                 last_30_keep : Number
             });
+            models.ChannelAnalysis = db.define("tbl_rt_channel_analysis", {
+                id : {type: 'number', key: true},
+                date : Date,
+                channel_name : String,
+                channel_id : String,
+                type : String,
+                ver : String,
+                day_type : Number,
+                new_users_num : Number,
+                new_account_num : Number,
+                active_users_num : Number,
+                start_count : Number,
+                consume_users_num : Number,
+                unit_use_time : Number
+            });
+            models.ChannelUserKeep = db.define("tbl_rt_channel_user_keep", {
+                id : {type: 'number', key: true},
+                date : Date,
+                type : String,
+                ver : String,
+                day_type : Number,
+                channel_id : String,
+                channel_name : String,
+                keep_type : String,
+                keep_rate : Number
+            });
+            models.ChannelUserActive = db.define("tbl_rt_channel_user_active", {
+                id : {type: 'number', key: true},
+                date : Date,
+                type : String,
+                ver : String,
+                day_type : Number,
+                channel_id : String,
+                channel_name : String,
+                active_type : String,
+                active_num : Number
+            });
+            models.ChannelIdNameChart = db.define("tbl_rt_channel_id_name_chart", {
+                id : {type: 'number', key: true},
+                channel_id : String,
+                channel_name : String
+            });
             models.db1 = db;
             next();
         }
