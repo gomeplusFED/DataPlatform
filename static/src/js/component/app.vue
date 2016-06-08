@@ -5,13 +5,6 @@
     <m-confirm></m-confirm>
     <m-export-confirm></m-export-confirm>
     <m-main v-for="item in currentPageDefaultData.defaultData" :index="$index" :init-data="initData" :current-data="currentPageDefaultData.defaultData[$index]" :loading.sync="loading"></m-main>
-
-
-
-
-    <a href="javascript:void(0)" v-link="{path: '/dataOverview/app', query: {a: '123'}}">asdasd</a>
-
-
 </template>
 
 
@@ -76,7 +69,7 @@ var App = Vue.extend({
             $('#side-menu a').removeClass('active');
             $('[href="' + url + '"]').addClass('active');
 
-            actions.setCurrentPageDefaultData(store, window.allPageConfig.page[url])
+            actions.setCurrentPageDefaultData(store, window.allPageConfig.page[url]);
 
             // 页面访问统计
             $.ajax({
