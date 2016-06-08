@@ -73,7 +73,7 @@ module.exports = {
         },
         "5": {
             name: "渠道分析",
-            display: true,
+            display: false,
             className: "fa  fa-laptop fa-fw",
             href: "#",
             path: [
