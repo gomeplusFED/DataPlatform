@@ -20,7 +20,6 @@ module.exports = {
             newData = {};
         for(var key of thirdSource) {
             obj[key.channel_id] = [];
-
         }
 
         for(var date of dates) {
@@ -68,12 +67,20 @@ module.exports = {
             for(var i = 0; i < top; i++) {
                 for(var key of array[i]) {
                     a.push(key);
-                    map[key.channel_id] = key.channel_name;
+                    if(filter_key === "keep_rate") {
+                        map[key.channel_id] = key.channel_name + "(%)";
+                    } else {
+                        map[key.channel_id] = key.channel_name;
+                    }
                 }
             }
             for(key of a) {
                 var date = util.getDate(key.date);
-                newData[date][key.channel_id] = key[filter_key];
+                if(filter_key === "keep_rate") {
+                    newData[date][key.channel_id] = (key[filter_key] * 100).toFixed(2);
+                } else {
+                    newData[date][key.channel_id] = key[filter_key];
+                }
             }
             return newData;
         }

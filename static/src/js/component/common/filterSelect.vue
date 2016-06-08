@@ -4,7 +4,7 @@
 			<div class="group">
 				<strong>{{item.title}}{{item.title === '' ? '' : '：'}}</strong>
 				<div class="btn_group" v-if="!isCell">
-					<div v-if="item.groups.length < 5">
+					<div v-if="item.groups.length < 6">
 						<button v-for="group in item.groups" @click="getArgv(item.filter_key,group.key,$event)" track-by="$index">{{group.value}}</button>
 					</div>
 					<div v-else>
