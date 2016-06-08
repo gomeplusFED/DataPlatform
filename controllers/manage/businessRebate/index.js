@@ -5,6 +5,7 @@
  */
 var api = require("../../../base/api"),
     help = require("../../../base/help"),
+    _ = require("lodash"),
     config = require("../../../utils/config.json"),
     businessRebate = require("../../../filters/businessRebate");
 
@@ -12,7 +13,7 @@ module.exports = (Router) => {
     Router = new api(Router, {
         router: "/businessRebate/businessAllOne",
         modelName: ["RebateShopOverview", "RebateShopRefund"],
-        date_picker_data: 1,
+        //date_picker_data: 1,
         platform : false,
         filter(data, filter_key, dates) {
             return businessRebate.businessAllOne(data);
@@ -24,8 +25,14 @@ module.exports = (Router) => {
         }],
         rows: [
             ["name", "order_num", "order_amount", "shop_num", "user_num", "product_sku_num"],
-            ["rebate_order_num", "rebate_amount_total", "rebate_amount_actual", "rebate_amount", "rate", "platform_amount"],
-            ["name", "spu_num", "sku_num", "user_num", "amount", "amount_actual"]
+            ["rebate_order_num",
+                //"rebate_amount_total", "rebate_amount_actual",
+                "rebate_amount",
+                //"rate",
+                "platform_amount"],
+            ["name", "spu_num", "sku_num", "user_num", "amount",
+                //"amount_actual"
+            ]
         ],
         cols: [
             [{
@@ -50,18 +57,18 @@ module.exports = (Router) => {
             [{
                 caption: "返利到账订单数",
                 type: "string"
-            }, {
-                caption: "返利到账订单总金额",
-                type: "string"
-            }, {
-                caption: "返利到账订单实付金额",
-                type: "string"
+            //}, {
+            //    caption: "返利到账订单总金额",
+            //    type: "string"
+            //}, {
+            //    caption: "返利到账订单实付金额",
+            //    type: "string"
             }, {
                 caption: "返利到账金额",
                 type: "string"
-            }, {
-                caption: "返利比率",
-                type: "string"
+            //}, {
+            //    caption: "返利比率",
+            //    type: "string"
             }, {
                 caption: "平台到账金额",
                 type: "string"
@@ -81,17 +88,31 @@ module.exports = (Router) => {
             }, {
                 caption: "退货商品总金额",
                 type: "string"
-            }, {
-                caption: "实际退货金额",
-                type: "string"
+            //}, {
+            //    caption: "实际退货金额",
+            //    type: "string"
             }]
         ]
     });
 
     Router = new api(Router,{
         router : "/businessRebate/businessAllTwo",
-        modelName : [ "RebateShopTredencyDetails" ],
+        modelName : [ "RebateShopOrderTredencyDetails", "TypeFlow" ],
+        orderParams : {
+            type : 2,
+            type_code : 3,
+            status : 1
+        },
         level_select : true,
+        level_select_name : "category_id",
+        level_select_url : "/api/categories",
+        fixedParams(query, filter_key, req, cb) {
+            if(query.category_id === undefined) {
+                query.category_id = "all";
+            }
+            query.day_type = 1;
+            cb(null, query);
+        },
         platform : false,
         filter_select: [{
             title: '指标选择',
@@ -114,8 +135,22 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/businessRebate/businessAllThree",
-        modelName : [ "RebateShopTredencyDetails" ],
+        modelName : [ "RebateShopTypeLevelDetails", "TypeFlow" ],
+        orderParams : {
+            type : 2,
+            type_code : 3,
+            status : 1
+        },
         level_select : true,
+        level_select_name : "category_id",
+        level_select_url : "/api/categories",
+        fixedParams(query, filter_key, req, cb) {
+            if(query.category_id === undefined) {
+                query.category_id = "all";
+            }
+            query.day_type = 1;
+            cb(null, query);
+        },
         platform : false,
         filter_select: [
             {
@@ -140,8 +175,22 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/businessRebate/businessAllFour",
-        modelName : [ "RebateShopTredencyDetails" ],
+        modelName : [ "RebateShopTypeLevelDetails", "TypeFlow" ],
+        orderParams : {
+            type : 2,
+            type_code : 3,
+            status : 1
+        },
         level_select : true,
+        level_select_name : "category_id",
+        level_select_url : "/api/categories",
+        fixedParams(query, filter_key, req, cb) {
+            if(query.category_id === undefined) {
+                query.category_id = "all";
+            }
+            query.day_type = 1;
+            cb(null, query);
+        },
         platform : false,
         filter_select: [
             {
@@ -167,10 +216,13 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/businessRebate/businessAllFive",
         modelName : [ "RebateShopTop" ],
-        date_picker_data: 1,
+        showDayUnit : true,
+        date_picker_data : 1,
         platform : false,
-        filter(data, filter_key, dates) {
-            return businessRebate.businessAllFive(data);
+        paging : true,
+        order : ["-order_num", "-pay_order_num"],
+        filter(data, filter_key, dates, filter_key2, page) {
+            return businessRebate.businessAllFive(data, page);
         },
         rows : [
             [ "id", "shop_name", "plan_num", "spu_num", "user_num", "pay_rate", "pay_price_rate",
@@ -215,18 +267,27 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/businessRebate/businessAllSix",
-        modelName : [ "RebateShopPlanTop" ],
-        date_picker_data: 1,
+        modelName : [ "RebateShopPlanTop", "TypeFlow" ],
+        orderParams : {
+            type : 2,
+            type_code : 3,
+            status : 1,
+            limit : 100
+        },
         platform : false,
+        paging : true,
+        order : ["-order_num", "-pay_order_num"],
+        showDayUnit : true,
+        date_picker_data : 1,
         flexible_btn : [
             {
-                content: '<a href="/businessRebate/plan" target="_blank">更多</a>',
+                content: '<a href="#!/businessRebate/plan">更多</a>',
                 preMethods: [],
                 customMethods: ''
             }
         ],
-        filter(data, filter_key, dates) {
-            return businessRebate.businessAllSix(data);
+        filter(data, filter_key, dates, filter_key2, page) {
+            return businessRebate.businessAllSix(data, page);
         },
         rows : [
             [ "id", "plan_name", "shop_name", "deadline", "related_flow", "level", "spu_num", "user_num",
@@ -268,7 +329,7 @@ module.exports = (Router) => {
                 caption : "返利到账金额",
                 type : "number"
             },{
-                caption : "退出率",
+                caption : "退货率",
                 type : "string"
             }
             ]
@@ -277,16 +338,55 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/businessRebate/planOne",
-        modelName : [ "RebateShopPlanTop" ],
+        modelName : [ "RebateShopPlanTop", "TypeFlow" ],
+        orderParams : {
+            type : 2,
+            type_code : 3,
+            status : 1,
+            limit : 100
+        },
         excel_export : true,
         platform : false,
+        paging : true,
+        order : ["-date"],
+        showDayUnit : true,
+        date_picker_data : 1,
+        selectFilter(req, cb) {
+            req.models.TypeFlow.find({
+                type : 2,
+                type_code : 3,
+                status : 1
+            }, (err, data) => {
+                if(err) {
+                    cb(err);
+                } else {
+                    var filter_select = [],
+                        related_flow = _.uniq(_.pluck(data, "flow_code"));
+                    filter_select.push({
+                        title: '关联流程',
+                        filter_key: 'related_flow',
+                        groups: [{
+                            key: related_flow,
+                            value: '全部返利'
+                        }]
+                    });
+                    for(var key of data) {
+                        filter_select[0].groups.push({
+                            key : key.flow_code,
+                            value : key.flow_name
+                        })
+                    }
+                    cb(null, filter_select);
+                }
+            });
+        },
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
-        date_picker_data: 1,
-        filter(data, filter_key, dates) {
-            return businessRebate.planOne(data);
+        //date_picker_data: 1,
+        filter(data, filter_key, dates, filter_key2, page) {
+            return businessRebate.planOne(data, page);
         },
         rows : [
             [ "id", "plan_name", "shop_name", "deadline", "related_flow", "level", "spu_num", "user_num",
@@ -328,7 +428,7 @@ module.exports = (Router) => {
                 caption : "返利到账金额",
                 type : "number"
             },{
-                caption : "退出率",
+                caption : "退货率",
                 type : "string"
             }
             ]

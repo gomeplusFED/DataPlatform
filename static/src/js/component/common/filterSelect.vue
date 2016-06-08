@@ -4,7 +4,14 @@
 			<div class="group">
 				<strong>{{item.title}}{{item.title === '' ? '' : '：'}}</strong>
 				<div class="btn_group" v-if="!isCell">
-					<button v-for="group in item.groups" @click="getArgv(item.filter_key,group.key,$event)" track-by="$index">{{group.value}}</button>
+					<div v-if="item.groups.length < 5">
+						<button v-for="group in item.groups" @click="getArgv(item.filter_key,group.key,$event)" track-by="$index">{{group.value}}</button>
+					</div>
+					<div v-else>
+						<select @change="getArgvSelect(item.filter_key, $event)">
+							<option v-for="group in item.groups" :value="group.key">{{group.value}}</option>
+						</select>
+					</div>
 				</div>
 				<div class="btn_group" v-else>
 					<select @change="extraSelect($event,pageComponentsDataIndex)">
@@ -73,6 +80,10 @@ var FilterSelect = Vue.extend({
 		getArgv: function(key,value,ev){
 			Vue.set(this.argvs, key, value);
 		},
+		getArgvSelect: function(key, ev){
+			var value = $(ev.target).find('option:selected').val();
+			Vue.set(this.argvs, key, value);
+		},
 		extraSelect: function(ev,pageComponentsDataIndex){
 			this.checkedOption = $(ev.target).find('option:selected').index();
 			// 嵌套层级较深，从原始属性里慢慢分析吧。。。心累
@@ -108,17 +119,21 @@ var FilterSelect = Vue.extend({
 				}
 				// 检测filter是否是级联选择
 				this.checkHasCell();
-
 				// 纯按钮事件处理
 				if(this.isFirstHandler && !this.isCell){
 					for(var i = 0;i < this.pageComponentsData[this.componentType].length;i++){
-						(function(filterIndex){
-							$('#filter_group_' + _this.index + '_' + filterIndex).find('button').bind('click',function(){
-								$('#filter_group_' + _this.index + '_' + filterIndex).find('button').removeClass('active');
-								$(this).addClass('active');
-							})
-						})(i)
-						$('#filter_group_' + this.index + '_' + i).find('button').eq(0).trigger('click');
+						var _curr = this.pageComponentsData[this.componentType][i];
+						if(_curr.groups.length > 5){
+							Vue.set(this.argvs, this.pageComponentsData[this.componentType][0].filter_key, _curr.groups[0].key);
+						}else{
+							(function(filterIndex){
+								$('#filter_group_' + _this.index + '_' + filterIndex).find('button').bind('click',function(){
+									$('#filter_group_' + _this.index + '_' + filterIndex).find('button').removeClass('active');
+									$(this).addClass('active');
+								})
+							})(i)
+							$('#filter_group_' + this.index + '_' + i).find('button').eq(0).trigger('click');
+						}
 					}
 				}
 				// 级联菜单事件处理

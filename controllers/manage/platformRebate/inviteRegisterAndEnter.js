@@ -5,6 +5,7 @@
  */
 var api = require("../../../base/api"),
     help = require("../../../base/help"),
+    _ = require("lodash"),
     config = require("../../../utils/config.json"),
     filter = require("../../../filters/platformRebate/inviteRegisterAndEnter");
 
@@ -12,7 +13,7 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/platformRebate/inviteRegisterAndEnterOne",
         modelName : ["RebateInvitepartner"],
-        date_picker_data: 1,
+        //date_picker_data: 1,
         platform : false,
         flexible_btn: [{
             content: '<a href="javascript:void(0)" help_url="/inviteRegisterAndEnter/help_json">帮助</a>',
@@ -43,7 +44,7 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/platformRebate/inviteRegisterAndEnterTwo",
-        date_picker_data: 1,
+        //date_picker_data: 1,
         platform : false,
         modelName : [ "RebatetInviteseller" ],
         filter(data, filter_key, dates) {
@@ -76,13 +77,18 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/platformRebate/inviteRegisterAndEnterThree",
         platform : false,
-        modelName : ["RebatetRegisterTrendency"],
+        modelName : ["RebatetRegisterTrendency", "TypeFlow"],
+        orderParams : {
+            type_code : [1, 2, 5],
+            type : 1,
+            status : 1
+        },
         filter_select: [{
             title: '指标选择',
             filter_key: 'filter_key',
             groups: [{
                 key: 'registered_count',
-                value: '邀请成功'
+                value: '邀请成功数'
             }, {
                 key: 'rebate_amount_count',
                 value: '返利到账金额'
@@ -96,80 +102,78 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/platformRebate/inviteRegisterAndEnterFour",
         platform : false,
-        modelName : ["RebatetRegisterSheduleDetails"],
+        modelName : ["RebatetRegisterSheduleDetails", "TypeFlow"],
+        orderParams : {
+            type : 1,
+            status : 1,
+            limit : 100
+        },
+        excel_export : true,
+        paging : true,
+        order : ["-date"],
+        showDayUnit : true,
+        date_picker_data : 1,
         flexible_btn: [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
-        filter_select: [{
-            title: '使用方',
-            filter_key: 'user_party',
-            groups: [{
-                key: '单项单级返利',
-                value: '单项单级返利',
-                cell: {
-                    title: '关联流程',
-                    filter_key : 'correlate_flow',
-                    groups : [{
-                        key: '固定返利',
-                        value: '固定返利'
-                    },{
-                        key: '比例返利',
-                        value: '比例返利'
-                    }]
+        selectFilter(req, cb) {
+            req.models.TypeFlow.find({
+                type_code : [1, 2, 5],
+                type : 1,
+                status : 1
+            }, (err, data) => {
+                if(err) {
+                    cb(err);
+                } else {
+                    var  filter_select = [],
+                        obj = {},
+                        user_party = _.uniq(_.pluck(data, "type_code"));
+                    filter_select.push({
+                        title: '使用方',
+                        filter_key: 'user_party',
+                        groups: [ {
+                            key: user_party,
+                            value: '全部使用方',
+                            cell: {
+                                title: '关联流程',
+                                filter_key : 'correlate_flow',
+                                groups : [{
+                                    key: '',
+                                    value: '全部相关流程'
+                                }]
+                            }
+                        }]
+                    });
+                    for(var key of user_party) {
+                        obj[key] = {
+                            key: key,
+                            cell: {
+                                title: '关联流程',
+                                filter_key : 'correlate_flow',
+                                groups : [{
+                                    key: '',
+                                    value: '全部相关流程'
+                                }]
+                            }
+                        }
+                    }
+                    for(key of data) {
+                        obj[key.type_code].value = key.type_name;
+                        obj[key.type_code].cell.groups.push({
+                            key : key.flow_code,
+                            value : key.flow_name
+                        });
+                    }
+                    for(key in obj) {
+                        filter_select[0].groups.push(obj[key]);
+                    }
+                    cb(null, filter_select);
                 }
-            }, {
-                key: '平台基础返利',
-                value: '平台基础返利',
-                cell: {
-                    title: '关联流程',
-                    filter_key : 'correlate_flow',
-                    groups : [{
-                        key: '分享购买',
-                        value: '分享购买'
-                    },{
-                        key: '邀请好友-购买返利',
-                        value: '邀请好友-购买返利'
-                    },{
-                        key: '邀请好友-固定返利',
-                        value: '邀请好友-固定返利'
-                    }]
-                }
-            }, {
-                key: '平台促销返利',
-                value: '平台促销返利',
-                cell: {
-                    title: '关联流程',
-                    filter_key : 'correlate_flow',
-                    groups : [{
-                        key: '分享购买',
-                        value: '分享购买'
-                    },{
-                        key: '邀请好友-购买返利',
-                        value: '邀请好友-购买返利'
-                    },{
-                        key: '邀请好友-固定返利',
-                        value: '邀请好友-固定返利'
-                    }]
-                }
-            }, {
-                key: '邀请商家入驻返利',
-                value: '邀请商家入驻返利',
-                cell: {
-                    title: '关联流程',
-                    filter_key : 'correlate_flow',
-                    groups : [{
-                        key: '固定返利',
-                        value: '固定返利'
-                    }, {
-                        key: '分享购买',
-                        value: '分享购买'
-                    }]
-                }
-            }]
-        }],
-        filter(data, filter_key, dates) {
-            return filter.inviteRegisterAndEnterFour(data);
+            });
+        },
+        filter(data, filter_key, dates, filter_key2, page) {
+            return filter.inviteRegisterAndEnterFour(data, page);
         },
         rows : [
             ["id", "rebate_plan_name", "user_party", "deadline", "correlate_flow", "participate_user_count",

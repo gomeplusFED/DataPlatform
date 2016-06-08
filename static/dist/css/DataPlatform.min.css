@@ -5,7 +5,7 @@ input {outline: 0;font-size: 14px;margin: 0;padding: 0;box-sizing: border-box;}
 input:active,input:visited,input:focus{outline: none!important;}
 html, body, form, fieldset, p, div, h1, h2, h3, h4, h5, h6 {-webkit-text-size-adjust: none}
 article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {display: block}
-a, input, select, button, textarea {font-family: 'Microsoft YaHei', arial, helvetica, sans-serif}
+a, input, select, button, textarea {font-family: 'Microsoft YaHei', arial, helvetica, sans-serif;outline: none!important;}
 a {text-decoration: none;color: #3990e6}
 body {font-family: 'Microsoft YaHei', arial, helvetica, sans-serif;-webkit-text-size-adjust: none;-webkit-user-select: none;font-size: 14px;background: #eee;}
 ol, ul {list-style: none}
@@ -2383,6 +2383,9 @@ th {
     max-width: 100%;
     margin-bottom: 20px
 }
+.table tr th{
+    background-color: lavender;
+}
 .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
     padding: 8px;
     line-height: 1.42857143;
@@ -3571,7 +3574,8 @@ select[multiple].input-group-sm>.form-control, select[multiple].input-group-sm>.
 }
 .nav>li>a.active{
     text-decoration: none;
-    background-color: #eee
+    color: #23527c;
+    background-color: #eee;
 }
 .nav>li.disabled>a {
     color: #777
@@ -5167,7 +5171,7 @@ button.close {
     -webkit-transform: translate(0, 0);
     -ms-transform: translate(0, 0);
     -o-transform: translate(0, 0);
-    transform: translate(0, 0)
+    transform: translate(0, 0);
 }
 .modal-open .modal {
     overflow-x: hidden;
@@ -5176,7 +5180,7 @@ button.close {
 .modal-dialog {
     position: relative;
     width: auto;
-    margin: 10px
+    margin: 10px;
 }
 .modal-content {
     position: relative;
@@ -5188,7 +5192,7 @@ button.close {
     border-radius: 6px;
     outline: 0;
     -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
-    box-shadow: 0 3px 9px rgba(0, 0, 0, .5)
+    box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
 }
 .modal-backdrop {
     position: fixed;
@@ -5221,7 +5225,9 @@ button.close {
 }
 .modal-body {
     position: relative;
-    padding: 15px
+    padding: 15px;
+    max-height: 500px;
+    overflow-y: auto;
 }
 .modal-footer {
     padding: 15px;
@@ -5261,6 +5267,11 @@ button.close {
 @media (min-width:992px) {
     .modal-lg {
         width: 900px
+    }
+}
+@media (min-width:1366px) {
+    .modal-lg {
+        width: 1100px
     }
 }
 .tooltip {

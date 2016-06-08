@@ -4,6 +4,7 @@
  * @fileoverview 商家返利汇总
  */
 var util = require("../../utils"),
+    config = require("../../utils/config.json")
     _ = require("lodash");
 
 module.exports = {
@@ -47,11 +48,11 @@ module.exports = {
                 total_amount_actual: 0
             };
         for (var key of source) {
-            total_order_num = key.total_order_num;
-            total_order_amount = key.total_order_amount;
-            total_shop_num = key.total_shop_num;
-            total_user_num = key.total_user_num;
-            total_product_sku_num = key.total_product_sku_num;
+            total_order_num += key.total_order_num;
+            total_order_amount += key.total_order_amount;
+            total_shop_num += key.total_shop_num;
+            total_user_num += key.total_user_num;
+            total_product_sku_num += key.total_product_sku_num;
             objOne.order_num += key.order_num;
             objOne.order_amount += key.order_amount;
             objOne.shop_num += key.shop_num;
@@ -75,6 +76,7 @@ module.exports = {
             objThree.amount_actual += key.amount_actual;
             objThree.total_amount_actual += key.total_amount_actual;
         }
+        objOne.order_amount = objOne.order_amount.toFixed(2);
         one.push(objOne);
         one.push({
             name: "总占比",
@@ -85,7 +87,10 @@ module.exports = {
             product_sku_num: util.toFixed(objOne.product_sku_num, total_product_sku_num)
         });
         objTwe.rate = util.toFixed(objTwe.rebate_amount, objTwe.rebate_amount_actual);
+        objTwe.rebate_amount = objTwe.rebate_amount.toFixed(2);
+        objTwe.platform_amount = objTwe.platform_amount.toFixed(2);
         twe.push(objTwe);
+        objThree.amount = objThree.amount.toFixed(2);
         three.push(objThree);
         three.push({
             name: "返利退货订单占比",
@@ -99,28 +104,23 @@ module.exports = {
     },
     businessAllTwe(data, filter_key, dates) {
         var source = data.data,
+            orderSource = data.orderData,
             type = "line",
-            array = [ "分销购买", "分享购买", "组合返利" ],
             map = {},
             newDate = {};
-        map[filter_key + "_0"] = "分销购买";
-        map[filter_key + "_1"] = "分享购买";
-        map[filter_key + "_2"] = "组合返利";
+        for(var key of orderSource) {
+            map[key.flow_code] = key.flow_name;
+        }
         for(var date of dates) {
             var obj = {};
-            for(var i = 0; i < array.length; i++) {
-                obj[filter_key + "_" + i] = 0;
+            for(key of orderSource) {
+                obj[key.flow_code] = 0;
             }
-            for(var key of source) {
-                if(date === util.getDate(key.date)) {
-                    for(var i = 0; i < array.length; i++) {
-                        if(key.rebate_type === array[i]) {
-                            obj[filter_key + "_" + i] += key[filter_key];
-                        }
-                    }
-                }
-            }
-            newDate[util.getDate(new Date(date))] = obj;
+            newDate[date] = obj;
+        }
+        for(key of source) {
+            date = util.getDate(key.date);
+            newDate[date][key.rebate_type] += Math.round(key[filter_key]);
         }
         return [{
             type : type,
@@ -133,8 +133,11 @@ module.exports = {
     },
     businessAllThree(data, filter_key) {
         var source = data.data,
+            orderSource = data.orderData,
             newDataPie = {},
             newDataBar = {},
+            objPie = {},
+            objBar = {},
             mapPie = {},
             mapBar = {},
             filter_name = {
@@ -144,36 +147,37 @@ module.exports = {
             },
             typePie = "pie",
             typeBar = "bar",
-            XPie = ["1级","2级","3级","4级"],
-            XBar = ["层级1","层级2","层级3","层级4"];
-        for(var level of XPie) {
-            var obj = {};
-            obj.value = 0;
-            for(var key of source) {
-                if(level === key.grade) {
-                    obj.value += key[filter_key];
-                }
-            }
-            newDataPie[level] = obj;
+            XPie = [],
+            XBar = [];
+        for(var i = 0; i < orderSource[0].rebate_level; i++) {
+            XPie.push({
+                key :  i + 1 + "级",
+                value : i + 1
+            });
+            XBar.push({
+                key :  i + 1 + "层级",
+                value : i + 1
+            });
         }
-        for(var level of XPie) {
-            var obj = {};
-            for(var i = 0; i < XBar.length; i++) {
-                obj[i] = 0;
+        for (var level of XPie) {
+            objPie[level.value] = {
+                value : 0
+            };
+            objBar[level.value] = {};
+            for (var i = 0; i < XBar.length; i++) {
+                objBar[level.value][i] = 0;
             }
-            for(var key of source) {
-                if(key.level === level) {
-                    for(var i = 0; i < XBar.length; i++) {
-                        if(key.grade === XBar[i]) {
-                            obj[i] += key[filter_key];
-                        }
-                    }
-                }
-            }
-            newDataBar[level] = obj;
+        }
+        for(key of source) {
+            objPie[key.grade].value += Math.round(key[filter_key]);
+            objBar[key.grade][key.level] += Math.round(key[filter_key]);
+        }
+        for(level of XPie) {
+            newDataPie[level.key] = objPie[level.value];
+            newDataBar[level.key] = objBar[level.value];
         }
         for(var i = 0; i < XBar.length; i++) {
-            mapBar[i] = XBar[i];
+            mapBar[i] = XBar[i].key;
         }
         mapPie.value= filter_name[filter_key];
         return [{
@@ -194,7 +198,9 @@ module.exports = {
     },
     businessAllFour(data, filter_key) {
         var source = data.data,
+            orderSource = data.orderData,
             newData = {},
+            obj = {},
             map = {},
             typePie = "pie",
             typeBar = "bar",
@@ -203,17 +209,23 @@ module.exports = {
                 item_amount : "商品总金额",
                 rebate_amount : "返利到账金额"
             },
-            XData = ["分销购买","分享购买"];
+            XData = [];
+        for(var key of orderSource) {
+            XData.push({
+                key : key.flow_name,
+                value : key.flow_code
+            });
+        }
         for(var x of XData) {
-            var obj = {
+            obj[x.value] = {
                 value : 0
             };
-            for(var key of source) {
-                if(x === key.rebate_type) {
-                    obj.value += key[filter_key];
-                }
-            }
-            newData[x] = obj;
+        }
+        for(var key of source) {
+            obj[key.rebate_type].value += key[filter_key];
+        }
+        for(x of XData) {
+            newData[x.key] = obj[x.value];
         }
         map.value = filter_name[filter_key];
         return [{
@@ -232,62 +244,79 @@ module.exports = {
             }
         }]
     },
-    businessAllFive(data) {
+    businessAllFive(data, page) {
         var source = data.data,
+            count = data.dataCount > 50 ? 50 : data.dataCount,
+            page = page || 1,
             newData = [],
-            length = source.length,
-            top = length > 50 ? 50 : length;
-        source = util.sort(source, "order_num", "pay_order_num");
-        for(var i = 0; i < top; i++) {
+            length = source.length;
+        for(var i = 0; i < length; i++) {
             var obj = {
-                id : i + 1,
+                id : (page - 1) * 10 + i + 1,
                 shop_name : source[i].shop_name,
                 plan_num : source[i].plan_num,
                 spu_num : source[i].spu_num,
                 user_num : source[i].user_num,
                 pay_rate : source[i].order_num + "/" + source[i].total_order_num,
-                pay_price_rate : source[i].order_amount + "/" + source[i].total_order_amount,
-                plan_rebate_amount : source[i].plan_rebate_amount,
-                rebate_amount : source[i].rebate_amount,
-                platform_amount : source[i].platform_amount
-            }
+                pay_price_rate : source[i].order_amount.toFixed(2) + "/" + source[i].total_order_amount.toFixed(2),
+                plan_rebate_amount : source[i].plan_rebate_amount.toFixed(2),
+                rebate_amount : source[i].rebate_amount.toFixed(2),
+                platform_amount : source[i].platform_amount.toFixed(2)
+            };
             newData.push(obj);
         }
-        return util.toTable([newData], data.rows, data.cols);
+        return util.toTable([newData], data.rows, data.cols, [count]);
     },
-    businessAllSix(data) {
+    businessAllSix(data, page) {
         var source = data.data,
+            orderSource = data.orderData,
+            count = data.dataCount > 50 ? 50 : data.dataCount,
+            page = page || 1,
             newData = [],
             length = source.length,
-            top = length > 50 ? 50 : length;
-        source = util.sort(source, "order_num", "pay_order_num");
-        for(var i = 0; i < top; i++) {
+            related_flow = {};
+        for(var key of orderSource) {
+            related_flow[key.flow_code] = key.flow_name;
+        }
+        for(var i = 0; i < length; i++) {
             var obj = {
-                id : i + 1,
+                id : (page - 1) * 10 + i + 1,
                 plan_name : source[i].plan_name,
                 shop_name : source[i].shop_name,
                 deadline : source[i].deadline,
-                related_flow : source[i].related_flow,
+                related_flow : related_flow[source[i].related_flow],
                 level : source[i].level,
                 spu_num : source[i].spu_num,
                 user_num : source[i].user_num,
                 pay_rate : source[i].order_num + "/" + source[i].total_order_num,
-                pay_price_rate : source[i].order_amount + "/" + source[i].total_order_amount,
-                rebate_amount : source[i].rebate_amount,
+                pay_price_rate : source[i].order_amount.toFixed(2) + "/" + source[i].total_order_amount.toFixed(2),
+                rebate_amount : source[i].rebate_amount.toFixed(2),
                 refund_rate : util.toFixed(source[i].refund_sku_num, source[i].sku_num)
             };
             newData.push(obj);
         }
-        return util.toTable([newData], data.rows, data.cols);
+        return util.toTable([newData], data.rows, data.cols, [count]);
     },
-    planOne(data) {
-        var source = data.data;
-        for(var i = 0; i < source.length; i++) {
-            source[i].id = i + 1;
-            source[i].pay_rate = source[i].order_num + "/" + source[i].total_order_num;
-            source[i].pay_price_rate = source[i].order_amount + "/" + source[i].total_order_amount;
-            source[i].refund_rate = util.toFixed(source[i].refund_sku_num, source[i].sku_num);
+    planOne(data, page) {
+        var source = data.data,
+            orderSource = data.orderData,
+            count = data.dataCount,
+            page = page || 1,
+            newData = [],
+            related_flow = {};
+        for(var key of orderSource) {
+            related_flow[key.flow_code] = key.flow_name;
         }
-        return util.toTable([source], data.rows, data.cols);
+        for(var i = 0; i < source.length; i++) {
+            var key = source[i];
+            key.id = (page - 1) * 10 + i + 1;
+            key.related_flow = related_flow[key.related_flow];
+            key.pay_rate = key.order_num + "/" + key.total_order_num;
+            key.pay_price_rate = key.order_amount.toFixed(2) + "/" + key.total_order_amount.toFixed(2);
+            key.rebate_amount = key.rebate_amount.toFixed(2);
+            key.refund_rate = util.toFixed(key.refund_sku_num, key.sku_num);
+            newData.push(key);
+        }
+        return util.toTable([newData], data.rows, data.cols, [count]);
     }
 };

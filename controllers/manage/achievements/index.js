@@ -10,22 +10,22 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/achievements/shopOne",
-        modelName : ["ShopList"],
+        modelName : ["SalesPerfShopKv"],
         platform : false,
         filter_select: [{
             title: '',
             filter_key : 'filter_key',
             groups: [{
-                key: 'shop_new_num',
+                key: 'xpop_shops_num_add_al',
                 value: '新增注册店铺'
             }, {
-                key: 'shop_succ_num',
+                key: 'xpop_shops_num_succ_add_al',
                 value: '成功入驻店铺'
             }, {
-                key: 'shop_order_succ_num',
+                key: 'deal_shops_num',
                 value: '成功交易店铺'
             }, {
-                key: 'shop_access_num',
+                key: 'xpop_shops_num_acc_al',
                 value: '被访问店铺数'
             }]
         }],
@@ -36,19 +36,27 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/achievements/shopTwo",
-        modelName : ["ShopList"],
+        modelName : ["SalesPerfShopKv"],
         platform : false,
+        paging : true,
+        order : ["-date"],
         excel_export : true,
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
+        //fixedParams : {
+        //    key_type : [ "xpop_shops_num_add_al", "xpop_shops_num_succ_add_al",
+        //        "xpop_shops_num_acc_al", "xpop_shops_num_succ_tot_al", "xpop_shops_num_share_al",
+        //        "xpop_shops_num_succ_order_al", "xpop_shops_num_succ_deal_al"]
+        //},
         filter(data, filter_key, dates) {
-            return filter.shopTwo(data, dates);
+            return filter.shopTwo(data);
         },
         rows : [
-            [ 'date', 'shop_new_num', 'shop_succ_num', 'shop_total_num', 'shop_order_num',
-                'shop_order_succ_num', 'shop_access_num', 'shop_share_num' ]
+            [ 'date', 'xpop_shops_num_add_al', 'xpop_shops_num_succ_add_al', 'xpop_shops_num_succ_tot_al',
+                "xpop_shops_num_effective_al",'order_shops_num', 'deal_shops_num', 'xpop_shops_num_acc_al',
+                'xpop_shops_num_share_al' ]
         ],
         cols : [
             [
@@ -67,6 +75,10 @@ module.exports = (Router) => {
                 },
                 {
                     caption : '累计店铺数',
+                    type : 'number'
+                },
+                {
+                    caption : '有效店铺数',
                     type : 'number'
                 },
                 {
@@ -91,20 +103,24 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/achievements/shopThree",
-        modelName : ["ShopTop"],
+        modelName : ["ShopAccesTop"],
         platform : false,
+        showDayUnit : true,
+        paging : true,
+        order : ["-access_num"],
+        sum : ["access_num", "access_users"],
         excel_export : true,
         date_picker_data : 1,
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
-        filter(data, filter_key, dates) {
-            return filter.shopThree(data);
+        filter(data, filter_key, dates, filter_key2, page) {
+            return filter.shopThree(data, page);
         },
         rows : [
-            [ 'top', 'shop_name', 'access_num', 'access_num_rate', 'access_users', 'access_users_rate',
-                'share_commodity_num']
+            [ 'top', 'shop_name', 'access_num', 'access_num_rate', 'access_users',
+                'access_users_rate', 'share_num']
         ],
         cols : [
             [{
@@ -126,7 +142,7 @@ module.exports = (Router) => {
                 caption: '访客数占比',
                 type: 'string'
             }, {
-                caption: '被分享商品数',
+                caption: '被分享次数',
                 type: 'number'
             }]
         ]
@@ -134,19 +150,17 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/achievements/shopFour",
-        modelName : ["ShopTop"],
+        modelName : ["ShopPayTop"],
         platform : false,
+        showDayUnit : true,
+        paging : true,
+        order : ["-pay_price"],
+        sum : ["pay_price", "pay_commodity_num"],
         excel_export : true,
-        flexible_btn : [{
-            content: '<a href="javascript:void(0)">导出</a>',
-            preMethods: ['excel_export']
-        }],
-        filter(data, filter_key, dates) {
-            return filter.shopFour(data);
-        },
+        date_picker_data : 1,
         filter_select: [{
             title: '',
-            filter_key : 'filter_key',
+            filter_key : 'sku_type',
             groups: [{
                 key: '1',
                 value: '合并SKU'
@@ -155,6 +169,13 @@ module.exports = (Router) => {
                 value: 'SKU'
             }]
         }],
+        flexible_btn : [{
+            content: '<a href="javascript:void(0)">导出</a>',
+            preMethods: ['excel_export']
+        }],
+        filter(data, filter_key, dates, filter_key2, page) {
+            return filter.shopFour(data, filter_key, page);
+        },
         rows : [
             [ 'top', 'shop_name', 'pay_price', 'pay_price_rate', 'pay_commodity_num',
                 'pay_commodity_rate', 'share_commodity_num']

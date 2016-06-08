@@ -3,40 +3,20 @@
  * @date 20160414
  * @fileoverview 留存分析
  */
-var util = require("../../utils");
+var util = require("../../utils"),
+    moment = require("moment");
 
 module.exports = {
-    retainedOne(data, dates) {
+    retainedOne(data) {
         var source = data.data,
-            newData = [];
-        dates.sort((a, b) => {
-            return new Date(b) - new Date(a);
-        });
-        for(var date of dates) {
-            var obj = {
-                date : date,
-                new_user : 0,
-                t1 : "0.00%",
-                t7 : "0.00%",
-                t14 : "0.00%",
-                t30 : "0.00%"
-            };
-            for(var key of source) {
-                if(date === util.getDate(key.date)) {
-                    obj.new_user = key.new_user;
-                    if(key.keep_type === "0") {
-                        obj.t1 = (key.keep_num / (key.new_user === 0 ? 1 : key.new_user) * 100).toFixed(2) + "%";
-                    } else if (key.keep_type === "1") {
-                        obj.t7 = (key.keep_num / (key.new_user === 0 ? 1 : key.new_user) * 100).toFixed(2) + "%";
-                    } else if (key.keep_type === "2") {
-                        obj.t14 = (key.keep_num / (key.new_user === 0 ? 1 : key.new_user) * 100).toFixed(2) + "%";
-                    } else if (key.keep_type === "3") {
-                        obj.t30 = (key.keep_num / (key.new_user === 0 ? 1 : key.new_user) * 100).toFixed(2) + "%";
-                    }
-                }
-            }
-            newData.push(obj);
+            count = data.dataCount;
+        for(var key of source) {
+            key.date = moment(key.date).format("YYYY-MM-DD");
+            key.last_1_keep = key.last_1_keep + "%";
+            key.last_7_keep = key.last_7_keep + "%";
+            key.last_14_keep = key.last_14_keep + "%";
+            key.last_30_keep = key.last_30_keep + "%";
         }
-        return util.toTable([newData], data.rows, data.cols);
+        return util.toTable([source], data.rows, data.cols, [count]);
     }
 };

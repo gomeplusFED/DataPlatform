@@ -3,7 +3,8 @@
  * @date 20160415
  * @fileoverview 分享数据
  */
-var util = require("../../utils");
+var util = require("../../utils"),
+    moment = require("moment");
 
 module.exports = {
     insideOne(data, filter_key, dates) {
@@ -42,28 +43,10 @@ module.exports = {
     },
     insideTwo(data, dates) {
         var source = data.data,
-            obj = {},
-            newData = [];
-        dates.sort((a, b) => {
-            return new Date(b) - new Date(a);
-        });
-        for(var date of dates) {
-            obj[date] = {
-                share_num : 0,
-                open_num : 0
-            };
-        }
+            count = data.dataCount;
         for(var key of source) {
-            obj[util.getDate(key.date)].share_num += key.share_num;
-            obj[util.getDate(key.date)].open_num += key.open_num;
+            key.date = moment(key.date).format("YYYY-MM-DD");
         }
-        for(var date of dates) {
-            newData.push({
-                date : date,
-                share_num : obj[date].share_num,
-                open_num : obj[date].open_num
-            });
-        }
-        return util.toTable([newData], data.rows, data.cols);
+        return util.toTable([source], data.rows, data.cols, [count]);
     }
 };

@@ -25,9 +25,9 @@ module.exports = {
                 value : 0
             };
         }
-        for(var key of source) {
+        source.forEach((key) => {
             newData[util.getDate(key.date)].value += key[filter_key];
-        }
+        });
         return [{
             type : type,
             map : map,
@@ -37,38 +37,27 @@ module.exports = {
             }
         }]
     },
-    accessWapTwo(data) {
+    accessWapTwo(data, page) {
         var source = data.data,
-            urls = util.uniq(_.pluck(source, "url")),
+            count = data.dataCount,
+            page = page || 1,
             newData = [];
-        for(var i = 0; i < urls.length; i++) {
-            var obj = {
-                id : i + 1,
-                url : urls[i],
-                page_view : 0,
-                access_num : 0,
-                down_browse : 0,
-                avg_stay_time : 0,
-                operating : "<button class='btn btn-default' url_detail='/useAnalysis/wap'>详情>></button>"
-            };
-            for(var key of source) {
-                if(urls[i] === key.url) {
-                    obj.page_view += key.page_view;
-                    obj.access_num += key.access_num;
-                    obj.down_browse += key.down_browse;
-                    obj.avg_stay_time += Math.round(key.avg_stay_time);
-                }
-            }
-            newData.push(obj);
+        for(var i = 0; i < source.length; i++) {
+            var key = source[i];
+            key.id = (page - 1) * 10 + i + 1;
+            key.operating = "<button class='btn btn-default' url_detail='/useAnalysis/wap'>详情>></button>";
+            key.avg_stay_time = Math.round(key.avg_stay_time);
+            newData.push(key);
         }
-        return util.toTable([newData], data.rows, data.cols);
+        return util.toTable([newData], data.rows, data.cols, [count]);
     },
     wap(data) {
-        var source = data.data;
+        var source = data.data,
+            count = data.dataCount;
         for(var i = 0; i < source.length; i++) {
-            source[i].id = i + 1;
             source[i].date = moment(source[i].date).format("YYYY-MM-DD");
+            source[i].avg_stay_time = Math.round(source[i].avg_stay_time);
         }
-        return util.toTable([source], data.rows, data.cols);
+        return util.toTable([source], data.rows, data.cols, [count]);
     }
 };

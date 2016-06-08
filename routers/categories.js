@@ -6,5 +6,15 @@ module.exports = function(Router) {
             res.send(data);
         })
     });
+
+    Router.get('/api/socialAnalysisCategories', function(req, res, next) {
+        var pid = "";
+        if(req.query.pid !== "0") {
+            pid = req.query.pid;
+        }
+        req.models["SocialCategory"].find({ pid: pid }, function(err, data) {
+            res.send(data);
+        });
+    });
     return Router;
 };

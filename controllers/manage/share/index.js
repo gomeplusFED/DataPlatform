@@ -4,6 +4,8 @@
  * @fileoverview 分享数据
  */
 var api = require("../../../base/api"),
+    help = require("../../../base/help"),
+    config = require("../../../utils/config.json"),
     filter = require("../../../filters/share");
 
 module.exports = (Router) => {
@@ -11,6 +13,11 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/share/insideOne",
         modelName : ["ShareAnalysis"],
+        flexible_btn: [{
+            content: '<a href="javascript:void(0)" help_url="/share/inside/help_json">帮助</a>',
+            preMethods: ["show_help"],
+            customMethods: ''
+        }],
         filter_select: [{
             title: '',
             filter_key : 'filter_key',
@@ -31,6 +38,8 @@ module.exports = (Router) => {
         router : "/share/insideTwo",
         modelName : ["ShareAnalysis"],
         excel_export : true,
+        paging : true,
+        order : ["-date"],
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
@@ -57,6 +66,22 @@ module.exports = (Router) => {
                     type: 'number'
                 }
             ]
+        ]
+    });
+
+    Router = new help(Router, {
+        router : "/share/inside/help",
+        rows : config.help.rows,
+        cols : config.help.cols,
+        data : [
+            {
+                name : "分享次数（站内）",
+                help : "被分享到站内的次数，站内（联系人，我的圈子，我的群聊）"
+            },
+            {
+                name : "打开次数（站内）",
+                help : "站内分享的链接被点击的次数"
+            }
         ]
     });
 

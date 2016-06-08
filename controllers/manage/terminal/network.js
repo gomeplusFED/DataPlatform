@@ -53,6 +53,9 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/terminal/networkTwo",
         modelName : ["KeyValue"],
+        paging : true,
+        order : ["-date"],
+        sum : ["value", "value3"],
         filter_select: [{
             title: '',
             filter_key : 'key_type',
@@ -73,7 +76,7 @@ module.exports = (Router) => {
             return filter.networkTwo(data, filter_key);
         },
         rows : [
-            [ 'name', 'new_users', 'new_users_rate', 'start_up', 'start_up_rate' ]
+            [ 'key_name', 'value', 'new_users_rate', 'value3', 'start_up_rate' ]
         ],
         cols : [
             [

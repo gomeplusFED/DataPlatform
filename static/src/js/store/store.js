@@ -12,9 +12,25 @@ var state = {
     modalTableData: {
         show: false,
         title: '弹窗表格',
-        data: null // 表格数据
+        data: null, // 表格数据
+        query_api: null,
+        query_parmas: null
     },
-    currentPageDefaultData: []
+    currentPageDefaultData: null,
+    confirmConfig: {
+        show: false,
+        title: '弹出对话框',
+        msg: '提示信息',
+        apply: 'func',
+        cancle: 'func'
+    },
+    exportConfirmConfig: {
+        show: false,
+        title: '请选择导出数据范围（<1000）',
+        len: 0,
+        apply: 'func',
+        cancle: 'func'
+    }
 }
 
 var actions = require('./actions.js');
@@ -31,14 +47,20 @@ mutations.HIDEALERT = function(state) {
     state.alertConfig.show = false;
 }
 
-mutations.MODALTABLE = function(state, params) {
-    if(params.title){
+mutations.MODALTABLE = function(state, params){
+    if (params.title) {
         state.modalTableData.title = params.title;
     }
-    if(params.data){
+    if (params.data) {
         state.modalTableData.data = params.data;
     }
     state.modalTableData.show = params.show;
+    if (params.query_api) {
+        state.modalTableData.query_api = params.query_api;
+    }
+    if (params.query_parmas) {
+        state.modalTableData.query_parmas = params.query_parmas;
+    }
 }
 
 mutations.HIDEMODALTABLE = function(state) {
@@ -47,6 +69,26 @@ mutations.HIDEMODALTABLE = function(state) {
 
 mutations.SETCURRENTPAGEDEFAULTDATA = function(state, data) {
     state.currentPageDefaultData = data;
+}
+
+mutations.CONFIRM = function(state, params){
+    state.confirmConfig.show = params.show;
+    state.confirmConfig.title = params.title || '弹窗';
+    state.confirmConfig.msg = params.msg || '';
+    state.confirmConfig.apply = params.apply || function(){};
+    state.confirmConfig.cancle = params.cancle || function(){};
+}
+
+mutations.EXPORTCONFIRM = function(state, params){
+    state.exportConfirmConfig.show = params.show;
+    state.exportConfirmConfig.title = params.title || '弹窗';
+    state.exportConfirmConfig.len = params.len || 0;
+    state.exportConfirmConfig.apply = params.apply || function(){};
+    state.exportConfirmConfig.cancle = params.cancle || function(){};
+}
+
+mutations.HIDECONFIRM = function(state){
+    state.confirmConfig.show = false;
 }
 
 module.exports = new Vuex.Store({

@@ -10,6 +10,10 @@ var gulpIf = require('gulp-if');
 var concat = require('gulp-concat');
 var rename = require('gulp-rename');
 var minimist = require('minimist');
+var gutil = require("gulp-util");
+var rev = require('gulp-rev-hash');
+var path = require('path');
+
 
 var pwd = __dirname;
 
@@ -35,6 +39,7 @@ var webpackConfig = {
             pwd + '/src/js/lib/moment.min.js',
             pwd + '/src/js/lib/datePicker.min.js',
             pwd + '/src/js/lib/jquery-table.min.js',
+            'vue-router',
             'echarts/lib/echarts',
             'echarts/lib/chart/bar',
             'echarts/lib/chart/line',
@@ -113,13 +118,28 @@ gulp.task('font', function() {
         .pipe(gulp.dest('./dist/fonts/'))
 })
 
+gulp.task('rev', function() {
+    return gulp
+        .src(['../views/include/header.html', '../views/include/footer.html'])
+        .pipe(gulpIf(argv.env == 'pro', rev({
+            assetsDir: path.join(pwd)
+        })))
+        .pipe(gulp.dest('../views/include/'));
+})
+
 gulp.task('watch', function() {
     webpackConfig.watch = argv.env != 'pro';
-    gulp.watch('./src/js/*', ['js']);
+    gulp.start('js');
     gulp.watch('./src/css/*', ['css']);
     gulp.watch('./src/img/*', ['img']);
 })
 
-gulp.task('default', ['clean'], function() {
-    gulp.start('js', 'css', 'img','font');
+// gulp.task('build', function() {
+    // gulp.series('clean', gulp.parallel('js', 'css', 'img', 'font'));
+// })
+
+gulp.task('build', ['js', 'css', 'img', 'font']);
+
+gulp.task('default', ['build'], function() {
+    gulp.start('rev');
 });

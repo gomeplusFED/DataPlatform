@@ -55,6 +55,7 @@ app.use(function(req, res, next) {
     next();
 });
 
+
 //载入view helps
 require('./helps')(app);
 
@@ -76,10 +77,13 @@ app.use(function() {
     }
 });
 
-// app.use((err, req, res, next) => {
-//     res.send({
-//         iserro: true
-//     });
-// });
+app.use((err, req, res, next) => {
+    console.log(err, "======");
+    if (err) {
+        res.json({
+            iserro: true
+        });
+    }
+});
 
 app.listen(7879);

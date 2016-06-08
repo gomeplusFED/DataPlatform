@@ -4,6 +4,7 @@
  * @fileoverview 版本分析
  */
 var api = require("../../../base/api"),
+    orm = require("orm"),
     moment = require("moment"),
     userAnalysis = require("../../../filters/userAnalysis");
 
@@ -22,7 +23,7 @@ module.exports = (Router) => {
                 value: '活跃用户'
             }, {
                 key: 'start_up',
-                value: '启动次数'
+                value: '次数'
             }]
         }],
         filter(data, filter_key, dates) {
@@ -33,15 +34,36 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/userAnalysis/versionTwo",
         modelName : ["NewAccount"],
-        rows : [],
-        cols : [],
+        paging : true,
+        sum : ["total_users"],
+        date_picker_data : 1,
+        fixedParams : {
+            ver : orm.not_in(["ALL"])
+        },
+        rows : [
+            ["ver", "total_users", "total_users_rate"]
+        ],
+        cols : [
+            [
+                {
+                    caption : '版本',
+                    type : 'string'
+                },{
+                    caption : '当天用户数',
+                    type : 'number'
+                },{
+                    caption : '当天用户占比',
+                    type : 'string'
+                }
+            ]
+        ],
         excel_export : true,
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
         filter(data, filter_key, dates) {
-            return userAnalysis.versionTwo(data, dates);
+            return userAnalysis.versionTwo(data);
         }
     });
 

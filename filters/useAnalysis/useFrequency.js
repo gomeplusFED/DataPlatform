@@ -9,22 +9,30 @@ module.exports = {
     useFrequencyOne(data, array, filter_key) {
         var newData = {},
             source = data.data,
+            total = 0,
             type = "bar",
+            obj = {},
             map = {
                 value : filter_key
             };
         //var array = [ '1-3秒', '4-10秒', '11-30秒', '31-60秒', '1-3分', '4-10分', '11-30分', '30分+' ];
         for(var key of array) {
-            var obj = {
+            obj[key] = {
                 value : 0
             };
-            for(var k of source) {
-                if(key === k.distribution) {
-                    obj.value += k.num;
-                }
-            }
-            newData[key] = obj;
         }
+
+        for(var key of source) {
+            obj[ key.distribution].value += key.num;
+            total += key.num;
+        }
+
+        for(var key of array) {
+            newData[key] = {
+                value : util.percentage(obj[key].value, total)
+            }
+        }
+
         return [{
             type : type,
             map : map,
@@ -36,6 +44,7 @@ module.exports = {
     },
     useFrequencyTwo(data, array) {
         var newData = [],
+            count = array.length,
             total_num = 0,
             source = data.data;
         //var array = [ '1-3秒', '4-10秒', '11-30秒', '31-60秒', '1-3分', '4-10分', '11-30分', '30分+' ];
@@ -56,6 +65,6 @@ module.exports = {
         for(var key of newData) {
             key.num_rate = util.toFixed(key.num, total_num);
         }
-        return util.toTable([newData], data.rows, data.cols);
+        return util.toTable([newData], data.rows, data.cols, [count]);
     }
 };

@@ -38,13 +38,15 @@ module.exports = (Router) => {
         router : "/marketingAnalysis/activityFlowTwo",
         modelName : ["MarketingFlow"],
         platform : false,
+        paging : true,
+        order : ["-date"],
         excel_export : true,
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
-        filter(data, filter_key, dates) {
-            return filter.activityFlowTwo(data);
+        filter(data, filter_key, dates, filter_key2, page) {
+            return filter.activityFlowTwo(data, page);
         },
         rows : [
             [ 'id', 'page_url', 'page_name', 'visitor_cut', 'pv', 'stay_time_avg',
@@ -95,6 +97,8 @@ module.exports = (Router) => {
         router : "/marketingAnalysis/activityFlowThree",
         modelName : ["MarketingFlow"],
         platform : false,
+        paging : true,
+        order : ["-date"],
         filter(data, filter_key, dates) {
             return filter.activityFlowThree(data);
         },

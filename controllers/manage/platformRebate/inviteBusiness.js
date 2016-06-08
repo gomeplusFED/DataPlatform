@@ -13,10 +13,11 @@ module.exports = (Router) => {
         router : "/platformRebate/inviteBusinessOne",
         modelName : ["Rebate", "RebateRefund"],
         fixedParams : {
-            user_party : "邀请商户入驻"
+            category_id : "all",
+            user_party : "5"
         },
         platform : false,
-        date_picker_data: 1,
+        //date_picker_data: 1,
         filter(data, filter_key, dates) {
             return filter.inviteBusinessOne(data);
         },
@@ -28,14 +29,18 @@ module.exports = (Router) => {
         rows: [
             ["defate_plan_count", "participate_seller_count", "participate_goods_count", "order_count",
                 "participate_user_count" ],
-            ["rebate_order_count", "rebate_order_amount_count", "rebate_order_amount_actual_count",
-                "rebate_amount_count", "rate"],
+            ["rebate_order_count", "rebate_order_amount_count",
+                //"rebate_order_amount_actual_count",
+                "rebate_amount_count"
+                //, "rate"
+            ],
             ["name", "spu_count", "sku_count", "refund_user_count", "refund_goods_amount_count",
-                "refund_goods_amount_actual_count"]
+                //"refund_goods_amount_actual_count"
+            ]
         ],
         cols: [
             [{
-                caption: "返利计划书",
+                caption: "返利计划数",
                 type: "string"
             }, {
                 caption: "参与商户数",
@@ -56,15 +61,15 @@ module.exports = (Router) => {
             }, {
                 caption: "返利订单总金额",
                 type: "string"
-            }, {
-                caption: "返利订单实付金额",
-                type: "string"
+            //}, {
+            //    caption: "返利订单实付金额",
+            //    type: "string"
             }, {
                 caption: "返利到账金额",
                 type: "string"
-            }, {
-                caption: "返利比率",
-                type: "string"
+            //}, {
+            //    caption: "返利比率",
+            //    type: "string"
             }],
             [{
                 caption: "",
@@ -81,21 +86,33 @@ module.exports = (Router) => {
             }, {
                 caption: "退货商品总金额",
                 type: "string"
-            }, {
-                caption: "实际退货金额",
-                type: "string"
+            //}, {
+            //    caption: "实际退货金额",
+            //    type: "string"
             }]
         ]
     });
 
     Router = new api(Router, {
         router : "/platformRebate/inviteBusinessTwo",
-        modelName : [ "RebatetRedencyDetails" ],
-        level_select : true,
-        platform : false,
-        fixedParams : {
-            user_party : "邀请商户入驻"
+        modelName : [ "RebateOrderTredencyDetails", "TypeFlow" ],
+        orderParams : {
+            type_code : 5,
+            type : 1,
+            status : 1
         },
+        level_select : true,
+        level_select_name : "category_id",
+        level_select_url : "/api/categories",
+        fixedParams(query, filter_key, req, cb) {
+            if(query.category_id === undefined) {
+                query.category_id = "all";
+            }
+            query.user_party = "5";
+            query.day_type = 1;
+            cb(null, query);
+        },
+        platform : false,
         filter_select: [{
             title: '指标选择',
             filter_key: 'filter_key',
@@ -117,12 +134,24 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/platformRebate/inviteBusinessThree",
-        modelName : [ "RebatetRedencyDetails" ],
-        level_select : true,
-        platform : false,
-        fixedParams : {
-            user_party : "邀请商户入驻"
+        modelName : [ "RebateTypeLevelDetails", "TypeFlow"],
+        orderParams : {
+            type_code : 5,
+            type : 1,
+            status : 1
         },
+        level_select : true,
+        level_select_name : "category_id",
+        level_select_url : "/api/categories",
+        fixedParams(query, filter_key, req, cb) {
+            if(query.category_id === undefined) {
+                query.category_id = "all";
+            }
+            query.user_party = "5";
+            query.day_type = 1;
+            cb(null, query);
+        },
+        platform : false,
         filter_select: [{
             title: '指标选择',
             filter_key: 'filter_key',
@@ -144,18 +173,28 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/platformRebate/inviteBusinessFour",
-        modelName : [ "RebatetSheduleDetails" ],
+        modelName : [ "RebatetSheduleDetails", "TypeFlow" ],
+        orderParams : {
+            type_code : 5,
+            type : 1,
+            status : 1,
+            limit : 100
+        },
         platform : false,
         fixedParams : {
-            user_party : "邀请商户入驻"
+            user_party : "5"
         },
+        paging : true,
+        order : ["-date"],
+        showDayUnit : true,
+        date_picker_data : 1,
         excel_export : true,
         //flexible_btn : [{
         //    content: '<a href="javascript:void(0)">导出</a>',
         //    preMethods: ['excel_export']
         //}],
-        filter(data, filter_key, dates) {
-            return filter.inviteBusinessFour(data);
+        filter(data, filter_key, dates, filter_key2, page) {
+            return filter.inviteBusinessFour(data, page);
         },
         rows : [
             [ "id", "rebate_plan_name", "user_party", "deadline", "correlate_flow", "level", "participate_seller_count",

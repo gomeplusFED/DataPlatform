@@ -89,7 +89,7 @@ var Chart = Vue.extend({
 		checkIsChart: function(){
 			return this.currentData.type.match(/chart/i) !== null;
 		},
-		fetchData: function(cb){
+		fetchData: function(cb, errcb){
 			var _this = this;
 			if(_this.resultArgvs.forceChange){
 				delete _this.resultArgvs.forceChange;
@@ -98,9 +98,10 @@ var Chart = Vue.extend({
 		        url: _this.currentData.query_api + '_json',
 		        type: 'get',
 		        data: _this.resultArgvs,
+		        timeout: 5000,
 		        success: function(data){
 		        	if(data.iserro){
-		        		actions.alert(stroe,{
+		        		actions.alert(store, {
 		        			show: true,
 		        			msg: '查询失败',
 		        			type: 'danger'
@@ -108,7 +109,12 @@ var Chart = Vue.extend({
 		        		return;
 		        	}
 		            cb && cb(data);
-		        }
+		        },
+		        error: function(jqXHR, status, errorThrown) {
+	                if(status === 'timeout') {
+						errcb && errcb();
+	                } 
+	            }
 		    })
 		},
 		rinseData: function(chartType,data,map,config){
@@ -123,6 +129,7 @@ var Chart = Vue.extend({
 				legend.push(map[item]);
 				var _currentObj = {};
 				_currentObj.type = chartType;
+				chartType === 'pie' ? _currentObj.startAngle = 180 : null;
 				_currentObj.stack = config.stack ? 'stack' : '';
 				_currentObj.data = [];
 				_currentObj.name = map[item];
@@ -136,6 +143,11 @@ var Chart = Vue.extend({
 				series.push(_currentObj);
 			}
 			
+
+			if(legend.length > 10){
+				options.legend.orient = 'vertical';
+				options.legend.left = 0;
+			}
 			options.legend.data = legend;
 			options.xAxis.data = xAxis;
 			options.series = series;
@@ -182,6 +194,17 @@ var Chart = Vue.extend({
 		            	if(_this.loading.noLoaded === 0){
 		            	    _this.loading.show = false;
 		            	}
+		            },function(){
+		            	_this.loading.noLoaded -= 1;
+		            	if(_this.loading.noLoaded === 0){
+		            	    _this.loading.show = false;
+		            	}
+		            	// erro
+		            	actions.alert(store, {
+		            		show: true,
+		            		msg: '查询超时',
+		            		type: 'danger'
+		            	})
 		            })
 	            }
 	        },

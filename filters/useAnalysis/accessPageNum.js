@@ -36,6 +36,7 @@ module.exports = {
     },
     accessPageNumTwo(data, array) {
         var newData = [],
+            count = array.length,
             total_num = 0,
             source = data.data;
         //var array = [ '1-3秒', '4-10秒', '11-30秒', '31-60秒', '1-3分', '4-10分', '11-30分', '30分+' ];
@@ -56,6 +57,6 @@ module.exports = {
         for(var key of newData) {
             key.num_rate = util.toFixed(key.num, total_num);
         }
-        return util.toTable([newData], data.rows, data.cols);
+        return util.toTable([newData], data.rows, data.cols, [count]);
     }
 };

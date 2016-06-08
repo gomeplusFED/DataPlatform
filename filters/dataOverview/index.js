@@ -17,8 +17,7 @@ module.exports = {
             dates = [ zdate, qdate ];
         var obj = {
                 name : '对比效果'
-            },
-            total_new_users = 0;
+            };
         for(var date of dates) {
             var zObj = {
                 name : "",
@@ -27,6 +26,7 @@ module.exports = {
                 open_user_avg : 0,
                 new_user : 0,
                 new_user_rate : "",
+                new_user_rate_two : "",
                 new_account : 0,
                 register_rate : 0,
                 using_time_avg : 0,
@@ -37,6 +37,7 @@ module.exports = {
                 visit_time_avg : 0,
                 stay_time_avg : 0,
                 pv1 : 0,
+                pv2 : 0,
                 create : 0
             };
             for(var key of orderData) {
@@ -48,6 +49,9 @@ module.exports = {
                     if(key.kpi_type === 2) {
                         zObj.create += key.kpi_value;
                     }
+                    if(key.kpi_type === 3) {
+                        zObj.pv2 += key.kpi_value;
+                    }
                 }
             }
             for(var key of source) {
@@ -56,7 +60,6 @@ module.exports = {
                 }
                 if(new Date(date + " 00:00:00").getTime() < key.date.getTime() &&
                     key.date.getTime() < new Date(date + " 23:59:59")) {
-                    total_new_users += key.new_user;
                     zObj.open_total += key.open_total;
                     zObj.open_user_total += key.open_user_total;
                     zObj.new_user += key.new_user;
@@ -73,8 +76,9 @@ module.exports = {
             newData.push(zObj);
         }
         for(var key of newData) {
-            key.new_user_rate = util.toFixed(key.new_user, total_new_users);
-            key.open_user_avg = (key.open_user_total / (key.open_total === 0 ? 1 : key.open_total) * 100).toFixed(2);
+            key.new_user_rate = util.toFixed(key.new_user, key.open_user_total);
+            key.new_user_rate_two = util.toFixed(key.new_user, key.uv);
+            key.open_user_avg = (key.open_total / (key.open_user_total === 0 ? 1 : key.open_user_total)).toFixed(2);
             key.register_rate = util.toFixed(key.new_account, key.new_user);
         }
         newData[0].name = "昨天";
@@ -107,14 +111,18 @@ module.exports = {
             - newData[1].register_rate.replace("%", "")).toFixed(2) + "%";
         obj.new_user_rate = (newData[0].new_user_rate.replace("%", "")
             - newData[1].new_user_rate.replace("%", "")).toFixed(2) + "%";
+        obj.new_user_rate_two = (newData[0].new_user_rate_two.replace("%", "")
+            - newData[1].new_user_rate_two.replace("%", "")).toFixed(2) + "%";
         obj.pv1 = ((newData[0].pv1 - newData[1].pv1) /
             (newData[0].pv1 === 0 ? 1 : newData[0].pv1) * 100).toFixed(2) + "%";
+        obj.pv2 = ((newData[0].pv2 - newData[1].pv2) /
+            (newData[0].pv2 === 0 ? 1 : newData[0].pv2) * 100).toFixed(2) + "%";
         obj.create = ((newData[0].create - newData[1].create) /
             (newData[0].create === 0 ? 1 : newData[0].create) * 100).toFixed(2) + "%";
         newData.push(obj);
         return util.toTable([newData], data.rows, data.cols);
     },
-    dataOverviewAllTwo(data, filter_key, filter_name, dates, type_key) {
+    dataOverviewAllTwo(data, filter_key, filter_name, dates) {
         var source = data.data,
             newData = {},
             type = "line",
@@ -127,14 +135,15 @@ module.exports = {
             };
         }
         for(var key of source) {
-            if(type_key && key.type === type_key) {
-                continue;
-            }
             if(filter_key === "register_rate") {
-                newData[util.getDate(key.date)].value += key.new_account /
-                    (key.new_user === 0 ? 1 : key.new_user) * 100;
+                if(newData[util.getDate(key.date)]) {
+                    newData[util.getDate(key.date)].value += key.new_account /
+                        (key.new_user === 0 ? 1 : key.new_user) * 100;
+                }
             } else {
-                newData[util.getDate(key.date)].value += key[filter_key];
+                if(newData[util.getDate(key.date)]) {
+                    newData[util.getDate(key.date)].value += key[filter_key];
+                }
             }
         }
         if(filter_key === "register_rate") {
@@ -153,52 +162,45 @@ module.exports = {
     },
     dataOverviewAllThree(data) {
         var source = data.data,
-            newData = [],
-            total_pv = 0,
-            length = source.length,
-            top = length > 10 ? 10 : length;
-        source.sort((a, b) => {
-            return b.pv - a.pv;
-        });
-        for(var key of source) {
-            if(key.region === "ALL") {
-                continue;
-            }
-            total_pv += key.pv;
+            sum = data.dataSum;
+
+        for(var i = 0; i < source.length; i++) {
+            source[i].id = i + 1;
+            source[i].open_total_rate = util.toFixed(source[i].open_total, sum[1]);
         }
-        for(var i = 0; i < top; i++) {
-            if(source[i]) {
-                if(source[i].region === "ALL") {
-                    top++;
-                } else {
-                    newData.push(source[i]);
-                }
-            }
-        }
-        for(var i = 0; i < newData.length; i++) {
-            newData[i].id = i + 1;
-            newData[i].pv_rate = util.toFixed(newData[i].pv, total_pv);
-        }
-        return util.toTable([newData], data.rows, data.cols);
+        return util.toTable([source], data.rows, data.cols);
     },
     dataOverviewAllFour(data) {
         var source = data.data,
-            top = source.length > 10 ? 10 : source.length,
-            total_pv = 0,
-            newData = [];
-        source.sort((a, b) => {
-            return b.pv - a.pv;
-        });
-        for(var key of source) {
-            total_pv += key.pv;
-        }
-        for(var i = 0; i < top; i++) {
+            sum = data.dataSum;
+
+        for(var i = 0; i < source.length; i++) {
             source[i].id = i + 1;
-            newData.push(source[i]);
+            source[i].pv_rate = util.toFixed(source[i].pv, sum[1]);
         }
-        for(var key of newData) {
-            key.pv_rate = util.toFixed(key.pv, total_pv);
+
+        return util.toTable([source], data.rows, data.cols);
+    },
+    dataOverviewWapThree(data) {
+        var source = data.data,
+            sum = data.dataSum;
+
+        for(var i = 0; i < source.length; i++) {
+            source[i].id = i + 1;
+            source[i].pv_rate = util.toFixed(source[i].pv, sum[1]);
         }
-        return util.toTable([newData], data.rows, data.cols);
+
+        return util.toTable([source], data.rows, data.cols);
+    },
+    dataOverviewWapFour(data) {
+        var source = data.data,
+            sum = data.dataSum;
+
+        for(var i = 0; i < source.length; i++) {
+            source[i].id = i + 1;
+            source[i].pv_rate = util.toFixed(source[i].pv, sum[1]);
+        }
+
+        return util.toTable([source], data.rows, data.cols);
     }
 };

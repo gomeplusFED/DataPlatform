@@ -1,5 +1,5 @@
 <template>
-    <button class="btn btn-default flexible_btn" v-for="item in pageComponentsData.flexible_btn" @click="resolveMethods(item, $event)">{{{item.content}}}</button>
+    <button class="btn btn-default flexible_btn" v-for="item in pageComponentsData.flexible_btn" @click="resolveMethods(item, $event)">{{{item.content}}}</button>   
 </template>
 <style>
 .flexible_btn{margin: 0 5px;padding: 0;box-sizing: border-box;}
@@ -32,6 +32,7 @@ var Btns = Vue.extend({
                 show_help: true
             },
             hasRequestUrl: null,
+            dataTableLen: 0
         }
     },
     vuex: {
@@ -47,12 +48,47 @@ var Btns = Vue.extend({
     },
     props: ['index','pageComponentsData','componentType','argvs','initData','resultArgvs'],
     methods: {
-        excel_export: function(){
-            var resultQuery = [];
-            for(var item in this.resultArgvs){
-                resultQuery.push(item + '=' + this.resultArgvs[item]);
+        excel_export: function(ev){
+            var key = window.location.hash.replace('#!','');
+            if (!(window.allPageConfig.userInfo.export[window.allPageConfig.page[key].id] && window.allPageConfig.userInfo.export[window.allPageConfig.page[key].id].length)) {
+                actions.alert(store, {
+                    show: true,
+                    msg: '无权限',
+                    type: 'danger'
+                })
+                return;
             }
-            // window.open(this.initData.defaultData[this.index].query_api + '_excel?' +  resultQuery.join('&'));
+            
+            var key = location.hash.replace('#!', '');
+
+            actions.exportConfirm(store, {
+                show: true,
+                title: '请选择导出数据范围（<1000）',
+                len: this.dataTableLen,
+                apply: (type, from, to) => {
+                    var resultQuery = [];
+                    var result = '';
+                    for(var item in this.resultArgvs){
+                        var ret = this.resultArgvs[item];
+                        if(type === 'b' && (item === 'limit' || item === 'page') ){
+                            continue;
+                        }
+                        if(ret instanceof Array){
+                            ret = ret.map(function(i){
+                                return item + '[]=' + i;
+                            }).join('&');
+                            resultQuery.push(ret);
+                        }else{
+                            resultQuery.push(item + '=' + ret);
+                        }
+                    }
+                    if(type === 'b'){
+                        resultQuery.push('from=' + from);
+                        resultQuery.push('to=' + to);
+                    }
+                    window.open(window.allPageConfig.page[key].defaultData[this.index].query_api + '_excel?' +  resultQuery.join('&'));
+                }
+            })
         },
         show_help: function(ev){
             var _this = this;
@@ -72,36 +108,12 @@ var Btns = Vue.extend({
                 success: function(data){
                     _this.hasRequestUrl = helpUrl;
                     var tableData = data.modelData[0];
-                    // 生成弹窗图表
-                    var modalColumns = [];
-                    tableData.rows.forEach(function(item,index){
-                       modalColumns.push({
-                           data: item,
-                           title: tableData.cols[index].caption
-                       })
-                    })
-                    var config = {
-                       data: tableData.data,
-                       columns: modalColumns,
-                       ordering: false,
-                       info: false,
-                       searching: false,
-                       responsive: false,
-                       lengthChange: false,
-                       retrieve: true,
-                       "language": {
-                           "emptyTable": "暂无数据",
-                           "paginate": {
-                               "previous": "上一页",
-                               "next": "下一页"
-                           }
-                       }
-                    }
-                    
                     actions.modalTable(store, {
                         show: true,
                         title: '帮助信息',
-                        data: config
+                        data: tableData,
+                        query_api: _this.modalTableData.query_api,
+                        query_parmas: _this.modalTableData.query_parmas
                     });
                 }
             })
@@ -120,6 +132,11 @@ var Btns = Vue.extend({
                 eval(item.customMethods);
             }
     	}
+    },
+    events: {
+        sendTableDataLen(len) {
+            this.dataTableLen = len;
+        }
     }
 })
 

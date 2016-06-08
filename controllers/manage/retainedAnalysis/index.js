@@ -10,9 +10,12 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/retainedAnalysis/retainedOne",
-        modelName : ["UserKeep"],
+        modelName : ["UserKeepResult"],
+        platform : true,
+        paging : true,
+        order : ["-date"],
         filter(data, filter_key, dates) {
-            return filter.retainedOne(data, dates);
+            return filter.retainedOne(data);
         },
         excel_export : true,
         flexible_btn : [{
@@ -20,7 +23,7 @@ module.exports = (Router) => {
             preMethods: ['excel_export']
         }],
         rows: [
-            [ 'date', 'new_user', 't1', 't7', 't14', 't30']
+            [ 'date', 'new_user', 'last_1_keep', 'last_7_keep', "last_14_keep", "last_30_keep"]
         ],
         cols: [
             [
@@ -35,13 +38,13 @@ module.exports = (Router) => {
                     caption: '次日留存率',
                     type: 'string'
                 }, {
-                    caption: '7日后留存率',
+                    caption: '7日留存率',
                     type: 'string'
                 }, {
-                    caption: '14日后留存率',
+                    caption: '14日留存率',
                     type: 'string'
                 }, {
-                    caption: '30日后留存率',
+                    caption: '30日留存率',
                     type: 'string'
                 }
             ]
