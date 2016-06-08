@@ -87,28 +87,22 @@ module.exports = {
             array = [],
             newData = {},
             map = {};
+
         for(var key of orderData) {
-            array.push({
-                key : key.flow_name,
-                value : key.flow_code
-            })
+            map[key.flow_code] = key.flow_name;
         }
-        map[filter_key + "_0"] = array[0].key;
-        map[filter_key + "_1"] = array[1].key;
-        for (var date of dates) {
+
+        for(var date of dates) {
             var obj = {};
-            obj[filter_key + "_0"] = 0;
-            obj[filter_key + "_1"] = 0;
-            for (var key of source) {
-                if (date === util.getDate(key.date)) {
-                    for (var i = 0; i < array.length; i++) {
-                        if (key.correlate_flow === array[i].value) {
-                            obj[filter_key + "_" + i] += Math.round(key[filter_key]);
-                        }
-                    }
-                }
+            for (key of orderData) {
+                obj[key.flow_code] = 0;
             }
             newData[date] = obj;
+        }
+
+        for(key of source) {
+            date = util.getDate(key.date);
+            newData[date][key.correlate_flow] += Math.round(key[filter_key]);
         }
         return [{
             type: type,

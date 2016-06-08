@@ -10,7 +10,9 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/channelAnalysis/channelOne",
-        modelName : ["NewAccount"],
+        modelName : ["ChannelAnalysis", "ChannelUserKeep", "ChannelIdNameChart"],
+        platform : false,
+        thirdParams : {},
         filter(data, filter_key, dates) {
             return filter.channelOne(data, filter_key, dates);
         },
@@ -18,14 +20,20 @@ module.exports = (Router) => {
             title: '',
             filter_key: 'filter_key',
             groups: [{
-                key: 'new_users',
+                key: 'new_users_num',
                 value: '新增用户'
             }, {
-                key: 'active_users',
+                key: 'new_account_num',
+                value: '新增账户'
+            }, {
+                key: 'active_users_num',
                 value: '活跃用户'
             }, {
-                key: 'start_up',
+                key: 'start_count',
                 value: '启动次数'
+            }, {
+                key: 'keep_rate',
+                value: '次日留存率'
             }]
         }]
     });

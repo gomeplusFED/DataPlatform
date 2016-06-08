@@ -9,42 +9,82 @@ var util = require("../../utils"),
 module.exports = {
     channelOne(data, filter_key, dates) {
         var source = data.data,
-            channels = util.uniq(_.pluck(source, "channel")),
-            array = [],
+            orderSource = data.orderData,
+            thirdSource = data.thirdData,
+            _top = 0,
+            _newArray = [],
+            obj = {},
+            _array = [],
             type = "line",
             map = {},
             newData = {};
-        for(var channel of channels) {
-            var obj = {
-                channel : channel,
-                value : 0
-            };
-            for(var key of source) {
-                if(channel === key.channel) {
-                    obj.value += key[filter_key];
-                }
-            }
-            array.push(obj);
+        for(var key of thirdSource) {
+            obj[key.channel_id] = [];
         }
-        array.sort((a, b) => {
-            return b.value - a.value;
-        });
-        var top = array.length > 10 ? 10 : array.length;
-        for(var i = 0; i < top; i++) {
-            map[array[i].channel] = array[i].channel;
-        }
+
         for(var date of dates) {
-            var obj = {};
-            for(var i = 0; i< top; i++) {
-                obj[array[i].channel] = 0;
+            var _obj = {};
+            for(key of thirdSource) {
+                _obj[key.channel_id] = 0;
             }
-            for(var key of source) {
-                if(date === util.getDate(key.date)) {
-                    obj[key.channel] += key[filter_key];
+            newData[date] = _obj;
+        }
+
+        if(filter_key === "keep_rate") {
+            _newArray = sort(orderSource);
+            _top = _newArray.length > 10 ? 10 : _newArray.length;
+            newData = returnData(_newArray, _top, map);
+        } else {
+            _newArray = sort(source);
+            _top = _newArray.length > 10 ? 10 : _newArray.length;
+            newData = returnData(_newArray, _top, map);
+        }
+
+        function sort(array) {
+            for(key of array) {
+                obj[key.channel_id].push(key);
+            }
+            for(key in obj) {
+                if(obj[key].length > 0) {
+                    _array.push(obj[key]);
                 }
             }
-            newData[date] = obj;
+            return _array.sort((a, b) => {
+                var total_a = 0,
+                    total_b = 0;
+                for(key of a) {
+                    total_a += key[filter_key];
+                }
+                for(key of b) {
+                    total_b += key[filter_key];
+                }
+                return total_b - total_a;
+            });
         }
+
+        function returnData(array, top, map) {
+            var a = [];
+            for(var i = 0; i < top; i++) {
+                for(var key of array[i]) {
+                    a.push(key);
+                    if(filter_key === "keep_rate") {
+                        map[key.channel_id] = key.channel_name + "(%)";
+                    } else {
+                        map[key.channel_id] = key.channel_name;
+                    }
+                }
+            }
+            for(key of a) {
+                var date = util.getDate(key.date);
+                if(filter_key === "keep_rate") {
+                    newData[date][key.channel_id] = (key[filter_key] * 100).toFixed(2);
+                } else {
+                    newData[date][key.channel_id] = key[filter_key];
+                }
+            }
+            return newData;
+        }
+
         return [{
             type : type,
             map : map,
