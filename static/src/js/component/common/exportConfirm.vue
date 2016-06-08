@@ -49,7 +49,7 @@ export default {
 	data() {
 		return {
 			checkedRadio: 'a',
-			from: 0,
+			from: 1,
 			to: 0
 		}
 	},
