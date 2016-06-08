@@ -119,6 +119,11 @@ var Table = Vue.extend({
             })
         },
         tableOperation: function(item, tableBody, detailParam){
+            // item 字符串的html节点，从节点上获取 `url_detail` 或者 `url_link` 以及需要的参数
+
+            // 如果是 `url_link` 检查给的参数，和自己要带的参数，然后形成一个对象，然后 $route.router.go 到 `url_link`，并且带上 query ，下一个页面接收到之后，先请求，请求完把参数拼接上
+
+
             var _this = this;
             if(item.indexOf('url_detail') !== -1){
                 var urlDetail = item.match(/url_detail=(?:\'|\")(.*)(?:\'|\")/i)[1];
@@ -157,6 +162,10 @@ var Table = Vue.extend({
                         });
                     }
                 })
+            }
+            if(item.indexOf('url_link') !== -1){
+                var urlDetail = item.match(/url_link=(?:\'|\")(.*)(?:\'|\")/i)[1];
+
             }
         },
         generatorTable: function(){
@@ -200,7 +209,7 @@ var Table = Vue.extend({
             handler: function(val){
                 // for debug
                 this.$log('resultArgvs');
-                
+
                 // 参数改了 请求数据，进行渲染
                 this.generatorTable();
             },

@@ -5,6 +5,13 @@
     <m-confirm></m-confirm>
     <m-export-confirm></m-export-confirm>
     <m-main v-for="item in currentPageDefaultData.defaultData" :index="$index" :init-data="initData" :current-data="currentPageDefaultData.defaultData[$index]" :loading.sync="loading"></m-main>
+
+
+
+
+    <a href="javascript:void(0)" v-link="{path: '/dataOverview/app', query: {a: '123'}}">asdasd</a>
+
+
 </template>
 
 
@@ -43,9 +50,6 @@ var App = Vue.extend({
             actions: actions
         }
     },
-    created: function(){
-        actions.setCurrentPageDefaultData(store, window.allPageConfig.page[this.$route.path]);
-    },
     components: {
         'm-loading': Loading,
         'm-alert': Alert,
@@ -56,13 +60,31 @@ var App = Vue.extend({
     },
     route: {
         data: function(transition){
+
+            var url = this.$route.path.replace(/(\?.*)/, '');
+
+            if (!window.allPageConfig.page[url]) {
+                this.$route.router.go({
+                    path: '/'
+                })
+                return;
+            }
+
+            $('[href="' + url + '"]').parent().parent().parent().addClass('active');
+            $('[href="' + url + '"]').parent().parent().addClass('in').attr('aria-expanded', true);
+            $('[href="' + url + '"]').focus();
+            $('#side-menu a').removeClass('active');
+            $('[href="' + url + '"]').addClass('active');
+
+            actions.setCurrentPageDefaultData(store, window.allPageConfig.page[url])
+
             // 页面访问统计
             $.ajax({
                 url: '/dataPlatform/count',
                 type: 'get',
                 data: {
-                    pagename: transition.to.path, // 页面URL
-                    username: window.allPageConfig.page[transition.to.path].pageTitle, // 页面名称 （狗血）
+                    pagename: transition.to.path.replace(/(\?.*)/, ''), // 页面URL
+                    username: window.allPageConfig.page[url].pageTitle, // 页面名称 （狗血）
                 }
             })
         }
