@@ -121,7 +121,7 @@ module.exports = {
                 operating :
                     "<button class='btn btn-default' " +
                     "url_link='/channelAnalysis/operating' " +
-                    'url_fixed_params=' + '{"channel_id":' + key + "}" +
+                    'url_fixed_params=' + '{\\"channel_id\\":\\"' + key + '\\"}' +
                     ">详细>></button>"
             };
             for(var k of obj[key]) {

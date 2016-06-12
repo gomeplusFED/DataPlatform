@@ -27,7 +27,7 @@ module.exports = {
             twoObj[key.keep_type] += key.keep_rate;
         }
         for(key in twoObj) {
-            twoObj[key] = twoObj[key].toFixed(2) + "%";
+            twoObj[key] = (twoObj[key] * 100).toFixed(2) + "%";
         }
 
         return util.toTable([[oneObj], [twoObj]], data.rows, data.cols);
