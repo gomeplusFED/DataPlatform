@@ -172,6 +172,9 @@ var Table = Vue.extend({
                 var fixedParams = $(utils.strToDom(item)).attr('url_fixed_params') ? JSON.parse($(utils.strToDom(item)).attr('url_fixed_params')) : {};
                 var customParams = $(utils.strToDom(item)).attr('custom_params') ? JSON.parse($(utils.strToDom(item)).attr('custom_params')) : [];
 
+
+                console.log(urlLink);
+
                 var resultStr = '';
                 var resultArray = [];
 
