@@ -20,5 +20,25 @@ module.exports = {
                 query_api: "/channelAnalysis/channelTwo"
             }]
         };
+    },
+    channelOperating() {
+        return {
+            name: "渠道列表",
+            path: "/channelAnalysis/operating",
+            display: true,
+            defaultData: [{
+                type: "table",
+                title: "渠道统计",
+                query_api: "/channelAnalysis/operatingOne"
+            //}, {
+            //    type: "chart",
+            //    title: "日趋势变化",
+            //    query_api: "/channelAnalysis/operatingTwo"
+            //},{
+            //    type: "table",
+            //    title: "渠道数据明细",
+            //    query_api: "/channelAnalysis/operatingThree"
+            }]
+        };
     }
 };

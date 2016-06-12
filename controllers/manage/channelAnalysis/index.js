@@ -1,7 +1,7 @@
 /**
  * @author yanglei
- * @date 20160414
- * @fileoverview 渠道分析
+ * @date 20160608
+ * @fileoverview 渠道列表
  */
 var api = require("../../../base/api"),
     help = require("../../../base/help"),
@@ -59,7 +59,8 @@ module.exports = (Router) => {
             preMethods: ['excel_export']
         }],
         rows: [
-            [ 'channel_name','channel_id', 'new_users_num', 'new_account_num', 'active_users_num', 'start_count', "rate"]
+            [ 'channel_name','channel_id', 'new_users_num', 'new_account_num', 'active_users_num',
+                'start_count', "rate", "operating"]
         ],
         cols: [
             [
@@ -83,6 +84,9 @@ module.exports = (Router) => {
                     type: 'number'
                 }, {
                     caption: '付费率',
+                    type: 'string'
+                }, {
+                    caption: '操作',
                     type: 'string'
                 }
             ]
