@@ -35,28 +35,52 @@ module.exports = {
     channelTwo(data, filter_key, dates) {
         var source = data.data,
             orderSource = data.orderData,
+            _orderSource = [],
+            _channel_id = "",
             type = "line",
             map = {},
             newData = {};
 
-        for(var date of dates) {
-            var _obj = {};
-            if(filter_key === "keep_rate") {
-                if(orderSource[0]) {
-                    _obj[orderSource[0].channel_id] = 0;
-                }
-            } else {
-                if(source[0]) {
-                    _obj[source[0].channel_id] = 0;
-                }
+        if(filter_key === "keep_rate") {
+            if(orderSource[0]) {
+                _channel_id = orderSource[0].channel_id;
+                map[orderSource[0].channel_id] = orderSource[0].channel_name + "(%)";
             }
-            newData[date] = _obj;
+        } else {
+            if(source[0]) {
+                _channel_id = source[0].channel_id;
+                map[orderSource[0].channel_id] = orderSource[0].channel_name;
+            }
         }
+
+        for(var date of dates) {
+            var obj = {};
+            obj[_channel_id] = 0;
+            newData[date] = obj;
+        }
+
+        for(var key of orderSource) {
+            if(key.keep_type === "0") {
+                _orderSource.push(key);
+            }
+        }
+
+        orderSource = _orderSource;
 
         if(filter_key === "keep_rate") {
+            for(key of orderSource) {
+                date = util.getDate(key.date);
+                newData[date][key.channel_id] += key.keep_rate;
+            }
+            for(key in newData) {
+                newData[key][_channel_id] = (newData[key][_channel_id] * 100).toFixed(0);
+            }
         } else {
+            for(key of source) {
+                date = util.getDate(key.date);
+                newData[date][key.channel_id] += key[filter_key];
+            }
         }
-
 
         return [{
             type : type,
