@@ -2,6 +2,7 @@
 
 
 var common = require('./common.js');
+var dom = require('./dom.js');
 
 var utils = {};
 
@@ -15,5 +16,7 @@ utils.mixin = function(source, target) {
 }
 
 utils.mixin(utils, common);
+utils.mixin(utils, dom);
+
 
 module.exports = utils;

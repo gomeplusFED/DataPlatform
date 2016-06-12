@@ -88,7 +88,14 @@ var Main = Vue.extend({
 				
 				if(_this.isnoComponent(data.components)){
 					_this.$set('argvs.forceChange',true);
-					// Vue.set(this.argvs, 'ceshi', '123');
+
+					// 解析query部分，添加到参数中去
+					if(_this.$route.path.match(/\?(.*)/)){
+						_this.$route.path.match(/\?(.*)/)[1].split('&').forEach(function(item){
+							var _curr = item.split('=')
+							Vue.set(_this.argvs, _curr[0], _curr[1]);
+						});
+					}
 				}
 			}
 		})

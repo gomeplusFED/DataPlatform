@@ -123,10 +123,11 @@ var Table = Vue.extend({
 
             // 如果是 `url_link` 检查给的参数，和自己要带的参数，然后形成一个对象，然后 $route.router.go 到 `url_link`，并且带上 query ，下一个页面接收到之后，先请求，请求完把参数拼接上
 
-
             var _this = this;
+
+            // 弹层表格详情
             if(item.indexOf('url_detail') !== -1){
-                var urlDetail = item.match(/url_detail=(?:\'|\")(.*)(?:\'|\")/i)[1];
+                var urlDetail = $(utils.strToDom(item)).attr('url_detail');
                 var url = tableBody[detailParam];
                 var params = {};
 
@@ -163,9 +164,27 @@ var Table = Vue.extend({
                     }
                 })
             }
-            if(item.indexOf('url_link') !== -1){
-                var urlDetail = item.match(/url_link=(?:\'|\")(.*)(?:\'|\")/i)[1];
 
+            // 跳转到新页面（需要带上各种各样参数）
+            if(item.indexOf('url_link') !== -1){
+                var urlLink = $(utils.strToDom(item)).attr('url_link');
+                var fixedParams = JSON.parse($(utils.strToDom(item)).attr('fixed_params'));
+                var customParams = JSON.parse($(utils.strToDom(item)).attr('custom_params'));
+
+                var resultStr = '';
+                var resultArray = [];
+
+                Object.keys(fixedParams).forEach(function(item){
+                    resultArray.push(item + '=' + fixedParams[item]);
+                })
+
+                customParams.forEach(function(item){
+                    if(this.resultArgvs[item]){
+                        resultArray.push(item + '=' + this.resultArgvs[item])
+                    }
+                })
+                
+                this.$route.router.go(urlLink + '?' + resultArray.join('&'));
             }
         },
         generatorTable: function(){
