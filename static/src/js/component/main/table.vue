@@ -167,6 +167,7 @@ var Table = Vue.extend({
 
             // 跳转到新页面（需要带上各种各样参数）
             if(item.indexOf('url_link') !== -1){
+
                 var urlLink = $(utils.strToDom(item)).attr('url_link');
                 var fixedParams = $(utils.strToDom(item)).attr('url_fixed_params') ? JSON.parse($(utils.strToDom(item)).attr('url_fixed_params')) : {};
                 var customParams = $(utils.strToDom(item)).attr('custom_params') ? JSON.parse($(utils.strToDom(item)).attr('custom_params')) : [];
