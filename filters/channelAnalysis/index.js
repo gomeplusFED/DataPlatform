@@ -11,6 +11,7 @@ module.exports = {
         var source = data.data,
             orderSource = data.orderData,
             thirdSource = data.thirdData,
+            _orderSource = [],
             _top = 0,
             _newArray = [],
             obj = {},
@@ -21,6 +22,14 @@ module.exports = {
         for(var key of thirdSource) {
             obj[key.channel_id] = [];
         }
+
+        for(key of orderSource) {
+            if(key.keep_type === "0") {
+                _orderSource.push(key);
+            }
+        }
+
+        orderSource = _orderSource;
 
         for(var date of dates) {
             var _obj = {};
@@ -77,7 +86,7 @@ module.exports = {
             for(key of a) {
                 var date = util.getDate(key.date);
                 if(filter_key === "keep_rate") {
-                    newData[date][key.channel_id] = (key[filter_key] * 100).toFixed(2);
+                    newData[date][key.channel_id] = (key[filter_key] * 100).toFixed(0);
                 } else {
                     newData[date][key.channel_id] = key[filter_key];
                 }

@@ -66,53 +66,60 @@ module.exports = (Router) => {
         ]
     });
 
-    //Router = new api(Router,{
-    //    router : "/channelAnalysis/channelTwo",
-    //    modelName : ["ChannelAnalysis", "ChannelIdNameChart"],
-    //    platform : false,
-    //    orderParams : {},
-    //    filter(data, filter_key, dates) {
-    //        return filter.channelTwo(data);
-    //    },
-    //    excel_export : true,
-    //    flexible_btn : [{
-    //        content: '<a href="javascript:void(0)">导出</a>',
-    //        preMethods: ['excel_export']
-    //    }],
-    //    rows: [
-    //        [ 'channel_name','channel_id', 'new_users_num', 'new_account_num', 'active_users_num',
-    //            'start_count', "rate", "operating"]
-    //    ],
-    //    cols: [
-    //        [
-    //            {
-    //                caption : '渠道名称',
-    //                type : 'string'
-    //            }, {
-    //            caption : '渠道ID',
-    //            type : 'string'
-    //        }, {
-    //            caption: '新增用户',
-    //            type: 'number'
-    //        },  {
-    //            caption: '新增账户',
-    //            type: 'number'
-    //        }, {
-    //            caption: '活跃用户',
-    //            type: 'number'
-    //        }, {
-    //            caption: '启动次数',
-    //            type: 'number'
-    //        }, {
-    //            caption: '付费率',
-    //            type: 'string'
-    //        }, {
-    //            caption: '操作',
-    //            type: 'string'
-    //        }
-    //        ]
-    //    ]
-    //});
+    Router = new api(Router,{
+        router : "/channelAnalysis/operatingTwo",
+        modelName : ["ChannelAnalysis", "ChannelUserKeep"],
+        platform : false,
+        flexible_btn: [{
+            content: '<a href="javascript:void(0)" help_url="/channelAnalysis/channel_json">帮助</a>',
+            preMethods: ["show_help"],
+            customMethods: ''
+        }],
+        filter(data, filter_key, dates) {
+            return filter.channelTwo(data, filter_key, dates);
+        },
+        selectFilter(req, cb) {
+            var filter_select = [{
+                title: '',
+                filter_key: 'filter_key',
+                groups: [{
+                    key: 'new_users_num',
+                    value: '新增用户'
+                }, {
+                    key: 'new_account_num',
+                    value: '新增账户'
+                }, {
+                    key: 'active_users_num',
+                    value: '活跃用户'
+                }, {
+                    key: 'start_count',
+                    value: '启动次数'
+                }, {
+                    key: 'keep_rate',
+                    value: '次日留存率'
+                }]
+            }, {
+                title: '对比渠道',
+                filter_key: 'channel_id',
+                groups: []
+            }],
+                groups = [];
+            req.models.ChannelIdNameChart.find({}, (err, data) => {
+                if(err) {
+                    cb(err);
+                } else {
+                    for(var key of data) {
+                        groups.push({
+                            key : key.channel_id,
+                            value : key.channel_name
+                        })
+                    }
+                    filter_select[1].groups = groups;
+                    cb(null, filter_select);
+                }
+            });
+        }
+    });
 
     Router = new help(Router, {
         router : "/channelAnalysis/channelOperating",
