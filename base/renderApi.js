@@ -89,7 +89,7 @@ renderApi.prototype = {
         var pageAll = {},
             page = {},
             limited = req.session.userInfo.limited;
-        Object.keys(config.limit).forEach((key) => {
+        for(var key in config.limit) {
             var limit = config.limit[key];
             if(limited[key]) {
                 for(var value of limited[key]) {
@@ -102,14 +102,28 @@ renderApi.prototype = {
                         };
                     }
                 }
+                if(limit.routers) {
+                    for(var k of limit.routers) {
+                        page[k.path] = {
+                            id: key,
+                            pageTitle : k.name,
+                            defaultData : k.defaultData
+                        };
+                    }
+                }
             }
             if(limit.display) {
                 pageAll[key] = {
                     name : limit.name,
                     path : limit.path
                 };
+                if(limit.routers) {
+                    for(var k of limit.routers) {
+                        pageAll[key].path.push(k);
+                    }
+                }
             }
-        });
+        };
         res.render(this.view, {
             //pageTitle: this.name,
             drop_down_default_data: dataParams.types,

@@ -78,6 +78,9 @@ module.exports = {
             href: "#",
             path: [
                 obj.channelAnalysis.channel()
+            ],
+            routers: [
+                obj.channelAnalysis.channelOperating()
             ]
         },
         "6": {
