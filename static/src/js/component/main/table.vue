@@ -22,7 +22,10 @@
 </template>
 <style>
 .table_con{}
-.table_con td,.table_con th{max-width: 200px;min-width: 120px;word-break:break-all;word-wrap:break-word;white-space: pre-wrap;}
+.table_con td,.table_con th{max-width: 200px;min-width: 120px;}
+
+/*word-break:break-all;word-wrap:break-word;white-space: pre-wrap;*/
+
 </style>
 <script>
 
@@ -167,10 +170,12 @@ var Table = Vue.extend({
 
             // 跳转到新页面（需要带上各种各样参数）
             if(item.indexOf('url_link') !== -1){
-                var urlLink = $(utils.strToDom(item)).attr('url_link');
-                var fixedParams = $(utils.strToDom(item)).attr('url_fixed_params') ? JSON.parse($(utils.strToDom(item)).attr('url_fixed_params')) : {};
-                var customParams = $(utils.strToDom(item)).attr('custom_params') ? JSON.parse($(utils.strToDom(item)).attr('custom_params')) : [];
+                var dom = utils.strToDom(item);
 
+                var urlLink = dom.getAttribute('url_link');
+                var fixedParams = dom.getAttribute('url_fixed_params') ? JSON.parse(dom.getAttribute('url_fixed_params')) : {};
+                var customParams = dom.getAttribute('custom_params') ? JSON.parse(dom.getAttribute('custom_params')) : [];
+                
                 var resultStr = '';
                 var resultArray = [];
 
