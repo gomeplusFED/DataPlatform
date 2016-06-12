@@ -13,7 +13,7 @@ var api = require("../../../base/api"),
 module.exports = (Router) => {
 
     Router = new api(Router,{
-        router : "/channelAnalysis/channelOne",
+        router : "/channelAnalysis/operatingOne",
         modelName : ["ChannelUserActive", "ChannelUserKeep"],
         platform : false,
         date_picker : false,
@@ -21,7 +21,7 @@ module.exports = (Router) => {
             var _query = {},
                 date = new Date().getTime(),
                 qDate = util.getDate(new Date(date - 24 * 60 * 60 * 1000));
-            _query.date = orm.bewteen(new Date(qDate + " 00:00:00"), new Date(qDate + " 23:59:59"));
+            _query.date = orm.between(new Date(qDate + " 00:00:00"), new Date(qDate + " 23:59:59"));
             _query.channel_id = query.channel_id;
             _query.day_type = 1;
             cb(null, _query);
