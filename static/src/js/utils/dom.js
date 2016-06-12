@@ -7,3 +7,5 @@ utils.strToDom = function(str){
 	obj.innerHTML = str;
 	return obj.childNodes;
 }
+
+module.exports = utils;
