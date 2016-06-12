@@ -30,10 +30,10 @@ module.exports = {
                 type: "table",
                 title: "渠道统计",
                 query_api: "/channelAnalysis/operatingOne"
-            //}, {
-            //    type: "chart",
-            //    title: "日趋势变化",
-            //    query_api: "/channelAnalysis/operatingTwo"
+            }, {
+                type: "chart",
+                title: "日趋势变化",
+                query_api: "/channelAnalysis/operatingTwo"
             //},{
             //    type: "table",
             //    title: "渠道数据明细",
