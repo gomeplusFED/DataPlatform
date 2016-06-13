@@ -96,20 +96,14 @@ var Main = Vue.extend({
 
 				if(_this.isnoComponent(data.components)){
 					Vue.set(_this.argvs, 'forceChange', true);
-					_this.count = 1;
+					_this.count = 0;
 				}
 
 				if(!_this.$route.path.match(/\?(.*)/)){
-					_this.count = 1;
+					_this.count = 0;
 				}
 
-				// 解析query部分，添加到参数中去
-				if(_this.$route.path.match(/\?(.*)/)){
-					_this.$route.path.match(/\?(.*)/)[1].split('&').forEach(function(item){
-						var _curr = item.split('=')
-						Vue.set(_this.argvs, _curr[0], _curr[1]);
-					});
-				}
+	
 			}
 		})
 	},
@@ -126,8 +120,8 @@ var Main = Vue.extend({
 		'argvs': {
 			handler: function(newVal, oldVal){
 				this.count++;
-				if(this.count === 2 || this.canUpdate){
-					this.canUpdate = true;
+				if(this.count === 1 || this.canUpdate){
+					
 					// 对各个组件汇总的参数处理
 					var result = {};
 					for(var item in newVal){
@@ -135,7 +129,20 @@ var Main = Vue.extend({
 							result[item] = newVal[item];
 						}
 					}
+
+					if(!this.canUpdate){
+						// 解析query部分，添加到参数中去，可能存在query部分的参数和默认的参数重复，所以，后设置query里的参数，防止覆盖
+						if(this.$route.path.match(/\?(.*)/)){
+							this.$route.path.match(/\?(.*)/)[1].split('&').forEach(function(item){
+								var _curr = item.split('=')
+								result[_curr[0]] = _curr[1];
+							});
+						}
+					}
+
 					this.resultArgvs = result;
+
+					this.canUpdate = true;
 				}
 			},
 			deep: true
