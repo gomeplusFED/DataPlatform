@@ -87,6 +87,7 @@ var FilterSelect = Vue.extend({
 		extraSelect: function(ev,pageComponentsDataIndex){
 			this.checkedOption = $(ev.target).find('option:selected').index();
 			// 嵌套层级较深，从原始属性里慢慢分析吧。。。心累
+			// console.log(this.pageComponentsData[this.componentType][pageComponentsDataIndex].filter_key, this.pageComponentsData[this.componentType][pageComponentsDataIndex].groups[this.checkedOption].key);
 			Vue.set(this.argvs, this.pageComponentsData[this.componentType][pageComponentsDataIndex].filter_key, this.pageComponentsData[this.componentType][pageComponentsDataIndex].groups[this.checkedOption].key);
 			Vue.set(this.argvs, this.pageComponentsData[this.componentType][pageComponentsDataIndex].groups[this.checkedOption].cell.filter_key, this.pageComponentsData[this.componentType][pageComponentsDataIndex].groups[this.checkedOption].cell.groups[0].key);
 		},
@@ -119,12 +120,13 @@ var FilterSelect = Vue.extend({
 				}
 				// 检测filter是否是级联选择
 				this.checkHasCell();
+
 				// 纯按钮事件处理
 				if(this.isFirstHandler && !this.isCell){
 					for(var i = 0;i < this.pageComponentsData[this.componentType].length;i++){
 						var _curr = this.pageComponentsData[this.componentType][i];
 						if(_curr.groups.length > 5){
-							Vue.set(this.argvs, this.pageComponentsData[this.componentType][0].filter_key, _curr.groups[0].key);
+							Vue.set(this.argvs, this.pageComponentsData[this.componentType][i].filter_key, _curr.groups[i].key);
 						}else{
 							(function(filterIndex){
 								$('#filter_group_' + _this.index + '_' + filterIndex).find('button').bind('click',function(){

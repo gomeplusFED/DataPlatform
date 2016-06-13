@@ -65,7 +65,9 @@ var Main = Vue.extend({
 				day_type: 1
 			},
 			pageComponentsData: null,
-			resultArgvs: ''
+			resultArgvs: '',
+			count: 0,
+			canUpdate: false
 		}
 	},
 	props: ['initData','currentData','loading','index'],
@@ -78,24 +80,35 @@ var Main = Vue.extend({
 		'm-btns': Btns,
 		'm-multi-select': MultiSelect
 	},
+	route: {
+		data: function(){
+
+		}
+	},
 	created: function(){
 		var _this = this;
 		$.ajax({
 			url: _this.currentData.query_api + '_json',
 			type: 'get',
 			success: function(data){
-				_this.pageComponentsData = data.components;
-				
-				if(_this.isnoComponent(data.components)){
-					_this.$set('argvs.forceChange',true);
 
-					// 解析query部分，添加到参数中去
-					if(_this.$route.path.match(/\?(.*)/)){
-						_this.$route.path.match(/\?(.*)/)[1].split('&').forEach(function(item){
-							var _curr = item.split('=')
-							Vue.set(_this.argvs, _curr[0], _curr[1]);
-						});
-					}
+				_this.pageComponentsData = data.components;
+
+				if(_this.isnoComponent(data.components)){
+					Vue.set(_this.argvs, 'forceChange', true);
+					_this.count = 1;
+				}
+
+				if(!_this.$route.path.match(/\?(.*)/)){
+					_this.count = 1;
+				}
+
+				// 解析query部分，添加到参数中去
+				if(_this.$route.path.match(/\?(.*)/)){
+					_this.$route.path.match(/\?(.*)/)[1].split('&').forEach(function(item){
+						var _curr = item.split('=')
+						Vue.set(_this.argvs, _curr[0], _curr[1]);
+					});
 				}
 			}
 		})
@@ -111,15 +124,19 @@ var Main = Vue.extend({
 	},
 	watch: {
 		'argvs': {
-			handler: function(val){
-				// 对各个组件汇总的参数处理
-				var result = {};
-				for(var item in this.argvs){
-					if(this.argvs[item] !== ''){
-						result[item] = this.argvs[item];
+			handler: function(newVal, oldVal){
+				this.count++;
+				if(this.count === 2 || this.canUpdate){
+					this.canUpdate = true;
+					// 对各个组件汇总的参数处理
+					var result = {};
+					for(var item in newVal){
+						if(newVal[item] !== ''){
+							result[item] = newVal[item];
+						}
 					}
+					this.resultArgvs = result;
 				}
-				this.resultArgvs = result;
 			},
 			deep: true
 		}
