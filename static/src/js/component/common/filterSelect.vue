@@ -126,7 +126,7 @@ var FilterSelect = Vue.extend({
 					for(var i = 0;i < this.pageComponentsData[this.componentType].length;i++){
 						var _curr = this.pageComponentsData[this.componentType][i];
 						if(_curr.groups.length > 5){
-							Vue.set(this.argvs, this.pageComponentsData[this.componentType][i].filter_key, _curr.groups[i].key);
+							Vue.set(this.argvs, this.pageComponentsData[this.componentType][i].filter_key, _curr.groups[0].key);
 						}else{
 							(function(filterIndex){
 								$('#filter_group_' + _this.index + '_' + filterIndex).find('button').bind('click',function(){
