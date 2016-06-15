@@ -101,6 +101,8 @@ module.exports = (Router) => {
             }, {
                 title: '对比渠道',
                 filter_key: 'channel_id',
+                "multi": true,
+                "max": 2,
                 groups: []
             }],
                 groups = [];
