@@ -22,7 +22,10 @@ module.exports = {
                 tran_pay_money_amount : 0,
                 tran_refund_pro_num_spu : 0,
                 tran_refund_pro_num_sku : 0,
-                tred_deal_money_amount : 0
+                tred_deal_money_amount : 0,
+                tran_plat_coupon_price : 0,
+                tran_balance : 0,
+                tran_turnover : 0
             };
         for(var key of source) {
             obj.tran_acc_pro_num += key.tran_acc_pro_num;
@@ -37,13 +40,18 @@ module.exports = {
             obj.tran_refund_pro_num_spu += key.tran_refund_pro_num_spu;
             obj.tran_refund_pro_num_sku += key.tran_refund_pro_num_sku;
             obj.tred_deal_money_amount += key.tred_deal_money_amount;
+            obj.tran_plat_coupon_price += key.tran_plat_coupon_price;
+            obj.tran_balance += key.tran_balance;
+            obj.tran_turnover += key.tran_turnover;
         }
         one.push({
             tran_acc_pro_num : obj.tran_acc_pro_num,
             tran_order_pro_num_spu : obj.tran_order_pro_num_spu,
             tran_order_pro_num_sku : obj.tran_order_pro_num_sku,
             tran_pay_pro_num_spu : obj.tran_pay_pro_num_spu,
-            tran_pay_pro_num_sku : obj.tran_pay_pro_num_sku
+            tran_pay_pro_num_sku : obj.tran_pay_pro_num_sku,
+            tran_refund_pro_num_spu : obj.tran_refund_pro_num_spu,
+            tran_refund_pro_num_sku : obj.tran_refund_pro_num_sku
         });
         two.push({
             tran_order_user_num : obj.tran_order_user_num,
@@ -51,8 +59,9 @@ module.exports = {
             tran_pay_user_num : obj.tran_pay_user_num,
             tran_pay_money_amount : obj.tran_pay_money_amount.toFixed(2),
             tran_cus_unit_price : util.division(obj.tran_pay_money_amount, obj.tran_pay_user_num),
-            tran_refund_pro_num_spu : obj.tran_refund_pro_num_spu,
-            tran_refund_pro_num_sku : obj.tran_refund_pro_num_sku
+            tran_plat_coupon_price : obj.tran_plat_coupon_price.toFixed(2),
+            tran_balance : obj.tran_balance.toFixed(2),
+            tran_turnover : obj.tran_turnover.toFixed(2)
         });
         return util.toTable([one, two], data.rows, data.cols);
     },

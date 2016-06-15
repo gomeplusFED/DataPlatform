@@ -34,10 +34,10 @@ module.exports = {
                 type: "chart",
                 title: "日趋势变化",
                 query_api: "/channelAnalysis/operatingTwo"
-            //},{
-            //    type: "table",
-            //    title: "渠道数据明细",
-            //    query_api: "/channelAnalysis/operatingThree"
+            },{
+                type: "table",
+                title: "渠道数据明细",
+                query_api: "/channelAnalysis/operatingThree"
             }]
         };
     }

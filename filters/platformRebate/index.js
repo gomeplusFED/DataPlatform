@@ -149,7 +149,10 @@ module.exports = {
         orderSource.sort((a, b) => {
             return b.rebate_level - a.rebate_level;
         });
-        for(var i = 0; i < orderSource[0].rebate_level; i++) {
+
+        var levelMax = orderSource[0].rebate_level;
+
+        for(var i = 0; i < levelMax; i++) {
             XPie.push({
                 key :  i + 1 + "级",
                 value : i + 1
@@ -164,14 +167,40 @@ module.exports = {
                 value : 0
             };
             objBar[level.value] = {};
-            for (var i = 0; i < XBar.length; i++) {
-                objBar[level.value][i] = 0;
+            for (var n = 0; n < XBar.length; n++) {
+                objBar[level.value][n] = 0;
             }
         }
         for(key of source) {
-            objPie[key.level].value += Math.round(key[filter_key]);
-            objBar[key.level][key.grade] += Math.round(key[filter_key]);
+            if(filter_key !== "rebate_amount_count") {
+                if(key.grade === "0") {
+                    objPie[key.level].value += key[filter_key];
+                }
+            } else {
+                objPie[key.level].value += key[filter_key];
+            }
+            objBar[key.level][key.grade] += key[filter_key];
         }
+
+        if(filter_key !== "rebate_amount_count") {
+            for(var key in objBar) {
+                for(var i = 0; i < levelMax - 1; i++) {
+                    objBar[key][i] -= objBar[key][i + 1];
+                }
+            }
+        }
+
+        if(filter_key !== "goods_sku_count") {
+            for(var key in objPie) {
+                objPie[key].value = (objPie[key].value / 100).toFixed(2);
+            }
+            for(var key in objBar) {
+                for(var k in objBar[key]) {
+                    objBar[key][k] = (objBar[key][k] / 100).toFixed(2);
+                }
+            }
+        }
+
         for(level of XPie) {
             newDataPie[level.key] = objPie[level.value];
             newDataBar[level.key] = objBar[level.value];
@@ -180,6 +209,7 @@ module.exports = {
             mapBar[i] = XBar[i].key;
         }
         mapPie.value = filter_name[filter_key];
+
         return [{
             type: typePie,
             map: mapPie,
@@ -215,10 +245,21 @@ module.exports = {
             };
         }
         for(key of source) {
-            if(obj[key.user_party]) {
+            if(filter_key !== "rebate_amount_count") {
+                if(key.grade === "0") {
+                    obj[key.user_party].value += Math.round(key[filter_key]);
+                }
+            } else {
                 obj[key.user_party].value += Math.round(key[filter_key]);
             }
         }
+
+        if(filter_key !== "goods_sku_count") {
+            for(var key in obj) {
+                obj[key].value = (obj[key].value / 100).toFixed(2);
+            }
+        }
+
         for(key of orderSource) {
             newData[key.type_name] = obj[key.type_code];
         }

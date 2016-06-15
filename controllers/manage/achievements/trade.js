@@ -13,29 +13,20 @@ module.exports = (Router) => {
         router : "/achievements/tradeOne",
         modelName : ["SalesPerfTranKv"],
         platform : false,
-        //fixedParams : {
-        //    key_type : [
-        //        "tran_acc_pro_num", "tran_order_pro_num", "tran_order_pro_num_j",
-        //        "tran_pay_pro_num", "tran_pay_pro_num_j", "tran_order_user_num",
-        //        "tred_order_all_amount", "tran_order_money_amount",
-        //        "tran_pay_user_num", "tran_pay_money_amount",
-        //        "tran_refund_pro_num", "tran_refund_pro_num_j"
-        //    ]
-        //},
         filter(data, filter_key, dates) {
             return filter.tradeOne(data);
         },
         rows: [
             ["tran_acc_pro_num",
-                //"tran_cart_pro_num", "tran_cart_pro_num_j",
                 "tran_order_pro_num_spu",
-                "tran_order_pro_num_sku", "tran_pay_pro_num_spu", "tran_pay_pro_num_sku"
+                "tran_order_pro_num_sku", "tran_pay_pro_num_spu", "tran_pay_pro_num_sku",
+                "tran_refund_pro_num_spu", "tran_refund_pro_num_sku"
             ],
             [
                 "tran_order_user_num", "tran_order_money_amount",
                 "tran_pay_user_num",
-                "tran_pay_money_amount", "tran_cus_unit_price", "tran_refund_pro_num_spu",
-                "tran_refund_pro_num_sku"
+                "tran_pay_money_amount", "tran_cus_unit_price",
+                "tran_balance", "tran_plat_coupon_price", "tran_turnover"
             ]
         ],
         cols: [
@@ -60,6 +51,12 @@ module.exports = (Router) => {
             }, {
                 caption: "付款商品件数",
                 type: "number"
+            }, {
+                caption: "退货商品数",
+                type: "number"
+            }, {
+                caption: "退货商品件数",
+                type: "number"
             }],
             [{
                 caption: "下单人数",
@@ -77,10 +74,13 @@ module.exports = (Router) => {
                 caption: "客单价",
                 type: "number"
             }, {
-                caption: "退货商品数",
+                caption: "国美币使用额",
                 type: "number"
             }, {
-                caption: "退货商品件数",
+                caption: "优惠卷使用额",
+                type: "number"
+            }, {
+                caption: "交易额",
                 type: "number"
             }]
         ]
@@ -152,13 +152,6 @@ module.exports = (Router) => {
         excel_export : true,
         paging : true,
         order : ["-date"],
-        //fixedParams : {
-        //    key_type : [
-        //        'tred_order_all_amount', 'tred_pay_all_amount', 'tran_order_money_amount',
-        //        'tran_pay_money_amount', 'tran_guest_unit_price', 'del_use_coupon_rate',
-        //        'del_refund_amount'
-        //    ]
-        //},
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']

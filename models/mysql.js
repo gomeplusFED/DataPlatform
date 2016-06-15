@@ -796,7 +796,10 @@ function connect(app) {
                 tran_order_money_amount : Number,
                 tran_pay_user_num : Number,
                 tran_pay_money_amount : Number,
-                tran_refund_pro_num_spu : Number
+                tran_refund_pro_num_spu : Number,
+                tran_plat_coupon_price : Number,
+                tran_balance : Number,
+                tran_turnover : Number
             });
             models.SalesProductMarketTop = db.define("tbl_rt_sales_product_market_top", {
                 id : {type: 'number', key: true},

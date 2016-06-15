@@ -4,7 +4,7 @@
  * @fileoverview 渠道分析
  */
 var util = require("../../utils"),
-    _ = require("lodash");
+    moment = require("moment");
 
 module.exports = {
     channelOne(data) {
@@ -90,5 +90,15 @@ module.exports = {
                 stack: false // 图的堆叠
             }
         }]
+    },
+    channelThree(data, dates) {
+        var source = data.data,
+            count = data.dataCount;
+        for(var key of source) {
+            key.date = moment(key.date).format("YYYY-MM-DD");
+            key.rate = util.toFixed(key.consume_users_num, key.active_users_num);
+        }
+
+        return util.toTable([source], data.rows, data.cols, [count]);
     }
 };
