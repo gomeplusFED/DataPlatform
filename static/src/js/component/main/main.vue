@@ -102,8 +102,6 @@ var Main = Vue.extend({
 				if(!_this.$route.path.match(/\?(.*)/)){
 					_this.count = 0;
 				}
-
-	
 			}
 		})
 	},
