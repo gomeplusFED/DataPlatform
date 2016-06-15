@@ -45,7 +45,7 @@ module.exports = {
             newData = {};
 
         for(var key of thirdSource) {
-            _obj[key.channel_id] = _obj[key.channel_name];
+            _obj[key.channel_id] = key.channel_name;
         }
 
         if(filter_key === "keep_rate") {
