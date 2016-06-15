@@ -4,6 +4,7 @@
  * @fileoverview 渠道分析
  */
 var util = require("../../utils"),
+    _ = require("lodash"),
     moment = require("moment");
 
 module.exports = {
@@ -35,27 +36,39 @@ module.exports = {
     channelTwo(data, filter_key, dates) {
         var source = data.data,
             orderSource = data.orderData,
+            thirdSource = data.thirdData,
+            _obj = {},
             _orderSource = [],
-            _channel_id = "",
+            _channel_id = [],
             type = "line",
             map = {},
             newData = {};
 
+        for(var key of thirdSource) {
+            _obj[key.channel_id] = key.channel_name;
+        }
+
         if(filter_key === "keep_rate") {
             if(orderSource[0]) {
-                _channel_id = orderSource[0].channel_id;
-                map[_channel_id] = orderSource[0].channel_name + "(%)";
+                _channel_id = _.uniq(_.pluck(orderSource, "channel_id"));
+                for(var key of _channel_id) {
+                    map[key] = _obj[key] + "(%)";
+                }
             }
         } else {
             if(source[0]) {
-                _channel_id = source[0].channel_id;
-                map[_channel_id] = source[0].channel_name;
+                _channel_id = _.uniq(_.pluck(source, "channel_id"));
+                for(var key of _channel_id) {
+                    map[key] = _obj[key];
+                }
             }
         }
 
         for(var date of dates) {
             var obj = {};
-            obj[_channel_id] = 0;
+            for(var key of _channel_id) {
+                obj[key] = 0;
+            }
             newData[date] = obj;
         }
 
