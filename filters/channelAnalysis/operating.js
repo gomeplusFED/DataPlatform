@@ -44,12 +44,12 @@ module.exports = {
         if(filter_key === "keep_rate") {
             if(orderSource[0]) {
                 _channel_id = orderSource[0].channel_id;
-                map[orderSource[0].channel_id] = orderSource[0].channel_name + "(%)";
+                map[_channel_id] = orderSource[0].channel_name + "(%)";
             }
         } else {
             if(source[0]) {
                 _channel_id = source[0].channel_id;
-                map[orderSource[0].channel_id] = orderSource[0].channel_name;
+                map[_channel_id] = source[0].channel_name;
             }
         }
 
