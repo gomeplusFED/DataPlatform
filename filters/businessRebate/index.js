@@ -252,7 +252,7 @@ module.exports = {
             length = source.length;
         for(var i = 0; i < length; i++) {
             var obj = {
-                id : (page - 1) * 10 + i + 1,
+                id : (page - 1) * 20 + i + 1,
                 shop_name : source[i].shop_name,
                 plan_num : source[i].plan_num,
                 spu_num : source[i].spu_num,
@@ -280,7 +280,7 @@ module.exports = {
         }
         for(var i = 0; i < length; i++) {
             var obj = {
-                id : (page - 1) * 10 + i + 1,
+                id : (page - 1) * 20 + i + 1,
                 plan_name : source[i].plan_name,
                 shop_name : source[i].shop_name,
                 deadline : source[i].deadline,
@@ -309,7 +309,7 @@ module.exports = {
         }
         for(var i = 0; i < source.length; i++) {
             var key = source[i];
-            key.id = (page - 1) * 10 + i + 1;
+            key.id = (page - 1) * 20 + i + 1;
             key.related_flow = related_flow[key.related_flow];
             key.pay_rate = key.order_num + "/" + key.total_order_num;
             key.pay_price_rate = key.order_amount.toFixed(2) + "/" + key.total_order_amount.toFixed(2);

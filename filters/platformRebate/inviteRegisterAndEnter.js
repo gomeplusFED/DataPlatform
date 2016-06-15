@@ -100,7 +100,7 @@ module.exports = {
             correlate_flow[key.flow_code] = key.flow_name;
         }
         for(var i = 0; i < source.length; i++) {
-            source[i].id = (page - 1) * 10 + i + 1;
+            source[i].id = (page - 1) * 20 + i + 1;
             source[i].user_party = user_party[source[i].user_party];
             source[i].correlate_flow = correlate_flow[source[i].correlate_flow];
             source[i].rebate_amount_count = source[i].rebate_amount_count.toFixed(2);

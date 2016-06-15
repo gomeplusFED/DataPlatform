@@ -186,7 +186,7 @@ module.exports = {
             correlate_flow[key.flow_code] = key.flow_name;
         }
         source.forEach((key, value) => {
-            key.id = (page - 1) * 10 + value + 1;
+            key.id = (page - 1) * 20 + value + 1;
             key.user_party = user_party[key.user_party];
             key.correlate_flow = correlate_flow[key.correlate_flow];
             key.order_rate = key.new_order_count + "/" + key.order_all_count;
