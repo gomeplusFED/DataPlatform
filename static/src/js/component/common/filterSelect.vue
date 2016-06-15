@@ -4,7 +4,7 @@
 			<div class="group" v-if="item.multi">
 				<strong>{{item.title}}{{item.title === '' ? '' : '：'}}</strong>
 				<div class="btn_group">
-					<button>选择</button>
+					<button @click="multiConShow = true">选择</button>
 				</div>
 				<div class="multi_checked_text">
 					<span v-for="multi_checked_key in multiCheckedOption">{{multiCheckedOption[multi_checked_key]}} | </span>
@@ -48,7 +48,7 @@
 <style>
 .filter_select{font-size: 0;margin: 0 0 12px;display: inline-block;}
 .filter_select .filter_group{display: inline-block;vertical-align: middle;margin-right: 25px;}
-.filter_select .filter_group .group{display: inline-block;vertical-align: middle;margin-left: 25px;}
+.filter_select .filter_group .group{display: inline-block;vertical-align: middle;margin-left: 25px;position: relative;}
 .filter_select .filter_group .group:first-child{margin-left: 0;}
 .filter_select .filter_group .group strong{font-size: 12px;display: inline-block;vertical-align: middle;}
 .filter_select .filter_group .group .btn_group{font-size: 0;display: inline-block;vertical-align: middle;}
@@ -62,6 +62,12 @@
 .filter_select .filter_group .group .btn_group select option{font-size: 12px;}
 .filter_select .filter_group .group .btn_group .cell_select{display: inline-block;vertical-align: middle;margin-left: 25px;}
 .filter_select .filter_group .group .btn_group .cell_select:first-child{margin-left: 0;}
+
+.multi_option_show{position: absolute;left: 0;top: 20px;}
+.multi_option_show ul{}
+.multi_option_show ul li{font-size: 12px;}
+.multi_option_show button{font-size: 12px;}
+
 </style>
 
 <script>
