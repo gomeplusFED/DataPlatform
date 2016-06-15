@@ -68,8 +68,9 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/channelAnalysis/operatingTwo",
-        modelName : ["ChannelAnalysis", "ChannelUserKeep"],
+        modelName : ["ChannelAnalysis", "ChannelUserKeep", "ChannelIdNameChart"],
         platform : false,
+        thirdParams : {},
         flexible_btn: [{
             content: '<a href="javascript:void(0)" help_url="/channelAnalysis/channel_json">帮助</a>',
             preMethods: ["show_help"],
