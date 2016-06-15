@@ -15,7 +15,7 @@
 			</div>
 			<div class="panel-body">
 				<m-filter-select :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'filter_select'" :argvs.sync='argvs'></m-filter-select>
-				<m-multi-select :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'level_select'" :argvs.sync='argvs'></m-multi-select>
+				<m-level-select :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'level_select'" :argvs.sync='argvs'></m-level-select>
 				<m-table :index="index" :result-argvs="resultArgvs" :init-data="initData" :page-components-data="pageComponentsData" :current-data="currentData" :loading.sync="loading"></m-table>
 				<m-chart :index="index" :result-argvs="resultArgvs" :init-data="initData" :page-components-data="pageComponentsData" :current-data="currentData" :loading.sync="loading"></m-chart>
 			</div>
@@ -47,7 +47,7 @@ var FilterSelect = require('../common/filterSelect.vue');
 var Table = require('./table.vue');
 var Chart = require('./chart.vue');
 var Btns = require('../common/btnGroup.vue');
-var MultiSelect = require('../common/multiSelect.vue')
+var LevelSelect = require('../common/levelSelect.vue');
 
 var utils = require('utils');
 
@@ -78,7 +78,7 @@ var Main = Vue.extend({
 		'm-table': Table,
 		'm-chart': Chart,
 		'm-btns': Btns,
-		'm-multi-select': MultiSelect
+		'm-level-select': LevelSelect
 	},
 	route: {
 		data: function(){

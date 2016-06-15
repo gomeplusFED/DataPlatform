@@ -34,7 +34,7 @@
 </template>
 
 <style>
-.level_select{display: inline-block;font-size: 0;}
+.level_select{display: inline-block;font-size: 0;margin: 0 25px 12px 0;}
 .level_select>strong{font-size: 12px;display: inline-block;vertical-align: middle;}
 .level_select>em{font-size: 14px;color: #333;font-style: normal;display: inline-block;vertical-align: middle;}
 .level_select>ul{display: inline-block;vertical-align: middle;font-size: 0;margin-bottom: 0;margin-left: 10px;}
@@ -69,8 +69,8 @@
 var Vue = require('Vue');
 var $ = require('jQuery');
 
-var MultiSelect = Vue.extend({
-	name: 'MultiSelect',
+var LevelSelect = Vue.extend({
+	name: 'LevelSelect',
 	data: function(){
 		return {
 			showSelect: false,
@@ -163,6 +163,6 @@ var MultiSelect = Vue.extend({
 	}
 })
 
-module.exports = MultiSelect;
+module.exports = LevelSelect;
 
 </script>

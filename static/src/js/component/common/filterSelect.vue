@@ -1,7 +1,23 @@
 <template>
 	<div class="filter_select" v-show="pageComponentsData[componentType].length > 0">
 		<div class="filter_group" :id="'filter_group_' + index + '_' + $index" v-for="( pageComponentsDataIndex, item) in pageComponentsData[componentType]" track-by="$index">
-			<div class="group">
+			<div class="group" v-if="item.multi">
+				<strong>{{item.title}}{{item.title === '' ? '' : '：'}}</strong>
+				<div class="btn_group">
+					<button>选择</button>
+				</div>
+				<div class="multi_checked_text">
+					<span v-for="multi_checked_key in multiCheckedOption">{{multiCheckedOption[multi_checked_key]}} | </span>
+				</div>
+				<div class="multi_option_show" v-show="multiConShow">
+					<ul>
+						<li v-for="multi_option in item.groups" @click="mulit_check(multi_option)" :class="{'multi_checked': multiCheckedOption[multi_option.key]}">{{multi_option.value}}</li>						
+					</ul>
+					<button @click="applyMulti(item)">确认</button>
+					<button @click="hideMultiCon()">取消</button>
+				</div>
+			</div>
+			<div class="group" v-else>
 				<strong>{{item.title}}{{item.title === '' ? '' : '：'}}</strong>
 				<div class="btn_group" v-if="!isCell">
 					<div v-if="item.groups.length < 6">
@@ -30,7 +46,7 @@
 </template>
 
 <style>
-.filter_select{font-size: 0;margin: 0 0 12px 0;display: inline-block;}
+.filter_select{font-size: 0;margin: 0 0 12px;display: inline-block;}
 .filter_select .filter_group{display: inline-block;vertical-align: middle;margin-right: 25px;}
 .filter_select .filter_group .group{display: inline-block;vertical-align: middle;margin-left: 25px;}
 .filter_select .filter_group .group:first-child{margin-left: 0;}
@@ -60,6 +76,9 @@
 var Vue = require('Vue');
 var $ = require('jQuery');
 
+var store = require('../../store/store.js');
+var actions = require('../../store/actions.js');
+
 var FilterSelect = Vue.extend({
 	name: 'FilterSelect',
 	data: function(){
@@ -69,12 +88,19 @@ var FilterSelect = Vue.extend({
 			cellData: [],
 			isFirstHandler: true,
 			checkedOption: 0,
-			cellCheckedOption: 0
+			cellCheckedOption: 0,
+			multiConShow: false,
+			multiCheckedOption: {}
 		}
 	},
 	props: ['index','pageComponentsData','componentType','argvs','initData'],
-	ready: function(){
-		
+	vuex: {
+	    getters: {
+	        alertConfig: function() {
+	            return store.state.alertConfig;
+	        }
+	    },
+	    actions: actions
 	},
 	methods: {
 		getArgv: function(key,value,ev){
@@ -108,6 +134,35 @@ var FilterSelect = Vue.extend({
 					}
 				}
 			}
+		},
+		mulit_check: function(item){
+			if(this.multiCheckedOption[item.key]){
+				delete this.multiCheckedOption[item.key];
+				return;
+			}
+			if(Object.keys(this.multiCheckedOption).length >= item.max){
+				actions.alert(store, {
+					show: true,
+					msg: '最多可以选择' + item.max + '个',
+					type: 'warning'
+				})
+			}
+			this.multiCheckedOption[item.key] = item.value;
+		},
+		applyMulti: function(item){
+			var _currArray = [];
+			if(this.argvs[item.filter_key]){
+				_currArray.push(this.argvs[item.filter_key]);
+			}
+			Object.keys(this.multiCheckedOption).forEach(function(item){
+				_currArray.push(item);
+			})
+			Vue.set(this.argvs, item.filter_key, _currArray);
+			this.multiConShow = false;
+		},
+		hideMultiCon: function(){
+			this.multiCheckedOption = {};
+			this.multiConShow = false;
 		}
 	},
 	watch: {
