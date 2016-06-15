@@ -121,6 +121,54 @@ module.exports = (Router) => {
         }
     });
 
+    Router = new api(Router,{
+        router : "/channelAnalysis/operatingThree",
+        modelName : ["ChannelAnalysis"],
+        platform : false,
+        paging : true,
+        order : ["-date"],
+        excel_export : true,
+        flexible_btn : [{
+            content: '<a href="javascript:void(0)">导出</a>',
+            preMethods: ['excel_export']
+        }],
+        filter(data, filter_key, dates) {
+            return filter.channelThree(data, dates);
+        },
+        rows: [
+            [ 'date', 'new_users_num', 'new_account_num', "active_users_num", "start_count",
+                "unit_use_time", "rate"]
+        ],
+        cols: [
+            [
+                {
+                    caption : '时间',
+                    type : 'string',
+                    width : 20
+                },
+                {
+                    caption : '新增用户',
+                    type : 'number'
+                }, {
+                    caption : '新增账户',
+                    type : 'number'
+                }, {
+                    caption: '活跃用户',
+                    type: 'number'
+                }, {
+                    caption: '启动次数',
+                    type: 'number'
+                }, {
+                    caption: '单次使用时长',
+                    type: 'number'
+                }, {
+                    caption: '付费率',
+                    type: 'string'
+                }
+            ]
+        ]
+    });
+
     Router = new help(Router, {
         router : "/channelAnalysis/channelOperating",
         rows : config.help.rows,

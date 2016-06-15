@@ -148,7 +148,7 @@ var MultiSelect = Vue.extend({
 						url: this.pageComponentsData[this.componentType].url,
 						type: 'get',
 						data: {
-							pid: 0
+							pid: ""
 						},
 						success: function(data){
 							_this.level.$set(0, data);

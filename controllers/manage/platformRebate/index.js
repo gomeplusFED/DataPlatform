@@ -206,7 +206,18 @@ module.exports = (Router) => {
                 query.category_id = "all";
             }
             query.day_type = 1;
-            cb(null, query);
+            req.models.TypeFlow.find({
+                type : 1,
+                status : 1
+            }, (err, data) => {
+                if(err) {
+                    cb(err);
+                } else {
+                    var user_party = _.uniq(_.pluck(data, "type_code"));
+                    query.user_party = user_party;
+                    cb(null, query);
+                }
+            });
         },
         platform : false,
         filter_select: [{
