@@ -57,7 +57,7 @@ module.exports = {
 
         for(var i = 0; i < source.length; i++) {
             var key = source[i];
-            key.top = (page - 1) * 10 + i + 1;
+            key.top = (page - 1) * 20 + i + 1;
             key.access_num_rate = util.toFixed(key.access_num, sum[1]);
             key.access_users_rate = util.toFixed(key.access_users, sum[2]);
             source[i] = key;
@@ -73,7 +73,7 @@ module.exports = {
 
         for(var i = 0; i < source.length; i++) {
             var key = source[i];
-            key.top = (page - 1) * 10 + i + 1;
+            key.top = (page - 1) * 20 + i + 1;
             key.pay_price = key.pay_price.toFixed(2);
             key.pay_price_rate = util.toFixed(key.pay_price, sum[1]);
             key.pay_commodity_rate = util.toFixed(key.pay_commodity_num, sum[2]);

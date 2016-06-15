@@ -60,7 +60,7 @@ module.exports = {
         }
         for(var i = 0; i < source.length; i++) {
             var key = source[i];
-            key.id = (page - 1) * 10 + i + 1;
+            key.id = (page - 1) * 20 + i + 1;
             key.date = moment(key.date).format("YYYY-MM-DD");
             key.acc_time = Math.round(key.acc_time);
             key.bounce_rate = key.bounce_rate.toFixed(2) + "%";

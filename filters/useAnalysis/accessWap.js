@@ -44,7 +44,7 @@ module.exports = {
             newData = [];
         for(var i = 0; i < source.length; i++) {
             var key = source[i];
-            key.id = (page - 1) * 10 + i + 1;
+            key.id = (page - 1) * 20 + i + 1;
             key.operating = "<button class='btn btn-default' url_detail='/useAnalysis/wap'>详情>></button>";
             key.avg_stay_time = Math.round(key.avg_stay_time);
             newData.push(key);
