@@ -39,7 +39,7 @@ module.exports = {
             thirdSource = data.thirdData,
             _obj = {},
             _orderSource = [],
-            _channel_id = channel_ids,
+            _channel_id = channel_ids || [],
             type = "line",
             map = {},
             newData = {};
@@ -48,8 +48,12 @@ module.exports = {
             _obj[key.channel_id] = key.channel_name;
         }
 
-        for(var key of _channel_id) {
-            map[key] = _obj[key];
+        if(Array.isArray(_channel_id)) {
+            for(var key of _channel_id) {
+                map[key] = _obj[key];
+            }
+        } else {
+            map[_channel_id] = _obj[_channel_id];
         }
 
         if(filter_key === "keep_rate") {
@@ -65,8 +69,12 @@ module.exports = {
 
         for(var date of dates) {
             var obj = {};
-            for(var key of _channel_id) {
-                obj[key] = 0;
+            if(Array.isArray(_channel_id)) {
+                for(var key of _channel_id) {
+                    obj[key] = 0;
+                }
+            } else {
+                obj[_channel_id] = 0;
             }
             newData[date] = obj;
         }
