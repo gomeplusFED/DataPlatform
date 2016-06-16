@@ -171,12 +171,20 @@ exports.percentage = function(one, two) {
     return (one / (two === 0 ? 1 : two) * 100).toFixed(2);
 };
 
+exports.toRound = function(one, two) {
+    return Math.round(one / (two === 0 ? 1 : two) * 100);
+};
+
 exports.division = function(one, two) {
     return (one / (two === 0 ? 1 : two)).toFixed(2);
 };
 
 exports.round = function(one, two) {
     return Math.round((one / (two === 0 ? 1 : two)));
+};
+
+exports.ceil = function(one, two) {
+    return Math.ceil((one / (two === 0 ? 1 : two)));
 };
 
 exports.getDate = function(date){

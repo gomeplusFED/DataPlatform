@@ -9,6 +9,7 @@ var util = require("../../utils"),
 module.exports = {
     groupOne(data) {
         var source = data.data,
+            length = source.length,
             newData = {
                 new_group_count : 0,
                 new_group_user_count : 0,
@@ -19,6 +20,11 @@ module.exports = {
                 register_user_all_count : 0,
                 new_group_user_rate: 0
             };
+
+        source.sort((a, b) => {
+            return new Date(a.date) - new Date(b.date);
+        });
+
         for(var key of source) {
             newData.new_group_count += key.new_group_count;
             newData.new_group_user_count += key.new_group_user_count;
@@ -27,6 +33,13 @@ module.exports = {
             newData.accumulated_group_user_all_count += key.accumulated_group_user_all_count;
             newData.register_user_all_count += key.register_user_all_count;
         }
+
+        if(source[length - 1]) {
+            var key = source[length - 1];
+            newData.accumulated_group_all_count = key.accumulated_group_all_count;
+            newData.accumulated_group_user_all_count = key.accumulated_group_user_all_count;
+        }
+
         newData.new_group_user_rate = util.toFixed(newData.new_group_user_count,
             newData.new_register_user_count);
         newData.user_join_group_rate = util.toFixed(newData.accumulated_group_user_all_count,
@@ -46,16 +59,16 @@ module.exports = {
         for(var date of dates) {
             newData[date] = {
                 //new_group_count : 0,
+                new_group_count : 0,
                 new_group_user_count : 0,
-                new_group_topic_count : 0,
                 DAU : 0
             };
         }
         for(var key of source) {
             var date = util.getDate(key.date);
             //newData[date].new_group_count += key.new_group_count;
+            newData[date].new_group_count += key.new_group_count;
             newData[date].new_group_user_count += key.new_group_user_count;
-            newData[date].new_group_topic_count += key.new_group_topic_count;
             newData[date].DAU += key.DAU;
         }
         return [{
@@ -73,12 +86,13 @@ module.exports = {
             orderData = data.orderData,
             type = "pie",
             obj = {},
+            total = 0,
             filter_name = {
                 group_count : "圈子数",
                 DAU : "DAU"
             },
             map = {
-                value : filter_name[filter_key]
+                value : filter_name[filter_key] + "(%)"
             },
             newData = {};
         for(var key of orderData) {
@@ -87,11 +101,12 @@ module.exports = {
             }
         }
         for(var key of source) {
+            total += key[filter_key];
             obj[key.group_type].value += key[filter_key];
         }
         for(var key of orderData) {
             newData[key.name] = {
-                value : obj[key.id].value
+                value : util.toRound(obj[key.id].value, total)
             };
         }
         return [{
@@ -106,6 +121,7 @@ module.exports = {
     groupFour(data, filter_key, filter_key2) {
         var source = data.data,
             orderData = data.orderData,
+            total = 0,
             type = "pie",
             obj = {},
             filter_name = {
@@ -114,7 +130,7 @@ module.exports = {
             },
             filter_key = filter_key || "-1",
             map = {
-                value : filter_name[filter_key2]
+                value : filter_name[filter_key2] + "(%)"
             },
             newData = {};
         for(var key of orderData) {
@@ -125,12 +141,13 @@ module.exports = {
             }
         }
         for(var key of source) {
+            total += key[filter_key2];
             obj[key.group_type].value += key[filter_key2];
         }
         for(var key of orderData) {
             if(key.pid === filter_key) {
                 newData[key.name] = {
-                    value : obj[key.id].value
+                    value : util.toRound(obj[key.id].value, total)
                 };
             }
         }
@@ -155,8 +172,9 @@ module.exports = {
         }
         for(var i = 0; i < source.length; i++) {
             key = source[i];
-            key.id = (page - 1) * 10 + i +1;
+            key.id = (page - 1) * 20 + i +1;
             key.group_type = type[key.group_type];
+            key.rate = util.toFixed(key.DAU, key.accumulated_group_user_all_count);
             newData.push(key);
         }
         return util.toTable([newData], data.rows, data.cols, [count]);

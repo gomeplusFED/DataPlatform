@@ -1,15 +1,15 @@
 /**
  * @author Hao Sun
  * @date 20160512
- * @fileoverview 话题数据
+ * @fileoverview 圈主数据
  */
 var util = require("../../utils"),
-    config = require("../../utils/config.json").socialCategory,
     _ = require("lodash");
 
 module.exports = {
     hostOne(data) {
         var source = data.data,
+            length = source.length,
             newData = {
                 new_owner_num : 0,
                 new_owner_rate : 0,
@@ -18,12 +18,22 @@ module.exports = {
                 total_new_owner_num : 0,
                 fans_num : 0
             };
+
+        source.sort((a, b) => {
+            return new Date(a.date) - new Date(b.date);
+        });
+
         for(var key of source) {
             newData.new_owner_num += key.new_owner_num;
             newData.accum_owner_num += key.accum_owner_num;
             newData.total_new_owner_num += key.total_new_owner_num;
             newData.fans_num += key.fans_num;
         }
+
+        if(source[length - 1]) {
+            newData.accum_owner_num = source[length - 1].accum_owner_num;
+        }
+
         newData.new_owner_rate = util.toFixed(newData.new_owner_num,
             newData.total_new_owner_num);
         newData.avg_fan = util.toFixed(newData.fans_num,
@@ -34,32 +44,37 @@ module.exports = {
         var source = data.data,
             type = "line",
             newData = {},
+            obj = {},
             map = {
                 new_owner_num : "新增圈主数",
-                new_owner_rate : "新圈主占比",
+                new_owner_rate : "新圈主占比(%)",
                 avg_fan : "人均粉丝数"
             };
         for(var date of dates) {
-            newData[date] = {
+            obj[date] = {
                 new_owner_num : 0,
-                new_owner_rate : 0,
-                avg_fan : 0
+                total_new_owner_num : 0,
+                fans_num : 0,
+                accum_owner_num: 0
             };
         }
 
         for(var key of source) {
             var date = util.getDate(key.date);
-            newData[date].new_owner_num += key.new_owner_num;
-            newData[date].total_new_owner_num += key.total_new_owner_num;
-            newData[date].fans_num += key.fans_num;
-            newData[date].accum_owner_num += key.accum_owner_num;
+            obj[date].new_owner_num += key.new_owner_num;
+            obj[date].total_new_owner_num += key.total_new_owner_num;
+            obj[date].fans_num += key.fans_num;
+            obj[date].accum_owner_num += key.accum_owner_num;
         }
 
-        for(var key in newData) {
-            newData[key].new_owner_rate = util.toFixed(newData[key].new_owner_num,
-                newData[key].total_new_owner_num);
-            newData[key].avg_fan = util.toFixed(newData[key].fans_num,
-                newData[key].accum_owner_num);
+        for(var date of dates) {
+            newData[date] = {
+                new_owner_num : obj[date].new_owner_num,
+                new_owner_rate :
+                    util.toRound(obj[date].new_owner_num, obj[date].total_new_owner_num),
+                avg_fan :
+                    util.ceil(obj[date].fans_num, obj[date].accum_owner_num)
+            };
         }
 
         return [{
@@ -75,6 +90,7 @@ module.exports = {
     hostThree(data, filter_key) {
         var source = data.data,
             orderData = data.orderData,
+            total = 0,
             type = "pie",
             obj = {},
             filter_name = {
@@ -82,7 +98,7 @@ module.exports = {
                 fans_num : "粉丝数"
             },
             map = {
-                value : filter_name[filter_key]
+                value : filter_name[filter_key] + "(%)"
             },
             newData = {};
         for(var key of orderData) {
@@ -91,11 +107,12 @@ module.exports = {
             }
         }
         for(var key of source) {
+            total += key[filter_key];
             obj[key.group_type].value += key[filter_key];
         }
         for(var key of orderData) {
             newData[key.name] = {
-                value : obj[key.id].value
+                value : util.toRound(obj[key.id].value, total)
             };
         }
         return [{
@@ -110,6 +127,7 @@ module.exports = {
     hostFour(data, filter_key, filter_key2) {
         var source = data.data,
             orderData = data.orderData,
+            total = 0,
             type = "pie",
             obj = {},
             filter_name = {
@@ -118,7 +136,7 @@ module.exports = {
             },
             filter_key = filter_key || "-1",
             map = {
-                value : filter_name[filter_key2]
+                value : filter_name[filter_key2] + "(%)"
             },
             newData = {};
         for(var key of orderData) {
@@ -129,12 +147,13 @@ module.exports = {
             }
         }
         for(var key of source) {
+            total += key[filter_key2];
             obj[key.group_type].value += key[filter_key2];
         }
         for(var key of orderData) {
             if(key.pid === filter_key) {
                 newData[key.name] = {
-                    value : obj[key.id].value
+                    value : util.toRound(obj[key.id].value, total)
                 };
             }
         }
@@ -153,7 +172,7 @@ module.exports = {
             count = data.dataCount > 100 ? 100 : data.dataCount,
             newData = [];
         for(var i = 0; i < source.length; i++) {
-            source[i].id = (page - 1) * 10 + i +1;
+            source[i].id = (page - 1) * 20 + i +1;
             newData.push(source[i]);
         }
         return util.toTable([newData], data.rows, data.cols, [count]);

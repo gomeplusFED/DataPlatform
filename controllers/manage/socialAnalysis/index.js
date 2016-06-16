@@ -192,7 +192,8 @@ module.exports = (Router) => {
         }],
         rows: [
             [ "id", "group_name", "group_type", "new_group_user_count",
-            "new_group_topic_count", "DAU", "accumulated_group_user_all_count"]
+            "new_group_topic_count", "DAU", "accumulated_group_user_all_count",
+            "rate" ]
         ],
         cols: [
             [{
@@ -216,6 +217,9 @@ module.exports = (Router) => {
             }, {
                 caption: "圈子成员数", // （发布/回复）任意行为用户去重后数量 / 圈子成员数
                 type: "number"
+            },{
+                caption: "圈子参与度", // （发布/回复）任意行为用户去重后数量 / 圈子成员数
+                type: "string"
             }]
         ]
     });

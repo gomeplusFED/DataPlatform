@@ -254,6 +254,7 @@ api.prototype = {
         async(() => {
             var isErr = false,
                 error = "",
+                _params = query,
                 sendData = {
                     rows: this.rows,
                     cols: this.cols
@@ -291,7 +292,8 @@ api.prototype = {
                     this.filter_key || this.key_type || this.sku_type,
                     dates,
                     this.filter_key2,
-                    this.page
+                    this.page,
+                    _params
                 );
             }
             if(isErr) {
@@ -417,13 +419,13 @@ api.prototype = {
                 continue;
             }
             if(key === "to") {
-                limit = params[key]-1;
+                limit = +params[key];
                 continue;
             }
             _params[key] = params[key];
         }
         return new Promise((resolve, reject) => {
-            var sql = req.models[modelName].find(_params).limit(limit).offset(offset);
+            var sql = req.models[modelName].find(_params).offset(offset).limit(limit);
             if(orderArray) {
                 for(var key of orderArray) {
                     sql.order(key);

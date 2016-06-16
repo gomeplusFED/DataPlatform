@@ -4,12 +4,12 @@
  * @fileoverview 话题数据
  */
 var util = require("../../utils"),
-    config = require("../../utils/config.json").socialCategory,
     _ = require("lodash");
 
 module.exports = {
     topicsOne(data) {
         var source = data.data,
+            length = source.length,
             newData = {
                 new_topic_count : 0,
                 new_reply_count : 0,
@@ -20,6 +20,10 @@ module.exports = {
                 topic_all_count : 0,
                 accumulated_topic_all_count : 0
             };
+
+        source.sort((a, b) => {
+            return new Date(a.date) - new Date(b.date);
+        });
         
         for(var key of source) {
             newData.new_topic_count += key.new_topic_count;
@@ -29,6 +33,11 @@ module.exports = {
             newData.topic_all_count += key.topic_all_count;
             newData.accumulated_topic_all_count += key.accumulated_topic_all_count;
         }
+
+        if(source[length - 1]) {
+            newData.accumulated_topic_all_count = source[length - 1].accumulated_topic_all_count
+        }
+
         newData.new_reply_rate = util.toFixed(newData.new_reply_new_topic_count,
             newData.new_topic_count);
         newData.reply_rate = util.toFixed(newData.reply_topic_all_count,
@@ -41,14 +50,16 @@ module.exports = {
             newData = {},
             map = {
                 new_topic_count: "新增话题数",
-                topic_reply_rate: "话题回复率",
-                topic_click_rate: "话题点击率"
+                topic_reply_rate: "话题回复率(%)",
+                topic_click_rate: "话题点击率(%)"
             };
         for (var date of dates) {
             newData[date] = {
                 new_topic_count: 0,
-                topic_reply_rate: 0,
-                topic_click_rate: 0
+                reply_topic_all_count : 0,
+                topic_all_count : 0,
+                topic_clicked_count : 0,
+                topic_viewed_count : 0
             };
         }
 
@@ -62,9 +73,9 @@ module.exports = {
         }
 
         for (var key in newData) {
-            newData[key].topic_reply_rate = util.toFixed(newData[key].reply_topic_all_count,
+            newData[key].topic_reply_rate = util.toRound(newData[key].reply_topic_all_count,
                 newData[key].topic_all_count);
-            newData[key].topic_click_rate = util.toFixed(newData[key].topic_clicked_count,
+            newData[key].topic_click_rate = util.toRound(newData[key].topic_clicked_count,
                 newData[key].topic_viewed_count);
         }
 
@@ -78,10 +89,10 @@ module.exports = {
             }
         }];
     },
-
     topicsThree(data, filter_key) {
         var source = data.data,
             orderData = data.orderData,
+            total = 0,
             type = "pie",
             obj = {},
             filter_name = {
@@ -89,7 +100,7 @@ module.exports = {
                 replay_num : "回复"
             },
             map = {
-                value : filter_name[filter_key]
+                value : filter_name[filter_key] + "(%)"
             },
             newData = {};
         for(var key of orderData) {
@@ -98,11 +109,12 @@ module.exports = {
             }
         }
         for(var key of source) {
+            total += key[filter_key];
             obj[key.group_type].value += key[filter_key];
         }
         for(var key of orderData) {
             newData[key.name] = {
-                value : obj[key.id].value
+                value : util.toRound(obj[key.id].value, total)
             };
         }
         return [{
@@ -114,11 +126,11 @@ module.exports = {
             }
         }]
     },
-
     topicsFour(data, filter_key, filter_key2) {
         var source = data.data,
             orderData = data.orderData,
             type = "pie",
+            total = 0,
             obj = {},
             filter_name = {
                 topic_num : "话题",
@@ -126,7 +138,7 @@ module.exports = {
             },
             filter_key = filter_key || "-1",
             map = {
-                value : filter_name[filter_key2]
+                value : filter_name[filter_key2] + "(%)"
             },
             newData = {};
         for(var key of orderData) {
@@ -137,12 +149,13 @@ module.exports = {
             }
         }
         for(var key of source) {
+            total += key[filter_key2];
             obj[key.group_type].value += key[filter_key2];
         }
         for(var key of orderData) {
             if(key.pid === filter_key) {
                 newData[key.name] = {
-                    value : obj[key.id].value
+                    value : util.toRound(obj[key.id].value, total)
                 };
             }
         }
@@ -160,11 +173,11 @@ module.exports = {
             count = data.dataCount > 100 ? 100 : data.dataCount,
             page = page || 1,
             newData = [];
-        for(var i = 0; i < source.lenght; i++) {
+        for(var i = 0; i < source.length; i++) {
             var key = source[i];
-            key.id = (page - 1) * 10 + i + 1;
-            key.user_reply_rate = util.division(key.replay_user_num, key.click_user_num);
-            key.avg_reply = util.division(key.replay_num, key.replay_user_num);
+            key.id = (page - 1) * 20 + i + 1;
+            key.user_reply_rate = util.toFixed(key.replay_user_num, key.click_user_num);
+            key.avg_reply = util.round(key.replay_num, key.replay_user_num);
             newData.push(key);
         }
         return util.toTable([newData], data.rows, data.cols, [count]);

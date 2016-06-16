@@ -33,13 +33,13 @@ module.exports = {
 
         return util.toTable([[oneObj], [twoObj]], data.rows, data.cols);
     },
-    channelTwo(data, filter_key, dates) {
+    channelTwo(data, filter_key, dates, channel_ids) {
         var source = data.data,
             orderSource = data.orderData,
             thirdSource = data.thirdData,
             _obj = {},
             _orderSource = [],
-            _channel_id = [],
+            _channel_id = channel_ids,
             type = "line",
             map = {},
             newData = {};
@@ -48,16 +48,15 @@ module.exports = {
             _obj[key.channel_id] = key.channel_name;
         }
 
+        for(var key of _channel_id) {
+            map[key] = _obj[key];
+        }
+
         if(filter_key === "keep_rate") {
             if(orderSource[0]) {
-                _channel_id = _.uniq(_.pluck(orderSource, "channel_id"));
-                for(var key of _channel_id) {
-                    map[key] = _obj[key] + "(%)";
-                }
             }
         } else {
             if(source[0]) {
-                _channel_id = _.uniq(_.pluck(source, "channel_id"));
                 for(var key of _channel_id) {
                     map[key] = _obj[key];
                 }

@@ -118,6 +118,7 @@ module.exports = {
             orderData = data.orderData,
             newData = {},
             map = {},
+            obj = {},
             typePie = "pie",
             typeBar = "bar",
             filter_name = {
@@ -132,17 +133,21 @@ module.exports = {
                 value : key.flow_code
             })
         }
+
         for (var x of XData) {
-            var obj = {
-                value: 0
-            };
-            for (var key of source) {
-                if (x.value === key.correlate_flow) {
-                    obj.value += Math.round(key[filter_key]);
-                }
+            obj[x.value] = {
+                value : 0
             }
-            newData[x.key] = obj;
         }
+
+        for(var key of source) {
+            obj[key.correlate_flow].value += Math.round(key[filter_key]);
+        }
+
+        for (var x of XData) {
+            newData[x.key] = obj[x.value];
+        }
+
         map.value = filter_name[filter_key];
         return [{
             type: typePie,

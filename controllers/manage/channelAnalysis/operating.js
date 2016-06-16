@@ -76,8 +76,8 @@ module.exports = (Router) => {
             preMethods: ["show_help"],
             customMethods: ''
         }],
-        filter(data, filter_key, dates) {
-            return filter.channelTwo(data, filter_key, dates);
+        filter(data, filter_key, dates, filter_key2, page, query) {
+            return filter.channelTwo(data, filter_key, dates, query.channel_id);
         },
         selectFilter(req, cb) {
             var filter_select = [{

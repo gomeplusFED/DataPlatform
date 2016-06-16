@@ -20,7 +20,7 @@ module.exports = (Router) => {
             return filter.topicsOne(data);
         },
         flexible_btn: [{
-            content: '<a href="javascript:void(0)" help_url="/socialAnalysis/help_json">帮助</a>',
+            content: '<a href="javascript:void(0)" help_url="/socialAnalysis/helpTwo_json">帮助</a>',
             preMethods: ["show_help"],
             customMethods: ''
         }],

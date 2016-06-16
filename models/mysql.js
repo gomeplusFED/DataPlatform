@@ -642,6 +642,7 @@ function connect(app) {
                 new_owner_num: Number,
                 total_new_owner_num: Number,
                 fans_num: Number,
+                accum_owner_num : Number,
                 group_type: String,
                 day_type: Number,
                 date: Date,
