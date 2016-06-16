@@ -21,7 +21,7 @@
 							</ul>
 						</div>
 						<div class="panel-footer clearfix">
-							<!-- <div class="checked_select">当前选择：{{showResult.length ? showResult.join('－') : '默认'}}</div> -->
+							<button v-show="item.groups.length === item.max" class="btn btn-default" style="margin-left: 10px;" @click="selectAll(item)">全选</button>
 							<button class="btn btn-default" style="margin-left: 10px;float: right;" @click="hideMultiCon()">取消</button>
 							<button class="btn btn-default" style="margin-left: 10px;float: right;" @click="applyMulti(item)">确认</button>
 						</div>
@@ -189,6 +189,11 @@ var FilterSelect = Vue.extend({
 		hideMultiCon: function(){
 			this.multiCheckedOption = {};
 			this.multiConShow = false;
+		},
+		selectAll: function(obj){
+			obj.groups.forEach((item) => {
+				Vue.set(this.multiCheckedOption, item.key, item.value);
+			})
 		}
 	},
 	watch: {
