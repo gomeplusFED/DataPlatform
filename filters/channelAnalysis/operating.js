@@ -111,7 +111,7 @@ module.exports = {
             }
         }]
     },
-    channelThree(data, dates) {
+    channelThree(data) {
         var source = data.data,
             count = data.dataCount;
         for(var key of source) {
