@@ -108,7 +108,6 @@ var LevelSelect = Vue.extend({
 			this.checkedId = $(ev.target).attr('key');
 			var _this = this;
 			$.ajax({
-				// url: '/api/categories',
 				url: this.pageComponentsData[this.componentType].url,
 				type: 'get',
 				data: {
@@ -129,12 +128,10 @@ var LevelSelect = Vue.extend({
 		    	return;
 		    }
 		    Vue.set(this.argvs, this.pageComponentsData[this.componentType].name, 'all');
-		    // this.$set('argvs.category_id', 'all');
 		},
 		submit: function(){
 			// 设置参数
 			Vue.set(this.argvs, this.pageComponentsData[this.componentType].name, this.checkedId);
-			// this.$set('argvs.category_id', this.checkedId);
 		}
 	},
 	watch: {
@@ -144,7 +141,6 @@ var LevelSelect = Vue.extend({
 				if(val){
 					$('body').css('overflow','hidden');
 					$.ajax({
-						// url: '/api/categories',
 						url: this.pageComponentsData[this.componentType].url,
 						type: 'get',
 						data: {
