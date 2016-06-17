@@ -136,7 +136,7 @@ module.exports = (Router) => {
             preMethods: ['excel_export']
         }],
         filter(data, filter_key, dates) {
-            return filter.channelThree(data, dates);
+            return filter.channelThree(data);
         },
         rows: [
             [ 'date', 'new_users_num', 'new_account_num', "active_users_num", "start_count",
