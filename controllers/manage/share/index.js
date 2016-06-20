@@ -11,7 +11,7 @@ var api = require("../../../base/api"),
 module.exports = (Router) => {
 
     Router = new api(Router,{
-        router : "/share/insideOne",
+        router : "/share/indexOne",
         modelName : ["ShareAnalysis"],
         flexible_btn: [{
             content: '<a href="javascript:void(0)" help_url="/share/inside/help_json">帮助</a>',
