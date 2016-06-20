@@ -12,26 +12,39 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/share/indexOne",
-        modelName : ["ShareAnalysis"],
+        modelName : ["ShareAnalyzeOverview"],
+        platform : false,
         flexible_btn: [{
-            content: '<a href="javascript:void(0)" help_url="/share/inside/help_json">帮助</a>',
+            content: '<a href="javascript:void(0)" help_url="/share/index/help_json">帮助</a>',
             preMethods: ["show_help"],
             customMethods: ''
         }],
-        filter_select: [{
-            title: '',
-            filter_key : 'filter_key',
-            groups: [{
-                key: 'product',
-                value: '商品'
-            }, {
-                key: 'shop',
-                value: '店铺'
-            }]
-        }],
         filter(data, filter_key, dates) {
-            return filter.insideOne(data, filter_key, dates);
-        }
+            return filter.indexOne(data);
+        },
+        rows : [
+            ["shareTimeSum", "shareUserSum", "clickTimeSum", "clickUserSum", "rate"]
+        ],
+        cols : [
+            [
+                {
+                    caption : "分享次数",
+                    type : "number"
+                },{
+                    caption : "分享人数",
+                    type : "number"
+                },{
+                    caption : "点击次数",
+                    type : "number"
+                },{
+                    caption : "点击人数",
+                    type : "number"
+                },{
+                    caption : "有效分享占比",
+                    type : "string"
+                }
+            ]
+        ]
     });
 
     Router = new api(Router,{
@@ -70,17 +83,17 @@ module.exports = (Router) => {
     });
 
     Router = new help(Router, {
-        router : "/share/inside/help",
+        router : "/share/index/help",
         rows : config.help.rows,
         cols : config.help.cols,
         data : [
             {
-                name : "分享次数（站内）",
-                help : "被分享到站内的次数，站内（联系人，我的圈子，我的群聊）"
+                name : "有效分享占比",
+                help : "有效点击次数/分享次数"
             },
             {
-                name : "打开次数（站内）",
-                help : "站内分享的链接被点击的次数"
+                name : "分享回流率",
+                help : "分享文案中的链接点击次数/分享次数"
             }
         ]
     });

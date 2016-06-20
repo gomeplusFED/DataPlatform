@@ -7,39 +7,22 @@ var util = require("../../utils"),
     moment = require("moment");
 
 module.exports = {
-    insideOne(data, filter_key, dates) {
+    indexOne(data) {
         var source = data.data,
-            type = "line",
-            map = {
-                share_num : "分享次数",
-                open_num : "打开次数"
-            },
-            filter_name = {
-                product : "商品",
-                shop : "店铺"
-            },
-            newData = {};
-        for(var date of dates) {
-            var obj = {
-                share_num : 0,
-                open_num : 0
+            obj = {
+                shareTimeSum : 0,
+                shareUserSum : 0,
+                clickTimeSum : 0,
+                clickUserSum : 0
             };
-            for(var key of source) {
-                if(date === util.getDate(key.date)) {
-                    obj.share_num += key.share_num;
-                    obj.open_num += key.open_num;
-                }
-            }
-            newData[date] = obj;
+        for(var key of source) {
+            obj.shareTimeSum += key.sharetimesum;
+            obj.shareUserSum += key.shareusersum;
+            obj.clickTimeSum += key.clicktimesum;
+            obj.clickUserSum += key.clickusersum;
         }
-        return [{
-            type : type,
-            map : map,
-            data : newData,
-            config: { // 配置信息
-                stack: false // 图的堆叠
-            }
-        }]
+        obj.rate = util.toFixed(obj.shareTimeSum, obj.clickTimeSum);
+        return util.toTable([[obj]], data.rows, data.cols);
     },
     insideTwo(data, dates) {
         var source = data.data,
