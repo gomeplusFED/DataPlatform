@@ -186,7 +186,7 @@ module.exports = (Router) => {
             preMethods: ['excel_export']
         }],
         rows: [
-            [ "id", "topic_name", "click_num", "click_user_num",
+            [ "id", "topic_name", "click_num", "click_user_num","replay_num",
                 "user_reply_rate", "avg_reply"]
         ],
         cols: [
@@ -201,6 +201,9 @@ module.exports = (Router) => {
                 type: "number"
             }, {
                 caption: "点击用户数",
+                type: "number"
+            }, {
+                caption: "新增回复数",
                 type: "number"
             }, {
                 caption: "回复率", // 回复用户数 / 点击用户数
