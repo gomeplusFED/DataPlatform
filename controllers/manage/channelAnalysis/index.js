@@ -50,10 +50,10 @@ module.exports = (Router) => {
         modelName : ["ChannelAnalysis", "ChannelIdNameChart"],
         platform : false,
         orderParams : {},
+        excel_export : true,
         filter(data, filter_key, dates) {
             return filter.channelTwo(data);
         },
-        excel_export : true,
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
