@@ -46,7 +46,7 @@ module.exports = (Router) => {
                 caption: "下单商品件数",
                 type: "number"
             }, {
-                caption: "付款商品数",
+                caption: "支付商品数",
                 type: "number"
             }, {
                 caption: "付款商品件数",
