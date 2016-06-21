@@ -12,15 +12,15 @@
 				<li>
 					<input type="radio" name="export" id="b" value="b" v-model="checkedRadio">
 					<label for="b">选择数据导出（共{{exportConfirmConfig.len}}条数据）</label>
-					<input type="number" v-model="from">－<input type="number" v-model="to" :value="exportConfirmConfig.len" :max="exportConfirmConfig.len">
+					<input type="number" v-model="from" min="1">－<input type="number" v-model="to" :value="exportConfirmConfig.len" :max="exportConfirmConfig.len" min="0">
 					<div style="height: 28px;">
-						<p style="color: #ff5151;line-height: 28px;" v-show="(parseInt(to) - parseInt(from)) > 1000 || (parseInt(from) - parseInt(to)) > 0">范围有误</p>					
+						<p style="color: #ff5151;line-height: 28px;" v-show="(parseInt(to) - parseInt(from)) > 1000 || (parseInt(from) - parseInt(to)) > 0 || (parseInt(to) - parseInt(from)) > exportConfirmConfig.len || parseInt(from) <= 0">范围有误</p>					
 					</div>
 				</li>
 			</ul>
 		</div>
 		<div class="panel-footer">
-			<a href="javascript:void(0)" class="btn btn-default" @click="apply(),hide()">确认</a>
+			<a href="javascript:void(0)" class="btn btn-default" :disabled="(parseInt(to) - parseInt(from)) > 1000 || (parseInt(from) - parseInt(to)) > 0 || (parseInt(to) - parseInt(from)) > exportConfirmConfig.len || parseInt(from) <= 0" @click="apply(),hide()">确认</a>
 			<a href="javascript:void(0)" class="btn btn-default" @click="cancel(),hide()">取消</a>
 		</div>
 	</div>
