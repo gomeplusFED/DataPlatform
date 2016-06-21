@@ -59,7 +59,7 @@ var Btns = Vue.extend({
                 return;
             }
             
-            var key = location.hash.replace('#!', '');
+            var key = location.hash.replace('#!', '').replace(/(\?.*)/, '');
 
             actions.exportConfirm(store, {
                 show: true,
