@@ -49,7 +49,7 @@ module.exports = (Router) => {
                 caption: "支付商品数",
                 type: "number"
             }, {
-                caption: "付款商品件数",
+                caption: "支付商品件数",
                 type: "number"
             }, {
                 caption: "退货商品数",
@@ -122,10 +122,10 @@ module.exports = (Router) => {
                 value: '下单总量'
             }, {
                 key: 'tred_pay_all_amount',
-                value: '付款订单量'
+                value: '支付订单量'
             }, {
                 key: 'tred_pay_user_num',
-                value: '付款人数'
+                value: '支付人数'
             }, {
                 key: 'tran_order_pro_num_spu',
                 value: '下单商品数'
@@ -176,7 +176,7 @@ module.exports = (Router) => {
                     type : 'number'
                 },
                 {
-                    caption : '付款订单量',
+                    caption : '支付订单量',
                     type : 'number'
                 },
                 {
@@ -184,7 +184,7 @@ module.exports = (Router) => {
                     type : 'number'
                 },
                 {
-                    caption : '付款金额',
+                    caption : '支付金额',
                     type : 'number'
                 },
                 {
@@ -244,7 +244,7 @@ module.exports = (Router) => {
             [
                 {
                     caption : '类目名称',
-                    type : 'string',
+                    type : 'string'
                 },
                 {
                     caption : '浏览量',
@@ -296,19 +296,19 @@ module.exports = (Router) => {
                     type : 'string'
                 },
                 {
-                    caption : '成交金额',
+                    caption : '支付金额',
                     type : 'number'
                 },
                 {
-                    caption : '成交金额占比',
+                    caption : '支付金额占比',
                     type : 'number'
                 },
                 {
-                    caption : '成交商品数',
+                    caption : '支付商品数',
                     type : 'number'
                 },
                 {
-                    caption : '成交商品占比',
+                    caption : '支付商品数占比',
                     type : 'number'
                 },
                 {
