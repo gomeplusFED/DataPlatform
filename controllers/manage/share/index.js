@@ -20,7 +20,7 @@ module.exports = (Router) => {
             customMethods: ''
         }],
         filter(data, filter_key, dates) {
-            return filter.indexOne(data, dates);
+            return filter.indexOne(data);
         },
         rows : [
             ["shareTimeSum", "shareUserSum", "clickTimeSum", "clickUserSum", "rate"]
