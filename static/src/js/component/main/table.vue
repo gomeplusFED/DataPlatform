@@ -170,11 +170,11 @@ var Table = Vue.extend({
 
             // 跳转到新页面（需要带上各种各样参数）
             if(item.indexOf('url_link') !== -1){
-                var dom = utils.strToDom(item);
+                var dom = $(utils.strToDom(item));
 
-                var urlLink = dom.getAttribute('url_link');
-                var fixedParams = dom.getAttribute('url_fixed_params') ? JSON.parse(dom.getAttribute('url_fixed_params')) : {};
-                var customParams = dom.getAttribute('custom_params') ? JSON.parse(dom.getAttribute('custom_params')) : [];
+                var urlLink = dom.attr('url_link');
+                var fixedParams = dom.attr('url_fixed_params') ? JSON.parse(dom.attr('url_fixed_params')) : {};
+                var customParams = dom.attr('custom_params') ? JSON.parse(dom.attr('custom_params')) : [];
                 
                 var resultStr = '';
                 var resultArray = [];
@@ -188,7 +188,7 @@ var Table = Vue.extend({
                         resultArray.push(item + '=' + this.resultArgvs[item])
                     }
                 })
-                
+
                 this.$route.router.go(urlLink + '?' + resultArray.join('&'));
             }
         },
