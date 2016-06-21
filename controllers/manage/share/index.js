@@ -58,10 +58,10 @@ module.exports = (Router) => {
             title: '',
             filter_key: 'filter_key',
             groups: [{
-                key: 'share_time_sum',
+                key: 'sharetimesum',
                 value: '分享次数'
             }, {
-                key: 'share_user_sum',
+                key: 'shareusersum',
                 value: '分享人数'
             }, {
                 key: 'rate',
@@ -83,41 +83,41 @@ module.exports = (Router) => {
         router : "/share/indexFour",
         modelName : ["ShareAnalyzeTrend"],
         platform : false,
-        filter(data, filter_key, dates) {
+        filter(data) {
             return filter.indexFour(data);
         },
-        filter_select: [{
-            title: '',
-            filter_key: 'sharesource',
-            groups: [{
-                key: ["商品", "话题", "店铺", "圈子"],
-                value: '全部'
-            }, {
-                key: '商品',
-                value: '商品'
-            }, {
-                key: '话题',
-                value: '话题'
-            }, {
-                key: '店铺',
-                value: '店铺'
-            }, {
-                key: '圈子',
-                value: '圈子'
-            }]
-        }],
+        //filter_select: [{
+        //    title: '',
+        //    filter_key: 'sharesource',
+        //    groups: [{
+        //        key: ["shop", "topic", "product", "group"],
+        //        value: '全部'
+        //    }, {
+        //        key: 'product',
+        //        value: '商品'
+        //    }, {
+        //        key: 'topic',
+        //        value: '话题'
+        //    }, {
+        //        key: 'shop',
+        //        value: '店铺'
+        //    }, {
+        //        key: 'group',
+        //        value: '圈子'
+        //    }]
+        //}],
         rows : [
-            ["id", "sharesource", "share_time_sum", "share_user_sum", "click_time_sum",
+            ["share_source", "sharesource", "share_time_sum", "share_user_sum", "click_time_sum",
                 "click_user_sum", "rate", "operating"]
         ],
         cols : [
             [
                 {
-                    caption : "序号",
-                    type : "number"
+                    caption : "分享来源",
+                    type : "string"
                 },
                 {
-                    caption : "分享来源",
+                    caption : "分享来源英文对照",
                     type : "string"
                 },{
                     caption : "分享次数",

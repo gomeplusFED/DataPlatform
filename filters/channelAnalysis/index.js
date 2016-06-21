@@ -127,11 +127,7 @@ module.exports = {
                 active_users_num : 0,
                 start_count : 0,
                 consume_users_num : 0,
-                operating : `
-                    <button class='btn btn-default'
-                    url_link='/channelAnalysis/operating'
-                    url_fixed_params='{"channel_id": "${key}"}'>详细>></button>
-                `
+                operating : `<button class='btn btn-default' url_link='/channelAnalysis/operating' url_fixed_params='{"channel_id": "${key}"}'>详细>></button>`
             };
             for(var k of obj[key]) {
                 _obj.new_users_num += k.new_users_num;
