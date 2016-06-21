@@ -15,21 +15,21 @@ module.exports = {
                     type : "table",
                     title : "分享数据总览",
                     query_api : "/share/indexOne"
-                //},
-                //{
-                //    type : "chart",
-                //    title : "分享趋势",
-                //    query_api : "/share/indexTwo"
-                //},
-                //{
-                //    type : "chart",
-                //    title : "分享渠道分布",
-                //    query_api : "/share/indexThree"
-                //},
-                //{
-                //    type : "table",
-                //    title : "分享数据详情 ",
-                //    query_api : "/share/indexFour"
+                },
+                {
+                    type : "chart",
+                    title : "分享趋势",
+                    query_api : "/share/indexTwo"
+                },
+                {
+                    type : "chart",
+                    title : "分享渠道分布",
+                    query_api : "/share/indexThree"
+                },
+                {
+                    type : "table",
+                    title : "分享数据详情 ",
+                    query_api : "/share/indexFour"
                 }
             ]
         }

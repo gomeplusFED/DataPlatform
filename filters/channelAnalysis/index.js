@@ -101,7 +101,7 @@ module.exports = {
             config: { // 配置信息
                 stack: false // 图的堆叠
             }
-        }]
+        }];
     },
     channelTwo(data) {
         var source = data.data,

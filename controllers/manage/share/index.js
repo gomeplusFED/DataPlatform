@@ -20,7 +20,7 @@ module.exports = (Router) => {
             customMethods: ''
         }],
         filter(data, filter_key, dates) {
-            return filter.indexOne(data);
+            return filter.indexOne(data, dates);
         },
         rows : [
             ["shareTimeSum", "shareUserSum", "clickTimeSum", "clickUserSum", "rate"]
@@ -48,35 +48,131 @@ module.exports = (Router) => {
     });
 
     Router = new api(Router,{
-        router : "/share/insideTwo",
-        modelName : ["ShareAnalysis"],
-        excel_export : true,
-        paging : true,
-        order : ["-date"],
-        flexible_btn : [{
-            content: '<a href="javascript:void(0)">导出</a>',
-            preMethods: ['excel_export']
-        }],
+        router : "/share/indexTwo",
+        modelName : ["ShareAnalyzeTrend"],
+        platform : false,
         filter(data, filter_key, dates) {
-            return filter.insideTwo(data, dates);
+            return filter.indexTwo(data, filter_key, dates);
         },
+        filter_select: [{
+            title: '',
+            filter_key: 'filter_key',
+            groups: [{
+                key: 'share_time_sum',
+                value: '分享次数'
+            }, {
+                key: 'share_user_sum',
+                value: '分享人数'
+            }, {
+                key: 'rate',
+                value: '有效分享占比'
+            }]
+        }]
+    });
+
+    Router = new api(Router,{
+        router : "/share/indexThree",
+        modelName : ["ShareAnalyzeChannel"],
+        platform : false,
+        filter(data, filter_key, dates) {
+            return filter.indexThree(data);
+        }
+    });
+
+    Router = new api(Router,{
+        router : "/share/indexFour",
+        modelName : ["ShareAnalyzeTrend"],
+        platform : false,
+        filter(data, filter_key, dates) {
+            return filter.indexFour(data);
+        },
+        filter_select: [{
+            title: '',
+            filter_key: 'sharesource',
+            groups: [{
+                key: ["商品", "话题", "店铺", "圈子"],
+                value: '全部'
+            }, {
+                key: '商品',
+                value: '商品'
+            }, {
+                key: '话题',
+                value: '话题'
+            }, {
+                key: '店铺',
+                value: '店铺'
+            }, {
+                key: '圈子',
+                value: '圈子'
+            }]
+        }],
         rows : [
-            ['date','share_num','open_num']
+            ["id", "sharesource", "share_time_sum", "share_user_sum", "click_time_sum",
+                "click_user_sum", "rate", "operating"]
         ],
         cols : [
             [
                 {
-                    caption : '时间',
-                    type : 'string',
-                    width : 20
+                    caption : "序号",
+                    type : "number"
                 },
                 {
-                    caption: '分享次数',
-                    type: 'number'
-                },
+                    caption : "分享来源",
+                    type : "string"
+                },{
+                    caption : "分享次数",
+                    type : "number"
+                },{
+                    caption : "分享人数",
+                    type : "number"
+                },{
+                    caption : "点击次数",
+                    type : "number"
+                },{
+                    caption : "点击人数",
+                    type : "number"
+                },{
+                    caption : "有效分享占比",
+                    type : "string"
+                },{
+                    caption : "操作"
+                }
+            ]
+        ]
+    });
+
+    Router = new api(Router,{
+        router : "/share/operating",
+        modelName : ["ShareAnalyzeChannelTrend"],
+        platform : false,
+        //paging : true,
+        filter(data, filter_key, dates) {
+            return filter.operating(data);
+        },
+        rows : [
+            ["share_channel", "share_time_sum", "share_user_sum", "click_time_sum",
+                "click_user_sum", "rate"]
+        ],
+        cols : [
+            [
                 {
-                    caption: '打开次数',
-                    type: 'number'
+                    caption : "分享渠道",
+                    type : "string"
+                },{
+                    caption : "分享次数",
+                    type : "number"
+                },{
+                    caption : "分享人数",
+                    type : "number"
+                },{
+                    caption : "点击次数",
+                    type : "number"
+                },{
+                    caption : "点击人数",
+                    type : "number"
+                },{
+                    caption : "分享回流率",
+                    type : "string"
                 }
             ]
         ]
