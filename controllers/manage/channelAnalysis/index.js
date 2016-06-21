@@ -86,8 +86,7 @@ module.exports = (Router) => {
                     caption: '付费率',
                     type: 'string'
                 }, {
-                    caption: '操作',
-                    type: 'string'
+                    caption: '操作'
                 }
             ]
         ]
