@@ -150,17 +150,6 @@ function connect(app) {
                 ver: String,
                 channel: String
             });
-            models.ShareAnalysis = db.define("tbl_rt_share_analysis", {
-                id: { type: 'number', key: true },
-                date: Date,
-                day_type: Number,
-                type: String,
-                ver: String,
-                channel: String,
-                share_num: Number,
-                open_num: Number,
-                buy_num: Number
-            });
             models.Rebate = db.define("tbl_rt_rebate", {
                 id: { type: 'number', key: true },
                 date: Date,
@@ -882,6 +871,56 @@ function connect(app) {
                 id : {type: 'number', key: true},
                 channel_id : String,
                 channel_name : String
+            });
+            models.ShareAnalyzeOverview = db.define("tbl_rt_share_analyze_overview", {
+                id : {type: 'number', key: true},
+                date : Date,
+                sharetimesum : Number,
+                shareusersum : Number,
+                clicktimesum : Number,
+                clickusersum : Number,
+                day_type : Number,
+                channel : String,
+                type : String,
+                version : String
+            });
+            models.ShareAnalyzeTrend = db.define("tbl_rt_share_analyze_trend", {
+                id : {type: 'number', key: true},
+                date : Date,
+                sharesource : String,
+                sharetimesum : Number,
+                shareusersum : Number,
+                clicktimesum : Number,
+                clickusersum : Number,
+                day_type : Number,
+                channel : String,
+                type : String,
+                version : String
+            });
+            models.ShareAnalyzeChannel = db.define("tbl_rt_share_analyze_channel", {
+                id : {type: 'number', key: true},
+                date : Date,
+                sharechannel : String,
+                sharetimesum : Number,
+                shareusersum : Number,
+                day_type : Number,
+                channel : String,
+                type : String,
+                version : String
+            });
+            models.ShareAnalyzeChannelTrend = db.define("tbl_rt_share_analyze_channel_trend", {
+                id : {type: 'number', key: true},
+                date : Date,
+                sharesource : String,
+                sharechannel : String,
+                sharetimesum : Number,
+                shareusersum : Number,
+                clicktimesum : Number,
+                clickusersum : Number,
+                day_type : Number,
+                channel : String,
+                type : String,
+                version : String
             });
             models.db1 = db;
             next();

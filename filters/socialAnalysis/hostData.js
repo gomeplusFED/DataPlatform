@@ -25,18 +25,17 @@ module.exports = {
 
         for(var key of source) {
             newData.new_owner_num += key.new_owner_num;
-            newData.accum_owner_num += key.accum_owner_num;
             newData.total_new_owner_num += key.total_new_owner_num;
-            newData.fans_num += key.fans_num;
         }
 
         if(source[length - 1]) {
             newData.accum_owner_num = source[length - 1].accum_owner_num;
+            newData.fans_num = source[length - 1].fans_num;
         }
 
         newData.new_owner_rate = util.toFixed(newData.new_owner_num,
             newData.total_new_owner_num);
-        newData.avg_fan = util.toFixed(newData.fans_num,
+        newData.avg_fan = util.ceil(newData.fans_num,
             newData.accum_owner_num);
         return util.toTable([[newData]], data.rows, data.cols);
     },

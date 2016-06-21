@@ -117,11 +117,6 @@ renderApi.prototype = {
                     name : limit.name,
                     path : limit.path
                 };
-                if(limit.routers) {
-                    for(var k of limit.routers) {
-                        pageAll[key].path.push(k);
-                    }
-                }
             }
         };
         res.render(this.view, {

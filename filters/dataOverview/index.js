@@ -78,47 +78,109 @@ module.exports = {
         for(var key of newData) {
             key.new_user_rate = util.toFixed(key.new_user, key.open_user_total);
             key.new_user_rate_two = util.toFixed(key.new_user, key.uv);
-            key.open_user_avg = (key.open_total / (key.open_user_total === 0 ? 1 : key.open_user_total)).toFixed(2);
+            key.open_user_avg = util.division(key.open_total, key.open_user_total);
             key.register_rate = util.toFixed(key.new_account, key.new_user);
         }
         newData[0].name = "昨天";
         newData[1].name = "前天";
-        obj.open_total = ((newData[0].open_total - newData[1].open_total)
-            / (newData[0].open_total === 0 ? 1 : newData[0].open_total) * 100).toFixed(2) + "%";
-        obj.jump_loss_rate = ((newData[0].jump_loss_rate - newData[1].jump_loss_rate)
-            / (newData[0].jump_loss_rate === 0 ? 1 : newData[0].jump_loss_rate) * 100).toFixed(2) + "%";
-        obj.open_user_total = ((newData[0].open_user_total - newData[1].open_user_total)
-            / (newData[0].open_user_total === 0 ? 1 : newData[0].open_user_total) * 100).toFixed(2) + "%";
-        obj.new_user = ((newData[0].new_user - newData[1].new_user)
-            / (newData[0].new_user === 0 ? 1 : newData[0].new_user) * 100).toFixed(2) + "%";
-        obj.new_account = ((newData[0].new_account - newData[1].new_account)
-            / (newData[0].new_account === 0 ? 1 : newData[0].new_account) * 100).toFixed(2) + "%";
-        obj.stay_time_avg = ((newData[0].stay_time_avg - newData[1].stay_time_avg)
-            / (newData[0].stay_time_avg === 0 ? 1 : newData[0].stay_time_avg) * 100).toFixed(2) + "%";
-        obj.using_time_avg = ((newData[0].using_time_avg - newData[1].using_time_avg)
-            / (newData[0].using_time_avg === 0 ? 1 : newData[0].using_time_avg) * 100).toFixed(2) + "%";
-        obj.uv = ((newData[0].uv - newData[1].uv)
-            / (newData[0].uv === 0 ? 1 : newData[0].uv) * 100).toFixed(2) + "%";
-        obj.pv = ((newData[0].pv - newData[1].pv)
-            / (newData[0].pv === 0 ? 1 : newData[0].pv) * 100).toFixed(2) + "%";
-        obj.ip_count = ((newData[0].ip_count - newData[1].ip_count)
-            / (newData[0].ip_count === 0 ? 1 : newData[0].ip_count) * 100).toFixed(2) + "%";
-        obj.visit_time_avg = ((newData[0].visit_time_avg - newData[1].visit_time_avg)
-            / (newData[0].visit_time_avg === 0 ? 1 : newData[0].visit_time_avg) * 100).toFixed(2) + "%";
-        obj.open_user_avg = ((newData[0].open_user_avg - newData[1].open_user_avg) /
-            (newData[0].open_user_avg === "0.00" ? 1 : newData[0].open_user_avg) * 100).toFixed(2) + "%";
+        obj.open_total =
+            util.toFixed(
+                newData[0].open_total - newData[1].open_total,
+                newData[1].open_total
+            );
+
+        obj.jump_loss_rate =
+            util.toFixed(
+                newData[0].jump_loss_rate - newData[1].jump_loss_rate,
+                newData[1].jump_loss_rate
+            );
+
+        obj.open_user_total =
+            util.toFixed(
+                newData[0].open_user_total - newData[1].open_user_total,
+                newData[1].open_user_total
+            );
+
+        obj.new_user =
+            util.toFixed(
+                newData[0].new_user - newData[1].new_user,
+                newData[1].new_user
+            );
+
+        obj.new_account =
+            util.toFixed(
+                newData[0].new_account - newData[1].new_account,
+                newData[1].new_account
+            );
+
+        obj.stay_time_avg =
+            util.toFixed(
+                newData[0].stay_time_avg - newData[1].stay_time_avg,
+                newData[1].stay_time_avg
+            );
+
+        obj.using_time_avg =
+            util.toFixed(
+                newData[0].using_time_avg - newData[1].using_time_avg,
+                newData[1].using_time_avg
+            );
+
+        obj.uv =
+            util.toFixed(
+                newData[0].uv - newData[1].uv,
+                newData[1].uv
+            );
+
+        obj.pv =
+            util.toFixed(
+                newData[0].pv - newData[1].pv,
+                newData[1].pv
+            );
+
+        obj.ip_count =
+            util.toFixed(
+                newData[0].ip_count - newData[1].ip_count,
+                newData[1].ip_count
+            );
+
+        obj.visit_time_avg =
+            util.toFixed(
+                newData[0].visit_time_avg - newData[1].visit_time_avg,
+                newData[1].visit_time_avg
+            );
+        obj.open_user_avg =
+            util.toFixed(
+                newData[0].open_user_avg - newData[1].open_user_avg,
+                newData[1].open_user_avg
+            );
+
         obj.register_rate = (newData[0].register_rate.replace("%", "")
             - newData[1].register_rate.replace("%", "")).toFixed(2) + "%";
+
         obj.new_user_rate = (newData[0].new_user_rate.replace("%", "")
             - newData[1].new_user_rate.replace("%", "")).toFixed(2) + "%";
+
         obj.new_user_rate_two = (newData[0].new_user_rate_two.replace("%", "")
             - newData[1].new_user_rate_two.replace("%", "")).toFixed(2) + "%";
-        obj.pv1 = ((newData[0].pv1 - newData[1].pv1) /
-            (newData[0].pv1 === 0 ? 1 : newData[0].pv1) * 100).toFixed(2) + "%";
-        obj.pv2 = ((newData[0].pv2 - newData[1].pv2) /
-            (newData[0].pv2 === 0 ? 1 : newData[0].pv2) * 100).toFixed(2) + "%";
-        obj.create = ((newData[0].create - newData[1].create) /
-            (newData[0].create === 0 ? 1 : newData[0].create) * 100).toFixed(2) + "%";
+
+        obj.pv1 =
+            util.toFixed(
+                newData[0].pv1 - newData[1].pv1,
+                newData[1].pv1
+            );
+
+        obj.pv2 =
+            util.toFixed(
+                newData[0].pv2 - newData[1].pv2,
+                newData[1].pv2
+            );
+
+        obj.create =
+            util.toFixed(
+                newData[0].create - newData[1].create,
+                newData[1].create
+            );
+
         newData.push(obj);
         return util.toTable([newData], data.rows, data.cols);
     },
