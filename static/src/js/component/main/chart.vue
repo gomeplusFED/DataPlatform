@@ -168,7 +168,6 @@ var Chart = Vue.extend({
 				delete options.yAxis;
 				delete options.grid;
 			}
-			console.log(options);
 			return options;
 		}
 	},
