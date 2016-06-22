@@ -147,7 +147,7 @@ api.prototype = {
         var query = req.query,
             params = {},
             dates = [];
-        
+
         if(!query.startTime && !query.endTime) {
             params = this.default;
         } else {
