@@ -56,18 +56,6 @@ module.exports = {
             map[_channel_id] = _obj[_channel_id];
         }
 
-        if(filter_key === "keep_rate") {
-            if(orderSource[0]) {
-
-            }
-        } else {
-            if(source[0]) {
-                for(var key of _channel_id) {
-                    map[key] = _obj[key];
-                }
-            }
-        }
-
         for(var date of dates) {
             var obj = {};
             if(Array.isArray(_channel_id)) {
@@ -95,6 +83,9 @@ module.exports = {
             }
             for(key in newData) {
                 newData[key][_channel_id] = (newData[key][_channel_id] * 100).toFixed(0);
+            }
+            for(var key in map) {
+                map[key] += "(%)";
             }
         } else {
             for(key of source) {
