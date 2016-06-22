@@ -147,6 +147,7 @@ api.prototype = {
         var query = req.query,
             params = {},
             dates = [];
+        
         if(!query.startTime && !query.endTime) {
             params = this.default;
         } else {
@@ -301,30 +302,7 @@ api.prototype = {
                 return;
             }
             if (type !== "excel") {
-                res[type]({
-                    code: 200,
-                    modelData: sendData,
-                    components: {
-                        flexible_btn: this.flexible_btn,
-                        date_picker: {
-                            show: this.date_picker,
-                            defaultData: this.date_picker_data,
-                            showDayUnit : this.showDayUnit
-                        },
-                        drop_down: {
-                            platform: this.platform,
-                            channel: this.channel,
-                            version: this.version,
-                            coupon: this.coupon
-                        },
-                        level_select: {
-                            show : this.level_select,
-                            url : this.level_select_url,
-                            name : this.level_select_name
-                        },
-                        filter_select: this.filter_select
-                    }
-                });
+                this._render(res, sendData, type);
             } else {
                 var conf = excelExport.analysisExcel(sendData),
                     result = nodeExcel.execute(conf);
@@ -333,6 +311,32 @@ api.prototype = {
                 res.end(result, 'binary');
             }
         })();
+    },
+    _render(res, sendData, type) {
+        res[type]({
+            code: 200,
+            modelData: sendData,
+            components: {
+                flexible_btn: this.flexible_btn,
+                date_picker: {
+                    show: this.date_picker,
+                    defaultData: this.date_picker_data,
+                    showDayUnit : this.showDayUnit
+                },
+                drop_down: {
+                    platform: this.platform,
+                    channel: this.channel,
+                    version: this.version,
+                    coupon: this.coupon
+                },
+                level_select: {
+                    show : this.level_select,
+                    url : this.level_select_url,
+                    name : this.level_select_name
+                },
+                filter_select: this.filter_select
+            }
+        });
     },
     _setCache(type, req, res, params, data, next, dates) {
         cache.cacheSet(cacheName, data, cacheTime, (err, success) => {

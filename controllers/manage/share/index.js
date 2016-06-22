@@ -6,6 +6,7 @@
 var api = require("../../../base/api"),
     help = require("../../../base/help"),
     config = require("../../../utils/config.json"),
+    orm = require("orm"),
     filter = require("../../../filters/share");
 
 module.exports = (Router) => {
@@ -23,7 +24,7 @@ module.exports = (Router) => {
             return filter.indexOne(data);
         },
         rows : [
-            ["shareTimeSum", "shareUserSum", "clickTimeSum", "clickUserSum", "rate"]
+            ["share_time_sum", "share_user_sum", "click_time_sum", "click_user_sum", "rate"]
         ],
         cols : [
             [
@@ -51,6 +52,9 @@ module.exports = (Router) => {
         router : "/share/indexTwo",
         modelName : ["ShareAnalyzeTrend"],
         platform : false,
+        fixedParams : {
+            share_source_name : "all"
+        },
         filter(data, filter_key, dates) {
             return filter.indexTwo(data, filter_key, dates);
         },
@@ -58,10 +62,10 @@ module.exports = (Router) => {
             title: '',
             filter_key: 'filter_key',
             groups: [{
-                key: 'sharetimesum',
+                key: 'share_time_sum',
                 value: '分享次数'
             }, {
-                key: 'shareusersum',
+                key: 'share_user_sum',
                 value: '分享人数'
             }, {
                 key: 'rate',
@@ -83,41 +87,52 @@ module.exports = (Router) => {
         router : "/share/indexFour",
         modelName : ["ShareAnalyzeTrend"],
         platform : false,
-        filter(data) {
-            return filter.indexFour(data);
+        paging : true,
+        date_picker_data : 1,
+        filter(data, filter_key, dates, filter_key2, page) {
+            return filter.indexFour(data, filter_key, page);
         },
-        //filter_select: [{
-        //    title: '',
-        //    filter_key: 'sharesource',
-        //    groups: [{
-        //        key: ["shop", "topic", "product", "group"],
-        //        value: '全部'
-        //    }, {
-        //        key: 'product',
-        //        value: '商品'
-        //    }, {
-        //        key: 'topic',
-        //        value: '话题'
-        //    }, {
-        //        key: 'shop',
-        //        value: '店铺'
-        //    }, {
-        //        key: 'group',
-        //        value: '圈子'
-        //    }]
-        //}],
+        fixedParams(query, filter_key, req, cb) {
+            if(filter_key === "all") {
+                query.share_source_name = "all";
+            } else {
+                query.share_source = filter_key;
+                query.share_source_name = orm.not_in(["all"]);
+            }
+            cb(null, query);
+        },
+        filter_select: [{
+            title: '',
+            filter_key: 'filter_key',
+            groups: [{
+                key: "all",
+                value: '全部'
+            }, {
+                key: 'product',
+                value: '商品'
+            }, {
+                key: 'topic',
+                value: '话题'
+            }, {
+                key: 'shop',
+                value: '店铺'
+            }, {
+                key: 'group',
+                value: '圈子'
+            }]
+        }],
         rows : [
-            ["share_source", "sharesource", "share_time_sum", "share_user_sum", "click_time_sum",
+            ["id", "share_source", "share_time_sum", "share_user_sum", "click_time_sum",
                 "click_user_sum", "rate", "operating"]
         ],
         cols : [
             [
                 {
-                    caption : "分享来源",
-                    type : "string"
+                    caption : "序号",
+                    type : "number"
                 },
                 {
-                    caption : "分享来源英文对照",
+                    caption : "分享来源",
                     type : "string"
                 },{
                     caption : "分享次数",
@@ -145,7 +160,13 @@ module.exports = (Router) => {
         router : "/share/operating",
         modelName : ["ShareAnalyzeChannelTrend"],
         platform : false,
-        //paging : true,
+        paging : true,
+        fixedParams(query, filter_key, req, cb) {
+            if(filter_key === "all") {
+                query.share_source_name = "all";
+            }
+            cb(null, query);
+        },
         filter(data, filter_key, dates) {
             return filter.operating(data);
         },

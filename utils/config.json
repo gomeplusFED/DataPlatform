@@ -16,19 +16,23 @@
     ]
   },
   "share" : {
-    "shop" : "店铺",
-    "product" : "商品",
-    "topic" : "话题",
-    "group" : "圈子",
-    "in-attention" : "关注的人",
-    "in-Chat" : "我的群聊",
-    "in-fensi" : "我的粉丝",
-    "in-quanzi" : "我的圈子",
-    "out-copylink" : "复制链接",
-    "out-QQ" : "QQ",
-    "out-Qqzone" : "QQ空间",
-    "out-weixin" : "微信",
-    "out-pyq" : "朋友圈",
-    "out-xlwb" : "新浪微博"
+    "source" : {
+      "shop" : "店铺",
+      "product" : "商品",
+      "topic" : "话题",
+      "group" : "圈子"
+    },
+    "channel" : {
+      "in-attention" : "关注的人",
+      "in-Chat" : "我的群聊",
+      "in-fensi" : "我的粉丝",
+      "in-quanzi" : "我的圈子",
+      "out-copylink" : "复制链接",
+      "out-QQ" : "QQ",
+      "out-Qqzone" : "QQ空间",
+      "out-weixin" : "微信",
+      "out-pyq" : "朋友圈",
+      "out-xlwb" : "新浪微博"
+    }
   }
 }

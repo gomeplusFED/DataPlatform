@@ -11,18 +11,18 @@ module.exports = {
     indexOne(data) {
         var source = data.data,
             obj = {
-                shareTimeSum : 0,
-                shareUserSum : 0,
-                clickTimeSum : 0,
-                clickUserSum : 0
+                share_time_sum : 0,
+                share_user_sum : 0,
+                click_time_sum : 0,
+                click_user_sum : 0
             };
         for(var key of source) {
-            obj.shareTimeSum += key.sharetimesum;
-            obj.shareUserSum += key.shareusersum;
-            obj.clickTimeSum += key.clicktimesum;
-            obj.clickUserSum += key.clickusersum;
+            obj.share_time_sum += key.share_time_sum;
+            obj.share_user_sum += key.share_user_sum;
+            obj.click_time_sum += key.click_time_sum;
+            obj.click_user_sum += key.click_user_sum;
         }
-        obj.rate = util.toFixed(obj.clickTimeSum, obj.shareTimeSum);
+        obj.rate = util.toFixed(obj.click_time_sum, obj.share_time_sum);
         return util.toTable([[obj]], data.rows, data.cols);
     },
     indexTwo(data, filter_key, dates) {
@@ -44,13 +44,19 @@ module.exports = {
             };
         }
 
+        if(filter_key === "rate") {
+            for(var key in map) {
+                map[key] = map[key] + "(%)";
+            }
+        }
+
         for(var key of source) {
             var date = util.getDate(key.date);
             if(filter_key !== "rate") {
-                newData[date][key.sharesource] = key[filter_key];
+                newData[date][key.share_source] = key[filter_key];
             } else {
-                newData[date][key.sharesource] =
-                    util.percentage(key.clicktimesum, key.sharetimesum);
+                newData[date][key.share_source] =
+                    util.toRound(key.click_time_sum, key.share_time_sum);
             }
         }
 
@@ -70,29 +76,28 @@ module.exports = {
             two = {},
             type = "pie",
             total_time = 0,
-            total_user = 0,
-            channels = _.uniq(_.pluck(source, "sharechannel"));
+            total_user = 0;
 
-        for(var key of channels) {
+        for(var key in config.channel) {
             obj[key] = {
-                shareusersum : 0,
-                sharetimesum : 0
+                share_user_sum : 0,
+                share_time_sum : 0
             };
         }
 
         for(var key of source) {
-            total_time += key.sharetimesum;
-            total_user += key.shareusersum;
-            obj[key.sharechannel].shareusersum += key.shareusersum;
-            obj[key.sharechannel].sharetimesum += key.sharetimesum;
+            total_time += key.share_time_sum;
+            total_user += key.share_user_sum;
+            obj[key.share_channel].share_user_sum += key.share_user_sum;
+            obj[key.share_channel].share_time_sum += key.share_time_sum;
         }
 
         for(var key in obj) {
-            one[config[key]] = {
-                value : util.toRound(obj[key].shareusersum, total_user)
+            one[config.channel[key]] = {
+                value : util.toRound(obj[key].share_user_sum, total_user)
             };
-            two[config[key]] = {
-                value : util.toRound(obj[key].sharetimesum, total_time)
+            two[config.channel[key]] = {
+                value : util.toRound(obj[key].share_time_sum, total_time)
             };
         }
 
@@ -116,81 +121,42 @@ module.exports = {
             }
         }];
     },
-    indexFour(data, shareSource) {
+    indexFour(data, filter_key, page)
+    {
         var source = data.data,
-            obj = {
-                shop : {},
-                product : {},
-                topic : {},
-                group : {}
-            },
-            newData = [];
+            count = data.dataCount,
+            page = page || 1,
+            sum = 1;
 
-        for(var key in obj) {
-            obj[key] = {
-                share_time_sum : 0,
-                share_user_sum : 0,
-                click_time_sum : 0,
-                click_user_sum : 0,
-                operating :  "<button class='btn btn-default' url_detail='/share/operating'>详情>></button>"
-            }
+        if(filter_key === "all") {
+            data.rows[0][1] = "share_source";
+            data.cols[0][1].caption = "分享来源";
+        } else {
+            data.rows[0][1] = "share_source_name";
+            data.cols[0][1].caption = config.source[filter_key];
         }
 
         for(var key of source) {
-            obj[key.sharesource].share_time_sum += key.sharetimesum;
-            obj[key.sharesource].share_user_sum += key.shareusersum;
-            obj[key.sharesource].click_time_sum += key.clicktimesum;
-            obj[key.sharesource].click_user_sum += key.clickusersum;
+            if(filter_key === "all") {
+                key.share_source = config.source[key.share_source];
+            }
+            key.id = (page - 1) * 20 + sum;
+            key.operating =  "<button class='btn btn-default' url_detail='/share/operating'>详情>></button>";
+            key.rate = util.toFixed(key.click_time_sum, key.share_time_sum);
+            sum++;
         }
 
-        for(var key in obj) {
-            newData.push({
-                share_source : config[key],
-                sharesource : key,
-                share_time_sum : obj[key].share_time_sum,
-                share_user_sum : obj[key].share_user_sum,
-                click_time_sum : obj[key].click_time_sum,
-                click_user_sum : obj[key].click_user_sum,
-                rate : util.toFixed(obj[key].click_time_sum, obj[key].share_time_sum),
-                operating : obj[key].operating
-            });
-        }
-
-        return util.toTable([newData], data.rows, data.cols);
+        return util.toTable([source], data.rows, data.cols, [count]);
     },
     operating(data) {
         var source = data.data,
-            channels = _.uniq(_.pluck(source, "sharechannel")),
-            obj = {},
-            newData = [];
-
-        for(var key of channels) {
-            obj[key] = {
-                share_time_sum : 0,
-                share_user_sum : 0,
-                click_time_sum : 0,
-                click_user_sum : 0
-            };
-        }
+            count = data.dataCount;
 
         for(var key of source) {
-            obj[key.sharechannel].share_time_sum += key.sharetimesum;
-            obj[key.sharechannel].share_user_sum += key.shareusersum;
-            obj[key.sharechannel].click_time_sum += key.clicktimesum;
-            obj[key.sharechannel].click_user_sum += key.clickusersum;
+            key.rate = util.toFixed(key.click_time_sum, key.share_time_sum);
+            key.share_channel = config.channel[key.share_channel];
         }
 
-        for(var key in obj) {
-            newData.push({
-                share_channel : config[key],
-                share_time_sum : obj[key].share_time_sum,
-                share_user_sum : obj[key].share_user_sum,
-                click_time_sum : obj[key].click_time_sum,
-                click_user_sum : obj[key].click_user_sum,
-                rate : util.toFixed(obj[key].click_time_sum, obj[key].share_time_sum)
-            });
-        }
-
-        return util.toTable([newData], data.rows, data.cols);
+        return util.toTable([source], data.rows, data.cols, [count]);
     }
 };
