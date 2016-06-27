@@ -149,8 +149,9 @@ module.exports = function(Router) {
                                                     }
                                                 } else {
                                                     //不存在本地用户,写入本地用户
+                                                    var name = entry.object.dn.match(/CN=(.*?)($|-|,)/)[1];
                                                     req.models.User2.create({
-                                                        name: entry.object.dn.match(/CN=(.*?)-/)[1],
+                                                        name: name,
                                                         username : entry.object.sAMAccountName,
                                                         email : email,
                                                         limited : "{}",
