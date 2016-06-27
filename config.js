@@ -109,7 +109,7 @@ module.exports = {
         },
         "9" : {
             name: "分享收藏",
-            display: true,
+            display: false,
             className: "fa fa-external-link fa-fw",
             href: "#",
             path: [
