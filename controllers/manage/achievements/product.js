@@ -230,8 +230,9 @@ module.exports = (Router) => {
             return filter.productFive(data, page);
         },
         rows : [
-            [ 'top', 'commodity_name', 'order_users', 'oder_products', 'order_price',
-                'order_price_rate', "refund_num" ]
+            [ 'top', 'commodity_name', 'order_users', 'oder_products',
+                'order_price', 'pay_users', 'pay_products',
+                'order_price', 'order_price_rate', "refund_num" ]
         ],
         cols : [
             [{
@@ -245,6 +246,15 @@ module.exports = (Router) => {
                 type: 'number'
             }, {
                 caption: '下单件数',
+                type: 'number'
+            },{
+                caption: '下单金额',
+                type: 'number'
+            },{
+                caption: '成交人数',
+                type: 'number'
+            },{
+                caption: '成交件数',
                 type: 'number'
             }, {
                 caption: '成交金额',
