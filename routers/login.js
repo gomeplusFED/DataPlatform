@@ -149,7 +149,7 @@ module.exports = function(Router) {
                                                     }
                                                 } else {
                                                     //不存在本地用户,写入本地用户
-                                                    var name = entry.object.dn.match(/CN=(.*?)($|-|,)/)[1];
+                                                    var name = entry.object.sn + entry.object.givenName;
                                                     req.models.User2.create({
                                                         name: name,
                                                         username : entry.object.sAMAccountName,
