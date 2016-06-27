@@ -49,11 +49,14 @@ module.exports = (Router) => {
         router : "/channelAnalysis/channelTwo",
         modelName : ["ChannelAnalysis", "ChannelIdNameChart"],
         platform : false,
+        paging : true,
         orderParams : {},
+        excel_export : true,
+        date_picker_data : 1,
+        showDayUnit : true,
         filter(data, filter_key, dates) {
             return filter.channelTwo(data);
         },
-        excel_export : true,
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
@@ -86,8 +89,7 @@ module.exports = (Router) => {
                     caption: '付费率',
                     type: 'string'
                 }, {
-                    caption: '操作',
-                    type: 'string'
+                    caption: '操作'
                 }
             ]
         ]

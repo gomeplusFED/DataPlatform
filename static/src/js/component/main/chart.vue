@@ -117,7 +117,7 @@ var Chart = Vue.extend({
 	            }
 		    })
 		},
-		rinseData: function(chartType,data,map,config){
+		rinseData: function(chartType, data, map, config){
 			var options = $.extend(true, {}, chartDataModel);
 			var xAxis = [];
 			var series = [];
@@ -144,7 +144,7 @@ var Chart = Vue.extend({
 			}
 			
 
-			if(legend.length > 10){
+			if(legend.length > 10 || chartType === 'pie'){
 				options.legend.orient = 'vertical';
 				options.legend.left = 0;
 			}

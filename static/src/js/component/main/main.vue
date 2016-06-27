@@ -65,7 +65,7 @@ var Main = Vue.extend({
 				day_type: 1
 			},
 			pageComponentsData: null,
-			resultArgvs: '',
+			resultArgvs: {},
 			count: 0,
 			canUpdate: false
 		}
@@ -131,9 +131,10 @@ var Main = Vue.extend({
 					if(!this.canUpdate){
 						// 解析query部分，添加到参数中去，可能存在query部分的参数和默认的参数重复，所以，后设置query里的参数，防止覆盖
 						if(this.$route.path.match(/\?(.*)/)){
+							var _this = this;
 							this.$route.path.match(/\?(.*)/)[1].split('&').forEach(function(item){
-								var _curr = item.split('=')
-								result[_curr[0]] = _curr[1];
+								var _curr = item.split('=');
+								Vue.set(_this.argvs, _curr[0], _curr[1]);
 							});
 						}
 					}

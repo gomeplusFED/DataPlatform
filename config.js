@@ -19,7 +19,7 @@ module.exports = {
     pageTitle: '',
     js: [],
     limit: {
-        "0": {
+        "0" : {
             name: "用户管理",
             display: true,
             className: "fa fa-user fa-fw",
@@ -38,7 +38,7 @@ module.exports = {
                 display: true
             }]
         },
-        "2": {
+        "2" : {
             name: "数据概览",
             display: true,
             className: "fa fa-dashboard fa-fw",
@@ -48,7 +48,7 @@ module.exports = {
                 obj.dataOverview.wap()
             ]
         },
-        "3": {
+        "3" : {
             name: "用户分析",
             display: true,
             className: "fa fa-bar-chart-o fa-fw",
@@ -61,7 +61,7 @@ module.exports = {
                 obj.retainedAnalysis.retained()
             ]
         },
-        "4": {
+        "4" : {
             name: "留存分析",
             display: false,
             className: "fa fa-th-list fa-fw",
@@ -71,7 +71,7 @@ module.exports = {
                 obj.retainedAnalysis.retained()
             ]
         },
-        "5": {
+        "5" : {
             name: "渠道分析",
             display: true,
             className: "fa  fa-laptop fa-fw",
@@ -83,7 +83,7 @@ module.exports = {
                 obj.channelAnalysis.channelOperating()
             ]
         },
-        "6": {
+        "6" : {
             name: "使用分析",
             display: true,
             className: "fa fa-th fa-fw",
@@ -96,7 +96,7 @@ module.exports = {
                 obj.useAnalysis.accessPageNum()
             ]
         },
-        "8": {
+        "8" : {
             name: "终端属性",
             display: true,
             className: "fa fa-tablet fa-fw",
@@ -107,14 +107,13 @@ module.exports = {
                 obj.terminal.provinces()
             ]
         },
-        "9": {
-            name: "分享数据",
+        "9" : {
+            name: "分享收藏",
             display: true,
             className: "fa fa-external-link fa-fw",
             href: "#",
             path: [
-                obj.share.inside(),
-                obj.share.outer()
+                obj.share.index()
             ]
         },
         "10": {
@@ -186,7 +185,7 @@ module.exports = {
             ],
             routers: []
         },
-        "17" : {
+        "17": {
             name : "社交分析",
             display : true,
             className : "fa  fa-laptop fa-fw",

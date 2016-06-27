@@ -101,50 +101,24 @@ module.exports = {
             config: { // 配置信息
                 stack: false // 图的堆叠
             }
-        }]
+        }];
     },
     channelTwo(data) {
         var source = data.data,
             orderSource = data.orderData,
-            obj = {},
-            channel = {},
-            newData = [];
+            count = data.dataCount,
+            channel = {};
 
         for(var key of orderSource) {
-            obj[key.channel_id] = [];
             channel[key.channel_id] = key.channel_name;
         }
 
         for(key of source) {
-            obj[key.channel_id].push(key);
+            key.operating =
+                `<button class='btn btn-default' url_link='/channelAnalysis/operating' url_fixed_params='{"channel_id": "${key.channel_id}"}'>详细>></button>`
+            key.rate = util.toFixed(key.consume_users_num, key.active_users_num);
         }
 
-        for(key in obj) {
-            var _obj = {
-                channel_id : key,
-                new_users_num : 0,
-                new_account_num : 0,
-                active_users_num : 0,
-                start_count : 0,
-                consume_users_num : 0,
-                operating : `
-                    <button class='btn btn-default'
-                    url_link='/channelAnalysis/operating'
-                    url_fixed_params='{"channel_id": "${key}"}'>详细>></button>
-                `
-            };
-            for(var k of obj[key]) {
-                _obj.new_users_num += k.new_users_num;
-                _obj.new_account_num += k.new_account_num;
-                _obj.active_users_num += k.active_users_num;
-                _obj.start_count += k.start_count;
-                _obj.consume_users_num += k.consume_users_num;
-            }
-            _obj.channel_name = channel[key];
-            _obj.rate = util.toFixed(_obj.consume_users_num, _obj.active_users_num);
-            newData.push(_obj);
-        }
-
-        return util.toTable([newData], data.rows, data.cols, [newData.length]);
+        return util.toTable([source], data.rows, data.cols, [count]);
     }
 };

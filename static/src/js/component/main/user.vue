@@ -270,7 +270,6 @@ var User = Vue.extend({
 		'm-pagination': Pagination,
 		'm-loading': Loading,
 		'm-alert': Alert,
-		'm-modal': ModalTable,
 		'm-limit-list': LimitList,
 		'm-confirm': Confirm
 	},

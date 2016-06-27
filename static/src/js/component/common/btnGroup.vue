@@ -49,7 +49,7 @@ var Btns = Vue.extend({
     props: ['index','pageComponentsData','componentType','argvs','initData','resultArgvs'],
     methods: {
         excel_export: function(ev){
-            var key = window.location.hash.replace('#!','');
+            var key = window.location.hash.replace('#!','').replace(/(\?.*)/, '');
             if (!(window.allPageConfig.userInfo.export[window.allPageConfig.page[key].id] && window.allPageConfig.userInfo.export[window.allPageConfig.page[key].id].length)) {
                 actions.alert(store, {
                     show: true,
@@ -59,7 +59,7 @@ var Btns = Vue.extend({
                 return;
             }
             
-            var key = location.hash.replace('#!', '');
+            var key = location.hash.replace('#!', '').replace(/(\?.*)/, '');
 
             actions.exportConfirm(store, {
                 show: true,

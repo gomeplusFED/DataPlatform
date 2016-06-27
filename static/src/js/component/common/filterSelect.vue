@@ -211,6 +211,7 @@ var FilterSelect = Vue.extend({
 				if(this.isFirstHandler && !this.isCell){
 					for(var i = 0;i < this.pageComponentsData[this.componentType].length;i++){
 						var _curr = this.pageComponentsData[this.componentType][i];
+						if(_curr.multi) continue;
 						if(_curr.groups.length > 5){
 							Vue.set(this.argvs, this.pageComponentsData[this.componentType][i].filter_key, _curr.groups[0].key);
 						}else{
