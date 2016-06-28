@@ -49,8 +49,11 @@ module.exports = (Router) => {
         router : "/channelAnalysis/channelTwo",
         modelName : ["ChannelAnalysis", "ChannelIdNameChart"],
         platform : false,
+        paging : true,
         orderParams : {},
         excel_export : true,
+        date_picker_data : 1,
+        showDayUnit : true,
         filter(data, filter_key, dates) {
             return filter.channelTwo(data);
         },
