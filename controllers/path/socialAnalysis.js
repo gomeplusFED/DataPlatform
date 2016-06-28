@@ -23,12 +23,12 @@ module.exports = {
                 },
                 {
                     type : "chart",
-                    title : "圈子类型分布",
+                    title : "圈子一级新增分布",
                     query_api : "/socialAnalysis/groupThree"
                 },
                 {
                     type : "chart",
-                    title : "圈子类型分布",
+                    title : "圈子二级新增分布",
                     query_api : "/socialAnalysis/groupFour"
                 },
                 {
@@ -58,12 +58,12 @@ module.exports = {
                 },
                 {
                     type : "chart",
-                    title : "圈子类型分布",
+                    title : "圈子一级新增分布",
                     query_api : "/socialAnalysis/topicsThree"
                 },
                 {
                     type : "chart",
-                    title : "圈子类型分布",
+                    title : "圈子二级新增分布",
                     query_api : "/socialAnalysis/topicsFour"
                 },
                 {
@@ -93,12 +93,12 @@ module.exports = {
                 },
                 {
                     type : "chart",
-                    title : "圈主类型分布",
+                    title : "新增圈主一级分布",
                     query_api : "/socialAnalysis/hostThree"
                 },
                 {
                     type : "chart",
-                    title : "圈主类型分布",
+                    title : "新增圈主二级分布",
                     query_api : "/socialAnalysis/hostFour"
                 },
                 {
