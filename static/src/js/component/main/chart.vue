@@ -58,7 +58,8 @@ var chartDataModel = {
 // echart 主模块，npm安装
 var echarts = require('echarts/lib/echarts');
 require('echarts/lib/component/legend'); // 图例
-require('echarts/lib/component/tooltip'); // 工具箱
+// require('echarts/lib/component/tooltip'); // 工具箱
+require('echarts/lib/component/toolbox'); // 工具箱
 require('echarts/lib/chart/bar'); // 柱状图
 require('echarts/lib/chart/line'); // 折线图
 require('echarts/lib/chart/pie'); // 饼图
