@@ -286,7 +286,8 @@ module.exports = (Router) => {
         },
         rows : [
             [ 'area', 'deal_money_amount', 'deal_money_ratio', 'deal_pro_num',
-                'deal_pro_ratio', 'cus_unit_price'
+                'deal_pro_ratio', 'cus_unit_price',
+                'buyersum', 'quantitysum', 'payordersum'
             ]
         ],
         cols : [
@@ -314,7 +315,19 @@ module.exports = (Router) => {
                 {
                     caption: '客单价',
                     type: 'number'
-                }
+                },
+                {
+                    caption: '成交人数',
+                    type: 'number'
+                },
+                {
+                    caption: '成交件数',
+                    type: 'number'
+                    },
+                    {
+                        caption: '成交订单量',
+                        type: 'number'
+                    }
             ]
         ]
     });

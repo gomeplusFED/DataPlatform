@@ -120,7 +120,8 @@ module.exports = {
             var key = source[i];
             key.top = (page - 1) * 20 + i + 1;
             key.order_price = key.order_price.toFixed(2);
-            key.order_price_rate = util.toFixed(key.order_price, sum[1]);
+            key.pay_price = key.pay_price.toFixed(2);
+            key.pay_price_rate = util.toFixed(key.pay_price, sum[1]);
         }
 
         return util.toTable([source], data.rows, data.cols, [count]);

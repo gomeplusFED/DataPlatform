@@ -218,7 +218,7 @@ module.exports = (Router) => {
         platform : false,
         paging : true,
         order : ["-order_price"],
-        sum : ["order_price"],
+        sum : ["pay_price"],
         date_picker_data : 1,
         showDayUnit : true,
         excel_export : true,
@@ -232,7 +232,7 @@ module.exports = (Router) => {
         rows : [
             [ 'top', 'commodity_name', 'order_users', 'oder_products',
                 'order_price', 'pay_users', 'pay_products',
-                'order_price', 'order_price_rate', "refund_num" ]
+                'pay_price', 'pay_price_rate', "refund_num" ]
         ],
         cols : [
             [{
