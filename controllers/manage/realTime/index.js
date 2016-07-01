@@ -109,41 +109,6 @@ module.exports = (Router) => {
                     ep.emit("pv", data);
                 }
             });
-            cluster.get(typeParams + ":pv", (err, data) => {
-                if(err) {
-                    error = true;
-                } else {
-                    ep.emit("pv", data);
-                }
-            });
-            cluster.get(typeParams + ":pv", (err, data) => {
-                if(err) {
-                    error = true;
-                } else {
-                    ep.emit("pv", data);
-                }
-            });
-            cluster.get(typeParams + ":pv", (err, data) => {
-                if(err) {
-                    error = true;
-                } else {
-                    ep.emit("pv", data);
-                }
-            });
-            cluster.get(typeParams + ":pv", (err, data) => {
-                if(err) {
-                    error = true;
-                } else {
-                    ep.emit("pv", data);
-                }
-            });
-            cluster.get(typeParams + ":pv", (err, data) => {
-                if(err) {
-                    error = true;
-                } else {
-                    ep.emit("pv", data);
-                }
-            });
         }
     });
 
