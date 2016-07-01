@@ -38,6 +38,15 @@ module.exports = {
                 display: true
             }]
         },
+        "1" : {
+            name: "实时分析",
+            display: true,
+            className: "fa fa-bar-chart-o fa-fw fa-fw",
+            href: "#",
+            path: [
+                obj.realTime.index()
+            ]
+        },
         "2" : {
             name: "数据概览",
             display: true,

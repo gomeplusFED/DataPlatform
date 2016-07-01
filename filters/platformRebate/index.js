@@ -179,7 +179,7 @@ module.exports = {
             } else {
                 objPie[key.level].value += key[filter_key];
             }
-            objBar[key.level][key.grade] += key[filter_key];
+            objBar[key.level][key.grade - 1] += key[filter_key];
         }
 
         if(filter_key !== "rebate_amount_count") {
