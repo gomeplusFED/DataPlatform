@@ -23,7 +23,7 @@ module.exports = {
                 },
                 {
                     type : "chart",
-                    title : "分享渠道分布",
+                    title : "分享渠道分布(分享人数分布-分享次数分布)",
                     query_api : "/share/indexThree"
                 },
                 {

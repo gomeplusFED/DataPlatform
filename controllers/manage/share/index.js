@@ -89,12 +89,17 @@ module.exports = (Router) => {
         platform : false,
         paging : true,
         date_picker_data : 1,
+        excel_export : true,
         filter(data, filter_key, dates, filter_key2, page) {
             return filter.indexFour(data, filter_key, page);
         },
+        flexible_btn : [{
+            content: '<a href="javascript:void(0)">导出</a>',
+            preMethods: ['excel_export']
+        }],
         fixedParams(query, filter_key, req, cb) {
             if(filter_key === "all") {
-                query.share_source_name = "all";
+                query.share_source_name = ["all"];
             } else {
                 query.share_source = filter_key;
                 query.share_source_name = orm.not_in(["all"]);
@@ -108,16 +113,16 @@ module.exports = (Router) => {
                 key: "all",
                 value: '全部'
             }, {
-                key: 'product',
+                key: '商品',
                 value: '商品'
             }, {
-                key: 'topic',
+                key: '话题',
                 value: '话题'
             }, {
-                key: 'shop',
+                key: '店铺',
                 value: '店铺'
             }, {
-                key: 'group',
+                key: '圈子',
                 value: '圈子'
             }]
         }],
@@ -164,6 +169,8 @@ module.exports = (Router) => {
         fixedParams(query, filter_key, req, cb) {
             if(filter_key === "all") {
                 query.share_source_name = "all";
+            } else {
+                query.share_source = filter_key;
             }
             cb(null, query);
         },
