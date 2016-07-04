@@ -26,7 +26,7 @@ function connect(app) {
     app.use(orm.express('mysql://' + mysql.username + ':' + mysql.pwd + '@' + mysql.host + '/' + mysql.database + '?timezone=CST', {
         define: function(db, models, next) {
             db.settings.set('instance.cache', false);
-            db.settings.set('instance.autoFetch', true);
+            //db.settings.set('instance.autoFetch', true);
             //db.settings.set('instance.autoFetchLimit', 9999);
             //db.settings.set('instance.cacheSaveCheck', false);
             //db.settings.set('instance.autoSave', true);

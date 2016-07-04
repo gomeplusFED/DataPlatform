@@ -19,7 +19,6 @@
     "cookie-session": "2.0.0-alpha.1",
     "echarts": "^3.1.5",
     "ejs": "2.3.4",
-    "eventproxy": "^0.3.4",
     "excel-export": "^0.4.1",
     "express": "4.x",
     "flashify": "0.1.2",

@@ -25,8 +25,9 @@ var redis = require("ioredis"),
             host : "bj01-ops-rdsc06.test.gomeplus.com"
         }
     ]),
-    moment = require("moment"),
-    EventProxy = require("eventproxy");
+    async = require("asyncawait/async"),
+    await = require("asyncawait/await"),
+    moment = require("moment");
 
 
 module.exports = (Router) => {
@@ -136,4 +137,8 @@ function _render(res, sendData, modules) {
             filter_select: modules.filter_select
         }
     })
+}
+
+async function _find(options) {
+    return new promise((resolve, rejest));
 }
