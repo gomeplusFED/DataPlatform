@@ -40,7 +40,7 @@ module.exports = {
         },
         "1" : {
             name: "实时分析",
-            display: true,
+            display: false,
             className: "fa fa-bar-chart-o fa-fw fa-fw",
             href: "#",
             path: [
