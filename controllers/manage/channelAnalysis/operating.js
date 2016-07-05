@@ -8,13 +8,14 @@ var api = require("../../../base/api"),
     orm = require("orm"),
     util = require("../../../utils"),
     config = require("../../../utils/config.json"),
+    moment = require("moment"),
     filter = require("../../../filters/channelAnalysis/operating");
 
 module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/channelAnalysis/operatingOne",
-        modelName : ["ChannelUserActive", "ChannelUserKeep"],
+        modelName : ["ChannelUserActive", "ChannelUserKeep", "ChannelUserKeep", "ChannelUserKeep"],
         platform : false,
         date_picker : false,
         fixedParams(query, filter_key, req, cb) {
@@ -25,6 +26,30 @@ module.exports = (Router) => {
             _query.channel_id = query.channel_id;
             _query.day_type = 1;
             cb(null, _query);
+        },
+        orderParams(query) {
+            var _query = {},
+                date = moment(new Date() - 2 * 24 * 60 * 60 * 1000).format("YYYY-MM-DD");
+            _query.date = orm.between(new Date(date + " 00:00:00"), new Date(date + " 23:59:59"));
+            _query.channel_id = query.channel_id;
+            _query.day_type = 1;
+            return _query;
+        },
+        thirdParams(query) {
+            var _query = {},
+                date = moment(new Date() - 3 * 24 * 60 * 60 * 1000).format("YYYY-MM-DD");
+            _query.date = orm.between(new Date(date + " 00:00:00"), new Date(date + " 23:59:59"));
+            _query.channel_id = query.channel_id;
+            _query.day_type = 1;
+            return _query;
+        },
+        fourParams(query) {
+            var _query = {},
+                date = moment(new Date() - 7 * 24 * 60 * 60 * 1000).format("YYYY-MM-DD");
+            _query.date = orm.between(new Date(date + " 00:00:00"), new Date(date + " 23:59:59"));
+            _query.channel_id = query.channel_id;
+            _query.day_type = 1;
+            return _query;
         },
         flexible_btn: [{
             content: '<a href="javascript:void(0)" help_url="/channelAnalysis/channelOperating_json">帮助</a>',

@@ -11,6 +11,8 @@ module.exports = {
     channelOne(data) {
         var source = data.data,
             orderSource = data.orderData,
+            threeSource = data.thirdData,
+            fourSource = data.fourParams,
             oneObj = {
                 "0" : 0,
                 "1" : 0,
@@ -24,8 +26,21 @@ module.exports = {
         for(var key of source) {
             oneObj[key.active_type] += key.active_num;
         }
+
         for(key of orderSource) {
-            twoObj[key.keep_type] += key.keep_rate;
+            if(key.keep_type === "0") {
+                twoObj[key.keep_type] += key.keep_rate;
+            }
+        }
+        for(var key of threeSource) {
+            if(key.keep_type === "1") {
+                twoObj[key.keep_type] += key.keep_rate;
+            }
+        }
+        for(var key of fourSource) {
+            if(key.keep_type === "2") {
+                twoObj[key.keep_type] += key.keep_rate;
+            }
         }
         for(key in twoObj) {
             twoObj[key] = (twoObj[key] * 100).toFixed(2) + "%";
