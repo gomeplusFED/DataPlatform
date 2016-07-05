@@ -183,6 +183,10 @@ exports.round = function(one, two) {
     return Math.round((one / (two === 0 ? 1 : two)));
 };
 
+exports.contrast = function(one, two) {
+    return (one - two) / (two === 0 ? 1 : two);
+};
+
 exports.ceil = function(one, two) {
     return Math.ceil((one / (two === 0 ? 1 : two)));
 };

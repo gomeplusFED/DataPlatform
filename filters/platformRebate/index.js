@@ -173,7 +173,7 @@ module.exports = {
         }
         for(key of source) {
             if(filter_key !== "rebate_amount_count") {
-                if(key.grade === "0") {
+                if(key.grade === "1") {
                     objPie[key.level].value += key[filter_key];
                 }
             } else {
@@ -246,7 +246,7 @@ module.exports = {
         }
         for(key of source) {
             if(filter_key !== "rebate_amount_count") {
-                if(key.grade === "0") {
+                if(key.grade === "1") {
                     obj[key.user_party].value += Math.round(key[filter_key]);
                 }
             } else {
