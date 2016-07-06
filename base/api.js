@@ -293,7 +293,7 @@ api.prototype = {
                     this.filter_key || this.key_type || this.sku_type,
                     dates,
                     this.filter_key2,
-                    this.page,
+                    _params.page,
                     _params
                 );
             }
