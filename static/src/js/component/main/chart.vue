@@ -173,17 +173,17 @@ var Chart = Vue.extend({
 				_currentObj.stack = config.stack ? 'stack' : '';
 				_currentObj.data = [];
 				_currentObj.name = map[item];
-				_currentObj.data = [];
 				for (var dataItem in data) {
 					_currentObj.data.push({
 						value: data[dataItem][item],
 						name: dataItem
 					});
 				}
+				var _curr = _currentObj;
 				if (chartType === 'map') {
-					_currentObj = $.extend(true, mapDefaultSeries, _currentObj);
+					_curr = Object.assign(mapDefaultSeries, _currentObj);
 				}
-				series.push(_currentObj);
+				series.push(_curr);
 			}
 
 			if (legend.length > 10 || chartType === 'pie') {
