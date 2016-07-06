@@ -212,6 +212,7 @@ var Chart = Vue.extend({
 
 			if (chartType === 'pie') {
 				options.legend.data = xAxis;
+				options.tooltip.formatter = '{a} <br/>{b} : {c} ({d}%)';
 				delete options.xAxis;
 				delete options.yAxis;
 				delete options.grid;
@@ -223,7 +224,6 @@ var Chart = Vue.extend({
 				delete options.grid;
 				delete options.xAxis;
 				delete options.yAxis;
-				this.chartHeight = 600;
 			}
 			return options;
 		}
@@ -239,10 +239,20 @@ var Chart = Vue.extend({
 					this.fetchData(function(data) {
 						_this.chartData = data.modelData;
 						_this.chartData.forEach(function(item, domIndex) {
+							if (Object.keys(item.data).length === 0) {
+								return;
+							}
 							var chartOptions = _this.rinseData(item.type, item.data, item.map, item.config);
 							setTimeout(function() {
 								if (chartOptions.series[0].data.length) {
 									var Chart = echarts.init($('#chart_' + _this.index).find('.chart_con').eq(domIndex)[0]);
+									_this.chartHeight = 400;
+									if (item.type === 'map') {
+										_this.chartHeight = 800;
+									}
+									setTimeout(function() {
+										Chart.resize({});
+									}, 1);
 									Chart.setOption(chartOptions);
 								}
 							}, 1);
