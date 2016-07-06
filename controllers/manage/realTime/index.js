@@ -413,7 +413,7 @@ module.exports = (Router) => {
                 try{
                     var key = "js:" + type[params.type] + date + ":" + end;
                     var data = await(_customFind([
-                        "zrevrange", key, 0, 10, "WITHSCORES"
+                        "zrevrange", key, 0, 9, "WITHSCORES"
                     ]));
                     //var array = [];
                     //for(var i = 0; i < data[1].length; i++) {
