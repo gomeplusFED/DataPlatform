@@ -99,6 +99,7 @@ require('echarts/lib/component/toolbox'); // 工具箱
 require('echarts/lib/chart/bar'); // 柱状图
 require('echarts/lib/chart/line'); // 折线图
 require('echarts/lib/chart/pie'); // 饼图
+require('echarts/map/js/china.js');
 
 var store = require('../../store/store.js');
 var actions = require('../../store/actions.js');
