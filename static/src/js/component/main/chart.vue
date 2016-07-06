@@ -1,6 +1,6 @@
 <template>
 	<div :id="'chart_'+index" class="chart" v-show="checkIsChart()">
-		<div class="chart_con" v-for="item in chartData" style="height: 400px;width: 100%;">
+		<div class="chart_con" v-for="item in chartData" style="width: 100%;" :style="{'height': chartHeight + 'px'}">
 			<div class="nodata all_center">
 				<img src="/dist/img/nodata.png">
 				<span>暂无数据</span>
@@ -99,6 +99,7 @@ require('echarts/lib/component/toolbox'); // 工具箱
 require('echarts/lib/chart/bar'); // 柱状图
 require('echarts/lib/chart/line'); // 折线图
 require('echarts/lib/chart/pie'); // 饼图
+require('echarts/map/js/china.js');
 
 var store = require('../../store/store.js');
 var actions = require('../../store/actions.js');
@@ -108,7 +109,8 @@ var Chart = Vue.extend({
 	data: function() {
 		return {
 			initEd: false,
-			chartData: []
+			chartData: [],
+			chartHeight: 400
 		};
 	},
 	vuex: {
@@ -210,6 +212,7 @@ var Chart = Vue.extend({
 
 			if (chartType === 'pie') {
 				options.legend.data = xAxis;
+				options.tooltip.formatter = '{a} <br/>{b} : {c} ({d}%)';
 				delete options.xAxis;
 				delete options.yAxis;
 				delete options.grid;
@@ -218,8 +221,10 @@ var Chart = Vue.extend({
 			if (chartType === 'map') {
 				options.visualMap = visualMap;
 				options.visualMap.max = config.mapMaxValue;
+				delete options.grid;
+				delete options.xAxis;
+				delete options.yAxis;
 			}
-
 			return options;
 		}
 	},
@@ -234,10 +239,20 @@ var Chart = Vue.extend({
 					this.fetchData(function(data) {
 						_this.chartData = data.modelData;
 						_this.chartData.forEach(function(item, domIndex) {
+							if (Object.keys(item.data).length === 0) {
+								return;
+							}
 							var chartOptions = _this.rinseData(item.type, item.data, item.map, item.config);
 							setTimeout(function() {
 								if (chartOptions.series[0].data.length) {
 									var Chart = echarts.init($('#chart_' + _this.index).find('.chart_con').eq(domIndex)[0]);
+									_this.chartHeight = 400;
+									if (item.type === 'map') {
+										_this.chartHeight = 800;
+									}
+									setTimeout(function() {
+										Chart.resize({});
+									}, 1);
 									Chart.setOption(chartOptions);
 								}
 							}, 1);
