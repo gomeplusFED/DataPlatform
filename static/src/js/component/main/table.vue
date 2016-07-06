@@ -147,13 +147,6 @@ var Table = Vue.extend({
 					}
 				}
 
-				// if(this.hasRequestUrl !== null && this.hasRequestUrl === url){
-				//     actions.modalTable(store, {
-				//         show: true,
-				//     });
-				//     return;
-				// }
-
 				$.ajax({
 					url: urlDetail + '_json',
 					type: 'get',
@@ -163,7 +156,7 @@ var Table = Vue.extend({
 						var tableData = data.modelData[0];
 						actions.modalTable(store, {
 							show: true,
-							title: '帮助信息',
+							title: '详情',
 							data: tableData,
 							query_api: urlDetail + '_json',
 							query_parmas: params
