@@ -93,6 +93,7 @@ function connect(app) {
             models.ShareAnalyzeTrend = db.define("tbl_rt_share_analyze_trend", obj.ShareAnalyzeTrend);
             models.ShareAnalyzeChannel = db.define("tbl_rt_share_analyze_channel", obj.ShareAnalyzeChannel);
             models.ShareAnalyzeChannelTrend = db.define("tbl_rt_share_analyze_channel_trend", obj.ShareAnalyzeChannelTrend);
+            models.UrlToName = db.define("tbl_rt_url_to_name", obj.UrlToName);
             models.db1 = db;
             next();
         }

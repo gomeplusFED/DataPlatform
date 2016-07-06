@@ -34,7 +34,7 @@ module.exports = (Router) => {
                 caption: "新增圈子数",
                 type: "number"
             }, {
-                caption: "新增入圈户数",
+                caption: "新增入圈用户数",
                 type: "number"
             }, {
                 caption: "新增入圈用户率", // = 新增入圈用户数 / 注册用户数

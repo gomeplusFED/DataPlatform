@@ -4,6 +4,7 @@
  * @fileoverview 实时分析
  */
 var moment = require("moment"),
+    area = require("../../utils/config.json").area,
     util = require("../../utils");
 
 module.exports = {
@@ -162,7 +163,7 @@ module.exports = {
                 two : "对比"
             };
 
-        for(var i = 1; i < +hour + 2; i++) {
+        for(var i = 0; i < +hour + 1; i++) {
             newData[i + ":00-" + (i + 1) + ":00"] = {
                 one : 0,
                 two : 0
@@ -174,7 +175,7 @@ module.exports = {
                 for(var i = 0; i < +hour + 1; i++) {
                     if(data["0"][option[0]][i] &&
                         data["0"][option[1]][i]) {
-                        newData[(i + 1) + ":00-" + (i + 2) + ":00"].one =
+                        newData[i + ":00-" + (i + 1) + ":00"].one =
                             util.percentage(
                                 data["0"][option[0]][i],
                                 data["0"][option[1]][i]
@@ -182,7 +183,7 @@ module.exports = {
                     }
                     if(data["1"][option[0]][i] &&
                         data["1"][option[1]][i]) {
-                        newData[(i + 1) + ":00-" + (i + 2) + ":00"].two =
+                        newData[i + ":00-" + (i + 1) + ":00"].two =
                             util.percentage(
                                 data["1"][option[0]][i],
                                 data["1"][option[1]][i]
@@ -193,7 +194,7 @@ module.exports = {
                 for(var i = 0; i < +hour + 1; i++) {
                     if(data["0"][option[0]][i] &&
                         data["0"][option[1]][i]) {
-                        newData[(i + 1) + ":00-" + (i + 2) + ":00"].one =
+                        newData[i + ":00-" + (i + 1) + ":00"].one =
                             util.round(
                                 data["0"][option[0]][i],
                                 data["0"][option[1]][i]
@@ -201,7 +202,7 @@ module.exports = {
                     }
                     if(data["1"][option[0]][i] &&
                         data["1"][option[1]][i]) {
-                        newData[(i + 1) + ":00-" + (i + 2) + ":00"].two =
+                        newData[i + ":00-" + (i + 1) + ":00"].two =
                             util.round(
                                 data["1"][option[0]][i],
                                 data["1"][option[1]][i]
@@ -212,11 +213,11 @@ module.exports = {
         } else {
             for(var i = 0; i < +hour + 1; i++) {
                 if(data["0"][option[0]][i]) {
-                    newData[(i + 1) + ":00-" + (i + 2) + ":00"].one =
+                    newData[i + ":00-" + (i + 1) + ":00"].one =
                         data["0"][option[0]][i];
                 }
                 if(data["1"][option[0]][i]) {
-                    newData[(i + 1) + ":00-" + (i + 2) + ":00"].two =
+                    newData[i + ":00-" + (i + 1) + ":00"].two =
                         data["1"][option[0]][i];
                 }
             }
@@ -235,6 +236,60 @@ module.exports = {
                     dataView: {readOnly: true}
                 }
             }
+        }]
+    },
+    three(data, type, chartType) {
+        var maps = {
+            "ios" : {
+                pv : "启动用户"
+                //uv : "启动次数"
+            },
+            "android" : {
+                pv : "启动用户"
+                //uv : "启动次数"
+            },
+            "PC" : {
+                pv : "浏览量"
+                //uv : "访客数"
+            },
+            "H5" : {
+                pv : "浏览量"
+                //uv : "访客数"
+            }
+        },
+            config = {
+                "map" : {
+                    stack: false,
+                    toolBox : {
+                        dataView: {readOnly: true}
+                    }
+                },
+                "pie" : {
+                    stack: false,
+                    toolBox : {
+                        dataView: {readOnly: true}
+                    }
+                }
+            },
+            newData = {};
+
+        if(data[0][1][1]) {
+            config.map.mapMaxValue = data[0][1][1];
+        }
+
+        for(var i = 0; i < data[0][1].length; i++) {
+            if(i%2 === 0) {
+                newData[area[data[0][1][i]]] = {
+                    pv : data[0][1][i + 1]
+                };
+            }
+        }
+
+        return [{
+            map : maps[type],
+            type : chartType,
+            config : config[chartType],
+            data : newData
         }]
     }
 };

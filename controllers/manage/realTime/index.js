@@ -261,28 +261,25 @@ module.exports = (Router) => {
                 }]
             };
 
-        if(params.type === " PC" || params.type === "H5") {
-            for(var key in pc) {
-                modules.filter_select[0].groups[2].cell.groups.push({
-                    key : pc[key],
-                    value : key
-                });
-                modules.filter_select[0].groups[3].cell.groups.push({
-                    key : pc[key],
-                    value : key
-                });
-            }
-        } else {
-            for(var key in ios) {
-                modules.filter_select[0].groups[0].cell.groups.push({
-                    key : ios[key],
-                    value : key
-                });
-                modules.filter_select[0].groups[1].cell.groups.push({
-                    key : ios[key],
-                    value : key
-                });
-            }
+        for(var key in pc) {
+            modules.filter_select[0].groups[2].cell.groups.push({
+                key : pc[key],
+                value : key
+            });
+            modules.filter_select[0].groups[3].cell.groups.push({
+                key : pc[key],
+                value : key
+            });
+        }
+        for(var key in ios) {
+            modules.filter_select[0].groups[0].cell.groups.push({
+                key : ios[key],
+                value : key
+            });
+            modules.filter_select[0].groups[1].cell.groups.push({
+                key : ios[key],
+                value : key
+            });
         }
         if(Object.keys(params).length === 0) {
             _render(res, [], modules);
@@ -341,6 +338,100 @@ module.exports = (Router) => {
         }
     });
 
+    Router = Router.get("/realTime/three_json", (req, res, next) => {
+        var params = req.query,
+            //date = moment(new Date()).format("MMDD"),
+            date = "0704",
+            hour = moment(new Date()).format("HH"),
+            end = "",
+            modules = {
+                flexible_btn : [],
+                filter_select : [{
+                    title: '',
+                    filter_key: 'type',
+                    groups: [{
+                        key: 'ios',
+                        value: 'ios'
+                    }, {
+                        key: 'android',
+                        value: 'android'
+                    }, {
+                        key: 'PC',
+                        value: 'PC'
+                    }, {
+                        key: 'H5',
+                        value: 'H5'
+                    }]
+                }, {
+                    title: '时段选择',
+                    filter_key: 'hour',
+                    groups: [{
+                        key : "all",
+                        value : "全时段"
+                    }]
+                }, {
+                    title: '',
+                    filter_key: 'chartType',
+                    groups: [{
+                        key : "map",
+                        value : "地图"
+                    }, {
+                        key : "pie",
+                        value : "饼状图"
+                    }]
+                }]
+            };
+
+        for(var i = 0; i < +hour + 1; i++) {
+            if(i >= 10) {
+                modules.filter_select[1].groups.push({
+                    key : i + "",
+                    value : i + ":00-" + (i + 1) + ":00"
+                });
+            } else {
+                modules.filter_select[1].groups.push({
+                    key : "0" + i,
+                    value : i + ":00-" + (i + 1) + ":00"
+                });
+            }
+        }
+
+        if(params.hour !== "all") {
+            date += params.hour;
+        }
+
+        if(params.type === "PC" || params === "H5") {
+            end = "pro_pv"
+        } else {
+            end = "pro_startcount"
+        }
+
+        if(Object.keys(params).length === 0) {
+            _render(res, [], modules);
+        } else {
+            async(() => {
+                try{
+                    var key = "js:" + type[params.type] + date + ":" + end;
+                    var data = await(_customFind([
+                        "zrevrange", key, 0, 10, "WITHSCORES"
+                    ]));
+                    //var array = [];
+                    //for(var i = 0; i < data[1].length; i++) {
+                    //    if(i%2 === 0) {
+                    //        array.push([
+                    //            "zscore", "js:" + type[params.type] + date + ":pro_uv"
+                    //        ]);
+                    //    }
+                    //}
+                    //var uvs = await(_customFind(array));
+                    _render(res, filter.three(data, params.type, params.chartType), modules);
+                } catch(err) {
+                    next(err);
+                }
+            })();
+        }
+    });
+
     return Router;
 };
 
@@ -371,4 +462,18 @@ var _find = async((key) => {
             }
         })
     })
+});
+
+var _customFind = async((key) => {
+    return new Promise((resolve, reject) => {
+        cluster.pipeline([
+            key
+        ]).exec((err, data) => {
+            if(err) {
+                reject(err);
+            } else {
+                resolve(data);
+            }
+        });
+    });
 });

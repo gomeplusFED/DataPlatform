@@ -20,11 +20,11 @@ module.exports = {
                     type : "chart",
                     title : "实时趋势",
                     query_api : "/realTime/two"
-                //},
-                //{
-                //    type : "table",
-                //    title : "实时地域分布TOP10",
-                //    query_api : "/realTime/three"
+                },
+                {
+                    type : "chart",
+                    title : "实时地域分布TOP10",
+                    query_api : "/realTime/three"
                 //},
                 //{
                 //    type : "table",
