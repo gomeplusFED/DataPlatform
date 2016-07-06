@@ -8,14 +8,29 @@
 		</div>
 	</div>
 </template>
-
 <style>
-.chart_con {background: #fff;}
-.chart_con .nodata{text-align: center;}
-.chart_con .nodata img{display: block;width: 100px;}
-.chart_con .nodata span{display: block;position: absolute;font-size: 14px;color: #000;width: 100%;text-align: center;}
-</style>
+.chart_con {
+	background: #fff;
+}
 
+.chart_con .nodata {
+	text-align: center;
+}
+
+.chart_con .nodata img {
+	display: block;
+	width: 100px;
+}
+
+.chart_con .nodata span {
+	display: block;
+	position: absolute;
+	font-size: 14px;
+	color: #000;
+	width: 100%;
+	text-align: center;
+}
+</style>
 <script>
 /*
  * 组件说明
@@ -53,6 +68,27 @@ var chartDataModel = {
 		type: 'value'
 	},
 	series: [] // 数据列
+};
+
+var visualMap = {
+	min: 0,
+	max: 2500,
+	left: 'left',
+	top: 'bottom',
+	calculable: true
+};
+
+var mapDefaultSeries = {
+	mapType: 'china',
+	roam: false,
+	label: {
+		normal: {
+			show: true
+		},
+		emphasis: {
+			show: true
+		}
+	}
 };
 
 // echart 主模块，npm安装
@@ -115,7 +151,7 @@ var Chart = Vue.extend({
 				error: function(jqXHR, status, errorThrown) {
 					if (status === 'timeout') {
 						errcb && errcb();
-					} ;
+					};
 				}
 			});
 		},
@@ -127,7 +163,7 @@ var Chart = Vue.extend({
 			for (var item in data) {
 				xAxis.push(item);
 			}
-			for (var item in map) {
+			for (let item in map) {
 				legend.push(map[item]);
 				var _currentObj = {};
 				_currentObj.type = chartType;
@@ -141,6 +177,9 @@ var Chart = Vue.extend({
 						value: data[dataItem][item],
 						name: dataItem
 					});
+				}
+				if (chartType === 'map') {
+					_currentObj = $.extend(true, mapDefaultSeries, _currentObj);
 				}
 				series.push(_currentObj);
 			}
@@ -175,6 +214,12 @@ var Chart = Vue.extend({
 				delete options.yAxis;
 				delete options.grid;
 			}
+
+			if (chartType === 'map') {
+				options.visualMap = visualMap;
+				options.visualMap.max = config.mapMaxValue;
+			}
+
 			return options;
 		}
 	},
@@ -221,5 +266,4 @@ var Chart = Vue.extend({
 });
 
 module.exports = Chart;
-
 </script>
