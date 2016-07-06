@@ -280,7 +280,7 @@ module.exports = {
         for(var i = 0; i < data[0][1].length; i++) {
             if(i%2 === 0) {
                 newData[area[data[0][1][i]]] = {
-                    pv : data[0][1][i + 1]
+                    pv : +data[0][1][i + 1]
                 };
             }
         }
