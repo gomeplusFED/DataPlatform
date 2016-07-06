@@ -274,7 +274,7 @@ module.exports = {
             newData = {};
 
         if(data[0][1][1]) {
-            config.map.mapMaxValue = data[0][1][1];
+            config.map.mapMaxValue = +data[0][1][1];
         }
 
         for(var i = 0; i < data[0][1].length; i++) {
