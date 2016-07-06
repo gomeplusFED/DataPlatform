@@ -22,7 +22,7 @@ module.exports = {
                     query_api : "/realTime/two"
                 },
                 {
-                    type : "table",
+                    type : "chart",
                     title : "实时地域分布TOP10",
                     query_api : "/realTime/three"
                 //},

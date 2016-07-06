@@ -4,6 +4,7 @@
  * @fileoverview 实时分析
  */
 var moment = require("moment"),
+    area = require("../../utils/config.json").area,
     util = require("../../utils");
 
 module.exports = {
@@ -235,6 +236,60 @@ module.exports = {
                     dataView: {readOnly: true}
                 }
             }
+        }]
+    },
+    three(data, type, chartType) {
+        var maps = {
+            "ios" : {
+                pv : "启动用户"
+                //uv : "启动次数"
+            },
+            "android" : {
+                pv : "启动用户"
+                //uv : "启动次数"
+            },
+            "PC" : {
+                pv : "浏览量"
+                //uv : "访客数"
+            },
+            "H5" : {
+                pv : "浏览量"
+                //uv : "访客数"
+            }
+        },
+            config = {
+                "map" : {
+                    stack: false,
+                    toolBox : {
+                        dataView: {readOnly: true}
+                    }
+                },
+                "pie" : {
+                    stack: false,
+                    toolBox : {
+                        dataView: {readOnly: true}
+                    }
+                }
+            },
+            newData = {};
+
+        if(data[0][1][1]) {
+            config.map.mapMaxValue = data[0][1][1];
+        }
+
+        for(var i = 0; i < data[0][1].length; i++) {
+            if(i%2 === 0) {
+                newData[area[data[0][1][i]]] = {
+                    pv : data[0][1][i + 1]
+                };
+            }
+        }
+
+        return [{
+            map : maps[type],
+            type : chartType,
+            config : config[chartType],
+            data : newData
         }]
     }
 };

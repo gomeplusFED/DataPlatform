@@ -340,8 +340,10 @@ module.exports = (Router) => {
 
     Router = Router.get("/realTime/three_json", (req, res, next) => {
         var params = req.query,
-            date = moment(new Date()).format("MMDD"),
+            //date = moment(new Date()).format("MMDD"),
+            date = "0704",
             hour = moment(new Date()).format("HH"),
+            end = "",
             modules = {
                 flexible_btn : [],
                 filter_select : [{
@@ -371,7 +373,7 @@ module.exports = (Router) => {
                     title: '',
                     filter_key: 'chartType',
                     groups: [{
-                        key : "area",
+                        key : "map",
                         value : "地图"
                     }, {
                         key : "pie",
@@ -395,13 +397,38 @@ module.exports = (Router) => {
         }
 
         if(params.hour !== "all") {
-            date += params.hours;
+            date += params.hour;
+        }
+
+        if(params.type === "PC" || params === "H5") {
+            end = "pro_pv"
+        } else {
+            end = "pro_startcount"
         }
 
         if(Object.keys(params).length === 0) {
             _render(res, [], modules);
         } else {
-
+            async(() => {
+                try{
+                    var key = "js:" + type[params.type] + date + ":" + end;
+                    var data = await(_customFind([
+                        "zrevrange", key, 0, 10, "WITHSCORES"
+                    ]));
+                    //var array = [];
+                    //for(var i = 0; i < data[1].length; i++) {
+                    //    if(i%2 === 0) {
+                    //        array.push([
+                    //            "zscore", "js:" + type[params.type] + date + ":pro_uv"
+                    //        ]);
+                    //    }
+                    //}
+                    //var uvs = await(_customFind(array));
+                    _render(res, filter.three(data, params.type, params.chartType), modules);
+                } catch(err) {
+                    next(err);
+                }
+            })();
         }
     });
 
@@ -440,7 +467,7 @@ var _find = async((key) => {
 var _customFind = async((key) => {
     return new Promise((resolve, reject) => {
         cluster.pipeline([
-
+            key
         ]).exec((err, data) => {
             if(err) {
                 reject(err);
