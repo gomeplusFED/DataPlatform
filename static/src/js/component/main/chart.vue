@@ -240,7 +240,6 @@ var Chart = Vue.extend({
 						_this.chartData = data.modelData;
 						_this.chartData.forEach(function(item, domIndex) {
 							var chartOptions = _this.rinseData(item.type, item.data, item.map, item.config);
-							console.log(item.type);
 							setTimeout(function() {
 								if (chartOptions.series[0].data.length) {
 									var Chart = echarts.init($('#chart_' + _this.index).find('.chart_con').eq(domIndex)[0]);
