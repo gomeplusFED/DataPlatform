@@ -30,24 +30,24 @@
 			</div>
 			<div class="group" v-else>
 				<strong>{{item.title}}{{item.title === '' ? '' : '：'}}</strong>
-				<div class="btn_group" v-if="!isCell">
+				<div class="btn_group" v-if="isCell[pageComponentsDataIndex]">
+					<select @change="extraSelect($event,pageComponentsDataIndex)">
+						<option v-for="group in item.groups" :value="group.key">{{group.value}}</option>
+					</select>
+					<div class="cell_select" v-for="cell in cellData[pageComponentsDataIndex]" :index="$index" v-show="checkedOption === $index">
+						<strong style="font-size: 12px;display: inline-block;vertical-align: middle;">{{cell.title | json}}{{cell.title === '' ? '' : '：'}}</strong>
+						<select @change="cellSelectChange($event,pageComponentsDataIndex)">
+							<option v-for="cellOption in cell.groups" :value="cellOption.key">{{cellOption.value}}</option>
+						</select>
+					</div>
+				</div>
+				<div class="btn_group" v-else>
 					<div v-if="item.groups.length < 6">
 						<button v-for="group in item.groups" @click="getArgv(item.filter_key,group.key,$event)" track-by="$index">{{group.value}}</button>
 					</div>
 					<div v-else>
 						<select @change="getArgvSelect(item.filter_key, $event)">
 							<option v-for="group in item.groups" :value="group.key">{{group.value}}</option>
-						</select>
-					</div>
-				</div>
-				<div class="btn_group" v-else>
-					<select @change="extraSelect($event,pageComponentsDataIndex)">
-						<option v-for="group in item.groups" :value="group.key">{{group.value}}</option>
-					</select>
-					<div class="cell_select" v-for="cell in cellData" :index="$index" v-show="checkedOption === $index">
-						<strong>{{cell.title}}{{cell.title === '' ? '' : '：'}}</strong>
-						<select @change="cellSelectChange($event,pageComponentsDataIndex)">
-							<option v-for="cellOption in cell.groups" :value="cellOption.key">{{cellOption.value}}</option>
 						</select>
 					</div>
 				</div>
@@ -202,8 +202,8 @@ var FilterSelect = Vue.extend({
 	data: function() {
 		return {
 			targetParentGroup: null,
-			isCell: false,
-			cellData: [],
+			isCell: [],
+			cellData: {},
 			isFirstHandler: true,
 			checkedOption: 0,
 			cellCheckedOption: 0,
@@ -239,18 +239,17 @@ var FilterSelect = Vue.extend({
 			Vue.set(this.argvs, this.pageComponentsData[this.componentType][pageComponentsDataIndex].groups[this.checkedOption].cell.filter_key, this.pageComponentsData[this.componentType][pageComponentsDataIndex].groups[this.checkedOption].cell.groups[this.cellCheckedOption].key);
 		},
 		checkHasCell: function() {
-			for (var item of this.pageComponentsData[this.componentType]) {
-				var _count = 0;
-				for (var group of item.groups) {
-					if (group.cell && group.cell.groups.length) {
-						_count++;
-						this.cellData.push(group.cell);
-						if (_count === item.groups.length) {
-							this.isCell = true;
-						}
+			var _this = this;
+			this.pageComponentsData[this.componentType].forEach(function(item, groupsIndex) {
+				Vue.set(_this.isCell, groupsIndex, false);
+				Vue.set(_this.cellData, groupsIndex, []);
+				item.groups.forEach(function(group, groupIndex) {
+					if (group.cell && group.cell.groups) {
+						_this.isCell[groupsIndex] = true;
+						_this.cellData[groupsIndex].push(group.cell);
 					}
-				}
-			}
+				});
+			});
 		},
 		mulit_check: function(item, parent) {
 			if (this.multiCheckedOption[item.key]) {
@@ -305,32 +304,33 @@ var FilterSelect = Vue.extend({
 				if (val === null || !this.pageComponentsData[this.componentType].length > 0) {
 					return;
 				}
+
 				// 检测filter是否是级联选择
 				this.checkHasCell();
 
-				// 纯按钮事件处理
-				if (this.isFirstHandler && !this.isCell) {
-					for (var i = 0; i < this.pageComponentsData[this.componentType].length; i++) {
-						var _curr = this.pageComponentsData[this.componentType][i];
-						if (_curr.multi) continue;
-						if (_curr.groups.length > 5) {
-							Vue.set(this.argvs, this.pageComponentsData[this.componentType][i].filter_key, _curr.groups[0].key);
+				this.pageComponentsData[this.componentType].forEach(function(item, index) {
+					if (_this.isCell[index]) {
+						Vue.set(_this.argvs, _this.pageComponentsData[_this.componentType][0].filter_key, _this.pageComponentsData[_this.componentType][0].groups[0].key);
+						Vue.set(_this.argvs, _this.pageComponentsData[_this.componentType][0].groups[0].cell.filter_key, _this.pageComponentsData[_this.componentType][0].groups[0].cell.groups[0].key);
+					} else {
+						var _curr = item;
+						if (_curr.multi) {
+
 						} else {
-							(function(filterIndex) {
-								$('#filter_group_' + _this.index + '_' + filterIndex).find('button').bind('click', function() {
-									$('#filter_group_' + _this.index + '_' + filterIndex).find('button').removeClass('active');
-									$(this).addClass('active');
-								});
-							})(i);
-							$('#filter_group_' + this.index + '_' + i).find('button').eq(0).trigger('click');
-						}
+							if (_curr.groups.length > 5) {
+								Vue.set(_this.argvs, _curr.filter_key, _curr.groups[0].key);
+							} else {
+								(function(filterIndex) {
+									$('#filter_group_' + _this.index + '_' + filterIndex).find('button').bind('click', function() {
+										$('#filter_group_' + _this.index + '_' + filterIndex).find('button').removeClass('active');
+										$(this).addClass('active');
+									});
+								})(index);
+								$('#filter_group_' + _this.index + '_' + index).find('button').eq(0).trigger('click');
+							}
+						};
 					}
-				}
-				// 级联菜单事件处理
-				if (this.isFirstHandler && this.isCell) {
-					Vue.set(this.argvs, this.pageComponentsData[this.componentType][0].filter_key, this.pageComponentsData[this.componentType][0].groups[0].key);
-					Vue.set(this.argvs, this.pageComponentsData[this.componentType][0].groups[0].cell.filter_key, this.pageComponentsData[this.componentType][0].groups[0].cell.groups[0].key);
-				}
+				});
 			},
 			deep: true
 		}
