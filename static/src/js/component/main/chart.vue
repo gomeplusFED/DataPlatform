@@ -1,6 +1,6 @@
 <template>
 	<div :id="'chart_'+index" class="chart" v-show="checkIsChart()">
-		<div class="chart_con" v-for="item in chartData" style="height: 400px;width: 100%;">
+		<div class="chart_con" v-for="item in chartData" style="width: 100%;" :style="{'height': chartHeight + 'px'}">
 			<div class="nodata all_center">
 				<img src="/dist/img/nodata.png">
 				<span>暂无数据</span>
@@ -109,7 +109,8 @@ var Chart = Vue.extend({
 	data: function() {
 		return {
 			initEd: false,
-			chartData: []
+			chartData: [],
+			chartHeight: 400
 		};
 	},
 	vuex: {
@@ -219,8 +220,11 @@ var Chart = Vue.extend({
 			if (chartType === 'map') {
 				options.visualMap = visualMap;
 				options.visualMap.max = config.mapMaxValue;
+				delete options.grid;
+				delete options.xAxis;
+				delete options.yAxis;
+				this.chartHeight = 600;
 			}
-
 			return options;
 		}
 	},
@@ -236,6 +240,7 @@ var Chart = Vue.extend({
 						_this.chartData = data.modelData;
 						_this.chartData.forEach(function(item, domIndex) {
 							var chartOptions = _this.rinseData(item.type, item.data, item.map, item.config);
+							console.log(item.type);
 							setTimeout(function() {
 								if (chartOptions.series[0].data.length) {
 									var Chart = echarts.init($('#chart_' + _this.index).find('.chart_con').eq(domIndex)[0]);
