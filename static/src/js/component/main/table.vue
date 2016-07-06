@@ -162,7 +162,7 @@ var Table = Vue.extend({
 							query_parmas: params
 						});
 					}
-				})
+				});
 			}
 
 			// 跳转到新页面（需要带上各种各样参数）

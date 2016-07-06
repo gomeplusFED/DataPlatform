@@ -75,6 +75,9 @@ var ModalTable = Vue.extend({
 	ready: function() {
 		var _this = this;
 		this.paginationConf.onChange = function() {
+			if (!_this.modalTableData.show) {
+				return;
+			}
 			var resultPrams = _this.modalTableData.query_parmas;
 
 			utils.mixin(resultPrams, {
