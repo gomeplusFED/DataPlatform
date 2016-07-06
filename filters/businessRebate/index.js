@@ -170,7 +170,7 @@ module.exports = {
         }
         for(key of source) {
             objPie[key.grade].value += Math.round(key[filter_key]);
-            objBar[key.grade][key.level] += Math.round(key[filter_key]);
+            objBar[key.grade][key.level - 1] += Math.round(key[filter_key]);
         }
         for(level of XPie) {
             newDataPie[level.key] = objPie[level.value];

@@ -162,7 +162,7 @@ module.exports = {
                 two : "对比"
             };
 
-        for(var i = 1; i < +hour + 2; i++) {
+        for(var i = 0; i < +hour + 1; i++) {
             newData[i + ":00-" + (i + 1) + ":00"] = {
                 one : 0,
                 two : 0
@@ -174,7 +174,7 @@ module.exports = {
                 for(var i = 0; i < +hour + 1; i++) {
                     if(data["0"][option[0]][i] &&
                         data["0"][option[1]][i]) {
-                        newData[(i + 1) + ":00-" + (i + 2) + ":00"].one =
+                        newData[i + ":00-" + (i + 1) + ":00"].one =
                             util.percentage(
                                 data["0"][option[0]][i],
                                 data["0"][option[1]][i]
@@ -182,7 +182,7 @@ module.exports = {
                     }
                     if(data["1"][option[0]][i] &&
                         data["1"][option[1]][i]) {
-                        newData[(i + 1) + ":00-" + (i + 2) + ":00"].two =
+                        newData[i + ":00-" + (i + 1) + ":00"].two =
                             util.percentage(
                                 data["1"][option[0]][i],
                                 data["1"][option[1]][i]
@@ -193,7 +193,7 @@ module.exports = {
                 for(var i = 0; i < +hour + 1; i++) {
                     if(data["0"][option[0]][i] &&
                         data["0"][option[1]][i]) {
-                        newData[(i + 1) + ":00-" + (i + 2) + ":00"].one =
+                        newData[i + ":00-" + (i + 1) + ":00"].one =
                             util.round(
                                 data["0"][option[0]][i],
                                 data["0"][option[1]][i]
@@ -201,7 +201,7 @@ module.exports = {
                     }
                     if(data["1"][option[0]][i] &&
                         data["1"][option[1]][i]) {
-                        newData[(i + 1) + ":00-" + (i + 2) + ":00"].two =
+                        newData[i + ":00-" + (i + 1) + ":00"].two =
                             util.round(
                                 data["1"][option[0]][i],
                                 data["1"][option[1]][i]
@@ -212,11 +212,11 @@ module.exports = {
         } else {
             for(var i = 0; i < +hour + 1; i++) {
                 if(data["0"][option[0]][i]) {
-                    newData[(i + 1) + ":00-" + (i + 2) + ":00"].one =
+                    newData[i + ":00-" + (i + 1) + ":00"].one =
                         data["0"][option[0]][i];
                 }
                 if(data["1"][option[0]][i]) {
-                    newData[(i + 1) + ":00-" + (i + 2) + ":00"].two =
+                    newData[i + ":00-" + (i + 1) + ":00"].two =
                         data["1"][option[0]][i];
                 }
             }
