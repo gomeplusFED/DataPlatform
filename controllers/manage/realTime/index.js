@@ -340,8 +340,7 @@ module.exports = (Router) => {
 
     Router = Router.get("/realTime/three_json", (req, res, next) => {
         var params = req.query,
-            //date = moment(new Date()).format("MMDD"),
-            date = "0704",
+            date = moment(new Date()).format("MMDD"),
             hour = moment(new Date()).format("HH"),
             end = "",
             modules = {
@@ -385,7 +384,7 @@ module.exports = (Router) => {
         for(var i = 0; i < +hour + 1; i++) {
             if(i >= 10) {
                 modules.filter_select[1].groups.push({
-                    key : i + "",
+                    key : i,
                     value : i + ":00-" + (i + 1) + ":00"
                 });
             } else {
@@ -430,6 +429,105 @@ module.exports = (Router) => {
                 }
             })();
         }
+    });
+
+    Router = Router.get("/realTime/four_json", (req, res, next) => {
+        var params = req.query,
+            date = moment(new Date()).format("MMDD"),
+            hour = moment(new Date()).format("HH"),
+            end = "",
+            keyEnd = "",
+            modules = {
+                flexible_btn : [],
+                filter_select : [{
+                    title: '',
+                    filter_key: 'type',
+                    groups: [{
+                        key: 'ios',
+                        value: 'ios'
+                    }, {
+                        key: 'android',
+                        value: 'android'
+                    }, {
+                        key: 'PC',
+                        value: 'PC'
+                    }, {
+                        key: 'H5',
+                        value: 'H5'
+                    }]
+                }, {
+                    title: '时段选择',
+                    filter_key: 'hour',
+                    groups: [{
+                        key : "all",
+                        value : "全时段"
+                    }]
+                }]
+            };
+
+        for(var i = 0; i < +hour; i++) {
+            if(i >= 10) {
+                modules.filter_select[1].groups.push({
+                    key : i,
+                    value : i + ":00-" + (i + 1) + ":00"
+                });
+            } else {
+                modules.filter_select[1].groups.push({
+                    key : "0" + i,
+                    value : i + ":00-" + (i + 1) + ":00"
+                });
+            }
+        }
+
+        if(params.hour !== "all") {
+            date += params.hour;
+        }
+
+        if(params.type === "PC" || params.type === "H5") {
+            end = "url_pv";
+            keyEnd = "pv";
+        } else {
+            end = "url_startcount";
+            keyEnd = "startcount";
+        }
+
+        if(Object.keys(params).length === 0) {
+            _render(res, [], modules);
+        } else {
+            async(() => {
+                try{
+                    var key = "js:" + type[params.type] + date + ":" + end;
+                    var data = await(_customFind([
+                        "zrevrange", key, 0, 9, "WITHSCORES"
+                    ]));
+                    var urls = [];
+                    var uvs = [];
+                    for(var i = 0; i < data[0][1].length; i++) {
+                        if(i%2 === 0) {
+                            urls.push(data[0][1][i]);
+                            uvs.push(await(_customFind([
+                                "zscore",
+                                "js:" + type[params.type] + date + ":url_uv",
+                                data[0][1][i]
+                            ])));
+                        }
+                    }
+                    var total_pv = await(_find("js:" + type[params.type] + date+ ":" + keyEnd));
+                    req.models.UrlToName.find({
+                        url : urls
+                    }, (err, names) => {
+                        if(err) {
+                            next(err);
+                        } else {
+                            _render(res, filter.four(data, uvs, names, total_pv, params), modules);
+                        }
+                    });
+                } catch(err) {
+                    next(err);
+                }
+            })();
+        }
+
     });
 
     return Router;
