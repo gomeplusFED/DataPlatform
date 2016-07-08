@@ -191,7 +191,7 @@ module.exports = (Router) => {
                 "浏览量" : ["pv"],
                 "访问次数" : ["vv"],
                 "新增访客数" : ["newuser"],
-                "新增访客占比" : ["newuser", "uv"],
+                "新增访客占比(%)" : ["newuser", "uv"],
                 "新增注册（账户）" : ["user"],
                 "平均访问页面数" : ["pv", "vv"],
                 "平均访问时长" : ["visit", "vv"]
@@ -201,7 +201,7 @@ module.exports = (Router) => {
                 "启动次数" : ["startcount"],
                 "人均启动次数" : ["startcount", "uv"],
                 "新增用户" : ["newuser"],
-                "新增用户占比" : ["newuser", "uv"],
+                "新增用户占比(%)" : ["newuser", "uv"],
                 "新增注册（账户）" : ["user"],
                 "每次使用时长" : ["visit", "startcount"],
                 "每人使用时长" : ["visit", "uv"]
