@@ -97,14 +97,14 @@ module.exports = (Router) => {
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
-        fixedParams(query, filter_key, req, cb) {
+        params(query, filter_key) {
             if(filter_key === "all") {
                 query.share_source_name = ["all"];
             } else {
                 query.share_source = filter_key;
                 query.share_source_name = orm.not_in(["all"]);
             }
-            cb(null, query);
+            return query;
         },
         filter_select: [{
             title: '',
