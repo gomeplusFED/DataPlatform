@@ -4,27 +4,9 @@
  * @fileoverview 实时分析
  */
 var redis = require("ioredis"),
-    cluster = new redis.Cluster([
-        {
-            port : 7001,
-            host : "bj01-ops-rdsc01.test.gomeplus.com"
-        },{
-            port : 7001,
-            host : "bj01-ops-rdsc02.test.gomeplus.com"
-        },{
-            port : 7001,
-            host : "bj01-ops-rdsc03.test.gomeplus.com"
-        },{
-            port : 7001,
-            host : "bj01-ops-rdsc04.test.gomeplus.com"
-        },{
-            port : 7001,
-            host : "bj01-ops-rdsc05.test.gomeplus.com"
-        },{
-            port : 7001,
-            host : "bj01-ops-rdsc06.test.gomeplus.com"
-        }
-    ]),
+    redisConfig = require("../../../db/redis.json"),
+    config = require("../../../db/config.json").redis,
+    cluster = new redis.Cluster(redisConfig[config]),
     type = {
         "PC" : "www:",
         "H5" : "m:",
@@ -340,7 +322,8 @@ module.exports = (Router) => {
 
     Router = Router.get("/realTime/three_json", (req, res, next) => {
         var params = req.query,
-            date = moment(new Date()).format("MMDD"),
+            //date = moment(new Date()).format("MMDD"),
+            date = "0704",
             hour = moment(new Date()).format("HH"),
             end = "",
             modules = {
