@@ -100,6 +100,7 @@ module.exports = (Router) => {
         params(query, filter_key) {
             if(filter_key === "all") {
                 query.share_source_name = ["all"];
+                delete query.share_source;
             } else {
                 query.share_source = filter_key;
                 query.share_source_name = orm.not_in(["all"]);
