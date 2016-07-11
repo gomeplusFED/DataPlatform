@@ -64,46 +64,45 @@
 	<m-loading :loading.sync="loading"></m-loading>
 	<m-alert></m-alert>
 	<div class="modal" id="modal_table" v-show="modal.show" transtion="fade">
-	    <div class="modal-dialog modal-lg">
-	        <div class="modal-content">
-	            <div class="modal-header">
-	                <h4 class="modal-title">{{modal.title}}</h4>
-	            </div>
-	            <div class="modal-body">
-	                <table v-if="modal.type === 'roleList'" class="table table-striped table-bordered table-hover">
-	                	<thead>
-	                		<tr>
-	                			<th></th>
-	                			<th>序号</th>
-	                			<th>角色名称</th>
-	                			<th>创建时间</th>
-	                			<th>备注</th>
-	                		</tr>
-	                	</thead>
-	                	<tbody>
-	                		<tr v-for="item in roleList">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title">{{modal.title}}</h4>
+				</div>
+				<div class="modal-body">
+					<table v-if="modal.type === 'roleList'" class="table table-striped table-bordered table-hover">
+						<thead>
+							<tr>
+								<th></th>
+								<th>序号</th>
+								<th>角色名称</th>
+								<th>创建时间</th>
+								<th>备注</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr v-for="item in roleList">
 								<th><span><input type="checkbox" :value="item.name" v-model="item.checked"></input></span></th>
 								<th><span>{{item.id}}</span></th>
 								<th><span>{{item.name}}</span></th>
 								<th><span>{{item.date | Date 'yyyy-MM-dd hh:mm:ss'}}</span></th>
 								<th><span>{{item.remark}}</span></th>
-	                		</tr>
-	                	</tbody>
-	                </table>
-	                <m-limit-list v-show="modal.type === 'limitList'" :id="id" :limited="limited" :export-limit="exportLimit"></m-limit-list>
-	            </div>
-	            <div class="modal-footer">
-	                <button type="button" class="btn default" data-dismiss="modal" @click="apply()">确定</button>
-	                <button type="button" class="btn default" data-dismiss="modal" @click="modal.show = false">取消</button>
-	            </div>
-	        </div>
-	    </div>
+							</tr>
+						</tbody>
+					</table>
+					<m-limit-list v-show="modal.type === 'limitList'" :id="id" :limited="limited" :export-limit="exportLimit"></m-limit-list>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn default" data-dismiss="modal" @click="apply()">确定</button>
+					<button type="button" class="btn default" data-dismiss="modal" @click="modal.show = false">取消</button>
+				</div>
+			</div>
+		</div>
 	</div>
 	<m-confirm></m-confirm>
 </template>
-
 <style>
-.search{
+.search {
 	position: absolute;
 	right: 20px;
 	top: 50%;
@@ -113,7 +112,8 @@
 	-ms-transform: translateY(-50%);
 	width: 250px;
 }
-.search span{
+
+.search span {
 	position: absolute;
 	position: absolute;
 	right: 5px;
@@ -124,30 +124,34 @@
 	-ms-transform: translateY(-50%);
 	z-index: 7;
 }
-.fa{
+
+.fa {
 	margin-left: 3px;
 }
+
 .user_table_con {
 	width: 100%;
 	overflow-x: auto;
 }
-.user_table {
-	
-}
-.user_table td{
+
+.user_table {}
+
+.user_table td {
 	min-width: 120px;
 }
-.user_table th{
+
+.user_table th {
 	min-width: 120px;
 }
+
 .user_table td {
 	position: relative;
 	line-height: 34px!important;
 }
-.user_table td .btn{
 
-}
-.user_table td>a{
+.user_table td .btn {}
+
+.user_table td>a {
 	display: inline-block;
 	vertical-align: middle;
 	right: 8px;
@@ -158,20 +162,22 @@
 	-moz-transform: translateY(-50%);
 	-ms-transform: translateY(-50%);
 }
-.user_table td ul{
+
+.user_table td ul {
 	font-size: 0;
 	text-align: center;
 	width: 300px;
 	margin: 0 auto;
 }
-.user_table td ul li{
+
+.user_table td ul li {
 	display: inline-block;
 	vertical-align: middle;
 	margin: 0 4px;
 	font-size: 14px;
 }
 
-.user_table td .remark{
+.user_table td .remark {
 	display: inline-block;
 	vertical-align: middle;
 	position: absolute;
@@ -182,18 +188,18 @@
 	-moz-transform: translateY(-50%);
 	-ms-transform: translateY(-50%);
 }
-.user_table td .remark input{
+
+.user_table td .remark input {
 	display: none;
 	margin-right: 5px;
 }
 
-.user_table td i{
+.user_table td i {
 	display: inline-block;
 	vertical-align: middle;
 	width: 22px;
 }
 </style>
-
 <script>
 var Vue = require('Vue');
 
@@ -220,13 +226,13 @@ require('../../filter/index.js');
 
 var User = Vue.extend({
 	name: 'User',
-	data: function(){
+	data: function() {
 		return {
 			paginationConf: {
-				currentPage: 1,     // 当前页
-				totalItems: 0,     // 总条数
-				itemsPerPage: 10,    // 每页条数
-				pagesLength: 5,     // 显示几页( 1,2,3 / 1,2,3,4,5)
+				currentPage: 1, // 当前页
+				totalItems: 0, // 总条数
+				itemsPerPage: 10, // 每页条数
+				pagesLength: 5, // 显示几页( 1,2,3 / 1,2,3,4,5)
 				onChange: function() {
 					// 回调
 					UserVm.createTableBySearchStr();
@@ -236,7 +242,7 @@ var User = Vue.extend({
 			userListData: null,
 			loading: {
 				show: true,
-                noLoaded: 0
+				noLoaded: 0
 			},
 			modal: {
 				show: false,
@@ -255,16 +261,16 @@ var User = Vue.extend({
 			modifyLimited: {},
 			modifyExportLimited: {},
 			showRemarkLen: false
-		}
+		};
 	},
 	store: store,
 	vuex: {
-	    getters: {
-	        alertConfig: function() {
-	            return store.state.alertConfig;
-	        }
-	    },
-	    actions: actions
+		getters: {
+			alertConfig: function() {
+				return store.state.alertConfig;
+			}
+		},
+		actions: actions
 	},
 	components: {
 		'm-pagination': Pagination,
@@ -273,34 +279,33 @@ var User = Vue.extend({
 		'm-limit-list': LimitList,
 		'm-confirm': Confirm
 	},
-	init: function(){
+	init: function() {
 		UserVm = this;
 	},
-	created: function(){
+	created: function() {
 		this.createTableBySearchStr();
 	},
 	methods: {
-		showRemark: function(ev,id,remark){
+		showRemark: function(ev, id, remark) {
 			var _this = this;
-			$(document).bind('click',function(ev){
-			    var obj = $(ev.target);
-			    if (obj.parents('.remark').length === 0) {
-			    	$('.remark').find('input').css('display','none');
-			    	_this.showRemarkLen = false;
-			    }
-			})
-			
-			if($(ev.target).parents('.remark').find('input').css('display') === 'inline-block'){
-				$(ev.target).parents('.remark').find('input').css('display','none');
+			$(document).bind('click', function(ev) {
+				var obj = $(ev.target);
+				if (obj.parents('.remark').length === 0) {
+					$('.remark').find('input').css('display', 'none');
+					_this.showRemarkLen = false;
+				}
+			});
+
+			if ($(ev.target).parents('.remark').find('input').css('display') === 'inline-block') {
+				$(ev.target).parents('.remark').find('input').css('display', 'none');
 				this.showRemarkLen = false;
-				this.editRemark(id,remark);
-			}else{
-				$(ev.target).parents('.remark').find('input').css('display','inline-block');
+				this.editRemark(id, remark);
+			} else {
+				$(ev.target).parents('.remark').find('input').css('display', 'inline-block');
 				this.showRemarkLen = true;
 			}
-
 		},
-		editRemark: function(id,remark){
+		editRemark: function(id, remark) {
 			var _this = this;
 			$.ajax({
 				url: '/users/update',
@@ -309,25 +314,25 @@ var User = Vue.extend({
 					id: id,
 					remark: remark
 				},
-				success: function(data){
-					if(!data.success){
+				success: function(data) {
+					if (!data.success) {
 						actions.alert(store, {
 							show: true,
 							msg: data.msg,
 							type: 'danger'
-						})
+						});
 						return;
 					}
 					actions.alert(store, {
 						show: true,
 						msg: '修改成功',
 						type: 'success'
-					})
-					$('.remark').find('input').css('display','none');
+					});
+					$('.remark').find('input').css('display', 'none');
 				}
-			})
+			});
 		},
-		createTableBySearchStr: function(){
+		createTableBySearchStr: function() {
 			var search = this.searchStr;
 			var _this = this;
 			$.ajax({
@@ -338,14 +343,14 @@ var User = Vue.extend({
 					limit: 10,
 					page: _this.paginationConf.currentPage
 				},
-				success: function(data){
+				success: function(data) {
 					_this.paginationConf.totalItems = data.count;
 					_this.userListData = data.data;
 					_this.loading.show = false;
 				}
-			})
+			});
 		},
-		showRoleList: function(role, id, limited, exportLimited, index){
+		showRoleList: function(role, id, limited, exportLimited, index) {
 			var _this = this;
 			_this.modal.show = true;
 			_this.modal.title = '修改角色';
@@ -357,87 +362,86 @@ var User = Vue.extend({
 			$.ajax({
 				url: '/role/find',
 				type: 'get',
-				data:{
+				data: {
 					status: 1
 				},
-				success: function(data){
+				success: function(data) {
 					_this.roleList = data.data;
 					var currentUserRoleNameArr = _this.currentUserRoleName ? _this.currentUserRoleName.split(';') : [];
-					for(var item in _this.roleList){
+					for (var item in _this.roleList) {
 						Vue.set(_this.roleList[item], 'checked', false);
-						if(currentUserRoleNameArr.filter(function(v, index){
-							return _this.roleList[item].name === v;
-						}).length > 0){
+						if (currentUserRoleNameArr.filter(function(v, index) {
+								return _this.roleList[item].name === v;
+							}).length > 0) {
 							Vue.set(_this.roleList[item], 'checked', true);
 						}
 					}
 					_this.limited = JSON.parse(_this.userListData[index].limited);
 					_this.exportLimit = JSON.parse(_this.userListData[index].export);
 				}
-			})
+			});
 		},
-		showLimitList: function(id, limited, exportLimit){
+		showLimitList: function(id, limited, exportLimit) {
 			var _this = this;
 			_this.currentID = id;
 			_this.modal.show = true;
 			_this.modal.title = '修改权限';
 			_this.modal.type = 'limitList';
 			_this.id = id;
-			_this.exportLimit = JSON.parse(exportLimit);
-			_this.limited = JSON.parse(limited);
+			_this.exportLimit = this.fixLimit(JSON.parse(exportLimit), 'exportLimit');
+			_this.limited = this.fixLimit(JSON.parse(limited), 'limit');
 		},
-		apply: function(){
+		apply: function() {
 			var _this = this;
-			if(this.modal.type === 'roleList'){
-
+			if (this.modal.type === 'roleList') {
 				var currentUserRoleNameArr = _this.currentUserRoleName ? _this.currentUserRoleName.split(';') : [];
 
 				var resultLimited = utils.mixin(_this.limited, {});
 				var resultExportLimited = utils.mixin(_this.exportLimit, {});
 
-				for(var item in _this.roleList){
-					if(_this.roleList[item]['checked'] && !utils.isInArry(_this.roleList[item]['name'], currentUserRoleNameArr)){
+				for (var item in _this.roleList) {
+					if (_this.roleList[item]['checked'] && !utils.isInArry(_this.roleList[item]['name'], currentUserRoleNameArr)) {
 						var obj1 = JSON.parse(_this.roleList[item]['limited']);
-						for(var k in obj1){
-							if(!resultLimited[k]){
+						for (let k in obj1) {
+							if (!resultLimited[k]) {
 								resultLimited[k] = obj1[k];
 							}
-							var _currentArr = resultLimited[k].concat(obj1[k]);
+							let _currentArr = resultLimited[k].concat(obj1[k]);
 							resultLimited[k] = utils.uniqueArray(resultLimited[k]);
-							resultLimited[k].sort(function(a, b){
+							resultLimited[k].sort(function(a, b) {
 								return a - b;
-							})
+							});
 						}
 
 						var obj2 = JSON.parse(_this.roleList[item]['export']);
-						for(var k in obj2){
-							if(!resultExportLimited[k]){
+						for (let k in obj2) {
+							if (!resultExportLimited[k]) {
 								resultExportLimited[k] = obj2[k];
 							}
-							var _currentArr = resultExportLimited[k].concat(obj2[k]);
+							let _currentArr = resultExportLimited[k].concat(obj2[k]);
 							resultExportLimited[k] = utils.uniqueArray(resultExportLimited[k]);
-							resultExportLimited[k].sort(function(a, b){
+							resultExportLimited[k].sort(function(a, b) {
 								return a - b;
-							})
+							});
 						}
 					}
 				}
 
 				var roleName = [];
-				for(var item in _this.roleList){
-					if(_this.roleList[item]['checked']){
+				for (let item in _this.roleList) {
+					if (_this.roleList[item]['checked']) {
 						roleName.push(_this.roleList[item].name);
 					}
 				}
 
-				for(var item in resultLimited){
-					if(resultLimited[item] === undefined || resultLimited[item].length === 0){
+				for (let item in resultLimited) {
+					if (resultLimited[item] === undefined || resultLimited[item].length === 0) {
 						delete resultLimited[item];
 					}
 				}
 
-				for(var item in resultExportLimited){
-					if(resultExportLimited[item] === undefined || resultExportLimited[item].length === 0){
+				for (let item in resultExportLimited) {
+					if (resultExportLimited[item] === undefined || resultExportLimited[item].length === 0) {
 						delete resultExportLimited[item];
 					}
 				}
@@ -451,34 +455,34 @@ var User = Vue.extend({
 						export: JSON.stringify(resultExportLimited),
 						role: roleName.join(';')
 					},
-					success: function(data){
-						if(!data.success){
+					success: function(data) {
+						if (!data.success) {
 							actions.alert(store, {
 								show: true,
 								msg: data.msg,
 								type: 'danger'
-							})
+							});
 							return;
 						}
 						actions.alert(store, {
 							show: true,
 							msg: '修改成功',
 							type: 'success'
-						})
+						});
 						_this.modal.show = false;
 						_this.createTableBySearchStr();
 					}
-				})
-			}else if(this.modal.type === 'limitList'){
-				var _this = this;
-				for(var item in _this.modifyLimited){
-					if(_this.modifyLimited[item] === undefined || _this.modifyLimited[item].length === 0){
+				});
+			} else if (this.modal.type === 'limitList') {
+				let _this = this;
+				for (let item in _this.modifyLimited) {
+					if (_this.modifyLimited[item] === undefined || _this.modifyLimited[item].length === 0) {
 						delete _this.modifyLimited[item];
 					}
 				}
 
-				for(var item in _this.modifyExportLimited){
-					if(_this.modifyExportLimited[item] === undefined || _this.modifyExportLimited[item].length === 0){
+				for (let item in _this.modifyExportLimited) {
+					if (_this.modifyExportLimited[item] === undefined || _this.modifyExportLimited[item].length === 0) {
 						delete _this.modifyExportLimited[item];
 					}
 				}
@@ -490,32 +494,32 @@ var User = Vue.extend({
 						limited: JSON.stringify(_this.modifyLimited),
 						export: JSON.stringify(_this.modifyExportLimited)
 					},
-					success: function(data){
-						if(!data.success){
+					success: function(data) {
+						if (!data.success) {
 							actions.alert(store, {
 								show: true,
 								msg: data.msg,
 								type: 'danger'
-							})
+							});
 							return;
 						}
 						actions.alert(store, {
 							show: true,
 							msg: '修改成功',
 							type: 'success'
-						})
+						});
 						_this.modal.show = false;
 						_this.createTableBySearchStr();
 					}
-				})
+				});
 			}
 		},
-		forbidden: function(id, email){
+		forbidden: function(id, email) {
 			var _this = this;
 			actions.confirm(store, {
 				show: true,
 				msg: '是否禁用账户 ' + email + '？',
-				apply: function(){
+				apply: function() {
 					$.ajax({
 						url: '/users/update',
 						type: 'post',
@@ -523,33 +527,33 @@ var User = Vue.extend({
 							id: id,
 							status: 0
 						},
-						success: function(data){
-							if(!data.success){
+						success: function(data) {
+							if (!data.success) {
 								actions.alert(store, {
 									show: true,
 									msg: data.msg,
 									type: 'danger'
-								})
+								});
 								return;
 							}
 							actions.alert(store, {
 								show: true,
 								msg: '禁用成功',
 								type: 'success'
-							})
+							});
 							_this.createTableBySearchStr();
 							_this.modal.show = false;
 						}
-					})
+					});
 				}
-			})
+			});
 		},
-		startUsing: function(id, email){
+		startUsing: function(id, email) {
 			var _this = this;
 			actions.confirm(store, {
 				show: true,
 				msg: '是否启用账户 ' + email + '？',
-				apply: function(){
+				apply: function() {
 					$.ajax({
 						url: '/users/update',
 						type: 'post',
@@ -557,44 +561,56 @@ var User = Vue.extend({
 							id: id,
 							status: 1
 						},
-						success: function(data){
-							if(!data.success){
+						success: function(data) {
+							if (!data.success) {
 								actions.alert(store, {
 									show: true,
 									msg: data.msg,
 									type: 'danger'
-								})
+								});
 								return;
 							}
 							actions.alert(store, {
 								show: true,
 								msg: '启用成功',
 								type: 'success'
-							})
+							});
 							_this.createTableBySearchStr();
 							_this.modal.show = false;
 						}
-					})
+					});
 				}
-			})
+			});
 		},
+		fixLimit(limit, type) {
+			// 修正页面列表与权限列表不对应的情况
+			var _cur = Object.assign({}, limit);
+			for (let key1 in _cur) {
+				for (let key2 in _cur[key1]) {
+					if (window.allPageConfig.pageAll[key1].path[key2] === undefined) {
+						_cur[key1].splice(key2, 1);
+					}
+				}
+			}
+			return _cur;
+		}
 	},
 	watch: {
 		searchStr: {
-			handler: function(val){
+			handler: function(val) {
 				this.createTableBySearchStr();
 			}
 		}
 	},
 	events: {
-		borcastLimit: function(limit){
+		borcastLimit: function(limit) {
 			this.modifyLimited = limit;
 		},
-		borcastExportLimit: function(limit){
+		borcastExportLimit: function(limit) {
 			this.modifyExportLimited = limit;
 		}
 	}
-})
+});
 
 module.exports = User;
 </script>

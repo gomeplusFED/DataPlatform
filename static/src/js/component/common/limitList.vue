@@ -10,10 +10,10 @@
 			</li>
 			<li v-for="(key,item1) in pageAll">
 				<div @click.stop="showLevel($event, $index)">
-					<span><input @click.stop="checkAll('limit', key)" type="checkbox" v-model="limitAll[key]"></input></span>
+					<span><input @click="checkAll('limit', key)" type="checkbox" v-model="limitAll[key]"></input></span>
 					<span>{{item1.name}}</span>
 					<span>&nbsp;</span>
-					<span><label><input @click.stop="checkAll('exportLimit', key)" type="checkbox" v-model="exportLimitAll[key]"/>数据导出</label></span>
+					<span><label><input @click="checkAll('exportLimit', key)" type="checkbox" v-model="exportLimitAll[key]"/>数据导出</label></span>
 				</div>
 				<ul v-show="levelShow[$index]">
 					<li v-for="item2 in item1.path">
@@ -98,7 +98,6 @@ label input {
 var Vue = require('Vue');
 var $ = require('jQuery');
 
-
 var utils = require('utils');
 
 var LimitList = Vue.extend({
@@ -111,12 +110,12 @@ var LimitList = Vue.extend({
 			exportLimitObj: {},
 			limitAll: {},
 			exportLimitAll: {}
-		}
+		};
 	},
 	props: ['id', 'limited', 'exportLimit'],
 	created: function() {
 		var count = 0;
-		for (var item in this.pageAll) {
+		for (let item in this.pageAll) {
 			if (count === 0) {
 				Vue.set(this.levelShow, count, true);
 			} else {
@@ -134,9 +133,9 @@ var LimitList = Vue.extend({
 		},
 		parseLimitAll: function(type) {
 			if (type === 'limit') {
-				for (var item in this.limitedObj) {
-					var _count1 = 0;
-					for (var k in this.limitedObj[item]) {
+				for (let item in this.limitedObj) {
+					let _count1 = 0;
+					for (let k in this.limitedObj[item]) {
 						if (this.limitedObj[item][k]) {
 							_count1 += 1;
 						}
@@ -148,9 +147,9 @@ var LimitList = Vue.extend({
 					}
 				}
 			} else if (type === 'exportLimit') {
-				for (var item in this.exportLimitObj) {
-					var _count1 = 0;
-					for (var k in this.exportLimitObj[item]) {
+				for (let item in this.exportLimitObj) {
+					let _count1 = 0;
+					for (let k in this.exportLimitObj[item]) {
 						if (this.exportLimitObj[item][k]) {
 							_count1 += 1;
 						}
@@ -183,18 +182,18 @@ var LimitList = Vue.extend({
 			}
 			return result;
 		},
-		checkAll: function(type, key) {
+		checkAll: function(type, key, ev) {
 			if (type === 'limit') {
 				Vue.set(this.limitedObj, key, {});
 				if (!this.limitAll[key]) {
-					for (var item in this.pageAll[key]['path']) {
+					for (let item in this.pageAll[key]['path']) {
 						if (this.limitedObj[key] === undefined) {
 							Vue.set(this.limitedObj, key, {});
 						}
 						Vue.set(this.limitedObj[key], item, true);
 					}
 				} else {
-					for (var item in this.pageAll[key]['path']) {
+					for (let item in this.pageAll[key]['path']) {
 						if (this.limitedObj[key] === undefined) {
 							Vue.set(this.limitedObj, key, {});
 						}
@@ -202,16 +201,16 @@ var LimitList = Vue.extend({
 					}
 				}
 			} else if (type === 'exportLimit') {
-				Vue.set(this.exportLimitAll, key, {});
+				Vue.set(this.exportLimitObj, key, {});
 				if (!this.exportLimitAll[key]) {
-					for (var item in this.pageAll[key]['path']) {
+					for (let item in this.pageAll[key]['path']) {
 						if (this.exportLimitObj[key] === undefined) {
 							Vue.set(this.exportLimitObj, key, {});
 						}
 						Vue.set(this.exportLimitObj[key], item, true);
 					}
 				} else {
-					for (var item in this.pageAll[key]['path']) {
+					for (let item in this.pageAll[key]['path']) {
 						if (this.exportLimitObj[key] === undefined) {
 							Vue.set(this.exportLimitObj, key, {});
 						}
@@ -219,10 +218,6 @@ var LimitList = Vue.extend({
 					}
 				}
 			}
-
-		},
-		dispatchParams: function() {
-
 		}
 	},
 	watch: {
