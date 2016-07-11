@@ -21,9 +21,9 @@ function api(Router, options) {
         //数据库
         modelName: [],
         //filter过滤数据时对应表数据存储名字
-        sendDataName : ["data", "orderData", "thirdData"],
+        sendDataName : ["data", "orderData", "thirdData", "fourParams"],
         //是否固定参数
-        paramsName : ["params", "orderParams", "thirdParams"],
+        paramsName : ["params", "orderParams", "thirdParams", "fourParams"],
         //分页名字
         pagingName : ["paging", "orderPaging"],
         //排序名字
@@ -264,7 +264,7 @@ api.prototype = {
                 for(var i = 0; i < this.modelName.length; i++) {
                     if(this[this.paramsName[i]]) {
                         if(typeof this[this.paramsName[i]] === "function") {
-                            query = this[this.paramsName[i]]();
+                            query = this[this.paramsName[i]](query, this.filter_key);
                         } else {
                             query = this[this.paramsName[i]];
                         }
@@ -293,7 +293,7 @@ api.prototype = {
                     this.filter_key || this.key_type || this.sku_type,
                     dates,
                     this.filter_key2,
-                    this.page,
+                    _params.page,
                     _params
                 );
             }

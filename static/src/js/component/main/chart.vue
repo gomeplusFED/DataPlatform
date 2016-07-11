@@ -1,6 +1,6 @@
 <template>
 	<div :id="'chart_'+index" class="chart" v-show="checkIsChart()">
-		<div class="chart_con" v-for="item in chartData" style="height: 400px;width: 100%;">
+		<div class="chart_con" v-for="item in chartData" style="width: 100%;" :style="{'height': chartHeight + 'px'}">
 			<div class="nodata all_center">
 				<img src="/dist/img/nodata.png">
 				<span>暂无数据</span>
@@ -8,14 +8,29 @@
 		</div>
 	</div>
 </template>
-
 <style>
-.chart_con {background: #fff;}
-.chart_con .nodata{text-align: center;}
-.chart_con .nodata img{display: block;width: 100px;}
-.chart_con .nodata span{display: block;position: absolute;font-size: 14px;color: #000;width: 100%;text-align: center;}
-</style>
+.chart_con {
+	background: #fff;
+}
 
+.chart_con .nodata {
+	text-align: center;
+}
+
+.chart_con .nodata img {
+	display: block;
+	width: 100px;
+}
+
+.chart_con .nodata span {
+	display: block;
+	position: absolute;
+	font-size: 14px;
+	color: #000;
+	width: 100%;
+	text-align: center;
+}
+</style>
 <script>
 /*
  * 组件说明
@@ -55,6 +70,27 @@ var chartDataModel = {
 	series: [] // 数据列
 };
 
+var visualMap = {
+	min: 0,
+	max: 2500,
+	left: 'left',
+	top: 'bottom',
+	calculable: true
+};
+
+var mapDefaultSeries = {
+	mapType: 'china',
+	roam: false,
+	label: {
+		normal: {
+			show: true
+		},
+		emphasis: {
+			show: true
+		}
+	}
+};
+
 // echart 主模块，npm安装
 var echarts = require('echarts/lib/echarts');
 require('echarts/lib/component/legend'); // 图例
@@ -63,6 +99,7 @@ require('echarts/lib/component/toolbox'); // 工具箱
 require('echarts/lib/chart/bar'); // 柱状图
 require('echarts/lib/chart/line'); // 折线图
 require('echarts/lib/chart/pie'); // 饼图
+require('echarts/map/js/china.js');
 
 var store = require('../../store/store.js');
 var actions = require('../../store/actions.js');
@@ -72,7 +109,8 @@ var Chart = Vue.extend({
 	data: function() {
 		return {
 			initEd: false,
-			chartData: []
+			chartData: [],
+			chartHeight: 400
 		};
 	},
 	vuex: {
@@ -115,7 +153,7 @@ var Chart = Vue.extend({
 				error: function(jqXHR, status, errorThrown) {
 					if (status === 'timeout') {
 						errcb && errcb();
-					} ;
+					};
 				}
 			});
 		},
@@ -127,7 +165,7 @@ var Chart = Vue.extend({
 			for (var item in data) {
 				xAxis.push(item);
 			}
-			for (var item in map) {
+			for (let item in map) {
 				legend.push(map[item]);
 				var _currentObj = {};
 				_currentObj.type = chartType;
@@ -135,14 +173,17 @@ var Chart = Vue.extend({
 				_currentObj.stack = config.stack ? 'stack' : '';
 				_currentObj.data = [];
 				_currentObj.name = map[item];
-				_currentObj.data = [];
 				for (var dataItem in data) {
 					_currentObj.data.push({
 						value: data[dataItem][item],
 						name: dataItem
 					});
 				}
-				series.push(_currentObj);
+				var _curr = _currentObj;
+				if (chartType === 'map') {
+					_curr = Object.assign(mapDefaultSeries, _currentObj);
+				}
+				series.push(_curr);
 			}
 
 			if (legend.length > 10 || chartType === 'pie') {
@@ -171,9 +212,18 @@ var Chart = Vue.extend({
 
 			if (chartType === 'pie') {
 				options.legend.data = xAxis;
+				options.tooltip.formatter = '{a} <br/>{b} : {c} ({d}%)';
 				delete options.xAxis;
 				delete options.yAxis;
 				delete options.grid;
+			}
+
+			if (chartType === 'map') {
+				options.visualMap = visualMap;
+				options.visualMap.max = config.mapMaxValue;
+				delete options.grid;
+				delete options.xAxis;
+				delete options.yAxis;
 			}
 			return options;
 		}
@@ -189,10 +239,20 @@ var Chart = Vue.extend({
 					this.fetchData(function(data) {
 						_this.chartData = data.modelData;
 						_this.chartData.forEach(function(item, domIndex) {
+							if (Object.keys(item.data).length === 0) {
+								return;
+							}
 							var chartOptions = _this.rinseData(item.type, item.data, item.map, item.config);
 							setTimeout(function() {
 								if (chartOptions.series[0].data.length) {
 									var Chart = echarts.init($('#chart_' + _this.index).find('.chart_con').eq(domIndex)[0]);
+									_this.chartHeight = 400;
+									if (item.type === 'map') {
+										_this.chartHeight = 800;
+									}
+									setTimeout(function() {
+										Chart.resize({});
+									}, 1);
 									Chart.setOption(chartOptions);
 								}
 							}, 1);
@@ -221,5 +281,4 @@ var Chart = Vue.extend({
 });
 
 module.exports = Chart;
-
 </script>

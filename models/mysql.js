@@ -26,7 +26,7 @@ function connect(app) {
     app.use(orm.express('mysql://' + mysql.username + ':' + mysql.pwd + '@' + mysql.host + '/' + mysql.database + '?timezone=CST', {
         define: function(db, models, next) {
             db.settings.set('instance.cache', false);
-            //db.settings.set('instance.autoFetch', true);
+            db.settings.set('instance.autoFetch', true);
             //db.settings.set('instance.autoFetchLimit', 9999);
             //db.settings.set('instance.cacheSaveCheck', false);
             //db.settings.set('instance.autoSave', true);
@@ -93,6 +93,7 @@ function connect(app) {
             models.ShareAnalyzeTrend = db.define("tbl_rt_share_analyze_trend", obj.ShareAnalyzeTrend);
             models.ShareAnalyzeChannel = db.define("tbl_rt_share_analyze_channel", obj.ShareAnalyzeChannel);
             models.ShareAnalyzeChannelTrend = db.define("tbl_rt_share_analyze_channel_trend", obj.ShareAnalyzeChannelTrend);
+            models.UrlToName = db.define("tbl_rt_url_to_name", obj.UrlToName);
             models.db1 = db;
             next();
         }

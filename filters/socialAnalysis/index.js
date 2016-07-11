@@ -52,7 +52,7 @@ module.exports = {
             newData = {},
             map = {
                 new_group_count : "新增圈子数",
-                new_group_user_count : "新增入圈户数",
+                new_group_user_count : "新增入圈用户数",
                 //new_group_topic_count : "新增话题数",
                 DAU : "DAU"
             };

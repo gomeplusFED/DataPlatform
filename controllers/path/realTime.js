@@ -15,21 +15,21 @@ module.exports = {
                     type : "table",
                     title : "实时概况",
                     query_api : "/realTime/one"
-                //},
-                //{
-                //    type : "chart",
-                //    title : "实时趋势",
-                //    query_api : "/realTime/two"
-                //},
-                //{
-                //    type : "table",
-                //    title : "实时地域分布TOP10",
-                //    query_api : "/realTime/three"
-                //},
-                //{
-                //    type : "table",
-                //    title : "访问页面分布TOP10",
-                //    query_api : "/realTime/four"
+                },
+                {
+                    type : "chart",
+                    title : "实时趋势",
+                    query_api : "/realTime/two"
+                },
+                {
+                    type : "chart",
+                    title : "实时地域分布TOP10",
+                    query_api : "/realTime/three"
+                },
+                {
+                    type : "table",
+                    title : "访问页面分布TOP10",
+                    query_api : "/realTime/four"
                 }
             ]
         }
