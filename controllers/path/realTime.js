@@ -25,11 +25,11 @@ module.exports = {
                     type : "chart",
                     title : "实时地域分布TOP10",
                     query_api : "/realTime/three"
-                //},
-                //{
-                //    type : "table",
-                //    title : "访问页面分布TOP10",
-                //    query_api : "/realTime/four"
+                },
+                {
+                    type : "table",
+                    title : "访问页面分布TOP10",
+                    query_api : "/realTime/four"
                 }
             ]
         }

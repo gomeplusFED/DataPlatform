@@ -291,5 +291,75 @@ module.exports = {
             config : config[chartType],
             data : newData
         }]
+    },
+    four(data, uvs, names, total_pv, params) {
+        var rows = [[
+            "date", "url", "name", "uv", "pv", "pv_rate"
+        ]],
+            cols = [[]],
+            pc = {
+                "时段" : "string",
+                "访问页面" : "string",
+                "页面名称/ID" : "string",
+                "访客数" : "number",
+                "浏览量" : "number",
+                "浏览量占比" : "string"
+            },
+            app = {
+                "时段" : "string",
+                "访问页面" : "string",
+                "页面名称/ID" : "string",
+                "访问用户数" : "number",
+                "访问次数" : "number",
+                "浏览量占比" : "string"
+            },
+            date = "",
+            config = {},
+            newData = [];
+        if(params.type === "PC" || params.type === "H5") {
+            for(var key in pc) {
+                cols[0].push({
+                    caption : key,
+                    type : pc[key]
+                });
+            }
+        } else {
+            for(var key in app) {
+                cols[0].push({
+                    caption : key,
+                    type : app[key]
+                });
+            }
+        }
+
+        if(params.hour === "all") {
+            date = "全时段";
+        } else {
+            date = params.hour + ":00-" + (params.hour + 1) + ":00";
+        }
+
+        for(var key of names) {
+            config[key.url] = key.name;
+        }
+
+        for(var i = 0; i < data[0][1].length; i++) {
+            if(i%2 === 1) {
+                newData.push({
+                    date : date,
+                    url : data[0][1][i - 1],
+                    pv : +data[0][1][i]
+                });
+            }
+        }
+
+        for(var i = 0; i < newData.length; i++) {
+            var key = newData[i];
+            key.uv = +uvs[i][0][1];
+            key.name = config[key.url];
+            key.pv_rate = util.toFixed(key.pv, total_pv);
+            newData[i] = key;
+        }
+
+        return util.toTable([newData], rows, cols);
     }
 };
