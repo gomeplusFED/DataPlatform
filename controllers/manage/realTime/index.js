@@ -322,8 +322,7 @@ module.exports = (Router) => {
 
     Router = Router.get("/realTime/three_json", (req, res, next) => {
         var params = req.query,
-            //date = moment(new Date()).format("MMDD"),
-            date = "0704",
+            date = moment(new Date()).format("MMDD"),
             hour = moment(new Date()).format("HH"),
             end = "",
             modules = {
