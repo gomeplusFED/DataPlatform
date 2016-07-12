@@ -24,7 +24,7 @@ module.exports = (Router) => {
             ],
             [
                 "tran_order_user_num", "tran_order_money_amount",
-                "tran_pay_user_num",
+                "tred_order_all_amount","tred_pay_all_amount","tran_pay_user_num",
                 "tran_pay_money_amount", "tran_cus_unit_price",
                 "tran_balance", "tran_plat_coupon_price", "tran_turnover"
             ]
@@ -63,6 +63,12 @@ module.exports = (Router) => {
                 type: "number"
             }, {
                 caption: "下单金额",
+                type: "number"
+            }, {
+                caption: "下单总量",
+                type: "number"
+            }, {
+                caption: "付款订单量",
                 type: "number"
             }, {
                 caption: "支付人数",
@@ -232,42 +238,11 @@ module.exports = (Router) => {
                 value: '四级类目'
             }]
         }],
-        filter(data, filter_key, dates) {
-            return filter.tradeFour(data, filter_key);
+        filter(data, filter_key, dates, filter_key2, page, params) {
+            return filter.tradeFour(data, params);
         },
-        rows : [
-            [ 'caty_name', 'access_num', 'access_users', 'sales_pro_num',
-                'pay_money_amount', 'pay_money_amount_ratio'
-            ]
-        ],
-        cols : [
-            [
-                {
-                    caption : '类目名称',
-                    type : 'string'
-                },
-                {
-                    caption : '浏览量',
-                    type : 'number'
-                },
-                {
-                    caption : '访客数',
-                    type : 'number'
-                },
-                {
-                    caption : '销量',
-                    type : 'number'
-                },
-                {
-                    caption : '销售金额',
-                    type : 'number'
-                },
-                {
-                    caption : '销售金额占比',
-                    type : 'string'
-                }
-            ]
-        ]
+        rows : [],
+        cols : []
     });
 
     Router = new api(Router,{

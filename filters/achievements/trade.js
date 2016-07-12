@@ -19,6 +19,8 @@ module.exports = {
                 tran_order_user_num : 0,
                 tran_order_money_amount : 0,
                 tran_pay_user_num : 0,
+                tred_order_all_amount : 0,
+                tred_pay_all_amount : 0,
                 tran_pay_money_amount : 0,
                 tran_refund_pro_num_spu : 0,
                 tran_refund_pro_num_sku : 0,
@@ -29,6 +31,8 @@ module.exports = {
             };
         for(var key of source) {
             obj.tran_acc_pro_num += key.tran_acc_pro_num;
+            obj.tred_order_all_amount += key.tred_order_all_amount;
+            obj.tred_pay_all_amount += key.tred_pay_all_amount;
             obj.tran_order_pro_num_spu += key.tran_order_pro_num_spu;
             obj.tran_order_pro_num_sku += key.tran_order_pro_num_sku;
             obj.tran_pay_pro_num_spu += key.tran_pay_pro_num_spu;
@@ -56,6 +60,8 @@ module.exports = {
         two.push({
             tran_order_user_num : obj.tran_order_user_num,
             tran_order_money_amount : obj.tran_order_money_amount.toFixed(2),
+            tred_order_all_amount : obj.tred_order_all_amount.toFixed(0),
+            tred_pay_all_amount : obj.tred_pay_all_amount.toFixed(0),
             tran_pay_user_num : obj.tran_pay_user_num,
             tran_pay_money_amount : obj.tran_pay_money_amount.toFixed(2),
             tran_cus_unit_price : util.division(obj.tran_pay_money_amount, obj.tran_pay_user_num),
@@ -125,10 +131,63 @@ module.exports = {
 
         return util.toTable([source], data.rows, data.cols, [count]);
     },
-    tradeFour(data) {
+    tradeFour(data, params) {
         var source = data.data,
             count = data.dataCount,
-            total = 0;
+            total = 0,
+            cols = [],
+            rows = [];
+
+        if(params.caty_level === "3") {
+            rows.push("lev2_name");
+            cols.push({
+                caption : "二级类目",
+                type : "string"
+            });
+        } else if (params.caty_level === "4") {
+            rows.push("lev2_name");
+            rows.push("lev3_name");
+            cols.push({
+                caption : "二级类目",
+                type : "string"
+            });
+            cols.push({
+                caption : "三级类目",
+                type : "string"
+            });
+        }
+
+        data.rows[0] = rows.concat([ 'caty_name', 'access_num', 'access_users', 'sales_pro_num',
+            'pay_money_amount', 'pay_money_amount_ratio'
+        ]);
+
+        data.cols[0] = cols.concat([
+            {
+                caption : '类目名称',
+                type : 'string'
+            },
+            {
+                caption : '浏览量',
+                type : 'number'
+            },
+            {
+                caption : '访客数',
+                type : 'number'
+            },
+            {
+                caption : '销量',
+                type : 'number'
+            },
+            {
+                caption : '销售金额',
+                type : 'number'
+            },
+            {
+                caption : '销售金额占比',
+                type : 'string'
+            }
+        ]);
+
         for(var key of source) {
             total += key.pay_money_amount;
         }

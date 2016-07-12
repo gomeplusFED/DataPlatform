@@ -17,5 +17,7 @@ module.exports = {
     type : String,
     ver : String,
     channel : String,
+    lev2_name : String,
+    lev3_name : String,
     day_type : Number
 };
