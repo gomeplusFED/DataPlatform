@@ -11,7 +11,7 @@ var redis = require("ioredis"),
         "PC" : "www:",
         "H5" : "m:",
         "ios" : "ios:",
-        "Android" : "android:"
+        "android" : "android:"
     },
     filter = require("../../../filters/realTime"),
     orm = require("orm"),
@@ -24,6 +24,7 @@ var redis = require("ioredis"),
 module.exports = (Router) => {
     Router = Router.get("/realTime/one_json", (req, res, next) => {
         var params = req.query,
+            start = "",
             date = moment(new Date()).format("MMDD"),
             zDate = moment(new Date - 24 * 60 * 60 * 1000).format("MMDD"),
             hour =  moment(new Date()).format("HH"),
@@ -84,11 +85,13 @@ module.exports = (Router) => {
                 ["name", "one", "two", "three", "four", "five", "six", "seven", "eight"]
             ],
             cols = [[]];
+
         if(Object.keys(params).length === 0) {
             _render(res, [], modules);
         } else {
             if(params.type === "PC" || params.type === "H5") {
                 objCols = pcCols;
+                start = "js:";
                 for(var key in pc) {
                     cols[0].push({
                         caption : key,
@@ -96,8 +99,9 @@ module.exports = (Router) => {
                     });
                 }
             } else {
+                start = "app:";
+                objCols = iosCols;
                 for(var key in ios) {
-                    objCols = iosCols;
                     cols[0].push({
                         caption : key,
                         type : ios[key]
@@ -111,11 +115,11 @@ module.exports = (Router) => {
                         for(var i = 0; i< +hour + 1; i++) {
                             if(i >= 10) {
                                 data["0"][key].push(
-                                    await (_find("js:" + type[params.type] + date + i + ":" + key))
+                                    await (_find(start + type[params.type] + date + i + ":" + key))
                                 );
                             } else {
                                 data["0"][key].push(
-                                    await (_find("js:" + type[params.type] + date + "0" + i + ":" + key))
+                                    await (_find(start + type[params.type] + date + "0" + i + ":" + key))
                                 );
                             }
                         }
@@ -123,11 +127,11 @@ module.exports = (Router) => {
                         for(var n = 0; n < 24; n++) {
                             if(n >= 10) {
                                 data["1"][key].push(
-                                    await (_find("js:" + type[params.type] + zDate + n + ":" + key))
+                                    await (_find(start + type[params.type] + zDate + n + ":" + key))
                                 );
                             } else {
                                 data["1"][key].push(
-                                    await (_find("js:" + type[params.type] + zDate + "0" + n + ":" + key))
+                                    await (_find(start + type[params.type] + zDate + "0" + n + ":" + key))
                                 );
                             }
                         }
@@ -137,22 +141,22 @@ module.exports = (Router) => {
                     for(var i = 0; i< +hour + 1; i++) {
                         if(i >= 10) {
                             data["0"].user.push(
-                                await (_find("js:" + type[params.type] + "reg:" + date + i + ":user"))
+                                await (_find(start + type[params.type] + "reg:" + date + i + ":user"))
                             );
                         } else {
                             data["0"].user.push(
-                                await (_find("js:" + type[params.type] + "reg:" + date + "0" + i + ":user"))
+                                await (_find(start + type[params.type] + "reg:" + date + "0" + i + ":user"))
                             );
                         }
                     }
                     for(var n = 0; n < 24; n++) {
                         if(n >= 10) {
                             data["1"].user.push(
-                                await (_find("js:" + type[params.type] + zDate + n + ":" + key))
+                                await (_find(start + type[params.type] + "reg:" + zDate + n + ":user"))
                             );
                         } else {
                             data["1"].user.push(
-                                await (_find("js:" + type[params.type] + zDate + "0" + n + ":" + key))
+                                await (_find(start + type[params.type] + "reg:" + zDate + "0" + n + ":user"))
                             );
                         }
                     }
@@ -166,6 +170,7 @@ module.exports = (Router) => {
 
     Router = Router.get("/realTime/two_json", (req, res, next) => {
         var params = req.query,
+            start = "",
             date = moment(new Date()).format("MMDD"),
             hour =  moment(new Date()).format("HH"),
             pc = {
@@ -263,6 +268,12 @@ module.exports = (Router) => {
                 value : key
             });
         }
+
+        if(params.type === "PC" || params.type === "H5") {
+            start = "js:";
+        } else {
+            start = "app:";
+        }
         if(Object.keys(params).length === 0) {
             _render(res, [], modules);
         } else {
@@ -276,17 +287,17 @@ module.exports = (Router) => {
                             for(var i = 0; i < +hour + 1; i++) {
                                 if(i >= 10) {
                                     one.push(await (_find(
-                                        "js:" + type[params.type] + "reg:" + date + i + ":" + key
+                                        start + type[params.type] + "reg:" + date + i + ":" + key
                                     )));
                                     two.push(await (_find(
-                                        "js:" + type[params.type] + "reg:" + _date + i + ":" + key
+                                        start + type[params.type] + "reg:" + _date + i + ":" + key
                                     )));
                                 } else {
                                     one.push(await (_find(
-                                        "js:" + type[params.type] + "reg:" + date + "0" + i + ":" + key
+                                        start + type[params.type] + "reg:" + date + "0" + i + ":" + key
                                     )));
                                     two.push(await (_find(
-                                        "js:" + type[params.type] + "reg:" + _date + "0" + i + ":" + key
+                                        start + type[params.type] + "reg:" + _date + "0" + i + ":" + key
                                     )));
                                 }
                             }
@@ -294,17 +305,17 @@ module.exports = (Router) => {
                             for(var i = 0; i < +hour + 1; i++) {
                                 if(i >= 10) {
                                     one.push(await (_find(
-                                        "js:" + type[params.type] + date + i + ":" + key
+                                        start + type[params.type] + date + i + ":" + key
                                     )));
                                     two.push(await (_find(
-                                        "js:" + type[params.type] + _date + i + ":" + key
+                                        start + type[params.type] + _date + i + ":" + key
                                     )));
                                 } else {
                                     one.push(await (_find(
-                                        "js:" + type[params.type] + date + "0" + i + ":" + key
+                                        start + type[params.type] + date + "0" + i + ":" + key
                                     )));
                                     two.push(await (_find(
-                                        "js:" + type[params.type] + _date + "0" + i + ":" + key
+                                        start + type[params.type] + _date + "0" + i + ":" + key
                                     )));
                                 }
                             }
@@ -322,6 +333,7 @@ module.exports = (Router) => {
 
     Router = Router.get("/realTime/three_json", (req, res, next) => {
         var params = req.query,
+            start = "",
             date = moment(new Date()).format("MMDD"),
             hour = moment(new Date()).format("HH"),
             end = "",
@@ -382,9 +394,11 @@ module.exports = (Router) => {
         }
 
         if(params.type === "PC" || params === "H5") {
-            end = "pro_pv"
+            end = "pro_pv";
+            start = "js:";
         } else {
-            end = "pro_startcount"
+            end = "pro_startcount";
+            start = "app:";
         }
 
         if(Object.keys(params).length === 0) {
@@ -392,7 +406,7 @@ module.exports = (Router) => {
         } else {
             async(() => {
                 try{
-                    var key = "js:" + type[params.type] + date + ":" + end;
+                    var key = start + type[params.type] + date + ":" + end;
                     var data = await(_customFind([
                         "zrevrange", key, 0, 9, "WITHSCORES"
                     ]));
@@ -415,6 +429,7 @@ module.exports = (Router) => {
 
     Router = Router.get("/realTime/four_json", (req, res, next) => {
         var params = req.query,
+            start = "",
             date = moment(new Date()).format("MMDD"),
             hour = moment(new Date()).format("HH"),
             end = "",
@@ -468,9 +483,11 @@ module.exports = (Router) => {
         if(params.type === "PC" || params.type === "H5") {
             end = "url_pv";
             keyEnd = "pv";
+            start = "js:";
         } else {
             end = "url_startcount";
             keyEnd = "startcount";
+            start = "app:";
         }
 
         if(Object.keys(params).length === 0) {
@@ -478,7 +495,7 @@ module.exports = (Router) => {
         } else {
             async(() => {
                 try{
-                    var key = "js:" + type[params.type] + date + ":" + end;
+                    var key = start + type[params.type] + date + ":" + end;
                     var data = await(_customFind([
                         "zrevrange", key, 0, 9, "WITHSCORES"
                     ]));
@@ -489,12 +506,12 @@ module.exports = (Router) => {
                             urls.push(data[0][1][i]);
                             uvs.push(await(_customFind([
                                 "zscore",
-                                "js:" + type[params.type] + date + ":url_uv",
+                                start + type[params.type] + date + ":url_uv",
                                 data[0][1][i]
                             ])));
                         }
                     }
-                    var total_pv = await(_find("js:" + type[params.type] + date+ ":" + keyEnd));
+                    var total_pv = await(_find(start + type[params.type] + date+ ":" + keyEnd));
                     req.models.UrlToName.find({
                         url : urls
                     }, (err, names) => {
