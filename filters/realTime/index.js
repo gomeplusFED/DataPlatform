@@ -311,11 +311,12 @@ module.exports = {
                 "页面名称/ID" : "string",
                 "访问用户数" : "number",
                 "访问次数" : "number",
-                "浏览量占比" : "string"
+                "访问次数占比" : "string"
             },
             date = "",
             config = {},
-            newData = [];
+            newData = [],
+            total = 0;
         if(params.type === "PC" || params.type === "H5") {
             for(var key in pc) {
                 cols[0].push({
@@ -329,6 +330,12 @@ module.exports = {
                     caption : key,
                     type : app[key]
                 });
+            }
+        }
+
+        for(var key of total_pv) {
+            if(key) {
+                total += +key;
             }
         }
 
@@ -356,7 +363,7 @@ module.exports = {
             var key = newData[i];
             key.uv = +uvs[i][0][1];
             key.name = config[key.url];
-            key.pv_rate = util.toFixed(key.pv, total_pv);
+            key.pv_rate = util.toFixed(key.pv, total);
             newData[i] = key;
         }
 
