@@ -432,8 +432,6 @@ module.exports = (Router) => {
             start = "",
             date = moment(new Date()).format("MMDD"),
             hour = moment(new Date()).format("HH"),
-            end = "",
-            keyEnd = "",
             modules = {
                 flexible_btn : [],
                 filter_select : [{
@@ -481,12 +479,8 @@ module.exports = (Router) => {
         }
 
         if(params.type === "PC" || params.type === "H5") {
-            end = "url_pv";
-            keyEnd = "pv";
             start = "js:";
         } else {
-            end = "url_startcount";
-            keyEnd = "startcount";
             start = "app:";
         }
 
@@ -495,10 +489,11 @@ module.exports = (Router) => {
         } else {
             async(() => {
                 try{
-                    var key = start + type[params.type] + date + ":" + end;
+                    var key = start + type[params.type] + date + ":url_pv";
                     var data = await(_customFind([
                         "zrevrange", key, 0, 9, "WITHSCORES"
                     ]));
+                    var total_pv = [];
                     var urls = [];
                     var uvs = [];
                     for(var i = 0; i < data[0][1].length; i++) {
@@ -511,7 +506,23 @@ module.exports = (Router) => {
                             ])));
                         }
                     }
-                    var total_pv = await(_find(start + type[params.type] + date+ ":" + keyEnd));
+                    if(params.hour === "all") {
+                        for(var i = 0; i < +hour + 1; i++) {
+                            if(i >=10) {
+                                total_pv.push(
+                                    await(_find(start + type[params.type] + date + i + ":pv"))
+                                )
+                            } else {
+                                total_pv.push(
+                                    await(_find(start + type[params.type] + date + "0" + i + ":pv"))
+                                )
+                            }
+                        }
+                    } else {
+                        total_pv.push(
+                            await(_find(start + type[params.type] + date+ ":pv"))
+                        )
+                    }
                     req.models.UrlToName.find({
                         url : urls
                     }, (err, names) => {
