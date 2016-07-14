@@ -18,6 +18,8 @@ var redis = require("ioredis"),
     util = require("../../../utils"),
     async = require("asyncawait/async"),
     await = require("asyncawait/await"),
+    help = require("../../../base/help"),
+    helpConfig = require("../../../utils/config.json"),
     moment = require("moment");
 
 
@@ -59,8 +61,12 @@ module.exports = (Router) => {
             },
             modules = {
                 flexible_btn : [{
-                    content: '<a href="javascript:void(0)" help_url="/dataOverviewApp/help_json">帮助</a>',
+                    content: '<a href="javascript:void(0)" help_url="/realTime/help_json">帮助</a>',
                     preMethods: ["show_help"],
+                    customMethods: ''
+                },{
+                    content: '<a href="#!/dataOverview/app">更多>></a>',
+                    preMethods: [],
                     customMethods: ''
                 }],
                 filter_select : [{
@@ -538,6 +544,86 @@ module.exports = (Router) => {
             })();
         }
 
+    });
+
+    Router = new help(Router, {
+        router : "/realTime/help",
+        rows : helpConfig.help.rows,
+        cols : helpConfig.help.cols,
+        data : [
+            {
+                name : "APP字段释义",
+                help : ""
+            },
+            {
+                name : "启动用户数",
+                help : "当天各时段启动应用的用户数（去重）"
+            },
+            {
+                name : "启动次数",
+                help : "当天各时段启动应用的总次数（累加）"
+            },
+            {
+                name : "人均启动次数",
+                help : "启动总次数/启动用户数"
+            },
+            {
+                name : "新增用户",
+                help : "首次启动应用的用户数（以设备区分）"
+            },
+            {
+                name : "新增用户占比",
+                help : "新增用户/总启动用户数"
+            },
+            {
+                name : "新增注册（账户）",
+                help : "当天各时段APP/WAP注册的账户数"
+            },
+            {
+                name : "每次使用时长",
+                help : "使用应用总时长/启动次数"
+            },
+            {
+                name : "每人使用时长",
+                help : "使用应用总时长/启动用户数   "
+            },
+            {
+                name : "WAP字段释义",
+                help : ""
+            },
+            {
+                name : "访客数",
+                help : "当天各时段访问WAP站的用户数（去重）"
+            },
+            {
+                name : "浏览量",
+                help : "用户多次打开或刷新同一个页面，该指标值累加"
+            },
+            {
+                name : "访问次数",
+                help : "访客WAP进行访问的次数"
+            },
+            {
+                name : "新增访客数",
+                help : "初次访问WAP的用户数"
+            },
+            {
+                name : "新增访客占比",
+                help : "新增访客数/当天总访客数"
+            },
+            {
+                name : "新增注册（账户）",
+                help : "当天各时段WAP注册的账户数"
+            },
+            {
+                name : "平均访问页面数",
+                help : "浏览量/访问次数"
+            },
+            {
+                name : "平均访问时长",
+                help : "总的停留时间/总的访问次数"
+            }
+        ]
     });
 
     return Router;
