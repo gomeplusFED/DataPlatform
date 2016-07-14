@@ -11,19 +11,22 @@ var redis = require("ioredis"),
         "PC" : "www:",
         "H5" : "m:",
         "ios" : "ios:",
-        "Android" : "android:"
+        "android" : "android:"
     },
     filter = require("../../../filters/realTime"),
     orm = require("orm"),
     util = require("../../../utils"),
     async = require("asyncawait/async"),
     await = require("asyncawait/await"),
+    help = require("../../../base/help"),
+    helpConfig = require("../../../utils/config.json"),
     moment = require("moment");
 
 
 module.exports = (Router) => {
     Router = Router.get("/realTime/one_json", (req, res, next) => {
         var params = req.query,
+            start = "",
             date = moment(new Date()).format("MMDD"),
             zDate = moment(new Date - 24 * 60 * 60 * 1000).format("MMDD"),
             hour =  moment(new Date()).format("HH"),
@@ -58,8 +61,12 @@ module.exports = (Router) => {
             },
             modules = {
                 flexible_btn : [{
-                    content: '<a href="javascript:void(0)" help_url="/dataOverviewApp/help_json">帮助</a>',
+                    content: '<a href="javascript:void(0)" help_url="/realTime/help_json">帮助</a>',
                     preMethods: ["show_help"],
+                    customMethods: ''
+                },{
+                    content: '<a href="#!/dataOverview/app">更多>></a>',
+                    preMethods: [],
                     customMethods: ''
                 }],
                 filter_select : [{
@@ -84,11 +91,13 @@ module.exports = (Router) => {
                 ["name", "one", "two", "three", "four", "five", "six", "seven", "eight"]
             ],
             cols = [[]];
+
         if(Object.keys(params).length === 0) {
             _render(res, [], modules);
         } else {
             if(params.type === "PC" || params.type === "H5") {
                 objCols = pcCols;
+                start = "js:";
                 for(var key in pc) {
                     cols[0].push({
                         caption : key,
@@ -96,8 +105,9 @@ module.exports = (Router) => {
                     });
                 }
             } else {
+                start = "app:";
+                objCols = iosCols;
                 for(var key in ios) {
-                    objCols = iosCols;
                     cols[0].push({
                         caption : key,
                         type : ios[key]
@@ -111,11 +121,11 @@ module.exports = (Router) => {
                         for(var i = 0; i< +hour + 1; i++) {
                             if(i >= 10) {
                                 data["0"][key].push(
-                                    await (_find("js:" + type[params.type] + date + i + ":" + key))
+                                    await (_find(start + type[params.type] + date + i + ":" + key))
                                 );
                             } else {
                                 data["0"][key].push(
-                                    await (_find("js:" + type[params.type] + date + "0" + i + ":" + key))
+                                    await (_find(start + type[params.type] + date + "0" + i + ":" + key))
                                 );
                             }
                         }
@@ -123,11 +133,11 @@ module.exports = (Router) => {
                         for(var n = 0; n < 24; n++) {
                             if(n >= 10) {
                                 data["1"][key].push(
-                                    await (_find("js:" + type[params.type] + zDate + n + ":" + key))
+                                    await (_find(start + type[params.type] + zDate + n + ":" + key))
                                 );
                             } else {
                                 data["1"][key].push(
-                                    await (_find("js:" + type[params.type] + zDate + "0" + n + ":" + key))
+                                    await (_find(start + type[params.type] + zDate + "0" + n + ":" + key))
                                 );
                             }
                         }
@@ -137,22 +147,22 @@ module.exports = (Router) => {
                     for(var i = 0; i< +hour + 1; i++) {
                         if(i >= 10) {
                             data["0"].user.push(
-                                await (_find("js:" + type[params.type] + "reg:" + date + i + ":user"))
+                                await (_find(start + type[params.type] + "reg:" + date + i + ":user"))
                             );
                         } else {
                             data["0"].user.push(
-                                await (_find("js:" + type[params.type] + "reg:" + date + "0" + i + ":user"))
+                                await (_find(start + type[params.type] + "reg:" + date + "0" + i + ":user"))
                             );
                         }
                     }
                     for(var n = 0; n < 24; n++) {
                         if(n >= 10) {
                             data["1"].user.push(
-                                await (_find("js:" + type[params.type] + zDate + n + ":" + key))
+                                await (_find(start + type[params.type] + "reg:" + zDate + n + ":user"))
                             );
                         } else {
                             data["1"].user.push(
-                                await (_find("js:" + type[params.type] + zDate + "0" + n + ":" + key))
+                                await (_find(start + type[params.type] + "reg:" + zDate + "0" + n + ":user"))
                             );
                         }
                     }
@@ -166,6 +176,7 @@ module.exports = (Router) => {
 
     Router = Router.get("/realTime/two_json", (req, res, next) => {
         var params = req.query,
+            start = "",
             date = moment(new Date()).format("MMDD"),
             hour =  moment(new Date()).format("HH"),
             pc = {
@@ -263,6 +274,12 @@ module.exports = (Router) => {
                 value : key
             });
         }
+
+        if(params.type === "PC" || params.type === "H5") {
+            start = "js:";
+        } else {
+            start = "app:";
+        }
         if(Object.keys(params).length === 0) {
             _render(res, [], modules);
         } else {
@@ -276,17 +293,17 @@ module.exports = (Router) => {
                             for(var i = 0; i < +hour + 1; i++) {
                                 if(i >= 10) {
                                     one.push(await (_find(
-                                        "js:" + type[params.type] + "reg:" + date + i + ":" + key
+                                        start + type[params.type] + "reg:" + date + i + ":" + key
                                     )));
                                     two.push(await (_find(
-                                        "js:" + type[params.type] + "reg:" + _date + i + ":" + key
+                                        start + type[params.type] + "reg:" + _date + i + ":" + key
                                     )));
                                 } else {
                                     one.push(await (_find(
-                                        "js:" + type[params.type] + "reg:" + date + "0" + i + ":" + key
+                                        start + type[params.type] + "reg:" + date + "0" + i + ":" + key
                                     )));
                                     two.push(await (_find(
-                                        "js:" + type[params.type] + "reg:" + _date + "0" + i + ":" + key
+                                        start + type[params.type] + "reg:" + _date + "0" + i + ":" + key
                                     )));
                                 }
                             }
@@ -294,17 +311,17 @@ module.exports = (Router) => {
                             for(var i = 0; i < +hour + 1; i++) {
                                 if(i >= 10) {
                                     one.push(await (_find(
-                                        "js:" + type[params.type] + date + i + ":" + key
+                                        start + type[params.type] + date + i + ":" + key
                                     )));
                                     two.push(await (_find(
-                                        "js:" + type[params.type] + _date + i + ":" + key
+                                        start + type[params.type] + _date + i + ":" + key
                                     )));
                                 } else {
                                     one.push(await (_find(
-                                        "js:" + type[params.type] + date + "0" + i + ":" + key
+                                        start + type[params.type] + date + "0" + i + ":" + key
                                     )));
                                     two.push(await (_find(
-                                        "js:" + type[params.type] + _date + "0" + i + ":" + key
+                                        start + type[params.type] + _date + "0" + i + ":" + key
                                     )));
                                 }
                             }
@@ -322,8 +339,8 @@ module.exports = (Router) => {
 
     Router = Router.get("/realTime/three_json", (req, res, next) => {
         var params = req.query,
-            //date = moment(new Date()).format("MMDD"),
-            date = "0704",
+            start = "",
+            date = moment(new Date()).format("MMDD"),
             hour = moment(new Date()).format("HH"),
             end = "",
             modules = {
@@ -383,9 +400,11 @@ module.exports = (Router) => {
         }
 
         if(params.type === "PC" || params === "H5") {
-            end = "pro_pv"
+            end = "pro_pv";
+            start = "js:";
         } else {
-            end = "pro_startcount"
+            end = "pro_startcount";
+            start = "app:";
         }
 
         if(Object.keys(params).length === 0) {
@@ -393,7 +412,7 @@ module.exports = (Router) => {
         } else {
             async(() => {
                 try{
-                    var key = "js:" + type[params.type] + date + ":" + end;
+                    var key = start + type[params.type] + date + ":" + end;
                     var data = await(_customFind([
                         "zrevrange", key, 0, 9, "WITHSCORES"
                     ]));
@@ -416,10 +435,9 @@ module.exports = (Router) => {
 
     Router = Router.get("/realTime/four_json", (req, res, next) => {
         var params = req.query,
+            start = "",
             date = moment(new Date()).format("MMDD"),
             hour = moment(new Date()).format("HH"),
-            end = "",
-            keyEnd = "",
             modules = {
                 flexible_btn : [],
                 filter_select : [{
@@ -467,11 +485,9 @@ module.exports = (Router) => {
         }
 
         if(params.type === "PC" || params.type === "H5") {
-            end = "url_pv";
-            keyEnd = "pv";
+            start = "js:";
         } else {
-            end = "url_startcount";
-            keyEnd = "startcount";
+            start = "app:";
         }
 
         if(Object.keys(params).length === 0) {
@@ -479,10 +495,11 @@ module.exports = (Router) => {
         } else {
             async(() => {
                 try{
-                    var key = "js:" + type[params.type] + date + ":" + end;
+                    var key = start + type[params.type] + date + ":url_pv";
                     var data = await(_customFind([
                         "zrevrange", key, 0, 9, "WITHSCORES"
                     ]));
+                    var total_pv = [];
                     var urls = [];
                     var uvs = [];
                     for(var i = 0; i < data[0][1].length; i++) {
@@ -490,12 +507,28 @@ module.exports = (Router) => {
                             urls.push(data[0][1][i]);
                             uvs.push(await(_customFind([
                                 "zscore",
-                                "js:" + type[params.type] + date + ":url_uv",
+                                start + type[params.type] + date + ":url_uv",
                                 data[0][1][i]
                             ])));
                         }
                     }
-                    var total_pv = await(_find("js:" + type[params.type] + date+ ":" + keyEnd));
+                    if(params.hour === "all") {
+                        for(var i = 0; i < +hour + 1; i++) {
+                            if(i >=10) {
+                                total_pv.push(
+                                    await(_find(start + type[params.type] + date + i + ":pv"))
+                                )
+                            } else {
+                                total_pv.push(
+                                    await(_find(start + type[params.type] + date + "0" + i + ":pv"))
+                                )
+                            }
+                        }
+                    } else {
+                        total_pv.push(
+                            await(_find(start + type[params.type] + date+ ":pv"))
+                        )
+                    }
                     req.models.UrlToName.find({
                         url : urls
                     }, (err, names) => {
@@ -511,6 +544,86 @@ module.exports = (Router) => {
             })();
         }
 
+    });
+
+    Router = new help(Router, {
+        router : "/realTime/help",
+        rows : helpConfig.help.rows,
+        cols : helpConfig.help.cols,
+        data : [
+            {
+                name : "APP字段释义",
+                help : ""
+            },
+            {
+                name : "启动用户数",
+                help : "当天各时段启动应用的用户数（去重）"
+            },
+            {
+                name : "启动次数",
+                help : "当天各时段启动应用的总次数（累加）"
+            },
+            {
+                name : "人均启动次数",
+                help : "启动总次数/启动用户数"
+            },
+            {
+                name : "新增用户",
+                help : "首次启动应用的用户数（以设备区分）"
+            },
+            {
+                name : "新增用户占比",
+                help : "新增用户/总启动用户数"
+            },
+            {
+                name : "新增注册（账户）",
+                help : "当天各时段APP/WAP注册的账户数"
+            },
+            {
+                name : "每次使用时长",
+                help : "使用应用总时长/启动次数"
+            },
+            {
+                name : "每人使用时长",
+                help : "使用应用总时长/启动用户数   "
+            },
+            {
+                name : "WAP字段释义",
+                help : ""
+            },
+            {
+                name : "访客数",
+                help : "当天各时段访问WAP站的用户数（去重）"
+            },
+            {
+                name : "浏览量",
+                help : "用户多次打开或刷新同一个页面，该指标值累加"
+            },
+            {
+                name : "访问次数",
+                help : "访客WAP进行访问的次数"
+            },
+            {
+                name : "新增访客数",
+                help : "初次访问WAP的用户数"
+            },
+            {
+                name : "新增访客占比",
+                help : "新增访客数/当天总访客数"
+            },
+            {
+                name : "新增注册（账户）",
+                help : "当天各时段WAP注册的账户数"
+            },
+            {
+                name : "平均访问页面数",
+                help : "浏览量/访问次数"
+            },
+            {
+                name : "平均访问时长",
+                help : "总的停留时间/总的访问次数"
+            }
+        ]
     });
 
     return Router;
