@@ -203,13 +203,6 @@ var Chart = Vue.extend({
 				options.yAxis = _xAxis;
 			}
 
-			if (config.toolBox) {
-				options.toolbox.show = true;
-				Object.keys(config.toolBox).forEach(function(item) {
-					options.toolbox.feature[item] = config.toolBox[item];
-				});
-			}
-
 			if (chartType === 'pie') {
 				options.legend.data = xAxis;
 				options.tooltip.formatter = '{a} <br/>{b} : {c} ({d}%)';
@@ -225,6 +218,35 @@ var Chart = Vue.extend({
 				delete options.xAxis;
 				delete options.yAxis;
 			}
+
+			if (config.toolBox) {
+				options.toolbox.show = true;
+				Object.keys(config.toolBox).forEach(function(item) {
+					options.toolbox.feature[item] = config.toolBox[item];
+				});
+				if (options.toolbox.feature.dataView) {
+					options.toolbox.feature.dataView.optionToContent = function(options) {
+						var axisData = data;
+						var series = options.series;
+						var table = '<div style="width: 100%;height: 100%;overflow: scroll;">';
+						table += '<table class="table table-bordered table-hover" style="width: 100%;text-align: center;"><tr><td></td>';
+						Object.keys(map).forEach(function(item) {
+							table += '<td>' + map[item] + '</td>';
+						});
+						table += '</tr>';
+						Object.keys(data).forEach(function(th) {
+							table += '<tr><td>' + th + '</td>';
+							Object.keys(map).forEach(function(td) {
+								table += '<td>' + data[th][td] + '</td>';
+							});
+							table += '</tr>';
+						});
+						table += '</table></div>';
+						return table;
+					};
+				}
+			}
+
 			return options;
 		}
 	},
