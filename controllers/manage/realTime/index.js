@@ -399,7 +399,7 @@ module.exports = (Router) => {
             date += params.hour;
         }
 
-        if(params.type === "PC" || params === "H5") {
+        if(params.type === "PC" || params.type === "H5") {
             end = "pro_pv";
             start = "js:";
         } else {
