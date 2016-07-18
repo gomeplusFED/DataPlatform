@@ -167,23 +167,23 @@ module.exports = {
                 type : 'string'
             },
             {
-                caption : '浏览量',
+                caption : '类目商品访问量',
                 type : 'number'
             },
             {
-                caption : '访客数',
+                caption : '类目商品访客数',
                 type : 'number'
             },
             {
-                caption : '销量',
+                caption : '支付商品件数',
                 type : 'number'
             },
             {
-                caption : '销售金额',
+                caption : '支付金额',
                 type : 'number'
             },
             {
-                caption : '销售金额占比',
+                caption : '支付金额占比',
                 type : 'string'
             }
         ]);

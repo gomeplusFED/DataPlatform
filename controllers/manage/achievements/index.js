@@ -90,11 +90,11 @@ module.exports = (Router) => {
                     type : 'number'
                 },
                 {
-                    caption : '被访问的店铺数',
+                    caption : '被访问店铺数',
                     type : 'number'
                 },
                 {
-                    caption : '被分享的店铺数',
+                    caption : '被分享店铺数',
                     type : 'number'
                 }
             ]
@@ -130,19 +130,19 @@ module.exports = (Router) => {
                 caption: '店铺名称',
                 type: 'string'
             }, {
-                caption: '浏览量',
+                caption: '店铺访问量',
                 type: 'number'
             }, {
-                caption: '浏览量占比',
+                caption: '店铺访问量占比',
                 type: 'string'
             }, {
-                caption: '访客数',
+                caption: '店铺访客数',
                 type: 'number'
             }, {
-                caption: '访客数占比',
+                caption: '店铺访客数占比',
                 type: 'string'
             }, {
-                caption: '被分享次数',
+                caption: '店铺被分享次数',
                 type: 'number'
             }]
         ]
@@ -163,7 +163,7 @@ module.exports = (Router) => {
             filter_key : 'sku_type',
             groups: [{
                 key: '1',
-                value: '合并SKU'
+                value: 'item'
             }, {
                 key: '2',
                 value: 'SKU'

@@ -81,12 +81,14 @@ module.exports = {
         }
 
         if(filter_key === "2") {
+            data.cols[0][1].caption = "商品访问量";
             data.cols[0][2].caption = "下单商品件数";
             data.cols[0][3].caption = "支付商品件数";
             data.cols[0][4].caption = "退货商品件数";
         }
 
         if(filter_key === "1") {
+            data.cols[0][1].caption = "被访问商品数";
             data.cols[0][2].caption = "下单商品数";
             data.cols[0][3].caption = "支付商品数";
             data.cols[0][4].caption = "退货商品数";

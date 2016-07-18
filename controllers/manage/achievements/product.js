@@ -25,7 +25,7 @@ module.exports = (Router) => {
                 value: 'SKU'
             }, {
                 key: 1,
-                value: '合并SKU'
+                value: 'item'
             }]
         }],
         filter(data, filter_key, dates) {
@@ -77,7 +77,7 @@ module.exports = (Router) => {
                     filter_key : 'filter_key',
                     groups: [{
                         key: "products_cars",
-                        value: '加购商品件数'
+                        value: '商品访问量'
                     },{
                         key: "products_order",
                         value: '下单商品件数'
@@ -88,13 +88,13 @@ module.exports = (Router) => {
                 }
             }, {
                 key: 1,
-                value: '合并SKU',
+                value: 'item',
                 cell : {
                     title: '',
                     filter_key : 'filter_key',
                     groups: [{
                         key: "product_scan",
-                        value: '浏览商品数'
+                        value: '被访问的商品数'
                     },{
                         key: "products_order",
                         value: '下单商品数'
@@ -125,7 +125,7 @@ module.exports = (Router) => {
                 value: 'SKU'
             }, {
                 key: 1,
-                value: '合并SKU'
+                value: 'item'
             }]
         }],
         flexible_btn : [{
@@ -194,16 +194,16 @@ module.exports = (Router) => {
                 caption: '商品名称',
                 type: 'string'
             }, {
-                caption: '浏览量',
+                caption: '商品访问量',
                 type: 'number'
             }, {
-                caption: '浏览量占比',
+                caption: '商品访问量占比',
                 type: 'string'
             }, {
-                caption: '访客数',
+                caption: '商品访客数',
                 type: 'number'
             }, {
-                caption: '访客数占比',
+                caption: '商品访客数占比',
                 type: 'string'
             }, {
                 caption: '商品被分享次数',
@@ -251,19 +251,19 @@ module.exports = (Router) => {
                 caption: '下单金额',
                 type: 'number'
             },{
-                caption: '成交人数',
+                caption: '支付人数',
                 type: 'number'
             },{
-                caption: '成交件数',
+                caption: '支付件数',
                 type: 'number'
             }, {
-                caption: '成交金额',
+                caption: '支付金额',
                 type: 'number'
             }, {
-                caption: '成交金额占比',
+                caption: '支付金额占比',
                 type: 'string'
             }, {
-                caption: '退货数',
+                caption: '退货件数',
                 type: 'number'
             }]
         ]

@@ -83,9 +83,11 @@ module.exports = {
         if(sku_type === "2") {
             data.cols[0][4].caption = "支付商品件数";
             data.cols[0][5].caption = "支付商品件数占比";
+            data.cols[0][6].caption = "商品被分享次数";
         } else {
             data.cols[0][4].caption = "支付商品数";
             data.cols[0][5].caption = "支付商品数占比";
+            data.cols[0][6].caption = "被分享商品数";
         }
 
         return util.toTable([source], data.rows, data.cols, [count]);

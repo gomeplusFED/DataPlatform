@@ -83,10 +83,10 @@ module.exports = (Router) => {
                 caption: "国美币使用额",
                 type: "number"
             }, {
-                caption: "优惠卷使用额",
+                caption: "平台优惠券使用金额",
                 type: "number"
             }, {
-                caption: "交易额",
+                caption: "成交金额",
                 type: "number"
             }]
         ]
@@ -101,10 +101,10 @@ module.exports = (Router) => {
             filter_key: 'filter_key',
             groups: [{
                 key: 'tred_acc_shop_num',
-                value: '浏览店铺数'
+                value: '被访问店铺数'
             }, {
                 key: 'tred_deal_shop_num',
-                value: '成交店铺数'
+                value: '支付店铺数'
             }, {
                 key: 'tran_acc_pro_num',
                 value: '浏览商品数'
@@ -122,7 +122,7 @@ module.exports = (Router) => {
                 value: '成交金额'
             }, {
                 key: 'tran_order_money_amount',
-                value: '付款金额'
+                value: '支付金额'
             }, {
                 key: 'tred_order_all_amount',
                 value: '下单总量'
@@ -133,11 +133,20 @@ module.exports = (Router) => {
                 key: 'tred_pay_user_num',
                 value: '支付人数'
             }, {
+                key: 'tran_pay_pro_num_spu',
+                value: '支付商品数'
+            },  {
+                key: 'tran_pay_pro_num_sku',
+                value: '支付商品件数'
+            },  {
                 key: 'tran_order_pro_num_spu',
                 value: '下单商品数'
             }, {
                 key: 'tran_order_pro_num_sku',
                 value: '下单商品件数'
+            }, {
+                key: 'tran_order_user_num',
+                value: '下单人数'
             }, {
                 key: "tran_guest_unit_price",
                 value: '客单价'
@@ -206,7 +215,7 @@ module.exports = (Router) => {
                     type : 'number'
                 },
                 {
-                    caption : '退货数',
+                    caption : '退货件数',
                     type : 'number'
                 }
             ]
@@ -292,17 +301,17 @@ module.exports = (Router) => {
                     type: 'number'
                 },
                 {
-                    caption: '成交人数',
+                    caption: '支付人数',
                     type: 'number'
                 },
                 {
-                    caption: '成交件数',
+                    caption: '支付件数',
                     type: 'number'
-                    },
-                    {
-                        caption: '成交订单量',
-                        type: 'number'
-                    }
+                },
+                {
+                    caption: '支付订单量',
+                    type: 'number'
+                }
             ]
         ]
     });
