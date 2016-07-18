@@ -423,7 +423,7 @@ api.prototype = {
                 continue;
             }
             if(key === "to") {
-                limit = +params[key];
+                limit = +params[key] - offset;
                 continue;
             }
             _params[key] = params[key];
