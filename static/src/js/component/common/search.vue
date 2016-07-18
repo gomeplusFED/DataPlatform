@@ -44,9 +44,6 @@ export default {
 		};
 	},
 	props: ['index', 'pageComponentsData', 'componentType', 'argvs', 'initData'],
-	ready: function() {
-
-	},
 	methods: {
 		applySearch: function() {
 			this.setArgv(this.pageComponentsData[this.componentType].key, this.searchStr);
