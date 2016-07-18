@@ -16,6 +16,7 @@
 			<div class="panel-body">
 				<m-filter-select :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'filter_select'" :argvs.sync='argvs'></m-filter-select>
 				<m-level-select :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'level_select'" :argvs.sync='argvs'></m-level-select>
+				<m-search :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'search'" :argvs.sync='argvs'></m-search>
 				<m-table :index="index" :result-argvs="resultArgvs" :init-data="initData" :page-components-data="pageComponentsData" :current-data="currentData" :loading.sync="loading"></m-table>
 				<m-chart :index="index" :result-argvs="resultArgvs" :init-data="initData" :page-components-data="pageComponentsData" :current-data="currentData" :loading.sync="loading"></m-chart>
 			</div>
@@ -30,14 +31,12 @@
 </style>
 
 <script>
-
 /*
  * 组件说明
  * 名称：模块主入口组件
  * 数据来源：ajax
  * 详细：先根据页面上的initData中相应的query_api请求此模块中需要的组件数据，然后渲染组件，然后接受参数，然后处理参数，然后传递给table.vue/chart.vue，然后这两个组件再根据参数请求图表数据进行渲染
  */
-
 var Vue = require('Vue');
 var $ = require('jQuery');
 
@@ -48,6 +47,7 @@ var Table = require('./table.vue');
 var Chart = require('./chart.vue');
 var Btns = require('../common/btnGroup.vue');
 var LevelSelect = require('../common/levelSelect.vue');
+var Search = require('../common/search.vue');
 
 var utils = require('utils');
 
@@ -78,7 +78,8 @@ var Main = Vue.extend({
 		'm-table': Table,
 		'm-chart': Chart,
 		'm-btns': Btns,
-		'm-level-select': LevelSelect
+		'm-level-select': LevelSelect,
+		'm-search': Search
 	},
 	route: {
 		data: function(){

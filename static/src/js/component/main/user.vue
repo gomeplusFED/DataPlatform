@@ -101,7 +101,7 @@
 	</div>
 	<m-confirm></m-confirm>
 </template>
-<style>
+<style scoped>
 .search {
 	position: absolute;
 	right: 20px;
