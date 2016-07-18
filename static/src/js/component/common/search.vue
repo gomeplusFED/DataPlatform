@@ -35,8 +35,8 @@
 .search_con .input-group input {}
 </style>
 <script>
-import Vue from 'vue';
-export default {
+var Vue = require('Vue');
+module.exports = Vue.extend({
 	name: 'search',
 	data: function() {
 		return {
@@ -52,5 +52,5 @@ export default {
 			Vue.set(this.argvs, key, value);
 		}
 	}
-};
+});
 </script>
