@@ -30,17 +30,17 @@ module.exports = {
             newData = {},
             type = "line",
             map = {
-                "店铺" : "店铺",
-                "商品" : "商品",
-                "话题" : "话题",
-                "圈子" : "圈子"
+                "shop" : "店铺",
+                "product" : "商品",
+                "topic" : "话题",
+                "group" : "圈子"
             };
         for(var date of dates) {
             newData[date] = {
-                "店铺" : 0,
-                "商品" : 0,
-                "话题" : 0,
-                "圈子" : 0
+                "shop" : 0,
+                "product" : 0,
+                "topic" : 0,
+                "group" : 0
             };
         }
 
@@ -132,11 +132,12 @@ module.exports = {
             data.cols[0][1].caption = "分享来源";
         } else {
             data.rows[0][1] = "share_source_name";
-            data.cols[0][1].caption = filter_key;
+            data.cols[0][1].caption = config.source[filter_key];
         }
 
         for(var key of source) {
             key.id = (page - 1) * 20 + sum;
+            key.share_source = config.source[filter_key];
             key.operating =  "<button class='btn btn-default' url_detail='/share/operating'>分渠道</button>";
             key.rate = util.toFixed(key.click_time_sum, key.share_time_sum);
             sum++;

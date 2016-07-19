@@ -114,16 +114,16 @@ module.exports = (Router) => {
                 key: "all",
                 value: '全部'
             }, {
-                key: '商品',
+                key: 'product',
                 value: '商品'
             }, {
-                key: '话题',
+                key: 'topic',
                 value: '话题'
             }, {
-                key: '店铺',
+                key: 'shop',
                 value: '店铺'
             }, {
-                key: '圈子',
+                key: 'group',
                 value: '圈子'
             }]
         }],
@@ -170,8 +170,18 @@ module.exports = (Router) => {
         fixedParams(query, filter_key, req, cb) {
             if(filter_key === "all") {
                 query.share_source_name = "all";
-            } else {
-                query.share_source = filter_key;
+            }
+            if(query.share_source === "店铺") {
+                query.share_source = "shop";
+            }
+            if(query.share_source === "商品") {
+                query.share_source = "product";
+            }
+            if(query.share_source === "话题") {
+                query.share_source = "topic";
+            }
+            if(query.share_source === "圈子") {
+                query.share_source = "group";
             }
             cb(null, query);
         },
