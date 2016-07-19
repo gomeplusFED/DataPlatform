@@ -5,7 +5,8 @@
  */
 
 module.exports = {
-    dt : {type : "date", key:true},
+    id : String,
+    date : Date,
     discount_interrgional : String,
     type : String,
     create_num : Number,

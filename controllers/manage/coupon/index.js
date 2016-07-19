@@ -63,17 +63,6 @@ module.exports = (Router) => {
         platform : false,
         date_picker_data : 1,
         showDayUnit : true,
-        params(query) {
-            var _params = {};
-            for(var key in query) {
-                if(key === "date") {
-                    _params.dt = query[key];
-                } else if(key !== "day_type") {
-                    _params[key] = query[key];
-                }
-            }
-            return _params;
-        },
         filter(data, filter_key, dates) {
             return filter.allThree(data, filter_key);
         },

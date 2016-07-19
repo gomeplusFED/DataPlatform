@@ -18,19 +18,22 @@ module.exports = {
                 used_num : "使用数量"
             },
             map = {
-                platform : "平台" + filter_name[filter_key],
-                shop : "商家" + filter_name[filter_key]
+                value : filter_name[filter_key]
             },
             newData = {
-                platform : 0,
-                shop : 0
+                "平台" : {
+                    value : 0
+                },
+                "商家" : {
+                    value : 0
+                }
             };
 
         for(var key of source) {
             if(key.type === "1") {
-                newData.platform += key[filter_key];
+                newData["平台"].value += key[filter_key];
             } else {
-                newData.shop += key[filter_key];
+                newData["商家"].value += key[filter_key];
             }
         }
 
