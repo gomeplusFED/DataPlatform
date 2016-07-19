@@ -3,7 +3,7 @@
 		<strong class="title">{{pageComponentsData[componentType].title}}</strong>
 		<div class="from-con">
 			<div class="input-group input-group-sm">
-				<input type="text" class="form-control" v-model="searchStr" @keyDown.enter="applySearch()">
+				<input type="text" class="form-control" v-model="searchStr" @key-down.enter="applySearch()">
 				<span class="input-group-btn">
 					<button class="btn btn-default" type="button" @click="applySearch()">搜索</button>
 				</span>
