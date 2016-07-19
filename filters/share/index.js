@@ -137,7 +137,7 @@ module.exports = {
 
         for(var key of source) {
             key.id = (page - 1) * 20 + sum;
-            key.share_source = config.source[filter_key];
+            key.share_source = config.source[key.share_source];
             key.operating =  "<button class='btn btn-default' url_detail='/share/operating'>分渠道</button>";
             key.rate = util.toFixed(key.click_time_sum, key.share_time_sum);
             sum++;
