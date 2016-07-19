@@ -287,6 +287,10 @@ api.prototype = {
                 isErr = true;
                 error = err;
             }
+            if(isErr) {
+                next(error);
+                return;
+            }
             if (this.filter) {
                 sendData = this.filter(
                     sendData,
@@ -296,10 +300,6 @@ api.prototype = {
                     _params.page,
                     _params
                 );
-            }
-            if(isErr) {
-                next(error);
-                return;
             }
             if (type !== "excel") {
                 this._render(res, sendData, type);
@@ -399,6 +399,7 @@ api.prototype = {
                 _params[key] = params[key];
             }
         }
+        console.log(_params);
         return new Promise((resolve, reject) => {
             req.models[modelName].find(_params, (err, data) => {
                 if (err) {

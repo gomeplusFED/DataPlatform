@@ -57,5 +57,41 @@ module.exports = (Router) => {
         ]
     });
 
+    Router = new api(Router, {
+        router : "/coupon/allThree",
+        modelName : ["CouponGroupPriceInterrgional"],
+        platform : false,
+        date_picker_data : 1,
+        showDayUnit : true,
+        params(query) {
+            var _params = {};
+            for(var key in query) {
+                if(key === "date") {
+                    _params.dt = query[key];
+                } else if(key !== "day_type") {
+                    _params[key] = query[key];
+                }
+            }
+            return _params;
+        },
+        filter(data, filter_key, dates) {
+            return filter.allThree(data, filter_key);
+        },
+        filter_select: [{
+            title: '指标',
+            filter_key : 'filter_key',
+            groups: [{
+                key: 'create_num',
+                value: '平台商家创建占比'
+            }, {
+                key: 'receive_num',
+                value: '平台商家领取占比'
+            }, {
+                key: 'used_num',
+                value: '平台商家使用占比'
+            }]
+        }]
+    });
+
     return Router;
 };
