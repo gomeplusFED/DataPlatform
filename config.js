@@ -105,6 +105,15 @@ module.exports = {
                 obj.useAnalysis.accessPageNum()
             ]
         },
+        "7" : {
+            name: "优惠券分析",
+            display: true,
+            className: "fa fa-bar-chart-o fa-fw fa-fw",
+            href: "#",
+            path: [
+                obj.coupon.all()
+            ]
+        },
         "8" : {
             name: "终端属性",
             display: true,

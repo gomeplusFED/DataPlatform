@@ -14,14 +14,14 @@ module.exports = {
                 type: "table",
                 title: "优惠券总览",
                 query_api: "/coupon/allOne"
-            },{
-                type: "chart",
-                title: "优惠券趋势",
-                query_api: "/coupon/allTwo"
-            },{
-                type: "chart",
-                title: "优惠券分布",
-                query_api: "/coupon/allThree"
+            //},{
+            //    type: "chart",
+            //    title: "优惠券趋势",
+            //    query_api: "/coupon/allTwo"
+            //},{
+            //    type: "chart",
+            //    title: "优惠券分布",
+            //    query_api: "/coupon/allThree"
             }]
         };
     },
