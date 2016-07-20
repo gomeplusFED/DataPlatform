@@ -5,7 +5,9 @@
  */
 
 module.exports = {
+    id : {type : "number", key:true},
     date : Date,
+    day_type : Number,
     shop_id : Number,
     shop_name : String,
     create_num : Number,

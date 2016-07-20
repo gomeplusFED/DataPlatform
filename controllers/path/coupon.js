@@ -31,14 +31,14 @@ module.exports = {
             path: "/coupon/platformCoupon",
             display: true,
             defaultData: [{
-                type: "table",
-                title: "优惠券总览",
-                query_api: "/coupon/platformCouponOne"
-            },{
-                type: "chart",
-                title: "优惠券趋势",
-                query_api: "/coupon/platformCouponTwo"
-            },{
+            //    type: "table",
+            //    title: "优惠券总览",
+            //    query_api: "/coupon/platformCouponOne"
+            //},{
+            //    type: "chart",
+            //    title: "优惠券趋势",
+            //    query_api: "/coupon/platformCouponTwo"
+            //},{
                 type: "chart",
                 title: "面值分布",
                 query_api: "/coupon/platformCouponThree"

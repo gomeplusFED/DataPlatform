@@ -111,7 +111,9 @@ module.exports = {
             className: "fa fa-bar-chart-o fa-fw fa-fw",
             href: "#",
             path: [
-                obj.coupon.all()
+                obj.coupon.all(),
+                obj.coupon.platformCoupon(),
+                obj.coupon.shopCoupon()
             ]
         },
         "8" : {

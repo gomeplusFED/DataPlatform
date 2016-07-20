@@ -105,7 +105,8 @@ function api(Router, options) {
         }, {
             key: "quan",
             value: "coupon"
-        }]
+        }],
+        search : {show: false}
     }, options);
 
     utils.mixin(this, defaultOption);
@@ -334,7 +335,8 @@ api.prototype = {
                     url : this.level_select_url,
                     name : this.level_select_name
                 },
-                filter_select: this.filter_select
+                filter_select: this.filter_select,
+                search: this.search
             }
         });
     },
