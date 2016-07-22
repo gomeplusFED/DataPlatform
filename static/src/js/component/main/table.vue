@@ -3,12 +3,12 @@
 		<table v-for="tableItem in tableData" class="table table-bordered table-hover" role="grid" aria-describedby="dataTables_info">
 			<thead>
 				<tr>
-					<th v-for="captionItem in tableItem.cols">{{captionItem.caption}}</th>
+					<th v-for="(captionIndex, captionItem) in tableItem.cols" v-show="tableColControl[captionIndex]">{{captionItem.caption}}</th>
 				</tr>
 			</thead>
 			<tbody v-if="tableItem.data.length !== 0">
 				<tr v-for="tableBody in tableItem.data">
-					<td v-for="(tableKey, tableCell) in tableItem.rows"><span @click="tableOperation(tableBody[tableCell], tableBody, tableItem.rows[1])">{{{tableBody[tableCell] | toThousands}}}</span></td>
+					<td v-for="(tableKey, tableCell) in tableItem.rows" v-show="tableColControl[tableKey]"><span @click="tableOperation(tableBody[tableCell], tableBody, tableItem.rows[1])">{{{tableBody[tableCell] | toThousands}}}</span></td>
 				</tr>
 			</tbody>
 			<tbody v-else>
@@ -29,8 +29,6 @@
 	min-width: 120px;
 }
 
-
-/*word-break:break-all;word-wrap:break-word;white-space: pre-wrap;*/
 </style>
 <script>
 /*
@@ -50,6 +48,8 @@ var utils = require('utils');
 
 var Pagination = require('../common/pagination.vue');
 
+var eventBus = require('../support/event-bus.vue');
+
 var Table = Vue.extend({
 	name: 'Table',
 	data: function() {
@@ -67,8 +67,9 @@ var Table = Vue.extend({
 				onChange: function() {
 
 				}
-			}
-		}
+			},
+			tableColControl: {}
+		};
 	},
 	vuex: {
 		getters: {
@@ -83,6 +84,10 @@ var Table = Vue.extend({
 	},
 	ready: function() {
 		this.paginationConf.onChange = this.generatorTable;
+		var _this = this;
+		eventBus.$on('controlTableCol' + this.index, function(option) {
+			_this.tableColControl = option;
+		});
 	},
 	components: {
 		'm-pagination': Pagination
@@ -113,7 +118,7 @@ var Table = Vue.extend({
 							show: true,
 							msg: '查询失败',
 							type: 'danger'
-						})
+						});
 						return;
 					}
 					cb && cb(data);
@@ -123,7 +128,7 @@ var Table = Vue.extend({
 						errcb && errcb();
 					}
 				}
-			})
+			});
 		},
 		tableOperation: function(item, tableBody, detailParam) {
 			// item 字符串的html节点，从节点上获取 `url_detail` 或者 `url_link` 以及需要的参数
@@ -141,7 +146,7 @@ var Table = Vue.extend({
 				params[detailParam] = url;
 				utils.mixin(params, this.resultArgvs);
 
-				for (var item in params) {
+				for (let item in params) {
 					if (item === 'limit' || item === 'page') {
 						delete params[item];
 					}
@@ -178,13 +183,13 @@ var Table = Vue.extend({
 
 				Object.keys(fixedParams).forEach(function(item) {
 					resultArray.push(item + '=' + fixedParams[item]);
-				})
+				});
 
 				customParams.forEach(function(item) {
 					if (this.resultArgvs[item]) {
-						resultArray.push(item + '=' + this.resultArgvs[item])
+						resultArray.push(item + '=' + this.resultArgvs[item]);
 					}
-				})
+				});
 
 				this.$route.router.go(urlLink + '?' + resultArray.join('&'));
 			}
@@ -192,36 +197,42 @@ var Table = Vue.extend({
 		generatorTable: function() {
 			var _this = this;
 			if (this.currentData.type.indexOf('table') !== -1) {
-
 				this.loading.show = true;
 				this.loading.noLoaded += 1;
-				this.scrollTop = $(document).scrollTop(),
-					this.fetchData(function(data) {
-						_this.tableData = data.modelData;
+				this.scrollTop = $(document).scrollTop();
+				this.fetchData(function(data) {
+					_this.tableData = data.modelData;
 
-						_this.paginationConf.totalItems = data.modelData[0].count || 0;
+					// 控制第一个表格的列
+					_this.tableData[0].cols.forEach(function(item, index) {
+						Vue.set(_this.tableColControl, index, true);
+					});
 
-						_this.$dispatch('getTableDataLen', data.modelData[0].count || data.modelData[0].data.length);
+					eventBus.$emit('tableGenerate' + _this.index, _this.tableData);
 
-						// 所有组件加载完毕之后loading消失
-						_this.loading.noLoaded -= 1;
-						if (_this.loading.noLoaded === 0) {
-							_this.loading.show = false;
-						}
-						// 重新生成表格页面会回到顶部，重置下
-						$(document).scrollTop(_this.scrollTop);
-					}, function() {
-						_this.loading.noLoaded -= 1;
-						if (_this.loading.noLoaded === 0) {
-							_this.loading.show = false;
-						}
-						// erro
-						actions.alert(store, {
-							show: true,
-							msg: '查询超时',
-							type: 'danger'
-						})
-					})
+					_this.paginationConf.totalItems = data.modelData[0].count || 0;
+
+					_this.$dispatch('getTableDataLen', data.modelData[0].count || data.modelData[0].data.length);
+
+					// 所有组件加载完毕之后loading消失
+					_this.loading.noLoaded -= 1;
+					if (_this.loading.noLoaded === 0) {
+						_this.loading.show = false;
+					}
+					// 重新生成表格页面会回到顶部，重置下
+					$(document).scrollTop(_this.scrollTop);
+				}, function() {
+					_this.loading.noLoaded -= 1;
+					if (_this.loading.noLoaded === 0) {
+						_this.loading.show = false;
+					}
+					// erro
+					actions.alert(store, {
+						show: true,
+						msg: '查询超时',
+						type: 'danger'
+					});
+				});
 			}
 		}
 	},
@@ -237,6 +248,6 @@ var Table = Vue.extend({
 			deep: true
 		}
 	}
-})
+});
 module.exports = Table;
 </script>
