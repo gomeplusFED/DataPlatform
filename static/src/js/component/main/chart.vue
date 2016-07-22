@@ -173,6 +173,7 @@ var Chart = Vue.extend({
 				_currentObj.stack = config.stack ? 'stack' : '';
 				_currentObj.data = [];
 				_currentObj.name = map[item];
+				chartType === 'bar' ? _currentObj.barMaxWidth = '40px' : null;
 				for (var dataItem in data) {
 					_currentObj.data.push({
 						value: data[dataItem][item],
@@ -246,6 +247,8 @@ var Chart = Vue.extend({
 					};
 				}
 			}
+
+			console.log(options);
 
 			return options;
 		}
