@@ -4,21 +4,37 @@
  * @fileoverview 优惠券
  */
 var api = require("../../../base/api"),
+    util = require("../../../utils"),
+    orm = require("orm"),
     filter = require("../../../filters/coupon");
 
 module.exports = (Router) => {
 
     Router = new api(Router, {
         router : "/coupon/allOne",
-        modelName : ["SalesPerfTranKv"],
+        modelName : ["CouponGroupDate"],
         platform : false,
         date_picker_data : 1,
         showDayUnit : true,
-        filter(data, filter_key, dates) {
-            return filter.allOne(data);
+        fixedParams(query, filter_key, req, cb) {
+            var startTime = new Date(query.startTime + " 00:00:00"),
+                endTime =
+                    new Date(
+                        util.getDate(
+                            new Date(
+                                new Date(query.startTime) - 24 * 60 * 60 * 1000
+                            )
+                        ) + " 23:59:59"
+                    );
+            query.date = orm.between(startTime, endTime);
+            cb(null, query);
+        },
+        filter(data, filter_key, dates, filter_key2, page, params) {
+            return filter.allOne(data, dates);
         },
         rows: [
-            ["name", ""]
+            ["name", "create_num", "create_amount", "give_num", "receive_num", "receive_rate",
+                "used_num", "used_amount", "used_rate", "invalid_num"]
         ],
         cols: [
             [
@@ -58,8 +74,17 @@ module.exports = (Router) => {
     });
 
     Router = new api(Router, {
+        router : "/coupon/allTwo",
+        modelName : ["CouponGroupDate"],
+        platform : false,
+        filter(data, filter_key, dates) {
+            return filter.allTwo(data, dates);
+        }
+    });
+
+    Router = new api(Router, {
         router : "/coupon/allThree",
-        modelName : ["CouponGroupPriceInterrgional"],
+        modelName : ["CouponGroupDate"],
         platform : false,
         date_picker_data : 1,
         showDayUnit : true,
@@ -70,7 +95,7 @@ module.exports = (Router) => {
             title: '指标',
             filter_key : 'filter_key',
             groups: [{
-                key: 'create_num',
+                key: 'create_coupon_num',
                 value: '平台商家创建占比'
             }, {
                 key: 'receive_num',

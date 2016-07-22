@@ -1,12 +1,13 @@
 /**
  * @author yanglei
- * @date 20160718
- * @fileoverview 平台优惠券
+ * @date 20160721
+ * @fileoverview 商家优惠券
  */
-var util = require("../../utils");
+var util = require("../../utils"),
+    _ = require("lodash");
 
 module.exports = {
-    platformCouponOne(data, dates) {
+    shopCouponOne(data, dates) {
         var source = data.data,
             obj = {},
             newData = [];
@@ -89,15 +90,15 @@ module.exports = {
                     newData[0].invalid_num
                 ),
                 receive_rate :
-                    newData[0].receive_rate.replace("%", "") - newData[1].receive_rate.replace("%", "") + "%",
+                newData[0].receive_rate.replace("%", "") - newData[1].receive_rate.replace("%", "") + "%",
                 used_rate :
-                    newData[0].used_rate.replace("%", "") - newData[1].used_rate.replace("%", "") + "%"
+                newData[0].used_rate.replace("%", "") - newData[1].used_rate.replace("%", "") + "%"
             });
         }
 
         return util.toTable([newData], data.rows, data.cols);
     },
-    platformCouponTwo(data, dates) {
+    shopCouponTwo(data, dates) {
         var source = data.data,
             type  = "line",
             map = {
@@ -131,7 +132,7 @@ module.exports = {
             }
         }];
     },
-    platformCouponThree(data) {
+    shopCouponThree(data) {
         var source = data.data,
             type = "bar",
             map = {
@@ -155,8 +156,8 @@ module.exports = {
         for(var key of source) {
             total_receive += key.receive_num;
             total_used += key.used_num;
-            obj[key.price_interrgional].receive_num += key.receive_num;
-            obj[key.price_interrgional].used_num += key.used_num;
+            obj[key.discount_interrgional].receive_num += key.receive_num;
+            obj[key.discount_interrgional].used_num += key.used_num;
         }
 
         for(var key in obj) {
@@ -176,7 +177,17 @@ module.exports = {
             }
         }]
     },
-    platformCouponFour(data) {
+    shopCouponFour(data) {
+        var source = data.data,
+            count = data.dataCount;
+
+        for(var key of source) {
+            key.used_rate = util.toFixed(key.used_num, key.receive_num);
+        }
+
+        return util.toTable([source], data.rows, data.cols, [count]);
+    },
+    shopCouponFive(data) {
         var source = data.data,
             count = data.dataCount;
 

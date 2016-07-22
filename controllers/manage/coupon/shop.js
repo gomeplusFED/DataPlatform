@@ -1,17 +1,17 @@
 /**
  * @author yanglei
- * @date 20160718
- * @fileoverview 平台优惠券
+ * @date 20160721
+ * @fileoverview 商家优惠券
  */
 var api = require("../../../base/api"),
     orm = require("orm"),
     util = require("../../../utils"),
-    filter = require("../../../filters/coupon/platform");
+    filter = require("../../../filters/coupon/shop");
 
 module.exports = (Router) => {
 
     Router = new api(Router, {
-        router : "/coupon/platformCouponOne",
+        router : "/coupon/shopCouponOne",
         modelName : ["CouponGroupDate"],
         platform : false,
         date_picker_data : 1,
@@ -27,11 +27,11 @@ module.exports = (Router) => {
                         ) + " 23:59:59"
                     );
             query.date = orm.between(startTime, endTime);
-            query.type = "2";
+            query.type = "1";
             cb(null, query);
         },
         filter(data, filter_key, dates) {
-            return filter.platformCouponOne(data, dates);
+            return filter.shopCouponOne(data, dates);
         },
         rows: [
             ["name", "create_coupon_num", "create_coupon_amount", "give_num", "receive_num", "receive_rate",
@@ -75,33 +75,33 @@ module.exports = (Router) => {
     });
 
     Router = new api(Router, {
-        router : "/coupon/platformCouponTwo",
+        router : "/coupon/shopCouponTwo",
         modelName : ["CouponGroupDate"],
         platform : false,
         params(query) {
-            query.type = "2";
+            query.type = "1";
             return query;
         },
-        filter(data, filter_key, dates) {
-            return filter.platformCouponTwo(data, dates);
+        filter(data, filter_key, dates, filter_key2, page, parmas, type) {
+            return filter.shopCouponTwo(data, dates, type);
         }
     });
 
     Router = new api(Router, {
-        router : "/coupon/platformCouponThree",
+        router : "/coupon/shopCouponThree",
         modelName : ["CouponGroupPriceInterrgional"],
         platform : false,
         params(query) {
-            query.type = "2";
+            query.type = "1";
             return query;
         },
         filter(data, filter_key, dates) {
-            return filter.platformCouponThree(data);
+            return filter.shopCouponThree(data);
         }
     });
 
     Router = new api(Router, {
-        router : "/coupon/platformCouponFour",
+        router : "/coupon/shopCouponFour",
         modelName : ["CouponGroupDate"],
         paging : true,
         platform : false,
@@ -111,15 +111,11 @@ module.exports = (Router) => {
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
-        fixedParams(query, filter_key, req, cb) {
-            query.type = "2";
-            cb(null, query);
-        },
         filter(data, filter_key, dates) {
-            return filter.platformCouponFour(data);
+            return filter.shopCouponFour(data);
         },
         rows : [
-            ["date", "create_coupon_num", "create_coupon_amount", "give_num", "give_amount",
+            ["date", "create_coupon_num", "create_coupon_amount",
                 "receive_num", "receive_amount", "used_num", "used_amount",
                 "used_rate", "invalid_num", "expired_num" ]
         ],
@@ -133,12 +129,6 @@ module.exports = (Router) => {
                     type : "number"
                 },{
                     caption : "创建总金额",
-                    type : "number"
-                },{
-                    caption : "发送数量",
-                    type : "number"
-                },{
-                    caption : "发送总金额",
                     type : "number"
                 },{
                     caption : "领取数量",
@@ -167,77 +157,57 @@ module.exports = (Router) => {
     });
 
     Router = new api(Router, {
-        router : "/coupon/platformCouponFive",
-        modelName : ["CouponInfo"],
+        router : "/coupon/shopCouponFive",
+        modelName : ["CouponGroupShopTop"],
         paging : true,
+        date_picker_data : 1,
+        showDayUnit : true,
         platform : false,
+        order : ["-receive_num"],
         excel_export : true,
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
-        fixedParams(query, filter_key, req, cb) {
-            query.type = "2";
-            if(!query.coupon_id) {
-                query.created_at =
-                    orm.between(new Date(query.startTime + " 00:00:00"), new Date(query.endTime + " 23:59:59"));
-            }
-            query.date = orm.between(
-                new Date(util.getDate(new Date(new Date() - 24 * 60 * 60 * 1000)) + " 00:00:00"),
-                new Date(util.getDate(new Date(new Date() - 24 * 60 * 60 * 1000)) + " 23:59:59")
-            );
-            cb(null, query);
-        },
-        search : {
-            show : true,
-            title : "请输入优惠券编号：",
-            key : "coupon_id"
-        },
         filter(data, filter_key, dates) {
-            return filter.platformCouponFour(data);
+            return filter.shopCouponFour(data);
         },
         rows : [
-            ["coupon_id", "coupon_name", "discount", "end_at", "create_num",
-                "give_num", "receive_num", "receive_rate", "used_num",
-                "used_rate", "expired_rate", "invalid_rate" ]
+            ["shop_name", "create_coupon_num", "create_coupon_amount",
+                "receive_num", "receive_amount", "used_num", "used_amount",
+                "used_rate", "invalid_num", "expired_num" ]
         ],
         cols : [
             [
                 {
-                    caption : "优惠卷编号",
-                    type : "number"
-                },{
-                    caption : "名称",
-                    type : "string"
-                },{
-                    caption : "面值",
-                    type : "string"
-                },{
-                    caption : "有效期",
+                    caption : "店铺名称",
                     type : "string"
                 },{
                     caption : "创建数量",
                     type : "number"
                 },{
-                    caption : "已发送数量",
+                    caption : "创建总金额",
                     type : "number"
                 },{
-                    caption : "已领取数量",
+                    caption : "领取数量",
                     type : "number"
                 },{
-                    caption : "领取率",
-                    type : "string"
+                    caption : "领取总金额",
+                    type : "number"
                 },{
-                    caption : "已使用数量",
+                    caption : "使用数量",
+                    type : "number"
+                },{
+                    caption : "使用总金额",
                     type : "number"
                 },{
                     caption : "使用率",
                     type : "string"
                 },{
-                    caption : "过期率",
+                    caption : "过期数量",
                     type : "string"
                 },{
-                    caption : "作废率",
+                    caption : "作废数量",
                     type : "string"
                 }
             ]

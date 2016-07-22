@@ -11,14 +11,14 @@ module.exports = {
             path: "/coupon",
             display: true,
             defaultData: [{
-                //type: "table",
-                //title: "优惠券总览",
-                //query_api: "/coupon/allOne"
-            //},{
-            //    type: "chart",
-            //    title: "优惠券趋势",
-            //    query_api: "/coupon/allTwo"
-            //},{
+                type: "table",
+                title: "优惠券总览",
+                query_api: "/coupon/allOne"
+            },{
+                type: "chart",
+                title: "优惠券趋势",
+                query_api: "/coupon/allTwo"
+            },{
                 type: "chart",
                 title: "优惠券分布",
                 query_api: "/coupon/allThree"
@@ -31,21 +31,25 @@ module.exports = {
             path: "/coupon/platformCoupon",
             display: true,
             defaultData: [{
-            //    type: "table",
-            //    title: "优惠券总览",
-            //    query_api: "/coupon/platformCouponOne"
-            //},{
-            //    type: "chart",
-            //    title: "优惠券趋势",
-            //    query_api: "/coupon/platformCouponTwo"
-            //},{
+                type: "table",
+                title: "优惠券总览",
+                query_api: "/coupon/platformCouponOne"
+            },{
+                type: "chart",
+                title: "优惠券趋势",
+                query_api: "/coupon/platformCouponTwo"
+            },{
                 type: "chart",
                 title: "面值分布",
                 query_api: "/coupon/platformCouponThree"
             },{
                 type: "table",
-                title: "优惠券列表",
+                title: "优惠券使用明细",
                 query_api: "/coupon/platformCouponFour"
+            },{
+                type: "table",
+                title: "优惠券列表",
+                query_api: "/coupon/platformCouponFive"
             }]
         };
     },
@@ -68,11 +72,11 @@ module.exports = {
                 query_api: "/coupon/shopCouponThree"
             },{
                 type: "table",
-                title: "优惠券使用明细",
+                title: "优惠券明细",
                 query_api: "/coupon/shopCouponFour"
             },{
                 type: "table",
-                title: "优惠券列表",
+                title: "店铺优惠券TOP100",
                 query_api: "/coupon/shopCouponFive"
             }]
         };

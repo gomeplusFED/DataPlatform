@@ -299,7 +299,8 @@ api.prototype = {
                     dates,
                     this.filter_key2,
                     _params.page,
-                    _params
+                    _params,
+                    type
                 );
             }
             if (type !== "excel") {
@@ -401,6 +402,7 @@ api.prototype = {
                 _params[key] = params[key];
             }
         }
+        console.log(_params);
         return new Promise((resolve, reject) => {
             req.models[modelName].find(_params, (err, data) => {
                 if (err) {

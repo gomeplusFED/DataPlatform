@@ -1,14 +1,13 @@
 /**
  * @author yanglei
- * @date 20160718
+ * @date 20160721
  * @fileoverview
  */
 
 module.exports = {
-    id : {type : "number", key: true},
-    day_type : Number,
+    id : {type : "number", key : true},
     date : Date,
-    price_interrgional : String,
+    day_type : Number,
     type : String,
     create_coupon_num : Number,
     create_coupon_amount : Number,
