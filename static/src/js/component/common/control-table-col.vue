@@ -1,5 +1,5 @@
 <template>
-	<div class="btn_group control_table_col">
+	<div class="btn_group control_table_col" v-show="pageComponentsData[componentType].show">
 		<strong>控制表格列：</strong>
 		<button class="btn btn-default btn-sm" @click="showModal = !showModal">选择</button>
 		<div class="select_con multi_option_show" v-show="showModal">
