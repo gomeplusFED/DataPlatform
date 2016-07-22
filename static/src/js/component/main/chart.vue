@@ -1,6 +1,6 @@
 <template>
 	<div :id="'chart_'+index" class="chart" v-show="checkIsChart()">
-		<div class="chart_con" v-for="item in chartData" style="width: 100%;" :style="{'height': chartHeight + 'px'}">
+		<div class="chart_con" v-for="(index, item) in chartData" :style="{'height': chartHeight + 'px', 'width': shouldHalfWidth[index] ? '50%' : '100%'}">
 			<div class="nodata all_center">
 				<img src="/dist/img/nodata.png">
 				<span>暂无数据</span>
@@ -9,8 +9,12 @@
 	</div>
 </template>
 <style>
+.chart {
+	font-size: 0;
+}
 .chart_con {
 	background: #fff;
+	display: inline-block;
 }
 
 .chart_con .nodata {
@@ -110,7 +114,8 @@ var Chart = Vue.extend({
 		return {
 			initEd: false,
 			chartData: [],
-			chartHeight: 400
+			chartHeight: 400,
+			shouldHalfWidth: {}
 		};
 	},
 	vuex: {
@@ -247,9 +252,6 @@ var Chart = Vue.extend({
 					};
 				}
 			}
-
-			console.log(options);
-
 			return options;
 		}
 	},
@@ -264,8 +266,16 @@ var Chart = Vue.extend({
 					this.fetchData(function(data) {
 						_this.chartData = data.modelData;
 						_this.chartData.forEach(function(item, domIndex) {
+							if (!_this.shouldHalfWidth[domIndex]) {
+								Vue.set(_this.shouldHalfWidth, domIndex, false);
+							}
 							if (Object.keys(item.data).length === 0) {
 								return;
+							}
+							var nextChart = _this.chartData[domIndex + 1] || {};
+							if (item.type === 'pie' && nextChart.type === 'pie' && _this.shouldHalfWidth[domIndex] === false) {
+								_this.shouldHalfWidth[domIndex] = true;
+								_this.shouldHalfWidth[domIndex + 1] = true;
 							}
 							var chartOptions = _this.rinseData(item.type, item.data, item.map, item.config);
 							setTimeout(function() {
