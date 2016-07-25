@@ -3,16 +3,17 @@
  * @date 20160718
  * @fileoverview 平台优惠券
  */
-var util = require("../../utils");
+var util = require("../../utils"),
+    moment = require("moment");
 
 module.exports = {
-    platformCouponOne(data, dates) {
+    platformCouponOne(data, dates, params) {
         var source = data.data,
             obj = {},
             newData = [];
 
         dates.push(
-            util.getDate(new Date(new Date(dates[0]) - 24 * 60 * 60 * 1000))
+            util.getDate(util.date(dates[0], params.day_type))
         );
 
         if(dates.length === 2) {
@@ -181,7 +182,34 @@ module.exports = {
             count = data.dataCount;
 
         for(var key of source) {
+            key.date = util.getDate(key.date);
             key.used_rate = util.toFixed(key.used_num, key.receive_num);
+        }
+
+        return util.toTable([source], data.rows, data.cols, [count]);
+    },
+    platformCouponFive(data) {
+        var source = data.data,
+            sumDate = data.dataSum,
+            count = data.dataCount;
+
+        for(var key of source) {
+            if(key.end_at <= new Date()) {
+                key.expired_rate = util.toFixed(
+                    key.receive_num - key.used_num,
+                    key.receive_num
+                );
+                key.invalid_rate = util.toFixed(
+                    key.create_num - key.receive_num,
+                    key.create_num
+                );
+            } else {
+                key.expired_rate = "0%";
+                key.invalid_rate = "0%";
+            }
+            key.end_at = moment(key.end_at).format("YYYY-MM-DD HH:mm:ss");
+            key.used_rate = util.toFixed(key.used_num, key.receive_num);
+            key.receive_rate = util.toFixed(key.receive_num, sumDate["1"]);
         }
 
         return util.toTable([source], data.rows, data.cols, [count]);

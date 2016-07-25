@@ -17,21 +17,14 @@ module.exports = (Router) => {
         date_picker_data : 1,
         showDayUnit : true,
         fixedParams(query, filter_key, req, cb) {
-            var startTime = new Date(query.startTime + " 00:00:00"),
-                endTime =
-                    new Date(
-                        util.getDate(
-                            new Date(
-                                new Date(query.startTime) - 24 * 60 * 60 * 1000
-                            )
-                        ) + " 23:59:59"
-                    );
+            var endTime = new Date(query.startTime + " 23:59:59"),
+                startTime = util.date(query.startTime, query.day_type);
             query.date = orm.between(startTime, endTime);
             query.type = "2";
             cb(null, query);
         },
-        filter(data, filter_key, dates) {
-            return filter.platformCouponOne(data, dates);
+        filter(data, filter_key, dates, filter_key2, page, params) {
+            return filter.platformCouponOne(data, dates, params);
         },
         rows: [
             ["name", "create_coupon_num", "create_coupon_amount", "give_num", "receive_num", "receive_rate",
@@ -170,6 +163,7 @@ module.exports = (Router) => {
         router : "/coupon/platformCouponFive",
         modelName : ["CouponInfo"],
         paging : true,
+        sum : ["receive_num"],
         platform : false,
         excel_export : true,
         flexible_btn : [{
@@ -194,7 +188,7 @@ module.exports = (Router) => {
             key : "coupon_id"
         },
         filter(data, filter_key, dates) {
-            return filter.platformCouponFour(data);
+            return filter.platformCouponFive(data);
         },
         rows : [
             ["coupon_id", "coupon_name", "discount", "end_at", "create_num",

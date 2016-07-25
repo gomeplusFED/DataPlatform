@@ -23,7 +23,7 @@ var orm = require('orm'),
     }
 
 function connect(app) {
-    app.use(orm.express('mysql://' + mysql.username + ':' + mysql.pwd + '@' + mysql.host + '/' + mysql.database + '?timezone=CST', {
+    app.use(orm.express('mysql://' + mysql.username + ':' + mysql.pwd + '@' + mysql.host + '/' + mysql.database, {
         define: function(db, models, next) {
             db.settings.set('instance.cache', false);
             db.settings.set('instance.autoFetch', true);

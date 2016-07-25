@@ -4,16 +4,17 @@
  * @fileoverview 商家优惠券
  */
 var util = require("../../utils"),
+    moment = require("moment"),
     _ = require("lodash");
 
 module.exports = {
-    shopCouponOne(data, dates) {
+    shopCouponOne(data, dates, params) {
         var source = data.data,
             obj = {},
             newData = [];
 
         dates.push(
-            util.getDate(new Date(new Date(dates[0]) - 24 * 60 * 60 * 1000))
+            util.getDate(util.date(dates[0], params.day_type))
         );
 
         if(dates.length === 2) {
@@ -156,8 +157,8 @@ module.exports = {
         for(var key of source) {
             total_receive += key.receive_num;
             total_used += key.used_num;
-            obj[key.discount_interrgional].receive_num += key.receive_num;
-            obj[key.discount_interrgional].used_num += key.used_num;
+            obj[key.price_interrgional].receive_num += key.receive_num;
+            obj[key.price_interrgional].used_num += key.used_num;
         }
 
         for(var key in obj) {
@@ -182,6 +183,7 @@ module.exports = {
             count = data.dataCount;
 
         for(var key of source) {
+            key.date = moment(key.date).format("YYYY-MM-DD");
             key.used_rate = util.toFixed(key.used_num, key.receive_num);
         }
 

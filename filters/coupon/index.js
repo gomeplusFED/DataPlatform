@@ -7,12 +7,12 @@ var util = require("../../utils"),
     _ = require("lodash");
 
 module.exports = {
-    allOne(data, dates) {
+    allOne(data, dates, params) {
         var source = data.data,
             newDate = [];
 
         dates.push(
-            util.getDate(new Date(new Date(dates[0]) - 24 * 60 * 60 * 1000))
+            util.getDate(util.date(dates[0], params.day_type))
         );
 
         if(dates.length === 2) {
@@ -43,10 +43,10 @@ module.exports = {
                 newDate.push(obj);
             }
 
-            newDate[0].receive_rate = util.toFixed(newDate[0].receive_rate, newDate[0].give_num);
-            newDate[0].used_rate =  util.toFixed(newDate[0].used_rate, newDate[0].receive_num);
-            newDate[1].receive_rate = util.toFixed(newDate[1].receive_rate, newDate[1].give_num);
-            newDate[1].used_rate = util.toFixed(newDate[1].used_rate, newDate[1].receive_num);
+            newDate[0].receive_rate = util.toFixed(newDate[0].receive_num, newDate[0].give_num);
+            newDate[0].used_rate =  util.toFixed(newDate[0].used_num, newDate[0].receive_num);
+            newDate[1].receive_rate = util.toFixed(newDate[1].receive_num, newDate[1].give_num);
+            newDate[1].used_rate = util.toFixed(newDate[1].used_num, newDate[1].receive_num);
 
             newDate.push({
                 name : "对比",

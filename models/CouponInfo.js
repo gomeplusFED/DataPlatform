@@ -24,7 +24,7 @@ module.exports = {
     used_num : Number,
     used_amount : Number,
     start_at : Date,
-    end_at : Date,
+    end_at : {type : "date", time: true, timezone:true},
     created_at : Date,
     updated_at : Date,
     published_at : Date
