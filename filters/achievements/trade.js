@@ -134,66 +134,11 @@ module.exports = {
     tradeFour(data, params) {
         var source = data.data,
             count = data.dataCount,
-            total = 0,
-            cols = [],
-            rows = [];
+            sourceSum = data.dataSum;
 
-        if(params.caty_level === "3") {
-            rows.push("lev2_name");
-            cols.push({
-                caption : "二级类目",
-                type : "string"
-            });
-        } else if (params.caty_level === "4") {
-            rows.push("lev2_name");
-            rows.push("lev3_name");
-            cols.push({
-                caption : "二级类目",
-                type : "string"
-            });
-            cols.push({
-                caption : "三级类目",
-                type : "string"
-            });
-        }
-
-        data.rows[0] = rows.concat([ 'caty_name', 'access_num', 'access_users', 'sales_pro_num',
-            'pay_money_amount', 'pay_money_amount_ratio'
-        ]);
-
-        data.cols[0] = cols.concat([
-            {
-                caption : '类目名称',
-                type : 'string'
-            },
-            {
-                caption : '类目商品访问量',
-                type : 'number'
-            },
-            {
-                caption : '类目商品访客数',
-                type : 'number'
-            },
-            {
-                caption : '支付商品件数',
-                type : 'number'
-            },
-            {
-                caption : '支付金额',
-                type : 'number'
-            },
-            {
-                caption : '支付金额占比',
-                type : 'string'
-            }
-        ]);
-
-        for(var key of source) {
-            total += key.pay_money_amount;
-        }
         for(var key of source) {
             key.pay_money_amount = key.pay_money_amount.toFixed(2);
-            key.pay_money_amount_ratio = util.toFixed(key.pay_money_amount, total);
+            key.pay_money_amount_ratio = util.toFixed(key.pay_money_amount, sourceSum["1"]);
         }
         return util.toTable([source], data.rows, data.cols, [count]);
     },

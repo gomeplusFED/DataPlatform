@@ -77,7 +77,7 @@ function connect(app) {
             models.SocialCategory = db.define("tbl_social_category", obj.SocialCategory);
             models.ShopPayTop = db.define("tbl_rt_shop_pay_top", obj.ShopPayTop);
             models.ShopAccesTop = db.define("tbl_rt_shop_acces_top", obj.ShopAccesTop);
-            models.TradeCaty = db.define("tbl_rt_deal_caty", obj.TradeCaty);
+            models.TradeCaty = db.define("ads2_spt_rt_deal_caty", obj.TradeCaty);
             models.TradeUser = db.define("tbl_rt_deal_user", obj.TradeUser);
             models.SalesPerfProductKv = db.define("tbl_rt_sales_perf_product_kv", obj.SalesPerfProductKv);
             models.SalesPerfShopKv = db.define("tbl_rt_sales_perf_shop_kv", obj.SalesPerfShopKv);

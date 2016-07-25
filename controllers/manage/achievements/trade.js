@@ -227,31 +227,69 @@ module.exports = (Router) => {
         modelName : ["TradeCaty"],
         platform : false,
         paging : true,
+        sum : ["pay_money_amount"],
         date_picker_data : 1,
         excel_export : true,
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
-        filter_select: [{
-            title: '',
-            filter_key : 'caty_level',
-            groups: [{
-                key: 2,
-                value: '二级类目'
-            }, {
-                key: 3,
-                value: '三级类目'
-            }, {
-                key: 4,
-                value: '四级类目'
-            }]
-        }],
+        fixedParams(query, filter_key, req, cb) {
+            var _ids = [],
+                category_id = query.category_id || 0;
+            req.models.ConfCategories.find({
+                pid : category_id,
+                status : 1
+            }, (err, data) => {
+                if(err) {
+                    cb(err);
+                } else {
+                    for(var key of data) {
+                        _ids.push(key.id);
+                    }
+                    query.category_id = _ids;
+                    cb(null, query);
+                }
+            });
+        },
+        level_select : true,
+        level_select_name : "category_id",
+        level_select_url : "/api/categories",
         filter(data, filter_key, dates, filter_key2, page, params) {
             return filter.tradeFour(data, params);
         },
-        rows : [],
-        cols : []
+        rows : [
+            [ 'caty_name', 'access_num', 'access_users', 'sales_pro_num',
+            'pay_money_amount', 'pay_money_amount_ratio']
+        ],
+        cols : [
+            [
+                {
+                    caption : '类目名称',
+                    type : 'string'
+                },
+                {
+                    caption : '类目商品访问量',
+                    type : 'number'
+                },
+                {
+                    caption : '类目商品访客数',
+                    type : 'number'
+                },
+                {
+                    caption : '支付商品件数',
+                    type : 'number'
+                },
+                {
+                    caption : '支付金额',
+                    type : 'number'
+                },
+                {
+                    caption : '支付金额占比',
+                    type : 'string'
+                }
+            ]
+        ]
     });
 
     Router = new api(Router,{
