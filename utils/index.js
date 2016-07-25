@@ -238,3 +238,32 @@ exports.getClientIp = function(req) {
     }
     return ipAddress;
 };
+
+exports.date = function(date, day_type) {
+    var startTime = "";
+
+    if(day_type === "1") {
+        startTime = new Date(
+            exports.getDate(
+                new Date(
+                    new Date(date) - 24 * 60 * 60 * 1000
+                )
+            ) + " 00:00:00"
+        )
+    } else if(day_type === "2") {
+        startTime = new Date(
+            exports.getDate(
+                new Date(
+                    new Date(date) - 7 * 24 * 60 * 60 * 1000
+                )
+            ) + " 00:00:00"
+        )
+    } else {
+        var start = new Date(date),
+            year = new Date(start).getFullYear(),
+            month = new Date(start).getMonth();
+        startTime = new Date(new Date(year, month, 1).getTime() - 24 * 60 * 60 * 1000);
+    }
+
+    return startTime;
+};

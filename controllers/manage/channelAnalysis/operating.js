@@ -96,11 +96,6 @@ module.exports = (Router) => {
         modelName : ["ChannelAnalysis", "ChannelUserKeep", "ChannelIdNameChart"],
         platform : false,
         thirdParams : {},
-        flexible_btn: [{
-            content: '<a href="javascript:void(0)" help_url="/channelAnalysis/channel_json">帮助</a>',
-            preMethods: ["show_help"],
-            customMethods: ''
-        }],
         filter(data, filter_key, dates, filter_key2, page, query) {
             return filter.channelTwo(data, filter_key, dates, query.channel_id);
         },
@@ -156,10 +151,6 @@ module.exports = (Router) => {
         paging : true,
         order : ["-date"],
         excel_export : true,
-        flexible_btn : [{
-            content: '<a href="javascript:void(0)">导出</a>',
-            preMethods: ['excel_export']
-        }],
         filter(data, filter_key, dates) {
             return filter.channelThree(data);
         },
