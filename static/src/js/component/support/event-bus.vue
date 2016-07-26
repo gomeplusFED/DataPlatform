@@ -1,4 +1,4 @@
 <script>
-var Vue = require('vue');
+var Vue = require('Vue');
 module.exports = new Vue();
 </script>
