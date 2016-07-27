@@ -88,7 +88,6 @@ function api(Router, options) {
     }, options);
 
     utils.mixin(this, defaultOption);
-
     this.setRouter(Router);
 
     return Router;
@@ -104,10 +103,12 @@ api.prototype = {
             this._rend(res, [], type);
         } else {
             if(this._checkDate(query, next)) {
-                params.date = orm.between(
-                    new Date(query.startTime + " 00:00:00"),
-                    new Date(query.endTime + " 23:59:59")
-                );
+                if(query.startTime && query.endTime) {
+                    params.date = orm.between(
+                        new Date(query.startTime + " 00:00:00"),
+                        new Date(query.endTime + " 23:59:59")
+                    );
+                }
                 if(typeof this.fixedName === "function") {
                     this.fixedParams(req, query, (err, data) => {
                         if(err) {
@@ -118,6 +119,9 @@ api.prototype = {
                             this._getCache(type, res, req, next, query, params, dates);
                         }
                     });
+                } else {
+                    dates = utils.times(query.startTime, query.endTime, query.day_type);
+                    this._getCache(type, res, req, next, query, params, dates);
                 }
             }
         }
@@ -366,7 +370,7 @@ api.prototype = {
             }
         });
     },
-    _findDatabase : async(function(req, params, modelName, procedure) => {
+    _findDatabase : async((req, params, modelName, procedure) => {
         var limit = +params.limit || 10,
             page = params.page || 1,
             offset = limit * (page - 1),
@@ -427,7 +431,7 @@ api.prototype = {
             }
         });
     }),
-    _findDatabaseSql : async(function(req, sql) => {
+    _findDatabaseSql : async((req, sql) => {
         return new Promise((resolve, reject) => {
             req.models.db1.driver.execQuery(sql, (err, data) => {
                 if(err) {
