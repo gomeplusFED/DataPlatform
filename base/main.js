@@ -29,7 +29,7 @@ function api(Router, options) {
         //查库流程
         procedure : [],
         //查库原生sql
-        sql : [],
+        sql : ["firstSql", "secondSql", "thirdSql", "fourthSql"],
         //对应表是否分页
         paging : [],
         //需要求和字段
@@ -102,7 +102,18 @@ api.prototype = {
             params = {},
             dates = [];
         if(Object.keys(query).length === 0) {
-            this._render(res, [], type);
+            if(this.selectFilter) {
+                this.selectFilter(req, (err, data) => {
+                    if(!err) {
+                        this.filter_select = data;
+                        this._render(res, [], type);
+                    } else {
+                        next(err);
+                    }
+                });
+            } else {
+                this._render(res, [], type);
+            }
         } else {
             if(this._checkDate(query, next)) {
                 if(query.startTime && query.endTime) {
@@ -118,12 +129,12 @@ api.prototype = {
                         } else {
                             query = data;
                             dates = utils.times(query.startTime, query.endTime, query.day_type);
-                            this._getCache(type, res, req, next, query, params, dates);
+                            this._getCache(type, req, res, next, query, params, dates);
                         }
                     });
                 } else {
                     dates = utils.times(query.startTime, query.endTime, query.day_type);
-                    this._getCache(type, res, req, next, query, params, dates);
+                    this._getCache(type, req, res, next, query, params, dates);
                 }
             }
         }
@@ -203,21 +214,7 @@ api.prototype = {
         });
         return true;
     },
-    _selectFilter(type, res, req, next, query, params, dates) {
-        if(typeof this.selectFilter === "function") {
-            this.selectFilter(req, (err, data) => {
-                if(!err) {
-                    this.filter_select = data;
-                    this._findData(type, res, req, next, query, params, dates);
-                } else {
-                    next(err);
-                }
-            });
-        } else {
-            this._findData(type, res, req, next, query, params, dates);
-        }
-    },
-    _findData(type, res, req, next, query, params, dates) {
+    _findData(type, req, res, next, query, params, dates) {
         async(() => {
             var isErr = false,
                 error = "",
@@ -248,26 +245,26 @@ api.prototype = {
                 };
             try {
                 for(var i = 0; i < this.modelName.length; i++) {
+                    if(this[this.paramsName[i]]) {
+                        if(typeof this[this.paramsName[i]] === "function") {
+                            query = this[this.paramsName[i]](query, params, sendData);
+                        } else {
+                            query = this[this.paramsName[i]];
+                        }
+                    }
+
                     sendData[this.dataName[i]] = {};
                     if(this.sql[i]) {
                         if(this.paging[i]) {
                             sendData[this.dataName[i]].data =
-                                await(this._findDatabaseSql(req, this.sql[i][0]));
+                                await(this._findDatabaseSql(req, this.sql[i](query, params, false)));
                             sendData[this.dataName[i]].count =
-                                await(this._findDatabaseSql(req, this.sql[i][1]));
+                                await(this._findDatabaseSql(req, this.sql[i](query, params, true)));
                         } else {
                             sendData[this.dataName[i]].data =
-                                await(this._findDatabaseSql(req, this.sql[i]));
+                                await(this._findDatabaseSql(req, this.sql[i])(query, params));
                         }
                     } else {
-                        if(this[this.paramsName[i]]) {
-                            if(typeof this[this.paramsName[i]] === "function") {
-                                query = this[this.paramsName[i]](query, params, sendData);
-                            } else {
-                                query = this[this.paramsName[i]];
-                            }
-                        }
-
                         if(this.procedure[i]) {
                             if(this.paging[i]) {
                                 sendData[this.dataName[i]].data =
@@ -323,16 +320,12 @@ api.prototype = {
             }
         })();
     },
-    _getCache(type, res, req, next, query, params, dates) {
+    _getCache(type, req, res, next, query, params, dates) {
         cache.cacheGet(cacheName, (err, cacheData) => {
             if (!err) {
                 if (cacheData) {
                     if (this._checkParams(next, query, params, cacheData)) {
-                        if(this._selectFilter) {
-                            this._selectFilter(type, res, req, next, query, params, dates)
-                        } else {
-                            this._findData(type, res, req, next, query, params, dates);
-                        }
+                        this._findData(type, req, res, next, query, params, dates);
                     }
                 } else {
                     cacheData = {};
@@ -363,11 +356,7 @@ api.prototype = {
     _setCache(type, req, res, next, query, params, dates, cacheData) {
         cache.cacheSet(cacheName, cacheData, cacheTime, (err, success) => {
             if (!err && success) {
-                if(this._selectFilter) {
-                    this._selectFilter(type, res, req, next, query, params, dates);
-                } else {
-                    this._findData(type, res, req, next, query, params, dates);
-                }
+                this._findData(type, req, res, next, query, params, dates);
             } else {
                 next(err);
             }
