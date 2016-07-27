@@ -28,6 +28,8 @@ function api(Router, options) {
         fixedName : null,
         //查库流程
         procedure : [],
+        //查库原生sql
+        sql : [],
         //对应表是否分页
         paging : [],
         //需要求和字段
@@ -100,7 +102,7 @@ api.prototype = {
             params = {},
             dates = [];
         if(Object.keys(query).length === 0) {
-            this._rend(res, [], type);
+            this._render(res, [], type);
         } else {
             if(this._checkDate(query, next)) {
                 if(query.startTime && query.endTime) {
@@ -139,7 +141,7 @@ api.prototype = {
             return true;
         }
     },
-    _rend(res, sendData, type) {
+    _render(res, sendData, type) {
         res[type]({
             code: 200,
             modelData: sendData,
@@ -246,6 +248,7 @@ api.prototype = {
                 };
             try {
                 for(var i = 0; i < this.modelName.length; i++) {
+                    sendData[this.dataName[i]] = {};
                     if(this.sql[i]) {
                         if(this.paging[i]) {
                             sendData[this.dataName[i]].data =
