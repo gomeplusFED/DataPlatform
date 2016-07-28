@@ -33,9 +33,9 @@ function api(Router, options) {
         //对应表是否分页
         paging : [],
         //需要求和字段
-        sum: null,
+        sum : [],
         //排序字段
-        order : null,
+        order : [],
         //辅助表数据整理 req cb
         selectFilter : null,
         //行
@@ -225,16 +225,13 @@ api.prototype = {
                     find : "params",
                     offset : "offset",
                     limit : "limit",
-                    run : {
-                        end : true
-                    }
+                    order : this.order,
+                    run : ""
                 },
                 sum = {
                     aggregate : "params",
                     sum : this.sum,
-                    get : {
-                        end : true
-                    }
+                    get : ""
                 },
                 count = {
                     count : ""
@@ -254,15 +251,15 @@ api.prototype = {
                     }
 
                     sendData[this.dataName[i]] = {};
-                    if(this.sql[i]) {
+                    if(this[this.sql[i]]) {
                         if(this.paging[i]) {
                             sendData[this.dataName[i]].data =
-                                await(this._findDatabaseSql(req, this.sql[i](query, params, false)));
+                                await(this._findDatabaseSql(req, this[this.sql[i]](query, params, false)));
                             sendData[this.dataName[i]].count =
-                                await(this._findDatabaseSql(req, this.sql[i](query, params, true)));
+                                await(this._findDatabaseSql(req, this[this.sql[i]](query, params, true)));
                         } else {
                             sendData[this.dataName[i]].data =
-                                await(this._findDatabaseSql(req, this.sql[i])(query, params));
+                                await(this._findDatabaseSql(req, this[this.sql[i]](query, params)));
                         }
                     } else {
                         if(this.procedure[i]) {
@@ -367,6 +364,9 @@ api.prototype = {
             page = params.page || 1,
             offset = limit * (page - 1),
             keys = Object.keys(procedure),
+            endFn = "get run",
+            arrayFn = "sum groupBy order",
+            objectFn = "aggregate",
             length = keys.length,
             _obj = {
                 limit : limit,
@@ -387,29 +387,28 @@ api.prototype = {
                 _obj.params[key] = params[key];
             }
         }
+
         return new Promise((resolve, reject) => {
             var sql = req.models[modelName];
             if(length > 1) {
                 for(var key in procedure) {
-                    if(typeof procedure[key] === "object") {
-                        if(procedure[key].end) {
-                            sql[key](() => {
-                                var args = arguments;
-                                if (args["0"]) {
-                                    reject(args["0"]);
-                                } else {
-                                    resolve(args);
-                                }
-                            });
-                        } else {
-                            sql[key](_obj.params, procedure[key].value);
-                        }
-                    } else if(procedure[key] instanceof Array) {
+                    if(endFn.indexOf(key) >= 0) {
+                        sql[key](function() {
+                            var args = arguments;
+                            if (args["0"]) {
+                                reject(args["0"]);
+                            } else {
+                                resolve(args);
+                            }
+                        });
+                    } else if(arrayFn.indexOf(key) >= 0) {
                         for(var k of procedure[key]) {
                             sql[key](k);
                         }
+                    } else if(objectFn.indexOf(key) >= 0) {
+                        sql = sql[key](procedure[key].value || [], _obj.params);
                     } else {
-                        sql[key](_obj[procedure[key]]);
+                        sql = sql[key](_obj[procedure[key]]);
                     }
                 }
             } else {
