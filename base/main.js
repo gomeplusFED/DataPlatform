@@ -394,9 +394,10 @@ api.prototype = {
                 for(var key in procedure) {
                     if(endFn.indexOf(key) >= 0) {
                         sql[key](function() {
-                            var args = arguments;
-                            if (args["0"]) {
-                                reject(args["0"]);
+                            var args = Array.prototype.slice.call(arguments),
+                                err = args.shift();
+                            if (err) {
+                                reject(err);
                             } else {
                                 resolve(args);
                             }
