@@ -89,7 +89,6 @@ module.exports = {
     hostThree(data, filter_key) {
         var source = data.data,
             orderData = data.orderData,
-            total = 0,
             type = "pie",
             obj = {},
             filter_name = {
@@ -97,7 +96,7 @@ module.exports = {
                 fans_num : "粉丝数"
             },
             map = {
-                value : filter_name[filter_key] + "(%)"
+                value : filter_name[filter_key]
             },
             newData = {};
         for(var key of orderData) {
@@ -106,12 +105,11 @@ module.exports = {
             }
         }
         for(var key of source) {
-            total += key[filter_key];
             obj[key.group_type].value += key[filter_key];
         }
         for(var key of orderData) {
             newData[key.name] = {
-                value : util.toRound(obj[key.id].value, total)
+                value : obj[key.id].value
             };
         }
         return [{
@@ -126,7 +124,6 @@ module.exports = {
     hostFour(data, filter_key, filter_key2) {
         var source = data.data,
             orderData = data.orderData,
-            total = 0,
             type = "pie",
             obj = {},
             filter_name = {
@@ -135,7 +132,7 @@ module.exports = {
             },
             filter_key = filter_key || "-1",
             map = {
-                value : filter_name[filter_key2] + "(%)"
+                value : filter_name[filter_key2]
             },
             newData = {};
         for(var key of orderData) {
@@ -146,13 +143,12 @@ module.exports = {
             }
         }
         for(var key of source) {
-            total += key[filter_key2];
             obj[key.group_type].value += key[filter_key2];
         }
         for(var key of orderData) {
             if(key.pid === filter_key) {
                 newData[key.name] = {
-                    value : util.toRound(obj[key.id].value, total)
+                    value : obj[key.id].value
                 };
             }
         }
