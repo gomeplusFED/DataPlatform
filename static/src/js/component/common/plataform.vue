@@ -35,15 +35,16 @@ export default {
 	},
 	methods: {
 		plataformLink(item) {
+			let key = this.platafromData.key;
+			let curQuery = utils.parseUrlQuery(this.$route.path);
+			curQuery[key] = item.key;
 			this.$router.go({
-				query: {
-					global_plataform: item.key
-				}
+				query: curQuery
 			});
 			setTimeout(() => {
-				var platform = utils.parseUrlQuery(this.$route.path).global_plataform;
-				eventBus.$emit('platformChange', platform, this.platafromData.key);
-			}, 1);
+				var platform = utils.parseUrlQuery(this.$route.path)[key];
+				eventBus.$emit('platformChange', platform, key);
+			}, 0);
 		}
 	}
 };
