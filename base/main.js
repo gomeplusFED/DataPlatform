@@ -244,9 +244,11 @@ api.prototype = {
                 for(var i = 0; i < this.modelName.length; i++) {
                     if(this[this.paramsName[i]]) {
                         if(typeof this[this.paramsName[i]] === "function") {
-                            query = this[this.paramsName[i]](query, params, sendData);
+                            params = this[this.paramsName[i]](query, params, sendData);
                         } else {
-                            query = this[this.paramsName[i]];
+                            for(var key in this[this.paramsName[i]]) {
+                                params[key] = this[this.paramsName[i]][key];
+                            }
                         }
                     }
 
@@ -328,7 +330,7 @@ api.prototype = {
                     cacheData = {};
                     async(() => {
                         try {
-                            var data = await (this._findDatabase(req, params, cacheName, {find : ""}));
+                            var data = await (this._findDatabase(req, {}, cacheName, {find : ""}));
                             for (var key of this.defaultRender) {
                                 cacheData[key.render] = [];
                                 for (var k of data) {
@@ -399,7 +401,7 @@ api.prototype = {
                             if (err) {
                                 reject(err);
                             } else {
-                                resolve(args);
+                                resolve(args[0]);
                             }
                         });
                     } else if(arrayFn.indexOf(key) >= 0) {
