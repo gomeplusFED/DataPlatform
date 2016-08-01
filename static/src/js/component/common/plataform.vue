@@ -42,7 +42,7 @@ export default {
 			});
 			setTimeout(() => {
 				var platform = utils.parseUrlQuery(this.$route.path).global_plataform;
-				eventBus.$emit('platformChange', platform);
+				eventBus.$emit('platformChange', platform, this.platafromData.key);
 			}, 1);
 		}
 	}
