@@ -1,14 +1,12 @@
 'use strict';
 var Vue = require('Vue');
 var $ = require('jQuery');
-var VueRouter = require('vue-router')
+var VueRouter = require('vue-router');
 Vue.use(VueRouter);
-
 
 // for jq plugin and debug
 window.jQuery = $;
 window.$ = $;
-
 
 // fileter
 require('./filter/index.js');
@@ -35,37 +33,37 @@ window.store = store;
 window.actions = actions;
 
 router.map({
-    '*': {
-        component: App
-    },
-    '/': {
-        component: Index
-    },
-    '/user': {
-        component: User
-    },
-    '/role': {
-        component: Role
-    },
-    '/log': {
-        component: Log
-    },
-    '/error': {
-        component: Erro
-    }
+	'*': {
+		component: App
+	},
+	'/': {
+		component: Index
+	},
+	'/user': {
+		component: User
+	},
+	'/role': {
+		component: Role
+	},
+	'/log': {
+		component: Log
+	},
+	'/error': {
+		component: Erro
+	}
 });
 
 router.start(blankApp, '#page-wrapper');
 
 $.ajaxSetup({
-    global: true,
-    complete: function(XMLHttpRequest, status) {
-        var res = {};
-        try{
-            res = JSON.parse(XMLHttpRequest.responseText);
-        }catch(e){};
-        if(res.iserro){
-            router.go('/error');
-        }
-    }
-})
+	global: true,
+	complete: function(XMLHttpRequest, status) {
+		var res = {};
+		try {
+			res = JSON.parse(XMLHttpRequest.responseText);
+		} catch (e) {};
+		if (res.iserro) {
+			router.go('/error');
+		}
+	}
+});
