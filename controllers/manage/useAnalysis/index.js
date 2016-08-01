@@ -6,10 +6,11 @@
 var api = require("../../../base/api"),
     help = require("../../../base/help"),
     config = require("../../../utils/config.json"),
+    main = require("../../../base/main"),
     filter = require("../../../filters/useAnalysis");
 
 module.exports = (Router) => {
-    Router = new api(Router,{
+    Router = new main(Router,{
         router : "/useAnalysis/useTimeOne",
         modelName : ["UserCompose"],
         flexible_btn: [{
@@ -17,7 +18,7 @@ module.exports = (Router) => {
             preMethods: ["show_help"],
             customMethods: ''
         }],
-        fixedParams : {
+        params : {
             use_type : 1
         },
         filter(data, filter_key, dates) {
