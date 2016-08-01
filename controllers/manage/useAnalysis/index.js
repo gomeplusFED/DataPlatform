@@ -3,14 +3,26 @@
  * @date 20160413
  * @fileoverview 使用时长
  */
-var api = require("../../../base/api"),
+var api = require("../../../base/main"),
     help = require("../../../base/help"),
     config = require("../../../utils/config.json"),
-    main = require("../../../base/main"),
     filter = require("../../../filters/useAnalysis");
 
 module.exports = (Router) => {
-    Router = new main(Router,{
+    const procedure = [
+        {
+            aggregate : {
+                value : ["distribution"]
+            },
+            sum : ["num"],
+            groupBy : ["distribution"],
+            get : ""
+        }
+    ];
+    const times = [ '1-3秒', '4-10秒', '11-30秒', '31-60秒',
+        '1-3分', '3-10分', '10-30分', '30分+' ];
+
+    Router = new api(Router,{
         router : "/useAnalysis/useTimeOne",
         modelName : ["UserCompose"],
         flexible_btn: [{
@@ -18,19 +30,19 @@ module.exports = (Router) => {
             preMethods: ["show_help"],
             customMethods: ''
         }],
+        procedure : procedure,
         params : {
             use_type : 1
         },
         filter(data, filter_key, dates) {
-            return filter.useTimeOne(data, [ '1-3秒', '4-10秒', '11-30秒', '31-60秒',
-                '1-3分', '3-10分', '10-30分', '30分+' ], "单次使用时长");
+            return filter.useTimeOne(data, times, "单次使用时长");
         }
     });
 
     Router = new api(Router,{
         router : "/useAnalysis/useTimeTwo",
         modelName : ["UserCompose"],
-        fixedParams : {
+        params : {
             use_type : 1
         },
         excel_export : true,
@@ -38,15 +50,15 @@ module.exports = (Router) => {
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
+        procedure : procedure,
         filter(data, filter_key, dates) {
             return filter.useTimeTwo(
                 data,
-                [ '1-3秒', '4-10秒', '11-30秒', '31-60秒',
-                    '1-3分', '3-10分', '10-30分', '30分+' ]
+                times
             );
         },
         rows : [
-            ['distribution', 'num', 'num_rate']
+            ['distribution', 'sum_num', 'num_rate']
         ],
         cols : [
             [{
@@ -65,13 +77,14 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/useAnalysis/useTimeThree",
         modelName : ["UserCompose"],
-        fixedParams : {
+        params : {
             use_type : 4
         },
+        procedure : procedure,
         filter(data, filter_key, dates) {
             return filter.useTimeOne(
                 data,
-                [ '1-3秒', '4-10秒', '11-30秒', '31-60秒', '1-3分', '3-10分', '10-30分', '30分+' ],
+                times,
                 "日使用时长"
             );
         }
@@ -80,7 +93,7 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/useAnalysis/useTimeFour",
         modelName : ["UserCompose"],
-        fixedParams : {
+        params : {
             use_type : 4
         },
         excel_export : true,
@@ -88,14 +101,15 @@ module.exports = (Router) => {
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
+        procedure : procedure,
         filter(data, filter_key, dates) {
             return filter.useTimeTwo(
                 data,
-                [ '1-3秒', '4-10秒', '11-30秒', '31-60秒', '1-3分', '3-10分', '10-30分', '30分+' ]
+                times
             );
         },
         rows : [
-            ['distribution', 'num', 'num_rate']
+            ['distribution', 'sum_num', 'num_rate']
         ],
         cols : [
             [{

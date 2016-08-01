@@ -100,6 +100,10 @@ module.exports = (Router) => {
         platform : false,
         order : ["-date"],
         excel_export : true,
+        params(query) {
+            query.type = "1";
+            return query;
+        },
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
