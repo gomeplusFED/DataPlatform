@@ -128,8 +128,8 @@ var Main = Vue.extend({
 				}
 			}
 		});
-		eventBus.$on('platformChange', (plataform) => {
-			Vue.set(_this.argvs, 'global_plataform', plataform);
+		eventBus.$on('platformChange', (plataform, key) => {
+			Vue.set(_this.argvs, key, plataform);
 		});
 	},
 	methods: {
