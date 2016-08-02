@@ -25,7 +25,6 @@ module.exports = {
     published_coupon_num : Number,
     valid_coupon_num : Number,
     invalid_coupon_num : Number,
-    stop_coupon_num : Number,
     all_give_num : Number,
     all_give_amount : Number,
     all_receive_num : Number,

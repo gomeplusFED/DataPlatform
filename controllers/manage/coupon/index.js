@@ -4,8 +4,10 @@
  * @fileoverview 优惠券
  */
 var api = require("../../../base/api"),
+    help = require("../../../base/help"),
     util = require("../../../utils"),
     orm = require("orm"),
+    config = require("../../../utils/config.json"),
     filter = require("../../../filters/coupon");
 
 module.exports = (Router) => {
@@ -16,6 +18,11 @@ module.exports = (Router) => {
         platform : false,
         date_picker_data : 1,
         showDayUnit : true,
+        flexible_btn: [{
+            content: '<a href="javascript:void(0)" help_url="/coupon/help_json">帮助</a>',
+            preMethods: ["show_help"],
+            customMethods: ''
+        }],
         fixedParams(query, filter_key, req, cb) {
             var endTime = new Date(query.startTime + " 23:59:59"),
                 startTime = util.date(query.startTime, query.day_type);
@@ -99,6 +106,54 @@ module.exports = (Router) => {
                 value: '平台商家使用占比'
             }]
         }]
+    });
+
+    Router = new help(Router, {
+        router : "/coupon/help",
+        rows : config.help.rows,
+        cols : config.help.cols,
+        data : [
+            {
+                name : "创建数量",
+                help : "时间段内新建优惠券总数量（平台+商家）"
+            },
+            {
+                name : "创建总金额",
+                help : "时间段内新建优惠券总金额（平台+商家）"
+            },
+            {
+                name : "发放数量",
+                help : "时间段内发放优惠券总数量（平台+商家）"
+            },
+            {
+                name : "领取数量",
+                help : "时间段内优惠券被领取总数量（平台+商家）"
+            },
+            {
+                name : "使用数量",
+                help : "时间段内优惠券被使用总数量（平台+商家）"
+            },
+            {
+                name : "使用总金额",
+                help : "时间段内优惠券被使用总金额（平台+商家）"
+            },
+            {
+                name : "过期数量",
+                help : "优惠券被领取后未使用而过期的数量"
+            },
+            {
+                name : "平台商家创建占比",
+                help : "平台创建数量/总创建优惠券数量，商家创建数量/总创建优惠券数量"
+            },
+            {
+                name : "平台商家领取占比",
+                help : "平台领取数量/总领取优惠券数量，商家领取数量/总领取优惠券数量"
+            },
+            {
+                name : "平台商家使用占比",
+                help : "平台使用数量/总使用优惠券数量，商家使用数量/总使用优惠券数量"
+            }
+        ]
     });
 
     return Router;
