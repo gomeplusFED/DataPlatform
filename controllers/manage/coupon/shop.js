@@ -34,7 +34,7 @@ module.exports = (Router) => {
             return filter.shopCouponOne(data, dates, params);
         },
         rows: [
-            ["name", "create_coupon_num", "create_coupon_amount", "give_num", "receive_num", "receive_rate",
+            ["name", "create_num", "create_amount", "give_num", "receive_num", "receive_rate",
                 "used_num", "used_amount", "used_rate", "invalid_num"]
         ],
         cols: [
@@ -115,7 +115,7 @@ module.exports = (Router) => {
             return filter.shopCouponFour(data);
         },
         rows : [
-            ["date", "create_coupon_num", "create_coupon_amount",
+            ["date", "create_num", "create_amount",
                 "receive_num", "receive_amount", "used_num", "used_amount",
                 "used_rate", "invalid_num", "expired_num" ]
         ],
@@ -173,7 +173,7 @@ module.exports = (Router) => {
             return filter.shopCouponFour(data);
         },
         rows : [
-            ["shop_name", "create_coupon_num", "create_coupon_amount",
+            ["shop_name", "create_num", "create_amount",
                 "receive_num", "receive_amount", "used_num", "used_amount",
                 "used_rate", "invalid_num", "expired_num" ]
         ],

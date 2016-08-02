@@ -34,7 +34,7 @@ module.exports = (Router) => {
             return filter.platformCouponOne(data, dates, params);
         },
         rows: [
-            ["name", "create_coupon_num", "create_coupon_amount", "give_num", "receive_num", "receive_rate",
+            ["name", "create_num", "create_amount", "give_num", "receive_num", "receive_rate",
                 "used_num", "used_amount", "used_rate", "invalid_num"]
         ],
         cols: [
@@ -119,7 +119,7 @@ module.exports = (Router) => {
             return filter.platformCouponFour(data);
         },
         rows : [
-            ["date", "create_coupon_num", "create_coupon_amount", "give_num", "give_amount",
+            ["date", "create_num", "create_amount", "give_num", "give_amount",
                 "receive_num", "receive_amount", "used_num", "used_amount",
                 "used_rate", "invalid_num", "expired_num" ]
         ],

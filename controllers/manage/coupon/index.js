@@ -96,7 +96,7 @@ module.exports = (Router) => {
             title: '指标',
             filter_key : 'filter_key',
             groups: [{
-                key: 'create_coupon_num',
+                key: 'create_num',
                 value: '平台商家创建占比'
             }, {
                 key: 'receive_num',

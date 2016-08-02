@@ -91,7 +91,7 @@ module.exports = {
         var source = data.data,
             type = "line",
             map = {
-                create_coupon_num : "创建数量",
+                create_num : "创建数量",
                 receive_num : "领取数量",
                 used_num : "使用数量"
             },
@@ -99,7 +99,7 @@ module.exports = {
 
         for(var date of dates) {
             newData[date] = {
-                create_coupon_num : 0,
+                create_num : 0,
                 receive_num : 0,
                 used_num : 0
             };
@@ -107,7 +107,7 @@ module.exports = {
 
         for(var key of source) {
             var date = util.getDate(key.date);
-            newData[date].create_coupon_num += key.create_coupon_num;
+            newData[date].create_num += key.create_num;
             newData[date].receive_num += key.receive_num;
             newData[date].used_num += key.used_num;
         }
@@ -125,7 +125,7 @@ module.exports = {
         var source = data.data,
             type = "pie",
             filter_name = {
-                create_coupon_num : "创建数量",
+                create_num : "创建数量",
                 receive_num : "领取数量",
                 used_num : "使用数量"
             },
@@ -142,7 +142,7 @@ module.exports = {
             };
 
         for(var key of source) {
-            if(key.type === "1") {
+            if(key.type === 1) {
                 newData["商家"].value += key[filter_key];
             } else {
                 newData["平台"].value += key[filter_key];

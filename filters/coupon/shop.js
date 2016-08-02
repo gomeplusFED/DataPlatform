@@ -21,8 +21,8 @@ module.exports = {
             for(var date of dates) {
                 obj[date] = {
                     name : date,
-                    create_coupon_num : 0,
-                    create_coupon_amount : 0,
+                    create_num : 0,
+                    create_amount : 0,
                     give_num : 0,
                     receive_num : 0,
                     receive_rate : "0%",
@@ -36,8 +36,8 @@ module.exports = {
 
             for(var key of source) {
                 var _date = util.getDate(key.date);
-                obj[_date].create_coupon_num += key.create_coupon_num;
-                obj[_date].create_coupon_amount += key.create_coupon_amount;
+                obj[_date].create_num += key.create_num;
+                obj[_date].create_amount += key.create_amount;
                 obj[_date].give_num += key.give_num;
                 obj[_date].receive_num += key.receive_num;
                 obj[_date].used_num += key.used_num;
@@ -48,8 +48,8 @@ module.exports = {
             for(var date of dates) {
                 newData.push({
                     name : date,
-                    create_coupon_num : obj[date].create_coupon_num,
-                    create_coupon_amount : obj[date].create_coupon_amount,
+                    create_num : obj[date].create_num,
+                    create_amount : obj[date].create_amount,
                     give_num : obj[date].give_num,
                     receive_num : obj[date].receive_num,
                     used_num : obj[date].used_num,
@@ -62,13 +62,13 @@ module.exports = {
 
             newData.push({
                 name : "对比",
-                create_coupon_num : util.toFixed(
-                    newData[0].create_coupon_num - newData[1].create_coupon_num,
-                    newData[0].create_coupon_num
+                create_num : util.toFixed(
+                    newData[0].create_num - newData[1].create_num,
+                    newData[0].create_num
                 ),
-                create_coupon_amount : util.toFixed(
-                    newData[0].create_coupon_amount - newData[1].create_coupon_amount,
-                    newData[0].create_coupon_amount
+                create_amount : util.toFixed(
+                    newData[0].create_amount - newData[1].create_amount,
+                    newData[0].create_amount
                 ),
                 give_num : util.toFixed(
                     newData[0].give_num - newData[1].give_num,
@@ -103,7 +103,7 @@ module.exports = {
         var source = data.data,
             type  = "line",
             map = {
-                create_coupon_num : "创建数量",
+                create_num : "创建数量",
                 receive_num : "领取数量",
                 used_num : "使用数量"
             },
@@ -111,7 +111,7 @@ module.exports = {
 
         for(var date of dates) {
             newData[date] = {
-                create_coupon_num : 0,
+                create_num : 0,
                 receive_num : 0,
                 used_num : 0
             };
@@ -119,7 +119,7 @@ module.exports = {
 
         for(var key of source) {
             var date = util.getDate(key.date);
-            newData[date].create_coupon_num += key.create_coupon_num;
+            newData[date].create_num += key.create_num;
             newData[date].receive_num += key.receive_num;
             newData[date].used_num += key.used_num;
         }
