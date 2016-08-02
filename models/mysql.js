@@ -94,10 +94,10 @@ function connect(app) {
             models.ShareAnalyzeChannel = db.define("tbl_rt_share_analyze_channel", obj.ShareAnalyzeChannel);
             models.ShareAnalyzeChannelTrend = db.define("tbl_rt_share_analyze_channel_trend", obj.ShareAnalyzeChannelTrend);
             models.UrlToName = db.define("tbl_rt_url_to_name", obj.UrlToName);
-            models.CouponGroupPriceInterrgional = db.define("ads2_rt_coupon_group_price_interrgional", obj.CouponGroupPriceInterrgional);
-            models.CouponGroupShopTop = db.define("ads2_rt_coupon_group_shop_top", obj.CouponGroupShopTop);
-            models.CouponInfo = db.define("ads2_rt_coupon_info", obj.CouponInfo);
-            models.CouponGroupDate = db.define("ads2_rt_coupon_group_date", obj.CouponGroupDate);
+            models.CouponGroupPriceInterrgional = db.define("ads2_coupon_group_price_interrgional", obj.CouponGroupPriceInterrgional);
+            models.CouponGroupShopTop = db.define("ads2_coupon_group_shop_top", obj.CouponGroupShopTop);
+            models.CouponInfo = db.define("ads2_coupon_info", obj.CouponInfo);
+            models.CouponGroupDate = db.define("ads2_coupon_group_date", obj.CouponGroupDate);
             models.db1 = db;
             next();
         }
