@@ -69,6 +69,8 @@ var ControlTableCol = require('../common/control-table-col.vue');
 
 var utils = require('utils');
 
+var eventBus = require('../support/event-bus.vue');
+
 var Main = Vue.extend({
 	name: 'Main',
 	data: function() {
@@ -105,7 +107,7 @@ var Main = Vue.extend({
 
 		}
 	},
-	created: function() {
+	ready: function() {
 		var _this = this;
 		$.ajax({
 			url: _this.currentData.query_api + '_json',
@@ -121,7 +123,13 @@ var Main = Vue.extend({
 				if (!_this.$route.path.match(/\?(.*)/)) {
 					_this.count = 0;
 				}
+				if (/.*(\/.*One)/.test(_this.currentData.query_api)) {
+					eventBus.$emit('globalPlataform', data.components.global_plataform || {});
+				}
 			}
+		});
+		eventBus.$on('platformChange', (plataform, key) => {
+			Vue.set(_this.argvs, key, plataform);
 		});
 	},
 	methods: {

@@ -21,6 +21,7 @@ var pwd = __dirname;
 var argv = require('minimist')(process.argv.slice(2));
 // var config = require('./config.json');
 
+var rootPath = __dirname;
 
 var vendorPlugin = new webpack.optimize.CommonsChunkPlugin({
     name: 'vendor',
@@ -54,10 +55,12 @@ var webpackConfig = {
     module: {
         loaders: [{
             test: /.js$/,
-            loader: 'jsx-loader?harmony'
+            loader: 'babel',
+            include: path.join(rootPath, './src'),
+            exclude: path.join(rootPath, '../node_modules/')
         }, {
             test: /.vue$/,
-            loader: 'vue-loader'
+            loader: 'vue'
         }]
     },
     plugins: [vendorPlugin],
@@ -88,10 +91,16 @@ gulp.task('clean', function() {
 });
 
 gulp.task('js', function() {
+    if (argv.env === 'pro') {
+        webpackConfig.plugins.push(new webpack.optimize.UglifyJsPlugin({
+            compress: {
+                warnings: false
+            }
+        }));
+    }
     return gulp
         .src('./src/js/app.js')
         .pipe(gulpWebpack(webpackConfig))
-        .pipe(gulpIf(argv.env == 'pro', uglify()))
         // .pipe(gulpIf(argv.env == 'pro', header(banner, { config: config })))
         .pipe(gulp.dest('./dist/js/'))
 })

@@ -8,7 +8,7 @@ var util = require("../../utils");
 module.exports = {
     useTimeOne(data, array, filter_key) {
         var newData = {},
-            source = data.data,
+            source = data.first.data,
             total = 0,
             type = "bar",
             map = {
@@ -21,8 +21,8 @@ module.exports = {
             };
         }
         for(key of source) {
-            newData[key.distribution].value += key.num;
-            total += key.num;
+            newData[key.distribution].value += key.sum_num;
+            total += key.sum_num;
         }
         for(key of array) {
             newData[key] = {
@@ -42,20 +42,20 @@ module.exports = {
         var newData = [],
             total_num = 0,
             obj = {},
-            count = array.length;
-            source = data.data;
+            count = array.length,
+            source = data.first.data;
         //var array = [ '1-3秒', '4-10秒', '11-30秒', '31-60秒', '1-3分', '4-10分', '11-30分', '30分+' ];
         for(var key of array) {
             obj[key] = 0;
         }
         for(key of source) {
-            obj[key.distribution] += key.num;
-            total_num += key.num;
+            obj[key.distribution] = key.sum_num;
+            total_num += key.sum_num;
         }
         for(key of array) {
             newData.push({
                 distribution : key,
-                num : obj[key],
+                sum_num : obj[key],
                 num_rate : util.toFixed(obj[key], total_num)
             });
         }
