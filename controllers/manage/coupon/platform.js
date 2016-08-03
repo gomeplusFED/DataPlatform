@@ -181,7 +181,10 @@ module.exports = (Router) => {
             query.type = "2";
             if(!query.coupon_id) {
                 query.created_at =
-                    orm.between(new Date(query.startTime + " 00:00:00"), new Date(query.endTime + " 23:59:59"));
+                    orm.between(
+                        new Date(query.startTime + " 00:00:00").getTime(),
+                        new Date(query.endTime + " 23:59:59").getTime()
+                    );
             }
             query.date = orm.between(
                 new Date(util.getDate(new Date(new Date() - 24 * 60 * 60 * 1000)) + " 00:00:00"),
