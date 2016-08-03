@@ -194,7 +194,7 @@ module.exports = {
             count = data.dataCount;
 
         for(var key of source) {
-            if(new Date(key.end_at) <= new Date()) {
+            if(new Date(key.end_at * 1000) <= new Date()) {
                 key.expired_rate = util.toFixed(
                     key.receive_num - key.used_num,
                     key.receive_num
@@ -207,7 +207,7 @@ module.exports = {
                 key.expired_rate = "0%";
                 key.invalid_rate = "0%";
             }
-            key.end_at = moment(new Date(key.end_at)).format("YYYY-MM-DD HH:mm:ss");
+            key.end_at = moment(new Date(key.end_at * 1000)).format("YYYY-MM-DD HH:mm:ss");
             key.used_rate = util.toFixed(key.used_num, key.receive_num);
             key.receive_rate = util.toFixed(key.receive_num, sumDate["1"]);
         }
