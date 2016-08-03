@@ -192,6 +192,12 @@ module.exports = (Router) => {
             );
             cb(null, query);
         },
+        params(query, filter_key) {
+            if(query.coupon_id) {
+                delete query.created_at;
+            }
+            return query;
+        },
         search : {
             show : true,
             title : "请输入优惠券编号：",
