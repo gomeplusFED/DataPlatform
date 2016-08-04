@@ -116,12 +116,10 @@ api.prototype = {
             }
         } else {
             if(this._checkDate(query, next)) {
-                if(query.startTime && query.endTime) {
-                    params.date = orm.between(
-                        new Date(query.startTime + " 00:00:00"),
-                        new Date(query.endTime + " 23:59:59")
-                    );
-                }
+                params.date = orm.between(
+                    new Date(query.startTime + " 00:00:00"),
+                    new Date(query.endTime + " 23:59:59")
+                );
                 if(typeof this.fixedName === "function") {
                     this.fixedParams(req, query, (err, data) => {
                         if(err) {
@@ -143,11 +141,9 @@ api.prototype = {
         if(query.startTime === undefined && query.endTime === undefined) {
             return true;
         } else {
-            if (!validator.isDate(query.startTime)) {
-                next(new Error("startTime参数出错"));
+            if (!validator.isDate(query.startTime) && !validator.isDate(query.endTime)) {
+                next(new Error("startTime参数出错或者endTime参数出错"));
                 return false;
-            } else if(!validator.isDate(query.endTime)) {
-                next(new Error("endTime参数出错"));
             }
             return true;
         }
@@ -184,34 +180,27 @@ api.prototype = {
             err = [];
         for(var key of this.defaultRender) {
             if(this[key.render]) {
-                if(!query[key.param]) {
-                    query[key.param] = params[key.param];
-                }
                 errObj[key.param] = false;
                 for(var k of cacheData[key.render]) {
                     if(query[key.param] === k) {
-                        params[key.param] = query[key.param];
                         errObj[key.param] = true;
                     }
                 }
             }
         }
-        Object.keys(errObj).forEach((key) => {
-            if (!errObj[key]) {
-                err.push(key);
-            }
-        });
+        for(var key in errObj) {
+            !errObj[key] && err.push(key);
+        }
+
         if (err.length > 0) {
             next(new Error(err.join("参数或者") + "参数出错"));
             return false;
         }
-        Object.keys(query).forEach((value) => {
+        for(var value in query) {
             if(value !== "startTime" && value !== "endTime" && value.indexOf("filter") < 0) {
-                if(params[value] !== query[value]) {
-                    params[value] = query[value];
-                }
+                params[value] = query[value];
             }
-        });
+        }
         return true;
     },
     _findData(type, req, res, next, query, params, dates) {
@@ -243,18 +232,17 @@ api.prototype = {
             try {
                 for(var i = 0; i < this.modelName.length; i++) {
                     if(this[this.paramsName[i]]) {
-                        if(typeof this[this.paramsName[i]] === "function") {
+                        if (typeof this[this.paramsName[i]] === "function") {
                             params = this[this.paramsName[i]](query, params, sendData);
                         } else {
-                            for(var key in this[this.paramsName[i]]) {
+                            for (var key in this[this.paramsName[i]]) {
                                 params[key] = this[this.paramsName[i]][key];
                             }
                         }
                     }
-
                     sendData[this.dataName[i]] = {};
                     if(this[this.sql[i]]) {
-                        if(this.paging[i]) {
+                        if (this.paging[i]) {
                             sendData[this.dataName[i]].data =
                                 await(this._findDatabaseSql(req, this[this.sql[i]](query, params, false)));
                             sendData[this.dataName[i]].count =
@@ -264,33 +252,26 @@ api.prototype = {
                                 await(this._findDatabaseSql(req, this[this.sql[i]](query, params)));
                         }
                     } else {
-                        if(this.procedure[i]) {
-                            if(this.paging[i]) {
-                                sendData[this.dataName[i]].data =
-                                    await (this._findDatabase(req, params, this.modelName[i], this.procedure[i][0]));
-                                sendData[this.dataName[i]].sum =
-                                    await (this._findDatabase(req, params, this.modelName[i], this.procedure[i][1]));
-                                sendData[this.dataName[i]].count =
-                                    await (this._findDatabase(req, params, this.modelName[i], this.procedure[i][2]));
+                        if (this.procedure[i]) {
+                            if (this.paging[i]) {
+                                sendData = this._returnFind(
+                                    req, params, this.modelName[i],
+                                    this.procedure[i][0], sendData, this.dataName[i]
+                                );
                             } else {
                                 sendData[this.dataName[i]].data =
-                                    await (this._findDatabase(req, params, this.modelName[i], this.procedure[i]));
+                                    await(this._findDatabase(req, params, this.modelName[i], this.procedure[i]));
                             }
+                        } else if (this.paging[i]) {
+                            sendData = this._returnFind(
+                                req, params, this.modelName[i],
+                                [pageFind, sum, count], sendData, this.dataName[i]
+                            );
                         } else {
-                            if(this.paging[i]) {
-                                sendData[this.dataName[i]].data =
-                                    await (this._findDatabase(req, params, this.modelName[i], pageFind));
-                                sendData[this.dataName[i]].sum =
-                                    await (this._findDatabase(req, params, this.modelName[i], sum));
-                                sendData[this.dataName[i]].count =
-                                    await (this._findDatabase(req, params, this.modelName[i], count));
-                            } else {
-                                sendData[this.dataName[i]].data =
-                                    await (this._findDatabase(req, params, this.modelName[i], find));
-                            }
+                            sendData[this.dataName[i]].data =
+                                await(this._findDatabase(req, params, this.modelName[i], find));
                         }
                     }
-
                 }
             }catch(err) {
                 isErr = true;
@@ -301,12 +282,7 @@ api.prototype = {
                 return;
             }
             if (this.filter) {
-                sendData = this.filter(
-                    sendData,
-                    query,
-                    dates,
-                    type
-                );
+                sendData = this.filter(sendData, query, dates, type);
             }
             if (type !== "excel") {
                 this._render(res, sendData, type);
@@ -319,33 +295,38 @@ api.prototype = {
             }
         })();
     },
+    _returnFind(req, params, modelName, procedure, sendData, dataName){
+        sendData[dataName].data = await (this._findDatabase(req, params, modelName, procedure[0]));
+        sendData[dataName].sum = await (this._findDatabase(req, params, modelName, procedure[1]));
+        sendData[dataName].count = await (this._findDatabase(req, params, modelName, procedure[2]));
+        return sendData;
+    },
     _getCache(type, req, res, next, query, params, dates) {
         cache.cacheGet(cacheName, (err, cacheData) => {
             if (!err) {
                 if (cacheData) {
                     if (this._checkParams(next, query, params, cacheData)) {
                         this._findData(type, req, res, next, query, params, dates);
-                    }
-                } else {
-                    cacheData = {};
-                    async(() => {
-                        try {
-                            var data = await (this._findDatabase(req, {}, cacheName, {find : ""}));
-                            for (var key of this.defaultRender) {
-                                cacheData[key.render] = [];
-                                for (var k of data) {
-                                    if (k.type === key.db) {
-                                        cacheData[key.render].push(k.name);
-                                    }
+                    } else {
+                        cacheData = {};
+                        var cacheObject = {};
+                        async(() => {
+                            try {
+                                var data = await(this._findDatabase(req, {}, cacheName, {find: ""}));
+                                for (var key of this.defaultRender) {
+                                    cacheData[key.render] = [];
+                                    cacheObject[key.db] = key.render;
                                 }
+                                for (var k of data) {
+                                    cacheData[cacheObject[key.type]].push(k.name);
+                                }
+                                this._checkParams(next, query, params, cacheData) &&
+                                    this._setCache(type, req, res, next, query, params, dates, cacheData);
+                            } catch (err) {
+                                next(err);
                             }
-                            if (this._checkParams(next, query, params, cacheData)) {
-                                this._setCache(type, req, res, next, query, params, dates, cacheData);
-                            }
-                        }catch(err) {
-                            next(err);
-                        }
-                    })();
+                        })();
+                    }
                 }
             } else {
                 next(err);
@@ -354,11 +335,8 @@ api.prototype = {
     },
     _setCache(type, req, res, next, query, params, dates, cacheData) {
         cache.cacheSet(cacheName, cacheData, cacheTime, (err, success) => {
-            if (!err && success) {
-                this._findData(type, req, res, next, query, params, dates);
-            } else {
-                next(err);
-            }
+            return !err && success ?
+                this._findData(type, req, res, next, query, params, dates) : next(err);
         });
     },
     _findDatabase : async((req, params, modelName, procedure) => {
@@ -379,7 +357,6 @@ api.prototype = {
         if(params.from) {
             _obj.offset = params.from - 1;
         }
-
         if(params.to) {
             _obj.limit = +params.to;
         }
@@ -392,23 +369,19 @@ api.prototype = {
 
         return new Promise((resolve, reject) => {
             var sql = req.models[modelName];
-            if(length > 1) {
-                for(var key in procedure) {
-                    if(endFn.indexOf(key) >= 0) {
-                        sql[key](function() {
+            if (length > 1){
+                for (var key in procedure) {
+                    if (endFn.indexOf(key) >= 0) {
+                        sql[key](function () {
                             var args = Array.prototype.slice.call(arguments),
                                 err = args.shift();
-                            if (err) {
-                                reject(err);
-                            } else {
-                                resolve(args[0]);
-                            }
+                            err ? reject(err) : resolve(args);
                         });
-                    } else if(arrayFn.indexOf(key) >= 0) {
-                        for(var k of procedure[key]) {
+                    } else if (arrayFn.indexOf(key) >= 0) {
+                        for (var k of procedure[key]) {
                             sql[key](k);
                         }
-                    } else if(objectFn.indexOf(key) >= 0) {
+                    } else if (objectFn.indexOf(key) >= 0) {
                         sql = sql[key](procedure[key].value || [], _obj.params);
                     } else {
                         sql = sql[key](_obj[procedure[key]]);
@@ -416,23 +389,15 @@ api.prototype = {
                 }
             } else {
                 sql[keys[0]](_obj.params, (err, data) => {
-                    if(err) {
-                        reject(err);
-                    } else {
-                        resolve(data);
-                    }
+                    err ? reject(err) : resolve(data);
                 });
             }
         });
     }),
-    _findDatabaseSql : async((req, sql) => {
+    _findDatabaseSql : async((req, sqlObject) => {
         return new Promise((resolve, reject) => {
-            req.models.db1.driver.execQuery(sql, (err, data) => {
-                if(err) {
-                    reject(err);
-                } else {
-                    resolve(data);
-                }
+            req.models.db1.driver.execQuery(sqlObject.sql, sqlObject.params, (err, data) => {
+                err ? reject(err) : resolve(data);
             });
         });
     }),

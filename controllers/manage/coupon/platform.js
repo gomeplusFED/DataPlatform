@@ -157,10 +157,10 @@ module.exports = (Router) => {
                     type : "string"
                 },{
                     caption : "过期数量",
-                    type : "string"
+                    type : "number"
                 },{
                     caption : "作废数量",
-                    type : "string"
+                    type : "number"
                 }
             ]
         ]
