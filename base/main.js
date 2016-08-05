@@ -296,9 +296,14 @@ api.prototype = {
         })();
     },
     _returnFind(req, params, modelName, procedure, sendData, dataName){
-        sendData[dataName].data = await (this._findDatabase(req, params, modelName, procedure[0]));
-        sendData[dataName].sum = await (this._findDatabase(req, params, modelName, procedure[1]));
-        sendData[dataName].count = await (this._findDatabase(req, params, modelName, procedure[2]));
+        if(procedure.length === 2) {
+            sendData[dataName].data = await (this._findDatabase(req, params, modelName, procedure[0]));
+            sendData[dataName].count = await (this._findDatabase(req, params, modelName, procedure[1]));
+        } else {
+            sendData[dataName].data = await (this._findDatabase(req, params, modelName, procedure[0]));
+            sendData[dataName].sum = await (this._findDatabase(req, params, modelName, procedure[1]));
+            sendData[dataName].count = await (this._findDatabase(req, params, modelName, procedure[2]));
+        }
         return sendData;
     },
     _getCache(type, req, res, next, query, params, dates) {
