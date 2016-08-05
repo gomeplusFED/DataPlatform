@@ -88,7 +88,12 @@ function api(Router, options) {
             param: "coupon_type",
             db : "quan"
         }],
-        search : {show: false}
+        //搜索框
+        search : {show: false},
+        //表格字段选择框
+        control_table_col : {show: false},
+        //全局模块
+        global_platform: {show: false}
     }, options);
 
     utils.mixin(this, defaultOption);
@@ -175,7 +180,9 @@ api.prototype = {
                     name : this.level_select_name
                 },
                 filter_select: this.filter_select,
-                search: this.search
+                search: this.search,
+                control_table_col : this.control_table_col,
+                global_plataform : this.global_platform
             }
         });
     },
