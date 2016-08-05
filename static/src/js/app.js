@@ -11,6 +11,9 @@ window.$ = $;
 // fileter
 require('./filter/index.js');
 
+// directive
+require('./directive/tips.js');
+
 var dom = require('./dom/index.js');
 
 var blankApp = Vue.extend({});

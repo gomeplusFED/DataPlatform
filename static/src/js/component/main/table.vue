@@ -3,7 +3,7 @@
 		<table v-for="tableItem in tableData" class="table table-bordered table-hover" role="grid" aria-describedby="dataTables_info">
 			<thead>
 				<tr>
-					<th v-for="(captionIndex, captionItem) in tableItem.cols" v-show="tableColControl[captionIndex]">{{captionItem.caption}}</th>
+					<th v-for="(captionIndex, captionItem) in tableItem.cols" v-show="tableColControl[captionIndex]">{{captionItem.caption}} <i v-show="captionItem.caption !== ' '" style="opacity: 0.8;cursor: pointer;" class="fa fa-question-circle-o" v-tips="{direction: 'top', msg: captionItem.help}"></i></th>
 				</tr>
 			</thead>
 			<tbody v-if="tableItem.data.length !== 0">
@@ -240,6 +240,9 @@ var Table = Vue.extend({
 					});
 				});
 			}
+		},
+		showHelpBymouse(ev) {
+			console.log(ev.target.getAttribute('data'));
 		}
 	},
 	watch: {
