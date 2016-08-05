@@ -208,7 +208,9 @@ api.prototype = {
             var isErr = false,
                 error = "",
                 find = {
-                    find : ""
+                    find : "params",
+                    order : this.order,
+                    run : ""
                 },
                 pageFind = {
                     find : "params",
