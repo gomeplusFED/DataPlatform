@@ -33,7 +33,7 @@ function api(Router, options) {
         //对应表是否分页
         paging : [],
         //查询分页条数
-        //page : false,
+        page : null,
         //需要求和字段
         sum : [],
         //排序字段
