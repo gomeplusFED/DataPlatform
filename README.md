@@ -172,7 +172,8 @@ module.exports = function(Router) {
     cols : [
 	[
 	    caption : '列名',
-	    type : '类型'
+	    type : '类型',
+	    help : '帮助信息'
 	]
     ]
 }
