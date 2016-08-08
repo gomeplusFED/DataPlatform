@@ -91,7 +91,7 @@ function api(Router, options) {
         //搜索框
         search : {show: false},
         //表格字段选择框
-        control_table_col : {show: false},
+        control_table_col : false,
         //全局模块
         global_platform: {show: false}
     }, options);
