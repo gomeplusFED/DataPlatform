@@ -280,7 +280,7 @@ module.exports = function(Router) {
 默认值
 <pre><code>{
     search : {
-	show : false
+        show : false
     }
 }
 </code></pre>
@@ -296,12 +296,12 @@ module.exports = function(Router) {
 默认值
 <pre><code>{
     golbal_platform : {
-	show : false,
-	key : '参数名',
-	list : [{
-	    key : '参数值',
-	    name : '名称'
-	}]
+        show : false,
+        key : '参数名',
+        list : [{
+            key : '参数值',
+            name : '名称'
+        }]
     }
 }
 </code></pre>
