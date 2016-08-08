@@ -221,6 +221,9 @@ module.exports = (Router) => {
         order : ["-new_fans_num"],
         showDayUnit : true,
         date_picker_data: 1,
+        control_table_col : {
+            show : true
+        },
         filter(data, query, dates, type) {
             return filter.hostSix(data, query.page);
         },
@@ -230,8 +233,8 @@ module.exports = (Router) => {
             preMethods: ['excel_export']
         }],
         rows: [
-            [ "id", "owner_name", "new_fans_num", "new_group_num",
-            "group_num", "fans_num"]
+            [ "1", "2", "3", "4", "5", "6", "7", "8", "9" , "10",
+            "11", "12", "13", "14"]
         ],
         cols: [
             [{
@@ -241,21 +244,45 @@ module.exports = (Router) => {
                 caption: "圈主名称",
                 type: "string"
             }, {
-                caption: "圈主新增粉丝数",
-                type: "string",
+                caption: "圈主ID",
+                type: ""
+            }, {
+                caption: "是否达人",
+                type: ""
+            }, {
+                caption: "累计发布话题数",
+                type: ""
+            }, {
+                caption: "新增邀请好友数",
+                type: ""
+            }, {
+                caption: "累计邀请好友数",
+                type: ""
+            }, {
+                caption: "新增粉丝数",
+                type: "number",
                 help : "圈主本时间区间新关注粉丝数（第一次关注时间不在此时间区，不+1）"
+            },{
+                caption: "当前粉丝数",
+                type: "",
+                help : "当前累计的关注粉丝数"
             }, {
                 caption: "新增圈子数",
                 type: "number",
                 help : "圈主新建圈子数"
             }, {
-                caption: "圈子数",
-                type: "number",
+                caption: "当前圈子数",
+                type: "",
                 help : "此圈主下圈子数"
             }, {
-                caption: "粉丝数",
-                type: "number",
-                help : "当前累计的关注粉丝数"
+                caption: "新增关注次数",
+                type: ""
+            }, {
+                caption: "累计关注次数",
+                type: ""
+            }, {
+                caption: "新增取关次数",
+                type: ""
             }]
         ]
     });
