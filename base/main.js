@@ -181,7 +181,9 @@ api.prototype = {
                 },
                 filter_select: this.filter_select,
                 search: this.search,
-                control_table_col : this.control_table_col,
+                control_table_col : {
+                    show : this.control_table_col
+                },
                 global_plataform : this.global_platform
             }
         });

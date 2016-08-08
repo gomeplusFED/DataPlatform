@@ -221,9 +221,7 @@ module.exports = (Router) => {
         order : ["-new_fans_num"],
         showDayUnit : true,
         date_picker_data: 1,
-        control_table_col : {
-            show : true
-        },
+        control_table_col : true,
         filter(data, query, dates, type) {
             return filter.hostSix(data, query.page);
         },
