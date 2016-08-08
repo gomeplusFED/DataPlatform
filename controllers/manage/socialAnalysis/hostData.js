@@ -106,151 +106,159 @@ module.exports = (Router) => {
         }
     });
 
-    //Router = new api(Router,{
-    //    router : "/socialAnalysis/hostThree",
-    //    modelName : [ "HostDistribution", "SocialCategory" ],
-    //    platform : false,
-    //    orderParams : {
-    //        pid : ""
-    //    },
-    //    fixedParams(query, filter_key, req, cb) {
-    //        var group_type = [];
-    //        req.models.SocialCategory.find({
-    //            pid : ""
-    //        }, (err, data) => {
-    //            if(!err) {
-    //                for(var key of data) {
-    //                    group_type.push(key.id);
-    //                }
-    //                query.group_type = group_type;
-    //                cb(null, query);
-    //            } else {
-    //                cb(err);
-    //            }
-    //        });
-    //    },
-    //    filter_select: [
-    //        {
-    //            title: '指标选择',
-    //            filter_key: 'filter_key',
-    //            groups: [{
-    //                key: 'new_owner_num',
-    //                value: '圈主'
-    //            }, {
-    //                key: 'fans_num',
-    //                value: '粉丝数'
-    //            }]
-    //        }
-    //    ],
-    //    filter(data, filter_key) {
-    //        return filter.hostThree(data, filter_key);
-    //    }
-    //});
-    //
-    //Router = new api(Router,{
-    //    router : "/socialAnalysis/hostFour",
-    //    modelName : [ "HostDistribution", "SocialCategory" ],
-    //    platform : false,
-    //    orderParams : {},
-    //    fixedParams(query, filter_key, req, cb) {
-    //        var filter_key = filter_key || "-1",
-    //            group_type = [];
-    //        req.models.SocialCategory.find({
-    //            pid : filter_key
-    //        }, (err, data) => {
-    //            if(!err) {
-    //                for(var key of data) {
-    //                    group_type.push(key.id);
-    //                }
-    //                query.group_type = group_type;
-    //                cb(null, query);
-    //            } else {
-    //                cb(err);
-    //            }
-    //        });
-    //    },
-    //    selectFilter(req, cb) {
-    //        var filter_select = {
-    //            title: '一级分类',
-    //            filter_key: 'filter_key',
-    //            groups: []
-    //        };
-    //        req.models.SocialCategory.find({
-    //            pid : ""
-    //        }, (err, data) => {
-    //            if(!err) {
-    //                for(var key of data) {
-    //                    var obj = {
-    //                        key : key.id,
-    //                        value : key.name,
-    //                        cell : {
-    //                            title: '指标',
-    //                            filter_key: 'filter_key2',
-    //                            groups: [{
-    //                                key: 'new_owner_num',
-    //                                value: '圈主'
-    //                            }, {
-    //                                key: 'fans_num',
-    //                                value: '粉丝数'
-    //                            }]
-    //                        }
-    //                    };
-    //                    filter_select.groups.push(obj);
-    //                }
-    //                cb(null,[filter_select]);
-    //            } else {
-    //                cb(err);
-    //            }
-    //        });
-    //    },
-    //    filter_select: [],
-    //    filter(data, filter_key, dates, filter_key2) {
-    //        return filter.hostFour(data, filter_key, filter_key2);
-    //    }
-    //});
-    //
-    //Router = new api(Router,{
-    //    router : "/socialAnalysis/hostFive",
-    //    modelName : [ "HostTop" ],
-    //    platform : false,
-    //    paging : true,
-    //    order : ["-new_fans_num"],
-    //    showDayUnit : true,
-    //    date_picker_data: 1,
-    //    filter(data, filter_key, dates, filter_key2, page) {
-    //        return filter.hostFive(data, page);
-    //    },
-    //    excel_export : true,
-    //    flexible_btn : [{
-    //        content: '<a href="javascript:void(0)">导出</a>',
-    //        preMethods: ['excel_export']
-    //    }],
-    //    rows: [
-    //        [ "id", "owner_name", "new_fans_num", "new_group_num",
-    //        "group_num", "fans_num"]
-    //    ],
-    //    cols: [
-    //        [{
-    //            caption: "排名",
-    //            type: "number"
-    //        }, {
-    //            caption: "圈主名称",
-    //            type: "string"
-    //        }, {
-    //            caption: "圈主新增粉丝数",
-    //            type: "string"
-    //        }, {
-    //            caption: "新增圈子数",
-    //            type: "number"
-    //        }, {
-    //            caption: "圈子数",
-    //            type: "number"
-    //        }, {
-    //            caption: "粉丝数",
-    //            type: "number"
-    //        }]
-    //    ]
-    //});
+    Router = new api(Router,{
+        router : "/socialAnalysis/hostFour",
+        modelName : [ "HostDistribution", "SocialCategory" ],
+        platform : false,
+        secondParams(query, params, data) {
+            return {
+                pid : ""
+            };
+        },
+        fixedParams(req, query, cb) {
+            var group_type = [];
+            req.models.SocialCategory.find({
+                pid : ""
+            }, (err, data) => {
+                if(!err) {
+                    for(var key of data) {
+                        group_type.push(key.id);
+                    }
+                    query.group_type = group_type;
+                    cb(null, query);
+                } else {
+                    cb(err);
+                }
+            });
+        },
+        filter_select: [
+            {
+                title: '指标选择',
+                filter_key: 'filter_key',
+                groups: [{
+                    key: 'new_owner_num',
+                    value: '圈主'
+                }, {
+                    key: 'fans_num',
+                    value: '粉丝数'
+                }]
+            }
+        ],
+        filter(data, query, dates, type) {
+            return filter.hostFour(data, query);
+        }
+    });
+
+    Router = new api(Router,{
+        router : "/socialAnalysis/hostFive",
+        modelName : [ "HostDistribution", "SocialCategory" ],
+        platform : false,
+        secondParams(query, params, data) {
+            return {};
+        },
+        fixedParams(req, query, cb) {
+            var filter_key = query.filter_key || "-1",
+                group_type = [];
+            req.models.SocialCategory.find({
+                pid : filter_key
+            }, (err, data) => {
+                if(!err) {
+                    for(var key of data) {
+                        group_type.push(key.id);
+                    }
+                    query.group_type = group_type;
+                    cb(null, query);
+                } else {
+                    cb(err);
+                }
+            });
+        },
+        selectFilter(req, cb) {
+            var filter_select = {
+                title: '一级分类',
+                filter_key: 'filter_key',
+                groups: []
+            };
+            req.models.SocialCategory.find({
+                pid : ""
+            }, (err, data) => {
+                if(!err) {
+                    for(var key of data) {
+                        var obj = {
+                            key : key.id,
+                            value : key.name,
+                            cell : {
+                                title: '指标',
+                                filter_key: 'filter_key2',
+                                groups: [{
+                                    key: 'new_owner_num',
+                                    value: '圈主'
+                                }, {
+                                    key: 'fans_num',
+                                    value: '粉丝数'
+                                }]
+                            }
+                        };
+                        filter_select.groups.push(obj);
+                    }
+                    cb(null,[filter_select]);
+                } else {
+                    cb(err);
+                }
+            });
+        },
+        filter_select: [],
+        filter(data, query, dates, type) {
+            return filter.hostFive(data, query);
+        }
+    });
+
+    Router = new api(Router,{
+        router : "/socialAnalysis/hostSix",
+        modelName : [ "HostTop" ],
+        platform : false,
+        paging : [true],
+        order : ["-new_fans_num"],
+        showDayUnit : true,
+        date_picker_data: 1,
+        filter(data, query, dates, type) {
+            return filter.hostSix(data, query.page);
+        },
+        excel_export : true,
+        flexible_btn : [{
+            content: '<a href="javascript:void(0)">导出</a>',
+            preMethods: ['excel_export']
+        }],
+        rows: [
+            [ "id", "owner_name", "new_fans_num", "new_group_num",
+            "group_num", "fans_num"]
+        ],
+        cols: [
+            [{
+                caption: "排名",
+                type: "number"
+            }, {
+                caption: "圈主名称",
+                type: "string"
+            }, {
+                caption: "圈主新增粉丝数",
+                type: "string",
+                help : "圈主本时间区间新关注粉丝数（第一次关注时间不在此时间区，不+1）"
+            }, {
+                caption: "新增圈子数",
+                type: "number",
+                help : "圈主新建圈子数"
+            }, {
+                caption: "圈子数",
+                type: "number",
+                help : "此圈主下圈子数"
+            }, {
+                caption: "粉丝数",
+                type: "number",
+                help : "当前累计的关注粉丝数"
+            }]
+        ]
+    });
 
     Router = new help(Router, {
         router : "/socialAnalysis/helpThree",

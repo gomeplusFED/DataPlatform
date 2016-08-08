@@ -93,21 +93,21 @@ module.exports = {
                     type : "chart",
                     title : "圈主数据趋势",
                     query_api : "/socialAnalysis/hostThree"
-                //},
-                //{
-                //    type : "chart",
-                //    title : "新增圈主一级分布",
-                //    query_api : "/socialAnalysis/hostFour"
-                //},
-                //{
-                //    type : "chart",
-                //    title : "新增圈主二级分布",
-                //    query_api : "/socialAnalysis/hostFive"
-                //},
-                //{
-                //    type : "table",
-                //    title : "热门圈主排行TOP100",
-                //    query_api : "/socialAnalysis/hostSix"
+                },
+                {
+                    type : "chart",
+                    title : "新增圈主一级分布",
+                    query_api : "/socialAnalysis/hostFour"
+                },
+                {
+                    type : "chart",
+                    title : "新增圈主二级分布",
+                    query_api : "/socialAnalysis/hostFive"
+                },
+                {
+                    type : "table",
+                    title : "热门圈主排行TOP100",
+                    query_api : "/socialAnalysis/hostSix"
                 }
             ]
         }

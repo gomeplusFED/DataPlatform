@@ -129,7 +129,7 @@ api.prototype = {
                         new Date(query.endTime + " 23:59:59")
                     );
                 }
-                if(typeof this.fixedName === "function") {
+                if(typeof this.fixedParams === "function") {
                     this.fixedParams(req, query, (err, data) => {
                         if(err) {
                             next(err);
@@ -276,10 +276,17 @@ api.prototype = {
                                     await(this._findDatabase(req, params, this.modelName[i], this.procedure[i]));
                             }
                         } else if (this.paging[i]) {
-                            sendData = this._returnFind(
-                                req, params, this.modelName[i],
-                                [pageFind, sum, count], sendData, this.dataName[i]
-                            );
+                            if(this.sum.length > 0) {
+                                sendData = this._returnFind(
+                                    req, params, this.modelName[i],
+                                    [pageFind, sum, count], sendData, this.dataName[i]
+                                );
+                            } else {
+                                sendData = this._returnFind(
+                                    req, params, this.modelName[i],
+                                    [pageFind, count], sendData, this.dataName[i]
+                                );
+                            }
                         } else {
                             sendData[this.dataName[i]].data =
                                 await(this._findDatabase(req, params, this.modelName[i], find));

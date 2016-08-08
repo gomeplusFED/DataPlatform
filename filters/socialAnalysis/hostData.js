@@ -8,7 +8,7 @@ var util = require("../../utils"),
 
 module.exports = {
     hostOne(data) {
-        var source = data.first.data,
+        var source = data.first.data[0],
             newData = {
                 one : 0,
                 two : 0,
@@ -20,7 +20,7 @@ module.exports = {
         return util.toTable([[newData]], data.rows, data.cols);
     },
     hostTwo(data) {
-        var source = data.first.data,
+        var source = data.first.data[0],
             newData = [],
             array = ["APP", "WAP", "PC", "总计"];
 
@@ -38,7 +38,7 @@ module.exports = {
         return util.toTable([newData], data.rows, data.cols);
     },
     hostThree(data, query, dates) {
-        var source = data.first.data,
+        var source = data.first.data[0],
             type = "line",
             newData = {},
             filter_name = {
@@ -72,9 +72,9 @@ module.exports = {
             }
         }];
     },
-    hostFour(data, filter_key) {
-        var source = data.data,
-            orderData = data.orderData,
+    hostFour(data, query) {
+        var source = data.first.data[0],
+            orderData = data.second.data[0],
             type = "pie",
             obj = {},
             filter_name = {
@@ -82,7 +82,7 @@ module.exports = {
                 fans_num : "粉丝数"
             },
             map = {
-                value : filter_name[filter_key]
+                value : filter_name[query.filter_key]
             },
             newData = {};
         for(var key of orderData) {
@@ -91,7 +91,7 @@ module.exports = {
             }
         }
         for(var key of source) {
-            obj[key.group_type].value += key[filter_key];
+            obj[key.group_type].value += key[query.filter_key];
         }
         for(var key of orderData) {
             newData[key.name] = {
@@ -107,18 +107,18 @@ module.exports = {
             }
         }]
     },
-    hostFive(data, filter_key, filter_key2) {
-        var source = data.data,
-            orderData = data.orderData,
+    hostFive(data, query) {
+        var source = data.first.data[0],
+            orderData = data.second.data[0],
             type = "pie",
             obj = {},
             filter_name = {
                 new_owner_num : "圈主",
                 fans_num : "粉丝数"
             },
-            filter_key = filter_key || "-1",
+            filter_key = query.filter_key || "-1",
             map = {
-                value : filter_name[filter_key2]
+                value : filter_name[query.filter_key2]
             },
             newData = {};
         for(var key of orderData) {
@@ -129,7 +129,7 @@ module.exports = {
             }
         }
         for(var key of source) {
-            obj[key.group_type].value += key[filter_key2];
+            obj[key.group_type].value += key[query.filter_key2];
         }
         for(var key of orderData) {
             if(key.pid === filter_key) {
@@ -148,9 +148,9 @@ module.exports = {
         }]
     },
     hostSix(data, page) {
-        var source = data.data,
+        var source = data.first.data[0],
             page = page || 1,
-            count = data.dataCount > 100 ? 100 : data.dataCount,
+            count = data.first.count > 100 ? 100 : data.first.count,
             newData = [];
         for(var i = 0; i < source.length; i++) {
             source[i].id = (page - 1) * 20 + i +1;
