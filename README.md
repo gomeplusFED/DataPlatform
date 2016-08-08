@@ -288,7 +288,7 @@ module.exports = function(Router) {
 
 默认值
 <pre><code>{
-    show : false
+    control_table_col : false
 }
 </code></pre>
 -  **global_platfomr** --- 全局模块
