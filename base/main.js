@@ -32,6 +32,8 @@ function api(Router, options) {
         sql : ["firstSql", "secondSql", "thirdSql", "fourthSql"],
         //对应表是否分页
         paging : [],
+        //查询分页条数
+        page : null,
         //需要求和字段
         sum : [],
         //排序字段
@@ -86,7 +88,12 @@ function api(Router, options) {
             param: "coupon_type",
             db : "quan"
         }],
-        search : {show: false}
+        //搜索框
+        search : {show: false},
+        //表格字段选择框
+        control_table_col : {show: false},
+        //全局模块
+        global_platform: {show: false}
     }, options);
 
     utils.mixin(this, defaultOption);
@@ -116,10 +123,12 @@ api.prototype = {
             }
         } else {
             if(this._checkDate(query, next)) {
-                params.date = orm.between(
-                    new Date(query.startTime + " 00:00:00"),
-                    new Date(query.endTime + " 23:59:59")
-                );
+                if(query.startTime && query.endTime) {
+                    params.date = orm.between(
+                        new Date(query.startTime + " 00:00:00"),
+                        new Date(query.endTime + " 23:59:59")
+                    );
+                }
                 if(typeof this.fixedName === "function") {
                     this.fixedParams(req, query, (err, data) => {
                         if(err) {
@@ -171,7 +180,9 @@ api.prototype = {
                     name : this.level_select_name
                 },
                 filter_select: this.filter_select,
-                search: this.search
+                search: this.search,
+                control_table_col : this.control_table_col,
+                global_plataform : this.global_platform
             }
         });
     },
@@ -208,7 +219,9 @@ api.prototype = {
             var isErr = false,
                 error = "",
                 find = {
-                    find : ""
+                    find : "params",
+                    order : this.order,
+                    run : ""
                 },
                 pageFind = {
                     find : "params",
@@ -296,9 +309,14 @@ api.prototype = {
         })();
     },
     _returnFind(req, params, modelName, procedure, sendData, dataName){
-        sendData[dataName].data = await (this._findDatabase(req, params, modelName, procedure[0]));
-        sendData[dataName].sum = await (this._findDatabase(req, params, modelName, procedure[1]));
-        sendData[dataName].count = await (this._findDatabase(req, params, modelName, procedure[2]));
+        if(procedure.length === 2) {
+            sendData[dataName].data = await (this._findDatabase(req, params, modelName, procedure[0]));
+            sendData[dataName].count = await (this._findDatabase(req, params, modelName, procedure[1]));
+        } else {
+            sendData[dataName].data = await (this._findDatabase(req, params, modelName, procedure[0]));
+            sendData[dataName].sum = await (this._findDatabase(req, params, modelName, procedure[1]));
+            sendData[dataName].count = await (this._findDatabase(req, params, modelName, procedure[2]));
+        }
         return sendData;
     },
     _getCache(type, req, res, next, query, params, dates) {
@@ -307,26 +325,26 @@ api.prototype = {
                 if (cacheData) {
                     if (this._checkParams(next, query, params, cacheData)) {
                         this._findData(type, req, res, next, query, params, dates);
-                    } else {
-                        cacheData = {};
-                        var cacheObject = {};
-                        async(() => {
-                            try {
-                                var data = await(this._findDatabase(req, {}, cacheName, {find: ""}));
-                                for (var key of this.defaultRender) {
-                                    cacheData[key.render] = [];
-                                    cacheObject[key.db] = key.render;
-                                }
-                                for (var k of data) {
-                                    cacheData[cacheObject[key.type]].push(k.name);
-                                }
-                                this._checkParams(next, query, params, cacheData) &&
-                                    this._setCache(type, req, res, next, query, params, dates, cacheData);
-                            } catch (err) {
-                                next(err);
-                            }
-                        })();
                     }
+                } else {
+                    cacheData = {};
+                    var cacheObject = {};
+                    async(() => {
+                        try {
+                            var data = await(this._findDatabase(req, {}, cacheName, {find: ""}));
+                            for (var key of this.defaultRender) {
+                                cacheData[key.render] = [];
+                                cacheObject[key.db] = key.render;
+                            }
+                            for (var key of data) {
+                                cacheData[cacheObject[key.type]].push(key.name);
+                            }
+                            this._checkParams(next, query, params, cacheData) &&
+                            this._setCache(type, req, res, next, query, params, dates, cacheData);
+                        } catch (err) {
+                            next(err);
+                        }
+                    })();
                 }
             } else {
                 next(err);
@@ -340,7 +358,7 @@ api.prototype = {
         });
     },
     _findDatabase : async((req, params, modelName, procedure) => {
-        var limit = +params.limit || 10,
+        var limit = this.page || +params.limit || 20,
             page = params.page || 1,
             offset = limit * (page - 1),
             keys = Object.keys(procedure),
