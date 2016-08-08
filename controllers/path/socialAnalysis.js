@@ -39,7 +39,6 @@ module.exports = {
             ]
         }
     },
-    
     topics() {
         return {
             name : "话题数据",
@@ -74,7 +73,6 @@ module.exports = {
             ]
         }
     },
-    
     groupHost() {
         return {
             name : "圈主数据",
@@ -87,24 +85,29 @@ module.exports = {
                     query_api : "/socialAnalysis/hostOne"
                 },
                 {
-                    type : "chart",
-                    title : "圈主数据趋势",
+                    type : "table",
+                    title : "圈主数据统计",
                     query_api : "/socialAnalysis/hostTwo"
                 },
                 {
                     type : "chart",
-                    title : "新增圈主一级分布",
+                    title : "圈主数据趋势",
                     query_api : "/socialAnalysis/hostThree"
-                },
-                {
-                    type : "chart",
-                    title : "新增圈主二级分布",
-                    query_api : "/socialAnalysis/hostFour"
-                },
-                {
-                    type : "table",
-                    title : "热门圈主排行TOP100",
-                    query_api : "/socialAnalysis/hostFive"
+                //},
+                //{
+                //    type : "chart",
+                //    title : "新增圈主一级分布",
+                //    query_api : "/socialAnalysis/hostFour"
+                //},
+                //{
+                //    type : "chart",
+                //    title : "新增圈主二级分布",
+                //    query_api : "/socialAnalysis/hostFive"
+                //},
+                //{
+                //    type : "table",
+                //    title : "热门圈主排行TOP100",
+                //    query_api : "/socialAnalysis/hostSix"
                 }
             ]
         }
