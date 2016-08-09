@@ -11,7 +11,7 @@ module.exports = {
             path : "/socialAnalysis/group",
             display : true,
             defaultData : [
-                {
+                /*{
                     type : "table",
                     title : "圈子数据总览",
                     query_api : "/socialAnalysis/groupOne"
@@ -35,6 +35,27 @@ module.exports = {
                     type : "table",
                     title : "热门圈子排行TOP100",
                     query_api : "/socialAnalysis/groupFive"
+                },*/
+                //新的修改
+                 {
+                    type : "table",
+                    title : "数据总览：圈子名称",
+                    query_api : "/socialAnalysis/groupSix"
+                },
+                {
+                    type: "table",
+                    title:"数据统计",
+                    query_api : "/socialAnalysis/groupSeven"
+                },
+                {
+                    type : "chart",
+                    title : "圈子数据趋势",
+                    query_api : "/socialAnalysis/groupEight"
+                },
+                {
+                    type : "table",
+                    title:"话题列表",
+                    query_api : "/socialAnalysis/groupNine"
                 }
             ]
         }

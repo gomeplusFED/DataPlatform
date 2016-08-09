@@ -175,5 +175,92 @@ module.exports = {
             newData.push(key);
         }
         return util.toTable([newData], data.rows, data.cols, [count]);
-    }
+    },
+    groupSix(data){
+        var source = data.first.data[0],
+            newData = {
+                one : 0,
+                two : 0,
+                three : 0,
+                four : 0,
+                five : 0
+            };
+
+        return util.toTable([[newData]], data.rows, data.cols);
+    },
+    groupSeven(data){
+        var source = data.first.data[0],
+            newData = [],
+            array = ["APP", "WAP", "PC", "总计"];
+
+        for(let key of array) {
+            newData.push({
+                one : key,
+                two : 0,
+                three : 0,
+                four : 0,
+                five : 0,
+                six : 0,
+                seven:0,
+                eight:0,
+                nine:0,
+                ten:0
+            });
+        }
+
+        return util.toTable([newData], data.rows, data.cols);
+    },
+     groupEight(data, query, dates) {
+        var source = data.first.data[0],
+            type = "line",
+            newData = {},
+            filter_name = {
+                one : "新增成员数",
+                two : "新增分享数",
+                three : "新增话题数",
+                four : "删除话题数",
+                five: "新增回复数",
+                six: "删除回复数",
+                seven:"新增点赞数",
+                eight:"新增收藏数"
+            },
+            map = {
+                value : filter_name[query.filter_key]
+            };
+
+        for(let date of dates) {
+            newData[date] = {
+                value : 0
+            };
+        }
+
+        for(let key of source) {
+            var date = util.getDate(key.date);
+            newData[date].value = key.query.filter_key;
+        }
+
+        return [{
+            type : type,
+            map : map,
+            data : newData,
+            config: { // 配置信息
+                stack: false, // 图的堆叠
+                categoryY : false //柱状图竖着
+            }
+        }];
+    },
+     groupNine(data){
+        var source = data.first.data[0],
+            newData = {
+                one : "2016-08-09",
+                two : "GGsiMida",
+                three : 0,
+                four : "Smith",
+                five : 0,
+                six  : 0,
+                seven: 0
+            };
+
+        return util.toTable([[newData]], data.rows, data.cols);
+    },
 };
