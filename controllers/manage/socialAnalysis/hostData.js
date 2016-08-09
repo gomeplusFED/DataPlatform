@@ -222,6 +222,11 @@ module.exports = (Router) => {
         showDayUnit : true,
         date_picker_data: 1,
         control_table_col : true,
+        search : {
+            show : true,
+            title : "请输入圈主ID：",
+            key : "filter_key"
+        },
         filter(data, query, dates, type) {
             return filter.hostSix(data, query.page);
         },
