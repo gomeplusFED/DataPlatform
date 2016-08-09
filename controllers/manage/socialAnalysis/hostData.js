@@ -5,9 +5,6 @@
  */
 
 var api = require("../../../base/main"),
-    help = require("../../../base/help"),
-    orm = require("orm"),
-    config = require("../../../utils/config.json"),
     filter = require("../../../filters/socialAnalysis/hostData");
 
 module.exports = (Router) => {
@@ -287,36 +284,6 @@ module.exports = (Router) => {
                 caption: "新增取关次数",
                 type: ""
             }]
-        ]
-    });
-
-    Router = new help(Router, {
-        router : "/socialAnalysis/helpThree",
-        rows : config.help.rows,
-        cols : config.help.cols,
-        data : [
-            {
-                name : "新增圈主数",
-                help : "首次建立圈子的圈主数"
-            },{
-                name : "新圈主占比",
-                help : "首次建立圈子的圈主数 / 当日总建圈圈主数"
-            },{
-                name : "人均粉丝数",
-                help : "总圈主粉丝 / 总圈主数"
-            },{
-                name : "累计圈主数",
-                help : "累计圈主数"
-            },{
-                name : "圈主粉丝数（排名字段）",
-                help : "圈主本时间区间新关注粉丝数"
-            },{
-                name : "圈子数",
-                help : "此圈主下圈子数"
-            },{
-                name : "粉丝数",
-                help : "当前累积的关注粉丝数"
-            }
         ]
     });
 
