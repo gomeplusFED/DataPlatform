@@ -37,11 +37,11 @@ module.exports = {
             for(var key of source) {
                 var _date = util.getDate(key.date);
                 obj[_date].create_num += key.create_num;
-                obj[_date].create_amount += key.create_amount;
+                obj[_date].create_amount += key.create_amount / 100;
                 obj[_date].give_num += key.give_num;
                 obj[_date].receive_num += key.receive_num;
                 obj[_date].used_num += key.used_num;
-                obj[_date].used_amount += key.used_amount;
+                obj[_date].used_amount += key.used_amount / 100;
                 obj[_date].invalid_num += key.invalid_num;
             }
 
@@ -184,6 +184,9 @@ module.exports = {
 
         for(var key of source) {
             key.date = moment(key.date).format("YYYY-MM-DD");
+            key.create_amount = key.create_amount / 100;
+            key.receive_amount = key.receive_amount / 100;
+            key.used_amount = key.used_amount / 100;
             key.used_rate = util.toFixed(key.used_num, key.receive_num);
         }
 
@@ -195,6 +198,9 @@ module.exports = {
 
         for(var key of source) {
             key.used_rate = util.toFixed(key.used_num, key.receive_num);
+            key.create_amount = key.create_amount / 100;
+            key.receive_amount = key.receive_amount / 100;
+            key.used_amount = key.used_amount / 100;
         }
 
         return util.toTable([source], data.rows, data.cols, [count]);

@@ -36,11 +36,11 @@ module.exports = {
             for(var key of source) {
                 var _date = util.getDate(key.date);
                 obj[_date].create_num += key.create_num;
-                obj[_date].create_amount += key.create_amount;
+                obj[_date].create_amount += key.create_amount / 100;
                 obj[_date].give_num += key.give_num;
                 obj[_date].receive_num += key.receive_num;
                 obj[_date].used_num += key.used_num;
-                obj[_date].used_amount += key.used_amount;
+                obj[_date].used_amount += key.used_amount / 100;
                 obj[_date].invalid_num += key.invalid_num;
             }
 
@@ -183,6 +183,10 @@ module.exports = {
 
         for(var key of source) {
             key.date = util.getDate(key.date);
+            key.create_amount = key.create_amount / 100;
+            key.give_amount = key.give_amount / 100;
+            key.receive_amount = key.receive_amount / 100;
+            key.used_amount = key.used_amount / 100;
             key.used_rate = util.toFixed(key.used_num, key.receive_num);
         }
 
@@ -208,6 +212,7 @@ module.exports = {
                 key.invalid_rate = "0%";
             }
             key.end_at = moment(new Date(key.end_at * 1000)).format("YYYY-MM-DD HH:mm:ss");
+            key.discount = key.discount / 100 + '元';
             key.used_rate = util.toFixed(key.used_num, key.receive_num);
             key.receive_rate = util.toFixed(key.receive_num, sumDate["1"]);
         }

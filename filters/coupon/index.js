@@ -32,11 +32,11 @@ module.exports = {
                 for(var key of source) {
                     if(util.getDate(key.date) === date) {
                         obj.create_num += key.create_num;
-                        obj.create_amount += key.create_amount;
+                        obj.create_amount += key.create_amount / 100;
                         obj.give_num += key.give_num;
                         obj.receive_num += key.receive_num;
                         obj.used_num += key.used_num;
-                        obj.used_amount += key.used_amount;
+                        obj.used_amount += key.used_amount / 100;
                         obj.invalid_num += key.invalid_num;
                     }
                 }

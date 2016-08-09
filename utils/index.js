@@ -164,7 +164,7 @@ exports.sort = function(array, first, second) {
 };
 
 exports.toFixed = function(one, two) {
-    return (one / (two === 0 ? 1 : two) * 100).toFixed(2) + "%";
+    return (one / (Math.ceil(two) === 0 ? 1 : two) * 100).toFixed(2) + "%";
 };
 
 exports.percentage = function(one, two) {
