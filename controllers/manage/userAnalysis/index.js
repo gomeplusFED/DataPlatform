@@ -33,7 +33,6 @@ module.exports = (Router) => {
         modelName : ["NewAccount"],
         version : true,
         paging : true,
-        sum : ["new_users", "new_account"],
         order : ["-date"],
         rows : [['date', 'new_users', 'new_users_rate', 'new_account', 'new_account_rate' ]],
         cols : [

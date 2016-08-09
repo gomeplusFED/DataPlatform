@@ -49,17 +49,14 @@ module.exports = {
     newUsersTwe(data, dates) {
         var source = data.data,
             count = data.dataCount,
-            sum = data.dataSum,
-            newData = [],
-            total_users = sum[1] ? sum[1] : 0,
-            total_account = sum[2] ? sum[2] : 0;
+            newData = [];
         for(var key of source) {
             newData.push({
                 date : moment(key.date).format("YYYY-MM-DD"),
                 new_users : key.new_users,
-                new_users_rate : util.toFixed(key.new_users, total_users),
+                new_users_rate : util.toFixed(key.new_users, key.active_users),
                 new_account : key.new_account,
-                new_account_rate : util.toFixed(key.new_account, total_account)
+                new_account_rate : util.toFixed(key.new_account, key.active_account)
             });
         }
         return util.toTable([newData], data.rows, data.cols, [count]);
