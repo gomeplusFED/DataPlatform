@@ -46,6 +46,10 @@ var Vue = require('Vue');
 var $ = require('jQuery');
 
 var chartDataModel = {
+	title: {
+		text: '',
+		x: 'center'
+	},
 	tooltip: {
 		trigger: 'xAxis',
 		axisPointer: {
@@ -251,6 +255,9 @@ var Chart = Vue.extend({
 						return table;
 					};
 				}
+			}
+			if (config.title) {
+				options.title.text = config.title;
 			}
 			return options;
 		}

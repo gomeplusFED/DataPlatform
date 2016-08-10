@@ -91,7 +91,7 @@ function api(Router, options) {
         //搜索框
         search : {show: false},
         //表格字段选择框
-        control_table_col : {show: false},
+        control_table_col : false,
         //全局模块
         global_platform: {show: false}
     }, options);
@@ -129,7 +129,7 @@ api.prototype = {
                         new Date(query.endTime + " 23:59:59")
                     );
                 }
-                if(typeof this.fixedName === "function") {
+                if(typeof this.fixedParams === "function") {
                     this.fixedParams(req, query, (err, data) => {
                         if(err) {
                             next(err);
@@ -181,7 +181,9 @@ api.prototype = {
                 },
                 filter_select: this.filter_select,
                 search: this.search,
-                control_table_col : this.control_table_col,
+                control_table_col : {
+                    show : this.control_table_col
+                },
                 global_plataform : this.global_platform
             }
         });
@@ -276,10 +278,17 @@ api.prototype = {
                                     await(this._findDatabase(req, params, this.modelName[i], this.procedure[i]));
                             }
                         } else if (this.paging[i]) {
-                            sendData = this._returnFind(
-                                req, params, this.modelName[i],
-                                [pageFind, sum, count], sendData, this.dataName[i]
-                            );
+                            if(this.sum.length > 0) {
+                                sendData = this._returnFind(
+                                    req, params, this.modelName[i],
+                                    [pageFind, sum, count], sendData, this.dataName[i]
+                                );
+                            } else {
+                                sendData = this._returnFind(
+                                    req, params, this.modelName[i],
+                                    [pageFind, count], sendData, this.dataName[i]
+                                );
+                            }
                         } else {
                             sendData[this.dataName[i]].data =
                                 await(this._findDatabase(req, params, this.modelName[i], find));
