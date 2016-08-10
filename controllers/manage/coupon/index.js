@@ -96,13 +96,13 @@ module.exports = (Router) => {
             title: '指标',
             filter_key : 'filter_key',
             groups: [{
-                key: 'create_num',
+                key: 'create',
                 value: '平台商家创建占比'
             }, {
-                key: 'receive_num',
+                key: 'receive',
                 value: '平台商家领取占比'
             }, {
-                key: 'used_num',
+                key: 'used',
                 value: '平台商家使用占比'
             }]
         }]

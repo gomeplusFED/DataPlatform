@@ -37,11 +37,11 @@ module.exports = {
             for(var key of source) {
                 var _date = util.getDate(key.date);
                 obj[_date].create_num += key.create_num;
-                obj[_date].create_amount += key.create_amount / 100;
+                obj[_date].create_amount += +util.division(key.create_amount, 100);
                 obj[_date].give_num += key.give_num;
                 obj[_date].receive_num += key.receive_num;
                 obj[_date].used_num += key.used_num;
-                obj[_date].used_amount += key.used_amount / 100;
+                obj[_date].used_amount += +util.division(key.used_amount, 100);
                 obj[_date].invalid_num += key.invalid_num;
             }
 
@@ -49,11 +49,11 @@ module.exports = {
                 newData.push({
                     name : date,
                     create_num : obj[date].create_num,
-                    create_amount : obj[date].create_amount,
+                    create_amount : obj[date].create_amount.toFixed(2),
                     give_num : obj[date].give_num,
                     receive_num : obj[date].receive_num,
                     used_num : obj[date].used_num,
-                    used_amount : obj[date].used_amount,
+                    used_amount : obj[date].used_amount.toFixed(2),
                     invalid_num : obj[date].invalid_num,
                     receive_rate : util.toFixed(obj[date].receive_num, obj[date].give_num),
                     used_rate : util.toFixed(obj[date].used_num, obj[date].receive_num)
@@ -184,9 +184,9 @@ module.exports = {
 
         for(var key of source) {
             key.date = moment(key.date).format("YYYY-MM-DD");
-            key.create_amount = key.create_amount / 100;
-            key.receive_amount = key.receive_amount / 100;
-            key.used_amount = key.used_amount / 100;
+            key.create_amount = util.division(key.create_amount, 100);
+            key.receive_amount = util.division(key.receive_amount, 100);
+            key.used_amount = util.division(key.used_amount, 100);
             key.used_rate = util.toFixed(key.used_num, key.receive_num);
         }
 
@@ -198,9 +198,9 @@ module.exports = {
 
         for(var key of source) {
             key.used_rate = util.toFixed(key.used_num, key.receive_num);
-            key.create_amount = key.create_amount / 100;
-            key.receive_amount = key.receive_amount / 100;
-            key.used_amount = key.used_amount / 100;
+            key.create_amount = util.division(key.create_amount, 100);
+            key.receive_amount = util.division(key.receive_amount, 100);
+            key.used_amount = util.division(key.used_amount, 100);
         }
 
         return util.toTable([source], data.rows, data.cols, [count]);
