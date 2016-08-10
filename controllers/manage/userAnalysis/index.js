@@ -77,7 +77,7 @@ module.exports = (Router) => {
             },
             {
                 name : "新增账户占比",
-                help : "新增账户占比"
+                help : "新增账户占活跃账户比重"
             }
         ]
     });
