@@ -259,7 +259,7 @@ module.exports = (Router) => {
             return filter.tradeFour(data, params);
         },
         rows : [
-            [ 'caty_name', 'access_num', 'access_users', 'sales_pro_num',
+            [ 'category_name', 'access_num', 'access_users', 'sales_pro_num',
             'pay_money_amount', 'pay_money_amount_ratio']
         ],
         cols : [
