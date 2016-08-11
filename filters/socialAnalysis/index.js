@@ -202,9 +202,7 @@ module.exports = {
                 five : 0,
                 six : 0,
                 seven:0,
-                eight:0,
-                nine:0,
-                ten:0
+                eight:0
             });
         }
 
@@ -215,14 +213,12 @@ module.exports = {
             type = "line",
             newData = {},
             filter_name = {
-                one : "新增成员数",
-                two : "新增分享数",
-                three : "新增话题数",
-                four : "删除话题数",
-                five: "新增回复数",
-                six: "删除回复数",
-                seven:"新增点赞数",
-                eight:"新增收藏数"
+                one : "新增圈子数",
+                two : "新增加圈次数",
+                three : "新增退圈次数",
+                four : "新增入圈用户数",
+                five: "首次入圈用户数",
+                six: "DAU"
             },
             map = {
                 value : filter_name[query.filter_key]
@@ -249,18 +245,76 @@ module.exports = {
             }
         }];
     },
-     groupNine(data){
+     groupNine(data, filter_key) {
         var source = data.first.data[0],
-            newData = {
-                one : "2016-08-09",
-                two : "GGsiMida",
-                three : 0,
-                four : "Smith",
-                five : 0,
-                six  : 0,
-                seven: 0
+            orderData = data.second.data[0],
+            type = "pie",
+            obj = {},
+            filter_name = {
+                one : "圈子数",
+                two : "DAU",
+                three : "话题数"
+            },
+            map = {
+                value : filter_name[filter_key]
+            },
+            newData = {};
+        for(var key of orderData) {
+            obj[key.id] = {
+                value : 0
+            }
+        }
+        for(var key of source) {
+            obj[key.group_type].value += key[filter_key];
+        }
+        for(var key of orderData) {
+            newData[key.name] = {
+                value : obj[key.id].value
             };
-
-        return util.toTable([[newData]], data.rows, data.cols);
+        }
+        return [{
+            type : type,
+            map : map,
+            data : newData,
+            config: {
+                stack: false
+            }
+        }]
     },
+     groupTen(data, filter_key) {
+        var source = data.first.data[0],
+            orderData = data.second.data[0],
+            type = "pie",
+            obj = {},
+            filter_name = {
+                one : "圈子数",
+                two : "DAU",
+                three : "话题数"
+            },
+            map = {
+                value : filter_name[filter_key]
+            },
+            newData = {};
+        for(var key of orderData) {
+            obj[key.id] = {
+                value : 0
+            }
+        }
+        for(var key of source) {
+            obj[key.group_type].value += key[filter_key];
+        }
+        for(var key of orderData) {
+            newData[key.name] = {
+                value : obj[key.id].value
+            };
+        }
+        return [{
+            type : type,
+            map : map,
+            data : newData,
+            config: {
+                stack: false
+            }
+        }]
+    }
 };

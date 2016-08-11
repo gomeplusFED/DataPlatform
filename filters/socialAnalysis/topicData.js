@@ -7,7 +7,7 @@ var util = require("../../utils"),
     _ = require("lodash");
 
 module.exports = {
-    topicsOne(data) {
+    /*topicsOne(data) {
         var source = data.data,
             length = source.length,
             newData = {
@@ -43,8 +43,20 @@ module.exports = {
         newData.reply_rate = util.toFixed(newData.reply_topic_all_count,
             newData.topic_all_count);
         return util.toTable([[newData]], data.rows, data.cols);
+    },*/
+    topicsOne(data){
+        var source = data.first.data[0],
+            newData = {
+                one : 0,
+                two : 0,
+                three : 0,
+                four : 0,
+                five : 0
+            };
+
+        return util.toTable([[newData]], data.rows, data.cols);
     },
-    topicsTwo(data, dates) {
+    /*topicsTwo(data, dates) {
         var source = data.data,
             type = "line",
             newData = {},
@@ -88,6 +100,26 @@ module.exports = {
                 categoryY : false //柱状图竖着
             }
         }];
+    },*/
+    topicsTwo(data){
+        var source = data.first.data[0],
+            newData = [],
+            array = ["APP", "WAP", "PC", "总计"];
+
+        for(let key of array) {
+            newData.push({
+                one : key,
+                two : 0,
+                three : 0,
+                four : 0,
+                five : 0,
+                six : 0,
+                seven:0,
+                eight:0
+            });
+        }
+
+        return util.toTable([newData], data.rows, data.cols);
     },
     topicsThree(data, filter_key) {
         var source = data.data,

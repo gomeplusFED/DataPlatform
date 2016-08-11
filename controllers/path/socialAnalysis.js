@@ -36,15 +36,20 @@ module.exports = {
                     title : "热门圈子排行TOP100",
                     query_api : "/socialAnalysis/groupFive"
                 },*/
-                //新的修改
-                 {
+                /* {
                     type : "table",
-                    title : "数据总览：圈子名称",
+                    title:"话题列表",
+                    query_api : "/socialAnalysis/groupNine"
+                },*/
+                //新的修改
+                {
+                    type : "table",
+                    title : "圈子数据总览",
                     query_api : "/socialAnalysis/groupSix"
                 },
                 {
                     type: "table",
-                    title:"数据统计",
+                    title:"圈子数据统计",
                     query_api : "/socialAnalysis/groupSeven"
                 },
                 {
@@ -53,9 +58,19 @@ module.exports = {
                     query_api : "/socialAnalysis/groupEight"
                 },
                 {
-                    type : "table",
-                    title:"话题列表",
+                    type : "chart",
+                    title : "一级圈子类型分布",
                     query_api : "/socialAnalysis/groupNine"
+                },
+                {
+                    type : "chart",
+                    title : "二级圈子类型分布",
+                    query_api : "/socialAnalysis/groupTen"
+                },
+                {
+                    type : "table",
+                    title : "热门圈子排行",
+                    // query_api : "/socialAnalysis/groupTen"
                 }
             ]
         }
@@ -72,25 +87,25 @@ module.exports = {
                     query_api : "/socialAnalysis/topicsOne"
                 },
                 {
-                    type : "chart",
-                    title : "话题数据趋势",
+                    type : "table",
+                    title : "数据统计",
                     query_api : "/socialAnalysis/topicsTwo"
                 },
-                {
-                    type : "chart",
-                    title : "圈子一级新增分布",
-                    query_api : "/socialAnalysis/topicsThree"
-                },
-                {
-                    type : "chart",
-                    title : "圈子二级新增分布",
-                    query_api : "/socialAnalysis/topicsFour"
-                },
-                {
-                    type : "table",
-                    title : "热门话题排行TOP100",
-                    query_api : "/socialAnalysis/topicsFive"
-                }
+                // {
+                //     type : "chart",
+                //     title : "圈子一级新增分布",
+                //     query_api : "/socialAnalysis/topicsThree"
+                // },
+                // {
+                //     type : "chart",
+                //     title : "圈子二级新增分布",
+                //     query_api : "/socialAnalysis/topicsFour"
+                // },
+                // {
+                //     type : "table",
+                //     title : "热门话题排行TOP100",
+                //     query_api : "/socialAnalysis/topicsFive"
+                // }
             ]
         }
     },
