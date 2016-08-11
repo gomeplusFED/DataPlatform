@@ -215,6 +215,15 @@ module.exports = {
                 obj.socialAnalysis.topics(),
                 obj.socialAnalysis.groupHost()
             ]
+        },
+        "30" : {
+            name : "报表导出",
+            display : true,
+            className : "fa  fa-laptop fa-fw",
+            href : "#",
+            path : [
+                obj.table.table()
+            ]
         }
     }
 };
