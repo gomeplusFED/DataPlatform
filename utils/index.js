@@ -267,3 +267,43 @@ exports.date = function(date, day_type) {
 
     return startTime;
 };
+
+exports.mergeCell = function(data, rows) {
+    var merge = [];
+    for(var i = 0; i < rows.length; i++) {
+        var col = 0;
+        for(var j = 0; j < data.length; j++) {
+            if(i === 0) {
+                if(j !== 0 &&
+                    data[j][rows[i]] !== data[j -1][rows[i]]  &&
+                    j - 1 !== col) {
+                    merge.push({
+                        row : i,
+                        col : col,
+                        value : {
+                            row : i,
+                            col : j - 1
+                        }
+                    });
+                    col = j;
+                }
+            } else {
+                if(j !== 0 &&
+                    data[j][rows[i]] === data[j -1][rows[i]] &&
+                    data[j][rows[i - 1]] !== data[j -1][rows[i - 1]] &&
+                    col !== j - 1) {
+                    merge.push({
+                        row : i,
+                        col : col,
+                        value : {
+                            row : i,
+                            col : j - 1
+                        }
+                    });
+                    col = j;
+                }
+            }
+        }
+    }
+    return merge;
+};
