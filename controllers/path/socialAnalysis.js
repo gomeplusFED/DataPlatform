@@ -70,7 +70,7 @@ module.exports = {
                 {
                     type : "table",
                     title : "热门圈子排行",
-                    // query_api : "/socialAnalysis/groupTen"
+                    query_api : "/socialAnalysis/groupEleven"
                 }
             ]
         }
@@ -88,9 +88,30 @@ module.exports = {
                 },
                 {
                     type : "table",
-                    title : "数据统计",
+                    title : "话题数据统计",
                     query_api : "/socialAnalysis/topicsTwo"
                 },
+                {
+                    type : "chart",
+                    title : "话题数据趋势",
+                    query_api : "/socialAnalysis/topicsThree"
+                },
+                {
+                    type : "chart",
+                    title : "一级圈子类型分布",
+                    query_api : "/socialAnalysis/topicsFour"
+                },
+                {
+                    type : "table",
+                    title : "二级圈子类型分布",
+                    query_api : "/socialAnalysis/topicsFive"
+                },
+                {
+                    type : "table",
+                    title : "热门话题排行TOP100",
+                    // query_api : "/socialAnalysis/topicsTwo"
+                },
+                
                 // {
                 //     type : "chart",
                 //     title : "圈子一级新增分布",

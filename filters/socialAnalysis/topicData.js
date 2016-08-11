@@ -115,20 +115,68 @@ module.exports = {
                 five : 0,
                 six : 0,
                 seven:0,
-                eight:0
+                eight:0,
+                nine:0,
+                ten:0
             });
         }
 
         return util.toTable([newData], data.rows, data.cols);
     },
-    topicsThree(data, filter_key) {
-        var source = data.data,
-            orderData = data.orderData,
+    topicsThree(data, query, dates) {
+        var filter_key = query.filter_key;
+        var source = data.first.data[0],
+            type = "line",
+            // obj = {},
+            filter_name = {
+                "one" : "新增话题数",
+                "two" : "删除话题数",
+                "three" : "新增回复数",
+                "four" : "删除回复数",
+                "five" : "新增点赞数",
+                "six" : "新增收藏数",
+                "seven" : "新增分享数"
+            },
+            map = {
+                value : filter_name[filter_key]
+            },
+            newData = {};
+       
+        for(let date of dates){
+            newData[date] = {
+                value : 0
+            };
+        }
+
+        // for(var key of source) {
+        //     obj[key.group_type].value += key[filter_key];
+        // }
+        // for(var key of orderData) {
+        //     newData[key.name] = {
+        //         value : obj[key.id].value
+        //     };
+        // }
+
+        return [{
+            type : type,
+            map : map,
+            data : newData,
+            config: {
+                stack: false
+            }
+        }]
+    },
+    topicsFour(data, filter_key) {
+        var source = data.first.data[0],
+            orderData = data.second.data[0],
             type = "pie",
             obj = {},
             filter_name = {
-                topic_num : "话题",
-                replay_num : "回复"
+                one : "话题",
+                two : "回复",
+                three : "点赞",
+                four: "收藏",
+                five: "分享"
             },
             map = {
                 value : filter_name[filter_key]
@@ -156,36 +204,46 @@ module.exports = {
             }
         }]
     },
-    topicsFour(data, filter_key, filter_key2) {
-        var source = data.data,
-            orderData = data.orderData,
-            type = "pie",
-            obj = {},
+    topicsFive(data , query){
+
+        
+        
+        var group_type = query.group_type,
+            source = data.first.data[0],
+            orderData = data.second.data[0],
+            type = "pie";
+
+        var obj = {},
             filter_name = {
-                topic_num : "话题",
-                replay_num : "回复"
+                one : "话题",
+                two : "回复",
+                three : "点赞",
+                four : "收藏",
+                five : "分享"
             },
-            filter_key = filter_key || "-1",
             map = {
-                value : filter_name[filter_key2]
+                value : filter_name[query.filter_key2]
             },
             newData = {};
+        var showData = [];
         for(var key of orderData) {
-            if(key.pid === filter_key) {
+            for(var ss=0;ss<group_type.length;ss++){
+                if(group_type[ss] == key.id){
+                    showData.push(key);
+                }
                 obj[key.id] = {
                     value : 0
                 }
             }
         }
+
         for(var key of source) {
-            obj[key.group_type].value += key[filter_key2];
+            obj[key.group_type].value += key[query.filter_key];
         }
-        for(var key of orderData) {
-            if(key.pid === filter_key) {
-                newData[key.name] = {
-                    value : obj[key.id].value
-                };
-            }
+        for(var key of showData) {
+            newData[key.name] = {
+                value : obj[key.id].value
+            };
         }
         return [{
             type : type,
@@ -195,8 +253,8 @@ module.exports = {
                 stack: false
             }
         }]
-    },
-    topicsFive(data, page) {
+    }
+    /*topicsSix(data, page) {
         var source = data.data,
             count = data.dataCount > 100 ? 100 : data.dataCount,
             page = page || 1,
@@ -209,5 +267,5 @@ module.exports = {
             newData.push(key);
         }
         return util.toTable([newData], data.rows, data.cols, [count]);
-    }
+    }*/
 };

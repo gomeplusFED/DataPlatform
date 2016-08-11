@@ -30,13 +30,13 @@ module.exports = (Router) => {
         ],
         cols: [
             [{
-                caption: "话题成员数",
+                caption: "累计话题数",
                 type: "number"
             }, {
                 caption: "累计回复次数",
                 type: "number"
             }, {
-                caption: "话题回复率", // = 被恢复的话题数 / 话题数
+                caption: "话题回复率", // = 被回复的话题数 / 话题数
                 type: "string"
             }, {
                 caption: "累计点赞数",
@@ -65,14 +65,17 @@ module.exports = (Router) => {
             return filter.topicsTwo(data, dates);
         },
         rows : [
-            ["one" , "two", "three", "four", "five", "six", "seven", "eight"]
+            ["one" , "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"]
         ],
         cols : [
             [{
                 caption: "平台",
                 type: "string"
             },{
-                caption: "新增成员数",
+                caption: "新增话题数",
+                type: "number"
+            },{
+                caption: "删除话题数",
                 type: "number"
             },{
                 caption: "新增回复数",
@@ -82,6 +85,9 @@ module.exports = (Router) => {
                 type: "number"
             },{
                 caption: "删除回复数",
+                type: "number"
+            },{
+                caption: "新增话题回复率",
                 type: "number"
             },{
                 caption: "新增点赞数",
@@ -96,108 +102,250 @@ module.exports = (Router) => {
         ]
     });
     
-    // Router = new api(Router,{
-    //     router : "/socialAnalysis/topicsThree",
-    //     modelName : [ "TopicsDistribution", "SocialCategory" ],
-    //     platform : false,
-    //     orderParams : {
-    //         pid : ""
-    //     },
-    //     fixedParams(query, filter_key, req, cb) {
-    //         var group_type = [];
-    //         req.models.SocialCategory.find({
-    //             pid : ""
-    //         }, (err, data) => {
-    //             if(!err) {
-    //                 for(var key of data) {
-    //                     group_type.push(key.id);
-    //                 }
-    //                 query.group_type = group_type;
-    //                 cb(null, query);
-    //             } else {
-    //                 cb(err);
-    //             }
-    //         });
-    //     },
-    //     filter_select: [
-    //         {
-    //             title: '指标选择',
-    //             filter_key: 'filter_key',
-    //             groups: [{
-    //                 key: 'topic_num',
-    //                 value: '话题'
-    //             }, {
-    //                 key: 'replay_num',
-    //                 value: '回复'
-    //             }]
-    //         }
-    //     ],
-    //     filter(data, filter_key) {
-    //         return filter.topicsThree(data, filter_key);
-    //     }
-    // });
+    Router = new api(Router,{
+        router : "/socialAnalysis/topicsThree",
+        modelName : [ "TopicsDistribution" ],
+        platform : false,
+        level_select : true,
+        level_select_name : "group_type",
+        level_select_url : "/api/socialAnalysisCategories",
+       /* orderParams : {
+            pid : ""
+        },*/
+        /*fixedParams(query, filter_key, req, cb) {
+            var group_type = [];
+            req.models.SocialCategory.find({
+                pid : ""
+            }, (err, data) => {
+                if(!err) {
+                    for(var key of data) {
+                        group_type.push(key.id);
+                    }
+                    query.group_type = group_type;
+                    cb(null, query);
+                } else {
+                    cb(err);
+                }
+            });
+        },*/
+        filter_select: [
+            {
+                title: '平台选择',
+                filter_key: 'type',
+                groups: [{
+                    key: ['one','two','three'],
+                    value: '全部平台'
+                },{
+                    key: 'one',
+                    value: 'APP'
+                },{
+                    key: 'two',
+                    value: 'WAP'
+                },{
+                    key: 'three',
+                    value: 'PC'
+                }]
+            },
+            {
+                title: "指标",
+                filter_key: "filter_key",
+                groups: [{
+                    key: "one",
+                    value:"新增话题数"
+                }, {
+                    key: "two",
+                    value:"删除话题数"
+                }, {
+                    key: "three",
+                    value:"新增回复数"
+                }, {
+                    key: "four",
+                    value:"删除回复数"
+                }, {
+                    key: "five",
+                    value:"新增点赞数"
+                }, {
+                    key: "six",
+                    value:"新增收藏数"
+                }, {
+                    key: "seven",
+                    value:"新增分享数"
+                }]
+            }
+        ],
+        filter(data, query , dates) {
+            return filter.topicsThree(data, query , dates);
+        }
+    });
     
-    // Router = new api(Router,{
-    //     router : "/socialAnalysis/topicsFour",
-    //     modelName : [ "TopicsDistribution", "SocialCategory" ],
-    //     platform : false,
-    //     orderParams : {},
-    //     fixedParams(query, filter_key, req, cb) {
-    //         var filter_key = filter_key || "-1",
-    //             group_type = [];
-    //         req.models.SocialCategory.find({
-    //             pid : filter_key
-    //         }, (err, data) => {
-    //             if(!err) {
-    //                 for(var key of data) {
-    //                     group_type.push(key.id);
-    //                 }
-    //                 query.group_type = group_type;
-    //                 cb(null, query);
-    //             } else {
-    //                 cb(err);
-    //             }
-    //         });
-    //     },
-    //     selectFilter(req, cb) {
-    //         var filter_select = {
-    //             title: '一级分类',
-    //             filter_key: 'filter_key',
-    //             groups: []
-    //         };
-    //         req.models.SocialCategory.find({
-    //             pid : ""
-    //         }, (err, data) => {
-    //             if(!err) {
-    //                 for(var key of data) {
-    //                     var obj = {
-    //                         key : key.id,
-    //                         value : key.name,
-    //                         cell : {
-    //                             title: '指标',
-    //                             filter_key: 'filter_key2',
-    //                             groups: [{
-    //                                 key: 'topic_num',
-    //                                 value: '话题'
-    //                             }, {
-    //                                 key: 'replay_num',
-    //                                 value: '回复'
-    //                             }]
-    //                         }
-    //                     };
-    //                     filter_select.groups.push(obj);
-    //                 }
-    //                 cb(null,[filter_select]);
-    //             } else {
-    //                 cb(err);
-    //             }
-    //         });
-    //     },
-    //     filter_select: [],
-    //     filter(data, filter_key, dates, filter_key2) {
-    //         return filter.topicsFour(data, filter_key, filter_key2);
-    //     }
-    // });
+    Router = new api(Router,{
+        router : "/socialAnalysis/topicsFour",
+        modelName : [ "GroupDataDistribution", "SocialCategory" ],
+        platform : false,
+        secondParams(query, params, sendData) {
+            return {
+                pid : ""
+            }
+        },
+        fixedParams(req, query, cb) {
+            var group_type = [];
+            req.models.SocialCategory.find({
+                pid : ""   //没有pid的数据级为一级类目
+            }, (err, data) => {
+                if(!err) {
+                    for(var key of data) {
+                        group_type.push(key.id);
+                    }
+                    query.group_type = group_type;
+                    cb(null, query);
+                } else {
+                    cb(err);
+                }
+            });
+        },
+        filter_select: [
+            {
+                title: "平台选择",
+                filter_key : 'type',
+                groups: [{
+                    key: ['one','two','three'],
+                    value: '全部平台'
+                },{
+                    key: 'one',
+                    value: 'APP'
+                },{
+                    key: 'two',
+                    value: 'WAP'
+                },{
+                    key: 'three',
+                    value: 'PC'
+                }]
+            },
+            {
+                title: '指标选择',
+                filter_key: 'filter_key',
+                groups: [{
+                    key: 'one',
+                    value: '话题'
+                }, {
+                    key: 'two',
+                    value: '回复'
+                }, {
+                    key: 'three',
+                    value: '点赞'
+                }, {
+                    key: 'four',
+                    value: '收藏'
+                }, {
+                    key: 'five',
+                    value: '分享'
+                }]
+            }
+        ],
+        filter(data, query, dates, type) {
+            return filter.topicsFour(data, query.filter_key);
+        }
+    });
+
+
+    //二级圈子类型分布
+    Router = new api(Router,{
+        router : "/socialAnalysis/topicsFive",
+        modelName : [ "GroupDataDistribution", "SocialCategory" ],
+        platform : false,
+        secondParams(query, params, sendData) {
+            return {};
+        },
+        cols : [ [] ],
+        fixedParams(req, query, cb) {
+            //依据选择的一级分类id获取对应的二级列表，保存二级类id至req中
+            var filter_key = query.filter_key || "-1";
+            var group_type = [];
+            req.models.SocialCategory.find({
+                pid :   filter_key
+            }, (err, data) => {
+                if(!err) {
+                    for(var key of data) {
+                        group_type.push(key.id);
+                    }
+                    query.group_type = group_type;
+                    cb(null, query);
+                } else {
+                    cb(err);
+                }
+            });
+        },
+        //初始化一级分类选项
+        selectFilter(req , cb){
+            var filter_select = {
+                title : "一级分类",
+                filter_key : "filter_key",
+                groups : []
+            };
+
+            req.models.SocialCategory.find({
+                pid : ""
+            }, (err , data)=>{
+                if(!err){
+                    for(var key of data){
+                        var obj = {
+                            key : key.id,
+                            value:key.name
+                        }
+                        filter_select.groups.push(obj);
+                    }
+                    
+                    this.filter_select.push(filter_select);
+                    cb(null,this.filter_select);
+                }else{
+                    cb(err);
+                }
+            });
+        },
+        filter_select: [
+            {
+                title: "平台选择",
+                filter_key : 'type',
+                groups: [{
+                    key: ['one','two','three'],
+                    value: '全部平台'
+                },{
+                    key: 'one',
+                    value: 'APP'
+                },{
+                    key: 'two',
+                    value: 'WAP'
+                },{
+                    key: 'three',
+                    value: 'PC'
+                }]
+            },
+            {
+                title: '指标选择',
+                filter_key: 'filter_key2',
+                groups: [{
+                    key: 'one',
+                    value: '话题'
+                }, {
+                    key: 'two',
+                    value: '回复'
+                }, {
+                    key: 'three',
+                    value: '点赞'
+                }, {
+                    key: 'four',
+                    value: '收藏'
+                }, {
+                    key: 'five',
+                    value: '分享'
+                }]
+            }
+        ],
+        filter(data, query, dates, type) {
+
+            return filter.topicsFive(data, query);
+        }
+    });
     
     // Router = new api(Router,{
     //     router : "/socialAnalysis/topicsFive",

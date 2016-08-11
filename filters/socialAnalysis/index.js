@@ -281,29 +281,38 @@ module.exports = {
             }
         }]
     },
-     groupTen(data, filter_key) {
-        var source = data.first.data[0],
+     groupTen(data, query) {
+        var group_type = query.group_type,
+            source = data.first.data[0],
             orderData = data.second.data[0],
-            type = "pie",
-            obj = {},
+            type = "pie";
+
+        var obj = {},
             filter_name = {
                 one : "圈子数",
                 two : "DAU",
                 three : "话题数"
             },
             map = {
-                value : filter_name[filter_key]
+                value : filter_name[query.filter_key2]
             },
             newData = {};
+        var showData = [];
         for(var key of orderData) {
-            obj[key.id] = {
-                value : 0
+            for(var ss=0;ss<group_type.length;ss++){
+                if(group_type[ss] == key.id){
+                    showData.push(key);
+                }
+                obj[key.id] = {
+                    value : 0
+                }
             }
         }
+
         for(var key of source) {
-            obj[key.group_type].value += key[filter_key];
+            obj[key.group_type].value += key[query.filter_key];
         }
-        for(var key of orderData) {
+        for(var key of showData) {
             newData[key.name] = {
                 value : obj[key.id].value
             };
@@ -316,5 +325,29 @@ module.exports = {
                 stack: false
             }
         }]
+    },
+    groupEleven(data , query){
+        var page = query.page || 1;
+        var source = data.first.data[0],
+            count = data.first.count > 100 ? 100 : data.first.count,
+            newData = [{
+                "1" : 11,
+                "2" : 11,
+                "3" : 11,
+                "4" : 11,
+                "5" : 11,
+                "6" : 11,
+                "7" : 11,
+                "8" : 11,
+                "9" : '<a target="_blank" href="http://www.baidu.com">查看</a>'          
+            }];
+
+        
+
+        for(var i = 0; i < source.length; i++) {
+            source[i].id = (page - 1) * 20 + i +1;
+            newData.push(source[i]);
+        }
+        return util.toTable([newData], data.rows, data.cols, [count]);
     }
 };

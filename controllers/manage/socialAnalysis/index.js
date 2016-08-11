@@ -12,7 +12,7 @@ var api = require("../../../base/main"),
 
 module.exports = (Router) => {
     
-    //新：圈子数据总揽
+    //圈子数据总揽
     Router = new api(Router,{
         router : "/socialAnalysis/groupSix",
         modelName : ["Group"],
@@ -143,7 +143,6 @@ module.exports = (Router) => {
         router : "/socialAnalysis/groupNine",
         modelName : [ "GroupDataDistribution", "SocialCategory" ],
         platform : false,
-        date_picker_data : 1,
         secondParams(query, params, sendData) {
             return {
                 pid : ""
@@ -212,6 +211,7 @@ module.exports = (Router) => {
             return {};
         },
         fixedParams(req, query, cb) {
+            //依据选择的一级分类id获取对应的二级列表，保存二级类id至req中
             var filter_key = query.filter_key || "-1";
             var group_type = [];
             req.models.SocialCategory.find({
@@ -221,7 +221,6 @@ module.exports = (Router) => {
                     for(var key of data) {
                         group_type.push(key.id);
                     }
-                    console.log(data[0].name,data[1].name,data[2].name);
                     query.group_type = group_type;
                     cb(null, query);
                 } else {
@@ -276,7 +275,7 @@ module.exports = (Router) => {
             },
             {
                 title: "指标选择",
-                filter_key : "filter_key",
+                filter_key : "filter_key2",
                 groups : [
                     {
                         key: 'one',
@@ -292,12 +291,83 @@ module.exports = (Router) => {
             }
         ],
         filter(data, query, dates, type) {
-            return filter.groupTen(data, query.filter_key);
+            return filter.groupTen(data, query);
         }
     });
 
     //热门圈子排行
+    Router = new api(Router , {
+        router : "/socialAnalysis/groupEleven",
+        modelName : ["GroupDataTop"],
+        platform : false,
+        paging : [true],
+        // showDayUnit : true,
+        search : {
+            show : true,
+            title : "请输入圈子ID",
+            key : "filter_key"
+        },
+        flexible_btn:[{
+             content: '<a href="javascript:void(0)">导出</a>',
+            preMethods: ["excel_export"]
+        }],
+        rows: [
+            [ "1", "2", "3", "4", "5", "6", "7", "8", "9" ]
+        ],
+        cols: [
+            [{
+                caption : "排名",
+                type : "number"
+            }, {
+                caption : "圈子名称",
+                type : "number"
+            }, {
+                caption : "二级分类",
+                type : "number"
+            }, {
+                caption : "新增成员数",
+                type : "number"
+            }, {
+                caption : "新增话题数",
+                type : "number"
+            }, {
+                caption : "圈子新增分享数",
+                type : "number"
+            }, {
+                caption : "参与用户数",
+                type : "number"
+            }, {
+                caption : "圈子成员数",
+                type : "number"
+            }, {
+                caption : "话题",
+                type : "string"
+            }]
+        ],
+        filter_select : [
+            {
+                title: "平台选择",
+                filter_key : 'type',
+                groups: [{
+                    key: ['one','two','three'],
+                    value: '全部平台'
+                },{
+                    key: 'one',
+                    value: 'APP'
+                },{
+                    key: 'two',
+                    value: 'WAP'
+                },{
+                    key: 'three',
+                    value: 'PC'
+                }]
+            }
+        ],
+        filter(data , query , dates , type){
+            return filter.groupEleven(data , query);
+        }
 
+    });
 
     
 

@@ -42,7 +42,7 @@ async(() => {
     try {
         var data = await (filePath(files));
         for (var file of data) {
-            if (file.indexOf(".js") < 0) {
+            if (file.indexOf(".js") < 0 && file.indexOf('.') !== 0) {
                 var f = await (filePath(files + "/" + file));
                 for (var key of f) {
                     if (key.indexOf("js") >= 0) {
