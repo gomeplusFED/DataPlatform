@@ -21,10 +21,11 @@
 }
 .module li span {
 	background-color: rgba(0, 0, 0, 0.3);
-	color: #fff;
+	color: #000;
 	padding: 10px 16px;
 	display: inline-block;
 	width: 50%;
+	font-weight: bolder;
 }
 </style>
 <script>
