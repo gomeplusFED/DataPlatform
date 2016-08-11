@@ -133,8 +133,17 @@ exports.toTable = function(data, rows, cols, count) {
             rows : rows[i],
             cols : cols[i]
         };
-        if(count && count[i]) {
-            obj.count = count[i];
+        if(count && count instanceof Array) {
+            if(count[i]) {
+                obj.count = count[i];
+            }
+        } else if(count) {
+            if(count.count) {
+                obj.count = count.count[i];
+            }
+            if(count.config) {
+                obj.config = count.config[i];
+            }
         }
         newData.push(obj);
     }
@@ -269,15 +278,15 @@ exports.date = function(date, day_type) {
 };
 
 exports.mergeCell = function(data, rows) {
+    var _array = [];
     var merge = [];
     for(var i = 0; i < rows.length; i++) {
         var col = 0;
         for(var j = 0; j < data.length; j++) {
             if(i === 0) {
                 if(j !== 0 &&
-                    data[j][rows[i]] !== data[j -1][rows[i]]  &&
-                    j - 1 !== col) {
-                    merge.push({
+                    data[j][rows[i]] !== data[j -1][rows[i]]) {
+                    _array.push({
                         row : i,
                         col : col,
                         value : {
@@ -288,11 +297,13 @@ exports.mergeCell = function(data, rows) {
                     col = j;
                 }
             } else {
-                if(j !== 0 &&
-                    data[j][rows[i]] === data[j -1][rows[i]] &&
-                    data[j][rows[i - 1]] !== data[j -1][rows[i - 1]] &&
-                    col !== j - 1) {
-                    merge.push({
+                if(j !== 0 && (
+                        (data[j][rows[i]] === data[j -1][rows[i]] &&
+                        data[j][rows[i - 1]] !== data[j -1][rows[i - 1]]) || (
+                            data[j][rows[i]] !== data[j -1][rows[i]] &&
+                            data[j][rows[i - 1]] !== data[j -1][rows[i - 1]]
+                        )) ) {
+                    _array.push({
                         row : i,
                         col : col,
                         value : {
@@ -303,6 +314,11 @@ exports.mergeCell = function(data, rows) {
                     col = j;
                 }
             }
+        }
+    }
+    for(var key of _array) {
+        if(key.row !== key.value.row || key.col !== key.value.col) {
+            merge.push(key);
         }
     }
     return merge;

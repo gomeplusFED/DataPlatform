@@ -132,5 +132,19 @@ module.exports = {
                 }
             ]
         }
+    },
+    table() {
+        return {
+            name : "社交报表",
+            path : "/socialAnalysis/table",
+            display : true,
+            defaultData : [
+                {
+                    type : "table",
+                    title : "我的报表",
+                    query_api : "/socialAnalysis/tableOne"
+                }
+            ]
+        }
     }
 };
