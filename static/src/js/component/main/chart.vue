@@ -34,6 +34,9 @@
 	width: 100%;
 	text-align: center;
 }
+.chart table {
+	font-size: 14px;
+}
 </style>
 <script>
 /*
