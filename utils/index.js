@@ -289,7 +289,7 @@ exports.mergeCell = function(data, rows) {
                     _array.push({
                         row : i,
                         col : col,
-                        value : {
+                        end : {
                             row : i,
                             col : j - 1
                         }
@@ -306,7 +306,7 @@ exports.mergeCell = function(data, rows) {
                     _array.push({
                         row : i,
                         col : col,
-                        value : {
+                        end : {
                             row : i,
                             col : j - 1
                         }
@@ -317,7 +317,7 @@ exports.mergeCell = function(data, rows) {
         }
     }
     for(var key of _array) {
-        if(key.row !== key.value.row || key.col !== key.value.col) {
+        if(key.row !== key.end.row || key.col !== key.end.col) {
             merge.push(key);
         }
     }
