@@ -253,10 +253,8 @@ module.exports = {
         }]
     },
     topicsSix(data, page) {
-
-
-        var source = data.first.data[0],
-            count = data.first.count > 100 ? 100 : data.dataCount,
+        var source = data.first.data,
+            count = data.first.count[0].count > 100 ? 100 : data.first.count[0].count,
             page = page || 1,
             newData = [{
                 "one" : 11,
@@ -268,6 +266,7 @@ module.exports = {
                 "seven" : 11,
                 "eight" : '<a target="_blank" href="http://www.baidu.com">查看</a>'    
             }];
+
         for(var i = 0; i < source.length; i++) {
            source[i].id = (page - 1) * 20 + i +1;
             newData.push(source[i]);

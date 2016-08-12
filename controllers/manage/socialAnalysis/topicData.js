@@ -247,7 +247,6 @@ module.exports = (Router) => {
         }
     });
 
-
     //二级圈子类型分布
     Router = new api(Router,{
         router : "/socialAnalysis/topicsFive",
@@ -293,7 +292,6 @@ module.exports = (Router) => {
                         }
                         filter_select.groups.push(obj);
                     }
-                    // console.log(filter_select.groups);
                     
                     if(this.filter_select.length <3){
                         this.filter_select.push(filter_select);
@@ -359,23 +357,44 @@ module.exports = (Router) => {
         search : {
             show : true,
             title: "请输入话题ID",
-            key  : "filter_key"
+            key  : "id"
+        },
+        firstSql(query, params, isCount) {
+            let keys = [query.startTime, query.endTime, query.day_type];
+            let where = ["date BETWEEN ? AND ?", "day_type=?"];
+            if(query.id) {
+                keys.push(query.id);
+                where.push("id=?")
+            }
+            if(isCount) {
+                let sql = `SELECT COUNT(*) count FROM tbl_rt_group_topic_top WHERE ${where.join(" AND ")} ORDER BY ${query.filter_key} DESC`;
+                return {
+                    sql : sql,
+                    params : keys
+                };
+            } else {
+                let sql = `SELECT * FROM tbl_rt_group_topic_top WHERE ${where.join(" AND ")} ORDER BY ${query.filter_key} DESC`;
+                return {
+                    sql : sql,
+                    params : keys
+                };
+            }
         },
         filter_select: [
             {
                 title: '排行',
-                filter_key: 'filter_key2',
+                filter_key: 'filter_key',
                 groups: [{
-                    key: 'one',
+                    key: 'click_user_num',
                     value: 'PV'
                 }, {
-                    key: 'two',
+                    key: 'click_user_num',
                     value: '新增点赞数'
                 }, {
-                    key: 'three',
+                    key: 'click_user_num',
                     value: '新增收藏数'
                 }, {
-                    key: 'four',
+                    key: 'click_user_num',
                     value: '新增分享数'
                 }]
             }
