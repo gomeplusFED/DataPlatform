@@ -256,7 +256,6 @@ module.exports = (Router) => {
         secondParams(query, params, sendData) {
             return {};
         },
-        cols : [ [] ],
         fixedParams(req, query, cb) {
             //依据选择的一级分类id获取对应的二级列表，保存二级类id至req中
             var filter_key = query.filter_key || "-1";
@@ -294,9 +293,12 @@ module.exports = (Router) => {
                         }
                         filter_select.groups.push(obj);
                     }
+                    console.log(filter_select.groups);
                     
-                    this.filter_select.push(filter_select);
-                    cb(null,this.filter_select);
+                    if(this.filter_select.length <3){
+                        this.filter_select.push(filter_select);
+                    }
+                    cb(null, this.filter_select);
                 }else{
                     cb(err);
                 }
@@ -347,51 +349,78 @@ module.exports = (Router) => {
         }
     });
     
-    // Router = new api(Router,{
-    //     router : "/socialAnalysis/topicsFive",
-    //     modelName : [ "TopicsTop" ],
-    //     platform : false,
-    //     showDayUnit : true,
-    //     paging : true,
-    //     order : ["-click_num"],
-    //     date_picker_data: 1,
-    //     filter(data, filter_key, dates, filter_key2, page) {
-    //         return filter.topicsFive(data, page);
-    //     },
-    //     excel_export : true,
-    //     flexible_btn : [{
-    //         content: '<a href="javascript:void(0)">导出</a>',
-    //         preMethods: ['excel_export']
-    //     }],
-    //     rows: [
-    //         [ "id", "topic_name", "click_num", "click_user_num","replay_num",
-    //             "user_reply_rate", "avg_reply"]
-    //     ],
-    //     cols: [
-    //         [{
-    //             caption: "排名",
-    //             type: "number"
-    //         }, {
-    //             caption: "话题名称",
-    //             type: "string"
-    //         }, {
-    //             caption: "点击量", //排名字段
-    //             type: "number"
-    //         }, {
-    //             caption: "点击用户数",
-    //             type: "number"
-    //         }, {
-    //             caption: "新增回复数",
-    //             type: "number"
-    //         }, {
-    //             caption: "回复率", // 回复用户数 / 点击用户数
-    //             type: "string"
-    //         }, {
-    //             caption: "人均回复量", // 话题回复量 / 话题回复人数
-    //             type: "number"
-    //         }]
-    //     ]
-    // });
+    Router = new api(Router,{
+        router : "/socialAnalysis/topicsSix",
+        modelName : [ "TopicsTop" ],
+        platform : false,
+        paging : [true],
+        // order : ["-click_num"],
+        // date_picker_data: 1,
+        search : {
+            show : true,
+            title: "请输入话题ID",
+            key  : "filter_key"
+        },
+        filter_select: [
+            {
+                title: '排行',
+                filter_key: 'filter_key2',
+                groups: [{
+                    key: 'one',
+                    value: 'PV'
+                }, {
+                    key: 'two',
+                    value: '新增点赞数'
+                }, {
+                    key: 'three',
+                    value: '新增收藏数'
+                }, {
+                    key: 'four',
+                    value: '新增分享数'
+                }]
+            }
+        ],
+        filter(data, query) {
+            /*console.log("go" , query);
+            console.log(data);*/
+            return filter.topicsSix(data, query);
+        },
+        // excel_export : true,
+        flexible_btn : [{
+            content: '<a href="javascript:void(0)">导出</a>',
+            preMethods: ['excel_export']
+        }],
+        rows: [
+            [ "one", "two", "three", "four", "five", "six", "seven", "eight" ]
+        ],
+        cols: [
+            [{
+                caption: "排名",
+                type: "number"
+            }, {
+                caption: "话题名称",
+                type: "string"
+            }, {
+                caption: "PV", //排名字段
+                type: "number"
+            }, {
+                caption: "新增回复数",
+                type: "number"
+            }, {
+                caption: "新增点赞数",
+                type: "number"
+            }, {
+                caption: "新增收藏数",
+                type: "number"
+            }, {
+                caption: "新增分享数",
+                type: "number"
+            }, {
+                caption: "操作",
+                type: 'string'
+            }]
+        ]
+    });
 
     // Router = new help(Router, {
     //     router : "/socialAnalysis/helpTwo",

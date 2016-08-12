@@ -28,19 +28,23 @@ module.exports = (Router) => {
         ],
         cols: [
             [{
-                caption: "圈子成员数",
-                type: "number"
+                caption: "累计圈子数",
+                type: "number",
+                help: "圈子总数"
             }, {
-                caption: "圈子话题数",
+                caption: "累计入圈用户数",
                 type: "number"
             }, {
                 caption: "累计话题点赞数", // = 新增入圈用户数 / 注册用户数
                 type: "number"
             }, {
-                caption: "累计话题收藏数",
+                caption: "用户入圈率",
                 type: "number"
             }, {
-                caption: "累计话题回复次数",
+                caption: "累计话题数",
+                type: "number"
+            }, {
+                caption: "累计解散圈子数",
                 type: "number"
             }]
         ]
@@ -63,7 +67,8 @@ module.exports = (Router) => {
                 type: "string"
             }, {
                 caption: "新增圈子数",
-                type: "number"
+                type: "number",
+                help: "新增圈子的数量"
             }, {
                 caption: "新增加圈次数", // = 新增入圈用户数 / 注册用户数
                 type: "number"
@@ -75,10 +80,12 @@ module.exports = (Router) => {
                 type: "number"
             }, {
                 caption: "新增入圈用户数",
-                type: "number"
+                type: "number",
+                help: "首次加入圈子的用户去重"
             }, {
                 caption: "新增用户入圈率",
-                type: "number"
+                type: "number",
+                help: "=首次入圈用户数/新增注册人数"
             }, {
                 caption: "新增解散圈子数",
                 type: "number"
@@ -248,7 +255,10 @@ module.exports = (Router) => {
                         filter_select.groups.push(obj);
                     }
                     
-                    this.filter_select.push(filter_select);
+                    if(this.filter_select.length < 3){
+                        this.filter_select.push(filter_select);
+                    }
+                    
                     cb(null,this.filter_select);
                 }else{
                     cb(err);

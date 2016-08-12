@@ -342,8 +342,6 @@ module.exports = {
                 "9" : '<a target="_blank" href="http://www.baidu.com">查看</a>'          
             }];
 
-        
-
         for(var i = 0; i < source.length; i++) {
             source[i].id = (page - 1) * 20 + i +1;
             newData.push(source[i]);

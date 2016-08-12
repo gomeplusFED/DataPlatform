@@ -206,8 +206,6 @@ module.exports = {
     },
     topicsFive(data , query){
 
-        
-        
         var group_type = query.group_type,
             source = data.first.data[0],
             orderData = data.second.data[0],
@@ -253,19 +251,27 @@ module.exports = {
                 stack: false
             }
         }]
-    }
-    /*topicsSix(data, page) {
-        var source = data.data,
-            count = data.dataCount > 100 ? 100 : data.dataCount,
+    },
+    topicsSix(data, page) {
+
+
+        var source = data.first.data[0],
+            count = data.first.count > 100 ? 100 : data.dataCount,
             page = page || 1,
-            newData = [];
+            newData = [{
+                "one" : 11,
+                "two" : 11,
+                "three" : 11,
+                "four" : 11,
+                "five" : 11,
+                "six" : 11,
+                "seven" : 11,
+                "eight" : '<a target="_blank" href="http://www.baidu.com">查看</a>'    
+            }];
         for(var i = 0; i < source.length; i++) {
-            var key = source[i];
-            key.id = (page - 1) * 20 + i + 1;
-            key.user_reply_rate = util.toFixed(key.replay_user_num, key.click_user_num);
-            key.avg_reply = util.round(key.replay_num, key.replay_user_num);
-            newData.push(key);
+           source[i].id = (page - 1) * 20 + i +1;
+            newData.push(source[i]);
         }
         return util.toTable([newData], data.rows, data.cols, [count]);
-    }*/
+    }
 };
