@@ -10,22 +10,11 @@ module.exports = {
     platformCouponOne(data, dates, params) {
         var source = data.data,
             obj = {},
-            days = {
-                "1" : "当日",
-                "2" : "当周",
-                "3" : "当月"
-            },
-            day_type = days[params.day_type],
             newData = [];
 
         dates.push(
             util.getDate(util.date(dates[0], params.day_type))
         );
-
-        data.cols[0][5] = {
-            caption : day_type + "领取数量/" + day_type + "发行数量",
-            type : "string"
-        };
 
         if(dates.length === 2) {
             for(var date of dates) {
