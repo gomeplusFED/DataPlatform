@@ -293,8 +293,7 @@ module.exports = (Router) => {
                         }
                         filter_select.groups.push(obj);
                     }
-                    console.log(filter_select.groups);
-                    
+
                     if(this.filter_select.length <3){
                         this.filter_select.push(filter_select);
                     }
@@ -361,6 +360,9 @@ module.exports = (Router) => {
             title: "请输入话题ID",
             key  : "filter_key"
         },
+        //firstSql(query, params, isCount) {
+        //
+        //},
         filter_select: [
             {
                 title: '排行',
