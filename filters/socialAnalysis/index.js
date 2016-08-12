@@ -183,7 +183,8 @@ module.exports = {
                 two : 0,
                 three : 0,
                 four : 0,
-                five : 0
+                five : 0,
+                six : 0
             };
 
         return util.toTable([[newData]], data.rows, data.cols);
@@ -339,7 +340,7 @@ module.exports = {
                 "6" : 11,
                 "7" : 11,
                 "8" : 11,
-                "9" : '<a target="_blank" href="http://www.baidu.com">查看</a>'          
+                "9" : `<button class="btn btn-default" target='_blank' url_link='/socialAnalysis/groupDetail' url_fixed_params='{"channel":${page}}'>查看</button>`
             }];
 
         for(var i = 0; i < source.length; i++) {

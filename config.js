@@ -213,7 +213,10 @@ module.exports = {
             path : [
                 obj.socialAnalysis.group(),
                 obj.socialAnalysis.topics(),
-                obj.socialAnalysis.groupHost()
+                obj.socialAnalysis.groupHost(),
+            ],
+            routers: [
+                obj.socialAnalysis.groupDetail()
             ]
         },
         "30" : {

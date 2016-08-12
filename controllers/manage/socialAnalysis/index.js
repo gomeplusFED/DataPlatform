@@ -24,7 +24,7 @@ module.exports = (Router) => {
         },
         rows: [
             ["one", "two", "three",
-            "four", "five"]
+            "four", "five", "six"]
         ],
         cols: [
             [{
@@ -33,7 +33,8 @@ module.exports = (Router) => {
                 help: "圈子总数"
             }, {
                 caption: "累计入圈用户数",
-                type: "number"
+                type: "number",
+                help: "入圈用户数去重"
             }, {
                 caption: "累计话题点赞数", // = 新增入圈用户数 / 注册用户数
                 type: "number"
@@ -330,7 +331,8 @@ module.exports = (Router) => {
                 type : "number"
             }, {
                 caption : "圈子名称",
-                type : "number"
+                type : "number",
+                help : "圈子的名称"
             }, {
                 caption : "二级分类",
                 type : "number"
@@ -339,7 +341,8 @@ module.exports = (Router) => {
                 type : "number"
             }, {
                 caption : "新增话题数",
-                type : "number"
+                type : "number",
+                help : "圈子新增的话题数"
             }, {
                 caption : "圈子新增分享数",
                 type : "number"

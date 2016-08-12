@@ -293,7 +293,7 @@ module.exports = (Router) => {
                         }
                         filter_select.groups.push(obj);
                     }
-                    console.log(filter_select.groups);
+                    // console.log(filter_select.groups);
                     
                     if(this.filter_select.length <3){
                         this.filter_select.push(filter_select);
