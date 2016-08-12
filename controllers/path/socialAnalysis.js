@@ -75,6 +75,35 @@ module.exports = {
             ]
         }
     },
+    groupDetail(){
+        return {
+            name : "单条圈子数据",
+            path : "/socialAnalysis/groupDetail",
+            display : true,
+            defaultData : [
+                {
+                    type : "table",
+                    title : "数据总览",
+                    query_api : "/socialAnalysis/groupDetailOne"
+                },
+                {
+                    type : "table",
+                    title : "数据统计",
+                    query_api : "/socialAnalysis/groupDetailTwo"
+                },
+                {
+                    type : "chart",
+                    title : "数据趋势",
+                    query_api : "/socialAnalysis/groupDetailThree"
+                },
+                {
+                    type : "table",
+                    title : "话题列表",
+                    query_api : "/socialAnalysis/groupDetailFour"                    
+                }
+            ]
+        }
+    },
     topics() {
         return {
             name : "话题数据",
@@ -110,23 +139,31 @@ module.exports = {
                     type : "table",
                     title : "热门话题排行TOP100",
                     query_api : "/socialAnalysis/topicsSix"
+                }
+            ]
+        }
+    },
+    topicsDetail(){
+        return {
+            name : "单条话题数据",
+            path : "/socialAnalysis/topicsDetail",
+            display : true,
+            defaultData : [
+                {
+                    type : "table",
+                    title : "数据总览",
+                    query_api : "/socialAnalysis/topicDetailOne"
                 },
-                
-                // {
-                //     type : "chart",
-                //     title : "圈子一级新增分布",
-                //     query_api : "/socialAnalysis/topicsThree"
-                // },
-                // {
-                //     type : "chart",
-                //     title : "圈子二级新增分布",
-                //     query_api : "/socialAnalysis/topicsFour"
-                // },
-                // {
-                //     type : "table",
-                //     title : "热门话题排行TOP100",
-                //     query_api : "/socialAnalysis/topicsFive"
-                // }
+                {
+                    type : "table",
+                    title : "数据统计",
+                    query_api : "/socialAnalysis/topicDetailTwo"
+                },
+                {
+                    type : "chart",
+                    title : "数据趋势",
+                    query_api : "/socialAnalysis/topicDetailThree"
+                }
             ]
         }
     },

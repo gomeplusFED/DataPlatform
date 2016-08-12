@@ -216,7 +216,8 @@ module.exports = {
                 obj.socialAnalysis.groupHost(),
             ],
             routers: [
-                obj.socialAnalysis.groupDetail()
+                obj.socialAnalysis.groupDetail(),
+                obj.socialAnalysis.topicsDetail()
             ]
         },
         "30" : {
