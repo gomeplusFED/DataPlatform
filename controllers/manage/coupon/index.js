@@ -34,8 +34,10 @@ module.exports = (Router) => {
             return filter.allOne(data, dates, params);
         },
         rows: [
-            ["name", "create_num", "create_amount", "give_num", "receive_num", "receive_rate",
-                "used_num", "used_amount", "used_rate", "invalid_num"]
+            ["name", "published_num", "published_amount", "give_num", "receive_num", "receive_rate",
+                "used_num", "used_amount",
+                //"used_rate",
+                "invalid_num"]
         ],
         cols: [
             [
@@ -43,10 +45,10 @@ module.exports = (Router) => {
                     caption : "",
                     type : "string"
                 },{
-                    caption : "创建数量",
+                    caption : "发行数量",
                     type : "number"
                 },{
-                    caption : "创建总金额",
+                    caption : "发行总金额",
                     type : "number"
                 },{
                     caption : "发送数量",
@@ -63,9 +65,9 @@ module.exports = (Router) => {
                 },{
                     caption : "使用总金额",
                     type : "number"
-                },{
-                    caption : "使用率",
-                    type : "string"
+                //},{
+                //    caption : "使用率",
+                //    type : "string"
                 },{
                     caption : "过期数量",
                     type : "number"
@@ -96,8 +98,8 @@ module.exports = (Router) => {
             title: '指标',
             filter_key : 'filter_key',
             groups: [{
-                key: 'create',
-                value: '平台商家创建占比'
+                key: 'published',
+                value: '平台商家发行占比'
             }, {
                 key: 'receive',
                 value: '平台商家领取占比'
