@@ -292,7 +292,7 @@ api.prototype = {
                             if (this.paging[i]) {
                                 sendData = this._returnFind(
                                     req, params, this.modelName[i],
-                                    this.procedure[i][0], sendData, this.dataName[i]
+                                    this.procedure[i], sendData, this.dataName[i]
                                 );
                             } else {
                                 sendData[this.dataName[i]].data =

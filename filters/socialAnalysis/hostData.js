@@ -10,12 +10,16 @@ module.exports = {
     hostOne(data) {
         var source = data.first.data[0],
             newData = {
-                one : 0,
+                group_leader_num : 0,
                 two : 0,
                 three : 0,
                 four : 0,
                 five : 0
             };
+
+        for(let key of source) {
+            newData.group_leader_num = key.sum_value;
+        }
 
         return util.toTable([[newData]], data.rows, data.cols);
     },
@@ -36,13 +40,13 @@ module.exports = {
 
         for(let key of source) {
             obj[key.type].sum_first_groupOwner_num = key.sum_first_groupOwner_num;
-            obj["总计"].sum_first_groupOwner_num = key.sum_first_groupOwner_num;
+            obj["总计"].sum_first_groupOwner_num += key.sum_first_groupOwner_num;
             obj[key.type].sum_new_groupOwner_num = key.sum_new_groupOwner_num;
-            obj["总计"].sum_new_groupOwner_num = key.sum_new_groupOwner_num;
+            obj["总计"].sum_new_groupOwner_num += key.sum_new_groupOwner_num;
             obj[key.type].sum_attention_groupOwner_num = key.sum_attention_groupOwner_num;
-            obj["总计"].sum_attention_groupOwner_num = key.sum_attention_groupOwner_num;
+            obj["总计"].sum_attention_groupOwner_num += key.sum_attention_groupOwner_num;
             obj[key.type].sum_cancel_attention_groupOwner_num = key.sum_cancel_attention_groupOwner_num;
-            obj["总计"].sum_cancel_attention_groupOwner_num = key.sum_cancel_attention_groupOwner_num;
+            obj["总计"].sum_cancel_attention_groupOwner_num += key.sum_cancel_attention_groupOwner_num;
         }
 
         for(let key in obj) {
@@ -173,11 +177,26 @@ module.exports = {
     },
     hostSix(data, page) {
         var source = data.first.data[0],
+            secondSource = data.second.data[0],
+            config = {},
+            daren_flag = {
+                1 : "是",
+                0 : "不是"
+            },
             page = page || 1,
             count = data.first.count > 100 ? 100 : data.first.count,
             newData = [];
+
+        for(let key of secondSource) {
+            config[key.group_leader_id] = {};
+            config[key.group_leader_id][key.key] = key.sum_value;
+        }
+
         for(var i = 0; i < source.length; i++) {
-            source[i].id = (page - 1) * 20 + i +1;
+            source[i].top = (page - 1) * 20 + i +1;
+            source[i].person_topic_num = config[source[i].groupOwner_id].person_topic_num;
+            source[i].weiding = 0;
+            source[i].daren_flag = daren_flag[source[i].daren_flag];
             newData.push(source[i]);
         }
         return util.toTable([newData], data.rows, data.cols, [count]);

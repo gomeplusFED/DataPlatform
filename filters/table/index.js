@@ -9,11 +9,31 @@ module.exports = {
     tableOne(data, filter_key) {
         var source = data.first.data[0],
             count = data.first.count[0],
+            secondSource = data.second.data[0],
+            config = {},
             rows = [],
             cols = [],
-            merge = util.mergeCell(source, ["1"]);
+            merge = util.mergeCell(source, ["category_id_1"]);
         if(filter_key === "social") {
-            rows.push(["1", "2", "3", "4", "5", "6", "7", "8", "9"]);
+            for(let key of secondSource) {
+                if(+key.pid < 0) {
+                    config[key.pid]["cell"][key.id] = key.name;
+                } else {
+                    config[key.id] = {
+                        name : key.name,
+                        cell : {}
+                    };
+                }
+            }
+
+            for(let key of source) {
+                key.category_id_2 = config[key.category_id_1]["cell"][key.category_id_2];
+                key.category_id_1 = config[key.category_id_1].name;
+            }
+
+            rows.push(["category_id_1", "category_id_2", "new_group_num",
+                "new_topic_num", "delete_topic_num", "new_group_user_num",
+                "quit_group_user_num", "new_reply_num", "delete_reply_num"]);
             cols.push([{
                 caption: "一级分类",
                 type: "string"
