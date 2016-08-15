@@ -47,7 +47,7 @@ module.exports = {
                     title : "圈子数据总览",
                     query_api : "/socialAnalysis/groupSix"
                 },
-                {
+                /*{
                     type: "table",
                     title:"圈子数据统计",
                     query_api : "/socialAnalysis/groupSeven"
@@ -71,7 +71,7 @@ module.exports = {
                     type : "table",
                     title : "热门圈子排行",
                     query_api : "/socialAnalysis/groupEleven"
-                }
+                }*/
             ]
         }
     },
