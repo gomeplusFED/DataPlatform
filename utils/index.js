@@ -291,7 +291,7 @@ exports.mergeCell = function(data, rows) {
                         col : col,
                         end : {
                             row : i,
-                            col : j - 1
+                            col : j - col
                         }
                     });
                     col = j;
@@ -301,7 +301,7 @@ exports.mergeCell = function(data, rows) {
                         col : col,
                         end : {
                             row : i,
-                            col : j
+                            col : j - col + 1
                         }
                     });
                 }
