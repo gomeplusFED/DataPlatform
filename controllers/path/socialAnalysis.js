@@ -173,11 +173,11 @@ module.exports = {
             path : "/socialAnalysis/host",
             display : true,
             defaultData : [
-                {
-                    type : "table",
-                    title : "圈主数据总览",
-                    query_api : "/socialAnalysis/hostOne"
-                },
+                //{
+                //    type : "table",
+                //    title : "圈主数据总览",
+                //    query_api : "/socialAnalysis/hostOne"
+                //},
                 {
                     type : "table",
                     title : "圈主数据统计",
@@ -197,28 +197,13 @@ module.exports = {
                     type : "chart",
                     title : "新增圈主二级分布",
                     query_api : "/socialAnalysis/hostFive"
-                },
-                {
-                    type : "table",
-                    title : "热门圈主排行TOP100",
-                    query_api : "/socialAnalysis/hostSix"
-                }
-            ]
-        }
-    },
-    table() {
-        return {
-            name : "社交报表",
-            path : "/socialAnalysis/table",
-            display : true,
-            defaultData : [
-                {
-                    type : "table",
-                    title : "我的报表",
-                    query_api : "/socialAnalysis/tableOne"
+                //},
+                //{
+                //    type : "table",
+                //    title : "热门圈主排行TOP100",
+                //    query_api : "/socialAnalysis/hostSix"
                 }
             ]
         }
     }
-    // thegroupstate
 };

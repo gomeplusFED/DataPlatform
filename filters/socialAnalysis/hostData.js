@@ -21,34 +21,55 @@ module.exports = {
     },
     hostTwo(data) {
         var source = data.first.data[0],
+            array = ["APP", "WAP", "PC", "总计"],
             newData = [],
-            array = ["APP", "WAP", "PC", "总计"];
+            obj = {};
 
         for(let key of array) {
+            obj[key] = {
+                sum_first_groupOwner_num : 0,
+                sum_new_groupOwner_num : 0,
+                sum_attention_groupOwner_num : 0,
+                sum_cancel_attention_groupOwner_num : 0
+            }
+        }
+
+        for(let key of source) {
+            obj[key.type].sum_first_groupOwner_num = key.sum_first_groupOwner_num;
+            obj["总计"].sum_first_groupOwner_num = key.sum_first_groupOwner_num;
+            obj[key.type].sum_new_groupOwner_num = key.sum_new_groupOwner_num;
+            obj["总计"].sum_new_groupOwner_num = key.sum_new_groupOwner_num;
+            obj[key.type].sum_attention_groupOwner_num = key.sum_attention_groupOwner_num;
+            obj["总计"].sum_attention_groupOwner_num = key.sum_attention_groupOwner_num;
+            obj[key.type].sum_cancel_attention_groupOwner_num = key.sum_cancel_attention_groupOwner_num;
+            obj["总计"].sum_cancel_attention_groupOwner_num = key.sum_cancel_attention_groupOwner_num;
+        }
+
+        for(let key in obj) {
             newData.push({
-                one : key,
-                two : 0,
-                three : 0,
-                four : 0,
-                five : 0,
-                six : 0
+                type : key,
+                sum_first_groupOwner_num : obj[key].sum_first_groupOwner_num,
+                rate : util.toFixed(obj[key].sum_first_groupOwner_num, obj["总计"].sum_first_groupOwner_num),
+                sum_new_groupOwner_num : obj[key].sum_new_groupOwner_num,
+                sum_attention_groupOwner_num : obj[key].sum_attention_groupOwner_num,
+                sum_cancel_attention_groupOwner_num : obj[key].sum_cancel_attention_groupOwner_num
             });
         }
 
         return util.toTable([newData], data.rows, data.cols);
     },
-    hostThree(data, query, dates) {
+    hostThree(data, filter_key, dates) {
         var source = data.first.data[0],
             type = "line",
             newData = {},
             filter_name = {
-                one : "首当圈主数",
-                two : "新增圈主数",
-                three : "关注次数",
-                four : "取关次数"
+                sum_first_groupOwner_num : "首当圈主数",
+                sum_new_groupOwner_num : "新增圈主数",
+                sum_attention_groupOwner_num : "关注次数",
+                sum_cancel_attention_groupOwner_num : "取关次数"
             },
             map = {
-                value : filter_name[query.filter_key]
+                value : filter_name[filter_key]
             };
 
         for(let date of dates) {
@@ -59,7 +80,7 @@ module.exports = {
 
         for(let key of source) {
             var date = util.getDate(key.date);
-            newData[date].value = key.query.filter_key;
+            newData[date].value = key[filter_key];
         }
 
         return [{
@@ -72,26 +93,27 @@ module.exports = {
             }
         }];
     },
-    hostFour(data, query) {
+    hostFour(data, filter_key) {
         var source = data.first.data[0],
             orderData = data.second.data[0],
             type = "pie",
             obj = {},
             filter_name = {
-                new_owner_num : "圈主",
-                fans_num : "粉丝数"
+                new_groupOwner_num : "圈主",
+                new_fans_num : "粉丝数"
             },
             map = {
-                value : filter_name[query.filter_key]
+                value : filter_name[filter_key]
             },
             newData = {};
+
         for(var key of orderData) {
             obj[key.id] = {
                 value : 0
             }
         }
         for(var key of source) {
-            obj[key.group_type].value += key[query.filter_key];
+            obj[key.category_id].value += key[filter_key];
         }
         for(var key of orderData) {
             newData[key.name] = {
@@ -113,8 +135,8 @@ module.exports = {
             type = "pie",
             obj = {},
             filter_name = {
-                new_owner_num : "圈主",
-                fans_num : "粉丝数"
+                new_groupOwner_num : "圈主",
+                new_fans_num : "粉丝数"
             },
             filter_key = query.filter_key || "-1",
             map = {
@@ -128,9 +150,11 @@ module.exports = {
                 }
             }
         }
+
         for(var key of source) {
-            obj[key.group_type].value += key[query.filter_key2];
+            obj[key.category_id].value += key[query.filter_key2];
         }
+
         for(var key of orderData) {
             if(key.pid === filter_key) {
                 newData[key.name] = {

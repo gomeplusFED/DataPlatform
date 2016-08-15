@@ -7,8 +7,8 @@
 module.exports = {
     id : {type: 'number', key: true},
     category_id: String,
-    new_groupOwner_num: String,
-    new_fans_num: String,
+    new_groupOwner_num: Number,
+    new_fans_num: Number,
     day_type: Number,
     date: Date,
     ver: String,

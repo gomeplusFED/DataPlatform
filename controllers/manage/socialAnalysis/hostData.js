@@ -10,7 +10,7 @@ var api = require("../../../base/main"),
 module.exports = (Router) => {
     Router = new api(Router,{
         router : "/socialAnalysis/hostOne",
-        modelName : ["Host"],
+        modelName : ["GroupownerStatistics"],
         platform : false,
         date_picker: false,
         filter(data) {
@@ -41,13 +41,23 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/socialAnalysis/hostTwo",
-        modelName : ["Host"],
+        modelName : ["GroupownerStatistics"],
         platform : false,
+        procedure : [{
+            aggregate : {
+                value : ["type"]
+            },
+            sum : ["first_groupOwner_num", "new_groupOwner_num",
+                "attention_groupOwner_num", "cancel_attention_groupOwner_num"],
+            groupBy : ["type"],
+            get : ""
+        }],
         filter(data) {
             return filter.hostTwo(data);
         },
         rows: [
-            ["one", "two", "three", "four", "five", "six"]
+            ["type", "sum_first_groupOwner_num", "rate", "sum_new_groupOwner_num",
+                "sum_attention_groupOwner_num", "sum_cancel_attention_groupOwner_num"]
         ],
         cols: [
             [{
@@ -76,36 +86,61 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/socialAnalysis/hostThree",
-        modelName : [ "HostTendency" ],
+        modelName : [ "GroupownerStatistics" ],
         platform : false,
-        level_select : true,
-        level_select_name : "group_type",
-        level_select_url : "/api/socialAnalysisCategories",
+        //level_select : true,
+        //level_select_name : "group_type",
+        //level_select_url : "/api/socialAnalysisCategories",
+        procedure : [{
+            aggregate : {
+                value : ["date"]
+            },
+            sum : ["first_groupOwner_num", "new_groupOwner_num",
+                "attention_groupOwner_num", "cancel_attention_groupOwner_num"],
+            groupBy : ["date"],
+            get : ""
+        }],
         filter_select : [{
+            title: '指标',
+            filter_key : 'type',
+            groups: [{
+                key: ['APP', "WAP", "PC"],
+                value: '全部'
+            },{
+                key: 'APP',
+                value: 'APP'
+            },{
+                key: 'WAP',
+                value: 'WAP'
+            },{
+                key: 'PC',
+                value: 'PC'
+            }]
+        }, {
             title: '指标',
             filter_key : 'filter_key',
             groups: [{
-                key: 'one',
+                key: 'sum_first_groupOwner_num',
                 value: '首当圈主数'
             },{
-                key: 'two',
+                key: 'sum_new_groupOwner_num',
                 value: '新增圈主数'
             },{
-                key: 'three',
+                key: 'sum_attention_groupOwner_num',
                 value: '关注次数'
             },{
-                key: 'four',
+                key: 'sum_cancel_attention_groupOwner_num',
                 value: '取关次数'
             }]
         }],
         filter(data, query, dates, type) {
-            return filter.hostThree(data, query, dates);
+            return filter.hostThree(data, query.filter_key, dates);
         }
     });
 
     Router = new api(Router,{
         router : "/socialAnalysis/hostFour",
-        modelName : [ "HostDistribution", "SocialCategory" ],
+        modelName : [ "GroupownerCategoryDistribution", "SocialCategory" ],
         platform : false,
         secondParams(query, params, data) {
             return {
@@ -121,7 +156,7 @@ module.exports = (Router) => {
                     for(var key of data) {
                         group_type.push(key.id);
                     }
-                    query.group_type = group_type;
+                    query.category_id = group_type;
                     cb(null, query);
                 } else {
                     cb(err);
@@ -133,22 +168,22 @@ module.exports = (Router) => {
                 title: '指标选择',
                 filter_key: 'filter_key',
                 groups: [{
-                    key: 'new_owner_num',
+                    key: 'new_groupOwner_num',
                     value: '圈主'
                 }, {
-                    key: 'fans_num',
+                    key: 'new_fans_num',
                     value: '粉丝数'
                 }]
             }
         ],
         filter(data, query, dates, type) {
-            return filter.hostFour(data, query);
+            return filter.hostFour(data, query.filter_key);
         }
     });
 
     Router = new api(Router,{
         router : "/socialAnalysis/hostFive",
-        modelName : [ "HostDistribution", "SocialCategory" ],
+        modelName : [ "GroupownerCategoryDistribution", "SocialCategory" ],
         platform : false,
         secondParams(query, params, data) {
             return {};
@@ -163,7 +198,7 @@ module.exports = (Router) => {
                     for(var key of data) {
                         group_type.push(key.id);
                     }
-                    query.group_type = group_type;
+                    query.category_id = group_type;
                     cb(null, query);
                 } else {
                     cb(err);
@@ -188,10 +223,10 @@ module.exports = (Router) => {
                                 title: '指标',
                                 filter_key: 'filter_key2',
                                 groups: [{
-                                    key: 'new_owner_num',
+                                    key: 'new_groupOwner_num',
                                     value: '圈主'
                                 }, {
-                                    key: 'fans_num',
+                                    key: 'new_fans_num',
                                     value: '粉丝数'
                                 }]
                             }
@@ -212,7 +247,7 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/socialAnalysis/hostSix",
-        modelName : [ "HostTop" ],
+        modelName : [ "GroupownerList" ],
         platform : false,
         paging : [true],
         order : ["-new_fans_num"],
@@ -222,7 +257,7 @@ module.exports = (Router) => {
         search : {
             show : true,
             title : "请输入圈主ID：",
-            key : "filter_key"
+            key : "groupOwner_id"
         },
         filter(data, query, dates, type) {
             return filter.hostSix(data, query.page);
@@ -233,7 +268,7 @@ module.exports = (Router) => {
             preMethods: ['excel_export']
         }],
         rows: [
-            [ "1", "2", "3", "4", "5", "6", "7", "8", "9" , "10",
+            [ "top", "groupOwner_name", "groupOwner_id", "daren_flag", "5", "6", "7", "8", "9" , "10",
             "11", "12", "13", "14"]
         ],
         cols: [

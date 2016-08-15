@@ -6,11 +6,11 @@
 
 module.exports = {
     id : {type: 'number', key: true},
-    first_groupOwner_num : String,
-    new_groupOwner_num : String,
-    attention_groupOwner_num : String,
-    cancel_attention_groupOwner_num : String,
-    day_type : String,
+    first_groupOwner_num : Number,
+    new_groupOwner_num : Number,
+    attention_groupOwner_num : Number,
+    cancel_attention_groupOwner_num : Number,
+    day_type : Number,
     date : Date,
     ver : String,
     channel : String,
