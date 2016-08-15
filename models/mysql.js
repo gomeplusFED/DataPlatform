@@ -62,18 +62,6 @@ function connect(app) {
             models.User2 = db.define("tbl_dataplatform_nodejs_users2", obj.User2);
             models.Role = db.define("tbl_dataplatform_nodejs_role", obj.Role);
             models.Log = db.define("tbl_dataplatform_nodejs_log", obj.Log);
-            models.Group = db.define("tbl_rt_group", obj.Group);
-            models.GroupDataTendency = db.define("tbl_rt_group_tendency", obj.GroupDataTendency);
-            models.GroupDataDistribution = db.define("tbl_rt_group_distribution", obj.GroupDataDistribution);
-            models.GroupDataTop = db.define("tbl_rt_group_top", obj.GroupDataTop);
-            models.Topics = db.define("tbl_rt_group_topic", obj.Topics);
-            models.TopicsTendency = db.define("tbl_rt_group_topic_tendency", obj.TopicsTendency);
-            models.TopicsDistribution = db.define("tbl_rt_group_topic_distribution", obj.TopicsDistribution);
-            models.TopicsTop = db.define("tbl_rt_group_topic_top", obj.TopicsTop);
-            models.Host = db.define("tbl_rt_group_owner", obj.Host);
-            models.HostTendency = db.define("tbl_rt_group_owner_tendency", obj.HostTendency);
-            models.HostDistribution = db.define("tbl_rt_group_owner_distribution", obj.HostDistribution);
-            models.HostTop = db.define("tbl_rt_group_owner_top", obj.HostTop);
             models.SocialCategory = db.define("tbl_social_category", obj.SocialCategory);
             models.ShopPayTop = db.define("tbl_rt_shop_pay_top", obj.ShopPayTop);
             models.ShopAccesTop = db.define("tbl_rt_shop_acces_top", obj.ShopAccesTop);
@@ -98,6 +86,8 @@ function connect(app) {
             models.CouponGroupShopTop = db.define("ads2_coupon_group_shop_top", obj.CouponGroupShopTop);
             models.CouponInfo = db.define("ads2_coupon_info", obj.CouponInfo);
             models.CouponGroupDate = db.define("ads2_coupon_group_date", obj.CouponGroupDate);
+            models.GroupownerStatistics = db.define("ads2_soc_groupowner_statistics", obj.GroupownerStatistics);
+            models.GroupownerCategoryDistribution = db.define("ads2_soc_groupowner_category_distribution", obj.GroupownerCategoryDistribution);
             models.db1 = db;
             next();
         }

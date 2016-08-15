@@ -6,10 +6,9 @@
 
 module.exports = {
     id : {type: 'number', key: true},
-    new_group_count: Number,
-    new_group_user_count: Number,
-    DAU: Number,
-    group_type: String,
+    category_id: String,
+    new_groupOwner_num: String,
+    new_fans_num: String,
     day_type: Number,
     date: Date,
     ver: String,
