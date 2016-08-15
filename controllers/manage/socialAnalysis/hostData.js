@@ -5,19 +5,42 @@
  */
 
 var api = require("../../../base/main"),
+    _ = require("lodash"),
+    orm = require("orm"),
+    util = require("../../../utils"),
     filter = require("../../../filters/socialAnalysis/hostData");
 
 module.exports = (Router) => {
     Router = new api(Router,{
         router : "/socialAnalysis/hostOne",
-        modelName : ["GroupownerStatistics"],
+        modelName : ["Statistics"],
+        params(query, params, data) {
+            var now = new Date(),
+                start = util.getDate(new Date(now.getTime() - 24 * 60 * 60 * 1000)),
+                _params = {
+                    date : orm.between(
+                        new Date(start + " 00:00:00"),
+                        new Date(start + " 23:59:59")
+                    ),
+                    key : ["group_leader_num"]
+                };
+            return _params;
+        },
+        procedure : [{
+            aggregate : {
+                value : ["key"]
+            },
+            sum : ["value"],
+            groupBy : ["key"],
+            get : ""
+        }],
         platform : false,
         date_picker: false,
         filter(data) {
             return filter.hostOne(data);
         },
         rows: [
-            ["one", "two", "three", "four", "five"]
+            ["group_leader_num", "two", "three", "four", "five"]
         ],
         cols: [
             [{
@@ -247,10 +270,27 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/socialAnalysis/hostSix",
-        modelName : [ "GroupownerList" ],
+        modelName : [ "GroupownerList", "Statistics" ],
         platform : false,
-        paging : [true],
+        paging : [true, false],
         order : ["-new_fans_num"],
+        secondParams(query, params, data) {
+            var group_ids = _.uniq(_.pluck(data.first.data[0], "groupOwner_id")),
+                _params = {
+                    date : params.date,
+                    group_leader_id : group_ids,
+                    key : "person_topic_num"
+                };
+            return _params;
+        },
+        procedure : [false, {
+            aggregate : {
+                value : ["group_leader_id", "key"]
+            },
+            sum : ["value"],
+            groupBy : ["group_leader_id", "key"],
+            get : ""
+        }],
         showDayUnit : true,
         date_picker_data: 1,
         control_table_col : true,
@@ -268,8 +308,10 @@ module.exports = (Router) => {
             preMethods: ['excel_export']
         }],
         rows: [
-            [ "top", "groupOwner_name", "groupOwner_id", "daren_flag", "5", "6", "7", "8", "9" , "10",
-            "11", "12", "13", "14"]
+            [ "top", "groupOwner_name", "groupOwner_id", "daren_flag", "person_topic_num",
+                "new_invite_friends_num", "weiding", "new_fans_num", "weiding" ,
+                "new_group_num", "weiding", "new_attention_num",
+                "weiding", "new_cancel_attention_num"]
         ],
         cols: [
             [{

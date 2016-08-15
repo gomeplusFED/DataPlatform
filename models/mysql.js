@@ -90,7 +90,9 @@ function connect(app) {
             models.GroupownerCategoryDistribution = db.define("ads2_soc_groupowner_category_distribution", obj.GroupownerCategoryDistribution);
             models.GroupownerList = db.define("ads2_soc_groupowner_list", obj.GroupownerList);
             models.GroupReport = db.define("ads2_soc_group_report", obj.GroupReport);
-            models.Statistics = db.define("tbl_soc_statistics", obj.GroupReport);
+
+            models.Statistics = db.define("tbl_soc_statistics", obj.Statistics);
+
             //8.15 
             models.GroupStatistics = db.define("ads2_soc_group_statistics" , obj.GroupStatistics);
             models.GroupCategoryDistribution = db.define("ads2_soc_group_category_distribution" , obj.GroupCategoryDistribution);

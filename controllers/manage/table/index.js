@@ -11,13 +11,16 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/socialAnalysis/tableOne",
-        modelName : ["Host"],
-        paging : [true],
+        modelName : ["GroupReport", "SocialCategory"],
+        paging : [true, false],
         page : 40,
         platform : false,
         date_picker_data: 1,
         showDayUnit : true,
         excel_export : true,
+        secondParams(query, params, data) {
+            return {};
+        },
         filter_select: [
             {
                 title: '报表类型',

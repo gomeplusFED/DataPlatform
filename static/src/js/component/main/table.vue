@@ -7,8 +7,17 @@
 				</tr>
 			</thead>
 			<tbody v-if="tableItem.data.length !== 0">
-				<tr v-for="tableBody in tableItem.data">
-					<td v-for="(tableKey, tableCell) in tableItem.rows" v-show="tableColControl[tableKey]"><span @click="tableOperation(tableBody[tableCell], tableBody, tableItem.rows[1])">{{{tableBody[tableCell] | toThousands}}}</span></td>
+				<tr v-for="(tableIndex, tableBody) in tableItem.data">
+					<td 
+					v-for="(tableKey, tableCell) in tableItem.rows"
+					v-show="tableColControl[tableKey]"
+					v-if="isSpan(tableIndex, getIndexByKey(tableItem.rows,tableKey))"
+					:colspan="getColspan(tableIndex, getIndexByKey(tableItem.rows,tableKey))"
+					:rowspan="getRowspan(tableIndex, getIndexByKey(tableItem.rows,tableKey))"
+					>
+					<span @click="tableOperation(tableBody[tableCell], tableBody, tableItem.rows[1])">{{{tableBody[tableCell] | toThousands}}}
+					</span>
+					</td>
 				</tr>
 			</tbody>
 			<tbody v-else>
@@ -74,7 +83,17 @@ var Table = Vue.extend({
 
 				}
 			},
-			tableColControl: {}
+			tableColControl: {},
+			config: [
+				// {
+				// 	row: 1,
+				// 	col: 1,
+				// 	end: {
+				// 		row: 2,
+				// 		col: 2
+				// 	}
+				// }
+			]
 		};
 	},
 	vuex: {
@@ -208,6 +227,7 @@ var Table = Vue.extend({
 				this.scrollTop = $(document).scrollTop();
 				this.fetchData(function(data) {
 					_this.tableData = data.modelData;
+					_this.config= data.config || [];
 
 					// 控制第一个表格的列
 					_this.tableData[0].cols.forEach(function(item, index) {
@@ -243,6 +263,32 @@ var Table = Vue.extend({
 		},
 		showHelpBymouse(ev) {
 			console.log(ev.target.getAttribute('data'));
+		},
+		getColspan (row, col) {
+			let model= this.config.find(function(item) {
+				return item.col== col && item.row== row;
+			})
+			console.log(model.end,col);
+			return model ? model.end.col : 0;
+		},
+		getRowspan (row, col) {
+			let model= this.config.find(function(item) {
+				return item.col== col && item.row== row;
+			})
+			return model ? model.end.row : 0;
+		},
+		isSpan (row, col) {
+
+			return !this.config.length ? true : this.config.some(function(item) {
+				if(col== item.col && row== item.row){
+					return true;
+				}
+				return !(col>= item.col && row>= item.row && col<= item.col+item.end.col-1 && row<= item.row+item.end.row-1);
+			});
+		},
+		getIndexByKey(obj, key) {
+			let index= Object.keys(obj)[key];
+			return index;
 		}
 	},
 	watch: {
