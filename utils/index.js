@@ -295,6 +295,15 @@ exports.mergeCell = function(data, rows) {
                         }
                     });
                     col = j;
+                } else if(j === data.length - 1) {
+                    _array.push({
+                        row : i,
+                        col : col,
+                        end : {
+                            row : i,
+                            col : j
+                        }
+                    });
                 }
             } else {
                 if(j !== 0 && (
