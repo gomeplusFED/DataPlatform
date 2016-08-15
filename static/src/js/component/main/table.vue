@@ -11,9 +11,9 @@
 					<td 
 					v-for="(tableKey, tableCell) in tableItem.rows"
 					v-show="tableColControl[tableKey]"
-					v-if="isSpan(tableIndex, getIndexByKey(tableItem.rows,tableKey))"
-					:colspan="getColspan(tableIndex, getIndexByKey(tableItem.rows,tableKey))"
-					:rowspan="getRowspan(tableIndex, getIndexByKey(tableItem.rows,tableKey))"
+					v-if="isSpan(tableItem.config || [], tableIndex, getIndexByKey(tableItem.rows,tableKey))"
+					:colspan="getColspan(tableItem.config || [], tableIndex, getIndexByKey(tableItem.rows,tableKey))"
+					:rowspan="getRowspan(tableItem.config || [], tableIndex, getIndexByKey(tableItem.rows,tableKey))"
 					>
 					<span @click="tableOperation(tableBody[tableCell], tableBody, tableItem.rows[1])">{{{tableBody[tableCell] | toThousands}}}
 					</span>
@@ -227,7 +227,6 @@ var Table = Vue.extend({
 				this.scrollTop = $(document).scrollTop();
 				this.fetchData(function(data) {
 					_this.tableData = data.modelData;
-					_this.config= data.config || [];
 
 					// 控制第一个表格的列
 					_this.tableData[0].cols.forEach(function(item, index) {
@@ -264,26 +263,29 @@ var Table = Vue.extend({
 		showHelpBymouse(ev) {
 			console.log(ev.target.getAttribute('data'));
 		},
-		getColspan (row, col) {
-			let model= this.config.find(function(item) {
+		getColspan (config, row, col) {
+			let model= config.find(function(item) {
 				return item.col== col && item.row== row;
 			})
 			console.log(model.end,col);
 			return model ? model.end.col : 0;
 		},
-		getRowspan (row, col) {
-			let model= this.config.find(function(item) {
+		getRowspan (config, row, col) {
+			let model= config.find(function(item) {
 				return item.col== col && item.row== row;
 			})
 			return model ? model.end.row : 0;
 		},
-		isSpan (row, col) {
-
-			return !this.config.length ? true : this.config.some(function(item) {
+		isSpan (config, row, col) {
+			row = parseInt(row);
+			col = parseInt(col);
+			return !config.length ? true : config.some(function(item) {
 				if(col== item.col && row== item.row){
 					return true;
 				}
-				return !(col>= item.col && row>= item.row && col<= item.col+item.end.col-1 && row<= item.row+item.end.row-1);
+				let endcol= (item.col+item.end.col-1) < 0 ? 0 : (item.col+item.end.col-1);
+				let endrow= (item.row+item.end.row-1) < 0 ? 0 : (item.row+item.end.row-1);
+				return !(col>= item.col && row>= item.row && col<= endcol && row<= endrow);
 			});
 		},
 		getIndexByKey(obj, key) {
