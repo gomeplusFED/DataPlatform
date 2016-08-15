@@ -8,6 +8,7 @@ var api = require("../../../base/main"),
     help = require("../../../base/help"),
     orm = require("orm"),
     config = require("../../../utils/config.json"),
+    util = require("../../../utils"),
     filter = require("../../../filters/socialAnalysis");
 
 module.exports = (Router) => {
@@ -15,10 +16,20 @@ module.exports = (Router) => {
     //圈子数据总揽
     Router = new api(Router,{
         router : "/socialAnalysis/groupSix",
-        modelName : ["Group"],
+        modelName : ["Statistics"],
         platform : false,
         date_picker : false,
         //date_picker_data: 1,
+        params() {
+            var now = new Date(),
+                date = util.getDate(now);
+
+            return {
+                date : orm.between(date + " 00:00:00", date + " 23:59:59"),
+                key : ["group_num" , "group_persons_num" , "all_topic_num" , "del_group_num"],
+                group_id : "ALL"
+            }
+        },
         filter(data, filter_key, dates) {
             return filter.groupSix(data);
         },
@@ -36,11 +47,9 @@ module.exports = (Router) => {
                 type: "number",
                 help: "入圈用户数去重"
             }, {
-                caption: "累计话题点赞数", // = 新增入圈用户数 / 注册用户数
-                type: "number"
-            }, {
                 caption: "用户入圈率",
-                type: "number"
+                type: "number",
+                help: "累计入圈用户数/注册用户数"
             }, {
                 caption: "累计话题数",
                 type: "number"
@@ -54,7 +63,7 @@ module.exports = (Router) => {
     //圈子数据统计
     Router = new api(Router,{
         router : "/socialAnalysis/groupSeven",
-        modelName : ["Group"],
+        modelName : ["GroupStatistics"],
         platform : false,
         filter(data) {
             return filter.groupSeven(data);
@@ -97,7 +106,7 @@ module.exports = (Router) => {
     //圈子数据趋势
     Router = new api(Router,{
         router : "/socialAnalysis/groupEight",
-        modelName : [ "GroupDataTendency" ],
+        modelName : [ "GroupStatistics" ],
         platform : false,
         // level_select : false,
         // level_select_name : "group_type",
@@ -149,7 +158,7 @@ module.exports = (Router) => {
     //一级圈子类型分布
     Router = new api(Router,{
         router : "/socialAnalysis/groupNine",
-        modelName : [ "GroupDataDistribution", "SocialCategory" ],
+        modelName : [ "GroupCategoryDistribution", "SocialCategory" ],
         platform : false,
         secondParams(query, params, sendData) {
             return {
@@ -165,7 +174,7 @@ module.exports = (Router) => {
                     for(var key of data) {
                         group_type.push(key.id);
                     }
-                    query.group_type = group_type;
+                    query.category_id = group_type;
                     cb(null, query);
                 } else {
                     cb(err);
@@ -213,7 +222,7 @@ module.exports = (Router) => {
     //二级圈子类型分布
     Router = new api(Router,{
         router : "/socialAnalysis/groupTen",
-        modelName : [ "GroupDataDistribution", "SocialCategory" ],
+        modelName : [ "GroupCategoryDistribution", "SocialCategory" ],
         platform : false,
         secondParams(query, params, sendData) {
             return {};
@@ -229,7 +238,7 @@ module.exports = (Router) => {
                     for(var key of data) {
                         group_type.push(key.id);
                     }
-                    query.group_type = group_type;
+                    query.category_id = group_type;
                     cb(null, query);
                 } else {
                     cb(err);
@@ -309,7 +318,7 @@ module.exports = (Router) => {
     //热门圈子排行
     Router = new api(Router , {
         router : "/socialAnalysis/groupEleven",
-        modelName : ["GroupDataTop"],
+        modelName : ["SocialGroupList"],
         platform : false,
         paging : [true],
         // showDayUnit : true,

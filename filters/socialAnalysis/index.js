@@ -187,6 +187,8 @@ module.exports = {
                 six : 0
             };
 
+        console.log(source);
+
         return util.toTable([[newData]], data.rows, data.cols);
     },
     groupSeven(data){
@@ -283,7 +285,7 @@ module.exports = {
         }]
     },
      groupTen(data, query) {
-        var group_type = query.group_type,
+        var group_type = query.category_id,
             source = data.first.data[0],
             orderData = data.second.data[0],
             type = "pie";
