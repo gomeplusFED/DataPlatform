@@ -88,6 +88,8 @@ function connect(app) {
             models.CouponGroupDate = db.define("ads2_coupon_group_date", obj.CouponGroupDate);
             models.GroupownerStatistics = db.define("ads2_soc_groupowner_statistics", obj.GroupownerStatistics);
             models.GroupownerCategoryDistribution = db.define("ads2_soc_groupowner_category_distribution", obj.GroupownerCategoryDistribution);
+            models.GroupownerList = db.define("ads2_soc_groupowner_list", obj.GroupownerList);
+            models.GroupReport = db.define("ads2_soc_group_report", obj.GroupReport);
             models.db1 = db;
             next();
         }
