@@ -44,6 +44,10 @@
 	white-space: nowrap;
 }
 
+.table_con td[rowspan] {
+    vertical-align: middle;
+}
+
 </style>
 <script>
 /*
@@ -285,7 +289,7 @@ var Table = Vue.extend({
 				}
 				let endcol= (item.col+item.end.col-1) < 0 ? 0 : (item.col+item.end.col-1);
 				let endrow= (item.row+item.end.row-1) < 0 ? 0 : (item.row+item.end.row-1);
-				return !(col>= item.col && row>= item.row && col<= endcol && row<= endrow);
+				return !(col>= item.col && row>= item.row && col<= endcol && row<= endrow );
 			});
 		},
 		getIndexByKey(obj, key) {
