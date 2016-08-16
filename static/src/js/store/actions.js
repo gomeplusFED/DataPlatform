@@ -27,4 +27,8 @@ actions.exportConfirm = function(store, params) {
 	store.dispatch('EXPORTCONFIRM', params);
 }
 
+actions.tabCheckbox = function(store, params) {
+	store.dispatch('TABCHECKBOX', params);
+}
+
 module.exports = actions;
