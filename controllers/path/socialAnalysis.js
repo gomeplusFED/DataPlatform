@@ -136,9 +136,9 @@ module.exports = {
                 //    query_api : "/socialAnalysis/topicsFive"
                 //},
                 //{
-                    type : "table",
-                    title : "热门话题排行TOP100",
-                    query_api : "/socialAnalysis/topicsSix"
+                //    type : "table",
+                //    title : "热门话题排行TOP100",
+                //    query_api : "/socialAnalysis/topicsSix"
                 }
             ]
         }
