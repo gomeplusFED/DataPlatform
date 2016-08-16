@@ -4,14 +4,24 @@
  * @fileoverview 店铺分析
  */
 var api = require("../../../base/api"),
+    main = require("../../../base/main"),
     filter = require("../../../filters/achievements");
 
 module.exports = (Router) => {
 
-    Router = new api(Router,{
+    Router = new main(Router,{
         router : "/achievements/shopOne",
         modelName : ["SalesPerfShopKv"],
         platform : false,
+        procedure : [{
+            aggregate : {
+                value : ["date"]
+            },
+            sum : ["xpop_shops_num_add_al", "xpop_shops_num_succ_add_al",
+                "deal_shops_num", "xpop_shops_num_acc_al"],
+            groupBy : ["date"],
+            get : ""
+        }],
         filter_select: [{
             title: '',
             filter_key : 'filter_key',
@@ -29,8 +39,8 @@ module.exports = (Router) => {
                 value: '被访问店铺数'
             }]
         }],
-        filter(data, filter_key, dates) {
-            return filter.shopOne(data, filter_key, dates);
+        filter(data, query, dates, type) {
+            return filter.shopOne(data, query.filter_key, dates);
         }
     });
 
