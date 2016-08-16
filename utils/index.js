@@ -287,14 +287,23 @@ exports.mergeCell = function(data, rows) {
                 if(j !== 0 &&
                     data[j][rows[i]] !== data[j -1][rows[i]]) {
                     _array.push({
-                        row : i,
-                        col : col,
+                        col : i,
+                        row : col,
                         end : {
-                            row : i,
-                            col : j - 1
+                            col : i,
+                            row : j - col
                         }
                     });
                     col = j;
+                } else if(j === data.length - 1) {
+                    _array.push({
+                        col : i,
+                        row : col,
+                        end : {
+                            col : i,
+                            row : j - col + 1
+                        }
+                    });
                 }
             } else {
                 if(j !== 0 && (
@@ -304,11 +313,11 @@ exports.mergeCell = function(data, rows) {
                             data[j][rows[i - 1]] !== data[j -1][rows[i - 1]]
                         )) ) {
                     _array.push({
-                        row : i,
-                        col : col,
+                        col : i,
+                        row : col,
                         end : {
-                            row : i,
-                            col : j - 1
+                            col : i,
+                            row : j - 1
                         }
                     });
                     col = j;

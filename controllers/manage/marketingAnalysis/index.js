@@ -15,6 +15,40 @@ module.exports = (Router) => {
         filter(data, filter_key, dates) {
             return filter.overviewOne(data);
         },
+        flexible_btn: [{
+            content: '筛选',
+            preMethods: ['show_filter'],
+            customMethods: '',
+            max: 10,
+            key : "filter_key",
+            groups: [{
+                "text": "BD活动渠道",
+                "value": 0,
+                options: [{
+                    "text": "微信",
+                    "value": 1
+                },{
+                    "text": "微博",
+                    "value": 2
+                },{
+                    "text": "PC",
+                    "value": 3
+                }]
+            }, {
+                "text": "应用市场",
+                "value": 4,
+                options: [{
+                    "text": "58同城",
+                    "value": 5
+                },{
+                    "text": "智联",
+                    "value": 6
+                },{
+                    "text": "WAP",
+                    "value": 7
+                }]
+            }]
+        }],
         rows : [
             [ 'visitor_cut', 'pv', 'jump_loss_rate', 'h5_conversion_rate']
         ],
