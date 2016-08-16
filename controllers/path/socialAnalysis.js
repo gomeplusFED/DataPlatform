@@ -135,7 +135,7 @@ module.exports = {
                 //    title : "二级圈子类型分布",
                 //    query_api : "/socialAnalysis/topicsFive"
                 //},
-                {
+                //{
                     type : "table",
                     title : "热门话题排行TOP100",
                     query_api : "/socialAnalysis/topicsSix"
