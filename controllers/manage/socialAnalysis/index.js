@@ -25,17 +25,16 @@ module.exports = (Router) => {
                 date = util.getDate(now);
 
             return {
-                date : orm.between(date + " 00:00:00", date + " 23:59:59"),
+                // date : orm.between(date + " 00:00:00", date + " 23:59:59"),
                 key : ["group_num" , "group_persons_num" , "all_topic_num" , "del_group_num"],
-                group_id : "ALL"
             }
         },
         filter(data, filter_key, dates) {
             return filter.groupSix(data);
         },
         rows: [
-            ["one", "two", "three",
-            "four", "five", "six"]
+            ["group_num", "group_persons_num", "three",
+            "all_topic_num", "del_group_num"]
         ],
         cols: [
             [{
@@ -108,6 +107,7 @@ module.exports = (Router) => {
         router : "/socialAnalysis/groupEight",
         modelName : [ "GroupStatistics" ],
         platform : false,
+        // date_picker : false,
         // level_select : false,
         // level_select_name : "group_type",
         // level_select_url : "/api/socialAnalysisCategories",
@@ -115,38 +115,38 @@ module.exports = (Router) => {
             title: "平台选择",
             filter_key : 'type',
             groups: [{
-                key: ['one','two','three'],
+                key: ['APP','WAP','PC'],
                 value: '全部平台'
             },{
-                key: 'one',
+                key: 'APP',
                 value: 'APP'
             },{
-                key: 'two',
+                key: 'WAP',
                 value: 'WAP'
             },{
-                key: 'three',
+                key: 'PC',
                 value: 'PC'
             }]
         },{
             title: '指标',
             filter_key : 'filter_key',
             groups: [{
-                key: 'one',
+                key: 'new_group_num',
                 value: '新增圈子数'
             },{
-                key: 'two',
+                key: 'new_join_group_num',
                 value: '新增加圈次数'
             },{
-                key: 'three',
+                key: 'new_quit_group_num',
                 value: '新增退圈次数'
             },{
-                key: 'four',
+                key: 'new_group_user_num',
                 value: '新增入圈用户数'
             },{
-                key: 'five',
+                key: 'first_group_user_num',
                 value: '首次入圈用户数'
             },{
-                key: 'six',
+                key: 'dau',
                 value: 'DAU'
             }]
         }],

@@ -415,9 +415,11 @@ api.prototype = {
             }
         }
 
-        /*console.log("sql params");
+        /*console.log("===============sql params=============");
         console.log(req.url , modelName);
-        console.log(params);*/
+        console.log(params);
+        console.log(keys);
+        console.log("================== END =====================");*/
         return new Promise((resolve, reject) => {
             var sql = req.models[modelName];
             if (length > 1){
@@ -426,6 +428,10 @@ api.prototype = {
                         sql[key](function () {
                             var args = Array.prototype.slice.call(arguments),
                                 err = args.shift();
+                                /*console.log("==== result ===");
+                                console.log(key);
+                                console.log(args);
+                                console.log("======= END ======")*/
                             err ? reject(err) : resolve(args);
                         });
                     } else if (arrayFn.indexOf(key) >= 0) {
@@ -439,7 +445,12 @@ api.prototype = {
                     }
                 }
             } else {
+                // console.log(req.url);
                 sql[keys[0]](_obj.params, (err, data) => {
+                    /*console.log("==== result ===");
+                    console.log(keys);
+                    console.log(data);
+                    console.log("======= END222 ======")*/
                     err ? reject(err) : resolve(data);
                 });
             }
@@ -447,6 +458,7 @@ api.prototype = {
     }),
     _findDatabaseSql : async((req, sqlObject) => {
         return new Promise((resolve, reject) => {
+            console.log(sqlObject.sql);
             req.models.db1.driver.execQuery(sqlObject.sql, sqlObject.params, (err, data) => {
                 err ? reject(err) : resolve(data);
             });

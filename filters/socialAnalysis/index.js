@@ -179,53 +179,81 @@ module.exports = {
     groupSix(data){
         var source = data.first.data[0],
             newData = {
-                one : 0,
-                two : 0,
+                group_num : 0,
+                group_persons_num : 0,
                 three : 0,
-                four : 0,
-                five : 0,
-                six : 0
+                all_topic_num : 0,
+                del_group_num : 0
             };
-
-        console.log(source);
-
+        for(var key of source){
+            newData[key.key] += key.value;
+        }
         return util.toTable([[newData]], data.rows, data.cols);
     },
     groupSeven(data){
         var source = data.first.data[0],
             newData = [],
             array = ["APP", "WAP", "PC", "总计"];
-
-        for(let key of array) {
-            newData.push({
-                one : key,
-                two : 0,
-                three : 0,
-                four : 0,
-                five : 0,
-                six : 0,
-                seven:0,
-                eight:0
-            });
+    
+        var total = {
+            one : "总计",
+            two : 0,
+            three : 0,
+            four : 0,
+            five : 0,
+            six  : 0,
+            seven:0,
+            eight:0
         }
+
+        for(let key of source) {
+            var obj = {
+                one : key.type,
+                two : key.new_group_num,
+                three : key.new_join_group_num,
+                four : key.new_quit_group_num,
+                five : key.first_group_user_num,
+                six : key.new_group_user_num,
+                seven:0,
+                eight:key.new_group_disband_num
+            };
+
+            newData.push(obj);
+            for(let key in total){
+                if(key == "one"){
+                    continue;
+                }
+                total[key] += obj[key];
+            }
+        }
+
+        newData.push(total);
 
         return util.toTable([newData], data.rows, data.cols);
     },
-     groupEight(data, query, dates) {
+    groupEight(data, query, dates) {
         var source = data.first.data[0],
             type = "line",
             newData = {},
             filter_name = {
-                one : "新增圈子数",
-                two : "新增加圈次数",
-                three : "新增退圈次数",
-                four : "新增入圈用户数",
-                five: "首次入圈用户数",
-                six: "DAU"
+                new_group_num : "新增圈子数",
+                new_join_group_num : "新增加圈次数",
+                new_quit_group_num : "新增退圈次数",
+                new_group_user_num : "新增入圈用户数",
+                first_group_user_num: "首次入圈用户数",
+                dau: "DAU"
             },
             map = {
                 value : filter_name[query.filter_key]
             };
+
+        // console.log(data);
+        console.log(query.type , query.filter_key);
+
+        console.log(source.length);
+        // console.log(dates);
+        // console.log(source);
+
 
         for(let date of dates) {
             newData[date] = {
@@ -233,10 +261,15 @@ module.exports = {
             };
         }
 
-        for(let key of source) {
+       /* for(let key of source){
             var date = util.getDate(key.date);
-            newData[date].value = key.query.filter_key;
-        }
+            console.log(date);
+        }*/
+
+        // for(let key of source) {
+        //     var date = util.getDate(key.date);
+        //     newData[date].value = key.query.filter_key;
+        // }
 
         return [{
             type : type,
