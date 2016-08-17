@@ -5,6 +5,7 @@
 	<m-confirm></m-confirm>
 	<m-export-confirm></m-export-confirm>
 	<m-plataform></m-plataform>
+	<m-tab-checkbox></m-tab-checkbox>
 	<m-main v-for="item in currentPageDefaultData.defaultData" :index="$index" :init-data="initData" :current-data="currentPageDefaultData.defaultData[$index]" :loading.sync="loading"></m-main>
 </template>
 <script>
@@ -21,6 +22,7 @@ var Main = require('./main/main.vue');
 var Confirm = require('./common/confirm.vue');
 var ExportConfirm = require('./common/exportConfirm.vue');
 var Plateform = require('./common/plataform.vue');
+var FilterTabCheckbox = require('./common/filter-tab-checkbox.vue');
 
 var App = Vue.extend({
 	name: 'App',
@@ -49,7 +51,8 @@ var App = Vue.extend({
 		'm-main': Main,
 		'm-confirm': Confirm,
 		'm-export-confirm': ExportConfirm,
-		'm-plataform': Plateform
+		'm-plataform': Plateform,
+		'm-tab-checkbox': FilterTabCheckbox
 	},
 	ready() {
 
