@@ -16,19 +16,19 @@
 						</tr>
 						<tr>
 							<td>
-								<input v-model="channel_type" class="form-control" type="text" name="">
+								<input v-model="model.channel_type" class="form-control" type="text" name="">
 							</td>
 							<td>
-								<input v-model="channel_type_code" class="form-control" type="text" name="">
+								<input v-model="model.channel_type_code" class="form-control" type="text" name="">
 							</td>
 							<td>
-								<input v-model="channel_name" class="form-control" type="text" name="">
+								<input v-model="model.channel_name" class="form-control" type="text" name="">
 							</td>
 							<td>
-								<input v-model="channel_code" class="form-control" type="text" name="">
+								<input v-model="model.channel_code" class="form-control" type="text" name="">
 							</td>
 							<td>
-								<input v-model="channel_ex" class="form-control" type="text" name="">
+								<input v-model="model.channel_ex" class="form-control" type="text" name="">
 							</td>
 						</tr>
 					</table>
@@ -46,12 +46,12 @@
 					</tr>
 					<tr v-for="(index,item) in list">
 						<td>{{index+1}}</td>
-						<td>{{channel_type}}</td>
-						<td>{{channel_type_code}}</td>
-						<td>{{channel_name}}</td>
-						<td>{{channel_code}}</td>
-						<td>{{channel_ex}}</td>
-						<td>{{channel_id}}</td>
+						<td>{{item.channel_type}}</td>
+						<td>{{item.channel_type_code}}</td>
+						<td>{{item.channel_name}}</td>
+						<td>{{item.channel_code}}</td>
+						<td>{{item.channel_ex}}</td>
+						<td>{{item.channel_id}}</td>
 					</tr>
 				</table>
 			</div>
@@ -72,8 +72,17 @@
 		},
 		methods: {
 			addChannel: function() {
-				var temp = JSON.parse(JSON.stringify(this.model));
-				this.list.push(temp);
+				let _this = this;
+				let temp = {
+					channel_type: this.model.channel_type,
+					channel_type_code: this.model.channel_type_code,
+					channel_name: this.model.channel_name,
+					channel_code: this.model.channel_code,
+					channel_ex: this.model.channel_ex
+				};
+				$.post('/custom/channel', temp, function(res) {
+					_this.list.push(temp);
+				})
 			}
 		},
 

@@ -5,7 +5,9 @@
 				<strong>添加活动</strong>
 				<div class="head_group_con clearfix">
 					<button class="btn btn-primary" @click="commit">提交</button>
-					<button class="btn btn-default">取消</button>
+					<button class="btn btn-default">
+						<a href="/#!/activity/list">取消</a>
+					</button>
 				</div>
 			</div>
 			<div class="panel-body">
@@ -92,7 +94,7 @@
 					activity_name: "",
 					activity_start_time: "",
 					activity_end_time: "",
-					activity_info: "",
+					// activity_info: "",
 					activity_channel_relationship: []
 				},
 				channel: {
@@ -102,14 +104,8 @@
 				dateConifg: {
 					index: 0,
 					argvs: {
-						// channel: "",
-						// coupon_type: "",
-						// day_type: 1,
 						// endTime: "2016-08-17",
-						// filter_key: "new_users_num",
 						// startTime: "2016-08-11",
-						// type: "",
-						// ver: ""
 					},
 					pageComponentsData: {
 						
@@ -140,14 +136,26 @@
 					return false;
 				}
 				// post { activity : this.model }
-				$.post('/custom/saveActivity', this.model, function(res) {
+				$.post('/custom/saveActivity', {data: JSON.stringify(this.model)}, function(res) {
 					if (this.code === 200) {
-						
+
 					}else{
 						alert(res.msg);
 					}
 				})
+				// $.ajax({
+				// 	url: '/custom/saveActivity',
+				// 	dataType: "json",
+				// 	data: JSON.stringify(this.model),
+				// 	type: 'POST',
+				// 	success: function(res) {
+				// 		if (this.code === 200) {
 
+				// 		}else{
+				// 			alert(res.msg);
+				// 		}
+				// 	}
+				// })
 			},
 			serError: function(obj) {
 				// validate
@@ -166,7 +174,7 @@
 		route: {
 			data: function() {
 				this.dateConifg.pageComponentsData = {
-					date_picker: {show: true, defaultData: 7}
+					date_picker: {show: true, defaultData: 7, closevalid: true}
 				};
 
 				var id = this.$route.query.id;
@@ -175,6 +183,7 @@
 					$.get('/custom/saveActivity?activity_id='+id, function(res) {
 
 					})
+
 					if (model.activity_start_time && model.activity_end_time) {
 						this.argvs.startTime = activity_start_time;
 						this.argvs.endTime = activity_end_time;

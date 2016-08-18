@@ -101,10 +101,10 @@ module.exports = (Router) => {
     });
 
     Router = Router.post("/custom/saveActivity", (req, res, next) => {
-        const body = req.body,
+        const body = JSON.parse(req.body.data),
             activity = {},
             relationship = body.activity_channel_relationship;
-
+         
         for(let key in body) {
             if(key !== "activity_channel_relationship") {
                 activity[key] = body[key];
