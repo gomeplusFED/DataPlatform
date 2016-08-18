@@ -179,49 +179,69 @@ module.exports = {
     groupSix(data){
         var source = data.first.data[0],
             newData = {
-                one : 0,
-                two : 0,
+                group_num : 0,
+                group_persons_num : 0,
                 three : 0,
-                four : 0,
-                five : 0,
-                six : 0
+                all_topic_num : 0,
+                del_group_num : 0
             };
-
-        console.log(source);
-
+        for(var key of source){
+            newData[key.key] += key.value;
+        }
         return util.toTable([[newData]], data.rows, data.cols);
     },
     groupSeven(data){
         var source = data.first.data[0],
             newData = [],
             array = ["APP", "WAP", "PC", "总计"];
-
-        for(let key of array) {
-            newData.push({
-                one : key,
-                two : 0,
-                three : 0,
-                four : 0,
-                five : 0,
-                six : 0,
-                seven:0,
-                eight:0
-            });
+    
+        var total = {
+            one : "总计",
+            two : 0,
+            three : 0,
+            four : 0,
+            five : 0,
+            six  : 0,
+            seven:0,
+            eight:0
         }
+
+        for(let key of source) {
+            var obj = {
+                one : key.type,
+                two : key.new_group_num,
+                three : key.new_join_group_num,
+                four : key.new_quit_group_num,
+                five : key.first_group_user_num,
+                six : key.new_group_user_num,
+                seven:0,
+                eight:key.new_group_disband_num
+            };
+
+            newData.push(obj);
+            for(let key in total){
+                if(key == "one"){
+                    continue;
+                }
+                total[key] += obj[key];
+            }
+        }
+
+        newData.push(total);
 
         return util.toTable([newData], data.rows, data.cols);
     },
-     groupEight(data, query, dates) {
+    groupEight(data, query, dates) {
         var source = data.first.data[0],
             type = "line",
             newData = {},
             filter_name = {
-                one : "新增圈子数",
-                two : "新增加圈次数",
-                three : "新增退圈次数",
-                four : "新增入圈用户数",
-                five: "首次入圈用户数",
-                six: "DAU"
+                new_group_num : "新增圈子数",
+                new_join_group_num : "新增加圈次数",
+                new_quit_group_num : "新增退圈次数",
+                new_group_user_num : "新增入圈用户数",
+                first_group_user_num: "首次入圈用户数",
+                dau: "DAU"
             },
             map = {
                 value : filter_name[query.filter_key]
@@ -233,9 +253,9 @@ module.exports = {
             };
         }
 
-        for(let key of source) {
+        for(let key of source){
             var date = util.getDate(key.date);
-            newData[date].value = key.query.filter_key;
+            newData[date].value = key[query.filter_key];
         }
 
         return [{
@@ -248,33 +268,46 @@ module.exports = {
             }
         }];
     },
-     groupNine(data, filter_key) {
+    groupNine(data, query , dates) {
         var source = data.first.data[0],
             orderData = data.second.data[0],
             type = "pie",
-            obj = {},
             filter_name = {
-                one : "圈子数",
-                two : "DAU",
-                three : "话题数"
+                one : {
+                    "name" : "圈子数",
+                    "column": "new_group_num"
+                },
+                two : {
+                    "name" : "DAU",
+                    "column": "dau"
+                },
+                three : {
+                    "name" : "话题数",
+                    "column": "new_group_topic_num"
+                },
             },
             map = {
-                value : filter_name[filter_key]
-            },
-            newData = {};
-        for(var key of orderData) {
-            obj[key.id] = {
+                value : filter_name[query.filter_key].name
+            };
+
+        var obj = {},    
+            newData = {},
+            filterColumn = filter_name[query.filter_key].column; //要查询的字段
+
+        // id 为键，名称为值 , 保存所有一级类目的名字和对应的id
+        for(let category of orderData){
+            obj[category.id] = category.name;
+            //初始化各项的值
+            newData[category.name] = {
                 value : 0
             }
         }
-        for(var key of source) {
-            obj[key.group_type].value += key[filter_key];
+        for(let item of source){
+            //品种名称
+            var names = obj[item.category_id];
+            newData[names].value += item[filterColumn]; 
         }
-        for(var key of orderData) {
-            newData[key.name] = {
-                value : obj[key.id].value
-            };
-        }
+
         return [{
             type : type,
             map : map,
@@ -282,44 +315,54 @@ module.exports = {
             config: {
                 stack: false
             }
-        }]
+        }];
     },
-     groupTen(data, query) {
+    groupTen(data, query) {
         var group_type = query.category_id,
             source = data.first.data[0],
             orderData = data.second.data[0],
             type = "pie";
 
-        var obj = {},
-            filter_name = {
-                one : "圈子数",
-                two : "DAU",
-                three : "话题数"
+        var filter_name = {
+                one : {
+                    "name" : "圈子数",
+                    "column": "new_group_num"
+                },
+                two : {
+                    "name" : "DAU",
+                    "column": "dau"
+                },
+                three : {
+                    "name" : "话题数",
+                    "column": "new_group_topic_num"
+                },
             },
+            filterName = filter_name[query.filter_key2].name,
+            filterColumn = filter_name[query.filter_key2].column,
             map = {
-                value : filter_name[query.filter_key2]
-            },
+                value : filterName
+            };
+        var obj = {},
             newData = {};
         var showData = [];
-        for(var key of orderData) {
-            for(var ss=0;ss<group_type.length;ss++){
-                if(group_type[ss] == key.id){
-                    showData.push(key);
-                }
-                obj[key.id] = {
-                    value : 0
+
+        for(let cid of group_type){
+            for(let item of orderData){
+                if(item.id == cid){
+                    obj[cid] = item.name;
+                    newData[item.name] = {
+                        value : 0
+                    }
                 }
             }
         }
 
-        for(var key of source) {
-            obj[key.group_type].value += key[query.filter_key];
+        for(let item of source){
+            if(item.category_id in obj){
+                newData[obj[item.category_id]].value += item[filterColumn];
+            }
         }
-        for(var key of showData) {
-            newData[key.name] = {
-                value : obj[key.id].value
-            };
-        }
+
         return [{
             type : type,
             map : map,
@@ -333,22 +376,38 @@ module.exports = {
         var page = query.page || 1;
         var source = data.first.data[0],
             count = data.first.count > 100 ? 100 : data.first.count,
-            newData = [{
-                "1" : 11,
-                "2" : 11,
-                "3" : 11,
-                "4" : 11,
-                "5" : 11,
-                "6" : 11,
-                "7" : 11,
-                "8" : 11,
-                "9" : `<button class="btn btn-default" target='_blank' url_link='/socialAnalysis/groupDetail' url_fixed_params='{"channel":${page}}'>查看</button>`
-            }];
-
-        for(var i = 0; i < source.length; i++) {
-            source[i].id = (page - 1) * 20 + i +1;
-            newData.push(source[i]);
+            newData = [];
+        /*
+            newData 数据格式
+        {
+            "1" : 0,
+            "group_name" : "",
+            "category_id_2" : 0,
+            "new_group_user_num" : 0,
+            "new_group_topic_num" : 0,
+            "new_group_share_num" : 0,
+            "involve_group_user_num" : 0,
+            "8" : 0,
+            "9" : `<button class="btn btn-default" target='_blank' url_link='/socialAnalysis/groupDetail' url_fixed_params='{"channel":${page}}'>查看</button>`
         }
+        */
+
+        //分类名称
+        var obj = {};
+        for(let item of data.second.data[0]){
+            obj[item.id] = item.name;
+        }
+
+        var i = 1;
+        for(let item of source){
+            item["1"] = (page - 1) * 20 + i;
+            item["8"] = 0;
+            item.category_id_2 = obj[item.category_id_2];
+            item["9"] = `<button class="btn btn-default" target='_blank' url_link='/socialAnalysis/groupDetail' url_fixed_params='{"channel":${33}}'>查看</button>`;
+            newData.push(item);
+            i++;
+        }
+
         return util.toTable([newData], data.rows, data.cols, [count]);
     }
 };

@@ -30,6 +30,13 @@ var state = {
         len: 0,
         apply: 'func',
         cancle: 'func'
+    },
+    tabCheckboxConfig: {
+        show: false,
+        title: "筛选",
+        max: 0,
+        groups: [],
+        apply: 'func'
     }
 }
 
@@ -89,6 +96,10 @@ mutations.EXPORTCONFIRM = function(state, params){
 
 mutations.HIDECONFIRM = function(state){
     state.confirmConfig.show = false;
+}
+
+mutations.TABCHECKBOX = function(state, params) {
+    state.tabCheckboxConfig = params;
 }
 
 module.exports = new Vuex.Store({

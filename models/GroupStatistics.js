@@ -8,6 +8,8 @@
 
 module.exports = {
     id : {type: 'number', key: true}, 
+    category_id : String,
+    // category_id_2 : String,
     new_group_num : Number,  // COMMENT '新增圈子数',
     new_join_group_num : Number,  // COMMENT '新增加圈次数',
     new_quit_group_num : Number,  // COMMENT '新增退圈次数',

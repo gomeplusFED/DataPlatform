@@ -29,7 +29,8 @@ var Btns = Vue.extend({
         return {
             preMethods: {
                 excel_export: true,
-                show_help: true
+                show_help: true,
+                show_filter: true
             },
             hasRequestUrl: null,
             dataTableLen: 0
@@ -118,11 +119,29 @@ var Btns = Vue.extend({
                 }
             })
         },
+        show_filter: function(ev, item){
+            var _this = this;
+            actions.tabCheckbox(store, {
+                show: true,
+                title: '筛选',
+                max: item.max,
+                groups: item.groups,
+                apply: function(val){
+                    Vue.set(_this.resultArgvs, item.key, val.join(','))
+                    this.cancel();
+                },
+                cancel: function(){
+                    actions.tabCheckbox(store, {
+                        show: false
+                    })
+                }
+            });
+        },
     	resolveMethods: function(item, ev){
             if(item.preMethods.length){
                 for(var i = 0;i < item.preMethods.length;i++){
                     if(utils.isInObj(item.preMethods[i], this.preMethods)){
-                        eval('this.'+ item.preMethods[i]+ '(ev)');
+                        eval('this.'+ item.preMethods[i]+ '(ev,item)');
                     }else{
                         console.warn('Warn: "'+ item.preMethods[i] + '" is not a pre-method! From [Vue: btnGroup.vue]');
                     }
