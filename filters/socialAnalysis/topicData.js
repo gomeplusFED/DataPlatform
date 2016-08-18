@@ -257,19 +257,49 @@ module.exports = {
     },
     topicDetailTwo(data){
         var source = data.first.data[0],
+            obj = {},
             newData = [],
             array = ["APP", "WAP", "PC", "总计"];
 
         for(let key of array) {
+            obj[key] = {
+                new_topic_user_num : 0,
+                new_topic_reply_num : 0,
+                new_topic_reply_user_num : 0,
+                delete_topic_reply_num : 0,
+                new_topic_like_num : 0,
+                new_topic_save_num : 0,
+                new_topic_share_num : 0
+            }
+        }
+
+        for(let key of source) {
+            obj[key.type].new_topic_user_num = key.sum_new_topic_user_num;
+            obj[key.type].new_topic_reply_num = key.sum_new_topic_reply_num;
+            obj[key.type].new_topic_reply_user_num = key.sum_new_topic_reply_user_num;
+            obj[key.type].delete_topic_reply_num = key.sum_delete_topic_reply_num;
+            obj[key.type].new_topic_like_num = key.sum_new_topic_like_num;
+            obj[key.type].new_topic_save_num = key.sum_new_topic_save_num;
+            obj[key.type].new_topic_share_num = key.sum_new_topic_share_num;
+            obj["总计"].new_topic_user_num = key.sum_new_topic_user_num;
+            obj["总计"].new_topic_reply_num = key.sum_new_topic_reply_num;
+            obj["总计"].new_topic_reply_user_num = key.sum_new_topic_reply_user_num;
+            obj["总计"].delete_topic_reply_num = key.sum_delete_topic_reply_num;
+            obj["总计"].new_topic_like_num = key.sum_new_topic_like_num;
+            obj["总计"].new_topic_save_num = key.sum_new_topic_save_num;
+            obj["总计"].new_topic_share_num = key.sum_new_topic_share_num;
+        }
+
+        for(let key in obj) {
             newData.push({
-                one : key,
-                two : 0,
-                three : 0,
-                four : 0,
-                five : 0,
-                six : 0,
-                seven:0,
-                eight:0
+                type : key,
+                new_topic_user_num : obj[key].new_topic_user_num,
+                new_topic_reply_num : obj[key].new_topic_reply_num,
+                new_topic_reply_user_num : obj[key].new_topic_reply_user_num,
+                delete_topic_reply_num : obj[key].delete_topic_reply_num,
+                new_topic_like_num : obj[key].new_topic_like_num,
+                new_topic_save_num : obj[key].new_topic_save_num,
+                new_topic_share_num : obj[key].new_topic_share_num
             });
         }
 
@@ -279,16 +309,14 @@ module.exports = {
         var source = data.first.data[0],
             type = "line",
             newData = {},
-
             filter_name = {
-                one : "新增成员数",
-                two : "新增回复数",
-                three : "新增回复人数",
-                four : "删除回复数",
-                five: "新增点赞数",
-                six: "新增收藏数",
-                seven:"新增分享数",
-                eight:"新增收藏数"
+                new_topic_user_num : "新增成员数",
+                new_topic_reply_num : "新增回复数",
+                new_topic_reply_user_num : "新增回复人数",
+                delete_topic_reply_num : "删除回复数",
+                new_topic_like_num: "新增点赞数",
+                new_topic_save_num: "新增收藏数",
+                new_topic_share_num:"新增分享数"
             },
             map = {
                 value : filter_name[query.filter_key]
@@ -302,7 +330,7 @@ module.exports = {
 
         for(let key of source) {
             var date = util.getDate(key.date);
-            newData[date].value = key.query.filter_key;
+            newData[date].value = key["sum_" + query.filter_key];
         }
 
         return [{
@@ -311,7 +339,13 @@ module.exports = {
             data : newData,
             config: { // 配置信息
                 stack: false, // 图的堆叠
-                categoryY : false //柱状图竖着
+                categoryY : false, //柱状图竖着
+                toolBox : {
+                    magicType : {
+                        type: ['line', 'bar']
+                    },
+                    dataView: {readOnly: true}
+                }
             }
         }];
     }

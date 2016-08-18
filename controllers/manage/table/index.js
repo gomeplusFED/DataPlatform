@@ -13,7 +13,6 @@ module.exports = (Router) => {
         router : "/socialAnalysis/tableOne",
         modelName : ["GroupReport", "SocialCategory"],
         paging : [true, false],
-        page : 40,
         platform : false,
         date_picker_data: 1,
         showDayUnit : true,

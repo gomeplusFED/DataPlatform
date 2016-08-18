@@ -8,7 +8,7 @@ module.exports = {
     channel() {
         return {
             name: "渠道管理",
-            path: "/channel/list",
+            path: "/custom/channel",
             view: "/custom/channel",
             display: true,
             defaultData: []
@@ -19,16 +19,11 @@ module.exports = {
             name: "活动管理",
             path: "/activity/list",
             display: true,
-            defaultData: []
-        };
-    },
-    activityAdd() {
-        return {
-            name: "活动管理",
-            path: "/activity/add",
-            view : "/custom/saveActivity",
-            display: true,
-            defaultData: []
+            defaultData: [{
+                type: "table",
+                title: "活动列表",
+                query_api: "/activity/listOne"
+            }]
         };
     }
 };

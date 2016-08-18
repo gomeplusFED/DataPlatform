@@ -63,13 +63,25 @@ module.exports = (Router) => {
     //圈子数据统计
     Router = new api(Router,{
         router : "/socialAnalysis/topicDetailTwo",
-        modelName : ["Group"],
+        modelName : ["SocialTopicDetailStatistics"],
         platform : false,
         filter(data) {
             return filter.topicDetailTwo(data);
         },
+        procedure : [{
+            aggregate : {
+                value : ["type"]
+            },
+            sum : ["new_topic_user_num", "new_topic_reply_num", "new_topic_reply_user_num",
+                "delete_topic_reply_num", "new_topic_like_num", "new_topic_save_num",
+                "new_topic_share_num"],
+            groupBy : ["type"],
+            get : ""
+        }],
         rows: [
-            ["one","two","three","four","five","six","seven","eight"]
+            ["type", "new_topic_user_num", "new_topic_reply_num", "new_topic_reply_user_num",
+                "delete_topic_reply_num", "new_topic_like_num", "new_topic_save_num",
+                "new_topic_share_num"]
         ],
         cols: [
             [{
@@ -77,7 +89,7 @@ module.exports = (Router) => {
                 type: "string"
             }, {
                 caption: "新增成员数",
-                type: "number",
+                type: "number"
             }, {
                 caption: "新增回复数",
                 type: "number"
@@ -92,7 +104,7 @@ module.exports = (Router) => {
                 type: "number"
             }, {
                 caption: "新增收藏数",
-                type: "number",
+                type: "number"
             }, {
                 caption: "新增分享数",
                 type: "number"
@@ -103,49 +115,59 @@ module.exports = (Router) => {
     //圈子数据趋势
     Router = new api(Router,{
         router : "/socialAnalysis/topicDetailThree",
-        modelName : [ "GroupDataTendency" ],
+        modelName : [ "SocialTopicDetailStatistics" ],
         platform : false,
         filter_select : [{
             title: "平台选择",
             filter_key : 'type',
             groups: [{
-                key: ['one','two','three'],
+                key: ['APP','WAP','PC'],
                 value: '全部平台'
             },{
-                key: 'one',
+                key: 'APP',
                 value: 'APP'
             },{
-                key: 'two',
+                key: 'WAP',
                 value: 'WAP'
             },{
-                key: 'three',
+                key: 'PC',
                 value: 'PC'
             }]
         },{
             title: '指标',
             filter_key : 'filter_key',
             groups: [{
-                key: 'one',
+                key: 'new_topic_user_num',
                 value: '新增成员数'
             },{
-                key: 'two',
+                key: 'new_topic_reply_num',
                 value: '新增回复数'
             },{
-                key: 'three',
+                key: 'new_topic_reply_user_num',
                 value: '新增回复人数'
             },{
-                key: 'four',
+                key: 'delete_topic_reply_num',
                 value: '删除回复数'
             },{
-                key: 'five',
+                key: 'new_topic_like_num',
                 value: '新增点赞数'
             },{
-                key: 'six',
+                key: 'new_topic_save_num',
                 value: '新增收藏数'
             },{
-                key: 'seven',
+                key: 'new_topic_share_num',
                 value: '新增分享数'
             }]
+        }],
+        procedure : [{
+            aggregate : {
+                value : ["date"]
+            },
+            sum : ["new_topic_user_num", "new_topic_reply_num", "new_topic_reply_user_num",
+                "delete_topic_reply_num", "new_topic_like_num", "new_topic_save_num",
+                "new_topic_share_num"],
+            groupBy : ["date"],
+            get : ""
         }],
         filter(data, query, dates, type) {
             return filter.topicDetailThree(data, query, dates);

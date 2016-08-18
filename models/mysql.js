@@ -90,9 +90,7 @@ function connect(app) {
             models.GroupownerCategoryDistribution = db.define("ads2_soc_groupowner_category_distribution", obj.GroupownerCategoryDistribution);
             models.GroupownerList = db.define("ads2_soc_groupowner_list", obj.GroupownerList);
             models.GroupReport = db.define("ads2_soc_group_report", obj.GroupReport);
-
             models.Statistics = db.define("tbl_soc_statistics", obj.Statistics);
-
             //8.15 
             models.GroupStatistics = db.define("ads2_soc_group_statistics" , obj.GroupStatistics);
             models.GroupCategoryDistribution = db.define("ads2_soc_group_category_distribution" , obj.GroupCategoryDistribution);
@@ -103,6 +101,9 @@ function connect(app) {
             models.SocialTopicCategoryDistribution = db.define("ads2_soc_topic_category_distribution" , obj.SocialTopicCategoryDistribution);
             models.SocialTopicList = db.define("ads2_soc_topic_list" , obj.SocialTopicList);
             models.SocialTopicDetailStatistics = db.define("ads2_soc_topic_detail_statistics" , obj.SocialTopicDetailStatistics);
+            models.Activity = db.define("activity" , obj.Activity);
+            models.ActivityChannelRelationship = db.define("activity_channel_relationship" , obj.ActivityChannelRelationship);
+            models.Channel = db.define("channel" , obj.Channel);
 
             models.db1 = db;
             next();

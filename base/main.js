@@ -458,7 +458,6 @@ api.prototype = {
     }),
     _findDatabaseSql : async((req, sqlObject) => {
         return new Promise((resolve, reject) => {
-            console.log(sqlObject.sql);
             req.models.db1.driver.execQuery(sqlObject.sql, sqlObject.params, (err, data) => {
                 err ? reject(err) : resolve(data);
             });
