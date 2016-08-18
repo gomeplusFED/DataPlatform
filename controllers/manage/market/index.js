@@ -173,7 +173,7 @@ module.exports = (Router) => {
     });
 
     Router = Router.post("/custom/channel", (req, res, next) => {
-        const body = req.body;
+        const body = JSON.parse(req.body.data);
         req.models.Channel.create(body, (err, data) => {
             if(err) {
                 res.json({

@@ -73,15 +73,10 @@
 		methods: {
 			addChannel: function() {
 				let _this = this;
-				let temp = {
-					channel_type: this.model.channel_type,
-					channel_type_code: this.model.channel_type_code,
-					channel_name: this.model.channel_name,
-					channel_code: this.model.channel_code,
-					channel_ex: this.model.channel_ex
-				};
-				$.post('/custom/channel', temp, function(res) {
-					_this.list.push(temp);
+				$.post('/custom/channel', {data: JSON.stringify(this.model)}, function(res) {
+					if(res.code===200) {
+						_this.list.push(res.data);
+					}
 				})
 			}
 		},

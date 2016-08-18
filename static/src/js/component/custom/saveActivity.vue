@@ -143,20 +143,7 @@
 						alert(res.msg);
 					}
 				})
-				// $.ajax({
-				// 	url: '/custom/saveActivity',
-				// 	dataType: "json",
-				// 	data: JSON.stringify(this.model),
-				// 	type: 'POST',
-				// 	success: function(res) {
-				// 		if (this.code === 200) {
-
-				// 		}else{
-				// 			alert(res.msg);
-				// 		}
-				// 	}
-				// })
-			},
+							},
 			serError: function(obj) {
 				// validate
 				for(var key in obj) {
