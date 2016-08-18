@@ -22,7 +22,7 @@ Object.keys(config).forEach(function(key) {
     app.locals[key] = config[key];
 });
 
-var logger = require("morgan");
+//var logger = require("morgan");
 /* 测试使用 */
 // app.use(logger('dev'));
 
