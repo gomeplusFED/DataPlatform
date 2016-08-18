@@ -144,5 +144,38 @@ module.exports = (Router) => {
         });
     });
 
+    Router = Router.get("/custom/channel", (req, res, next) => {
+        const query = req.query,
+            offset = (query.page - 1) * query.limit,
+            limit = query.limit;
+        req.models.Channel.find({}).offset(offset).limit(limit).run((err, data) => {
+            if(err) {
+                next(err);
+            } else {
+                res.json({
+                    code : 200,
+                    data : data
+                });
+            }
+        });
+    });
+
+    Router = Router.post("/custom/channel", (req, res, next) => {
+        const body = req.body;
+        req.models.Channel.create(body, (err, data) => {
+            if(err) {
+                res.json({
+                    code : 400,
+                    msg : "创建失败"
+                });
+            } else {
+                res.json({
+                    code : 200,
+                    data : data
+                });
+            }
+        });
+    });
+
     return Router;
 };
