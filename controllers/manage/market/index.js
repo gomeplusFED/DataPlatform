@@ -71,19 +71,31 @@ module.exports = (Router) => {
     });
 
     Router = Router.get("/custom/saveActivity", (req, res, next) => {
-        req.models.Activity.find({
+        const params = {
             activity_id : req.query.activity_id
-        }, (err, data) => {
+        };
+        req.models.Activity.find(params, (err, data) => {
             if(err) {
                 res.json({
                     code : 400,
                     msg : "查询失败"
                 });
             } else {
-                res.json({
-                    code : 200,
-                    data : data[0]
+                req.models.ActivityChannelRelationship.find(params, (err, ships) => {
+                    if(err) {
+                        res.json({
+                            code : 400,
+                            msg : "查询失败"
+                        });
+                    } else {
+                        data[0].activity_channel_relationship = ships;
+                        res.json({
+                            code : 200,
+                            data : data[0]
+                        });
+                    }
                 });
+
             }
         });
     });
