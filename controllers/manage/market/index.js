@@ -173,7 +173,7 @@ module.exports = (Router) => {
     });
 
     Router = Router.post("/custom/channel", (req, res, next) => {
-        let body = req.body;
+        let body = JSON.parse(req.body.data);;
         body.channel_id = [body.channel_type_code, body.channel_code, body.channel_ex].join("");
         body.create_time = new Date();
         body.update_time = new Date();
