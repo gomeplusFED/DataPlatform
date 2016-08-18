@@ -115,7 +115,7 @@ module.exports = {
 
         for(key of source) {
             key.operating =
-                `<button class='btn btn-default' url_link='/channelAnalysis/operating' url_fixed_params='{"channel_id": "${key.channel_id}"}'>详细>></button>`
+                `<button class='btn btn-default' url_link='/channelAnalysis/operating' url_fixed_params='{"channel_id": "${key.channel_id}"}'>详细>></button>`;
             key.rate = util.toFixed(key.consume_users_num, key.active_users_num);
         }
 

@@ -6,6 +6,7 @@
 
 module.exports = {
     id : {type: 'number', key: true},
+    category_id : String,
     first_groupOwner_num : Number,
     new_groupOwner_num : Number,
     attention_groupOwner_num : Number,

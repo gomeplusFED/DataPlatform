@@ -10,50 +10,88 @@ module.exports = {
     topicsOne(data){
         var source = data.first.data[0],
             newData = {
-                one : 0,
-                two : 0,
-                three : 0,
-                four : 0,
-                five : 0
+                all_topic_num : 0,
+                all_topic_reply_num : 0,
+                all_praise_num : 0
             };
+
+        for(let key of source) {
+            newData[key.key] += key.sum_value;
+        }
 
         return util.toTable([[newData]], data.rows, data.cols);
     },
     topicsTwo(data){
         var source = data.first.data[0],
             newData = [],
+            obj = {},
             array = ["APP", "WAP", "PC", "总计"];
 
         for(let key of array) {
+            obj[key] = {
+                new_topic_num : 0,
+                delete_topic_num : 0,
+                new_topic_reply_num : 0,
+                new_topic_reply_user_num : 0,
+                delete_topic_reply_num : 0,
+                new_topic_like_num : 0,
+                new_topic_save_num : 0,
+                new_topic_share_num : 0,
+                new_reply_topic_num : 0
+            }
+        }
+
+        for(let key of source) {
+            let type = key.type;
+            obj[type].new_topic_num = key.new_topic_num;
+            obj[type].delete_topic_num = key.delete_topic_num;
+            obj[type].new_topic_reply_num = key.new_topic_reply_num;
+            obj[type].new_topic_reply_user_num = key.new_topic_reply_user_num;
+            obj[type].delete_topic_reply_num = key.delete_topic_reply_num;
+            obj[type].new_topic_like_num = key.new_topic_like_num;
+            obj[type].new_topic_save_num = key.new_topic_save_num;
+            obj[type].new_topic_share_num = key.new_topic_share_num;
+            obj[type].new_reply_topic_num = key.new_reply_topic_num;
+            obj["总计"].new_topic_num += key.new_topic_num;
+            obj["总计"].delete_topic_num += key.delete_topic_num;
+            obj["总计"].new_topic_reply_num += key.new_topic_reply_num;
+            obj["总计"].new_topic_reply_user_num += key.new_topic_reply_user_num;
+            obj["总计"].delete_topic_reply_num += key.delete_topic_reply_num;
+            obj["总计"].new_topic_like_num += key.new_topic_like_num;
+            obj["总计"].new_topic_save_num += key.new_topic_save_num;
+            obj["总计"].new_topic_share_num += key.new_topic_share_num;
+            obj["总计"].new_reply_topic_num += key.new_reply_topic_num;
+        }
+
+        for(let key in obj) {
+            let item = obj[key];
             newData.push({
-                one : key,
-                two : 0,
-                three : 0,
-                four : 0,
-                five : 0,
-                six : 0,
-                seven:0,
-                eight:0,
-                nine:0,
-                ten:0
+                type : key,
+                new_topic_num : item.new_topic_num,
+                delete_topic_num : item.delete_topic_num,
+                new_topic_reply_num : item.new_topic_reply_num,
+                new_topic_reply_user_num : item.new_topic_reply_user_num,
+                delete_topic_reply_num : item.delete_topic_reply_num,
+                rate : util.toFixed(item.new_reply_topic_num, item.new_topic_num),
+                new_topic_like_num : item.new_topic_like_num,
+                new_topic_save_num : item.new_topic_save_num,
+                new_topic_share_num : item.new_topic_share_num
             });
         }
 
         return util.toTable([newData], data.rows, data.cols);
     },
-    topicsThree(data, query, dates) {
-        var filter_key = query.filter_key;
+    topicsThree(data, filter_key, dates) {
         var source = data.first.data[0],
             type = "line",
-            // obj = {},
             filter_name = {
-                "one" : "新增话题数",
-                "two" : "删除话题数",
-                "three" : "新增回复数",
-                "four" : "删除回复数",
-                "five" : "新增点赞数",
-                "six" : "新增收藏数",
-                "seven" : "新增分享数"
+                "new_topic_num" : "新增话题数",
+                "delete_topic_num" : "删除话题数",
+                "new_topic_reply_num" : "新增回复数",
+                "delete_topic_reply_num" : "删除回复数",
+                "new_topic_like_num" : "新增点赞数",
+                "new_topic_save_num" : "新增收藏数",
+                "new_topic_share_num" : "新增分享数"
             },
             map = {
                 value : filter_name[filter_key]
@@ -64,6 +102,11 @@ module.exports = {
             newData[date] = {
                 value : 0
             };
+        }
+
+        for(let key of source) {
+            let date = util.getDate(key.date);
+            newData[date].value = key["sum_" + filter_key];
         }
 
         return [{
@@ -81,11 +124,11 @@ module.exports = {
             type = "pie",
             obj = {},
             filter_name = {
-                one : "话题",
-                two : "回复",
-                three : "点赞",
-                four: "收藏",
-                five: "分享"
+                new_topic_num : "话题",
+                new_topic_reply_num : "回复",
+                new_topic_like_num : "点赞",
+                new_topic_save_num: "收藏",
+                new_topic_share_num: "分享"
             },
             map = {
                 value : filter_name[filter_key]
@@ -97,7 +140,7 @@ module.exports = {
             }
         }
         for(var key of source) {
-            obj[key.group_type].value += key[filter_key];
+            obj[key.group_type].value = key["sum_" + filter_key];
         }
         for(var key of orderData) {
             newData[key.name] = {
@@ -114,42 +157,40 @@ module.exports = {
         }]
     },
     topicsFive(data , query){
-
-        var group_type = query.group_type,
+        var group_type = query.category_id,
             source = data.first.data[0],
             orderData = data.second.data[0],
+            config = {},
             type = "pie";
 
         var obj = {},
             filter_name = {
-                one : "话题",
-                two : "回复",
-                three : "点赞",
-                four : "收藏",
-                five : "分享"
+                new_topic_num : "话题",
+                new_topic_reply_num : "回复",
+                new_topic_like_num : "点赞",
+                new_topic_save_num: "收藏",
+                new_topic_share_num: "分享"
             },
             map = {
                 value : filter_name[query.filter_key2]
             },
             newData = {};
-        var showData = [];
-        for(var key of orderData) {
-            for(var ss=0;ss<group_type.length;ss++){
-                if(group_type[ss] == key.id){
-                    showData.push(key);
-                }
+
+        for(let key of orderData) {
+            config[key.id] = key.name;
+            if(key.pid === query.filter_key) {
                 obj[key.id] = {
                     value : 0
-                }
+                };
             }
         }
 
-        for(var key of source) {
-            obj[key.group_type].value += key[query.filter_key];
+        for(let key of source) {
+            obj[key.category_id].value = key["sum_" + query.filter_key2];
         }
-        for(var key of showData) {
-            newData[key.name] = {
-                value : obj[key.id].value
+        for(let key in obj) {
+            newData[config[key]] = {
+                value : obj[key].value
             };
         }
         return [{
@@ -161,38 +202,56 @@ module.exports = {
             }
         }]
     },
-    topicsSix(data, page) {
+    topicsSix(data, query) {
         var source = data.first.data,
             count = data.first.count[0].count > 100 ? 100 : data.first.count[0].count,
-            page = page || 1,
-            newData = [{
-                "one" : 11,
-                "two" : 11,
-                "three" : 11,
-                "four" : 11,
-                "five" : 11,
-                "six" : 11,
-                "seven" : 121,
-                "eight" : `<button class="btn btn-default" target='_blank' url_link='/socialAnalysis/topicsDetail' url_fixed_params='{"channel":${23}}'>查看</button>`   
-            }];
+            orderSource = data.second.data[0],
+            thirdSource = data.third.data[0],
+            page = query.page || 1,
+            limit = query.limit || 20,
+            category = {},
+            config = {};
 
-        for(var i = 0; i < source.length; i++) {
-           source[i].id = (page - 1) * 20 + i +1;
-            newData.push(source[i]);
+        for(let key of orderSource) {
+            config[key.topic_id] = {};
+            config[key.topic_id][key.key] = key.sum_value;
         }
-        return util.toTable([newData], data.rows, data.cols, [count]);
+
+        for(let key of thirdSource) {
+            category[key.id] = key.name;
+        }
+
+        for(let i = 0; i < source.length; i++) {
+            let key = source[i];
+            let obj = config[key.topic_id] || {};
+            key.top = (page - 1) * limit + i +1;
+            key.topic_reply_num = obj.topic_reply_num || 0;
+            key.topic_praise_num = obj.topic_praise_num || 0;
+            key.rate = "0.00%";
+            key.weiding = 0;
+            key.category_id_1 = category[key.category_id_1];
+            key.category_id_2 = category[key.category_id_2];
+            key.operating =
+                `<button class='btn btn-default' url_link='/socialAnalysis/topicsDetail' url_fixed_params='{"topic_id": "${key.topic_id}"}'>详细>></button>`;
+            source[i] = key;
+        }
+        return util.toTable([source], data.rows, data.cols, [count]);
     },
 
     /* ==============  详情部分  =========== */
     topicDetailOne(data){
         var source = data.first.data[0],
             newData = {
-                one : 0,
-                two : 0,
+                topic_subreply_num : 0,
+                topic_praise_num : 0,
                 three : 0,
                 four : 0,
                 five : 0
             };
+
+        for(let key of source) {
+            newData[key.key] = key.sum_value;
+        }
 
         return util.toTable([[newData]], data.rows, data.cols);
     },
