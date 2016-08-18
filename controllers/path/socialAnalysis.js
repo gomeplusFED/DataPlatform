@@ -153,16 +153,16 @@ module.exports = {
                     type : "table",
                     title : "数据总览",
                     query_api : "/socialAnalysis/topicDetailOne"
-                //},
-                //{
-                //    type : "table",
-                //    title : "数据统计",
-                //    query_api : "/socialAnalysis/topicDetailTwo"
-                //},
-                //{
-                //    type : "chart",
-                //    title : "数据趋势",
-                //    query_api : "/socialAnalysis/topicDetailThree"
+                },
+                {
+                    type : "table",
+                    title : "数据统计",
+                    query_api : "/socialAnalysis/topicDetailTwo"
+                },
+                {
+                    type : "chart",
+                    title : "数据趋势",
+                    query_api : "/socialAnalysis/topicDetailThree"
                 }
             ]
         }
