@@ -10,38 +10,7 @@ module.exports = {
             name : "圈子数据",
             path : "/socialAnalysis/group",
             display : true,
-            defaultData : [
-                /*{
-                    type : "table",
-                    title : "圈子数据总览",
-                    query_api : "/socialAnalysis/groupOne"
-                },
-                {
-                    type : "chart",
-                    title : "圈子数据趋势",
-                    query_api : "/socialAnalysis/groupTwo"
-                },
-                {
-                    type : "chart",
-                    title : "圈子一级新增分布",
-                    query_api : "/socialAnalysis/groupThree"
-                },
-                {
-                    type : "chart",
-                    title : "圈子二级新增分布",
-                    query_api : "/socialAnalysis/groupFour"
-                },
-                {
-                    type : "table",
-                    title : "热门圈子排行TOP100",
-                    query_api : "/socialAnalysis/groupFive"
-                },*/
-                /* {
-                    type : "table",
-                    title:"话题列表",
-                    query_api : "/socialAnalysis/groupNine"
-                },*/
-                //新的修改
+            defaultData : [    
                 {
                     type : "table",
                     title : "圈子数据总览",

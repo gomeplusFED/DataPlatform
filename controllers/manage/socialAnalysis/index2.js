@@ -14,16 +14,21 @@ module.exports = (Router) => {
     
     Router = new api(Router,{
         router : "/socialAnalysis/groupDetailOne",
-        modelName : ["Group"],
+        modelName : ["Statistics"],
         platform : false,
         date_picker : false,
         //date_picker_data: 1,
         filter(data, filter_key, dates) {
             return filter.groupDetailOne(data);
         },
+        params : function(query , params , sendData){
+            return {
+                "group_id" : params.group_id
+            }
+        },
         rows: [
-            ["one", "two", "three",
-            "four", "five"]
+            ["group_person_num", "group_topic_num", "topic_praise_num",
+            "four", "topic_reply_num"]
         ],
         cols: [
             [{
@@ -48,13 +53,21 @@ module.exports = (Router) => {
     //圈子数据统计
     Router = new api(Router,{
         router : "/socialAnalysis/groupDetailTwo",
-        modelName : ["Group"],
+        modelName : ["SocialGroupDetailStatistic"],
         platform : false,
         filter(data) {
             return filter.groupDetailTwo(data);
         },
+        procedure : [{
+             aggregate : {
+                value : ["type"]
+            },
+            sum : ["new_group_user_num","new_group_share_num","new_group_topic_num","delete_group_topic_num","new_group_reply_num","new_group_reply_user_num","delete_group_reply_num","new_group_like_num","new_group_save_num"],
+            groupBy : ["type"],
+            get : ""
+        }],
         rows: [
-            ["one","two","three","four","five","six","seven","eight","nine","ten"]
+            ["type","sum_new_group_user_num","sum_new_group_share_num","sum_new_group_topic_num","sum_delete_group_topic_num","sum_new_group_reply_num","sum_new_group_reply_user_num","sum_delete_group_reply_num","sum_new_group_like_num","sum_new_group_save_num"]
         ],
         cols: [
             [{
@@ -94,50 +107,50 @@ module.exports = (Router) => {
     //圈子数据趋势
     Router = new api(Router,{
         router : "/socialAnalysis/groupDetailThree",
-        modelName : [ "GroupDataTendency" ],
+        modelName : [ "SocialGroupDetailStatistic" ],
         platform : false,
         filter_select : [{
             title: "平台选择",
             filter_key : 'type',
             groups: [{
-                key: ['one','two','three'],
+                key: ['APP','WAP','PC'],
                 value: '全部平台'
             },{
-                key: 'one',
+                key: 'APP',
                 value: 'APP'
             },{
-                key: 'two',
+                key: 'WAP',
                 value: 'WAP'
             },{
-                key: 'three',
+                key: 'PC',
                 value: 'PC'
             }]
         },{
             title: '指标',
             filter_key : 'filter_key',
             groups: [{
-                key: 'one',
+                key: 'new_group_user_num',
                 value: '新增成员数'
             },{
-                key: 'two',
+                key: 'new_group_share_num',
                 value: '新增分享数'
             },{
-                key: 'three',
+                key: 'new_group_topic_num',
                 value: '新增话题数'
             },{
-                key: 'four',
+                key: 'delete_group_topic_num',
                 value: '删除话题数'
             },{
-                key: 'five',
+                key: 'new_group_reply_num',
                 value: '新增回复数'
             },{
-                key: 'six',
+                key: 'delete_group_reply_num',
                 value: '删除回复数'
             },{
-                key: 'seven',
+                key: 'new_group_like_num',
                 value: '新增点赞数'
             },{
-                key: 'eight',
+                key: 'new_group_save_num',
                 value: '新增收藏数'
             }]
         }],
@@ -146,15 +159,23 @@ module.exports = (Router) => {
         }
     });
 
-    //一级圈子类型分布
     Router = new api(Router,{
         router : "/socialAnalysis/groupDetailFour",
-        modelName : [ "GroupDataTop" ],
+        modelName : [ "SocialGroupDetailList" , "Statistics" ],
         platform : false,
+        excel_export : true,
         flexible_btn:[{
              content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ["excel_export"]
         }],
+        secondParams(query , params , sendData){
+            console.log(params);
+
+            return {
+                "group_id" : params.group_id,
+                "key"      : ["all_topic_reply_num" , "all_praise_num"],
+            }
+        }, 
         rows : [
             ["1","2","3","4","5","6","7","8"]
         ],

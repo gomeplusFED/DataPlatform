@@ -318,17 +318,34 @@ module.exports = (Router) => {
     //热门圈子排行
     Router = new api(Router , {
         router : "/socialAnalysis/groupEleven",
-        modelName : ["SocialGroupList" , "SocialCategory"],
+        modelName : ["SocialGroupList" , "SocialCategory" , "Statistics" ],
         platform : false,
-        paging : [true],
-        // showDayUnit : true,
+        paging : [true, false],
+        order  : ["-involve_group_user_num"],
+        excel_export : true,
+        procedure : [false, {
+            find : "params"
+        }, {
+            find : "params"
+        }],
         secondParams(query, params, sendData) {
             return {};
+        },
+        thirdParams(query , params ,sendData){
+            var param = {
+                group_id : [],
+                key : ["group_person_num"]
+            }
+            for(let item of sendData.first.data[0]){
+                param.group_id.push(item.group_id);
+            }
+            // console.log(GroupList);
+            return param;
         },
         search : {
             show : true,
             title : "请输入圈子ID",
-            key : "filter_key"
+            key : "group_id"
         },
         flexible_btn:[{
              content: '<a href="javascript:void(0)">导出</a>',
@@ -343,11 +360,11 @@ module.exports = (Router) => {
                 type : "number"
             }, {
                 caption : "圈子名称",
-                type : "number",
+                type : "string",
                 help : "圈子的名称"
             }, {
                 caption : "二级分类",
-                type : "number"
+                type : "string"
             }, {
                 caption : "新增成员数",
                 type : "number"
