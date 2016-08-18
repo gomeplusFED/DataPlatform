@@ -126,26 +126,29 @@ module.exports = {
     },
      groupDetailFour(data, query) {
 
-        console.log(data);
-
-        var page = query.page || 1;
         var source = data.first.data[0],
+            source2 = data.second.data[0],
             count = data.first.count > 100 ? 100 : data.first.count,
-            newData = [{
-                "1" : 11,
-                "2" : 11,
-                "3" : 11,
-                "4" : 11,
-                "5" : 11,
-                "6" : 11,
-                "7" : 11,
-                "8" : 11
-            }];
+            newData = [];
 
-        for(var i = 0; i < source.length; i++) {
-            source[i].id = (page - 1) * 20 + i +1;
-            newData.push(source[i]);
+        /* 整理 Statistics 取得的数据 */
+        var obj = {};
+        for(let item of source2){
+            if(!obj[item.topic_id]){
+                obj[item.topic_id] = {};
+            }
+            obj[item.topic_id][item.key] = item.value;
         }
+
+        var columnArr = ["5","all_topic_reply_num","topic_praise_num","8"];
+        for(let item of source){
+            for(let key of columnArr){
+                item[key] = DealNumber(obj[item.topic_id][key]);
+            }
+            item.topic_create_time = util.getDate(item.topic_create_time);
+            newData.push(item);
+        }
+
         return util.toTable([newData], data.rows, data.cols, [count]);
     }
 };

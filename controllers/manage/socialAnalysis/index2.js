@@ -6,6 +6,7 @@
 
 var api = require("../../../base/main"),
     help = require("../../../base/help"),
+    util = require("../../../utils"),
     orm = require("orm"),
     config = require("../../../utils/config.json"),
     filter = require("../../../filters/socialAnalysis/index2");
@@ -169,15 +170,25 @@ module.exports = (Router) => {
             preMethods: ["excel_export"]
         }],
         secondParams(query , params , sendData){
-            console.log(params);
+            //Statistics,查询时间，固定为昨天
+            var lastday = new Date(+new Date() - 1000*60*60*24),
+                date = util.getDate(lastday);
+            //Statistics,topic_id数组
+            var source = sendData.first.data[0];
+            var arr = [];
+            for(let item of source){
+                arr.push(item.topic_id);
+            }
 
             return {
+                date : orm.between(date + " 00:00:00", date + " 23:59:59"),
                 "group_id" : params.group_id,
-                "key"      : ["all_topic_reply_num" , "all_praise_num"],
+                "topic_id" : arr,
+                "date" : params.date
             }
         }, 
         rows : [
-            ["1","2","3","4","5","6","7","8"]
+            ["topic_create_time","topic_name","topic_id","publisher_name","5","all_topic_reply_num","topic_praise_num","8"]
         ],
         cols: [
             [{
@@ -188,7 +199,7 @@ module.exports = (Router) => {
                 type: "string"
             },{
                 caption: "话题ID",
-                type: "number"
+                type: "string"
             },{
                 caption: "发布人名称",
                 type: "string"
