@@ -57,15 +57,25 @@
 			</div>
 		</div>
 	</div>
+	<m-loading :loading.sync="loading"></m-loading>
 </template>
 <script>
 	var Vue = require('Vue');
 	var $ = require('jQuery');
 
+	var Loading = require('../common/loading.vue');
+	
 	var channel = Vue.extend({
 		name: 'channel',
+		components: {
+			'm-loading': Loading
+		},
 		data: function() {
 			return {
+				loading: {
+					show: true,
+					noLoaded: 0
+				},
 				model: {},
 				list: []
 			}
@@ -76,11 +86,21 @@
 				$.post('/custom/channel', {data: JSON.stringify(this.model)}, function(res) {
 					if(res.code===200) {
 						_this.list.push(res.data);
+					}else {
+						alert(res.msg)
 					}
 				})
 			}
 		},
-
+		route: {
+			data: function() {
+				let _this = this;
+				$.get('/custom/channel', function(res) {
+					_this.list= res.data;
+					_this.loading.show = false;
+				})
+			}
+		}
 	});
 
 	module.exports = channel;

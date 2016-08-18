@@ -143,16 +143,18 @@
 						alert(res.msg);
 					}
 				})
-							},
+			},
 			serError: function(obj) {
 				// validate
 				for(var key in obj) {
-					if (!obj[key]) {
+					if (!obj[key] && obj[key]!= undefined) {
 						$('label[for=' + key + ']').parent('.form-group').addClass('has-error').on('keyup', function(){
 							$(this).removeClass('has-error');
 							$(this).unbind('keyup');
 						});
-						return false;
+						if($('label[for=' + key + ']').length){
+							return false;
+						}
 					}
 				}
 				return true;
@@ -163,17 +165,17 @@
 				this.dateConifg.pageComponentsData = {
 					date_picker: {show: true, defaultData: 7, closevalid: true}
 				};
-
-				var id = this.$route.query.id;
+				var _this = this;
+				var id = this.$route.query.activity_id;
 				if (id) {
 					// get model by id /custom/saveActivity
 					$.get('/custom/saveActivity?activity_id='+id, function(res) {
-
+						_this.model = res.data
 					})
 
-					if (model.activity_start_time && model.activity_end_time) {
-						this.argvs.startTime = activity_start_time;
-						this.argvs.endTime = activity_end_time;
+					if (_this.model.activity_start_time && _this.model.activity_end_time) {
+						_this.argvs.startTime = activity_start_time;
+						_this.argvs.endTime = activity_end_time;
 					}
 				}
 
