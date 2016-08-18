@@ -177,7 +177,7 @@ module.exports = (Router) => {
         body.channel_id = [body.channel_type_code, body.channel_code, body.channel_ex].join("");
         body.create_time = new Date();
         body.update_time = new Date();
-        req.models.Channel.create(body, (err) => {
+        req.models.Channel.create(body, (err,data) => {
             if(err) {
                 res.json({
                     code : 400,
@@ -185,7 +185,8 @@ module.exports = (Router) => {
                 });
             } else {
                 res.json({
-                    code : 200
+                    code : 200,
+                    data : data
                 });
             }
         });
