@@ -9,6 +9,7 @@
 
 module.exports = {
     id : {type: 'number', key: true},
+    category_id : String,
     new_topic_num : Number,             // COMMENT '新增话题数',
     delete_topic_num : Number,             // COMMENT '删除话题数',
     new_topic_reply_num : Number,             // COMMENT '新增回复数',

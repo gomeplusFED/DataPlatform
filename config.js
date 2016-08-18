@@ -220,6 +220,16 @@ module.exports = {
                 obj.socialAnalysis.topicsDetail()
             ]
         },
+        "29" : {
+            name : "营销管理后台",
+            display : true,
+            className : "fa  fa-laptop fa-fw",
+            href : "#",
+            path : [
+                obj.market.channel(),
+                obj.market.activity()
+            ]
+        },
         "30" : {
             name : "报表导出",
             display : true,

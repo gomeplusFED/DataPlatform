@@ -111,9 +111,9 @@ module.exports = (Router) => {
         router : "/socialAnalysis/hostThree",
         modelName : [ "GroupownerStatistics" ],
         platform : false,
-        //level_select : true,
-        //level_select_name : "group_type",
-        //level_select_url : "/api/socialAnalysisCategories",
+        level_select : true,
+        level_select_name : "category_id",
+        level_select_url : "/api/socialAnalysisCategories",
         procedure : [{
             aggregate : {
                 value : ["date"]

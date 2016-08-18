@@ -5,42 +5,57 @@
  */
 
 var api = require("../../../base/main"),
-    help = require("../../../base/help"),
     orm = require("orm"),
-    config = require("../../../utils/config.json"),
+    util = require("../../../utils"),
     filter = require("../../../filters/socialAnalysis/topicData");
 
 module.exports = (Router) => {
     
     Router = new api(Router,{
         router : "/socialAnalysis/topicDetailOne",
-        modelName : ["Group"],
+        modelName : ["Statistics"],
         platform : false,
         date_picker : false,
-        //date_picker_data: 1,
+        params(query) {
+            let now = new Date().getTime(),
+                date = util.getDate(new Date(now - 24 * 60 * 60 * 1000));
+
+            return {
+                date : date,
+                topic_id : query.topic_id,
+                key : ["topic_subreply_num", "topic_praise_num"]
+            };
+        },
+        procedure : [{
+            aggregate : {
+                value : ["key"]
+            },
+            sum : ["value"],
+            groupBy : ["key"],
+            get : ""
+        }],
         filter(data, filter_key, dates) {
             return filter.topicDetailOne(data);
         },
         rows: [
-            ["one", "two", "three",
-            "four", "five"]
+            ["topic_subreply_num", "topic_praise_num"]
         ],
         cols: [
             [{
-                caption: "话题成员数",
-                type: "number"
-            }, {
+            //    caption: "话题成员数",
+            //    type: "number"
+            //}, {
                 caption: "累计回复次数",
                 type: "number"
-            }, {
-                caption: "话题回复率",
-                type: "number"
+            //}, {
+            //    caption: "话题回复率",
+            //    type: "number"
             }, {
                 caption: "累计点赞数",
                 type: "number"
-            }, {
-                caption: "累计收藏数",
-                type: "number"
+            //}, {
+            //    caption: "累计收藏数",
+            //    type: "number"
             }]
         ]
     });
