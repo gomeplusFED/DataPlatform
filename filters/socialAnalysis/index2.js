@@ -143,7 +143,11 @@ module.exports = {
         var columnArr = ["5","all_topic_reply_num","topic_praise_num","8"];
         for(let item of source){
             for(let key of columnArr){
-                item[key] = DealNumber(obj[item.topic_id][key]);
+                if(!obj[item.topic_id]){
+                    item[key] = 0;
+                }else{
+                    item[key] = DealNumber(obj[item.topic_id][key]);
+                }
             }
             item.topic_create_time = util.getDate(item.topic_create_time);
             newData.push(item);

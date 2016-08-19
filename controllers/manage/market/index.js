@@ -88,11 +88,36 @@ module.exports = (Router) => {
                             msg : "查询失败"
                         });
                     } else {
-                        data[0].activity_channel_relationship = ships;
-                        res.json({
-                            code : 200,
-                            data : data[0]
+
+                        var channel_idArr = [];
+                        for(let item of ships){
+                            channel_idArr.push(item.channel_id);
+                        }
+    
+                        req.models.Channel.find({"channel_id":channel_idArr} , (err , result) => {
+                            if(err){
+                                res.json({
+                                    code : 400,
+                                    msg : "查询失败"
+                                });
+                                return;
+                            }
+                            var obj = {};
+                            for(let item of result){
+                                obj[item.channel_id] = item.channel_name;
+                            }
+
+                            for(let item of ships){
+                                item.channel_name = obj[item.channel_id];
+                            }
+                            data[0].activity_channel_relationship = ships;
+
+                            res.json({
+                                code : 200,
+                                data : data[0]
+                            });
                         });
+                        
                     }
                 });
 
@@ -111,13 +136,14 @@ module.exports = (Router) => {
             }
         }
 
-        req.models.Activity.find(activity, (err, data) => {
+        req.models.Activity.find({activity_id:activity.activity_id}, (err, data) => {
             if(err) {
                 res.json({
                     code : 400,
                     msg : "创建失败"
                 });
             } else if(data.length > 0) {
+                // console.log(data);
                 req.models.ActivityChannelRelationship.create(relationship, (err, data) => {
                     if(err) {
                         res.json({

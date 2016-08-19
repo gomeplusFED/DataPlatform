@@ -184,7 +184,7 @@ module.exports = (Router) => {
                 date : orm.between(date + " 00:00:00", date + " 23:59:59"),
                 "group_id" : params.group_id,
                 "topic_id" : arr,
-                "date" : params.date
+                // "date" : params.date
             }
         }, 
         rows : [

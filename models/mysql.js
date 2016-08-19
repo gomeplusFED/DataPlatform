@@ -105,6 +105,8 @@ function connect(app) {
             models.ActivityChannelRelationship = db.define("activity_channel_relationship" , obj.ActivityChannelRelationship);
             models.Channel = db.define("channel" , obj.Channel);
 
+            models.VideoPlay = db.define("ads2_video_playing" , obj.VideoPlay);
+
             models.db1 = db;
             next();
         }

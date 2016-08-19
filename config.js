@@ -220,6 +220,16 @@ module.exports = {
                 obj.socialAnalysis.topicsDetail()
             ]
         },
+        "18": {
+            name : "视频统计",
+            display : true,
+            className : "fa  fa-laptop fa-fw",
+            href : "#",
+            path : [
+                obj.videoStatis.video(),
+                obj.videoStatis.videoEdition()
+            ]
+        },
         "29" : {
             name : "营销管理后台",
             display : true,
