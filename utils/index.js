@@ -332,3 +332,9 @@ exports.mergeCell = function(data, rows) {
     }
     return merge;
 };
+
+
+exports.isEmptyObject = function(obj){
+    for(var n in obj){ return false };
+    return true;
+}

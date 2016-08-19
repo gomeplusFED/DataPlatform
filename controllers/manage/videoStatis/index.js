@@ -22,18 +22,18 @@ module.exports = (Router) => {
             return params;
         },
         rows : [
-            ["new_play_num" , "active_user" ],
-            ["1" , "2" , "3" , "4" , "5"],
-            ["1" , "2" , "3" , "4" , "5" , "www6" , "7"]
+            /*["new_play_num" , "active_user" ],*/
+            ["health_play" , "port_succ" , "start_frame_succ" , "stop_play_num" , "play_fluent"],
+            ["unhealth_play" , "port_io_failed" , "port_data_failed" , "port_overtime" , "play_failed" , "play_error" , "improper_play"]
         ],
         cols : [
-            [{
+            /*[{
                 caption : "新增播放次数",
                 type    : "number"
             },{
                 caption : "活跃用户数",
                 type    : "number"
-            }],
+            }],*/
 
             [{
                 caption : "健康播放统计",
