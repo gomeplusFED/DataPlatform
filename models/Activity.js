@@ -11,6 +11,6 @@ module.exports = {
     activity_type : String,
     activity_start_time : Date,
     activity_end_time : Date,
-    'create _time' : Date,
+    create_time : Date,
     update_time : Date
 };

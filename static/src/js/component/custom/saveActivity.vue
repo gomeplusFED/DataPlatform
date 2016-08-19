@@ -5,8 +5,8 @@
 				<strong>添加活动</strong>
 				<div class="head_group_con clearfix">
 					<button class="btn btn-primary" @click="commit">提交</button>
-					<button class="btn btn-default">
-						<a href="/#!/activity/list">取消</a>
+					<button class="btn btn-default" v-link="{path: '/activity/list'}">
+						取消
 					</button>
 				</div>
 			</div>
@@ -16,13 +16,13 @@
 						<div class="form-group">
 							<label for="activity_type"  class="col-sm-1 control-label">活动类型:</label>
 							<div class="col-sm-4">
-								<input v-model="model.activity_type" type="text" class="form-control" placeholder="">
+								<input v-model="model.activity_type" :disabled="$route.query.activity_id" type="text" class="form-control" placeholder="">
 							</div>
 						</div>
 						<div class="form-group">
 							<label for="activity_id"  class="col-sm-1 control-label">活动ID:</label>
 							<div class="col-sm-4">
-								<input v-model="model.activity_id" type="text" class="form-control" placeholder="">
+								<input v-model="model.activity_id" :disabled="$route.query.activity_id" type="text" class="form-control" placeholder="">
 							</div>
 						</div>
 						<div class="form-group">
@@ -51,7 +51,7 @@
 							<td>{{channel.channel_id}}</td>
 						</tr>
 					</table>
-					<form class="form-horizontal">
+					<div class="form-horizontal">
 						<div class="form-group">
 							<label for="channel_name"  class="col-sm-1 control-label">渠道名称:</label>
 							<div class="col-sm-4">
@@ -65,7 +65,7 @@
 							</div>
 						</div>
 						<button class='btn btn-primary' @click="addChannel">添加</button>
-					</form>
+					</div>
 				</div>
 				<div class="remark">
 					<label>备注：</label>
@@ -108,7 +108,7 @@
 						// startTime: "2016-08-11",
 					},
 					pageComponentsData: {
-						
+
 					},
 					initData: window.allPageConfig
 				}
@@ -136,23 +136,30 @@
 					return false;
 				}
 				// post { activity : this.model }
-				$.post('/custom/saveActivity', {data: JSON.stringify(this.model)}, function(res) {
-					if (this.code === 200) {
-
-					}else{
+				let activity_id = this.model.activity_id;
+				this.model.activity_channel_relationship.map(function(x) {
+					// delete x.channel_name;
+					x.activity_id = activity_id;
+				})
+				$.post('/custom/saveActivity', {
+					data: JSON.stringify(this.model)
+				}, function(res) {
+					if (res.code === 200) {
+						window.location.href = '/#!/activity/list';
+					} else {
 						alert(res.msg);
 					}
 				})
 			},
 			serError: function(obj) {
 				// validate
-				for(var key in obj) {
-					if (!obj[key] && obj[key]!= undefined) {
-						$('label[for=' + key + ']').parent('.form-group').addClass('has-error').on('keyup', function(){
+				for (var key in obj) {
+					if (!obj[key] && obj[key] != undefined) {
+						$('label[for=' + key + ']').parent('.form-group').addClass('has-error').on('keyup', function() {
 							$(this).removeClass('has-error');
 							$(this).unbind('keyup');
 						});
-						if($('label[for=' + key + ']').length){
+						if ($('label[for=' + key + ']').length) {
 							return false;
 						}
 					}
@@ -163,22 +170,26 @@
 		route: {
 			data: function() {
 				this.dateConifg.pageComponentsData = {
-					date_picker: {show: true, defaultData: 7, closevalid: true}
+					date_picker: {
+						show: true,
+						defaultData: 7
+					}
 				};
 				var _this = this;
 				var id = this.$route.query.activity_id;
 				if (id) {
 					// get model by id /custom/saveActivity
-					$.get('/custom/saveActivity?activity_id='+id, function(res) {
-						_this.model = res.data
+					$.get('/custom/saveActivity?activity_id=' + id, function(res) {
+						if(res.code === 200){
+							_this.model = res.data;
+							if (_this.model.activity_start_time && _this.model.activity_end_time) {
+								_this.dateConifg.argvs.startTime = _this.model.activity_start_time;
+								_this.dateConifg.argvs.endTime = _this.model.activity_end_time;
+							}
+							$('.date_picker>input').attr('disabled', 'disabled');
+						}
 					})
-
-					if (_this.model.activity_start_time && _this.model.activity_end_time) {
-						_this.argvs.startTime = activity_start_time;
-						_this.argvs.endTime = activity_end_time;
-					}
 				}
-
 			}
 		}
 	});
@@ -189,9 +200,11 @@
 	.head_group_con button {
 		margin: 0 5px;
 	}
+	
 	.panel-body {
 		/*padding: 20px;*/
 	}
+	
 	.panel-body>div {
 		margin: 10px 0;
 		border-bottom: 1px solid #eee;

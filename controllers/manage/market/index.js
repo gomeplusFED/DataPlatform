@@ -105,7 +105,6 @@ module.exports = (Router) => {
             activity = {},
             relationship = body.activity_channel_relationship;
          
-         console.log("+==");
         for(let key in body) {
             if(key !== "activity_channel_relationship") {
                 activity[key] = body[key];
