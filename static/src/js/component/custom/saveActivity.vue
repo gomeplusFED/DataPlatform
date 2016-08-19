@@ -137,6 +137,9 @@
 				}
 				// post { activity : this.model }
 				let activity_id = this.model.activity_id;
+				this.model.activity_channel_relationship = this.model.activity_channel_relationship.filter(function(x) {
+					return !x.id;
+				})
 				this.model.activity_channel_relationship.map(function(x) {
 					// delete x.channel_name;
 					x.activity_id = activity_id;
