@@ -71,7 +71,7 @@ module.exports = (Router) => {
     });
 
     Router = Router.get("/custom/saveActivity", (req, res, next) => {
-        const params = {
+        var params = {
             activity_id : req.query.activity_id
         };
         req.models.Activity.find(params, (err, data) => {
@@ -137,18 +137,25 @@ module.exports = (Router) => {
         }
 
         req.models.Activity.find({activity_id:activity.activity_id}, (err, data) => {
+
             if(err) {
                 res.json({
                     code : 400,
-                    msg : "创建失败"
+                    msg : "活动查询失败"
                 });
             } else if(data.length > 0) {
-                // console.log(data);
+                
+                //保存活动名称
+                req.models.Activity.get(activity.activity_id , (err , data) => {
+                    data.activity_name = activity.activity_name;
+                    data.save();
+                });
+
                 req.models.ActivityChannelRelationship.create(relationship, (err, data) => {
                     if(err) {
                         res.json({
                             code : 400,
-                            msg : "创建失败"
+                            msg : "活动关系修改失败"
                         });
                     } else {
                         res.json({
@@ -161,14 +168,14 @@ module.exports = (Router) => {
                     if(err) {
                         res.json({
                             code : 400,
-                            msg : "创建失败"
+                            msg : "活动创建失败"
                         });
                     } else {
                         req.models.ActivityChannelRelationship.create(relationship, (err, data) => {
                             if(err) {
                                 res.json({
                                     code : 400,
-                                    msg : "创建失败"
+                                    msg : "活动关系修改失败2"
                                 });
                             } else {
                                 res.json({

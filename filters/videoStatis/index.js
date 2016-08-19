@@ -9,13 +9,18 @@ var util = require("../../utils"),
 module.exports = {
     
     videoOne(data , query){
-        var source = data.first.data[0];
-        // console.log(source[0]);
+        var source = data.first.data[0],
+            one = [],
+            two = [],
+            three=[];
+        console.log(source.length);
         for(var s in source[0]){
             console.log(s , source[0][s])
         }
 
-        return util.toTable([data , [] , []], data.rows, data.cols);
+
+
+        return util.toTable([source , [] , []], data.rows, data.cols);
     },
 
 

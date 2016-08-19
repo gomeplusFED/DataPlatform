@@ -22,7 +22,7 @@ module.exports = (Router) => {
             return params;
         },
         rows : [
-            ["one" , "two" , "three" , "" , "" , "" , ""],
+            ["new_play_num" , "active_user" ],
             ["1" , "2" , "3" , "4" , "5"],
             ["1" , "2" , "3" , "4" , "5" , "www6" , "7"]
         ],
@@ -32,9 +32,6 @@ module.exports = (Router) => {
                 type    : "number"
             },{
                 caption : "活跃用户数",
-                type    : "number"
-            },{
-                caption : "test",
                 type    : "number"
             }],
 
