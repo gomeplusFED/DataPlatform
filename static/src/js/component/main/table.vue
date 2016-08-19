@@ -1,16 +1,19 @@
 <template>
 	<div :id="'table_'+index" class="table_con table-responsive" v-show="currentData.type.indexOf('table') !== -1">
-		<table v-for="tableItem in tableData" class="table table-bordered table-hover" role="grid" aria-describedby="dataTables_info">
+		<table v-for="(outerTableIndex, tableItem) in tableData" class="table table-bordered table-hover" role="grid" aria-describedby="dataTables_info">
 			<thead>
-				<tr>
+				<tr v-if="outerTableIndex === 0">
 					<th v-for="(captionIndex, captionItem) in tableItem.cols" v-show="tableColControl[captionIndex]">{{captionItem.caption}} <i v-show="captionItem.caption !== ' ' && captionItem.help" style="opacity: 0.8;cursor: pointer;" class="fa fa-question-circle-o" v-tips="{direction: 'top', msg: captionItem.help}"></i></th>
+				</tr>
+				<tr v-else>
+					<th v-for="(captionIndex, captionItem) in tableItem.cols">{{captionItem.caption}} <i v-show="captionItem.caption !== ' ' && captionItem.help" style="opacity: 0.8;cursor: pointer;" class="fa fa-question-circle-o" v-tips="{direction: 'top', msg: captionItem.help}"></i></th>
 				</tr>
 			</thead>
 			<tbody v-if="tableItem.data.length !== 0">
 				<tr v-for="(tableIndex, tableBody) in tableItem.data">
 					<td 
 					v-for="(tableKey, tableCell) in tableItem.rows"
-					v-show="tableColControl[tableKey]"
+					v-show="tableColControl[tableKey] || outerTableIndex !== 0"
 					v-if="isSpan(tableItem.config || [], tableIndex, getIndexByKey(tableItem.rows,tableKey))"
 					:colspan="getColspan(tableItem.config || [], tableIndex, getIndexByKey(tableItem.rows,tableKey))"
 					:rowspan="getRowspan(tableItem.config || [], tableIndex, getIndexByKey(tableItem.rows,tableKey))"
