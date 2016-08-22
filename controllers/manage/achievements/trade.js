@@ -224,7 +224,7 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/achievements/tradeFour",
-        modelName : ["TradeCaty"],
+        modelName : ["DealCaty"],
         platform : false,
         paging : true,
         sum : ["pay_money_amount"],
@@ -234,32 +234,32 @@ module.exports = (Router) => {
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
-        fixedParams(query, filter_key, req, cb) {
-            var _ids = [],
-                category_id = query.category_id || 0;
-            req.models.ConfCategories.find({
-                pid : category_id,
-                status : 1
-            }, (err, data) => {
-                if(err) {
-                    cb(err);
-                } else {
-                    for(var key of data) {
-                        _ids.push(key.id);
-                    }
-                    query.category_id = _ids;
-                    cb(null, query);
-                }
-            });
-        },
-        level_select : true,
-        level_select_name : "category_id",
-        level_select_url : "/api/categories",
+        //fixedParams(query, filter_key, req, cb) {
+        //    var _ids = [],
+        //        category_id = query.category_id || 0;
+        //    req.models.ConfCategories.find({
+        //        pid : category_id,
+        //        status : 1
+        //    }, (err, data) => {
+        //        if(err) {
+        //            cb(err);
+        //        } else {
+        //            for(var key of data) {
+        //                _ids.push(key.id);
+        //            }
+        //            query.category_id = _ids;
+        //            cb(null, query);
+        //        }
+        //    });
+        //},
+        //level_select : true,
+        //level_select_name : "category_id",
+        //level_select_url : "/api/categories",
         filter(data, filter_key, dates, filter_key2, page, params) {
             return filter.tradeFour(data, params);
         },
         rows : [
-            [ 'category_name', 'access_num', 'access_users', 'sales_pro_num',
+            [ 'caty_name', 'access_num', 'access_users', 'sales_pro_num',
             'pay_money_amount', 'pay_money_amount_ratio']
         ],
         cols : [
