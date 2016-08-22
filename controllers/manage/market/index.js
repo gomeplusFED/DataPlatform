@@ -146,7 +146,9 @@ module.exports = (Router) => {
 
                 //保存活动名称
                 req.models.Activity.get(activity.activity_id , (err , data) => {
-                    data.activity_name = activity.activity_name;
+                    for(let key in activity) {
+                        data[key] = activity[key]
+                    }
                     data.update_time = new Date();
                     data.save();
                 });
