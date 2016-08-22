@@ -5,8 +5,7 @@
  */
 
 module.exports = {
-    id : {type: 'number', key: true},
-    activity_id : String,
+    activity_id : {type: 'number', key: true},
     activity_name : String,
     activity_type : String,
     activity_start_time : Date,
