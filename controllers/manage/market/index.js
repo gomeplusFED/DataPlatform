@@ -137,17 +137,17 @@ module.exports = (Router) => {
         }
 
         req.models.Activity.find({activity_id:activity.activity_id}, (err, data) => {
-
             if(err) {
                 res.json({
                     code : 400,
                     msg : "活动查询失败"
                 });
             } else if(data.length > 0) {
-                
+
                 //保存活动名称
                 req.models.Activity.get(activity.activity_id , (err , data) => {
                     data.activity_name = activity.activity_name;
+                    data.update_time = new Date();
                     data.save();
                 });
 
@@ -164,6 +164,7 @@ module.exports = (Router) => {
                     }
                 });
             } else {
+                activity.create_time = new Date();
                 req.models.Activity.create(activity, (err, data) => {
                     if(err) {
                         res.json({
