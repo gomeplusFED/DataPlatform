@@ -194,7 +194,10 @@ module.exports = {
 
         for(var i = 0; i < source.length; i++) {
             source[i].top = (page - 1) * 20 + i +1;
-            source[i].person_topic_num = config[source[i].groupOwner_id].person_topic_num;
+            source[i].person_topic_num = config[source[i].groupOwner_id].person_topic_num || 0;
+            source[i].person_friends_num = config[source[i].groupOwner_id].person_friends_num || 0;
+            source[i].person_funs_num = config[source[i].groupOwner_id].person_funs_num || 0;
+            source[i].person_funs_num = config[source[i].groupOwner_id].person_funs_num || 0;
             source[i].weiding = 0;
             source[i].daren_flag = daren_flag[source[i].daren_flag];
             newData.push(source[i]);

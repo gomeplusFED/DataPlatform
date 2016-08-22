@@ -25,8 +25,8 @@ module.exports = (Router) => {
                 date = util.getDate(now);
 
             return {
-                // date : orm.between(date + " 00:00:00", date + " 23:59:59"),
-                key : ["group_num" , "group_persons_num" , "all_topic_num" , "del_group_num"],
+                date : orm.between(date + " 00:00:00", date + " 23:59:59"),
+                key : ["group_num" , "group_persons_num" , "all_topic_num" , "del_group_num"]
             }
         },
         filter(data, filter_key, dates) {
@@ -326,7 +326,13 @@ module.exports = (Router) => {
         procedure : [false, {
             find : "params"
         }, {
-            find : "params"
+            aggregate : {
+                value : ["group_id", "key"]
+            },
+            sum : ["value"],
+            groupBy : ["group_person_num", "group_topic_num", "topic_praise_num",
+                "topic_collect_num", "topic_reply_num"],
+            get : ""
         }],
         secondParams(query, params, sendData) {
             return {};
@@ -334,8 +340,9 @@ module.exports = (Router) => {
         thirdParams(query , params ,sendData){
             var param = {
                 group_id : [],
-                key : ["group_person_num"]
-            }
+                key : ["group_person_num", "group_topic_num", "topic_praise_num",
+                    "topic_collect_num", "topic_reply_num"]
+            };
             for(let item of sendData.first.data[0]){
                 param.group_id.push(item.group_id);
             }
@@ -351,8 +358,19 @@ module.exports = (Router) => {
              content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ["excel_export"]
         }],
+        filter(data , query , dates , type){
+            return filter.groupEleven(data , query);
+        },
         rows: [
-            [ "1", "group_name", "category_id_2", "new_group_user_num", "new_group_topic_num", "new_group_share_num", "involve_group_user_num", "8", "9" ]
+            [ "top", "group_name", "group_id", "category_id_1",
+                "category_id_2", "creater_flag", "group_owner_id",
+                "group_owner_name", "new_group_user_num", "group_person_num",
+                "new_quit_group_num", "involve_group_user_num",
+                "new_group_topic_num", "group_topic_num", "new_group_share_num",
+                "topic_praise_num", "topic_collect_num", "new_group_topic_like_num",
+                "new_group_topic_save_num", "new_group_topic_share_num",
+                "new_group_topic_reply_num", "new_group_topic_reply_user_num",
+                "topic_reply_num", "operating"]
         ],
         cols: [
             [{
@@ -363,27 +381,71 @@ module.exports = (Router) => {
                 type : "string",
                 help : "圈子的名称"
             }, {
+                caption : "圈子ID",
+                type : "string"
+            }, {
+                caption : "一级分类",
+                type : "string"
+            }, {
                 caption : "二级分类",
+                type : "string"
+            },{
+                caption : "是否达人创建",
+                type : "string"
+            },{
+                caption : "圈主ID",
+                type : "string"
+            },{
+                caption : "圈主名称",
                 type : "string"
             }, {
                 caption : "新增成员数",
                 type : "number"
             }, {
+                caption : "圈子成员数",
+                type : "number"
+            }, {
+                caption : "新增退圈次数",
+                type : "number"
+            },{
+                caption : "参与用户数",
+                type : "number"
+            }, {
                 caption : "新增话题数",
                 type : "number",
                 help : "圈子新增的话题数"
+            },{
+                caption : "累计话题数",
+                type : "number"
             }, {
                 caption : "圈子新增分享数",
                 type : "number"
             }, {
-                caption : "参与用户数",
+                caption : "话题累计点赞数",
                 type : "number"
             }, {
-                caption : "圈子成员数",
+                caption : "话题累计收藏数",
                 type : "number"
             }, {
-                caption : "话题",
-                type : "string"
+                caption : "话题新增点赞数",
+                type : "number"
+            }, {
+                caption : "话题新增收藏数",
+                type : "number"
+            },{
+                caption : "话题新增分享数",
+                type : "number"
+            },{
+                caption : "话题新增回复数",
+                type : "number"
+            },{
+                caption : "话题新增回复人数",
+                type : "number"
+            }, {
+                caption : "累计话题回复次数",
+                type : "number"
+            }, {
+                caption : "话题"
             }]
         ],
         filter_select : [
@@ -404,10 +466,7 @@ module.exports = (Router) => {
                     value: 'PC'
                 }]
             }
-        ],
-        filter(data , query , dates , type){
-            return filter.groupEleven(data , query);
-        }
+        ]
 
     });
 
