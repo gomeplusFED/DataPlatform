@@ -136,13 +136,13 @@ module.exports = (Router) => {
             }
         }
 
-        req.models.Activity.find({activity_id:activity.activity_id}, (err, data) => {
+        req.models.Activity.find({activity_id:activity.activity_id}, (err, activityData) => {
             if(err) {
                 res.json({
                     code : 400,
                     msg : "活动查询失败"
                 });
-            } else if(data.length > 0) {
+            } else if(activityData.length > 0) {
 
                 //保存活动名称
                 req.models.Activity.get(activity.activity_id , (err , data) => {
