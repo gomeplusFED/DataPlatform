@@ -314,19 +314,19 @@ module.exports = (Router) => {
                 caption : "接口IO错误数",
                 type    : "number"
             },{
-                caption : "l-11接口数据错误率 port_io_failed",
+                caption : "接口数据错误率",
                 type    : "string"
             }, {
-                caption : "l-12接口超时率 port_overtime",
+                caption : "接口超时率",
                 type    : "string"
             }, {
-                caption : "l-13播放失败率 play_failed",
+                caption : "播放失败率",
                 type    : "string"
             }, {
-                caption : "l-14视频错误率 play_error",
+                caption : "视频错误率",
                 type    : "string"
             }, {
-                caption : "l-15非正常播放率 improper_play",
+                caption : "非正常播放率",
                 type    : "string"
             }]
         ],
