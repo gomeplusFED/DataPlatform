@@ -314,11 +314,20 @@ exports.mergeCell = function(data, rows) {
                                 row : col,
                                 end : {
                                     col : i,
-                                    row : j - 1
+                                    row : j  - col + 1
                                 }
                             });
                             col = j;
                         }
+                    } else if(j === data.length - 1) {
+                        _array.push({
+                            col : i,
+                            row : col,
+                            end : {
+                                col : i,
+                                row : j - col + 1
+                            }
+                        });
                     } else {
                         col = j;
                     }
@@ -336,7 +345,7 @@ exports.mergeCell = function(data, rows) {
 
 
 exports.isEmptyObject = function(obj){
-    for(var n in obj){ return false };
+    for(var n in obj){ return false }
     return true;
 }
 
