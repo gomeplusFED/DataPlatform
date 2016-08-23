@@ -173,7 +173,7 @@ exports.sort = function(array, first, second) {
 };
 
 exports.toFixed = function(one, two) {
-    return (one / (Math.ceil(two) === 0 ? 1 : two) * 100).toFixed(2) + "%";
+    return (one / (two === 0 ? 1 : two) * 100).toFixed(2) + "%";
 };
 
 exports.percentage = function(one, two) {
@@ -306,22 +306,21 @@ exports.mergeCell = function(data, rows) {
                     });
                 }
             } else {
-                if(j !== 0 && i !==0) {
-                    if(data[j][rows[i - 1]] === data[j - 1][rows[i - 1]]) {
-                        if(data[j][rows[i]] !== data[j - 1][rows[i]]) {
-                            _array.push({
-                                col : i,
-                                row : col,
-                                end : {
-                                    col : i,
-                                    row : j - 1
-                                }
-                            });
-                            col = j;
+                if(j !== 0 && (
+                        (data[j][rows[i]] === data[j -1][rows[i]] &&
+                        data[j][rows[i - 1]] !== data[j -1][rows[i - 1]]) || (
+                            data[j][rows[i]] !== data[j -1][rows[i]] &&
+                            data[j][rows[i - 1]] !== data[j -1][rows[i - 1]]
+                        )) ) {
+                    _array.push({
+                        col : i,
+                        row : col,
+                        end : {
+                            col : i,
+                            row : j - 1
                         }
-                    } else {
-                        col = j;
-                    }
+                    });
+                    col = j;
                 }
             }
         }

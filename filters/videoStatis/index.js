@@ -193,16 +193,14 @@ module.exports = {
 
         for(let item of source){
             item["l-11"] = util.percentage(item.port_io_failed , item.new_play_num) + "%";
+            item["l-12"] = util.percentage(item.port_overtime , item.new_play_num) + "%";
+            item["l-13"] = util.percentage(item.play_failed , item.new_play_num) + "%";
+            item["l-14"] = util.percentage(item.play_error , item.new_play_num) + "%";
+            item["l-15"] = util.percentage(item.improper_play , item.new_play_num) + "%";
         }
-
-
-
-
-
+        
 
         var merge = util.mergeCell(source , ["date" , "sdk_app_type"]);
-
-        console.log(merge);
 
         return util.toTable([source], data.rows, data.cols, {
             count : [count],
