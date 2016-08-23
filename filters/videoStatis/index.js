@@ -200,7 +200,7 @@ module.exports = {
 
 
 
-        var merge = util.mergeCell(source , ["date" , "sdk_app_type"]);
+        var merge = util.mergeCell(source , ["date", "sdk_app_type"]);
 
         console.log(merge);
 

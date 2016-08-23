@@ -306,7 +306,7 @@ exports.mergeCell = function(data, rows) {
                     });
                 }
             } else {
-                if(j !== 0 && i !==0) {
+                if(j !== 0) {
                     if(data[j][rows[i - 1]] === data[j - 1][rows[i - 1]]) {
                         if(data[j][rows[i]] !== data[j - 1][rows[i]]) {
                             _array.push({
@@ -314,29 +314,29 @@ exports.mergeCell = function(data, rows) {
                                 row : col,
                                 end : {
                                     col : i,
-                                    row : j  - col + 1
+                                    row : j  - col
                                 }
                             });
                             col = j;
                         }
-                    } else if(j === data.length - 1) {
-                        _array.push({
-                            col : i,
-                            row : col,
-                            end : {
-                                col : i,
-                                row : j - col + 1
-                            }
-                        });
                     } else {
                         col = j;
                     }
+                } else if(j === data.length - 1){
+                    _array.push({
+                        col : i,
+                        row : col,
+                        end : {
+                            col : i,
+                            row : j - col + 1
+                        }
+                    });
                 }
             }
         }
     }
     for(var key of _array) {
-        if(key.row !== key.end.row || key.col !== key.end.col) {
+        if(key.end.row !== 1 || 1 !== key.end.col) {
             merge.push(key);
         }
     }
