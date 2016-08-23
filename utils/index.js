@@ -306,21 +306,32 @@ exports.mergeCell = function(data, rows) {
                     });
                 }
             } else {
-                if(j !== 0 && (
-                        (data[j][rows[i]] === data[j -1][rows[i]] &&
-                        data[j][rows[i - 1]] !== data[j -1][rows[i - 1]]) || (
-                            data[j][rows[i]] !== data[j -1][rows[i]] &&
-                            data[j][rows[i - 1]] !== data[j -1][rows[i - 1]]
-                        )) ) {
-                    _array.push({
-                        col : i,
-                        row : col,
-                        end : {
-                            col : i,
-                            row : j - 1
+
+                if(j !== 0 && i !==0) {
+                    if(data[j][rows[i - 1]] === data[j - 1][rows[i - 1]]) {
+                        if(data[j][rows[i]] !== data[j - 1][rows[i]]) {
+                            _array.push({
+                                col : i,
+                                row : col,
+                                end : {
+                                    col : i,
+                                    row : j  - col + 1
+                                }
+                            });
+                            col = j;
                         }
-                    });
-                    col = j;
+                    } else if(j === data.length - 1) {
+                        _array.push({
+                            col : i,
+                            row : col,
+                            end : {
+                                col : i,
+                                row : j - col + 1
+                            }
+                        });
+                    } else {
+                        col = j;
+                    }
                 }
             }
         }
@@ -335,7 +346,7 @@ exports.mergeCell = function(data, rows) {
 
 
 exports.isEmptyObject = function(obj){
-    for(var n in obj){ return false };
+    for(var n in obj){ return false }
     return true;
 }
 
