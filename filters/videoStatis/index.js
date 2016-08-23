@@ -177,7 +177,36 @@ module.exports = {
         for(let item of source){
             item.date = util.getDate(item.date);
         }
-        // console.log(source);
         return util.toTable([source], data.rows, data.cols);
+    },
+
+    videoFour(data , query , params){
+        var source = data.first.data[0],
+            count  = data.first.count;
+
+        /* 整理数据 */
+        var total_new_play_num = 0;
+        for(let item of source){
+            item.date = util.getDate(item.date);
+            total_new_play_num += item.new_play_num;
+        }
+
+        for(let item of source){
+            item["l-11"] = util.percentage(item.port_io_failed , item.new_play_num) + "%";
+        }
+
+
+
+
+
+
+        var merge = util.mergeCell(source , ["date" , "sdk_app_type"]);
+
+        console.log(merge);
+
+        return util.toTable([source], data.rows, data.cols, {
+            count : [count],
+            config : [merge]
+        });
     }
 };

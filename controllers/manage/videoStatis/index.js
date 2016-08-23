@@ -22,7 +22,7 @@ module.exports = (Router) => {
             // query.startTime = "2016-08-9";
 
             params.sdk_app_type = "ALL";
-            params.version = "ALL";
+            params.ver = "ALL";
             params.date = util.beforeDate(query.startTime , 3);
             //保存下来传递给过滤函数使用
             query.date = params.date;
@@ -97,7 +97,7 @@ module.exports = (Router) => {
         },
         params : function(query , params){
             // params.date.from = "2016-08-07";
-            params.version = "ALL";
+            params.ver = "ALL";
             return params;
         },
         filter_select : [
@@ -151,7 +151,6 @@ module.exports = (Router) => {
 
     });
 
- 
     
     Router = new api(Router , {
         router : "/videoStatis/videoThree",
@@ -164,7 +163,7 @@ module.exports = (Router) => {
             preMethods: ["excel_export"]
         }],
         params : function(query , params , sendData){
-            params.version = "ALL";
+            params.ver = "ALL";
             return params;
         },
         rows : [
@@ -252,7 +251,110 @@ module.exports = (Router) => {
         }
     });
 
-
+    Router = new api(Router , {
+        router : "/videoStatis/videoFour",
+        modelName : ["VideoPlay"],
+        platform : false,
+        // version  : true,
+        excel_export : true,
+        date_picker_data : 1,
+        flexible_btn:[{
+             content: '<a href="javascript:void(0)">导出</a>',
+            preMethods: ["excel_export"]
+        }],
+        params : function(query , params , sendData){
+            return params;
+        },
+        rows : [
+            ["date" ,
+             "sdk_app_type" ,
+            "ver" ,
+            "new_play_num" , 
+            "5" ,
+            "port_succ" , 
+            "start_frame_succ" , 
+            "stop_play_num" , 
+            "play_fluent" ,
+            "port_io_failed" , 
+            "l-11" , 
+            "l-12" ,
+            "l-13" ,
+            "l-14" ,
+            "l-15"]
+        ],
+        cols : [
+            [{
+                caption : "日期",
+                type    : "string"
+            }, {
+                caption : "SDK类型",
+                type    : "string"
+            }, {
+                caption : "版本号",
+                type    : "number"
+            }, {
+                caption : "播放次数",
+                type    : "number"
+            }, {
+                caption : "占比",
+                type    : "number"
+            },{
+                caption : "接口成功数",
+                type    : "number"
+            }, {
+                caption : "首帧成功数",
+                type    : "number"
+            }, {
+                caption : "卡顿播放次数",
+                type    : "number"
+            }, {
+                caption : "播放流畅数",
+                type    : "number"
+            }, {
+                caption : "接口IO错误数",
+                type    : "number"
+            },{
+                caption : "l-11接口数据错误率 port_io_failed",
+                type    : "string"
+            }, {
+                caption : "l-12接口超时率 port_overtime",
+                type    : "string"
+            }, {
+                caption : "l-13播放失败率 play_failed",
+                type    : "string"
+            }, {
+                caption : "l-14视频错误率 play_error",
+                type    : "string"
+            }, {
+                caption : "l-15非正常播放率 improper_play",
+                type    : "string"
+            }]
+        ],
+        filter_select : [
+            {
+                title : "指标",
+                filter_key : "filter_key",
+                groups : [
+                    {
+                        key : "one",
+                        value:"健康播放数"
+                    },{
+                        key : "ios" ,
+                        value: "健康播放概率"
+                    },{
+                        key : "android",
+                        value: "错误播放数"
+                    },{
+                        key : "h5_custom",
+                        value: "错误播放概率"
+                    }
+                ]
+            }
+        ],
+        filter (data , query , params){
+            return filter.videoFour(data , query , params);
+        }
+    });
     
 
     return Router;
