@@ -406,7 +406,7 @@ module.exports = (Router) => {
             return {
                 topic_id : topic_ids,
                 date : orm.between(date + " 00:00:00", date + " 23:59:59"),
-                key : ["topic_reply_num", "topic_praise_num"]
+                key : ["topic_reply_num", "topic_praise_num", "topic_subreply_num", "topic_collect_num"]
             };
         },
         thirdParams(query, params, data) {
@@ -490,8 +490,9 @@ module.exports = (Router) => {
             [ "top", "topic_name", "topic_id", "group_name", "category_id_1",
                 "category_id_2", "PV", "UV", "publisher_id", "publisher_name",
                 "new_topic_reply_num", "new_topic_reply_user_num",
-                "rate", "topic_reply_num", "weiding", "weiding", "new_topic_like_num",
-                "topic_praise_num", "new_topic_save_num", "weiding", "new_topic_share_num",
+                //"rate",
+                "topic_reply_num", "topic_reply_user_num", "topic_rate", "new_topic_like_num",
+                "topic_praise_num", "new_topic_save_num", "topic_collect_num", "new_topic_share_num",
                 "operating"]
         ],
         cols: [
@@ -532,10 +533,10 @@ module.exports = (Router) => {
             }, {
                 caption: "新增回复人数",
                 type: 'number'
-            }, {
-                caption: "回复率",
-                type: 'string',
-                help : "回复用户数/点击用户数"
+            //}, {
+            //    caption: "回复率",
+            //    type: 'string',
+            //    help : "回复用户数/点击用户数"
             }, {
                 caption: "累计回复次数",
                 type: 'number'

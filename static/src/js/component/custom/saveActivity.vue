@@ -69,7 +69,7 @@
 				</div>
 				<div class="remark">
 					<label>备注：</label>
-					<textarea rows="3" name="" v-model="model.activity_info" class="form-control" ></textarea>
+					<textarea rows="3" name="" v-model="model.desc" class="form-control" ></textarea>
 				</div>
 			</div>
 		</div>

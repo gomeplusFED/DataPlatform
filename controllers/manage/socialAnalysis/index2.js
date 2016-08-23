@@ -29,7 +29,7 @@ module.exports = (Router) => {
         },
         rows: [
             ["group_person_num", "group_topic_num", "topic_praise_num",
-            "four", "topic_reply_num"]
+            "topic_collect_num", "topic_reply_num"]
         ],
         cols: [
             [{
@@ -184,11 +184,12 @@ module.exports = (Router) => {
                 date : orm.between(date + " 00:00:00", date + " 23:59:59"),
                 "group_id" : params.group_id,
                 "topic_id" : arr,
-                // "date" : params.date
+                "key" : ["topic_reply_user_num", "topic_collect_num"]
             }
         }, 
         rows : [
-            ["topic_create_time","topic_name","topic_id","publisher_name","5","all_topic_reply_num","topic_praise_num","8"]
+            ["topic_create_time","topic_name","topic_id","publisher_name","topic_reply_user_num",
+                "all_topic_reply_num","topic_praise_num","topic_collect_num"]
         ],
         cols: [
             [{

@@ -376,34 +376,18 @@ module.exports = {
         var page = query.page || 1;
         var source = data.first.data[0],
             count = data.first.count > 100 ? 100 : data.first.count,
-            newData = [];
-        /*
-            newData 数据格式
-        {
-            "1" : 0,
-            "group_name" : "",
-            "category_id_2" : 0,
-            "new_group_user_num" : 0,
-            "new_group_topic_num" : 0,
-            "new_group_share_num" : 0,
-            "involve_group_user_num" : 0,
-            "8" : 0,
-            "9" : `<button class="btn btn-default" target='_blank' url_link='/socialAnalysis/groupDetail' url_fixed_params='{"channel":${page}}'>查看</button>`
+            newData = [],
+            config = {
+                "0" : "不是",
+                "1" : "是"
+            },
+            ThirdData = data.third.data;
+
+        for(let key of ThirdData) {
+            let obj = {};
+            obj[key.key] = key.sum_value;
+            config[key.group_id] = obj;
         }
-        */
-
-        var ThirdData = data.third.data;
-
-        //group_id : value
-        //可能会对应多条话题数据
-        var obj3 = {};
-        for(let item of ThirdData){
-            if(!obj3[item.group_id]){
-                obj3[item.group_id] = 0;
-            }
-            obj3[item.group_id] += item.value;
-        }
-
         //分类名称
         var obj = {};
         for(let item of data.second.data){
@@ -412,10 +396,16 @@ module.exports = {
 
         var i = 1;
         for(let item of source){
-            item["1"] = (page - 1) * 20 + i;
-            item["8"] = obj3[item.group_id];
+            item.top = (page - 1) * 20 + i;
+            item.group_person_num = config[item.group_id].group_person_num || 0;
+            item.group_topic_num = config[item.group_id].group_topic_num || 0;
+            item.topic_praise_num = config[item.group_id].topic_praise_num || 0;
+            item.topic_collect_num = config[item.group_id].topic_collect_num || 0;
+            item.topic_reply_num = config[item.group_id].topic_reply_num || 0;
+            item.category_id_1 = obj[item.category_id_1];
             item.category_id_2 = obj[item.category_id_2];
-            item["9"] = `<button class="btn btn-default" url_link='/socialAnalysis/groupDetail' url_fixed_params='{"group_id":"${item.group_id}"}'>查看</button>`;
+            item.creater_flag = config[item.creater_flag];
+            item.operating = `<button class="btn btn-default" url_link='/socialAnalysis/groupDetail' url_fixed_params='{"group_id":"${item.group_id}"}'>详情</button>`;
             newData.push(item);
             i++;
         }

@@ -21,7 +21,7 @@ module.exports = {
                 "group_person_num" : 0,
                 "group_topic_num" : 0,
                 "topic_praise_num" : 0,
-                four : 0,   //累计话题收藏数
+                "topic_collect_num" : 0,   //累计话题收藏数
                 "topic_reply_num" : 0 
             };
 
@@ -30,6 +30,7 @@ module.exports = {
             newData.group_topic_num +=  DealNumber(item.group_topic_num);
             newData.topic_praise_num += DealNumber(item.topic_praise_num);
             newData.topic_reply_num  += DealNumber(item.topic_reply_num);
+            newData.topic_collect_num  += DealNumber(item.topic_collect_num);
         }
 
         return util.toTable([[newData]], data.rows, data.cols);
@@ -140,7 +141,7 @@ module.exports = {
             obj[item.topic_id][item.key] = item.value;
         }
 
-        var columnArr = ["5","all_topic_reply_num","topic_praise_num","8"];
+        var columnArr = ["topic_reply_user_num","all_topic_reply_num","topic_praise_num","topic_collect_num"];
         for(let item of source){
             for(let key of columnArr){
                 if(!obj[item.topic_id]){
