@@ -53,6 +53,17 @@ router.map({
 	},
 	'/error': {
 		component: Erro
+	},
+	'/custom': {
+		component: require('./component/custom/index.vue'),
+		subRoutes: {
+			'/saveActivity': {
+				component: require('./component/custom/saveActivity.vue')
+			},
+			'/channel': {
+				component: require('./component/custom/channel.vue')
+			}
+		}
 	}
 });
 

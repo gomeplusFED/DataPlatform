@@ -19,5 +19,7 @@ module.exports = {
     stay_time_avg: Number,
     entry_page_cut: Number,
     exit_page_cut: Number,
-    exit_rate: Number
+    exit_rate: Number,
+    ver : String,
+    channel : String
 };

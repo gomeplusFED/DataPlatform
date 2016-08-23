@@ -8,16 +8,138 @@ var util = require("../../utils"),
 
 module.exports = {
     dataOverviewAllOne(data, type) {
-        var source = data.data,
-            orderData = data.orderData,
+        var source = data.first.data[0],
+            orderData = data.second.data[0],
             newData = [],
             now = new Date(),
+            _type = 'android，ios，app',
+            _rows = [
+                [
+                    ['name', 'open_total', 'open_user_total', 'open_user_avg', 'new_user',
+                        'new_user_rate', 'new_account', 'register_rate', 'stay_time_avg', 'using_time_avg',
+                        "pv2", "create"]
+                ],
+                [
+                    ['name', 'uv', 'pv', 'ip_count', 'jump_loss_rate',
+                        'new_user', 'new_user_rate_two', 'new_account', 'register_rate', 'visit_time_avg',
+                        "pv1", "create"]
+                ]
+            ],
+            _cols = [
+                [
+                    [{
+                        caption: ' ',
+                        type: 'string'
+                    }, {
+                        caption: '启动次数',
+                        type: 'number',
+                        help : "开启app的次数"
+                    },  {
+                        caption: '启动用户',
+                        type: 'number',
+                        help : "开启app的人数"
+                    },  {
+                        caption: '人均启动次数',
+                        type: 'string',
+                        help : "启动次数/启动人数"
+                    }, {
+                        caption: '新用户',
+                        type: 'number',
+                        help : "新增激活用户"
+                    }, {
+                        caption: '新用户占比',
+                        type: 'string',
+                        help : "新用户/启动用户"
+                    }, {
+                        caption: '新增账户',
+                        type: 'number',
+                        help : "新注册用户数"
+                    }, {
+                        caption: '注册转化率',
+                        type: 'string',
+                        help : "新增账户/新用户"
+                    }, {
+                        caption: '每人使用时长(s)',
+                        type: 'string',
+                        help : "总时长/启动用户数"
+                    }, {
+                        caption: '每次使用时长(s)',
+                        type: 'string',
+                        help : "总时长/启动次数"
+                    }, {
+                        caption: '累计启动用户数',
+                        type: 'string'
+                    }, {
+                        caption: '累计注册用户数',
+                        type: 'string'
+                    }]
+                ],[
+                    [{
+                        caption: ' ',
+                        type: 'string'
+                    }, {
+                        caption: '访客数',
+                        type: 'number',
+                        help : "访问人数"
+                    },  {
+                        caption: '浏览量',
+                        type: 'number',
+                        help : "浏览次数"
+                    },  {
+                        caption: 'IP数',
+                        type: 'number',
+                        help : "访问IP数"
+                    }, {
+                        caption: '跳失率',
+                        type: 'number',
+                        help : "访客中访问一个页面用户占比"
+                    }, {
+                        caption: '新用户',
+                        type: 'number',
+                        help : "新访客"
+                    }, {
+                        caption: '新用户占比',
+                        type: 'string',
+                        help : "新用户/访客数"
+                    }, {
+                        caption: '新增账户',
+                        type: 'number',
+                        help : "新注册用户数"
+                    }, {
+                        caption: '注册转化率',
+                        type: 'string',
+                        help : "新增账户/新用户"
+                    }, {
+                        caption: '平均访问时长(s)',
+                        type: 'string',
+                        help : "总时长/访客数"
+                    }, {
+                        caption: '累计访问用户数',
+                        type: 'string'
+                    }, {
+                        caption: '累计注册用户数',
+                        type: 'string'
+                    }]
+                ]
+            ],
+            rows = [],
+            cols = [],
             zdate = util.getDate(new Date(now.getTime() - 24 * 60 * 60 * 1000)),
             qdate = util.getDate(new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000)),
             dates = [ zdate, qdate ];
+
+        if(_type.indexOf(type) >= 0) {
+            rows = _rows[0];
+            cols = _cols[0];
+        } else {
+            rows = _rows[1];
+            cols = _cols[1];
+        }
+
         var obj = {
                 name : '对比效果'
             };
+
         for(var date of dates) {
             var zObj = {
                 name : "",
@@ -55,11 +177,8 @@ module.exports = {
                 }
             }
             for(var key of source) {
-                var _date = util.getDate(key.date);
-                if(type && key.type === type) {
-                    continue;
-                }
-                if(date === _date) {
+                if(new Date(date + " 00:00:00").getTime() < key.date.getTime() &&
+                    key.date.getTime() < new Date(date + " 23:59:59")) {
                     zObj.open_total += key.open_total;
                     zObj.open_user_total += key.open_user_total;
                     zObj.new_user += key.new_user;
@@ -182,37 +301,72 @@ module.exports = {
             );
 
         newData.push(obj);
-        return util.toTable([newData], data.rows, data.cols);
+        return util.toTable([newData], rows, cols);
     },
-    dataOverviewAllTwo(data, filter_key, filter_name, dates) {
-        var source = data.data,
+    dataOverviewAllTwo(data, query, dates) {
+        var source = data.first.data[0],
             newData = {},
+            filter_key = query.type,
             type = "line",
-            map = {
-                value : filter_name[filter_key]
-            };
+            _type = "android，ios，app",
+            _filter_name = [
+                {
+                    open_user_total : "启动用户",
+                    open_total : "启动次数",
+                    new_user : "新用户",
+                    new_account : "新增账户",
+                    register_rate : "注册转化率(%)",
+                    using_time_avg : "每次使用时长(s)"
+                },
+                {
+                    uv : "访客数",
+                    pv : "浏览量",
+                    ip_count : "IP数",
+                    new_user : "新用户",
+                    new_account : "新增账户",
+                    visit_time_avg : "平均访问时长(s)",
+                    register_rate : "注册转化率(%)"
+                }
+            ],
+            map = {};
+
+        if(_type.indexOf(query.type || 'ios') >= 0) {
+            map = _filter_name[0];
+        } else {
+            map = _filter_name[1];
+        }
+
         for(var date of dates) {
             newData[date] = {
-                value : 0
+                open_user_total : 0,
+                open_total : 0,
+                new_user : 0,
+                new_account : 0,
+                register_rate : 0,
+                uv : 0,
+                pv : 0,
+                ip_count : 0,
+                visit_time_avg : 0,
+                using_time_avg : 0
             };
         }
         for(var key of source) {
-            if(filter_key === "register_rate") {
-                if(newData[util.getDate(key.date)]) {
-                    newData[util.getDate(key.date)].value += key.new_account /
-                        (key.new_user === 0 ? 1 : key.new_user) * 100;
-                }
-            } else {
-                if(newData[util.getDate(key.date)]) {
-                    newData[util.getDate(key.date)].value += key[filter_key];
-                }
-            }
+            let date = util.getDate(key.date);
+            newData[date].register_rate += key.new_account /
+                (key.new_user === 0 ? 1 : key.new_user) * 100;
+            newData[date].open_user_total += key.open_user_total;
+            newData[date].open_total += key.open_total;
+            newData[date].new_user += key.new_user;
+            newData[date].new_account += key.new_account;
+            newData[date].uv += key.uv;
+            newData[date].pv += key.pv;
+            newData[date].ip_count += key.ip_count;
+            newData[date].visit_time_avg += key.visit_time_avg;
+            newData[date].using_time_avg += key.using_time_avg;
         }
-        if(filter_key === "register_rate") {
-            Object.keys(newData).forEach((key) => {
-                newData[key].value = newData[key].value.toFixed(2);
-            });
-        }
+        Object.keys(newData).forEach((key) => {
+            newData[key].value = newData[key].register_rate.toFixed(2);
+        });
         return [{
             type : type,
             map : map,
@@ -222,26 +376,105 @@ module.exports = {
             }
         }];
     },
-    dataOverviewAllThree(data) {
-        var source = data.data,
-            sum = data.dataSum;
+    dataOverviewAllThree(data, type) {
+        var source = data.first.data[0],
+            sum = data.first.sum[0],
+            _type = "android，ios，app",
+            _rows = [
+                [
+                    [ "id", "region", "open_user_total", "open_total", "open_total_rate" ]
+                ],[
+                    [ "id", "region", "uv", "pv", "pv_rate" ]
+                ]
+            ],
+            _cols = [
+                [
+                    [ {
+                        caption : "序号",
+                        type : "number"
+                    },{
+                        caption : "地区",
+                        type : "number"
+                    },{
+                        caption : "启动用户数",
+                        type : "number"
+                    },{
+                        caption : "启动次数",
+                        type : "number"
+                    },{
+                        caption : "启动次数占比",
+                        type : "number"
+                    }]
+                ],
+                [
+                    [ {
+                        caption : "序号",
+                        type : "number"
+                    },{
+                        caption : "地区",
+                        type : "number"
+                    },{
+                        caption : "访客数",
+                        type : "number"
+                    },{
+                        caption : "浏览量",
+                        type : "number"
+                    },{
+                        caption : "浏览量占比",
+                        type : "number",
+                        help : "区域的浏览次数/总浏览次数"
+                    }]
+                ]
+            ],
+            rows = [],
+            cols = [];
+
+        if(_type.indexOf(type || "ios") >= 0) {
+            rows = _rows[0];
+            cols = _cols[0];
+        } else {
+            rows = _rows[1];
+            cols = _cols[1];
+        }
 
         for(var i = 0; i < source.length; i++) {
             source[i].id = i + 1;
-            source[i].open_total_rate = util.toFixed(source[i].open_total, sum[1]);
+            source[i].open_total_rate = util.toFixed(source[i].open_total, sum);
         }
-        return util.toTable([source], data.rows, data.cols);
+        return util.toTable([source], rows, cols);
     },
     dataOverviewAllFour(data) {
-        var source = data.data,
-            sum = data.dataSum;
+        var source = data.first.data[0],
+            sum = data.first.sum[0],
+            rows = [
+                [ "id", "page_url", "page_describe", "pv", "pv_rate" ]
+            ],
+            cols = [
+                [ {
+                    caption : "序号",
+                    type : "number"
+                },{
+                    caption : "访问页面",
+                    type : "number"
+                },{
+                    caption : "访问页面备注名称",
+                    type : "number"
+                },{
+                    caption : "访问次数",
+                    type : "number"
+                },{
+                    caption : "访问次数占比",
+                    type : "number",
+                    help : "页面访问次数/总访问次数"
+                } ]
+            ];
 
         for(var i = 0; i < source.length; i++) {
             source[i].id = i + 1;
-            source[i].pv_rate = util.toFixed(source[i].pv, sum[1]);
+            source[i].pv_rate = util.toFixed(source[i].pv, sum);
         }
 
-        return util.toTable([source], data.rows, data.cols);
+        return util.toTable([source], rows, cols);
     },
     dataOverviewWapThree(data) {
         var source = data.data,

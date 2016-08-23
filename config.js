@@ -53,8 +53,8 @@ module.exports = {
             className: "fa fa-dashboard fa-fw",
             href: "#",
             path: [
-                obj.dataOverview.all(),
-                obj.dataOverview.wap()
+                obj.dataOverview.all()
+                //obj.dataOverview.wap()
             ]
         },
         "3" : {
@@ -214,6 +214,39 @@ module.exports = {
                 obj.socialAnalysis.group(),
                 obj.socialAnalysis.topics(),
                 obj.socialAnalysis.groupHost()
+            ],
+            routers: [
+                obj.socialAnalysis.groupDetail(),
+                obj.socialAnalysis.topicsDetail()
+            ]
+        },
+        "18": {
+            name : "视频统计",
+            display : true,
+            className : "fa  fa-laptop fa-fw",
+            href : "#",
+            path : [
+                obj.videoStatis.video(),
+                obj.videoStatis.videoEdition()
+            ]
+        },
+        "29" : {
+            name : "营销管理后台",
+            display : true,
+            className : "fa  fa-laptop fa-fw",
+            href : "#",
+            path : [
+                obj.market.channel(),
+                obj.market.activity()
+            ]
+        },
+        "30" : {
+            name : "报表导出",
+            display : true,
+            className : "fa  fa-laptop fa-fw",
+            href : "#",
+            path : [
+                obj.table.table()
             ]
         }
     }

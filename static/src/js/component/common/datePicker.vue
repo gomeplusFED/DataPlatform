@@ -28,7 +28,8 @@ var DateCom = Vue.extend({
     name: 'DateCom',
     data: function() {
         return {
-
+            // 根据url判断是否判断起止时间大于当前时间
+            validlist: [ '/custom/saveActivity' ]
         }
     },
     props: ['index','pageComponentsData','componentType','argvs','initData'],
@@ -96,7 +97,8 @@ var DateCom = Vue.extend({
                 })
 
                 $('#datePicker_' + this.index).find('input').on('apply.daterangepicker',function(ev, picker){
-                    if(Number(picker.endDate.format('YYYY-MM-DD').replace(/\-/g,'')) > Number(yesterday.replace(/\-/g,''))){
+                    if( _this.validlist.indexOf(_this.$route.path) === -1 && Number(picker.endDate.format('YYYY-MM-DD').replace(/\-/g,'')) > Number(yesterday.replace(/\-/g,''))){
+
                         alert('请选择今天之前的时间！');
                         $('#datePicker_' + _this.index).find('input').data('daterangepicker').setStartDate(_this.pageComponentsData[_this.componentType].defaultData === 1 ? yesterday : last7Day);
                         $('#datePicker_' + _this.index).find('input').data('daterangepicker').setEndDate(yesterday);

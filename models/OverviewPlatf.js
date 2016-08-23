@@ -23,5 +23,7 @@ module.exports = {
     using_time_avg: Number,
     visit_time_avg: Number,
     day_type: Number,
-    type: String
+    type: String,
+    ver : String,
+    channel : String
 };

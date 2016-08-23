@@ -179,50 +179,69 @@ module.exports = {
     groupSix(data){
         var source = data.first.data[0],
             newData = {
-                one : 0,
-                two : 0,
+                group_num : 0,
+                group_persons_num : 0,
                 three : 0,
-                four : 0,
-                five : 0
+                all_topic_num : 0,
+                del_group_num : 0
             };
-
+        for(var key of source){
+            newData[key.key] += key.value;
+        }
         return util.toTable([[newData]], data.rows, data.cols);
     },
     groupSeven(data){
         var source = data.first.data[0],
             newData = [],
             array = ["APP", "WAP", "PC", "总计"];
-
-        for(let key of array) {
-            newData.push({
-                one : key,
-                two : 0,
-                three : 0,
-                four : 0,
-                five : 0,
-                six : 0,
-                seven:0,
-                eight:0,
-                nine:0,
-                ten:0
-            });
+    
+        var total = {
+            one : "总计",
+            two : 0,
+            three : 0,
+            four : 0,
+            five : 0,
+            six  : 0,
+            seven:0,
+            eight:0
         }
+
+        for(let key of source) {
+            var obj = {
+                one : key.type,
+                two : key.new_group_num,
+                three : key.new_join_group_num,
+                four : key.new_quit_group_num,
+                five : key.first_group_user_num,
+                six : key.new_group_user_num,
+                seven:0,
+                eight:key.new_group_disband_num
+            };
+
+            newData.push(obj);
+            for(let key in total){
+                if(key == "one"){
+                    continue;
+                }
+                total[key] += obj[key];
+            }
+        }
+
+        newData.push(total);
 
         return util.toTable([newData], data.rows, data.cols);
     },
-     groupEight(data, query, dates) {
+    groupEight(data, query, dates) {
         var source = data.first.data[0],
             type = "line",
             newData = {},
             filter_name = {
-                one : "新增成员数",
-                two : "新增分享数",
-                three : "新增话题数",
-                four : "删除话题数",
-                five: "新增回复数",
-                six: "删除回复数",
-                seven:"新增点赞数",
-                eight:"新增收藏数"
+                new_group_num : "新增圈子数",
+                new_join_group_num : "新增加圈次数",
+                new_quit_group_num : "新增退圈次数",
+                new_group_user_num : "新增入圈用户数",
+                first_group_user_num: "首次入圈用户数",
+                dau: "DAU"
             },
             map = {
                 value : filter_name[query.filter_key]
@@ -234,9 +253,9 @@ module.exports = {
             };
         }
 
-        for(let key of source) {
+        for(let key of source){
             var date = util.getDate(key.date);
-            newData[date].value = key.query.filter_key;
+            newData[date].value = key[query.filter_key];
         }
 
         return [{
@@ -249,18 +268,148 @@ module.exports = {
             }
         }];
     },
-     groupNine(data){
+    groupNine(data, query , dates) {
         var source = data.first.data[0],
-            newData = {
-                one : "2016-08-09",
-                two : "GGsiMida",
-                three : 0,
-                four : "Smith",
-                five : 0,
-                six  : 0,
-                seven: 0
+            orderData = data.second.data[0],
+            type = "pie",
+            filter_name = {
+                one : {
+                    "name" : "圈子数",
+                    "column": "new_group_num"
+                },
+                two : {
+                    "name" : "DAU",
+                    "column": "dau"
+                },
+                three : {
+                    "name" : "话题数",
+                    "column": "new_group_topic_num"
+                },
+            },
+            map = {
+                value : filter_name[query.filter_key].name
             };
 
-        return util.toTable([[newData]], data.rows, data.cols);
+        var obj = {},    
+            newData = {},
+            filterColumn = filter_name[query.filter_key].column; //要查询的字段
+
+        // id 为键，名称为值 , 保存所有一级类目的名字和对应的id
+        for(let category of orderData){
+            obj[category.id] = category.name;
+            //初始化各项的值
+            newData[category.name] = {
+                value : 0
+            }
+        }
+        for(let item of source){
+            //品种名称
+            var names = obj[item.category_id];
+            newData[names].value += item[filterColumn]; 
+        }
+
+        return [{
+            type : type,
+            map : map,
+            data : newData,
+            config: {
+                stack: false
+            }
+        }];
     },
+    groupTen(data, query) {
+        var group_type = query.category_id,
+            source = data.first.data[0],
+            orderData = data.second.data[0],
+            type = "pie";
+
+        var filter_name = {
+                one : {
+                    "name" : "圈子数",
+                    "column": "new_group_num"
+                },
+                two : {
+                    "name" : "DAU",
+                    "column": "dau"
+                },
+                three : {
+                    "name" : "话题数",
+                    "column": "new_group_topic_num"
+                },
+            },
+            filterName = filter_name[query.filter_key2].name,
+            filterColumn = filter_name[query.filter_key2].column,
+            map = {
+                value : filterName
+            };
+        var obj = {},
+            newData = {};
+        var showData = [];
+
+        for(let cid of group_type){
+            for(let item of orderData){
+                if(item.id == cid){
+                    obj[cid] = item.name;
+                    newData[item.name] = {
+                        value : 0
+                    }
+                }
+            }
+        }
+
+        for(let item of source){
+            if(item.category_id in obj){
+                newData[obj[item.category_id]].value += item[filterColumn];
+            }
+        }
+
+        return [{
+            type : type,
+            map : map,
+            data : newData,
+            config: {
+                stack: false
+            }
+        }]
+    },
+    groupEleven(data , query){
+        var page = query.page || 1;
+        var source = data.first.data[0],
+            count = data.first.count > 100 ? 100 : data.first.count,
+            newData = [],
+            config = {
+                "0" : "不是",
+                "1" : "是"
+            },
+            ThirdData = data.third.data;
+
+        for(let key of ThirdData) {
+            let obj = {};
+            obj[key.key] = key.sum_value;
+            config[key.group_id] = obj;
+        }
+        //分类名称
+        var obj = {};
+        for(let item of data.second.data){
+            obj[item.id] = item.name;
+        }
+
+        var i = 1;
+        for(let item of source){
+            item.top = (page - 1) * 20 + i;
+            item.group_person_num = config[item.group_id].group_person_num || 0;
+            item.group_topic_num = config[item.group_id].group_topic_num || 0;
+            item.topic_praise_num = config[item.group_id].topic_praise_num || 0;
+            item.topic_collect_num = config[item.group_id].topic_collect_num || 0;
+            item.topic_reply_num = config[item.group_id].topic_reply_num || 0;
+            item.category_id_1 = obj[item.category_id_1];
+            item.category_id_2 = obj[item.category_id_2];
+            item.creater_flag = config[item.creater_flag];
+            item.operating = `<button class="btn btn-default" url_link='/socialAnalysis/groupDetail' url_fixed_params='{"group_id":"${item.group_id}"}'>详情</button>`;
+            newData.push(item);
+            i++;
+        }
+
+        return util.toTable([newData], data.rows, data.cols, [count]);
+    }
 };

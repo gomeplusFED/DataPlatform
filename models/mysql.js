@@ -23,7 +23,7 @@ var orm = require('orm'),
     }
 
 function connect(app) {
-    app.use(orm.express('mysql://' + mysql.username + ':' + mysql.pwd + '@' + mysql.host + '/' + mysql.database, {
+    app.use(orm.express('mysql://' + mysql.username + ':' + mysql.pwd + '@' + mysql.host + '/' + mysql.database + '?timezone=CST', {
         define: function(db, models, next) {
             db.settings.set('instance.cache', false);
             db.settings.set('instance.autoFetch', true);
@@ -37,8 +37,8 @@ function connect(app) {
             models.MarketingFlow = db.define("tbl_rt_marketing_flow", obj.MarketingFlow);
             models.MarketingCoupon = db.define("tbl_rt_marketing_coupon", obj.MarketingCoupon);
             models.MarketingCouponDetails = db.define("tbl_rt_marketing_coupon_details", obj.MarketingCouponDetails);
-            models.OverviewPage = db.define("tbl_rt_overview_page", obj.OverviewPage);
-            models.OverviewPlatf = db.define("tbl_rt_overview_platf", obj.OverviewPlatf);
+            models.OverviewPage = db.define("ads2_overview_page", obj.OverviewPage);
+            models.OverviewPlatf = db.define("ads2_overview_platf", obj.OverviewPlatf);
             models.KpiValue = db.define("tbl_rt_kpi_value", obj.KpiValue);
             models.Rebate = db.define("tbl_rt_rebate", obj.Rebate);
             models.RebateRefund = db.define("tbl_rt_rebate_refund", obj.RebateRefund);
@@ -62,18 +62,6 @@ function connect(app) {
             models.User2 = db.define("tbl_dataplatform_nodejs_users2", obj.User2);
             models.Role = db.define("tbl_dataplatform_nodejs_role", obj.Role);
             models.Log = db.define("tbl_dataplatform_nodejs_log", obj.Log);
-            models.Group = db.define("tbl_rt_group", obj.Group);
-            models.GroupDataTendency = db.define("tbl_rt_group_tendency", obj.GroupDataTendency);
-            models.GroupDataDistribution = db.define("tbl_rt_group_distribution", obj.GroupDataDistribution);
-            models.GroupDataTop = db.define("tbl_rt_group_top", obj.GroupDataTop);
-            models.Topics = db.define("tbl_rt_group_topic", obj.Topics);
-            models.TopicsTendency = db.define("tbl_rt_group_topic_tendency", obj.TopicsTendency);
-            models.TopicsDistribution = db.define("tbl_rt_group_topic_distribution", obj.TopicsDistribution);
-            models.TopicsTop = db.define("tbl_rt_group_topic_top", obj.TopicsTop);
-            models.Host = db.define("tbl_rt_group_owner", obj.Host);
-            models.HostTendency = db.define("tbl_rt_group_owner_tendency", obj.HostTendency);
-            models.HostDistribution = db.define("tbl_rt_group_owner_distribution", obj.HostDistribution);
-            models.HostTop = db.define("tbl_rt_group_owner_top", obj.HostTop);
             models.SocialCategory = db.define("tbl_social_category", obj.SocialCategory);
             models.ShopPayTop = db.define("tbl_rt_shop_pay_top", obj.ShopPayTop);
             models.ShopAccesTop = db.define("tbl_rt_shop_acces_top", obj.ShopAccesTop);
@@ -99,6 +87,27 @@ function connect(app) {
             models.CouponGroupShopTop = db.define("ads2_coupon_group_shop_top", obj.CouponGroupShopTop);
             models.CouponInfo = db.define("ads2_coupon_info", obj.CouponInfo);
             models.CouponGroupDate = db.define("ads2_coupon_group_date", obj.CouponGroupDate);
+            models.GroupownerStatistics = db.define("ads2_soc_groupowner_statistics", obj.GroupownerStatistics);
+            models.GroupownerCategoryDistribution = db.define("ads2_soc_groupowner_category_distribution", obj.GroupownerCategoryDistribution);
+            models.GroupownerList = db.define("ads2_soc_groupowner_list", obj.GroupownerList);
+            models.GroupReport = db.define("ads2_soc_group_report", obj.GroupReport);
+            models.Statistics = db.define("tbl_soc_statistics", obj.Statistics);
+            //8.15 
+            models.GroupStatistics = db.define("ads2_soc_group_statistics" , obj.GroupStatistics);
+            models.GroupCategoryDistribution = db.define("ads2_soc_group_category_distribution" , obj.GroupCategoryDistribution);
+            models.SocialGroupList = db.define("ads2_soc_group_list" , obj.SocialGroupList); 
+            models.SocialGroupDetailStatistic = db.define("ads2_soc_group_detail_statistic" , obj.SocialGroupDetailStatistic);
+            models.SocialGroupDetailList = db.define("ads2_soc_group_detail_list" , obj.SocialGroupDetailList); 
+            models.SocialTopicStatistics = db.define("ads2_soc_topic_statistics" , obj.SocialTopicStatistics);
+            models.SocialTopicCategoryDistribution = db.define("ads2_soc_topic_category_distribution" , obj.SocialTopicCategoryDistribution);
+            models.SocialTopicList = db.define("ads2_soc_topic_list" , obj.SocialTopicList);
+            models.SocialTopicDetailStatistics = db.define("ads2_soc_topic_detail_statistics" , obj.SocialTopicDetailStatistics);
+            models.Activity = db.define("activity" , obj.Activity);
+            models.ActivityChannelRelationship = db.define("activity_channel_relationship" , obj.ActivityChannelRelationship);
+            models.Channel = db.define("channel" , obj.Channel);
+
+            models.VideoPlay = db.define("ads2_video_playing" , obj.VideoPlay);
+
             models.db1 = db;
             next();
         }

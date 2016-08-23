@@ -133,8 +133,17 @@ exports.toTable = function(data, rows, cols, count) {
             rows : rows[i],
             cols : cols[i]
         };
-        if(count && count[i]) {
-            obj.count = count[i];
+        if(count && count instanceof Array) {
+            if(count[i]) {
+                obj.count = count[i];
+            }
+        } else if(count) {
+            if(count.count) {
+                obj.count = count.count[i];
+            }
+            if(count.config) {
+                obj.config = count.config[i];
+            }
         }
         newData.push(obj);
     }
@@ -269,41 +278,89 @@ exports.date = function(date, day_type) {
 };
 
 exports.mergeCell = function(data, rows) {
+    var _array = [];
     var merge = [];
     for(var i = 0; i < rows.length; i++) {
         var col = 0;
         for(var j = 0; j < data.length; j++) {
             if(i === 0) {
                 if(j !== 0 &&
-                    data[j][rows[i]] !== data[j -1][rows[i]]  &&
-                    j - 1 !== col) {
-                    merge.push({
-                        row : i,
-                        col : col,
-                        value : {
-                            row : i,
-                            col : j - 1
+                    data[j][rows[i]] !== data[j -1][rows[i]]) {
+                    _array.push({
+                        col : i,
+                        row : col,
+                        end : {
+                            col : i,
+                            row : j - col
                         }
                     });
                     col = j;
+                } else if(j === data.length - 1) {
+                    _array.push({
+                        col : i,
+                        row : col,
+                        end : {
+                            col : i,
+                            row : j - col + 1
+                        }
+                    });
                 }
             } else {
-                if(j !== 0 &&
-                    data[j][rows[i]] === data[j -1][rows[i]] &&
-                    data[j][rows[i - 1]] !== data[j -1][rows[i - 1]] &&
-                    col !== j - 1) {
-                    merge.push({
-                        row : i,
-                        col : col,
-                        value : {
-                            row : i,
-                            col : j - 1
+                if(j !== 0) {
+                    if(data[j][rows[i - 1]] === data[j - 1][rows[i - 1]]) {
+                        if(data[j][rows[i]] !== data[j - 1][rows[i]]) {
+                            _array.push({
+                                col : i,
+                                row : col,
+                                end : {
+                                    col : i,
+                                    row : j  - col
+                                }
+                            });
+                            col = j;
+                        }
+                    } else {
+                        col = j;
+                    }
+                } else if(j === data.length - 1){
+                    _array.push({
+                        col : i,
+                        row : col,
+                        end : {
+                            col : i,
+                            row : j - col + 1
                         }
                     });
-                    col = j;
                 }
             }
         }
     }
+    for(var key of _array) {
+        if(key.end.row !== 1 || 1 !== key.end.col) {
+            merge.push(key);
+        }
+    }
     return merge;
 };
+
+
+exports.isEmptyObject = function(obj){
+    for(var n in obj){ return false }
+    return true;
+}
+
+/* 给定一个日期，返回包含前几天日期的一个数组 */
+exports.beforeDate = function( date , num ){
+    var oneDay = 1000*60*60*24,
+        thisDate = new Date(date).getTime(),
+        arr = [];
+
+    for(var i=0;i<num;i++){
+        var oneDate = new Date(thisDate - oneDay*i);
+        var time = oneDate.toLocaleDateString();
+        time = time.replace("/" , "-");
+        arr.push(time);
+    }
+    return arr;
+}
+

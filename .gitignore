@@ -3,3 +3,4 @@ node_modules/
 db/
 static/dist/
 npm-debug.log
+.vscode/launch.json

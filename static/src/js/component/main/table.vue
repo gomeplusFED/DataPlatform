@@ -1,14 +1,26 @@
 <template>
 	<div :id="'table_'+index" class="table_con table-responsive" v-show="currentData.type.indexOf('table') !== -1">
-		<table v-for="tableItem in tableData" class="table table-bordered table-hover" role="grid" aria-describedby="dataTables_info">
+		<table v-for="(outerTableIndex, tableItem) in tableData" class="table table-bordered table-hover" role="grid" aria-describedby="dataTables_info">
 			<thead>
-				<tr>
+				<tr v-if="outerTableIndex === 0">
 					<th v-for="(captionIndex, captionItem) in tableItem.cols" v-show="tableColControl[captionIndex]">{{captionItem.caption}} <i v-show="captionItem.caption !== ' ' && captionItem.help" style="opacity: 0.8;cursor: pointer;" class="fa fa-question-circle-o" v-tips="{direction: 'top', msg: captionItem.help}"></i></th>
+				</tr>
+				<tr v-else>
+					<th v-for="(captionIndex, captionItem) in tableItem.cols">{{captionItem.caption}} <i v-show="captionItem.caption !== ' ' && captionItem.help" style="opacity: 0.8;cursor: pointer;" class="fa fa-question-circle-o" v-tips="{direction: 'top', msg: captionItem.help}"></i></th>
 				</tr>
 			</thead>
 			<tbody v-if="tableItem.data.length !== 0">
-				<tr v-for="tableBody in tableItem.data">
-					<td v-for="(tableKey, tableCell) in tableItem.rows" v-show="tableColControl[tableKey]"><span @click="tableOperation(tableBody[tableCell], tableBody, tableItem.rows[1])">{{{tableBody[tableCell] | toThousands}}}</span></td>
+				<tr v-for="(tableIndex, tableBody) in tableItem.data">
+					<td 
+					v-for="(tableKey, tableCell) in tableItem.rows"
+					v-show="tableColControl[tableKey] || outerTableIndex !== 0"
+					v-if="isSpan(tableItem.config || [], tableIndex, getIndexByKey(tableItem.rows,tableKey))"
+					:colspan="getColspan(tableItem.config || [], tableIndex, getIndexByKey(tableItem.rows,tableKey))"
+					:rowspan="getRowspan(tableItem.config || [], tableIndex, getIndexByKey(tableItem.rows,tableKey))"
+					>
+					<span @click="tableOperation(tableBody[tableCell], tableBody, tableItem.rows[1])">{{{tableBody[tableCell] | toThousands}}}
+					</span>
+					</td>
 				</tr>
 			</tbody>
 			<tbody v-else>
@@ -33,6 +45,10 @@
 	-webkit-line-clamp: 1;
 	-webkit-box-orient: vertical;
 	white-space: nowrap;
+}
+
+.table_con td[rowspan] {
+    vertical-align: middle;
 }
 
 </style>
@@ -74,7 +90,17 @@ var Table = Vue.extend({
 
 				}
 			},
-			tableColControl: {}
+			tableColControl: {},
+			config: [
+				// {
+				// 	row: 1,
+				// 	col: 1,
+				// 	end: {
+				// 		row: 2,
+				// 		col: 2
+				// 	}
+				// }
+			]
 		};
 	},
 	vuex: {
@@ -243,6 +269,35 @@ var Table = Vue.extend({
 		},
 		showHelpBymouse(ev) {
 			console.log(ev.target.getAttribute('data'));
+		},
+		getColspan (config, row, col) {
+			let model= config.find(function(item) {
+				return item.col== col && item.row== row;
+			})
+			console.log(model.end,col);
+			return model ? model.end.col : 0;
+		},
+		getRowspan (config, row, col) {
+			let model= config.find(function(item) {
+				return item.col== col && item.row== row;
+			})
+			return model ? model.end.row : 0;
+		},
+		isSpan (config, row, col) {
+			row = parseInt(row);
+			col = parseInt(col);
+			return !config.length ? true : config.some(function(item) {
+				if(col== item.col && row== item.row){
+					return true;
+				}
+				let endcol= (item.col+item.end.col-1) < 0 ? 0 : (item.col+item.end.col-1);
+				let endrow= (item.row+item.end.row-1) < 0 ? 0 : (item.row+item.end.row-1);
+				return !(col>= item.col && row>= item.row && col<= endcol && row<= endrow );
+			});
+		},
+		getIndexByKey(obj, key) {
+			let index= Object.keys(obj)[key];
+			return index;
 		}
 	},
 	watch: {
