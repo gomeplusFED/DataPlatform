@@ -201,7 +201,7 @@ module.exports = {
         }
         
 
-        var merge = util.mergeCell(source , ["date" , "sdk_app_type"]);
+        var merge = util.mergeCell(source , ["date", "sdk_app_type"]);
 
         return util.toTable([source], data.rows, data.cols, {
             count : [count],
