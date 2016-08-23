@@ -53,8 +53,8 @@ module.exports = {
             className: "fa fa-dashboard fa-fw",
             href: "#",
             path: [
-                obj.dataOverview.all(),
-                obj.dataOverview.wap()
+                obj.dataOverview.all()
+                //obj.dataOverview.wap()
             ]
         },
         "3" : {

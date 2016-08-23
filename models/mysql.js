@@ -23,7 +23,7 @@ var orm = require('orm'),
     }
 
 function connect(app) {
-    app.use(orm.express('mysql://' + mysql.username + ':' + mysql.pwd + '@' + mysql.host + '/' + mysql.database, {
+    app.use(orm.express('mysql://' + mysql.username + ':' + mysql.pwd + '@' + mysql.host + '/' + mysql.database + '?timezone=CST', {
         define: function(db, models, next) {
             db.settings.set('instance.cache', false);
             db.settings.set('instance.autoFetch', true);
@@ -37,8 +37,8 @@ function connect(app) {
             models.MarketingFlow = db.define("tbl_rt_marketing_flow", obj.MarketingFlow);
             models.MarketingCoupon = db.define("tbl_rt_marketing_coupon", obj.MarketingCoupon);
             models.MarketingCouponDetails = db.define("tbl_rt_marketing_coupon_details", obj.MarketingCouponDetails);
-            models.OverviewPage = db.define("tbl_rt_overview_page", obj.OverviewPage);
-            models.OverviewPlatf = db.define("tbl_rt_overview_platf", obj.OverviewPlatf);
+            models.OverviewPage = db.define("ads2_overview_page", obj.OverviewPage);
+            models.OverviewPlatf = db.define("ads2_overview_platf", obj.OverviewPlatf);
             models.KpiValue = db.define("tbl_rt_kpi_value", obj.KpiValue);
             models.Rebate = db.define("tbl_rt_rebate", obj.Rebate);
             models.RebateRefund = db.define("tbl_rt_rebate_refund", obj.RebateRefund);
