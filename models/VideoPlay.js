@@ -8,7 +8,7 @@
 module.exports = {
     id : {type: 'number', key: true},
     sdk_app_type : String,// COMMENT '数据类型:android,flash,h5_custom,h5_native,ios',
-    version : String,// COMMENT '版本号',
+    ver : String,// COMMENT '版本号',
     active_user : Number,  // NOT NULL COMMENT '活跃用户数',
     new_play_num : Number,  // NOT NULL COMMENT '新增播放次数',
     health_play : Number,  // NOT NULL COMMENT '健康播放数',
