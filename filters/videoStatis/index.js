@@ -191,6 +191,8 @@ module.exports = {
             total_new_play_num += item.new_play_num;
         }
 
+        //sdk_app_type,相同的放一起,最后重新排序
+        var ArrObj = {};
         for(let item of source){
             item["5"] = util.percentage(item.new_play_num , total_new_play_num) + "%";
             item["l-11"] = util.percentage(item.port_io_failed , item.new_play_num) + "%";
@@ -198,10 +200,23 @@ module.exports = {
             item["l-13"] = util.percentage(item.play_failed , item.new_play_num) + "%";
             item["l-14"] = util.percentage(item.play_error , item.new_play_num) + "%";
             item["l-15"] = util.percentage(item.improper_play , item.new_play_num) + "%";
+
+            if(!ArrObj[item.sdk_app_type]){
+                ArrObj[item.sdk_app_type] = [];
+            }
+            ArrObj[item.sdk_app_type].push(item);
+        }
+
+        //重新排序
+        var EndArr = [];
+        for(var key in ArrObj){
+            for(let item of ArrObj[key]){
+                EndArr.push(item);
+            }
         }
         
 
-        var merge = util.mergeCell(source , ["date", "sdk_app_type"]);
+        var merge = util.mergeCell(EndArr , ["date", "sdk_app_type"]);
 
         return util.toTable([source], data.rows, data.cols, {
             count : [count],
