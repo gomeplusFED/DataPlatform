@@ -338,3 +338,19 @@ exports.isEmptyObject = function(obj){
     for(var n in obj){ return false };
     return true;
 }
+
+/* 给定一个日期，返回包含前几天日期的一个数组 */
+exports.beforeDate = function( date , num ){
+    var oneDay = 1000*60*60*24,
+        thisDate = new Date(date).getTime(),
+        arr = [];
+
+    for(var i=0;i<num;i++){
+        var oneDate = new Date(thisDate - oneDay*i);
+        var time = oneDate.toLocaleDateString();
+        time = time.replace("/" , "-");
+        arr.push(time);
+    }
+    return arr;
+}
+
