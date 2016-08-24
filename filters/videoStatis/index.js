@@ -6,7 +6,7 @@
 var util = require("../../utils"),
     _ = require("lodash");
 
-/* 环比计算 */
+/* 环比计算 , 昨天－前天  ／  前天 */
 function Chain(lastday , beforeLastday){
     if(lastday == 0 && beforeLastday == 0) return '0%';
 
@@ -33,16 +33,12 @@ module.exports = {
             }
         }
         //作为除数不能为0
-        initObj.new_play_num = 1;
+        initObj.sid_num = 1;
 
         //source应该有三项，没有时给初始化对象
-        var Other = true;
         for(var i=0;i<3;i++){
             if(allSource[i] == undefined){
                 allSource.push(initObj);
-                if(i==0){
-                    Other = false;
-                }
             }
         }
 
@@ -52,7 +48,7 @@ module.exports = {
         //用于第一行的数据
         var source = allSource[0];
         one.push({
-            "new_play_num" : Other ? source.new_play_num : 0,
+            "new_play_num" : source.new_play_num,
             "active_user"  : source.active_user
         });
 
@@ -63,28 +59,30 @@ module.exports = {
             switch(i){
                 case 1:
                     for(let item of data.rows[1]){
-                        Obj2[item] = source[item];
                         if(item == "health_play"){
                             Obj2[item] = "数值";
+                            continue;
                         }
+                        Obj2[item] = source[item];
                     }
                     for(let item of data.rows[2]){
-                        Obj3[item] = source[item];
                         if(item == "unhealth_play"){
                             Obj3[item] = "数值";
+                            continue;
                         }
+                        Obj3[item] = source[item];
                     }
                     break;
                 case 2:
                     //概率 除以新增播放次数
                     for(let item of data.rows[1]){
-                        Obj2[item] = util.toFixed(source[item] / source.new_play_num , 0);
+                        Obj2[item] = util.toFixed(source[item] / source.sid_num , 0);
                         if(item == "health_play"){
                             Obj2[item] = "概率";
                         }
                     }
                     for(let item of data.rows[2]){
-                        Obj3[item] = util.toFixed(source[item] / source.new_play_num , 0);
+                        Obj3[item] = util.toFixed(source[item] / source.sid_num , 0);
                         if(item == "unhealth_play"){
                             Obj3[item] = "概率";
                         }
@@ -119,9 +117,9 @@ module.exports = {
         var filterKey = {
                 "new_play_num" : "播放次数",
                 "health_play"  : "健康播放数",
-                "health_pro"   : "健康播放概率",
+                "health_pro"   : "健康播放概率(%)",
                 "unhealth_play": "错误播放数",
-                "unhealth_pro" : "错误播放概率"
+                "unhealth_pro" : "错误播放概率(%)"
             },
             filter_key = query.filter_key;
         var map  = { value : filterKey[filter_key] };
@@ -145,15 +143,14 @@ module.exports = {
             if(filter_key == "new_play_num" || filter_key == "unhealth_play" || filter_key == "health_play"){
                 
                 theobj.value = obj[item][filter_key];
-                
             }else{
-                if(obj[item].new_play_num == 0){
-                    obj[item].new_play_num = 1;
+                if(obj[item].sid_num == 0){
+                    obj[item].sid_num = 1;
                 }
                 if(filter_key == "health_pro"){
-                    theobj.value = util.division(obj[item].health_play , obj[item].new_play_num);
+                    theobj.value = util.percentage(obj[item].health_play , obj[item].sid_num);
                 }else if(filter_key == "unhealth_pro"){
-                    theobj.value = util.division(obj[item].unhealth_play , obj[item].new_play_num);
+                    theobj.value = util.percentage(obj[item].unhealth_play , obj[item].sid_num);
                 }
             }
 
@@ -188,18 +185,18 @@ module.exports = {
         var total_new_play_num = 0;
         for(let item of source){
             item.date = util.getDate(item.date);
-            total_new_play_num += item.new_play_num;
+            total_new_play_num += item.sid_num;
         }
 
         //sdk_app_type,相同的放一起,最后重新排序
         var ArrObj = {};
         for(let item of source){
-            item["5"] = util.percentage(item.new_play_num , total_new_play_num) + "%";
-            item["l-11"] = util.percentage(item.port_io_failed , item.new_play_num) + "%";
-            item["l-12"] = util.percentage(item.port_overtime , item.new_play_num) + "%";
-            item["l-13"] = util.percentage(item.play_failed , item.new_play_num) + "%";
-            item["l-14"] = util.percentage(item.play_error , item.new_play_num) + "%";
-            item["l-15"] = util.percentage(item.improper_play , item.new_play_num) + "%";
+            item["5"] = util.percentage(item.sid_num , total_new_play_num) + "%";
+            item["l-11"] = util.percentage(item.port_io_failed , item.sid_num) + "%";
+            item["l-12"] = util.percentage(item.port_overtime , item.sid_num) + "%";
+            item["l-13"] = util.percentage(item.play_failed , item.sid_num) + "%";
+            item["l-14"] = util.percentage(item.play_error , item.sid_num) + "%";
+            item["l-15"] = util.percentage(item.improper_play , item.sid_num) + "%";
 
             if(!ArrObj[item.sdk_app_type]){
                 ArrObj[item.sdk_app_type] = [];
