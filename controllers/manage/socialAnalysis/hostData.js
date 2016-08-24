@@ -22,7 +22,7 @@ module.exports = (Router) => {
                         new Date(start + " 00:00:00"),
                         new Date(start + " 23:59:59")
                     ),
-                    key : ["group_leader_num"]
+                    key : ["group_leader_num", "person_funs_num", "person_friends_num"]
                 };
             return _params;
         },
@@ -40,7 +40,9 @@ module.exports = (Router) => {
             return filter.hostOne(data);
         },
         rows: [
-            ["group_leader_num", "two", "three", "four", "five"]
+            ["group_leader_num", "rate", "person_friends_num"
+                //, "four", "five"
+            ]
         ],
         cols: [
             [{
@@ -48,16 +50,17 @@ module.exports = (Router) => {
                 type: "number"
             }, {
                 caption: "圈主人均粉丝数",
-                type: "number"
+                type: "number",
+                help : "总圈主粉丝数/总圈主数"
             }, {
-                caption: "累计邀请好友数",
+                caption: "累计好友数",
                 type: "number"
-            }, {
-                caption: "累计关注次数",
-                type: "number"
-            }, {
-                caption: "累计取关次数",
-                type: "number"
+            //}, {
+            //    caption: "累计关注次数",
+            //    type: "number"
+            //}, {
+            //    caption: "累计取关次数",
+            //    type: "number"
             }]
         ]
     });
@@ -336,7 +339,7 @@ module.exports = (Router) => {
                 caption: "新增邀请好友数",
                 type: ""
             }, {
-                caption: "累计邀请好友数",
+                caption: "累计好友数",
                 type: ""
             }, {
                 caption: "新增粉丝数",

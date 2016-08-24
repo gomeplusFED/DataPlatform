@@ -30,7 +30,7 @@ module.exports = (Router) => {
 
             return {
                 date : orm.between(date + " 00:00:00", date + " 23:59:59"),
-                key : ["all_topic_num", "all_topic_reply_num", "all_praise_num"]
+                key : ["all_topic_num", "all_topic_reply_num", "all_topic_subReply_num", "all_praise_num"]
             };
         },
         procedure : [{
@@ -50,7 +50,7 @@ module.exports = (Router) => {
             customMethods: ''
         }],*/
         rows: [
-            ["all_topic_num", "all_topic_reply_num", "all_praise_num"]
+            ["all_topic_num", "all", "all_praise_num"]
         ],
         cols: [
             [{
@@ -406,7 +406,8 @@ module.exports = (Router) => {
             return {
                 topic_id : topic_ids,
                 date : orm.between(date + " 00:00:00", date + " 23:59:59"),
-                key : ["topic_reply_num", "topic_praise_num", "topic_subreply_num", "topic_collect_num"]
+                key : ["topic_reply_num", "topic_praise_num", "topic_subreply_user_num",
+                    "topic_reply_user_num", "topic_subreply_num", "topic_collect_num"]
             };
         },
         thirdParams(query, params, data) {
@@ -491,7 +492,7 @@ module.exports = (Router) => {
                 "category_id_2", "PV", "UV", "publisher_id", "publisher_name",
                 "new_topic_reply_num", "new_topic_reply_user_num",
                 //"rate",
-                "topic_reply_num", "topic_reply_user_num", "topic_rate", "new_topic_like_num",
+                "reply_num", "reply_user_num", "topic_rate", "new_topic_like_num",
                 "topic_praise_num", "new_topic_save_num", "topic_collect_num", "new_topic_share_num",
                 "operating"]
         ],

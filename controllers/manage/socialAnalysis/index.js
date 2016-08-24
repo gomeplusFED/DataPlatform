@@ -330,8 +330,7 @@ module.exports = (Router) => {
                 value : ["group_id", "key"]
             },
             sum : ["value"],
-            groupBy : ["group_person_num", "group_topic_num", "topic_praise_num",
-                "topic_collect_num", "topic_reply_num"],
+            groupBy : ["key"],
             get : ""
         }],
         secondParams(query, params, sendData) {
@@ -341,7 +340,7 @@ module.exports = (Router) => {
             var param = {
                 group_id : [],
                 key : ["group_person_num", "group_topic_num", "topic_praise_num",
-                    "topic_collect_num", "topic_reply_num"]
+                    "topic_collect_num", "topic_reply_num", "topic_subreply_num"]
             };
             for(let item of sendData.first.data[0]){
                 param.group_id.push(item.group_id);
@@ -370,7 +369,7 @@ module.exports = (Router) => {
                 "topic_praise_num", "topic_collect_num", "new_group_topic_like_num",
                 "new_group_topic_save_num", "new_group_topic_share_num",
                 "new_group_topic_reply_num", "new_group_topic_reply_user_num",
-                "topic_reply_num", "operating"]
+                "reply_num", "operating"]
         ],
         cols: [
             [{

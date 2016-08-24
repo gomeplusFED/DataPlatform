@@ -22,7 +22,8 @@ module.exports = {
                 "group_topic_num" : 0,
                 "topic_praise_num" : 0,
                 "topic_collect_num" : 0,   //累计话题收藏数
-                "topic_reply_num" : 0 
+                "topic_reply_num" : 0,
+                "topic_subreply_num" : 0
             };
 
         for(let item of source){
@@ -30,8 +31,11 @@ module.exports = {
             newData.group_topic_num +=  DealNumber(item.group_topic_num);
             newData.topic_praise_num += DealNumber(item.topic_praise_num);
             newData.topic_reply_num  += DealNumber(item.topic_reply_num);
+            newData.topic_subreply_num  += DealNumber(item.topic_subreply_num);
             newData.topic_collect_num  += DealNumber(item.topic_collect_num);
         }
+
+        newData.reply_num = newData.topic_reply_num + newData.topic_subreply_num;
 
         return util.toTable([[newData]], data.rows, data.cols);
     },
@@ -130,29 +134,41 @@ module.exports = {
         var source = data.first.data[0],
             source2 = data.second.data[0],
             count = data.first.count > 100 ? 100 : data.first.count,
+            ids = [];
             newData = [];
 
         /* 整理 Statistics 取得的数据 */
-        var obj = {};
-        for(let item of source2){
-            if(!obj[item.topic_id]){
-                obj[item.topic_id] = {};
-            }
-            obj[item.topic_id][item.key] = item.value;
-        }
+        var config = {};
 
-        var columnArr = ["topic_reply_user_num","all_topic_reply_num","topic_praise_num","topic_collect_num"];
         for(let item of source){
-            for(let key of columnArr){
-                if(!obj[item.topic_id]){
-                    item[key] = 0;
-                }else{
-                    item[key] = DealNumber(obj[item.topic_id][key]);
-                }
-            }
+            ids.push(item.topic_id);
             item.topic_create_time = util.getDate(item.topic_create_time);
             newData.push(item);
         }
+
+         for(let id of ids) {
+             config[id] = {
+                 topic_reply_user_num : 0,
+                 topic_subreply_user_num : 0,
+                 topic_reply_num : 0,
+                 topic_subreply_num : 0,
+                 topic_praise_num : 0,
+                 topic_collect_num : 0
+             };
+         }
+
+         for(let item of source2) {
+             config[item.topic_id][key.key] = key.sum_value;
+         }
+
+         for(let item of newData) {
+             item.reply_user_num =
+                 config[item.topic_id].topic_reply_user_num + config[item.topic_id].topic_subreply_user_num;
+             item.topic_reply_num =
+                 config[item.topic_id].topic_reply_num + config[item.topic_id].topic_subreply_num;
+             item.topic_praise_num = config[item.topic_id].topic_praise_num;
+             item.topic_collect_num = config[item.topic_id].topic_collect_num;
+         }
 
         return util.toTable([newData], data.rows, data.cols, [count]);
     }

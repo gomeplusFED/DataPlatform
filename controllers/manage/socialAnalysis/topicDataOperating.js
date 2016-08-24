@@ -23,7 +23,7 @@ module.exports = (Router) => {
             return {
                 date : date,
                 topic_id : query.topic_id,
-                key : ["topic_subreply_num", "topic_praise_num"]
+                key : ["topic_subreply_num", "topic_reply_num", "topic_praise_num"]
             };
         },
         procedure : [{
@@ -38,7 +38,7 @@ module.exports = (Router) => {
             return filter.topicDetailOne(data);
         },
         rows: [
-            ["topic_subreply_num", "topic_praise_num"]
+            ["num", "topic_praise_num"]
         ],
         cols: [
             [{
