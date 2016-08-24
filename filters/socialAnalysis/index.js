@@ -204,7 +204,7 @@ module.exports = {
             six  : 0,
             seven:0,
             eight:0
-        }
+        };
 
         for(let key of source) {
             var obj = {

@@ -122,22 +122,22 @@ module.exports = (Router) => {
         modelName : [ "SocialGroupDetailStatistic" ],
         platform : false,
         filter_select : [{
-            title: "平台选择",
-            filter_key : 'type',
-            groups: [{
-                key: ['APP','WAP','PC'],
-                value: '全部平台'
-            },{
-                key: 'APP',
-                value: 'APP'
-            },{
-                key: 'WAP',
-                value: 'WAP'
-            },{
-                key: 'PC',
-                value: 'PC'
-            }]
-        },{
+        //    title: "平台选择",
+        //    filter_key : 'type',
+        //    groups: [{
+        //        key: ['APP','WAP','PC'],
+        //        value: '全部平台'
+        //    },{
+        //        key: 'APP',
+        //        value: 'APP'
+        //    },{
+        //        key: 'WAP',
+        //        value: 'WAP'
+        //    },{
+        //        key: 'PC',
+        //        value: 'PC'
+        //    }]
+        //},{
             title: '指标',
             filter_key : 'filter_key',
             groups: [{

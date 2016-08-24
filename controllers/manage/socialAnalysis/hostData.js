@@ -127,22 +127,22 @@ module.exports = (Router) => {
             get : ""
         }],
         filter_select : [{
-            title: '指标',
-            filter_key : 'type',
-            groups: [{
-                key: ['APP', "WAP", "PC"],
-                value: '全部'
-            },{
-                key: 'APP',
-                value: 'APP'
-            },{
-                key: 'WAP',
-                value: 'WAP'
-            },{
-                key: 'PC',
-                value: 'PC'
-            }]
-        }, {
+        //    title: '指标',
+        //    filter_key : 'type',
+        //    groups: [{
+        //        key: ['APP', "WAP", "PC"],
+        //        value: '全部'
+        //    },{
+        //        key: 'APP',
+        //        value: 'APP'
+        //    },{
+        //        key: 'WAP',
+        //        value: 'WAP'
+        //    },{
+        //        key: 'PC',
+        //        value: 'PC'
+        //    }]
+        //}, {
             title: '指标',
             filter_key : 'filter_key',
             groups: [{
