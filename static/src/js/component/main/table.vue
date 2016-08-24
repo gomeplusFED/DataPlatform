@@ -20,36 +20,36 @@
 					>
 					<span @click="tableOperation(tableBody[tableCell], tableBody, tableItem.rows[1])">{{{tableBody[tableCell] | toThousands}}}
 					</span>
-					</td>
-				</tr>
-			</tbody>
-			<tbody v-else>
-				<tr>
-					<td :colspan="tableItem.cols.length">暂无数据</td>
-				</tr>
-			</tbody>
-		</table>
-		<m-pagination :pagination-conf="paginationConf"></m-pagination>
-	</div>
+				</td>
+			</tr>
+		</tbody>
+		<tbody v-else>
+			<tr>
+				<td :colspan="tableItem.cols.length">暂无数据</td>
+			</tr>
+		</tbody>
+	</table>
+	<m-pagination :pagination-conf="paginationConf"></m-pagination>
+</div>
 </template>
 <style scoped>
-.table_con {}
+	.table_con {}
 
-.table_con td,
-.table_con th {
-	box-sizing: border-box;
-	max-width: 200px;
-	min-width: 120px;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	-webkit-line-clamp: 1;
-	-webkit-box-orient: vertical;
-	white-space: nowrap;
-}
+	.table_con td,
+	.table_con th {
+		box-sizing: border-box;
+		max-width: 200px;
+		min-width: 120px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		-webkit-line-clamp: 1;
+		-webkit-box-orient: vertical;
+		white-space: nowrap;
+	}
 
-.table_con td[rowspan] {
-    vertical-align: middle;
-}
+	.table_con td[rowspan] {
+		vertical-align: middle;
+	}
 
 </style>
 <script>
@@ -60,26 +60,26 @@
  * 详细：根据其他组件中交互导致的参数变化，然后请求数据进行渲染（.modal为表格中点击详情的弹出部分）
  */
 
-var Vue = require('Vue');
-var $ = require('jQuery');
+ var Vue = require('Vue');
+ var $ = require('jQuery');
 
-var store = require('../../store/store.js');
-var actions = require('../../store/actions.js');
+ var store = require('../../store/store.js');
+ var actions = require('../../store/actions.js');
 
-var utils = require('utils');
+ var utils = require('utils');
 
-var Pagination = require('../common/pagination.vue');
+ var Pagination = require('../common/pagination.vue');
 
-var eventBus = require('../support/event-bus.vue');
+ var eventBus = require('../support/event-bus.vue');
 
-var Table = Vue.extend({
-	name: 'Table',
-	data: function() {
-		return {
-			initEd: false,
-			tableData: [],
-			tableExample: [],
-			scrollTop: null,
+ var Table = Vue.extend({
+ 	name: 'Table',
+ 	data: function() {
+ 		return {
+ 			initEd: false,
+ 			tableData: [],
+ 			tableExample: [],
+ 			scrollTop: null,
 			// hasRequestUrl: null,
 			paginationConf: {
 				currentPage: 1, // 当前页
@@ -100,69 +100,69 @@ var Table = Vue.extend({
 				// 		col: 2
 				// 	}
 				// }
-			]
-		};
-	},
-	vuex: {
-		getters: {
-			modalTableData: function() {
-				return store.state.modalTableData;
-			}
+				]
+			};
 		},
-		actions: actions
-	},
-	created: function() {
-		this.initEd = true;
-	},
-	ready: function() {
-		this.paginationConf.onChange = this.generatorTable;
-		var _this = this;
-		eventBus.$on('controlTableCol' + this.index, function(option) {
-			_this.tableColControl = option;
-		});
-	},
-	components: {
-		'm-pagination': Pagination
-	},
-	props: ['initData', 'currentData', 'loading', 'index', 'resultArgvs', 'pageComponentsData'],
-	methods: {
-		fetchData: function(cb, errcb) {
-			var _this = this;
-			if (_this.resultArgvs.forceChange) {
-				delete _this.resultArgvs.forceChange;
-			}
-
-			var _current = this.resultArgvs;
-
-			utils.mixin(_current, {
-				limit: this.paginationConf.itemsPerPage,
-				page: this.paginationConf.currentPage
-			});
-
-			$.ajax({
-				url: this.currentData.query_api + '_json',
-				type: 'get',
-				data: _this.resultArgvs,
-				timeout: 5000,
-				success: function(data) {
-					if (data.iserro) {
-						actions.alert(store, {
-							show: true,
-							msg: '查询失败',
-							type: 'danger'
-						});
-						return;
-					}
-					cb && cb(data);
-				},
-				error: function(jqXHR, status, errorThrown) {
-					if (status === 'timeout') {
-						errcb && errcb();
-					}
+		vuex: {
+			getters: {
+				modalTableData: function() {
+					return store.state.modalTableData;
 				}
+			},
+			actions: actions
+		},
+		created: function() {
+			this.initEd = true;
+		},
+		ready: function() {
+			this.paginationConf.onChange = this.generatorTable;
+			var _this = this;
+			eventBus.$on('controlTableCol' + this.index, function(option) {
+				_this.tableColControl = option;
 			});
 		},
-		tableOperation: function(item, tableBody, detailParam) {
+		components: {
+			'm-pagination': Pagination
+		},
+		props: ['initData', 'currentData', 'loading', 'index', 'resultArgvs', 'pageComponentsData'],
+		methods: {
+			fetchData: function(cb, errcb) {
+				var _this = this;
+				if (_this.resultArgvs.forceChange) {
+					delete _this.resultArgvs.forceChange;
+				}
+
+				var _current = this.resultArgvs;
+
+				utils.mixin(_current, {
+					limit: this.paginationConf.itemsPerPage,
+					page: this.paginationConf.currentPage
+				});
+
+				$.ajax({
+					url: this.currentData.query_api + '_json',
+					type: 'get',
+					data: _this.resultArgvs,
+					timeout: 5000,
+					success: function(data) {
+						if (data.iserro) {
+							actions.alert(store, {
+								show: true,
+								msg: '查询失败',
+								type: 'danger'
+							});
+							return;
+						}
+						cb && cb(data);
+					},
+					error: function(jqXHR, status, errorThrown) {
+						if (status === 'timeout') {
+							errcb && errcb();
+						}
+					}
+				});
+			},
+			tableOperation: function(item, tableBody, detailParam) {
 			// item 字符串的html节点，从节点上获取 `url_detail` 或者 `url_link` 以及需要的参数
 
 			// 如果是 `url_link` 检查给的参数，和自己要带的参数，然后形成一个对象，然后 $route.router.go 到 `url_link`，并且带上 query ，下一个页面接收到之后，先请求，请求完把参数拼接上
@@ -286,14 +286,23 @@ var Table = Vue.extend({
 		isSpan (config, row, col) {
 			row = parseInt(row);
 			col = parseInt(col);
-			return !config.length ? true : config.some(function(item) {
+			if (!config.length) {
+				return true;
+			}
+
+			for (let i = config.length - 1; i >= 0; i--) {
+				let item = config[i]
 				if(col== item.col && row== item.row){
 					return true;
 				}
 				let endcol= (item.col+item.end.col-1) < 0 ? 0 : (item.col+item.end.col-1);
 				let endrow= (item.row+item.end.row-1) < 0 ? 0 : (item.row+item.end.row-1);
-				return !(col>= item.col && row>= item.row && col<= endcol && row<= endrow );
-			});
+				let result = col>= item.col && row>= item.row && col<= endcol && row<= endrow;
+				if (result) {
+					return false;
+				}
+			}
+			return true;
 		},
 		getIndexByKey(obj, key) {
 			let index= Object.keys(obj)[key];
