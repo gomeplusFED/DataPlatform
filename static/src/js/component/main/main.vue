@@ -125,6 +125,8 @@ var Main = Vue.extend({
 				}
 				if (/.*(\/.*One)/.test(_this.currentData.query_api)) {
 					eventBus.$emit('globalPlataform', data.components.global_plataform || {});
+				} else if (!_this.index) {
+					eventBus.$emit('globalPlataform', {});
 				}
 			}
 		});
