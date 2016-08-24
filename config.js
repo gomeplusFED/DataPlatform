@@ -222,7 +222,7 @@ module.exports = {
         },
         "18": {
             name : "视频统计",
-            display : true,
+            display : false,
             className : "fa  fa-laptop fa-fw",
             href : "#",
             path : [
