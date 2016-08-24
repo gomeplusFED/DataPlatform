@@ -6,6 +6,7 @@
 	<m-export-confirm></m-export-confirm>
 	<m-plataform></m-plataform>
 	<m-tab-checkbox></m-tab-checkbox>
+	<m-global></m-global>
 	<m-main v-for="item in currentPageDefaultData.defaultData" :index="$index" :init-data="initData" :current-data="currentPageDefaultData.defaultData[$index]" :loading.sync="loading"></m-main>
 </template>
 <script>
@@ -23,6 +24,8 @@ var Confirm = require('./common/confirm.vue');
 var ExportConfirm = require('./common/exportConfirm.vue');
 var Plateform = require('./common/plataform.vue');
 var FilterTabCheckbox = require('./common/filter-tab-checkbox.vue');
+var Global = require('./global/global.vue');
+var eventBus = require('./support/event-bus.vue');
 
 var App = Vue.extend({
 	name: 'App',
@@ -52,7 +55,8 @@ var App = Vue.extend({
 		'm-confirm': Confirm,
 		'm-export-confirm': ExportConfirm,
 		'm-plataform': Plateform,
-		'm-tab-checkbox': FilterTabCheckbox
+		'm-tab-checkbox': FilterTabCheckbox,
+		'm-global': Global
 	},
 	ready() {
 
@@ -85,6 +89,9 @@ var App = Vue.extend({
 					username: window.allPageConfig.page[url].pageTitle // 页面名称 （狗血）
 				}
 			});
+
+			// 全局接口
+			eventBus.$emit('load', []);
 		}
 	}
 
