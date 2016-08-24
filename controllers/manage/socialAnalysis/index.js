@@ -330,8 +330,7 @@ module.exports = (Router) => {
                 value : ["group_id", "key"]
             },
             sum : ["value"],
-            groupBy : ["group_person_num", "group_topic_num", "topic_praise_num",
-                "topic_collect_num", "topic_reply_num"],
+            groupBy : ["key"],
             get : ""
         }],
         secondParams(query, params, sendData) {
