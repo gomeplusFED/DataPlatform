@@ -255,7 +255,7 @@ module.exports = (Router) => {
         router : "/videoStatis/videoFour",
         modelName : ["VideoPlay"],
         platform : false,
-        // version  : true,
+        version  : true,
         excel_export : true,
         date_picker_data : 1,
         flexible_btn:[{
