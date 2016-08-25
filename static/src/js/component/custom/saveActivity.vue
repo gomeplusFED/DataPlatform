@@ -220,6 +220,6 @@
 	}
 
 	.form-group label {
-		min-width: 120px;
+		min-width: 140px;
 	}
 </style>
