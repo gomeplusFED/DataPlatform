@@ -34,7 +34,7 @@ function connect(app) {
             models.UserAnalysisVersion = db.define("ads2_user_analysis_version", obj.UserAnalysisVersion);
             models.Configure = db.define("tbl_rt_configure", obj.Configure);
             models.UsersAccess = db.define("tbl_rt_user_access", obj.UsersAccess);
-            models.UserCompose = db.define("tbl_rt_use_time", obj.UserCompose);
+            models.UserCompose = db.define("ads2_use_time", obj.UserCompose);
             models.MarketingFlow = db.define("tbl_rt_marketing_flow", obj.MarketingFlow);
             models.MarketingCoupon = db.define("tbl_rt_marketing_coupon", obj.MarketingCoupon);
             models.MarketingCouponDetails = db.define("tbl_rt_marketing_coupon_details", obj.MarketingCouponDetails);
