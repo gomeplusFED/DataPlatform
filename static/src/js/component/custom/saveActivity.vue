@@ -64,7 +64,13 @@
 								<input type="text" v-model="channel.channel_id" class="form-control" placeholder="">
 							</div>
 						</div>
-						<button class='btn btn-primary' @click="addChannel">添加</button>
+						<div class="form-group">
+							<label for="channel_id"  class="col-sm-1 control-label"></label>
+							<div class="col-sm-4">
+								<button class='btn btn-primary' @click="addChannel">添加</button>
+							</div>
+						</div>
+						
 					</div>
 				</div>
 				<div class="remark">
@@ -211,5 +217,9 @@
 	.panel-body>div {
 		margin: 10px 0;
 		border-bottom: 1px solid #eee;
+	}
+
+	.form-group label {
+		min-width: 120px;
 	}
 </style>
