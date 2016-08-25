@@ -30,7 +30,8 @@ function connect(app) {
             //db.settings.set('instance.autoFetchLimit', 9999);
             //db.settings.set('instance.cacheSaveCheck', false);
             //db.settings.set('instance.autoSave', true);
-            models.NewAccount = db.define("tbl_rt_useranalysis_newuser", obj.NewAccount);
+            models.NewAccount = db.define("ads2_user_analysis_users", obj.NewAccount);
+            models.UserAnalysisVersion = db.define("ads2_user_analysis_version", obj.UserAnalysisVersion);
             models.Configure = db.define("tbl_rt_configure", obj.Configure);
             models.UsersAccess = db.define("tbl_rt_user_access", obj.UsersAccess);
             models.UserCompose = db.define("tbl_rt_use_time", obj.UserCompose);

@@ -10,7 +10,7 @@ var _ = require("lodash"),
 module.exports = {
     One(data, mapKey, mapName, dates) {
         var type = "line",
-            source = data.data,
+            source = data.first.data[0],
             newData = {},
             data = [],
             map = {};
@@ -47,8 +47,8 @@ module.exports = {
         return data;
     },
     newUsersTwe(data, dates) {
-        var source = data.data,
-            count = data.dataCount,
+        var source = data.first.data[0],
+            count = data.first.count,
             newData = [];
         for(var key of source) {
             newData.push({
@@ -62,16 +62,17 @@ module.exports = {
         return util.toTable([newData], data.rows, data.cols, [count]);
     },
     activeUsersTwe(data, dates) {
-        var source = data.data,
-            count = data.dataCount;
+        var source = data.first.data[0],
+            count = data.first.count;
+
         for(var key of source) {
             key.date = moment(key.date).format("YYYY-MM-DD");
         }
         return util.toTable([source], data.rows, data.cols, [count]);
     },
     startUp(data, dates) {
-        var source = data.data,
-            count = data.dataCount;
+        var source = data.first.data[0],
+            count = data.first.count;
         for(var key of source) {
             key.date = moment(key.date).format("YYYY-MM-DD");
             key.startup_per = util.division(key.start_up, key.active_users);
@@ -79,50 +80,41 @@ module.exports = {
         return util.toTable([source], data.rows, data.cols, [count]);
     },
     versionOne(data, filter_key, dates) {
-        var source = data.data,
-            vers = util.uniq(_.pluck(source, "ver")),
+        var source = data.first.data[0],
+            second = data.second.data[0],
+            versions = [],
             newData = {},
-            array = [],
             type = "line",
-            filter_name = {
-                new_users : "新增用户",
-                active_users : "活跃用户",
-                start_up : "启动次数"
-            },
             map = {};
-        for(var ver of vers) {
-            if(ver !== "ALL") {
-                var obj = {
-                    ver : ver,
-                    value : 0
-                };
-                for(var key of source) {
-                    if(key.ver === ver) {
-                        obj.value += key[filter_key];
-                    }
-                }
-                array.push(obj);
-            }
-        }
-        array.sort((a, b) => {
-            return b.value - a.value;
+
+        second.sort((a, b) => {
+            return b['sum_' + filter_key] - a['sum_' + filter_key];
         });
-        var top = array.length > 10 ? 10 : array.length;
-        for(var i = 0; i < top; i++) {
-            map[array[i].ver] = array[i].ver + "版本";
-        }
-        for(var date of dates) {
-            var obj = {};
-            for(var i = 0; i < top; i++) {
-                obj[array[i].ver] = 0;
+
+        for(let i = 0; i < second.length; i++) {
+            if(i < 10) {
+                versions.push(second[i].version);
             }
-            for(var key of source) {
-                if(date === util.getDate(key.date)) {
-                    obj[key.ver] += key[filter_key];
-                }
-            }
-            newData[date] = obj;
         }
+
+        for(let version of versions) {
+            map[version] = version + "版本";
+        }
+
+        for(let date of dates) {
+            newData[date] = {};
+            for(let version of versions) {
+                newData[date][version] = 0;
+            }
+        }
+
+        for(let item of source) {
+            let date = util.getDate(item.date);
+            if(newData[date][item.version] === 0) {
+                newData[date][item.version] = item["sum_" + filter_key];
+            }
+        }
+
         return [{
             type : type,
             map : map,
@@ -133,9 +125,10 @@ module.exports = {
         }]
     },
     versionTwo(data) {
-        var source = data.data,
-            count = data.dataCount,
-            sum = data.dataSum[1] ? data.dataSum[1] : 1;
+        var source = data.first.data[0],
+            count = data.first.count,
+            sum = data.first.sum[0] ? data.first.sum[0] : 1;
+
         for(var key of source) {
             key.total_users_rate = util.toFixed(key.total_users, sum);
         }
