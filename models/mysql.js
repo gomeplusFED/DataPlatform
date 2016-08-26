@@ -33,7 +33,7 @@ function connect(app) {
             models.NewAccount = db.define("ads2_user_analysis_users", obj.NewAccount);
             models.UserAnalysisVersion = db.define("ads2_user_analysis_version", obj.UserAnalysisVersion);
             models.Configure = db.define("tbl_rt_configure", obj.Configure);
-            models.UsersAccess = db.define("tbl_rt_user_access", obj.UsersAccess);
+            models.UsersAccess = db.define("ads2_user_access", obj.UsersAccess);
             models.UserCompose = db.define("ads2_use_time", obj.UserCompose);
             models.MarketingFlow = db.define("tbl_rt_marketing_flow", obj.MarketingFlow);
             models.MarketingCoupon = db.define("tbl_rt_marketing_coupon", obj.MarketingCoupon);
@@ -53,7 +53,7 @@ function connect(app) {
             models.RebatetRegisterTrendency = db.define("tbl_rt_rebate_register_trendency", obj.RebatetRegisterTrendency);
             models.RebatetRegisterSheduleDetails = db.define("tbl_rt_rebate_register_schedule_details", obj.RebatetRegisterSheduleDetails);
             models.ConfCategories = db.define("ecp_back_categories", obj.ConfCategories);
-            models.UrlAccessWap = db.define("tbl_rt_url_access_wap", obj.UrlAccessWap);
+            models.UrlAccessWap = db.define("ads2_url_access_wap", obj.UrlAccessWap);
             models.KeyValue = db.define("tbl_rt_key_value", obj.KeyValue);
             models.RebateOrderTredencyDetails = db.define("tbl_rt_rebate_order_tredency_details", obj.RebateOrderTredencyDetails);
             models.RebateTypeLevelDetails = db.define("tbl_rt_rebate_type_level_details", obj.RebateTypeLevelDetails);
