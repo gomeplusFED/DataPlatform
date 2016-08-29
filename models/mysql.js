@@ -75,7 +75,7 @@ function connect(app) {
             models.SalesPerfTranKv = db.define("tbl_rt_sales_perf_tran_kv", obj.SalesPerfTranKv);
             models.SalesProductMarketTop = db.define("tbl_rt_sales_product_market_top", obj.SalesProductMarketTop);
             models.SalesProductFlowtTop = db.define("tbl_rt_sales_product_flow_top", obj.SalesProductFlowtTop);
-            models.UserKeepResult = db.define("tbl_rt_user_keep_result", obj.UserKeepResult);
+            models.UserKeepResult = db.define("ads2_user_analysis_keep", obj.UserKeepResult);
             models.ChannelAnalysis = db.define("tbl_rt_channel_analysis", obj.ChannelAnalysis);
             models.ChannelUserKeep = db.define("tbl_rt_channel_user_keep", obj.ChannelUserKeep);
             models.ChannelUserActive = db.define("tbl_rt_channel_user_active", obj.ChannelUserActive);

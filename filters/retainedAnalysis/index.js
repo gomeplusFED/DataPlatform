@@ -8,8 +8,8 @@ var util = require("../../utils"),
 
 module.exports = {
     retainedOne(data) {
-        var source = data.data,
-            count = data.dataCount;
+        var source = data.first.data[0],
+            count = data.first.count;
         for(var key of source) {
             key.date = moment(key.date).format("YYYY-MM-DD");
             key.last_1_keep = util.toFixed(key.last_1_keep, key.new_user);

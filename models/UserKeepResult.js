@@ -13,5 +13,7 @@ module.exports = {
     last_1_keep : Number,
     last_7_keep : Number,
     last_14_keep : Number,
-    last_30_keep : Number
+    last_30_keep : Number,
+    total_users : Number,
+    start_up : Number
 };
