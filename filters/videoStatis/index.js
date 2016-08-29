@@ -224,7 +224,7 @@ module.exports = {
 
         var merge = util.mergeCell(EndArr , ["date", "sdk_app_type"]);
 
-        return util.toTable([source], data.rows, data.cols, {
+        return util.toTable([EndArr], data.rows, data.cols, {
             count : [count],
             config : [merge]
         });
