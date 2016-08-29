@@ -221,7 +221,6 @@ module.exports = {
                 EndArr.push(item);
             }
         }
-        
 
         var merge = util.mergeCell(EndArr , ["date", "sdk_app_type"]);
 
