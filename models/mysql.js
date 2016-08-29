@@ -54,7 +54,8 @@ function connect(app) {
             models.RebatetRegisterSheduleDetails = db.define("tbl_rt_rebate_register_schedule_details", obj.RebatetRegisterSheduleDetails);
             models.ConfCategories = db.define("ecp_back_categories", obj.ConfCategories);
             models.UrlAccessWap = db.define("ads2_url_access_wap", obj.UrlAccessWap);
-            models.KeyValue = db.define("tbl_rt_key_value", obj.KeyValue);
+            models.KeyValue = db.define("ads2_terminal_key_value", obj.KeyValue);
+            //models.KeyValue = db.define("tbl_rt_key_value", obj.KeyValue);
             models.RebateOrderTredencyDetails = db.define("tbl_rt_rebate_order_tredency_details", obj.RebateOrderTredencyDetails);
             models.RebateTypeLevelDetails = db.define("tbl_rt_rebate_type_level_details", obj.RebateTypeLevelDetails);
             models.RebateShopOrderTredencyDetails = db.define("tbl_rt_rebate_shop_order_tredency_details", obj.RebateShopOrderTredencyDetails);
