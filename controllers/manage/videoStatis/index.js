@@ -314,6 +314,7 @@ module.exports = (Router) => {
         modelName : ["VideoPlay"],
         platform : false,
         version  : true,
+        paging : [true],
         excel_export : true,
         date_picker_data : 1,
         flexible_btn:[{
@@ -370,13 +371,13 @@ module.exports = (Router) => {
         cols : [
             [{
                 caption : "日期",
-                type    : "string"
+                type    : "date"
             }, {
                 caption : "SDK类型",
                 type    : "string"
             }, {
                 caption : "版本号",
-                type    : "number"
+                type    : "string"
             }, {
                 caption : "播放次数",
                 type    : "number"
