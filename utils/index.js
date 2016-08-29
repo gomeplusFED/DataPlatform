@@ -357,8 +357,8 @@ exports.beforeDate = function( date , num ){
 
     for(var i=0;i<num;i++){
         var oneDate = new Date(thisDate - oneDay*i);
-        var time = oneDate.toLocaleDateString();
-        time = time.replace("/" , "-");
+        var time = oneDate.getFullYear() + "-" + (oneDate.getMonth()+1) + "-" + oneDate.getDate();
+        // time = time.replace("/" , "-");
         arr.push(time);
     }
     return arr;
