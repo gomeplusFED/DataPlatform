@@ -362,7 +362,7 @@ module.exports = (Router) => {
             "stop_play_num" , 
             "play_fluent" ,
             "port_io_failed" , 
-            "l-11" , 
+            "l-11" ,
             "l-12" ,
             "l-13" ,
             "l-14" ,
