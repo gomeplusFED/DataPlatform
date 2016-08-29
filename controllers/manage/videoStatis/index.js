@@ -325,7 +325,7 @@ module.exports = (Router) => {
         params : function(query , params , sendData){
             return params;
         },
-       /* filter_select : [
+        filter_select : [
             {
                 title : "SDK选择",
                 filter_key : "sdk_app_type",
@@ -351,7 +351,7 @@ module.exports = (Router) => {
                     }
                 ]
             }
-        ],*/
+        ],
         rows : [
             ["date" ,
              "sdk_app_type" ,
