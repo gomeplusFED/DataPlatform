@@ -178,7 +178,19 @@ module.exports = (Router) => {
             "port_overtime" ,
             "play_failed" , 
             "play_error" , 
-            "improper_play"]
+            "improper_play",
+            //add
+            "l-16",
+            "l-17",
+            "l-18",
+            "l-19",
+            "l-20",
+            "l-21",
+            "l-22",
+            "l-23",
+            "l-24",
+            "l-25"
+            ]
         ],
         cols : [
             [{
@@ -217,7 +229,53 @@ module.exports = (Router) => {
             }, {
                 caption : "非正常播放数",
                 type    : "number"
-            }]
+            }
+
+
+            //增加
+            , {
+                caption : "接口成功率",
+                type    : "string",
+                comment : "l-16"
+            }, {
+                caption : "首帧成功率",
+                type    : "string",
+                comment : "l-17"
+            }, {
+                caption : "卡顿播放次率",
+                type    : "string",
+                comment : "l-18"
+            }, {
+                caption : "播放流畅率",
+                type    : "string",
+                comment : "l-19"
+            }, {
+                caption : "接口IO错误率",
+                type    : "string",
+                comment : "l-20"
+            }, {
+                caption : "接口数据错误率",
+                type    : "string",
+                comment : "l-21"
+            }, {
+                caption : "接口超时率",
+                type    : "string",
+                comment : "l-22"
+            }, {
+                caption : "播放失败率",
+                type    : "string",
+                comment : "l-23"
+            }, {
+                caption : "视频错误率",
+                type    : "string",
+                comment : "l-24"
+            }, {
+                caption : "非正常播放率",
+                type    : "string",
+                comment : "l-25"
+            }
+
+            ]
         ],
         filter_select : [
             {
@@ -296,8 +354,8 @@ module.exports = (Router) => {
                 caption : "播放次数",
                 type    : "number"
             }, {
-                caption : "占比",
-                type    : "number"
+                caption : "健康播放概率",
+                type    : "string"
             },{
                 caption : "接口成功数",
                 type    : "number"
@@ -328,9 +386,11 @@ module.exports = (Router) => {
             }, {
                 caption : "非正常播放率",
                 type    : "string"
-            }]
+            }
+            ]
         ],
-        filter_select : [
+        control_table_col : true,
+        /*filter_select : [
             {
                 title : "指标",
                 filter_key : "filter_key",
@@ -350,7 +410,7 @@ module.exports = (Router) => {
                     }
                 ]
             }
-        ],
+        ],*/
         filter (data , query , params){
             return filter.videoFour(data , query , params);
         }
