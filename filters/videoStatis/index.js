@@ -202,7 +202,7 @@ module.exports = {
         var ArrObj = {};
         for(let item of source){
             item["5"] = util.percentage(item.new_play_num , item.new_play_num + item.play_failed) + "%";
-            item["l-11"] = util.percentage(item.port_io_failed , item.sid_num) + "%";
+            item["l-11"] = util.percentage(item.port_data_failed , item.sid_num) + "%";
             item["l-12"] = util.percentage(item.port_overtime , item.sid_num) + "%";
             item["l-13"] = util.percentage(item.play_failed , item.sid_num) + "%";
             item["l-14"] = util.percentage(item.play_error , item.sid_num) + "%";

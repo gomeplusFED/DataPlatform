@@ -323,6 +323,33 @@ module.exports = (Router) => {
         params : function(query , params , sendData){
             return params;
         },
+        filter_select : [
+            {
+                title : "SDK选择",
+                filter_key : "sdk_app_type",
+                groups : [
+                    {
+                        key : ["ALL"],
+                        value:"全部SDK"
+                    },{
+                        key : "ios" ,
+                        value: "IOS"
+                    },{
+                        key : "android",
+                        value: "android"
+                    },{
+                        key : "h5_custom",
+                        value: "h5_custom"
+                    },{
+                        key : "h5_native",
+                        value: "h5_native"
+                    },{
+                        key : "flash",
+                        value: "flash"
+                    }
+                ]
+            }
+        ],
         rows : [
             ["date" ,
              "sdk_app_type" ,
