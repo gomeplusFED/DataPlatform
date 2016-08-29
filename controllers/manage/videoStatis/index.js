@@ -371,7 +371,7 @@ module.exports = (Router) => {
         cols : [
             [{
                 caption : "日期",
-                type    : "date"
+                type    : "string"
             }, {
                 caption : "SDK类型",
                 type    : "string"
