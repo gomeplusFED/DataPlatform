@@ -158,6 +158,7 @@ module.exports = (Router) => {
         platform : false,
         control_table_col : true,
         excel_export : true,
+        paging : [true],
         flexible_btn:[{
              content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ["excel_export"]
