@@ -1,7 +1,7 @@
 <template>
 	<div class="global">
 		<button class="btn btn-default" v-if="showConfig.filter" @click="filter">筛选</button>
-		<m-level-select :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'level_select'" :argvs.sync='argvs'></m-level-select>
+		<m-level-select v-if="showConfig.level_select" :index="1" :init-data="initData" :page-components-data="pageComponentsData" component-type="level_select" :argvs.sync='argvs'></m-level-select>
 	</div>
 </template>
 <script>
@@ -18,11 +18,26 @@
 		store: store,
 		data() {
 			return {
-				showConfig: {
-					filter: false
+				initData: window.allPageConfig,
+				pageComponentsData: {
+					level_select: {
+						name: "category_id",
+						show: true,
+						url: "/api/categories"
+					}
 				},
-				level_select: {
-					
+				argvs: {
+					channel: "",
+					coupon_type: "",
+					day_type: 1,
+					endTime: "2016-08-29",
+					startTime: "2016-08-23",
+					type: "",
+					ver: ""
+				},
+				showConfig: {
+					filter: false,
+					level_select: false
 				}
 			}
 		},
@@ -31,8 +46,10 @@
 			eventBus.$on('load', function(data) {
 				data.forEach(function(item) {
 					_this.showConfig[item.type] = true;
+					console.log(item.type);
 				})
 			});
+			// eventBus.$emit('load', [{type: 'level_select'}, {type: 'filter'}]);
 		},
 		components: {
 			'm-tab-checkbox': FilterTabCheckbox,
