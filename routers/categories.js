@@ -13,5 +13,15 @@ module.exports = function(Router) {
             res.send(data);
         });
     });
+
+
+    /*Router.get('/achievements/productZero', function(req, res, next) {
+        var pid = req.query.pid || "";
+        req.models["SocialCategory"].find({ pid: pid }, function(err, data) {
+            res.send(data);
+        });
+    });*/
+
+    
     return Router;
 };

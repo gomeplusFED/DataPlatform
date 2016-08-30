@@ -349,7 +349,7 @@ exports.isEmptyObject = function(obj){
     return true;
 }
 
-/* 给定一个日期，返回包含前几天日期的一个数组 */
+/* date ,给定一个日期; num , 这一天和几天前的日期 */
 exports.beforeDate = function( date , num ){
     var oneDay = 1000*60*60*24,
         thisDate = new Date(date).getTime(),

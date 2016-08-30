@@ -3,33 +3,72 @@
  * @date 20160415
  * @fileoverview 商品分析
  */
-var util = require(RootPath+"/utils"),
+var util = require("../../utils"),
     moment = require("moment");
 
 module.exports = {
     productOne(data, filter_key) {
-
-        var source = data.first.data[0];
-        return util.toTable([source], data.rows, data.cols);
+        var source = data.data,
+            newData = {
+                one : 0,
+                two : 0,
+                three : 0,
+                four : 0,
+                five : 0,
+                six : 0,
+                seven : 0
+            };
+        for(var key of source) {
+            newData.one += key.product_acc_uv;
+            newData.two += key.product_acc_pv;
+            newData.three += Math.round(key.product_acc_avg_time);
+            newData.four += key.product_scan;
+            newData.five += key.products_cars;
+            newData.six += key.products_order;
+            newData.seven += key.products_pay;
+        }
+        if(filter_key === "2") {
+            data.cols[0][4].caption = "加购商品件数";
+            data.cols[0][5].caption = "下单商品件数";
+            data.cols[0][6].caption = "支付商品件数";
+        }
+        if(filter_key === "1") {
+            data.cols[0][4].caption = "加购商品数";
+            data.cols[0][5].caption = "下单商品数";
+            data.cols[0][6].caption = "支付商品数";
+        }
+        return util.toTable([[newData]], data.rows, data.cols);
     },
     productTwo(data, filter_key, dates) {
-        var source = data.first.data[0],
-            rows   = ["昨日" , "前日" , "环比" , "7日平均环比"],
-            result = [],
-            configRow = data.rows[0];
-
-        for(let key of rows){
-            var obj = {};
-            for(let item of configRow){
-                obj[item] = 0;
-            }
-            obj.names = key;
-            result.push(obj);
+        var source = data.data,
+            type = "line",
+            filter_name = {
+                product_scan : "浏览商品数",
+                products_cars : "加购商品数",
+                products_pay : "支付商品",
+                products_order : "下单商品"
+            },
+            map = {
+                value : filter_name[filter_key]
+            },
+            newData = {};
+        for(var date of dates) {
+            newData[date] = {
+                value : 0
+            };
         }
-
-        console.log(data);
-
-       return util.toTable([result], data.rows, data.cols);
+        for(var key of source) {
+            newData[util.getDate(key.date)].value += key[filter_key];
+        }
+        return [{
+            map : map,
+            type : type,
+            data : newData,
+            config: { // 配置信息
+                stack: false, // 图的堆叠
+                categoryY : false //柱状图竖着
+            }
+        }]
     },
     productThree(data, filter_key) {
         var source = data.data,

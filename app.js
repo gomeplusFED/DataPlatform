@@ -18,10 +18,12 @@ var await = require("asyncawait/await");
 var orm = require('orm');
 
 orm.settings.set("connection.pool", true);
-// orm.settings.set("connection.debug", true);
+orm.settings.set("connection.debug", true);
 Object.keys(config).forEach(function(key) {
     app.locals[key] = config[key];
 });
+
+global.RootPath = __dirname;
 
 //var logger = require("morgan");
 /* 测试使用 */
