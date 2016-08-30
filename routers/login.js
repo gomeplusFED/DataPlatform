@@ -187,6 +187,7 @@ module.exports = function(Router) {
     });
 
     Router.get(/^((?!\/dist).)*$/, function(req, res, next) {
+        console.log("=======");
         if (req.session.isLogin) {
             /*用户输入浏览器地址栏URL路由权限控制*/
             next();
