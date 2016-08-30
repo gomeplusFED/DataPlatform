@@ -53,6 +53,8 @@ app.use(session({
     secret: 'DataPlatform'
 }));
 
+app.use(lactate.static(__dirname + '/static'));
+
 app.use(flash);
 
 app.use(function(req, res, next) {
@@ -69,8 +71,6 @@ new mysql(app);
 routers.forEach(function(router) {
     app.use(router);
 });
-
-app.use(lactate.static(__dirname + '/static'));
 
 app.use(function() {
     var args = arguments;
