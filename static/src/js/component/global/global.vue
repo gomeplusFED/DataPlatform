@@ -1,11 +1,13 @@
 <template>
-<div class="global">
+	<div class="global">
 		<button class="btn btn-default" v-if="showConfig.filter" @click="filter">筛选</button>
+		<m-level-select :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'level_select'" :argvs.sync='argvs'></m-level-select>
 	</div>
 </template>
 <script>
 	var Vue = require('Vue');
 	var FilterTabCheckbox = require('../common/filter-tab-checkbox.vue');
+	var LevelSelect = require('../common/levelSelect.vue');
 
 	var eventBus = require('../support/event-bus.vue');
 
@@ -18,6 +20,9 @@
 			return {
 				showConfig: {
 					filter: false
+				},
+				level_select: {
+					
 				}
 			}
 		},
@@ -30,7 +35,8 @@
 			});
 		},
 		components: {
-			'm-tab-checkbox': FilterTabCheckbox
+			'm-tab-checkbox': FilterTabCheckbox,
+			'm-level-select': LevelSelect
 		},
 		methods: {
 			filter: function(item) {
