@@ -89,9 +89,6 @@ var App = Vue.extend({
 					username: window.allPageConfig.page[url].pageTitle // 页面名称 （狗血）
 				}
 			});
-
-			// 全局接口
-			eventBus.$emit('load', []);
 		}
 	}
 
