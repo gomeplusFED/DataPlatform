@@ -110,7 +110,12 @@ module.exports = {
 
         for(let item of source) {
             let date = util.getDate(item.date);
-            newData[date][item.version] += item["sum_" + filter_key];
+            if(newData[date][item.version]) {
+                newData[date][item.version] += item[filter_key];
+            } else {
+                newData[date][item.version] = item[filter_key];
+            }
+
         }
 
         return [{
@@ -125,7 +130,7 @@ module.exports = {
     versionTwo(data) {
         var source = data.first.data[0],
             count = data.first.count,
-            sum = data.first.sum[0] ? data.first.sum[0] : 1;
+            sum = data.first.sum[0] ? data.first.sum[0] : 0;
 
         for(var key of source) {
             key.total_users_rate = util.toFixed(key.total_users, sum);

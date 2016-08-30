@@ -17,14 +17,7 @@ module.exports = (Router) => {
             params.type = query.type || "ios";
             return params;
         },
-        procedure : [{
-            aggregate : {
-                value : ["version", "date"]
-            },
-            sum : ["new_users", "total_users", "start_up"],
-            groupBy : ["date", "version"],
-            get : ""
-        }, {
+        procedure : [false, {
             aggregate : {
                 value : ["version"]
             },
