@@ -9,7 +9,7 @@ var util = require("../../utils"),
 
 module.exports = {
     indexOne(data) {
-        var source = data.data,
+        var source = data.first.data[0],
             obj = {
                 share_time_sum : 0,
                 share_user_sum : 0,
@@ -26,7 +26,7 @@ module.exports = {
         return util.toTable([[obj]], data.rows, data.cols);
     },
     indexTwo(data, filter_key, dates) {
-        var source = data.data,
+        var source = data.first.data[0],
             newData = {},
             type = "line",
             map = {
@@ -70,7 +70,7 @@ module.exports = {
         }];
     },
     indexThree(data) {
-        var source = data.data,
+        var source = data.first.data[0],
             obj = {},
             one = {},
             two = {},
@@ -122,8 +122,8 @@ module.exports = {
         }];
     },
     indexFour(data, filter_key, page) {
-        var source = data.data,
-            count = data.dataCount,
+        var source = data.first.data[0],
+            count = data.first.count,
             page = page || 1,
             sum = 1;
 
@@ -146,8 +146,8 @@ module.exports = {
         return util.toTable([source], data.rows, data.cols, [count]);
     },
     operating(data) {
-        var source = data.data,
-            count = data.dataCount;
+        var source = data.first.data[0],
+            count = data.first.count;
 
         for(var key of source) {
             key.rate = util.toFixed(key.click_time_sum, key.share_time_sum);

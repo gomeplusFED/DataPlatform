@@ -80,10 +80,10 @@ function connect(app) {
             models.ChannelUserKeep = db.define("tbl_rt_channel_user_keep", obj.ChannelUserKeep);
             models.ChannelUserActive = db.define("tbl_rt_channel_user_active", obj.ChannelUserActive);
             models.ChannelIdNameChart = db.define("tbl_rt_channel_id_name_chart", obj.ChannelIdNameChart);
-            models.ShareAnalyzeOverview = db.define("tbl_rt_share_analyze_overview", obj.ShareAnalyzeOverview);
-            models.ShareAnalyzeTrend = db.define("tbl_rt_share_analyze_trend", obj.ShareAnalyzeTrend);
-            models.ShareAnalyzeChannel = db.define("tbl_rt_share_analyze_channel", obj.ShareAnalyzeChannel);
-            models.ShareAnalyzeChannelTrend = db.define("tbl_rt_share_analyze_channel_trend", obj.ShareAnalyzeChannelTrend);
+            models.ShareAnalyzeOverview = db.define("ads2_share_analyze_overview", obj.ShareAnalyzeOverview);
+            models.ShareAnalyzeTrend = db.define("ads2_share_analyze_trend", obj.ShareAnalyzeTrend);
+            models.ShareAnalyzeChannel = db.define("ads2_share_analyze_channel", obj.ShareAnalyzeChannel);
+            models.ShareAnalyzeChannelTrend = db.define("ads2_share_analyze_channel_trend", obj.ShareAnalyzeChannelTrend);
             models.UrlToName = db.define("tbl_rt_url_to_name", obj.UrlToName);
             models.CouponGroupPriceInterrgional = db.define("ads2_coupon_group_price_interrgional", obj.CouponGroupPriceInterrgional);
             models.CouponGroupShopTop = db.define("ads2_coupon_group_shop_top", obj.CouponGroupShopTop);
