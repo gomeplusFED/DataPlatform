@@ -110,9 +110,7 @@ module.exports = {
 
         for(let item of source) {
             let date = util.getDate(item.date);
-            if(newData[date][item.version] === 0) {
-                newData[date][item.version] = item["sum_" + filter_key];
-            }
+            newData[date][item.version] += item["sum_" + filter_key];
         }
 
         return [{
