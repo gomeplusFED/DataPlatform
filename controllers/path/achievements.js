@@ -41,7 +41,7 @@ module.exports = {
             display : true,
             defaultData : [
                 {
-                    type : "table",
+                    type : "chart",
                     query_api : "/achievements/productZero"
                 },
                 {

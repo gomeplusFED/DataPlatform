@@ -11,6 +11,7 @@ var api = require(RootPath+"/base/main"),
 module.exports = (Router) => {
 
     Router = Router.get("/achievements/productZero_json" , function(req , res , next){
+
         res.json({
             code: 200,
             modelData: [],
@@ -28,7 +29,7 @@ module.exports = (Router) => {
                 },
                 level_select: {
                     show: true,
-                    url: "/api/socialAnalysisCategories",
+                    url: "/api/categories",
                     name: "category_id"
                 },
                 filter_select: [],
