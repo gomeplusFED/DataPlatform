@@ -44,6 +44,7 @@
 		ready() {
 			var _this = this;
 			eventBus.$on('loadGlobal', function(data) {
+				_this.pageComponentsData = data;
 				for(var item in data) {
 					_this.showConfig[item] = true;
 				}
@@ -60,22 +61,22 @@
 		},
 		methods: {
 			filter: function(item) {
-				var _this = this;
-				actions.tabCheckbox(store, {
-					show: false,
-					title: '筛选',
-					max: item.max,
-					groups: item.groups,
-					apply: val => {
-						eventBus.$emit('platformChange', item.key, val);
-						this.cancel();
-					},
-					cancel: () => {
-						actions.tabCheckbox(store, {
-							show: false
-						})
-					}
-				});
+				// var _this = this;
+				// actions.tabCheckbox(store, {
+				// 	show: false,
+				// 	title: '筛选',
+				// 	max: item.max,
+				// 	groups: item.groups,
+				// 	apply: val => {
+				// 		eventBus.$emit('platformChange', item.key, val);
+				// 		this.cancel();
+				// 	},
+				// 	cancel: () => {
+				// 		actions.tabCheckbox(store, {
+				// 			show: false
+				// 		})
+				// 	}
+				// });
 			}
 		},
 		watch: {
@@ -83,7 +84,7 @@
 				handler: function (val, oldVal) {
 				 	let category_id = val.category_id;
 
-				 	eventBus.$emit('platformChange', 'level_select', category_id);
+				 	eventBus.$emit('platformChange',category_id, this.pageComponentsData.level_select.name);
 
 					// let mains = this.$parent.$refs.main;
 					// mains.forEach(x => {
