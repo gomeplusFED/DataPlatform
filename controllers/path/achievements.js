@@ -36,35 +36,71 @@ module.exports = {
     },
     product() {
         return {
-            name : "商品分析",
+            name : "商品运营分析",
             path : "/achievements/product",
             display : true,
             defaultData : [
                 {
+                    type : "chart",
+                    query_api : "/achievements/productZero"
+                },
+                {
                     type : "table",
-                    title : "商品信息总览",
+                    title : "商品总览",
                     query_api : "/achievements/productOne"
                 },
                 {
-                    type : "chart",
-                    title : "商品销售趋势",
+                    type : "table",
+                    title : "商品管理总览",
                     query_api : "/achievements/productTwo"
                 },
                 {
+                    type : "chart",
+                    title : "商品价格区间分布－总商品数（万）",
+                    // query_api : "/achievements/productThree"
+                },
+                {
+                    type : "chart",
+                    title : "商品价格区间分布－新增商品数",
+                    // query_api : "/achievements/productThree"
+                },
+                {
+                    type : "chart",
+                    title : "商品运营趋势",
+                    // query_api : "/achievements/productFour"
+                },
+                {
+                    type : "table",
+                    title : "商品运营明细",
+                    // query_api : "/achievements/productFive"
+                }
+            ]
+        }
+    },
+    productSale() {
+        return {
+            name : "商品销售分析",
+            path : "/achievements/productSale",
+            display : true,
+            defaultData : [
+                {
+                    type : "table",
+                    title : "商品销售总览",
+                    // query_api : "/achievements/productOne"
+                },{
+                    type : "table",
+                    title : "商品销售趋势",
+                    // query_api : "/achievements/productOne"
+                },{
                     type : "table",
                     title : "商品销售明细",
-                    query_api : "/achievements/productThree"
-                },
-                {
+                    // query_api : "/achievements/productOne"
+                },{
                     type : "table",
-                    title : "商品流量排行TOP100",
-                    query_api : "/achievements/productFour"
-                },
-                {
-                    type : "table",
-                    title : "商品销售排行TOP100",
-                    query_api : "/achievements/productFive"
+                    title : "商品排行TOP100",
+                    // query_api : "/achievements/productOne"
                 }
+               
             ]
         }
     },

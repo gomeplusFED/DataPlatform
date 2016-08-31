@@ -110,6 +110,13 @@ function connect(app) {
 
             models.VideoPlay = db.define("ads2_video_playing" , obj.VideoPlay);
 
+            //8.30商品分析部分
+            models.ItemManager = db.define("ads2_itm_manager" , obj.ItemManager);
+            models.ItemOverview = db.define("ads2_itm_overview" , obj.ItemOverview);
+            models.ItemPie = db.define("ads2_itm_pie" , obj.ItemPie);
+            models.ItemRunSales = db.define("ads2_itm_run_sales" , obj.ItemRunSales);
+            models.ItemRunTop = db.define("ads2_itm_run_top" , obj.ItemRunTop);
+
             models.db1 = db;
             next();
         }
