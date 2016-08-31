@@ -57,7 +57,7 @@ module.exports = {
                 {
                     type : "chart",
                     title : "商品价格区间分布－总商品数（万）",
-                    // query_api : "/achievements/productThree"
+                    query_api : "/achievements/productThree"
                 },
                 {
                     type : "chart",

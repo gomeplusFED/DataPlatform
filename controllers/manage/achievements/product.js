@@ -10,8 +10,8 @@ var api = require(RootPath+"/base/main"),
 
 module.exports = (Router) => {
 
+    //本页面商品类目接口
     Router = Router.get("/achievements/productZero_json" , function(req , res , next){
-
         res.json({
             code: 200,
             modelData: [],
@@ -44,32 +44,9 @@ module.exports = (Router) => {
                 }
             }
         });
-
-       /* type: 'filter_tab_checkbox',
-        show: false,
-        key: 'test',
-        url: '',
-        data: []*/
     });
 
-
-    //商品价格区间分布－总商品数（万）
-    /*Router = new api(Router,{
-        router : "/achievements/productZero",
-        modelName : [],
-        platform : false,
-        level_select : true,
-        level_select_name : "category_id",
-        level_select_url : "/api/categories",
-        cols : [[]],
-        rows : [[]],
-        date_picker : false,
-        filter(data, query, dates) {
-            return data;
-        }
-    });*/
-
-
+    //商品总览
     Router = new api(Router,{
         router : "/achievements/productOne",
         modelName : ["ItemOverview"],
@@ -111,7 +88,6 @@ module.exports = (Router) => {
         ]
     });
 
-
     //商品管理总览
     Router = new api(Router,{
         router : "/achievements/productTwo",
@@ -119,9 +95,7 @@ module.exports = (Router) => {
         platform : false,
         date_picker : false,
         rows : [
-            [
-                "names" , "items_add" , "items_put" , "items_down" , "items_frost" , "items_delete"
-            ]
+            ["names" , "items_add" , "items_put" , "items_down" , "items_frost" , "items_delete"]
         ],
         params : function(query , params , sendData){
             var dates = utils.beforeDate(new Date() , 8);
