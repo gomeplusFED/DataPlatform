@@ -3,28 +3,49 @@
  * @date 20160401
  * @fileoverview 平台返利汇总
  */
-var api = require("../../../base/api"),
+var api = require("../../../base/main"),
     help = require("../../../base/help"),
     _ = require("lodash"),
-    orm = require("orm"),
     config = require("../../../utils/config.json"),
     filter = require("../../../filters/platformRebate");
 
 module.exports = (Router) => {
     Router = new api(Router,{
         router : "/platformRebate/platformOrderOne",
-        modelName : ["Rebate", "RebateRefund"],
+        modelName : ["Rebate"],
         level_select : true,
         level_select_name : "category_id",
         level_select_url : "/api/categories",
-        fixedParams(query, filter_key, req, cb) {
-            if(query.category_id === undefined) {
-                query.category_id = "all";
+        fixedParams(req, query, cb) {
+            if(query.category_id) {
+                req.models.ConfCategories.find({
+                    id : query.category_id
+                }, (err, data) => {
+                    if(err) {
+                        cb(err);
+                    } else {
+                        query['category_id_' + (data[0].level + 1)] = query.category_id;
+                        delete query.category_id;
+                        cb(null, query);
+                    }
+                });
+            } else {
+                cb(null, query);
             }
-            query.day_type = 1;
-            query.user_party = "all";
-            cb(null, query);
         },
+        procedure : [{
+            aggregate : "params",
+            sum : ["unique_order_num", "unique_is_rebate_order_num",
+                "fee", "is_rebate_fee", "unique_shop_num", "unique_is_rebate_shop_num",
+                "unique_user_num", "unique_is_rebate_user_num",
+                "merchandise_num", "is_rebate_merchandise_num",
+                "unique_is_over_rebate_order_num", "is_over_rebate_order_amount",
+                "unique_back_merchandise_num", "unique_is_rebate_back_merchandise_num",
+                "back_merchandise_num", "is_rebate_back_merchandise_num",
+                "unique_back_user_num", "unique_is_rebate_back_user_num",
+                "back_merchandise_amount", "is_rebate_back_merchandise_amount"],
+            get : ""
+        }],
         platform : false,
         //date_picker_data: 1,
         flexible_btn: [{
@@ -32,7 +53,7 @@ module.exports = (Router) => {
             preMethods: ["show_help"],
             customMethods: ''
         }],
-        filter(data, filter_key, dates) {
+        filter(data) {
             return filter.platformOrderOne(data);
         },
         rows: [
@@ -43,7 +64,7 @@ module.exports = (Router) => {
                 "rebate_amount_count"
                 //, "rate"
             ],
-            ["name", "spu_count", "sku_count", "refund_user_count", "refund_goods_amount_count",
+            ["name", "spu_count", "sku_count", "refund_user_count", "refund_goods_amount_count"
                 //"refund_goods_amount_actual_count"
             ]
         ],
@@ -108,103 +129,126 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/platformRebate/platformOrderTwe",
         modelName : [ "RebateOrderTredencyDetails", "TypeFlow" ],
-        orderParams : {
-            type : 1,
-            status : 1
+        fixedParams(req, query, cb) {
+            if(query.category_id) {
+                req.models.ConfCategories.find({
+                    id : query.category_id
+                }, (err, data) => {
+                    if(err) {
+                        cb(err);
+                    } else {
+                        query['category_id_' + (data[0].level + 1)] = query.category_id;
+                        delete query.category_id;
+                        cb(null, query);
+                    }
+                });
+            } else {
+                cb(null, query);
+            }
+        },
+        secondParams() {
+            return {
+                type : 1,
+                status : 1
+            };
         },
         level_select : true,
         level_select_name : "category_id",
         level_select_url : "/api/categories",
-        fixedParams(query, filter_key, req, cb) {
-            if(query.category_id === undefined) {
-                query.category_id = "all";
-            }
-            query.day_type = 1;
-            query.correlate_flow = "all";
-            cb(null, query);
-        },
+        procedure : [{
+            aggregate : {
+                value : ["plan_type", "date"]
+            },
+            sum : ["unique_is_rebate_order_num", "is_rebate_fee",
+                "is_rebate_merchandise_num"],
+            groupBy : ["date"],
+            get : ""
+        }, false],
         platform : false,
         filter_select: [{
             title: '指标选择',
             filter_key: 'filter_key',
             groups: [{
-                key: 'order_count',
+                key: 'unique_is_rebate_order_num',
                 value: '订单数'
             }, {
-                key: 'order_amount_count',
+                key: 'is_rebate_fee',
                 value: '订单总金额'
             }, {
-                key: 'goods_sku_count',
+                key: 'is_rebate_merchandise_num',
                 value: '商品件数'
             }]
         }],
-        filter(data, filter_key, dates) {
-            return filter.platformOrderTwe(data, filter_key, dates);
+        filter(data, query, dates) {
+            return filter.platformOrderTwe(data, query.filter_key, dates);
         }
     });
 
     Router = new api(Router,{
         router : "/platformRebate/platformOrderThree",
         modelName : [ "RebateTypeLevelDetails", "TypeFlow" ],
-        orderParams : {
-            type : 1,
-            status : 1
+        fixedParams(req, query, cb) {
+            if(query.category_id) {
+                req.models.ConfCategories.find({
+                    id : query.category_id
+                }, (err, data) => {
+                    if(err) {
+                        cb(err);
+                    } else {
+                        query['category_id_' + (data[0].level + 1)] = query.category_id;
+                        delete query.category_id;
+                        cb(null, query);
+                    }
+                });
+            } else {
+                cb(null, query);
+            }
         },
+        secondParams() {
+            return {
+                type : 1,
+                status : 1
+            };
+        },
+        procedure : [{
+            aggregate : {
+                value : ["level", "rebate_level"]
+            },
+            sum : ["is_rebate_merchandise_num", "is_rebate_fee",
+                "is_over_rebate_order_amount"],
+            groupBy : ["level", "rebate_level"],
+            get : ""
+        }, false],
         level_select : true,
         level_select_name : "category_id",
         level_select_url : "/api/categories",
-        fixedParams(query, filter_key, req, cb) {
-            if(query.category_id === undefined) {
-                query.category_id = "all";
-            }
-            query.day_type = 1;
-            req.models.TypeFlow.find({
-                type : 1,
-                status : 1
-            }, (err, data) => {
-                if(err) {
-                    cb(err);
-                } else {
-                    var user_party = _.uniq(_.pluck(data, "type_code"));
-                    query.user_party = user_party;
-                    cb(null, query);
-                }
-            });
-        },
         platform : false,
         filter_select: [{
             title: '指标选择',
             filter_key: 'filter_key',
             groups: [{
-                key: 'goods_sku_count',
+                key: 'is_rebate_merchandise_num',
                 value: '商品件数'
             }, {
-                key: 'goods_amount_count',
+                key: 'is_rebate_fee',
                 value: '商品总金额'
             }, {
-                key: 'rebate_amount_count',
+                key: 'is_over_rebate_order_amount',
                 value: '返利到账金额'
             }]
         }],
-        filter(data, filter_key, dates) {
-            return filter.platformOrderThree(data, filter_key);
+        filter(data, query, dates) {
+            return filter.platformOrderThree(data, query.filter_key);
         }
     });
 
     Router = new api(Router,{
         router : "/platformRebate/platformOrderFour",
-        modelName : [ "RebateTypeLevelDetails", "TypeFlow" ],
-        orderParams : {
-            type : 1,
-            status : 1
-        },
+        modelName : [ "RebatetSheduleDetails", "TypeFlow" ],
         level_select : true,
         level_select_name : "category_id",
         level_select_url : "/api/categories",
-        fixedParams(query, filter_key, req, cb) {
-            if(query.category_id === undefined) {
-                query.category_id = "all";
-            }
+        fixedParams(req, query, cb) {
             query.day_type = 1;
             req.models.TypeFlow.find({
                 type : 1,
@@ -214,28 +258,43 @@ module.exports = (Router) => {
                     cb(err);
                 } else {
                     var user_party = _.uniq(_.pluck(data, "type_code"));
-                    query.user_party = user_party;
+                    query.plan_type = user_party;
                     cb(null, query);
                 }
             });
         },
+        secondParams() {
+            return {
+                type : 1,
+                status : 1
+            };
+        },
+        procedure : [{
+            aggregate : {
+                value : ["plan_type"]
+            },
+            sum : ["unique_is_rebate_merchandise_num", "is_rebate_fee",
+                "is_over_rebate_order_amount"],
+            groupBy : ["plan_type"],
+            get : ""
+        }, false],
         platform : false,
         filter_select: [{
             title: '指标选择',
             filter_key: 'filter_key',
             groups: [{
-                key: 'goods_sku_count',
+                key: 'unique_is_rebate_merchandise_num',
                 value: '商品件数'
             }, {
-                key: 'goods_amount_count',
+                key: 'is_rebate_fee',
                 value: '商品总金额'
             }, {
-                key: 'rebate_amount_count',
+                key: 'is_over_rebate_order_amount',
                 value: '返利到账金额'
             }]
         }],
-        filter(data, filter_key, dates) {
-            return filter.platformOrderFour(data, filter_key);
+        filter(data, query, dates) {
+            return filter.platformOrderFour(data, query.filter_key);
         }
     });
 
@@ -244,7 +303,7 @@ module.exports = (Router) => {
         modelName : [ "RebatetSheduleDetails", "TypeFlow" ],
         excel_export : true,
         platform : false,
-        paging : true,
+        paging : [true, false],
         order : ["-date"],
         showDayUnit : true,
         date_picker_data : 1,
@@ -252,10 +311,11 @@ module.exports = (Router) => {
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
-        orderParams : {
-            type : 1,
-            status : 1,
-            limit : 100
+        secondParams() {
+            return {
+                type : 1,
+                status : 1
+            };
         },
         selectFilter(req, cb) {
             req.models.TypeFlow.find({
@@ -270,14 +330,14 @@ module.exports = (Router) => {
                         user_party = _.uniq(_.pluck(data, "type_code"));
                     filter_select.push({
                         title: '使用方',
-                        filter_key: 'user_party',
+                        filter_key: 'plan_type',
                         groups : [
                             {
                                 key: user_party,
                                 value: '全部使用方',
                                 cell: {
                                     title: '关联流程',
-                                    filter_key : 'correlate_flow',
+                                    filter_key : 'rebate_type',
                                     groups : [{
                                         key: '',
                                         value: '全部相关流程'
@@ -291,7 +351,7 @@ module.exports = (Router) => {
                             value: '',
                             cell: {
                                 title: '关联流程',
-                                filter_key : 'correlate_flow',
+                                filter_key : 'rebate_type',
                                 groups : [{
                                     key: '',
                                     value: '全部相关流程'
@@ -314,13 +374,13 @@ module.exports = (Router) => {
                 }
             });
         },
-        filter(data, filter_key, dates, filter_key2, page) {
-            return filter.platformOrderFive(data, page);
+        filter(data, query) {
+            return filter.platformOrderFive(data, query.page);
         },
         rows : [
-            [ "id", "rebate_plan_name", "user_party", "deadline", "correlate_flow", "level", "participate_seller_count",
-                "participate_goods_count", "participate_user_count", "order_rate", "price_rate",
-                "rebate_amount" ]
+            [ "id", "plan_name", "plan_type", "validscope_time", "rebate_type", "level", "unique_is_rebate_shop_num",
+                "unique_is_rebate_merchandise_num", "unique_is_rebate_user_num", "order_rate", "price_rate",
+                "is_over_rebate_order_amount" ]
         ],
         cols : [
             [

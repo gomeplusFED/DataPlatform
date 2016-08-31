@@ -31,7 +31,7 @@ function connect(app) {
             //db.settings.set('instance.cacheSaveCheck', false);
             //db.settings.set('instance.autoSave', true);
             models.NewAccount = db.define("ads2_user_analysis_users", obj.NewAccount);
-            models.UserAnalysisVersion = db.define("ads2_user_analysis_version", obj.UserAnalysisVersion);
+            models.UserAnalysisVersion = db.define("ads2_rebate_order_overview", obj.UserAnalysisVersion);
             models.Configure = db.define("tbl_rt_configure", obj.Configure);
             models.UsersAccess = db.define("ads2_user_access", obj.UsersAccess);
             models.UserCompose = db.define("ads2_use_time", obj.UserCompose);
@@ -41,14 +41,14 @@ function connect(app) {
             models.OverviewPage = db.define("ads2_overview_page", obj.OverviewPage);
             models.OverviewPlatf = db.define("ads2_overview_platf", obj.OverviewPlatf);
             models.KpiValue = db.define("tbl_rt_kpi_value", obj.KpiValue);
-            models.Rebate = db.define("tbl_rt_rebate", obj.Rebate);
+            models.Rebate = db.define("ads2_rebate_order_overview", obj.Rebate);
             models.RebateRefund = db.define("tbl_rt_rebate_refund", obj.RebateRefund);
             models.RebateShopOverview = db.define("tbl_rt_rebate_shop_overview", obj.RebateShopOverview);
             models.RebateShopRefund = db.define("tbl_rt_rebate_shop_refund", obj.RebateShopRefund);
             models.RebateShopTop = db.define("tbl_rt_rebate_shop_top", obj.RebateShopTop);
             models.RebateShopPlanTop = db.define("tbl_rt_rebate_shop_plan_top", obj.RebateShopPlanTop);
             models.RebateInvitepartner = db.define("tbl_rt_rebate_invitepartner", obj.RebateInvitepartner);
-            models.RebatetSheduleDetails = db.define("tbl_rt_rebate_schedule_details", obj.RebatetSheduleDetails);
+            models.RebatetSheduleDetails = db.define("ads2_rebate_order_plan_info", obj.RebatetSheduleDetails);
             models.RebatetInviteseller = db.define("tbl_rt_rebate_inviteseller", obj.RebatetInviteseller);
             models.RebatetRegisterTrendency = db.define("tbl_rt_rebate_register_trendency", obj.RebatetRegisterTrendency);
             models.RebatetRegisterSheduleDetails = db.define("tbl_rt_rebate_register_schedule_details", obj.RebatetRegisterSheduleDetails);
@@ -56,8 +56,8 @@ function connect(app) {
             models.UrlAccessWap = db.define("ads2_url_access_wap", obj.UrlAccessWap);
             models.KeyValue = db.define("ads2_terminal_key_value", obj.KeyValue);
             //models.KeyValue = db.define("tbl_rt_key_value", obj.KeyValue);
-            models.RebateOrderTredencyDetails = db.define("tbl_rt_rebate_order_tredency_details", obj.RebateOrderTredencyDetails);
-            models.RebateTypeLevelDetails = db.define("tbl_rt_rebate_type_level_details", obj.RebateTypeLevelDetails);
+            models.RebateOrderTredencyDetails = db.define("ads2_rebate_order_trend", obj.RebateOrderTredencyDetails);
+            models.RebateTypeLevelDetails = db.define("ads2_rebate_order_level_sum", obj.RebateTypeLevelDetails);
             models.RebateShopOrderTredencyDetails = db.define("tbl_rt_rebate_shop_order_tredency_details", obj.RebateShopOrderTredencyDetails);
             models.RebateShopTypeLevelDetails = db.define("tbl_rt_rebate_shop_type_level_details", obj.RebateShopTypeLevelDetails);
             models.Count = db.define("tbl_dataplatform_count", obj.Count);
