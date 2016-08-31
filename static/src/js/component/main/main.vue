@@ -114,7 +114,7 @@ var Main = Vue.extend({
 			type: 'get',
 			success: function(data) {
 				_this.pageComponentsData = data.components;
-
+				
 				if (_this.isnoComponent(data.components)) {
 					Vue.set(_this.argvs, 'forceChange', true);
 					_this.count = 0;

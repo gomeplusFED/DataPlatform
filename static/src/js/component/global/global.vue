@@ -23,7 +23,7 @@
 					level_select: {
 						name: "category_id",
 						show: true,
-						url: "/api/categories"
+						url: "/api/socialAnalysisCategories"
 					}
 				},
 				argvs: {
@@ -43,13 +43,16 @@
 		},
 		ready() {
 			var _this = this;
-			eventBus.$on('load', function(data) {
-				data.forEach(function(item) {
-					_this.showConfig[item.type] = true;
-					console.log(item.type);
-				})
+			eventBus.$on('loadGlobal', function(data) {
+				for(var item in data) {
+					_this.showConfig[item] = true;
+				}
+				// data.forEach(function(item) {
+				// 	_this.showConfig[item.type] = true;
+				// 	console.log(item.type);
+				// })
 			});
-			// eventBus.$emit('load', [{type: 'level_select'}, {type: 'filter'}]);
+			
 		},
 		components: {
 			'm-tab-checkbox': FilterTabCheckbox,
@@ -73,6 +76,22 @@
 						})
 					}
 				});
+			}
+		},
+		watch: {
+			'argvs': {
+				handler: function (val, oldVal) {
+				 	let category_id = val.category_id;
+
+				 	eventBus.$emit('platformChange', 'level_select', category_id);
+
+					// let mains = this.$parent.$refs.main;
+					// mains.forEach(x => {
+					// 	if (x.currentData.title != '返利计划汇总')
+					// 	x.$set('argvs.category_id', category_id);
+					// })
+				},
+				deep: true
 			}
 		}
 	};
