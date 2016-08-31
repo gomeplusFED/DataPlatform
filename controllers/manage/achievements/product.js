@@ -10,46 +10,63 @@ var api = require(RootPath+"/base/main"),
 
 module.exports = (Router) => {
 
-    // Router = Router.get("/achievements/productZero_json" , function(req , res , next){
-    //     res.json({
-    //         code: 200,
-    //         modelData: [ ],
-    //         components: {
-    //         flexible_btn: [ ],
-    //         date_picker: {
-    //         show: false,
-    //         defaultData: 7
-    //         },
-    //         drop_down: {
-    //         platform: false,
-    //         channel: false,
-    //         version: false,
-    //         coupon: false
-    //         },
-    //         level_select: {
-    //         show: true,
-    //         url: "/api/socialAnalysisCategories",
-    //         name: "category_id"
-    //         },
-    //         filter_select: [ ],
-    //         search: {
-    //         show: false
-    //         },
-    //         control_table_col: {
-    //         show: false
-    //         },
-    //         global_plataform: {
-    //         show: false
-    //         }
-    //         }
-    //         });
+    Router = Router.get("/achievements/productZero_json" , function(req , res , next){
+        res.json({
+            code: 200,
+            modelData: [],
+            components: {
+                flexible_btn: [ ],
+                date_picker: {
+                    show: false,
+                    defaultData: 7
+                },
+                drop_down: {
+                    platform: false,
+                    channel: false,
+                    version: false,
+                    coupon: false
+                },
+                level_select: {
+                    show: true,
+                    url: "/api/socialAnalysisCategories",
+                    name: "category_id"
+                },
+                filter_select: [],
+                search: {
+                    show: false
+                },
+                control_table_col: {
+                    show: false
+                },
+                global_plataform: {
+                    show: false
+                }
+            }
+        });
 
-    //    /* type: 'filter_tab_checkbox',
-    //     show: false,
-    //     key: 'test',
-    //     url: '',
-    //     data: []*/
-    // });
+       /* type: 'filter_tab_checkbox',
+        show: false,
+        key: 'test',
+        url: '',
+        data: []*/
+    });
+
+
+    //商品价格区间分布－总商品数（万）
+    /*Router = new api(Router,{
+        router : "/achievements/productZero",
+        modelName : [],
+        platform : false,
+        level_select : true,
+        level_select_name : "category_id",
+        level_select_url : "/api/categories",
+        cols : [[]],
+        rows : [[]],
+        date_picker : false,
+        filter(data, query, dates) {
+            return data;
+        }
+    });*/
 
 
     Router = new api(Router,{
@@ -106,10 +123,12 @@ module.exports = (Router) => {
             ]
         ],
         params : function(query , params , sendData){
-            var dates = utils.beforeDate(new Date() , 2);
-            
-            params.date = dates[1];
+            var dates = utils.beforeDate(new Date() , 8);
+
+            params.date = dates;
             params.category_id = -6;
+            query.date = dates;
+
             return params;
         },
         cols : [
@@ -134,64 +153,19 @@ module.exports = (Router) => {
             },]
         ],
 
-        filter(data, filter_key, dates) {
-            return filter.productTwo(data, filter_key, dates);
+        filter(data, query) {
+            return filter.productTwo(data, query);
         }
     });
 
+    //商品价格区间分布－总商品数（万）
     Router = new api(Router,{
         router : "/achievements/productThree",
-        modelName : ["SalesPerfProductKv"],
+        modelName : ["ItemPie"],
         platform : false,
-        paging : true,
-        order : ["-date"],
-        excel_export : true,
-        filter_select: [{
-            title: '',
-            filter_key : 'sku_type',
-            groups: [{
-                key: 2,
-                value: 'SKU'
-            }, {
-                key: 1,
-                value: 'item'
-            }]
-        }],
-        flexible_btn : [{
-            content: '<a href="javascript:void(0)">导出</a>',
-            preMethods: ['excel_export']
-        }],
-        filter(data, filter_key, dates) {
-            return filter.productThree(data, filter_key);
-        },
-        rows : [
-            [ 'date', 'product_scan', 'products_order', "products_pay", "products_return",
-                "pay_fee", "refund_fee" ]
-        ],
-        cols : [
-            [{
-                caption: '日期',
-                type: 'string'
-            }, {
-                caption: '被访问商品数',
-                type: 'number'
-            }, {
-                caption: '下单商品数/件数',
-                type: 'number'
-            }, {
-                caption: '支付商品数/件数',
-                type: 'number'
-            }, {
-                caption: '退货商品数/件数',
-                type: 'number'
-            }, {
-                caption: '支付金额',
-                type: 'number'
-            }, {
-                caption: '退货金额',
-                type: 'number'
-            }]
-        ]
+        filter(data, query, dates) {
+            return filter.productThree(data, query);
+        }
     });
 
     Router = new api(Router,{

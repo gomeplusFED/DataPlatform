@@ -40,10 +40,10 @@ module.exports = {
             path : "/achievements/product",
             display : true,
             defaultData : [
-                {
-                    type : "table",
-                    // query_api : "/achievements/productZero"
-                },
+                // {
+                //     type : "table",
+                //     query_api : "/achievements/productZero"
+                // },
                 {
                     type : "table",
                     title : "商品总览",
