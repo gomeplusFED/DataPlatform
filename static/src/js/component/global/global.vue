@@ -1,6 +1,6 @@
 <template>
 	<div class="global">
-		<button class="btn btn-default" v-if="pageComponentsData['flexible_btn']" @click="tab_checkbox(pageComponentsData['flexible_btn'][0])">筛选</button>
+		<button class="btn btn-default" v-if="pageComponentsData['flexible_btn']" @click="tab_checkbox(pageComponentsData['flexible_btn'])">筛选</button>
 		<m-level-select v-if="pageComponentsData['level_select']" :index="1" :init-data="initData" :page-components-data="pageComponentsData" component-type="level_select" :argvs.sync='argvs'></m-level-select>
 	</div>
 </template>
