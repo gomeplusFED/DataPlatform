@@ -174,9 +174,7 @@ module.exports = {
             className: "fa fa-bar-chart-o fa-fw fa-fw",
             href: "#",
             path: [
-                obj.marketingAnalysis.overview(),
-                obj.marketingAnalysis.activityFlow(),
-                obj.marketingAnalysis.couponInfo()
+                obj.marketingAnalysis.overview()
             ]
         },
         "15": {
