@@ -85,14 +85,6 @@ module.exports = (Router) => {
         }
     });
 
-    //Router  = Router.get("/marketingAnalysis/overviewFour_json", (req, res, next) => {
-    //    res.json({
-    //        code : 200,
-    //        modelData : [],
-    //        components : {}
-    //    })
-    //});
-
 
 
     function _render(res, sendData, modules) {
