@@ -57,23 +57,23 @@ module.exports = {
                 {
                     type : "chart",
                     title : "商品价格区间分布－总商品数（万）",
-                    // query_api : "/achievements/productThree"
+                    query_api : "/achievements/productThree"
                 },
-                {
-                    type : "chart",
-                    title : "商品价格区间分布－新增商品数",
-                    // query_api : "/achievements/productThree"
-                },
-                {
-                    type : "chart",
-                    title : "商品运营趋势",
-                    // query_api : "/achievements/productFour"
-                },
-                {
-                    type : "table",
-                    title : "商品运营明细",
-                    // query_api : "/achievements/productFive"
-                }
+                // {
+                //     type : "chart",
+                //     title : "商品价格区间分布－新增商品数",
+                //     // query_api : "/achievements/productThree"
+                // },
+                // {
+                //     type : "chart",
+                //     title : "商品运营趋势",
+                //     // query_api : "/achievements/productFour"
+                // },
+                // {
+                //     type : "table",
+                //     title : "商品运营明细",
+                //     // query_api : "/achievements/productFive"
+                // }
             ]
         }
     },

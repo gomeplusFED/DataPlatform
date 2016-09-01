@@ -8,12 +8,15 @@ var util = require("../../utils"),
 
 /* 环比计算 , 昨天－前天  ／  前天 */
 function Chain(lastday , beforeLastday){
-    if(lastday == 0 && beforeLastday == 0) return '0%';
+    if(lastday == 0 || beforeLastday == 0){
+        return '0%';
+    } 
 
-    if(!beforeLastday) beforeLastday = 1;
     var num = (lastday - beforeLastday) / beforeLastday;
+
     return util.toFixed(num , 0);
 }
+
 
 module.exports = {
     
@@ -35,8 +38,8 @@ module.exports = {
         //作为除数不能为0
         initObj.sid_num = 1;
 
-        //source应该有三项，没有时给初始化对象
-        for(var i=0;i<3;i++){
+        //source应该有两项，没有时给初始化对象
+        for(var i=0;i<2;i++){
             if(allSource[i] == undefined){
                 allSource.push(initObj);
             }
@@ -53,6 +56,7 @@ module.exports = {
         });
 
         //表二，表三都应当有三行，进行三次循环将对应的值放入two,three两个数组中
+        var day_type = [0 ,"日环比" , "周环比" , "月环比"];
         for(var i=1;i<=3;i++){
             var Obj2 = {},  //表二的数据结构 
                 Obj3 = {};  //表三的数据结构
@@ -74,7 +78,7 @@ module.exports = {
                     }
                     break;
                 case 2:
-                    //概率 除以新增播放次数
+                    //概率 除以sid_num
                     for(let item of data.rows[1]){
                         Obj2[item] = util.toFixed(source[item] / source.sid_num , 0);
                         if(item == "health_play"){
@@ -90,16 +94,18 @@ module.exports = {
                     break;
                 case 3:
                     for(let item of data.rows[1]){
-                        Obj2[item] = Chain(allSource[1][item] , allSource[2][item]);
                         if(item == "health_play"){
-                            Obj2[item] = "日环比";
+                            Obj2[item] = day_type[query.day_type];
+                        }else{
+                            Obj2[item] = Chain(allSource[0][item] , allSource[1][item]);
                         }
                     }
 
                     for(let item of data.rows[2]){
-                        Obj3[item] = Chain(allSource[1][item] , allSource[2][item]);
                         if(item == "unhealth_play"){
-                            Obj3[item] = "日环比";
+                            Obj3[item] = day_type[query.day_type];
+                        }else{
+                            Obj3[item] = Chain(allSource[0][item] , allSource[1][item]);
                         }
                     }
             }
@@ -122,41 +128,78 @@ module.exports = {
                 "unhealth_pro" : "错误播放概率(%)"
             },
             filter_key = query.filter_key;
-        var map  = { value : filterKey[filter_key] };
+        var map  = {
+            "ios" : "ios",
+            "andriod" : "andriod",
+            "h5_custom" : "h5_custom",
+            "h5_native" : "h5_native",
+            "flash" : "flash"
+        };
 
         /* init Data */
         var source = data.first.data[0];
-        var obj = {}, //以日期为键保存数据
-            newData = {};  //输出的数据
-        for(let item of source){
-            var date = util.getDate(item.date);
-            obj[date] = item;
-        }
+        var newData = {};  //输出的数据
 
+        //有几个时间输出几个以时间为键的值
         for(let item of dates){
-            var theobj = { value:0 };
-            if(!obj[item]){
-                newData[item] = theobj;
-                continue;
-            }
+            //每一个时间的键都应包含以下数据
+            var theobj = {
+                "ios" : 0,
+                "andriod" : 0,
+                "h5_custom":0,
+                "h5_native":0,
+                "flash":0
+            };
 
-            if(filter_key == "new_play_num" || filter_key == "unhealth_play" || filter_key == "health_play"){
-                
-                theobj.value = obj[item][filter_key];
-            }else{
-                if(obj[item].sid_num == 0){
-                    obj[item].sid_num = 1;
+            //遍历查询结果找出和当前时间相等的值
+            for(let key of source){
+                if(util.getDate(key.date) != item){
+                    continue;
                 }
-                if(filter_key == "health_pro"){
-                    theobj.value = util.percentage(obj[item].health_play , obj[item].sid_num);
-                }else if(filter_key == "unhealth_pro"){
-                    theobj.value = util.percentage(obj[item].unhealth_play , obj[item].sid_num);
+                //与当前时间相等的值包括sdk的所有类型,找出这条记录与谁相等
+                for(var onekey in theobj){
+                    if(onekey == key.sdk_app_type){
+                        //找到了对应的记录，根据filter_key赋值
+                        var number;
+                        switch(filter_key){
+                            case "new_play_num":
+                            case "unhealth_play":
+                            case "health_play":
+                                number = key[filter_key];
+                                break;
+                            case "health_pro":
+                                number = util.percentage(key.health_play , key.sid_num);
+                                break;
+                            case "unhealth_pro":
+                                number = util.percentage(key.unhealth_play , key.sid_num);
+                                break;
+                        }
+                        theobj[onekey] = number;
+                    }
                 }
             }
 
             newData[item] = theobj;
         }
-        
+
+        /* 输出格式
+        {
+            "2016-08-22" : {
+                "ios" : 3333,
+                "andriod" : 2323,
+                "h5_custom" : 2344,
+                "h5_native" : 2111,
+                "flash" : 333
+            },
+            "2016-08-23" : {
+                "ios" : 66,
+                "andriod" : 54,
+                "h5_custom" : 443,
+                "h5_native" : 22,
+                "flash" : 333
+            }
+        }*/
+
         return [{
             type : type,
             map : map,
@@ -192,10 +235,10 @@ module.exports = {
             count  = data.first.count;
 
         /* 整理数据 */
-        var total_new_play_num = 0;
+        // var total_new_play_num = 0;
         for(let item of source){
             item.date = util.getDate(item.date);
-            total_new_play_num += item.sid_num;
+            // total_new_play_num += item.sid_num;
         }
 
         //sdk_app_type,相同的放一起,最后重新排序

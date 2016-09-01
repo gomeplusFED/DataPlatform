@@ -114,6 +114,9 @@ function connect(app) {
             models.ItemRunSales = db.define("ads2_itm_run_sales" , obj.ItemRunSales);
             models.ItemRunTop = db.define("ads2_itm_run_top" , obj.ItemRunTop);
 
+            //9.1
+            models.AdsKeyValue = db.define("ads2_key_value" , obj.AdsKeyValue);
+
             models.db1 = db;
             next();
         }

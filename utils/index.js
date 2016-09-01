@@ -349,18 +349,63 @@ exports.isEmptyObject = function(obj){
     return true;
 }
 
-/* date ,给定一个日期; num , 这一天和几天前的日期 */
-exports.beforeDate = function( date , num ){
-    var oneDay = 1000*60*60*24,
-        thisDate = new Date(date).getTime(),
-        arr = [];
+
+/*
+ * 功能描述：给定一个日期，获取前几日／前几周／前几月的日期
+ * 参数 ：date , 给定的日期
+ *       num  , 要获取几个，包含date ,默认只包含1天
+ *       type , 日 1，周 2， 月 3，  默认1  
+ * 备注：月份只会返回获得月的最后一天 
+ * beforeDate("2016-2-2" , 5 , 3)
+ [  '2016-2-29',
+    '2016-1-31',
+    '2015-12-31',
+    '2015-11-30',
+    '2015-10-31' 
+]
+*/
+
+exports.beforeDate = function( date , num , type ){
+    var type = type/1 || 1,
+        num  = num || 1,
+        thisDate = new Date(date),
+        arr = [];    //返回的数组
+    //date是必须的
+    if(!date) return false;
+
+    var Units;
+
+    switch(type){
+        case 1:
+            Units = 1000*60*60*24;
+            break;
+        case 2:
+            Units = 1000*60*60*24*7;
+            break;
+        case 3:
+            break;
+    }
 
     for(var i=0;i<num;i++){
-        var oneDate = new Date(thisDate - oneDay*i);
-        var time = oneDate.getFullYear() + "-" + (oneDate.getMonth()+1) + "-" + oneDate.getDate();
-        // time = time.replace("/" , "-");
-        arr.push(time);
+        var aDate;
+        if(Units){
+            //日，周
+            aDate = new Date(thisDate.getTime() - i*Units);
+            aDate = aDate.getFullYear() + "-" + (aDate.getMonth()+1) + "-" + aDate.getDate();
+        }else{
+            //月
+            var year = thisDate.getFullYear();
+            var month = thisDate.getMonth() + 1 - i;
+            if(month <= 0){
+                month += 12;
+                year--;
+            }
+            var mDate = new Date(year , month , 0);
+            aDate = year + "-" + month + "-" + mDate.getDate();
+        }
+        arr.push(aDate);
     }
+
     return arr;
 }
 

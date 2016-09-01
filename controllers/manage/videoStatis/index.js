@@ -18,18 +18,19 @@ module.exports = (Router) => {
         modelName : ["VideoPlay"],
         platform : false,
         date_picker_data : 1,
+        showDayUnit: true,
         params : function(query , params , sendData){
-            // query.startTime = "2016-08-9";
 
             params.sdk_app_type = "ALL";
             params.ver = "ALL";
-            params.date = util.beforeDate(query.startTime , 3);
+            params.date = util.beforeDate(query.startTime , 2 , query.day_type);
+            
             //保存下来传递给过滤函数使用
             query.date = params.date;
             return params;
         },
         rows : [
-            ["new_play_num" , "active_user" ],
+            ["new_play_num" /*, "active_user" */],
             ["health_play" , "port_succ" , "start_frame_succ" , "stop_play_num" , "play_fluent"],
             ["unhealth_play" , "port_io_failed" , "port_data_failed" , "port_overtime" , "play_failed" , "play_error" , "improper_play"]
         ],
@@ -37,26 +38,30 @@ module.exports = (Router) => {
             [{
                 caption : "新增播放次数",
                 type    : "number"
-            },{
+            }/*,{
                 caption : "活跃用户数",
                 type    : "number"
-            }],
+            }*/],
 
             [{
                 caption : "健康播放统计",
                 type    : "string"
             }, {
                 caption : "play接口成功数",
-                type    : "number"
+                type    : "number",
+                help    : "视频请求play接口成功"
             }, {
                 caption : "首帧成功数",
-                type    : "number"
+                type    : "number",
+                help    : "视频获取首帧成功"
             }, {
                 caption : "卡顿播放次数",
-                type    : "number"
+                type    : "number",
+                help    : "视频卡的视频"
             }, {
                 caption : "播放流畅数",
-                type    : "number"
+                type    : "number",
+                help    : "'视频一次没有卡的视频"
             }],
 
             [{
@@ -64,22 +69,28 @@ module.exports = (Router) => {
                 type    : "string"
             }, {
                 caption : "接口IO错误数",
-                type    : "number"
+                type    : "number",
+                help    : "视频play接口io错误"
             }, {
                 caption : "接口数据错误数",
-                type    : "number"
+                type    : "number",
+                help    : "视频play接口数据错误"
             }, {
                 caption : "接口超时数",
-                type    : "number"
+                type    : "number",
+                help    : "视频play接口超时"
             }, {
                 caption : "播放失败数",
-                type    : "number"
+                type    : "number",
+                help    : "播放视频渲染失败的视频"
             }, {
                 caption : "视频错误数",
-                type    : "number"
+                type    : "number",
+                help    : "视频出现错误等级error的视频"
             }, {
                 caption : "非正常播放数",
-                type    : "number"
+                type    : "number",
+                help    : "视频出现错误等级warn的视频"
             }]
         ],
         filter (data , query , params){
@@ -96,12 +107,11 @@ module.exports = (Router) => {
             return filter.videoTwo(data , query , dates);
         },
         params : function(query , params){
-            // params.date.from = "2016-08-07";
             params.ver = "ALL";
             return params;
         },
         filter_select : [
-            {
+            /*{
                 title : "SDK选择",
                 filter_key : "sdk_app_type",
                 groups : [
@@ -125,7 +135,7 @@ module.exports = (Router) => {
                         value: "flash"
                     }
                 ]
-            },{
+            },*/{
                 title : "指标",
                 filter_key : "filter_key",
                 groups : [
@@ -137,13 +147,13 @@ module.exports = (Router) => {
                         value:"健康播放数"
                     },{
                         key : "health_pro",
-                        value:"健康播放概率"
+                        value:"健康播放概率(%)"
                     },{
                         key : "unhealth_play",
                         value:"错误播放数"
                     },{
                         key : "unhealth_pro",
-                        value:"错误播放概率"
+                        value:"错误播放概率(%)"
                     }
                 ]
             }
@@ -159,6 +169,7 @@ module.exports = (Router) => {
         control_table_col : true,
         excel_export : true,
         paging : [true],
+        order : ["date"],
         flexible_btn:[{
              content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ["excel_export"]
@@ -199,37 +210,48 @@ module.exports = (Router) => {
                 type    : "string"
             }, {
                 caption : "播放次数",
-                type    : "number"
+                type    : "number",
+                help    : "某视频只要播放过次数"
             }, {
                 caption : "接口成功数",
-                type    : "number"
+                type    : "number",
+                help    : "视频请求play接口成功"
             }, {
                 caption : "首帧成功数",
-                type    : "number"
+                type    : "number",
+                help    : "视频获取首帧成功"
             }, {
                 caption : "卡顿播放次数",
-                type    : "number"
+                type    : "number",
+                help    : "视频卡的视频"
             },{
                 caption : "播放流畅数",
-                type    : "number"
+                type    : "number",
+                help    : "视频一次没有卡的视频"
             }, {
                 caption : "接口IO错误数",
-                type    : "number"
+                type    : "number",
+                help    : "视频play接口io错误"
             }, {
                 caption : "接口数据错误数",
-                type    : "number"
+                type    : "number",
+                help    : "视频play接口数据错误"
             }, {
                 caption : "接口超时数",
-                type    : "number"
+                type    : "number",
+                help    : "视频play接口超时"
             }, {
                 caption : "播放失败数",
-                type    : "number"
+                type    : "number",
+                help    : "播放视频渲染失败的视频"
             },{
                 caption : "视频错误数",
-                type    : "number"
+                type    : "number",
+                help    : "视频出现错误等级error的视频"
             }, {
                 caption : "非正常播放数",
-                type    : "number"
+                type    : "number",
+                help    : "视频出现错误等级warn的视频"
             }
 
 
@@ -237,43 +259,53 @@ module.exports = (Router) => {
             , {
                 caption : "接口成功率",
                 type    : "string",
-                comment : "l-16"
+                comment : "l-16",
+                help    : "视频请求play接口成功"
             }, {
                 caption : "首帧成功率",
                 type    : "string",
-                comment : "l-17"
+                comment : "l-17",
+                help    : "视频获取首帧成功"
             }, {
                 caption : "卡顿播放次率",
                 type    : "string",
-                comment : "l-18"
+                comment : "l-18",
+                help    : "视频卡的视频"
             }, {
                 caption : "播放流畅率",
                 type    : "string",
-                comment : "l-19"
+                comment : "l-19",
+                help    : "视频一次没有卡的视频"
             }, {
                 caption : "接口IO错误率",
                 type    : "string",
-                comment : "l-20"
+                comment : "l-20",
+                help    : "视频play接口io错误"
             }, {
                 caption : "接口数据错误率",
                 type    : "string",
-                comment : "l-21"
+                comment : "l-21",
+                help    : "视频play接口数据错误"
             }, {
                 caption : "接口超时率",
                 type    : "string",
-                comment : "l-22"
+                comment : "l-22",
+                help    : "视频play接口超时"
             }, {
                 caption : "播放失败率",
                 type    : "string",
-                comment : "l-23"
+                comment : "l-23",
+                help    : "播放视频渲染失败的视频"
             }, {
                 caption : "视频错误率",
                 type    : "string",
-                comment : "l-24"
+                comment : "l-24",
+                help    : "视频出现错误等级error的视频"
             }, {
                 caption : "非正常播放率",
                 type    : "string",
-                comment : "l-25"
+                comment : "l-25",
+                help    : "视频出现错误等级warn的视频"
             }
 
             ]
@@ -314,7 +346,8 @@ module.exports = (Router) => {
         router : "/videoStatis/videoFour",
         modelName : ["VideoPlay"],
         platform : false,
-        version  : true,
+        showDayUnit: true,
+        // version  : true,
         paging : [true],
         excel_export : true,
         date_picker_data : 1,
@@ -323,7 +356,46 @@ module.exports = (Router) => {
             preMethods: ["excel_export"]
         }],
         params : function(query , params , sendData){
+            if(params.ver == "ALL"){
+                delete params.ver;
+            }
+            if(params.sdk_app_type == "ALL"){
+                params.sdk_app_type = ["ios" , "android" , "h5_custom" , "h5_native" , "flash"];
+            }
             return params;
+        },
+         //初始化一级分类选项
+        selectFilter(req , cb){
+            var filter_select = {
+                title : "版本号",
+                filter_key : "ver",
+                groups : [{
+                    key : "ALL",
+                    value:"ALL"
+                }]
+            };
+
+            req.models.AdsKeyValue.find({
+                "key_name" : "video_version"
+            }, (err , data)=>{
+                if(!err){
+                    for(var key of data){
+                        var obj = {
+                            key : key.values1,
+                            value:key.values1
+                        }
+                        filter_select.groups.push(obj);
+                    }
+                    if(this.filter_select[1]){
+                        this.filter_select[1] = filter_select;
+                    }else{
+                        this.filter_select.push(filter_select);
+                    }
+                    cb(null,this.filter_select);
+                }else{
+                    cb(err);
+                }
+            });
         },
         filter_select : [
             {
@@ -331,7 +403,7 @@ module.exports = (Router) => {
                 filter_key : "sdk_app_type",
                 groups : [
                     {
-                        key : ["ALL"],
+                        key : "ALL",
                         value:"全部SDK"
                     },{
                         key : "ios" ,
@@ -381,40 +453,51 @@ module.exports = (Router) => {
                 type    : "string"
             }, {
                 caption : "播放次数",
-                type    : "number"
+                type    : "number",
+                help    : "某视频只要播放过次数"
             }, {
                 caption : "健康播放概率",
-                type    : "string"
+                type    : "string",
             },{
                 caption : "接口成功数",
-                type    : "number"
+                type    : "number",
+                help    : "视频请求play接口成功"
             }, {
                 caption : "首帧成功数",
-                type    : "number"
+                type    : "number",
+                help    : "视频获取首帧成功"
             }, {
                 caption : "卡顿播放次数",
-                type    : "number"
+                type    : "number",
+                help    : "视频卡的视频"
             }, {
                 caption : "播放流畅数",
-                type    : "number"
+                type    : "number",
+                help    : "视频一次没有卡的视频"
             }, {
-                caption : "接口IO错误数",
-                type    : "number"
+                caption : "接口IO错误率",
+                type    : "number",
+                help    : "视频play接口io错误"
             },{
                 caption : "接口数据错误率",
-                type    : "string"
+                type    : "string",
+                help    : "视频play接口数据错误"
             }, {
                 caption : "接口超时率",
-                type    : "string"
+                type    : "string",
+                help    : "视频play接口超时"
             }, {
                 caption : "播放失败率",
-                type    : "string"
+                type    : "string",
+                help    : "播放视频渲染失败的视频"
             }, {
                 caption : "视频错误率",
-                type    : "string"
+                type    : "string",
+                help    : "视频出现错误等级error的视频"
             }, {
                 caption : "非正常播放率",
-                type    : "string"
+                type    : "string",
+                help    : "视频出现错误等级warn的视频"
             }
             ]
         ],
