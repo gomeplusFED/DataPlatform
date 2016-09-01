@@ -18,10 +18,10 @@ module.exports = {
             //    type: "table",
             //    title: "实时概况",
             //    query_api: "/marketingAnalysis/overviewOne"
-            }, {
-                type: "chart",
-                title: "实时概况",
-                query_api: "/marketingAnalysis/overviewFour"
+            // }, {
+            //     type: "chart",
+            //     title: "实时概况",
+            //     query_api: "/marketingAnalysis/overviewFour"
             }]
         };
     },
