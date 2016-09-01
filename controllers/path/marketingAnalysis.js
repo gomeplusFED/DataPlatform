@@ -11,17 +11,17 @@ module.exports = {
             path: "/marketingAnalysis/overview",
             display: true,
             defaultData: [{
-                type: "chart",
-                title: "",
-                query_api: "/marketingAnalysis/overviewZero"
+            //    type: "chart",
+            //    title: "",
+            //    query_api: "/marketingAnalysis/overviewZero"
             //}, {
-            //    type: "table",
+                type: "table",
+                title: "实时概况",
+                query_api: "/marketingAnalysis/overviewOne"
+            //}, {
+            //    type: "chart",
             //    title: "实时概况",
-            //    query_api: "/marketingAnalysis/overviewOne"
-            // }, {
-            //     type: "chart",
-            //     title: "实时概况",
-            //     query_api: "/marketingAnalysis/overviewFour"
+            //    query_api: "/marketingAnalysis/overviewFour"
             }]
         };
     },
