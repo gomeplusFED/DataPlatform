@@ -1,7 +1,7 @@
 <template>
 	<div class="global">
-		<button class="btn btn-default" v-if="showConfig.filter" @click="filter">筛选</button>
-		<m-level-select v-if="showConfig.level_select" :index="1" :init-data="initData" :page-components-data="pageComponentsData" component-type="level_select" :argvs.sync='argvs'></m-level-select>
+		<button class="btn btn-default" v-if="pageComponentsData['flexible_btn']" @click="tab_checkbox(pageComponentsData['flexible_btn'])">筛选</button>
+		<m-level-select v-if="pageComponentsData['level_select']" :index="1" :init-data="initData" :page-components-data="pageComponentsData" component-type="level_select" :argvs.sync='argvs'></m-level-select>
 	</div>
 </template>
 <script>
@@ -20,11 +20,11 @@
 			return {
 				initData: window.allPageConfig,
 				pageComponentsData: {
-					level_select: {
-						name: "category_id",
-						show: true,
-						url: "/api/socialAnalysisCategories"
-					}
+					// level_select: {
+					// 	name: "category_id",
+					// 	show: true,
+					// 	url: "/api/socialAnalysisCategories"
+					// }
 				},
 				argvs: {
 					channel: "",
@@ -36,7 +36,7 @@
 					ver: ""
 				},
 				showConfig: {
-					filter: false,
+					flexible_btn: false,
 					level_select: false
 				}
 			}
@@ -45,9 +45,9 @@
 			var _this = this;
 			eventBus.$on('loadGlobal', function(data) {
 				_this.pageComponentsData = data;
-				for(var item in data) {
-					_this.showConfig[item] = true;
-				}
+				// for(var item in data) {
+				// 	_this.showConfig[item] = true;
+				// }
 				// data.forEach(function(item) {
 				// 	_this.showConfig[item.type] = true;
 				// 	console.log(item.type);
@@ -60,23 +60,25 @@
 			'm-level-select': LevelSelect
 		},
 		methods: {
-			filter: function(item) {
-				// var _this = this;
-				// actions.tabCheckbox(store, {
-				// 	show: false,
-				// 	title: '筛选',
-				// 	max: item.max,
-				// 	groups: item.groups,
-				// 	apply: val => {
-				// 		eventBus.$emit('platformChange', item.key, val);
-				// 		this.cancel();
-				// 	},
-				// 	cancel: () => {
-				// 		actions.tabCheckbox(store, {
-				// 			show: false
-				// 		})
-				// 	}
-				// });
+			tab_checkbox: function(item) {
+				var _this = this;
+				actions.tabCheckbox(store, {
+					show: true,
+					title: '筛选',
+					max: item.max,
+					groups: item.groups,
+					apply: val => {
+						eventBus.$emit('platformChange',val , item.key);
+						actions.tabCheckbox(store, {
+							show: false
+						});
+					},
+					cancel: () => {
+						actions.tabCheckbox(store, {
+							show: false
+						});
+					}
+				});
 			}
 		},
 		watch: {

@@ -81,7 +81,7 @@
 				var currentPageDefaultData = window.allPageConfig.page[url];
 				var query_api = currentPageDefaultData.defaultData[0].query_api;
 
-				if(query_api === '/achievements/productZero') {
+				if(query_api.lastIndexOf('Zero') === query_api.length-4) {
 					$.ajax({
 						url: query_api + '_json',
 						type: 'get',
@@ -95,7 +95,7 @@
 
 				actions.setCurrentPageDefaultData(store, currentPageDefaultData);
 
-
+				this.loading = false;
 
 			// 页面访问统计
 			$.ajax({
