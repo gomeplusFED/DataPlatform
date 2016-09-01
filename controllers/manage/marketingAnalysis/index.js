@@ -3,7 +3,7 @@
  * @date 20160414
  * @fileoverview 活动总览
  */
-var api = require("../../../base/api"),
+var api = require("../../../base/main"),
     filter = require("../../../filters/marketingAnalysis");
 
 module.exports = (Router) => {
@@ -53,5 +53,16 @@ module.exports = (Router) => {
         });
     });
 
+    Router  = Router.get("/marketingAnalysis/overviewOne_json", (req, res, next) => {
+        let query = req.query;
+    });
+
+    Router  = Router.get("/marketingAnalysis/overviewFour_json", (req, res, next) => {
+        res.json({
+            code : 200,
+            modelData : [],
+            components : {}
+        })
+    });
     return Router;
 };

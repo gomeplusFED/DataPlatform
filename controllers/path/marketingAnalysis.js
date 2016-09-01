@@ -16,8 +16,12 @@ module.exports = {
                 query_api: "/marketingAnalysis/overviewZero"
             //}, {
             //    type: "table",
-            //    title: "营销活动流量",
-            //    query_api: "/marketingAnalysis/overviewTwo"
+            //    title: "实时概况",
+            //    query_api: "/marketingAnalysis/overviewOne"
+            }, {
+                type: "chart",
+                title: "实时概况",
+                query_api: "/marketingAnalysis/overviewFour"
             }]
         };
     },
