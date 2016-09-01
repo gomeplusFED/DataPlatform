@@ -9,70 +9,70 @@ var _ = require("lodash"),
 
 module.exports = {
     platformOrderOne(data) {
-        var source = data.first.data[0] ? data.first.data[0][0] || {} : {},
+        var source = data.first.data,
             one = [],
             two = [{
-                rebate_order_count : source.sum_is_over_rebate_order_num || 0,
-                rebate_amount_count : source.sum_is_over_rebate_order_amount || 0
+                rebate_order_count : source[10] || 0,
+                rebate_amount_count : source[11] || 0
             }],
             three = [];
 
         one.push({
             name : "返利订单",
-            order_count : source.sum_unique_is_rebate_order_num || 0,
-            rebate_order_amount_count : source.sum_is_rebate_fee || 0,
-            participate_seller_count : source.sum_unique_is_rebate_shop_num || 0,
-            participate_user_count : source.sum_unique_is_rebate_user_num || 0,
-            productSku_num : source.sum_is_rebate_merchandise_num || 0
+            order_count : source[1] || 0,
+            rebate_order_amount_count : source[3] || 0,
+            participate_seller_count : source[5] || 0,
+            participate_user_count : source[7] || 0,
+            productSku_num : source[9] || 0
         });
         one.push({
             name : "总占比",
             order_count : util.toFixed(
                 one[0].order_count,
-                source.sum_unique_order_num || 0
+                source[0] || 0
             ),
             rebate_order_amount_count : util.toFixed(
                 one[0].rebate_order_amount_count,
-                source.sum_fee || 0
+                source[2] || 0
             ),
             participate_seller_count : util.toFixed(
                 one[0].participate_seller_count,
-                source.sum_unique_shop_num || 0
+                source[4] || 0
             ),
             participate_user_count : util.toFixed(
                 one[0].participate_user_count,
-                source.sum_unique_user_num || 0
+                source[6] || 0
             ),
             productSku_num : util.toFixed(
                 one[0].participate_user_count,
-                source.sum_merchandise_num || 0
+                source[8] || 0
             )
         });
 
         three.push({
             name: "返利订单",
-            spu_count: source.sum_unique_is_rebate_back_merchandise_num || 0,
-            sku_count: source.sum_is_rebate_back_merchandise_num || 0,
-            refund_user_count: source.sum_unique_is_rebate_back_user_num || 0,
-            refund_goods_amount_count: source.sum_is_rebate_back_merchandise_amount || 0
+            spu_count: source[13] || 0,
+            sku_count: source[15] || 0,
+            refund_user_count: source[17] || 0,
+            refund_goods_amount_count: source[19] || 0
         });
         three.push({
             name: "返利退货订单占比",
             spu_count: util.toFixed(
                 three[0].spu_count,
-                source.sum_unique_back_merchandise_num || 0
+                source[12] || 0
             ),
             sku_count: util.toFixed(
                 three[0].sku_count,
-                source.sum_back_merchandise_num || 0
+                source[14] || 0
             ),
             refund_user_count: util.toFixed(
                 three[0].refund_user_count,
-                source.sum_unique_back_user_num || 0
+                source[16] || 0
             ),
             refund_goods_amount_count: util.toFixed(
                 three[0].refund_goods_amount_count,
-                source.sum_back_merchandise_amount || 0
+                source[18] || 0
             )
         });
         return util.toTable([one, two, three], data.rows, data.cols);

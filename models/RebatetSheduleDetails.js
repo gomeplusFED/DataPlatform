@@ -13,6 +13,7 @@ module.exports = {
     plan_type : String,
     rebate_type : String,
     level : String,
+    rebate_level : String,
     validscope_time : String,
     unique_is_rebate_order_num : Number,
     is_rebate_fee : Number,

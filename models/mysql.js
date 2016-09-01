@@ -42,6 +42,8 @@ function connect(app) {
             models.OverviewPlatf = db.define("ads2_overview_platf", obj.OverviewPlatf);
             models.KpiValue = db.define("tbl_rt_kpi_value", obj.KpiValue);
             models.Rebate = db.define("ads2_rebate_order_overview", obj.Rebate);
+            models.RebateOrderMuiltipleOverview = db.define("ads2_rebate_order_muiltiple_overview", obj.RebateOrderMuiltipleOverview);
+            models.RebateOrderMuiltipleTrend = db.define("ads2_rebate_order_muiltiple_trend", obj.RebateOrderMuiltipleTrend);
             models.RebateRefund = db.define("tbl_rt_rebate_refund", obj.RebateRefund);
             models.RebateShopOverview = db.define("tbl_rt_rebate_shop_overview", obj.RebateShopOverview);
             models.RebateShopRefund = db.define("tbl_rt_rebate_shop_refund", obj.RebateShopRefund);

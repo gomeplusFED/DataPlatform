@@ -4,9 +4,7 @@
  * @fileoverview 平台返利汇总
  */
 var api = require("../../../base/main"),
-    help = require("../../../base/help"),
     _ = require("lodash"),
-    config = require("../../../utils/config.json"),
     filter = require("../../../filters/platformRebate");
 
 module.exports = (Router) => {
@@ -48,11 +46,6 @@ module.exports = (Router) => {
         }],
         platform : false,
         //date_picker_data: 1,
-        flexible_btn: [{
-            content: '<a href="javascript:void(0)" help_url="/platformRebate/help_json">帮助</a>',
-            preMethods: ["show_help"],
-            customMethods: ''
-        }],
         filter(data) {
             return filter.platformOrderOne(data);
         },
@@ -86,23 +79,29 @@ module.exports = (Router) => {
                 type: "string"
             }, {
                 caption: "商品件数",
-                type: "string"
+                type: "string",
+                help : "所有订单中，带返利的商品总件数，统计时间为订单生成时间"
             }],
             [{
                 caption: "返利到账订单数",
-                type: "string"
+                type: "string",
+                help : "返利订单中已经返利到账的订单数，统计时间为订单返利到账时间"
             //}, {
             //    caption: "返利到账订单总金额",
-            //    type: "string"
+            //    type: "string",
+            //    help : "统计时间内所有已返利订单的成交金额，统计时间为订单返利到账时间"
             //}, {
             //    caption: "返利到账订单实付金额",
-            //    type: "string"
+            //    type: "string",
+            //    help : "统计时间内所有已返利订单的实际支付金额，统计时间为订单返利到账时间"
             }, {
                 caption: "返利到账金额",
-                type: "string"
+                type: "string",
+                help : "返利订单中已返利总金额，统计时间为订单返利到账时间"
             //}, {
             //    caption: "返利比率",
-            //    type: "string"
+            //    type: "string",
+            //    help : "返利到账金额/返利到账订单实付金额"
             }],
             [{
                 caption: "",
@@ -249,19 +248,36 @@ module.exports = (Router) => {
         level_select_name : "category_id",
         level_select_url : "/api/categories",
         fixedParams(req, query, cb) {
-            query.day_type = 1;
-            req.models.TypeFlow.find({
-                type : 1,
-                status : 1
-            }, (err, data) => {
-                if(err) {
-                    cb(err);
-                } else {
-                    var user_party = _.uniq(_.pluck(data, "type_code"));
-                    query.plan_type = user_party;
-                    cb(null, query);
-                }
-            });
+            if(query.category_id) {
+                req.models.ConfCategories.find({
+                    id : query.category_id
+                }, (err, data) => {
+                    if(err) {
+                        cb(err);
+                    } else {
+                        query['category_id_' + (data[0].level + 1)] = query.category_id;
+                        delete query.category_id;
+                        find(req, query, cb);
+                    }
+                });
+            } else {
+                find(req, query, cb);
+            }
+
+            function find(req, query, cb) {
+                req.models.TypeFlow.find({
+                    type : 1,
+                    status : 1
+                }, (err, data) => {
+                    if(err) {
+                        cb(err);
+                    } else {
+                        var user_party = _.uniq(_.pluck(data, "type_code"));
+                        query.plan_type = user_party;
+                        cb(null, query);
+                    }
+                });
+            }
         },
         secondParams() {
             return {
@@ -304,7 +320,6 @@ module.exports = (Router) => {
         excel_export : true,
         platform : false,
         paging : [true, false],
-        order : ["-date"],
         showDayUnit : true,
         date_picker_data : 1,
         flexible_btn : [{
@@ -419,49 +434,10 @@ module.exports = (Router) => {
                     type : "string"
                 }, {
                     caption : "返利到账金额",
-                    type : "number"
+                    type : "number",
+                help : "返利订单中已返利总金额，统计时间为订单返利到账时间"
                 }
             ]
-        ]
-    });
-
-    Router = new help(Router, {
-        router : "/platformRebate/help",
-        rows : config.help.rows,
-        cols : config.help.cols,
-        data : [
-            {
-                name : "商品件数",
-                help : "所有订单中，带返利的商品总件数，统计时间为订单生成时间"
-            },
-            {
-                name : "返利到账订单数",
-                help : "返利订单中已经返利到账的订单数，统计时间为订单返利到账时间"
-            },
-            {
-                name : "返利到账订单总金额",
-                help : "统计时间内所有已返利订单的成交金额，统计时间为订单返利到账时间"
-            },
-            {
-                name : "返利到账订单实付金额",
-                help : "统计时间内所有已返利订单的实际支付金额，统计时间为订单返利到账时间"
-            },
-            {
-                name : "返利到账金额",
-                help : "返利订单中已返利总金额，统计时间为订单返利到账时间"
-            },
-            {
-                name : "返利比率",
-                help : "返利到账金额/返利到账订单实付金额"
-            },
-            {
-                name : "返利退货订单占比",
-                help : "（例）退货商品数/（所有退货商品数，包括无返利商品），统计时间为订单生成时间"
-            },
-            {
-                name : "返利层级分布",
-                help : "返利商品件数，返利商品总金额，统计时间为订单生成时间；返利到账金额，统计时间为订单返利到账时间"
-            }
         ]
     });
 
