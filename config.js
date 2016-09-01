@@ -165,6 +165,7 @@ module.exports = {
             path: [
                 obj.achievements.shop(),
                 obj.achievements.product(),
+                obj.achievements.productSale(),
                 obj.achievements.trade()
             ]
         },

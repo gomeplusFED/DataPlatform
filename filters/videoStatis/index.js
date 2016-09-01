@@ -173,6 +173,16 @@ module.exports = {
 
         for(let item of source){
             item.date = util.getDate(item.date);
+            item["l-16"] = util.percentage(item.port_succ , item.sid_num) + "%";
+            item["l-17"] = util.percentage(item.start_frame_succ , item.sid_num) + "%";
+            item["l-18"] = util.percentage(item.stop_play_num , item.sid_num) + "%";
+            item["l-19"] = util.percentage(item.play_fluent , item.sid_num) + "%";
+            item["l-20"] = util.percentage(item.port_io_failed , item.sid_num) + "%";
+            item["l-21"] = util.percentage(item.port_data_failed , item.sid_num) + "%";
+            item["l-22"] = util.percentage(item.port_overtime , item.sid_num) + "%";
+            item["l-23"] = util.percentage(item.play_failed , item.sid_num) + "%";
+            item["l-24"] = util.percentage(item.play_error , item.sid_num) + "%";
+            item["l-25"] = util.percentage(item.improper_play , item.sid_num) + "%";
         }
         return util.toTable([source], data.rows, data.cols);
     },
@@ -191,8 +201,8 @@ module.exports = {
         //sdk_app_type,相同的放一起,最后重新排序
         var ArrObj = {};
         for(let item of source){
-            item["5"] = util.percentage(item.sid_num , total_new_play_num) + "%";
-            item["l-11"] = util.percentage(item.port_io_failed , item.sid_num) + "%";
+            item["5"] = util.percentage(item.new_play_num , item.new_play_num + item.play_failed) + "%";
+            item["l-11"] = util.percentage(item.port_data_failed , item.sid_num) + "%";
             item["l-12"] = util.percentage(item.port_overtime , item.sid_num) + "%";
             item["l-13"] = util.percentage(item.play_failed , item.sid_num) + "%";
             item["l-14"] = util.percentage(item.play_error , item.sid_num) + "%";
@@ -211,11 +221,10 @@ module.exports = {
                 EndArr.push(item);
             }
         }
-        
 
         var merge = util.mergeCell(EndArr , ["date", "sdk_app_type"]);
 
-        return util.toTable([source], data.rows, data.cols, {
+        return util.toTable([EndArr], data.rows, data.cols, {
             count : [count],
             config : [merge]
         });

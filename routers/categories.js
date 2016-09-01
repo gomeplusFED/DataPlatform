@@ -13,5 +13,6 @@ module.exports = function(Router) {
             res.send(data);
         });
     });
+    
     return Router;
 };
