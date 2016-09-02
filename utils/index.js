@@ -318,6 +318,15 @@ exports.mergeCell = function(data, rows) {
                                 }
                             });
                             col = j;
+                        } else if(j === data.length - 1) {
+                            _array.push({
+                                col : i,
+                                row : col,
+                                end : {
+                                    col : i,
+                                    row : j - col + 1
+                                }
+                            });
                         }
                     } else {
                         col = j;
