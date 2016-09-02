@@ -230,38 +230,53 @@ module.exports = {
         return util.toTable([source], data.rows, data.cols);
     },
 
-    videoFour(data , query , params){
+    videoFour(data , query , dates){
         var source = data.first.data[0],
             count  = data.first.count;
 
-        /* 整理数据 */
-        // var total_new_play_num = 0;
-        for(let item of source){
-            item.date = util.getDate(item.date);
-            // total_new_play_num += item.sid_num;
+        var RowsOther = [ 
+            "port_succ" , 
+            "start_frame_succ" , 
+            "stop_play_num" , 
+            "play_fluent" ,
+            "port_io_failed" , 
+            "port_data_failed" ,
+            "port_overtime" ,
+            "play_failed" ,
+            "play_error" ,
+            "improper_play" ,
+        ];
+
+        //time , sdk_app_type,相同的放一起,最后重新排序
+        var ArrObj = {};
+        for(let date of dates){
+            ArrObj[date] = {};
         }
 
-        //sdk_app_type,相同的放一起,最后重新排序
-        var ArrObj = {};
         for(let item of source){
-            item["5"] = util.percentage(item.new_play_num , item.new_play_num + item.play_failed) + "%";
-            item["l-11"] = util.percentage(item.port_data_failed , item.sid_num) + "%";
-            item["l-12"] = util.percentage(item.port_overtime , item.sid_num) + "%";
-            item["l-13"] = util.percentage(item.play_failed , item.sid_num) + "%";
-            item["l-14"] = util.percentage(item.play_error , item.sid_num) + "%";
-            item["l-15"] = util.percentage(item.improper_play , item.sid_num) + "%";
-
-            if(!ArrObj[item.sdk_app_type]){
-                ArrObj[item.sdk_app_type] = [];
+            //过滤版本为ALL的数据
+            if(item.ver == "ALL"){
+                continue;
             }
-            ArrObj[item.sdk_app_type].push(item);
+            item.date = util.getDate(item.date);
+
+            item["5"] = util.percentage(item.new_play_num , item.new_play_num + item.play_failed) + "%";
+          
+            for(let key of RowsOther){
+                item[key+"_lv"] = util.percentage(item[key] , item.sid_num) + "%";
+            }
+
+            if(!ArrObj[item.date][item.sdk_app_type]) ArrObj[item.date][item.sdk_app_type] = [];
+            ArrObj[item.date][item.sdk_app_type].push(item);
         }
 
         //重新排序
         var EndArr = [];
-        for(var key in ArrObj){
-            for(let item of ArrObj[key]){
-                EndArr.push(item);
+        for(var date in ArrObj){
+            for(var key in ArrObj[date]){
+                for(let item of ArrObj[date][key]){
+                    EndArr.push(item);
+                }
             }
         }
 

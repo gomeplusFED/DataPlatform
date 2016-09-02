@@ -346,11 +346,9 @@ module.exports = (Router) => {
         router : "/videoStatis/videoFour",
         modelName : ["VideoPlay"],
         platform : false,
-        showDayUnit: true,
-        // version  : true,
-        paging : [true],
+        paging : [false],
+        order : ["date"],
         excel_export : true,
-        date_picker_data : 1,
         flexible_btn:[{
              content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ["excel_export"]
@@ -364,7 +362,7 @@ module.exports = (Router) => {
             }
             return params;
         },
-         //初始化一级分类选项
+        //初始化一级分类选项
         selectFilter(req , cb){
             var filter_select = {
                 title : "版本号",
@@ -425,80 +423,153 @@ module.exports = (Router) => {
             }
         ],
         rows : [
-            ["date" ,
-             "sdk_app_type" ,
-            "ver" ,
-            "new_play_num" , 
-            "5" ,
-            "port_succ" , 
-            "start_frame_succ" , 
-            "stop_play_num" , 
-            "play_fluent" ,
-            "port_io_failed" , 
-            "l-11" ,
-            "l-12" ,
-            "l-13" ,
-            "l-14" ,
-            "l-15"]
+            [
+                "date" ,
+                "sdk_app_type" ,
+                "ver" ,
+                "new_play_num" , 
+                "5" ,
+
+                //健康播放统计
+                "port_succ" , 
+                "start_frame_succ" , 
+                "stop_play_num" , 
+                "play_fluent" ,
+
+                //健康播放概率
+                "port_succ_lv" , 
+                "start_frame_succ_lv" , 
+                "stop_play_num_lv" , 
+                "play_fluent_lv" ,
+
+                //错误播放统计
+                "port_io_failed" , 
+                "port_data_failed" ,
+                "port_overtime" ,
+                "play_failed" ,
+                "play_error" ,
+                "improper_play" ,
+
+                //错误播放概率
+                "port_io_failed_lv" , 
+                "port_data_failed_lv" ,
+                "port_overtime_lv" ,
+                "play_failed_lv" ,
+                "play_error_lv" ,
+                "improper_play_lv" ,
+            ]
         ],
         cols : [
-            [{
-                caption : "日期",
-                type    : "string"
-            }, {
-                caption : "SDK类型",
-                type    : "string"
-            }, {
-                caption : "版本号",
-                type    : "string"
-            }, {
-                caption : "播放次数",
-                type    : "number",
-                help    : "某视频只要播放过次数"
-            }, {
-                caption : "健康播放概率",
-                type    : "string",
-            },{
-                caption : "接口成功数",
-                type    : "number",
-                help    : "视频请求play接口成功"
-            }, {
-                caption : "首帧成功数",
-                type    : "number",
-                help    : "视频获取首帧成功"
-            }, {
-                caption : "卡顿播放次数",
-                type    : "number",
-                help    : "视频卡的视频"
-            }, {
-                caption : "播放流畅数",
-                type    : "number",
-                help    : "视频一次没有卡的视频"
-            }, {
-                caption : "接口IO错误率",
-                type    : "number",
-                help    : "视频play接口io错误"
-            },{
-                caption : "接口数据错误率",
-                type    : "string",
-                help    : "视频play接口数据错误"
-            }, {
-                caption : "接口超时率",
-                type    : "string",
-                help    : "视频play接口超时"
-            }, {
-                caption : "播放失败率",
-                type    : "string",
-                help    : "播放视频渲染失败的视频"
-            }, {
-                caption : "视频错误率",
-                type    : "string",
-                help    : "视频出现错误等级error的视频"
-            }, {
-                caption : "非正常播放率",
-                type    : "string",
-                help    : "视频出现错误等级warn的视频"
-            }
+            [
+                {
+                    caption : "日期",
+                    type    : "string"
+                }, {
+                    caption : "SDK类型",
+                    type    : "string"
+                }, {
+                    caption : "版本号",
+                    type    : "string"
+                }, {
+                    caption : "播放次数",
+                    type    : "number",
+                    help    : "某视频只要播放过次数"
+                }, {
+                    caption : "健康播放概率",
+                    type    : "string",
+                },
+
+                //健康播放统计
+                {
+                    caption : "接口成功数",
+                    type    : "number",
+                    help    : "视频请求play接口成功"
+                }, {
+                    caption : "首帧成功数",
+                    type    : "number",
+                    help    : "视频获取首帧成功"
+                }, {
+                    caption : "卡顿播放次数",
+                    type    : "number",
+                    help    : "视频卡的视频"
+                }, {
+                    caption : "播放流畅数",
+                    type    : "number",
+                    help    : "视频一次没有卡的视频"
+                }, 
+
+                //健康播放概率
+                {
+                    caption : "接口成功率",
+                    type    : "string",
+                    help    : "视频请求play接口成功"
+                }, {
+                    caption : "首帧成功率",
+                    type    : "string",
+                    help    : "视频获取首帧成功"
+                }, {
+                    caption : "卡顿播放率",
+                    type    : "string",
+                    help    : "视频卡的视频"
+                }, {
+                    caption : "播放流畅率",
+                    type    : "string",
+                    help    : "视频一次没有卡的视频"
+                },
+
+                //错误播放统计
+                {
+                    caption : "接口IO错误数",
+                    type    : "number",
+                    help    : "视频play接口io错误"
+                },{
+                    caption : "接口数据错误数",
+                    type    : "number",
+                    help    : "视频play接口数据错误"
+                }, {
+                    caption : "接口超时数",
+                    type    : "number",
+                    help    : "视频play接口超时"
+                }, {
+                    caption : "播放失败数",
+                    type    : "number",
+                    help    : "播放视频渲染失败的视频"
+                }, {
+                    caption : "视频错误数",
+                    type    : "number",
+                    help    : "视频出现错误等级error的视频"
+                }, {
+                    caption : "非正常播放数",
+                    type    : "number",
+                    help    : "视频出现错误等级warn的视频"
+                }, 
+
+                //错误播放概率
+                {
+                    caption : "接口IO错误率",
+                    type    : "string",
+                    help    : "视频play接口io错误"
+                }, {
+                    caption : "接口数据错误率",
+                    type    : "string",
+                    help    : "视频play接口数据错误"
+                }, {
+                    caption : "接口超时率",
+                    type    : "string",
+                    help    : "视频play接口超时"
+                }, {
+                    caption : "播放失败率",
+                    type    : "string",
+                    help    : "播放视频渲染失败的视频"
+                }, {
+                    caption : "视频错误率",
+                    type    : "string",
+                    help    : "视频出现错误等级error的视频"
+                }, {
+                    caption : "非正常播放率",
+                    type    : "string",
+                    help    : "视频出现错误等级warn的视频"
+                }
             ]
         ],
         control_table_col : true,
@@ -523,8 +594,8 @@ module.exports = (Router) => {
                 ]
             }
         ],*/
-        filter (data , query , params){
-            return filter.videoFour(data , query , params);
+        filter (data , query , dates){
+            return filter.videoFour(data , query , dates);
         }
     });
     
