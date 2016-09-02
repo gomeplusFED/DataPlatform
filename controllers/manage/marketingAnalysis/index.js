@@ -3,9 +3,13 @@
  * @date 20160414
  * @fileoverview 活动总览
  */
-var redis = require("ioredis"),
+let redis = require("ioredis"),
     redisConfig = require("../../../db/redis.json"),
     config = require("../../../db/config.json").redis,
+    moment = require("moment"),
+    filter = require("../../../filters/marketingAnalysis"),
+    async = require("asyncawait/async"),
+    await = require("asyncawait/await"),
     cluster = new redis.Cluster(redisConfig[config]);
 
 module.exports = (Router) => {
@@ -57,51 +61,140 @@ module.exports = (Router) => {
 
     Router  = Router.get("/marketingAnalysis/overviewOne_json", (req, res, next) => {
         let query = req.query,
-            modules = {},
+            data = {
+                now : {},
+                old : {}
+            },
+            now = new Date(),
+            date = moment(now).format("MMDD"),
+            oldDate = moment(new Date(now - 24 * 60 * 60 * 1000)).format("MMDD"),
+            hour = moment(now).format("HH"),
             cols = [
                 [
                     {
-                        caption : ""
+                        caption : "",
+                        type : "string"
                     },{
-                        caption : "活动页UV"
+                        caption : "活动页UV",
+                        type : "number"
                     },{
-                        caption : "活动页PV"
+                        caption : "活动页PV",
+                        type : "number"
                     },{
-                        caption : "新增注册"
+                        caption : "新增注册",
+                        type: "number"
                     },{
-                        caption : "分享人数"
+                        caption : "分享人数",
+                        type : "number"
                     },{
-                        caption : "分享次数"
+                        caption : "分享次数",
+                        type : "number"
                     }
                 ]
             ],
             rows = [
                 ["name", "uv", "pv", "new_user", "share_user", "share_num"]
             ];
-        if(Object(query).length === 0) {
-            _render(res, [], modules);
-        } else {
 
+        if(Object(query).length === 0) {
+            _render(res, []);
+        } else {
+            for(let key of rows[0]) {
+                data.now[key] = [];
+                data.old[key] = [];
+            }
+            if(query.channel_id) {
+                for(let key of query.channel_id) {
+                    for(let i = 0; i < +hour + 1; i++) {
+                        if(i >= 10) {
+                            data.now.pv.push(
+                                await (_find(`all:market:activity:${date + i}:${key}:pv`))
+                            );
+                            data.now.share_user.push(
+                                await (_find(`all:market:activity:share:${date + i}:${key}:pv`))
+                            );
+                        } else {
+                            data.now.pv.push(
+                                await (_find(`all:market:activity:${date}0${i}:${key}:pv`))
+                            );
+                            data.now.share_user.push(
+                                await (_find(`all:market:activity:share:${date}0${i}:${key}:pv`))
+                            );
+                        }
+                    }
+                    for(let i = 0; i < 24; i++) {
+                        if(i >= 10) {
+                            data.old.pv.push(
+                                await (_find(`all:market:activity:${oldDate + i}:${key}:pv`))
+                            );
+                            data.old.share_user.push(
+                                await (_find(`all:market:activity:share:${oldDate + i}:${key}:pv`))
+                            );
+                        } else {
+                            data.old.pv.push(
+                                await (_find(`all:market:activity:${oldDate}0${i}:${key}:pv`))
+                            );
+                            data.old.share_user.push(
+                                await (_find(`all:market:activity:share:${oldDate}0${i}:${key}:pv`))
+                            );
+                        }
+                    }
+                    data.now.uv.push(
+                        await (_find(`all:market:activity:${now}:${key}:uv`))
+                    );
+                    data.now.new_user.push(
+                        await (_find(`all:market:activity:register:${now}:${key}:uv`))
+                    );
+                    data.now.share_num.push(
+                        await (_find(`all:market:activity:share:${now}:${key}:uv`))
+                    );
+                    data.old.uv.push(
+                        await (_find(`all:market:activity:${oldDate}:${key}:uv`))
+                    );
+                    data.old.new_user.push(
+                        await (_find(`all:market:activity:register:${oldDate}:${key}:uv`))
+                    );
+                    data.old.share_num.push(
+                        await (_find(`all:market:activity:share:${oldDate}:${key}:uv`))
+                    );
+                }
+            }
+
+            _render(res, filter.overviewOne(data, rows, cols));
         }
     });
 
 
 
-    function _render(res, sendData, modules) {
+    function _render(res, sendData) {
         res.json({
             code: 200,
             modelData: sendData,
             components: {
-                flexible_btn: modules.flexible_btn,
                 date_picker: {
                     show: false
                 },
                 drop_down: {
-                    platform: false
-                },
-                filter_select: modules.filter_select
+                    platform: false,
+                    channel: false,
+                    version: false,
+                    coupon: false
+                }
             }
         })
     }
+
+    var _find = async((key) => {
+        return new Promise((resolve, reject) => {
+            cluster.get(key, (err, data) => {
+                if(err) {
+                    reject(err);
+                } else {
+                    resolve(data);
+                }
+            })
+        })
+    });
+
     return Router;
 };
