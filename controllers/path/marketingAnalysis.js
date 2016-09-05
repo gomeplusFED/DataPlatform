@@ -7,12 +7,16 @@
 module.exports = {
     overview() {
         return {
-            name: "活动概览",
+            name: "实时活动分析",
             path: "/marketingAnalysis/overview",
             display: true,
             defaultData: [{
+            //    type: "chart",
+            //    title: "",
+            //    query_api: "/marketingAnalysis/overviewZero"
+            //}, {
                 type: "table",
-                title: "营销活动流量",
+                title: "实时概况",
                 query_api: "/marketingAnalysis/overviewOne"
             }]
         };

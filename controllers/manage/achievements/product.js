@@ -44,44 +44,33 @@ module.exports = (Router) => {
                 }
             }
         });
-
-       /* type: 'filter_tab_checkbox',
-        show: false,
-        key: 'test',
-        url: '',
-        data: []*/
     });
 
-
-    //商品价格区间分布－总商品数（万）
-    /*Router = new api(Router,{
-        router : "/achievements/productZero",
-        modelName : [],
-        platform : false,
-        level_select : true,
-        level_select_name : "category_id",
-        level_select_url : "/api/categories",
-        cols : [[]],
-        rows : [[]],
-        date_picker : false,
-        filter(data, query, dates) {
-            return data;
-        }
-    });*/
 
 
     Router = new api(Router,{
         router : "/achievements/productOne",
         modelName : ["ItemOverview"],
         platform : false,
-        date_picker : false, 
+        date_picker : false,
         params : function(query , params , sendData){
             var dates = utils.beforeDate(new Date() , 2);
             //取昨天的数据
             params.date = dates[1];
-            params.category_id = -6;
-
             return params;
+        },
+        fixedParams(req , query , cb){
+            if(!query.category_id){
+                cb(null , query);
+            }else{
+                req.models.ConfCategories.find({
+                    pid : query.category_id
+                } , 1 , (err , data)=>{
+                    if(err) cb(err);
+                    query.category_level = data[0].level;
+                    cb(null , query);
+                });
+            }
         },
         filter(data, filter_key, dates) {
             return filter.productOne(data, filter_key);
@@ -119,18 +108,27 @@ module.exports = (Router) => {
         platform : false,
         date_picker : false,
         rows : [
-            [
-                "names" , "items_add" , "items_put" , "items_down" , "items_frost" , "items_delete"
-            ]
+            ["names" , "items_add" , "items_put" , "items_down" , "items_frost" , "items_delete"]
         ],
         params : function(query , params , sendData){
             var dates = utils.beforeDate(new Date() , 8);
 
             params.date = dates;
-            params.category_id = -6;
             query.date = dates;
-
             return params;
+        },
+        fixedParams(req , query , cb){
+            if(!query.category_id){
+                cb(null , query);
+            }else{
+                req.models.ConfCategories.find({
+                    pid : query.category_id
+                } , 1 , (err , data)=>{
+                    if(err) cb(err);
+                    query.category_level = data[0].level;
+                    cb(null , query);
+                });
+            }
         },
         cols : [
             [{
@@ -164,6 +162,36 @@ module.exports = (Router) => {
         router : "/achievements/productThree",
         modelName : ["ItemPie"],
         platform : false,
+        params : function(query , params , sendData){
+            delete params.category_id;
+            return params;
+        },
+        fixedParams(req , query , cb){
+            if(!query.category_id){
+                cb(null , query);
+            }else{
+                req.models.ConfCategories.find({
+                    pid : query.category_id
+                } , 1 , (err , data)=>{
+                    if(err) cb(err);
+                    switch(data[0].level){
+                        case 1:
+                            query.category_id_1 = query.category_id;
+                            break;
+                        case 2:
+                            query.category_id_2 = query.category_id;
+                            break;
+                        case 3:
+                            query.category_id_3 = query.category_id;
+                            break;
+                        case 4:
+                            query.category_id_4 = query.category_id;
+                            break;
+                    }
+                    cb(null , query);
+                });
+            }
+        },
         filter(data, query, dates) {
             return filter.productThree(data, query);
         }
