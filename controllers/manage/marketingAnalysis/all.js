@@ -61,7 +61,7 @@ module.exports = (Router) => {
         modelName : ["CamCamlistActive"],
         platform : false,
         filter(data, query, dates) {
-            return filter.couponInfoTwo(data);
+            return filter.allTwo(data, query, dates);
         },
         filter_select : [{
             title: '',
