@@ -264,7 +264,7 @@ module.exports = (Router) => {
                         filter_select.groups.push(obj);
                     }
                     
-                    cb(null,filter_select);
+                    cb(null,[filter_select]);
                 }else{
                     cb(err);
                 }
