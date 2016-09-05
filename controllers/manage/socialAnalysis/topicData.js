@@ -393,6 +393,7 @@ module.exports = (Router) => {
         paging : [true, false, false],
         date_picker_data: 1,
         showDayUnit: true,
+        control_table_col : true,
         search : {
             show : true,
             title: "请输入话题ID",
