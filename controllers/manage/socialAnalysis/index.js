@@ -263,8 +263,12 @@ module.exports = (Router) => {
                         };
                         filter_select.groups.push(obj);
                     }
+
+                    if(this.filter_select.length < 2){
+                        this.filter_select.push(filter_select);
+                    }
                     
-                    cb(null,[filter_select]);
+                    cb(null,this.filter_select);
                 }else{
                     cb(err);
                 }
