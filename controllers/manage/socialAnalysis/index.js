@@ -260,15 +260,11 @@ module.exports = (Router) => {
                         var obj = {
                             key : key.id,
                             value:key.name
-                        }
+                        };
                         filter_select.groups.push(obj);
                     }
                     
-                    if(this.filter_select.length < 3){
-                        this.filter_select.push(filter_select);
-                    }
-                    
-                    cb(null,this.filter_select);
+                    cb(null,filter_select);
                 }else{
                     cb(err);
                 }
