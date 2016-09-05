@@ -110,6 +110,10 @@ function connect(app) {
             models.ItemPie = db.define("ads2_itm_pie" , obj.ItemPie);
             models.ItemRunSales = db.define("ads2_itm_run_sales" , obj.ItemRunSales);
             models.ItemRunTop = db.define("ads2_itm_run_top" , obj.ItemRunTop);
+            //营销
+            models.CamOverview = db.define("ads2_cam_overview" , obj.CamOverview);
+            models.CamCamlistActive = db.define("ads2_cam_camlist_active" , obj.CamCamlistActive);
+            models.CamCamlistChannel = db.define("ads2_cam_camlist_channel" , obj.CamCamlistChannel);
 
             models.db1 = db;
             next();
