@@ -107,9 +107,9 @@ module.exports = (Router) => {
         router : "/socialAnalysis/groupEight",
         modelName : [ "GroupStatistics" ],
         platform : false,
-         level_select : false,
-         level_select_name : "category_id",
-         level_select_url : "/api/socialAnalysisCategories",
+        level_select : true,
+        level_select_name : "category_id",
+        level_select_url : "/api/socialAnalysisCategories",
         filter_select : [{
         //    title: "平台选择",
         //    filter_key : 'type',
