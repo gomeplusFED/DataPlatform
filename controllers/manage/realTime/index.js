@@ -3,10 +3,7 @@
  * @date 20160630
  * @fileoverview 实时分析
  */
-var redis = require("ioredis"),
-    redisConfig = require("../../../db/redis.json"),
-    config = require("../../../db/config.json").redis,
-    cluster = new redis.Cluster(redisConfig[config]),
+var cluster = global.cluster,
     type = {
         "PC" : "www:",
         "H5" : "m:",
@@ -15,7 +12,6 @@ var redis = require("ioredis"),
     },
     filter = require("../../../filters/realTime"),
     orm = require("orm"),
-    util = require("../../../utils"),
     async = require("asyncawait/async"),
     await = require("asyncawait/await"),
     help = require("../../../base/help"),

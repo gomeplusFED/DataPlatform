@@ -16,6 +16,10 @@ var app = express();
 var async = require("asyncawait/async");
 var await = require("asyncawait/await");
 var orm = require('orm');
+var redis = require("ioredis");
+var redisInfo = require("./db/redis.json");
+var redisConfig = require("./db/config.json").redis;
+var cluster = new redis.Cluster(redisInfo[redisConfig]);
 
 orm.settings.set("connection.pool", true);
 orm.settings.set("connection.debug", true);
@@ -67,6 +71,7 @@ app.use(function(req, res, next) {
 require('./helps')(app);
 
 new mysql(app);
+global.cluster = cluster;
 
 routers.forEach(function(router) {
     app.use(router);
