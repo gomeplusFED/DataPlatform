@@ -107,10 +107,9 @@ module.exports = (Router) => {
         router : "/socialAnalysis/groupEight",
         modelName : [ "GroupStatistics" ],
         platform : false,
-        // date_picker : false,
-        // level_select : false,
-        // level_select_name : "group_type",
-        // level_select_url : "/api/socialAnalysisCategories",
+         level_select : false,
+         level_select_name : "category_id",
+         level_select_url : "/api/socialAnalysisCategories",
         filter_select : [{
         //    title: "平台选择",
         //    filter_key : 'type',
@@ -321,6 +320,7 @@ module.exports = (Router) => {
         modelName : ["SocialGroupList" , "SocialCategory" , "Statistics" ],
         platform : false,
         paging : [true, false],
+        control_table_col : true,
         order  : ["-involve_group_user_num"],
         excel_export : true,
         procedure : [false, {
