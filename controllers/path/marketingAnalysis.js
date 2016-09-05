@@ -18,6 +18,10 @@ module.exports = {
                 type: "table",
                 title: "实时概况",
                 query_api: "/marketingAnalysis/overviewOne"
+            }, {
+                type: "chart",
+                title: "实时流量趋势",
+                query_api: "/marketingAnalysis/overviewTwo"
             }]
         };
     },

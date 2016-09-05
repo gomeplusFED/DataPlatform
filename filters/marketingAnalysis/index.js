@@ -13,7 +13,6 @@ module.exports = {
         for(let key in data.now) {
             let num = 0;
             for(let item of data.now[key]) {
-                console.log(item);
                 if(item) {
                     num += item;
                 }
@@ -35,5 +34,29 @@ module.exports = {
         old.name = "昨日";
 
         return util.toTable([[now, old]], rows, cols);
+    },
+    overviewTwo(data, day) {
+        let map = {
+            now : "今日"
+        };
+        if(day === "1") {
+            map.old = "前一日";
+        } else {
+            map.old = "上周同期"
+        }
+        return [{
+            type : "line",
+            map : map,
+            data : data,
+            config: { // 配置信息
+                stack: false, // 图的堆叠
+                toolBox : {
+                    magicType : {
+                        type: ['line', 'bar']
+                    },
+                    dataView: {readOnly: true}
+                }
+            }
+        }]
     }
 };
