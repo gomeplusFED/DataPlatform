@@ -318,6 +318,8 @@ module.exports = (Router) => {
     Router = new api(Router , {
         router : "/socialAnalysis/groupEleven",
         modelName : ["SocialGroupList" , "SocialCategory" , "Statistics" ],
+        date_picker_data : 1,
+        showDayUnit : true,
         platform : false,
         paging : [true, false],
         control_table_col : true,
