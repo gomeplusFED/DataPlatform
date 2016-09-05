@@ -121,7 +121,7 @@ module.exports = {
         /* 前端组件参数 */
         var type = "line";
         var filterKey = {
-                "new_play_num" : "播放次数",
+                "sid_num" : "播放次数",
                 "health_play"  : "健康播放数",
                 "health_pro"   : "健康播放概率(%)",
                 "unhealth_play": "错误播放数",
@@ -130,7 +130,7 @@ module.exports = {
             filter_key = query.filter_key;
         var map  = {
             "ios" : "ios",
-            "andriod" : "andriod",
+            "android" : "android",
             "h5_custom" : "h5_custom",
             "h5_native" : "h5_native",
             "flash" : "flash"
@@ -145,7 +145,7 @@ module.exports = {
             //每一个时间的键都应包含以下数据
             var theobj = {
                 "ios" : 0,
-                "andriod" : 0,
+                "android" : 0,
                 "h5_custom":0,
                 "h5_native":0,
                 "flash":0
@@ -162,7 +162,7 @@ module.exports = {
                         //找到了对应的记录，根据filter_key赋值
                         var number;
                         switch(filter_key){
-                            case "new_play_num":
+                            case "sid_num":
                             case "unhealth_play":
                             case "health_play":
                                 number = key[filter_key];
@@ -186,14 +186,14 @@ module.exports = {
         {
             "2016-08-22" : {
                 "ios" : 3333,
-                "andriod" : 2323,
+                "android" : 2323,
                 "h5_custom" : 2344,
                 "h5_native" : 2111,
                 "flash" : 333
             },
             "2016-08-23" : {
                 "ios" : 66,
-                "andriod" : 54,
+                "android" : 54,
                 "h5_custom" : 443,
                 "h5_native" : 22,
                 "flash" : 333
@@ -260,7 +260,7 @@ module.exports = {
             }
             item.date = util.getDate(item.date);
 
-            item["5"] = util.percentage(item.new_play_num , item.new_play_num + item.play_failed) + "%";
+            item["5"] = util.percentage(item.health_play , item.sid_num) + "%";
           
             for(let key of RowsOther){
                 item[key+"_lv"] = util.percentage(item[key] , item.sid_num) + "%";
