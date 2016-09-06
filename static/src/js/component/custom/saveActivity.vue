@@ -33,8 +33,9 @@
 						</div>
 						<div class="form-group">
 							<label for=""  class="col-sm-1 control-label">活动起止时间:</label>
+							<div class="col-sm-1"></div>
 							<div class="col-sm-6">
-								<m-date :index="dateConifg.index" :init-data="dateConifg.initData" :page-components-data="dateConifg.pageComponentsData" :component-type="'date_picker'" :argvs.sync='dateConifg.argvs'></m-date>
+								<m-date :index="dateConifg.index" :init-data="dateConifg.initData" :page-components-data="dateConifg.pageComponentsData" :component-type="'date_picker'" :argvs.sync='dateConifg.argvs' :cancel-date-limit='true'></m-date>
 							</div>
 						</div>
 					</form>
