@@ -193,41 +193,50 @@ module.exports = {
     groupSeven(data){
         var source = data.first.data[0],
             newData = [],
+            obj = {},
             array = ["APP", "WAP", "PC", "总计"];
-    
-        var total = {
-            one : "总计",
-            two : 0,
-            three : 0,
-            four : 0,
-            five : 0,
-            six  : 0,
-            seven:0,
-            eight:0
-        };
 
-        for(let key of source) {
-            var obj = {
-                one : key.type,
-                two : key.new_group_num,
-                three : key.new_join_group_num,
-                four : key.new_quit_group_num,
-                five : key.first_group_user_num,
-                six : key.new_group_user_num,
+        for(let key of array) {
+            obj[key] = {
+                two : 0,
+                three : 0,
+                four : 0,
+                five : 0,
+                six  : 0,
                 seven:0,
-                eight:key.new_group_disband_num
+                eight:0,
+                new_register_group_user_num : 0
             };
-
-            newData.push(obj);
-            for(let key in total){
-                if(key == "one"){
-                    continue;
-                }
-                total[key] += obj[key];
-            }
         }
 
-        newData.push(total);
+        for(let key of source) {
+            obj[key.type].two += key.new_group_num;
+            obj[key.type].three += key.new_join_group_num;
+            obj[key.type].four += key.new_quit_group_num;
+            obj[key.type].five += key.first_group_user_num;
+            obj[key.type].six += key.new_group_user_num;
+            obj[key.type].eight += key.new_group_disband_num;
+            obj[key.type].new_register_group_user_num += key.new_register_group_user_num;
+            obj["总计"].two += key.new_group_num;
+            obj["总计"].three += key.new_join_group_num;
+            obj["总计"].four += key.new_quit_group_num;
+            obj["总计"].five += key.first_group_user_num;
+            obj["总计"].six += key.new_group_user_num;
+            obj["总计"].eight += key.new_group_disband_num;
+            obj["总计"].new_register_group_user_num += key.new_register_group_user_num;
+        }
+        for(let key in obj) {
+            newData.push({
+                one : key,
+                two : obj[key].two,
+                three : obj[key].three,
+                four : obj[key].four,
+                five : obj[key].five,
+                six : obj[key].six,
+                seven : util.toFixed(obj[key].five, obj[key].new_register_group_user_num),
+                eight : obj[key].eight
+            });
+        }
 
         return util.toTable([newData], data.rows, data.cols);
     },
