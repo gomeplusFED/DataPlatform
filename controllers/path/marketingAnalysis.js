@@ -44,5 +44,21 @@ module.exports = {
                 query_api: "/marketingAnalysis/allThree"
             }]
         };
+    },
+    operating() {
+        return {
+            name: "活动流量",
+            path: "/marketingAnalysis/operating",
+            display: true,
+            defaultData: [{
+                type: "chart",
+                title: "活动效果分布",
+                query_api: "/marketingAnalysis/operatingOne"
+            },{
+                type: "table",
+                title: "活动效果明细",
+                query_api: "/marketingAnalysis/operatingTwo"
+            }]
+        };
     }
 };

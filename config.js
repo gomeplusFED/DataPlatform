@@ -177,6 +177,9 @@ module.exports = {
             path: [
                 obj.marketingAnalysis.overview(),
                 obj.marketingAnalysis.all()
+            ],
+            routers : [
+                obj.marketingAnalysis.operating()
             ]
         },
         "15": {

@@ -108,8 +108,14 @@ module.exports = (Router) => {
         },
         firstSql(query, params, isCount) {
             if(isCount) {
-                let config = ["active_type=?", "date BETWEEN ? AND ?"],
-                    params = [query.active_type, query.startTime, query.endTime];
+                let config = ["date BETWEEN ? AND ?"],
+                    params = [query.startTime, query.endTime],
+                    active_type = [];
+                for(let item of query.active_type) {
+                    active_type.push("?");
+                    params.push(item);
+                }
+                config.push(`active_type IN (${active_type.join(",")})`);
                 if(query.active_no) {
                     config.push("active_no=?");
                     params.push(query.active_no);
@@ -120,16 +126,22 @@ module.exports = (Router) => {
                     params : params
                 };
             } else {
-                let config = ["active_type=?", "date BETWEEN ? AND ?"],
-                    params = [query.active_type, query.startTime, query.endTime],
+                let config = ["date BETWEEN ? AND ?"],
+                    params = [query.startTime, query.endTime],
+                    active_type = [],
                     page = query.from || query.page || 1,
                     limit = query.to || query.limit || 20;
+                for(let item of query.active_type) {
+                    active_type.push("?");
+                    params.push(item);
+                }
+                config.push(`active_type IN (${active_type.join(",")})`);
                 if(query.active_no) {
                     config.push("active_no=?");
                     params.push(query.active_no);
                 }
                 params.push(page - 1);
-                params.push(limit);
+                params.push(+limit);
                 let sql = `SELECT
                     active_no,
                     SUM(active_pv) active_pv,
@@ -195,24 +207,33 @@ module.exports = (Router) => {
                     caption : "操作"
                 }
             ]
-        ]
-        //filter_select : [{
-        //    title: '指标',
-        //    filter_key : 'filter_key',
-        //    groups: [{
-        //        key: 'active_pv-register',
-        //        value: '活动页PV、新增注册'
-        //    }, {
-        //        key: 'coupon_get_num-coupon_use_num',
-        //        value: '优惠卷领取数量、优惠卷使用数量'
-        //    }, {
-        //        key: 'order_num-pay_num',
-        //        value: '订单总量、支付总量'
-        //    }, {
-        //        key: 'order_num_money-pay_num_money',
-        //        value: '订单总金额、实际支付总金额'
-        //    }]
-        //}]
+        ],
+        selectFilter(req, cb) {
+            let groups = [],
+                filter_select = {
+                    title: '活动类型',
+                    filter_key : 'active_type'
+                };
+            req.models.Activity.find({}, (err, data) => {
+                if(err) {
+                    cb(err);
+                } else {
+                    let activity_types = _.uniq(_.pluck(data, "activity_type"));
+                    for(let key of activity_types) {
+                        groups.push({
+                            key : [key],
+                            value : key
+                        });
+                    }
+                    filter_select.groups = [{
+                        key : activity_types,
+                        value : "全部"
+                    }].concat(groups);
+
+                    cb(null, [filter_select]);
+                }
+            })
+        }
     });
 
     return Router;

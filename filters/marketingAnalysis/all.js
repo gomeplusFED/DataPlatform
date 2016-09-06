@@ -85,7 +85,7 @@ module.exports = {
         }];
     },
     allThree(data) {
-        let source = data.first.data[0],
+        let source = data.first.data,
             count = data.first.count,
             second = data.second.data[0],
             config = {};
@@ -99,7 +99,13 @@ module.exports = {
         }
 
         for(let item of source) {
-            
+            let obj = config[item.active_no];
+            item.name = obj.name;
+            item.date = `${obj.start}到${obj.end}`;
+            item.operating =
+                `<button class='btn btn-default' url_link='/marketingAnalysis/operating' url_fixed_params='{"active_no": "${item.active_no}"}'>详细>></button>`;
         }
+
+        return util.toTable([source], data.rows, data.cols, [count]);
     }
 };
