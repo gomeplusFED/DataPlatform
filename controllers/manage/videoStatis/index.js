@@ -140,7 +140,7 @@ module.exports = (Router) => {
                 filter_key : "filter_key",
                 groups : [
                     {
-                        key : "new_play_num",
+                        key : "sid_num",
                         value:"播放次数"
                     },{
                         key : "health_play",
@@ -169,7 +169,7 @@ module.exports = (Router) => {
         control_table_col : true,
         excel_export : true,
         paging : [true],
-        order : ["date"],
+        order : ["-date"],
         flexible_btn:[{
              content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ["excel_export"]
@@ -180,7 +180,7 @@ module.exports = (Router) => {
         },
         rows : [
             ["date" ,
-             "new_play_num" ,
+             "sid_num" ,
             "port_succ" ,
             "start_frame_succ" , 
             "stop_play_num" ,
@@ -347,7 +347,7 @@ module.exports = (Router) => {
         modelName : ["VideoPlay"],
         platform : false,
         paging : [false],
-        order : ["date"],
+        order : ["-date"],
         excel_export : true,
         flexible_btn:[{
              content: '<a href="javascript:void(0)">导出</a>',
@@ -427,7 +427,7 @@ module.exports = (Router) => {
                 "date" ,
                 "sdk_app_type" ,
                 "ver" ,
-                "new_play_num" , 
+                "sid_num" , 
                 "5" ,
 
                 //健康播放统计

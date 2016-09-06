@@ -114,6 +114,10 @@ module.exports = (Router) => {
                                 item.channel_name = obj[item.channel_id];
                             }
                             data[0].activity_channel_relationship = ships;
+                            data[0].activity_start_time =
+                                moment(data[0].activity_start_time).format("YYYY-MM-DD");
+                            data[0].activity_end_time =
+                                moment(data[0].activity_end_time).format("YYYY-MM-DD");
 
                             res.json({
                                 code : 200,
