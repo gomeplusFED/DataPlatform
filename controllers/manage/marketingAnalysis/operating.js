@@ -13,8 +13,8 @@ module.exports = (Router) => {
         router : "/marketingAnalysis/operatingOne",
         modelName : ["CamOverview"],
         platform : false,
-        filter(data) {
-            return filter.allOne(data);
+        filter(data, query, dates) {
+            return filter.operatingOne(data, query, dates);
         },
         filter_select : [{
             title: '',

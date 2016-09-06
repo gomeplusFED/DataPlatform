@@ -8,5 +8,7 @@ var util = require("../../utils"),
     _ = require("lodash");
 
 module.exports = {
+    operatingOne(data, query, dates) {
 
+    }
 };
