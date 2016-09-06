@@ -83,5 +83,23 @@ module.exports = {
                 stack: false // 图的堆叠
             }
         }];
+    },
+    allThree(data) {
+        let source = data.first.data[0],
+            count = data.first.count,
+            second = data.second.data[0],
+            config = {};
+
+        for(let item of second) {
+            config[item.activity_id] = {
+                name : item.activity_name,
+                start : item.activity_start_time,
+                end : item.activity_end_time
+            }
+        }
+
+        for(let item of source) {
+            
+        }
     }
 };
