@@ -11,7 +11,7 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/marketingAnalysis/operatingOne",
-        modelName : ["CamOverview" ],
+        modelName : ["CamOverview"],
         platform : false,
         filter(data) {
             return filter.allOne(data);
