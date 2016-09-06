@@ -18,6 +18,7 @@ module.exports = {
     },
     allTwo(data, query, dates) {
         let source = data.first.data[0],
+            second = data.second.data[0],
             newData = {},
             filter_name = {
                 active_pv : "活动页PV",
@@ -30,7 +31,7 @@ module.exports = {
                 pay_num_money : "实际支付总金额"
             },
             type,
-            map,
+            map = {},
             filter_keys = query.filter_key.split("-"),
             filter_type = query.filter_type;
 
@@ -55,8 +56,32 @@ module.exports = {
             }
         } else {
             type = "bar";
+            let obj = {};
+            for(let key of second) {
+                obj[key.activity_id] = {
+                    name : key.activity_name
+                };
+                for(let key of filter_keys) {
+                    obj[key.activity_id][key] = 0;
+                }
+            }
+            for(let item of source) {
+                for(let key of filter_keys) {
+                    obj[item.active_no][key] += item[key];
+                }
+            }
+            for(let key in obj) {
+                newData[obj[key].name] = obj[key];
+            }
         }
 
-        return util.toTable([source], data.rows, data.cols, [count]);
+        return [{
+            type : type,
+            map : map,
+            data : newData,
+            config: { // 配置信息
+                stack: false // 图的堆叠
+            }
+        }];
     }
 };

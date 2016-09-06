@@ -38,10 +38,10 @@ module.exports = {
                 type: "chart",
                 title: "营销趋势",
                 query_api: "/marketingAnalysis/allTwo"
-            //},{
-            //    type: "table",
-            //    title: "营销列表",
-            //    query_api: "/marketingAnalysis/allThree"
+            },{
+                type: "table",
+                title: "营销列表",
+                query_api: "/marketingAnalysis/allThree"
             }]
         };
     }

@@ -4,6 +4,7 @@
  * @fileoverview 活动总览
  */
 var api = require("../../../base/main"),
+    _ = require("lodash"),
     filter = require("../../../filters/marketingAnalysis/all");
 
 module.exports = (Router) => {
@@ -58,8 +59,14 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/marketingAnalysis/allTwo",
-        modelName : ["CamCamlistActive"],
+        modelName : ["CamCamlistActive", "Activity"],
         platform : false,
+        secondParams(query, params, data) {
+            let ids = _.uniq(_.pluck(data.first.data[0], "active_no"));
+            return {
+                activity_id : ids
+            };
+        },
         filter(data, query, dates) {
             return filter.allTwo(data, query, dates);
         },
@@ -90,6 +97,70 @@ module.exports = (Router) => {
                 value: '订单总金额、实际支付总金额'
             }]
         }]
+    });
+
+    Router = new api(Router,{
+        router : "/marketingAnalysis/allThree",
+        modelName : ["CamCamlistChannel"],
+        platform : false,
+        filter(data, query, dates) {
+            return filter.allTwo(data, query, dates);
+        },
+        rows : [
+            []
+        ],
+        cols : [
+            [
+                {
+                    caption : "",
+                    type : ""
+                },{
+                    caption : "",
+                    type : ""
+                },{
+                    caption : "",
+                    type : ""
+                },{
+                    caption : "",
+                    type : ""
+                },{
+                    caption : "",
+                    type : ""
+                },{
+                    caption : "",
+                    type : ""
+                },{
+                    caption : "",
+                    type : ""
+                },{
+                    caption : "",
+                    type : ""
+                },{
+                    caption : "",
+                    type : ""
+                },{
+                    caption : "",
+                    type : ""
+                }
+            ]
+        ]
+        //filter_select : [{
+        //    title: '指标',
+        //    filter_key : 'filter_key',
+        //    groups: [{
+        //        key: 'active_pv-register',
+        //        value: '活动页PV、新增注册'
+        //    }, {
+        //        key: 'coupon_get_num-coupon_use_num',
+        //        value: '优惠卷领取数量、优惠卷使用数量'
+        //    }, {
+        //        key: 'order_num-pay_num',
+        //        value: '订单总量、支付总量'
+        //    }, {
+        //        key: 'order_num_money-pay_num_money',
+        //        value: '订单总金额、实际支付总金额'
+        //    }]
+        //}]
     });
 
     return Router;
