@@ -210,13 +210,15 @@ module.exports = {
         }
 
         for(let key of source) {
-            obj[key.type].two += key.new_group_num;
-            obj[key.type].three += key.new_join_group_num;
-            obj[key.type].four += key.new_quit_group_num;
-            obj[key.type].five += key.first_group_user_num;
-            obj[key.type].six += key.new_group_user_num;
-            obj[key.type].eight += key.new_group_disband_num;
-            obj[key.type].new_register_group_user_num += key.new_register_group_user_num;
+            if(obj[key.type]) {
+                obj[key.type].two += key.new_group_num;
+                obj[key.type].three += key.new_join_group_num;
+                obj[key.type].four += key.new_quit_group_num;
+                obj[key.type].five += key.first_group_user_num;
+                obj[key.type].six += key.new_group_user_num;
+                obj[key.type].eight += key.new_group_disband_num;
+                obj[key.type].new_register_group_user_num += key.new_register_group_user_num;
+            }
             obj["总计"].two += key.new_group_num;
             obj["总计"].three += key.new_join_group_num;
             obj["总计"].four += key.new_quit_group_num;
