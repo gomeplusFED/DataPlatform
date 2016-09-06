@@ -95,8 +95,6 @@
 
 				actions.setCurrentPageDefaultData(store, currentPageDefaultData);
 
-				this.loading = false;
-
 			// 页面访问统计
 			$.ajax({
 				url: '/dataPlatform/count',
