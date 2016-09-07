@@ -58,21 +58,26 @@ module.exports = (Router) => {
         modelName : ["CamCamlistChannel", "Channel"],
         platform : false,
         paging : [true, false],
+        excel_export : true,
+        flexible_btn : [{
+            content: '<a href="javascript:void(0)">导出</a>',
+            preMethods: ['excel_export']
+        }],
         firstSql(query, params, isCount) {
             let filter_type = query.filter_type || "date",
                 config = ["date BETWEEN ? AND ?", "active_no=?", "day_type=?"],
-                params = [query.startTime, query.endTime, query.active_no];
+                obj = [query.startTime, query.endTime, query.active_no, 1];
             if(isCount) {
                 let sql = `SELECT COUNT(*) count FROM ads2_cam_camlist_channel WHERE ${config.join(" AND ")} GROUP BY ${filter_type}`;
                 return {
                     sql : sql,
-                    params : params
+                    params : obj
                 };
             } else {
                 let page = query.from || query.page || 1,
                     limit = query.to || query.limit || 20;
-                params.push(page - 1);
-                params.push(+limit);
+                obj.push(page - 1);
+                obj.push(+limit);
                 let sql = `SELECT
                     ${filter_type},
                     SUM(active_pv) active_pv,
@@ -97,7 +102,7 @@ module.exports = (Router) => {
                     WHERE ${config.join(" AND ")} GROUP BY ${filter_type} LIMIT ?,?`;
                 return {
                     sql : sql,
-                    params : params
+                    params : obj
                 };
             }
         },

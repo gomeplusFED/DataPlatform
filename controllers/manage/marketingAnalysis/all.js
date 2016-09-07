@@ -107,6 +107,11 @@ module.exports = (Router) => {
         filter(data) {
             return filter.allThree(data);
         },
+        excel_export : true,
+        flexible_btn : [{
+            content: '<a href="javascript:void(0)">导出</a>',
+            preMethods: ['excel_export']
+        }],
         firstSql(query, params, isCount) {
             if(isCount) {
                 let config = ["date BETWEEN ? AND ?", "day_type=?"],
