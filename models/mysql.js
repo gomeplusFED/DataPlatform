@@ -116,6 +116,7 @@ function connect(app) {
 
             // 美店
             models.VshopInfo = db.define("ads2_vshop_item_details" , obj.VshopInfo);
+            models.VshopMerchandiseResources = db.define("ads2_vshop_merchandise_resources" , obj.VshopMerchandiseResources);
             models.VshopTransaction = db.define("ads2_vshop_transaction_details" , obj.VshopTransaction);
             
             models.db1 = db;
