@@ -32,7 +32,7 @@ var DateCom = Vue.extend({
             validlist: [ '/custom/saveActivity' ]
         }
     },
-    props: ['index','pageComponentsData','componentType','argvs','initData'],
+    props: ['index','pageComponentsData','componentType','argvs','initData', 'cancelDateLimit'],
     ready: function() {
 
     },
@@ -90,6 +90,10 @@ var DateCom = Vue.extend({
                     },
                     "ranges": this.pageComponentsData[this.componentType].defaultData === 7 ? range : {"昨天": [yesterday, yesterday]},
                     "showDayUnit": this.pageComponentsData[this.componentType].showDayUnit ? true : false
+                }
+                // 取消日期限制
+                if(this.cancelDateLimit) {
+                    options.dateLimit = null;
                 }
                 $('#datePicker_' + this.index).find('input').daterangepicker(options);
                 $('#datePicker_' + this.index).find('input').on('cancel.daterangepicker',function(ev, picker){

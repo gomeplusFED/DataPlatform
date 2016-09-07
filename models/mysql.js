@@ -115,6 +115,9 @@ function connect(app) {
             models.CamCamlistActive = db.define("ads2_cam_camlist_active" , obj.CamCamlistActive);
             models.CamCamlistChannel = db.define("ads2_cam_camlist_channel" , obj.CamCamlistChannel);
 
+            //9.1
+            models.AdsKeyValue = db.define("ads2_key_value" , obj.AdsKeyValue);
+
             models.db1 = db;
             next();
         }
