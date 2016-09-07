@@ -5,10 +5,96 @@
  * @二次开发 ，20160905 ， Mr.He
  */
 var api = require(RootPath+"/base/main"),
-    filter = require(RootPath+"/filters/achievements/product"),
+    filter = require(RootPath+"/filters/achievements/productSale"),
     utils  = require(RootPath+"/utils");
 
 module.exports = (Router) => {
+
+    Router = Router.get("/achievements/productZero_json" , function(req , res , next){
+
+        res.json({
+            code: 200,
+            modelData: [],
+            components: {
+                flexible_btn: [ ],
+                date_picker: {
+                    show: false,
+                    defaultData: 7
+                },
+                drop_down: {
+                    platform: false,
+                    channel: false,
+                    version: false,
+                    coupon: false
+                },
+                level_select: {
+                    show: true,
+                    url: "/api/categories",
+                    name: "category_id"
+                },
+                filter_select: [],
+                search: {
+                    show: false
+                },
+                control_table_col: {
+                    show: false
+                },
+                global_plataform: {
+                    show: false
+                }
+            }
+        });
+    });
+
+
+    Router = Router.get("/achievements/productZero2_json" , function(req , res , next){
+
+        res.json({
+            code: 200,
+            modelData: [],
+            components: {
+                flexible_btn: [ ],
+                date_picker: {
+                    show: false,
+                    defaultData: 7
+                },
+                drop_down: {
+                    platform: false,
+                    channel: false,
+                    version: false,
+                    coupon: false
+                },
+                filter_select: [{
+                    title: "平台选择",
+                    filter_key : 'filter_key',
+                    groups: [{
+                        key: ['APP','WAP','PC'],
+                        value: '全部平台'
+                    },{
+                        key: 'APP',
+                        value: 'APP'
+                    },{
+                        key: 'WAP',
+                        value: 'WAP'
+                    },{
+                        key: 'PC',
+                        value: 'PC'
+                    }]
+                }],
+                search: {
+                    show: false
+                },
+                control_table_col: {
+                    show: false
+                },
+                global_plataform: {
+                    show: false
+                }
+            }
+        });
+    });
+
+
 
     Router = new api(Router,{
         router : "/achievements/productSaleOne",
@@ -16,9 +102,11 @@ module.exports = (Router) => {
         platform : false,
         date_picker : false,
         params : function(query , params , sendData){
-            var dates = utils.beforeDate(new Date() , 2);
+            var dates = utils.beforeDate(new Date() , 8);
+            dates.shift(0);
             //取昨天的数据
-            params.date = dates[1];
+            params.date = dates;
+            query.dates = dates;
             return params;
         },
         fixedParams(req , query , cb){
@@ -34,37 +122,53 @@ module.exports = (Router) => {
                 });
             }
         },
-        filter(data, filter_key, dates) {
-            return filter.productSaleOne(data, filter_key);
-        },
-        cols : [
-            [
-                {
-                    caption: '商品总数',
-                    type: 'number',
-                    help: "平台累计商品总数（ITEM）"
-                }, {
-                    caption: '冻结总数',
-                    type: 'number',
-                    help: "统计时间内，平台冻结商品数(ITEM)"
-                }, {
-                    caption: '上架总数',
-                    type: 'number',
-                    help: "统计时间内，平台上架商品数(ITEM)"
+        filter_select : [
+            {
+                title : "类型",
+                filter_key : "filter_key",
+                groups: [{
+                    key: "ITEM",
+                    value: "ITEM"
                 },{
-                    caption: '下架总数',
-                    type: 'number',
-                    help: "统计时间内，平台下架商品数(ITEM)"
-                },{
-                    caption: '当前SPU使用总数',
-                    type: 'number',
-                    help: "累计当前SPU ID使用总数，去重"
-                }
-            ]
+                    key: "SKU",
+                    value: "SKU"
+                }]
+            }
         ],
+        cols : [
+            [{
+                comment : "/",
+                type : "string"
+            }, {
+                comment: '被访问商品数/商品访问量',
+                type: 'string'
+            }, {
+                comment: '被收藏商品数/商品收藏次数',
+                type: 'string'
+            }, {
+                comment: '被分享商品数/商品被分享次数',
+                type: 'string'
+            }, {
+                comment: '加购商品数/加购商品件数',
+                type: 'string'
+            }, {
+                comment: '下单商品数/下单商品件数',
+                type: 'string'
+            }, {
+                comment: '支付商品数/支付商品件数',
+                type: 'string'
+            }, {
+                comment: '退货商品数/退货商品件数',
+                type: 'string'
+            }]
+        ],
+        //set in filter function.
         rows : [
-            [ 'items_count_sum', 'items_frost_sum', 'items_put_sum', "items_down_sum", "items_spu_sum" ]
-        ]
+            []
+        ],
+        filter(data, query) {
+            return filter.productSaleOne(data, query);
+        }
     });
 
 

@@ -15,13 +15,178 @@ var prizeRange = {
     "6" : "50~60"
 }
 
+/* 环比计算 , 昨天－前天  ／  前天 */
+function Chain(lastObj , bObj , columns){
+    var obj = {};
+    for(let key of columns){
+        if(key == "names"){
+            obj[key] = "日环比";
+            continue;
+        }
+        if(!lastObj[key] || !bObj[key]){
+            obj[key] = "0%";
+        }else{
+            obj[key] = (lastObj[key] - bObj[key]) / bObj[key];
+            obj[key] = util.toFixed(obj[key] , 0);
+        }        
+    }
+    return obj;
+}
+
+/* 7日环比, 传入7天的数据 */
+function Chain7(thisObj , allObj , columns){
+    var obj = {},
+        result={};
+
+    // console.log(columns);
+    // columns = columns.shift(0);
+    // console.log(columns);
+
+
+    for(let item of columns){
+        if(item == "names") continue;
+        result[item] = 0;
+    }
+
+    var n = 0;
+    for(let key in allObj){
+        n++;
+        for(let item of columns){
+            if(item == "names") continue;
+            result[item] += allObj[key][item];
+        }
+    }
+
+    for(let item of columns){
+        if(item == "names") continue;
+        result[item] = thisObj[item] / (result[item] / n);
+        result[item] = util.toFixed( result[item] , 0 );
+    }
+
+    result.names = "7日平均环比";
+
+    return result;
+}
+
 
 module.exports = {
-    productSaleOne(data, filter_key) {
+    productSaleOne(data, query) {
+        var source = data.first.data[0],
+            resultArr = [],
+            filter_key=query.filter_key,
+            num = 0,
+            dates = query.dates;
 
-        var source = data.first.data[0];
-        return util.toTable([source], data.rows, data.cols);
+        if(filter_key == "SKU"){
+            num = 1;
+        }
+        var row = [
+                "names/names",   
+                "product_scan/product_acc_pv",
+                "product_collect/product_collect_num",
+                "share_commodity/share_commodity_num",
+                "product_cart/product_cart_num",
+                "order_commodity/order_commodity_num",
+                "pay_commodity/pay_commodity_num",
+                "products_return/products_return_num"
+            ],
+            typeRow = ["昨日" , "前日" , "环比" , "7日平均环比"];
+        data.rows[0] = [];
+
+        //处理列行的输出
+        for(var i=0,len=data.cols[0].length;i<len;i++){
+            data.cols[0][i].caption = data.cols[0][i].comment.split("/")[num];
+            data.rows[0].push(row[i].split("/")[num]);
+        }
+
+        //init data by dates. Keep every date has data. Default 0.
+        var initData = {};
+        for(let date of dates){
+            var obj = {};
+            for(let key of data.rows[0]){
+                obj[key] = 0;
+            }
+            initData[date] = obj;
+        }
+
+        //select Data, one date and one data , or error.
+        for(let item of source){
+            initData[item.date] = item;
+        }
+
+
+
+
+        // //整理查询数据
+        // var result = {};
+        // for(let item of source){
+
+        //     result[item.date] = item;
+        // }
+        // //没查到的数据补空对象
+        // for(let date of dates){
+        //     if(!result[date]) result[date] = {};
+        // }
+
+        // console.log(result);
+
+        //yesterday
+        initData[dates[0]].names = "昨日";
+        resultArr.push(initData[dates[0]]);
+
+        //before yesterday
+        initData[dates[1]].names = "前日";
+        resultArr.push(initData[dates[1]]);
+
+        //link relative
+        var obj3 = Chain(initData[dates[0]] , initData[dates[1]] , data.rows[0]);
+        resultArr.push(obj3);
+
+        //seven link relative
+        var obj4 = Chain7(initData[dates[0]] , initData , data.rows[0]);
+        // resultArr.push(obj4);
+
+
+        console.log(data.rows[0]);
+        // console.log(data);
+
+        return util.toTable([resultArr], data.rows, data.cols);
     },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     productSaleTwo(data, query) {
         var source = data.first.data[0],
             rows   = ["昨日" , "前日" , "环比" , "7日平均环比"],
