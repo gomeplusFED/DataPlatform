@@ -2,7 +2,7 @@
 	<div class="plataform" v-show="platafromData.show">
 		<span>平台切换（默认IOS）：</span>
 		<div class="btn-group" role="group" aria-label="...">
-			<button type="button" class="btn btn-default" v-for="item in platafromData.list" @click="plataformLink(item)">{{item.name}}</button>
+			<button type="button" :class="{'btn-primary': item.key === key}" class="btn btn-default" v-for="item in platafromData.list" @click="plataformLink(item)">{{item.name}}</button>
 		</div>
 	</div>
 </template>
@@ -25,7 +25,8 @@ export default {
 	name: 'plataform',
 	data() {
 		return {
-			platafromData: {}
+			platafromData: {},
+			key: ''
 		};
 	},
 	ready() {
@@ -35,6 +36,7 @@ export default {
 	},
 	methods: {
 		plataformLink(item) {
+			this.key = item.key;
 			let key = this.platafromData.key;
 			let curQuery = utils.parseUrlQuery(this.$route.path);
 			curQuery[key] = item.key;
