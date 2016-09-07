@@ -90,6 +90,7 @@ module.exports = {
             second = data.second.data[0],
             config = {};
 
+        console.log(count);
         for(let item of second) {
             config[item.activity_id] = {
                 name : item.activity_name,
