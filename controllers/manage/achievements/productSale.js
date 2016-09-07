@@ -6,7 +6,8 @@
  */
 var api = require(RootPath+"/base/main"),
     filter = require(RootPath+"/filters/achievements/productSale"),
-    utils  = require(RootPath+"/utils");
+    utils  = require(RootPath+"/utils"),
+    orm = require("orm");
 
 module.exports = (Router) => {
 
@@ -16,7 +17,6 @@ module.exports = (Router) => {
             code: 200,
             modelData: [],
             components: {
-                flexible_btn: [ ],
                 date_picker: {
                     show: false,
                     defaultData: 7
@@ -53,7 +53,6 @@ module.exports = (Router) => {
             code: 200,
             modelData: [],
             components: {
-                flexible_btn: [ ],
                 date_picker: {
                     show: false,
                     defaultData: 7
@@ -309,7 +308,7 @@ module.exports = (Router) => {
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
-        paging : [false],
+        paging : [true],
         filter_select : [
             {
                 title : "类型",
@@ -327,12 +326,36 @@ module.exports = (Router) => {
             }
         ],
         firstSql(query , params , isCount){
-            var num = query.filter_key / 1;
+            var num = query.filter_key / 1,
+                arrParam = [],
+                list = ["product_acc_pv", "order_commodity_num", "share_commodity_num"];
 
             console.log("isCount" , isCount);
+            console.log(params);
+
+            params.category_id = 1222;
+
+
+            arrParam[0] = utils.getDate(params.date.from) + " 00:00:00",
+            arrParam[1] = utils.getDate(params.date.to) + " 23:59:59",
+            arrParam[2] = params.category_id || "",
+            arrParam[3] = list[num],
+            arrParam[4] = (params.page-1)*params.limit;
+            arrParam[5] = params.limit / 1;
+            if(isCount){
+                //统计总数
+                let sql = `SELECT COUNT(*) count FROM ads2_itm_run_top WHERE date BETWEEN ? AND ? AND day_type = 1 AND category_id = ?`;
+                return {
+                    sql : sql,
+                    params : arrParam
+                }
+            }
+
+            let sql = `SELECT * FROM ads2_itm_run_top WHERE DATE BETWEEN ? AND ? AND day_type = 1 AND category_id = ? ORDER BY ? LIMIT ?,?`;
+
             return {
-                sql : "select * from ads2_itm_run_top",
-                params : []
+                sql : sql,
+                params : arrParam
             }
         },
         /*params : function(query , params , sendData){
@@ -365,6 +388,26 @@ module.exports = (Router) => {
             return filter.productSaleFour(data, query);
         }
     });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     Router = new api(Router,{
         router : "/achievements/productSaleFive",
