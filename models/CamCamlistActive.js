@@ -8,7 +8,7 @@ module.exports = {
     id : {type: 'number', key: true},
     date : Date,
     day_type : Number,
-    active_no : Number,
+    active_no : String,
     active_type : Number,
     active_pv : Number,
     active_uv : Number,
