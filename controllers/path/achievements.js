@@ -83,10 +83,10 @@ module.exports = {
             path : "/achievements/productSale",
             display : true,
             defaultData : [
-                // {
-                //     type : "chart",
-                //     query_api : "/achievements/productZero"
-                // },
+                 {
+                     type : "chart",
+                     query_api : "/achievements/productZero"
+                 },
                 // {
                 //     type : "chart",
                 //     query_api : "/achievements/productZero2"

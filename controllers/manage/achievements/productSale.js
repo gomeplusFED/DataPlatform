@@ -88,22 +88,22 @@ module.exports = (Router) => {
             query.dates = dates;
             return params;
         },
-        global_plataform: {
+        global_platform: {
             show: true,
             key : "filter_key",
             name : "平台切换（默认全部平台）",
             list : [{
                 key: ['APP','WAP','PC'],
-                value: '全部平台'
+                name: '全部平台'
             },{
                 key: 'APP',
-                value: 'APP'
+                name: 'APP'
             },{
                 key: 'WAP',
-                value: 'WAP'
+                name: 'WAP'
             },{
                 key: 'PC',
-                value: 'PC'
+                name: 'PC'
             }]
         },
        /* fixedParams(req , query , cb){
