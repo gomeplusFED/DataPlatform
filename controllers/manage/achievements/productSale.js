@@ -17,56 +17,16 @@ module.exports = (Router) => {
             code: 200,
             modelData: [],
             components: {
-                date_picker: {
-                    show: false,
-                    defaultData: 7
-                },
-                drop_down: {
-                    platform: false,
-                    channel: false,
-                    version: false,
-                    coupon: false
-                },
-                level_select: {
-                    show: true,
-                    url: "/api/categories",
-                    name: "category_id"
-                },
-                filter_select: [],
-                search: {
-                    show: false
-                },
-                control_table_col: {
-                    show: false
-                },
+                // level_select: {
+                //     show: true,
+                //     url: "/api/categories",
+                //     name: "category_id"
+                // },
                 global_plataform: {
-                    show: false
-                }
-            }
-        });
-    });
-
-
-    Router = Router.get("/achievements/productZero2_json" , function(req , res , next){
-
-        res.json({
-            code: 200,
-            modelData: [],
-            components: {
-                date_picker: {
-                    show: false,
-                    defaultData: 7
-                },
-                drop_down: {
-                    platform: false,
-                    channel: false,
-                    version: false,
-                    coupon: false
-                },
-                filter_select: [{
-                    title: "平台选择",
-                    filter_key : 'filter_key',
-                    groups: [{
+                    show: true,
+                    key : "filter_key",
+                    name : "平台切换（默认全部平台）",
+                    list : [{
                         key: ['APP','WAP','PC'],
                         value: '全部平台'
                     },{
@@ -79,16 +39,36 @@ module.exports = (Router) => {
                         key: 'PC',
                         value: 'PC'
                     }]
-                }],
-                search: {
-                    show: false
-                },
-                control_table_col: {
-                    show: false
-                },
-                global_plataform: {
-                    show: false
                 }
+            }
+        });
+    });
+
+
+    Router = Router.get("/achievements/productZero2_json" , function(req , res , next){
+
+        res.json({
+            code: 200,
+            modelData: [],
+            components: {
+                global_platform: {
+                    show: true,
+                    key : "filter_key",
+                    name : "平台切换（默认全部平台）",
+                    list : [{
+                        key: ['APP','WAP','PC'],
+                        value: '全部平台'
+                    },{
+                        key: 'APP',
+                        value: 'APP'
+                    },{
+                        key: 'WAP',
+                        value: 'WAP'
+                    },{
+                        key: 'PC',
+                        value: 'PC'
+                    }]
+                },
             }
         });
     }); 
@@ -107,6 +87,24 @@ module.exports = (Router) => {
             params.date = dates;
             query.dates = dates;
             return params;
+        },
+        global_plataform: {
+            show: true,
+            key : "filter_key",
+            name : "平台切换（默认全部平台）",
+            list : [{
+                key: ['APP','WAP','PC'],
+                value: '全部平台'
+            },{
+                key: 'APP',
+                value: 'APP'
+            },{
+                key: 'WAP',
+                value: 'WAP'
+            },{
+                key: 'PC',
+                value: 'PC'
+            }]
         },
        /* fixedParams(req , query , cb){
             if(!query.category_id){

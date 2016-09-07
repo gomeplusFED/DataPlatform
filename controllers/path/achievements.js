@@ -83,14 +83,14 @@ module.exports = {
             path : "/achievements/productSale",
             display : true,
             defaultData : [
-                {
-                    type : "chart",
-                    query_api : "/achievements/productZero"
-                },
-                {
-                    type : "chart",
-                    query_api : "/achievements/productZero2"
-                },
+                // {
+                //     type : "chart",
+                //     query_api : "/achievements/productZero"
+                // },
+                // {
+                //     type : "chart",
+                //     query_api : "/achievements/productZero2"
+                // },
                 {
                     type : "table",
                     title : "商品销售总览",
