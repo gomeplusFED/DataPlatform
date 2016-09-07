@@ -54,10 +54,10 @@ module.exports = {
                 type: "chart",
                 title: "活动效果分布",
                 query_api: "/marketingAnalysis/operatingOne"
-            },{
-                type: "table",
-                title: "活动效果明细",
-                query_api: "/marketingAnalysis/operatingTwo"
+            //},{
+            //    type: "table",
+            //    title: "活动效果明细",
+            //    query_api: "/marketingAnalysis/operatingTwo"
             }]
         };
     }

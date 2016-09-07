@@ -11,22 +11,30 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/marketingAnalysis/operatingOne",
-        modelName : ["CamOverview"],
+        modelName : ["CamCamlistChannel", "Channel"],
         platform : false,
+        secondParams(query, params, data) {
+            let ids = _.uniq(_.pluck(data.first.data[0], "channel_no"));
+            return {
+                channel_id : ids
+            };
+        },
         filter(data, query, dates) {
             return filter.operatingOne(data, query, dates);
         },
-        filter_select : [{
-            title: '',
-            filter_key : 'filter_type',
-            groups: [{
+        global_platform : {
+            show : true,
+            name : "(默认日期)",
+            key : "filter_type",
+            list : [{
                 key: 'date',
-                value: '日期'
+                name: '日期'
             }, {
                 key: 'channel',
-                value: '渠道'
+                name: '渠道'
             }]
-        }, {
+        },
+        filter_select : [{
             title: '指标',
             filter_key : 'filter_key',
             groups: [{
