@@ -51,7 +51,7 @@ module.exports = {
         //用于第一行的数据
         var source = allSource[0];
         one.push({
-            "new_play_num" : source.new_play_num,
+            "sid_num" : source.sid_num,
             "active_user"  : source.active_user
         });
 
