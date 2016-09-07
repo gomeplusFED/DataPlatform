@@ -157,8 +157,11 @@ module.exports = {
             };
         }
 
-
-
+        for(let item of source){
+            for(var key in newData[item.date]){
+                newData[item.date][key] += item[key];
+            }
+        }
 
         return [{
             type : type,
@@ -169,5 +172,17 @@ module.exports = {
                 categoryY : false //柱状图竖着
             }
         }];
+    },
+    productSix(data , query ,dates){
+        var source = data.first.data[0],
+            result = [];
+
+       /* console.log(123,dates);
+        for(var len=dates.length-1;len>=0;len--){
+            console.log(dates[len]);
+        }*/
+
+
+        return util.toTable([source], data.rows, data.cols); 
     }
 };

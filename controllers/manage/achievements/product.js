@@ -79,19 +79,24 @@ module.exports = (Router) => {
             [
                 {
                     caption: '商品总数',
-                    type: 'number'
+                    type: 'number',
+                    help: "平台累计商品总数（ITEM）"
                 }, {
                     caption: '冻结总数',
-                    type: 'number'
+                    type: 'number',
+                    help: "统计时间内，平台冻结商品数(ITEM)"
                 }, {
                     caption: '上架总数',
-                    type: 'number'
+                    type: 'number',
+                    help: "统计时间内，平台上架商品数(ITEM)"
                 },{
                     caption: '下架总数',
-                    type: 'number'
+                    type: 'number',
+                    help: "统计时间内，平台下架商品数(ITEM)"
                 },{
                     caption: '当前SPU使用总数',
-                    type: 'number'
+                    type: 'number',
+                    help: "累计当前SPU ID使用总数，去重"
                 }
             ]
         ],
@@ -136,19 +141,24 @@ module.exports = (Router) => {
                 type: 'string'
             },{
                 caption: '新增商品数',
-                type: 'number'
+                type: 'number',
+                help: "统计时间内，平台新增商品数（SPU）"
             },{
                 caption: '上架商品数',
-                type: 'number'
+                type: 'number',
+                help: "统计时间内，平台上架商品数(ITEM)"
             },{
                 caption: '下架商品数',
-                type: 'number'
+                type: 'number',
+                help: "统计时间内，平台下架商品数(ITEM)"
             },{
                 caption: '冻结商品数',
-                type: 'number'
+                type: 'number',
+                help: "统计时间内，平台冻结商品数(ITEM)"
             },{
                 caption: '删除商品数',
-                type: 'number'
+                type: 'number',
+                help: "统计时间内，平台删除商品数（SPU)"
             },]
         ],
 
@@ -243,35 +253,55 @@ module.exports = (Router) => {
         platform : false,
         // date_picker_data : 1,
         // showDayUnit : true,
+        filter(data, query , dates) {
+            return filter.productFive(data, query ,dates);
+        }
+    });
+
+    Router = new api(Router , {
+        router : "/achievements/productSix",
+        modelName:["ItemManager"],
         excel_export : true,
+        platform : false,
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
-        filter(data, query , dates) {
-            return filter.productFive(data, query ,dates);
-        },
-        /*filter_select : [{
-            title: "指标",
-            filter_key : 'filter_key',
-            groups: [{
-                key: "items_add",
-                value: "新增商品数"
+        order : ["-date"],
+        rows : [
+            ["date" , "items_add" , "items_put" , "items_down" , "items_frost" , "items_delete"]
+        ],
+        cols : [
+            [{
+                caption : "日期",
+                type : "date"
             },{
-                key: "items_put",
-                value: "上架商品数"
+                caption : "新增商品数",
+                type : "number",
+                help : "统计时间内，平台新增商品数（SPU）"
             },{
-                key: "items_down",
-                value: "下架商品数"
+                caption : "上架商品数",
+                type : "number",
+                help : "统计时间内，平台上架商品数(ITEM)"
             },{
-                key: "items_frost",
-                value: "冻结商品数"
+                caption : "下架商品数",
+                type : "number",
+                help : "统计时间内，平台下架商品数(ITEM)"
             },{
-                key: "items_delete",
-                value: "删除商品数"
+                caption : "冻结商品数",
+                type : "number",
+                help : "统计时间内，平台冻结商品数(ITEM)"
+            },{
+                caption : "删除商品数",
+                type : "number",
+                help : "统计时间内，平台删除商品数（SPU)"
             }]
-        }],*/
-    });
+        ],
+        filter( data , query ,dates ){
+            return filter.productSix(data, query ,dates);
+        }
+
+    })
 
     return Router;
 };

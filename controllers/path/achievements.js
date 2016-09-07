@@ -69,11 +69,11 @@ module.exports = {
                     title : "商品运营趋势",
                     query_api : "/achievements/productFive"
                 },
-                // {
-                //     type : "table",
-                //     title : "商品运营明细",
-                //     // query_api : "/achievements/productFive"
-                // }
+                {
+                    type : "table",
+                    title : "商品运营明细",
+                    query_api : "/achievements/productSix"
+                }
             ]
         }
     },

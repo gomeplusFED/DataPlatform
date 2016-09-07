@@ -3,10 +3,11 @@
  * @date 20160414
  * @fileoverview 活动总览
  */
-var redis = require("ioredis"),
-    redisConfig = require("../../../db/redis.json"),
-    config = require("../../../db/config.json").redis,
-    cluster = new redis.Cluster(redisConfig[config]);
+let moment = require("moment"),
+    filter = require("../../../filters/marketingAnalysis"),
+    async = require("asyncawait/async"),
+    await = require("asyncawait/await"),
+    cluster = global.cluster;
 
 module.exports = (Router) => {
 
@@ -57,51 +58,333 @@ module.exports = (Router) => {
 
     Router  = Router.get("/marketingAnalysis/overviewOne_json", (req, res, next) => {
         let query = req.query,
-            modules = {},
+            data = {
+                now : {},
+                old : {}
+            },
+            now = new Date("2016-08-31 17:00:00"),
+            date = moment(now).format("MMDD"),
+            oldDate = moment(new Date(now - 24 * 60 * 60 * 1000)).format("MMDD"),
+            hour = moment(now).format("HH"),
             cols = [
                 [
                     {
-                        caption : ""
+                        caption : "",
+                        type : "string"
                     },{
-                        caption : "活动页UV"
+                        caption : "活动页UV",
+                        type : "number"
                     },{
-                        caption : "活动页PV"
+                        caption : "活动页PV",
+                        type : "number"
                     },{
-                        caption : "新增注册"
+                        caption : "新增注册",
+                        type: "number"
                     },{
-                        caption : "分享人数"
+                        caption : "分享人数",
+                        type : "number"
                     },{
-                        caption : "分享次数"
+                        caption : "分享次数",
+                        type : "number"
                     }
                 ]
             ],
             rows = [
                 ["name", "uv", "pv", "new_user", "share_user", "share_num"]
             ];
-        if(Object(query).length === 0) {
-            _render(res, [], modules);
-        } else {
 
+        if(Object(query).length === 0) {
+            _render(res, [], {});
+        } else {
+            for(let key of rows[0]) {
+                data.now[key] = [];
+                data.old[key] = [];
+            }
+            async(() => {
+                try {
+                    if(query.channel_id) {
+                        for(let key of query.channel_id) {
+                            for(let i = 0; i < +hour + 1; i++) {
+                                if(i >= 10) {
+                                    data.now.pv.push(
+                                        await (_find(`all:market:activity:${date + i}:${key}:pv`))
+                                    );
+                                    data.now.share_user.push(
+                                        await (_find(`all:market:activity:share:${date + i}:${key}:pv`))
+                                    );
+                                } else {
+                                    data.now.pv.push(
+                                        await (_find(`all:market:activity:${date}0${i}:${key}:pv`))
+                                    );
+                                    data.now.share_user.push(
+                                        await (_find(`all:market:activity:share:${date}0${i}:${key}:pv`))
+                                    );
+                                }
+                            }
+                            for(let i = 0; i < 24; i++) {
+                                if(i >= 10) {
+                                    data.old.pv.push(
+                                        await (_find(`all:market:activity:${oldDate + i}:${key}:pv`))
+                                    );
+                                    data.old.share_user.push(
+                                        await (_find(`all:market:activity:share:${oldDate + i}:${key}:pv`))
+                                    );
+                                } else {
+                                    data.old.pv.push(
+                                        await (_find(`all:market:activity:${oldDate}0${i}:${key}:pv`))
+                                    );
+                                    data.old.share_user.push(
+                                        await (_find(`all:market:activity:share:${oldDate}0${i}:${key}:pv`))
+                                    );
+                                }
+                            }
+                            data.now.uv.push(
+                                await (_find(`all:market:activity:${date}:${key}:uv`))
+                            );
+                            data.now.new_user.push(
+                                await (_find(`all:market:activity:register:${date}:${key}:uv`))
+                            );
+                            data.now.share_num.push(
+                                await (_find(`all:market:activity:share:${date}:${key}:uv`))
+                            );
+                            data.old.uv.push(
+                                await (_find(`all:market:activity:${oldDate}:${key}:uv`))
+                            );
+                            data.old.new_user.push(
+                                await (_find(`all:market:activity:register:${oldDate}:${key}:uv`))
+                            );
+                            data.old.share_num.push(
+                                await (_find(`all:market:activity:share:${oldDate}:${key}:uv`))
+                            );
+                        }
+                    } else {
+                        for(let i = 0; i < +hour + 1; i++) {
+                            if(i >= 10) {
+                                data.now.pv.push(
+                                    await (_find(`all:market:activity:${date + i}:pv`))
+                                );
+                                data.now.share_user.push(
+                                    await (_find(`all:market:activity:share:${date + i}:pv`))
+                                );
+                            } else {
+                                data.now.pv.push(
+                                    await (_find(`all:market:activity:${date}0${i}:pv`))
+                                );
+                                data.now.share_user.push(
+                                    await (_find(`all:market:activity:share:${date}0${i}:pv`))
+                                );
+                            }
+                        }
+                        for(let i = 0; i < 24; i++) {
+                            if(i >= 10) {
+                                data.old.pv.push(
+                                    await (_find(`all:market:activity:${oldDate + i}:pv`))
+                                );
+                                data.old.share_user.push(
+                                    await (_find(`all:market:activity:share:${oldDate + i}:pv`))
+                                );
+                            } else {
+                                data.old.pv.push(
+                                    await (_find(`all:market:activity:${oldDate}0${i}:pv`))
+                                );
+                                data.old.share_user.push(
+                                    await (_find(`all:market:activity:share:${oldDate}0${i}:pv`))
+                                );
+                            }
+                        }
+                        data.now.uv.push(
+                            await (_find(`all:market:activity:${date}:uv`))
+                        );
+                        data.now.new_user.push(
+                            await (_find(`all:market:activity:register:${date}:uv`))
+                        );
+                        data.now.share_num.push(
+                            await (_find(`all:market:activity:share:${date}:uv`))
+                        );
+                        data.old.uv.push(
+                            await (_find(`all:market:activity:${oldDate}:uv`))
+                        );
+                        data.old.new_user.push(
+                            await (_find(`all:market:activity:register:${oldDate}:uv`))
+                        );
+                        data.old.share_num.push(
+                            await (_find(`all:market:activity:share:${oldDate}:uv`))
+                        );
+                    }
+
+                    _render(res, filter.overviewOne(data, rows, cols), {});
+                } catch(err) {
+                    next(err);
+                }
+            })();
         }
     });
 
+    Router = Router.get("/marketingAnalysis/overviewTwo_json", (req, res, next) => {
+        let query = req.query,
+            date = new Date(),
+            now = moment(date).format("MMDD"),
+            old = moment(new Date(date - query.day * 24 * 60 * 60 * 1000)).format("MMDD"),
+            hour = moment(date).format("HH"),
+            modules = {
+                filter_select : [{
+                    title: '数据指标',
+                    filter_key: 'filter_key',
+                    groups: [{
+                        key: 'uv',
+                        value: '活动页UV'
+                    }, {
+                        key: 'pv',
+                        value: '活动页PV'
+                    }, {
+                        key: 'new_user',
+                        value: '新增注册'
+                    }, {
+                        key: 'share_user',
+                        value: '分享人数'
+                    }, {
+                        key: 'share_num',
+                        value: '分享次数'
+                    }]
+                }, {
+                    title: '对比时段',
+                    filter_key: 'day',
+                    groups: [{
+                        key : 1,
+                        value : "前一日"
+                    }, {
+                        key : 7,
+                        value : "上周同期"
+                    }]
+                }]
+            };
 
+        if(Object.keys(query).length === 0) {
+            _render(res, [], modules);
+        } else {
+            async(() => {
+                try {
+                    if(query.channel_id) {
+                        _render(res, filter.overviewTwo(
+                            _findRedis(query.filter_key, {
+                                now : now,
+                                old : old
+                            }, hour, query.channel_id)
+                        ), modules);
+                    } else {
+                        _render(res, filter.overviewTwo(
+                            _findRedis(query.filter_key, {
+                                now : now,
+                                old : old
+                            }, hour, []), query.day
+                        ), modules);
+                    }
+                } catch(err) {
+                    next(err);
+                }
+            })();
+        }
+    });
+
+    function _findRedis(filter_key, date, hour, channels) {
+        let data = {},
+            key,
+            end;
+
+        if(filter_key === "uv") {
+            key = "all:market:activity:";
+            end = "uv";
+        } else if(filter_key === "pv") {
+            key = "all:market:activity:";
+            end = "pv";
+        } else if(filter_key === "new_user") {
+            key = "all:market:activity:register";
+            end = "uv";
+        } else if(filter_key === "share_user") {
+            key = "all:market:activity:share";
+            end = "pv";
+        } else {
+            key = "all:market:activity:share";
+            end = "uv";
+        }
+
+        if(channels.length === 0) {
+            for(let i = 0; i < +hour + 1; i++) {
+                if(i >= 10) {
+                    data[`${i}:00-${i+1}:00`] = {
+                        now : await (_find(`${key}:${date.now + i + end}`)) || 0,
+                        old : await (_find(`${key}:${date.old + i + end}`)) || 0
+                    };
+                } else {
+                    data[`0${i}:00-0${i+1}:00`] = {
+                        now : await (_find(`${key}:${date.now}0${i + end}`)) || 0,
+                        old : await (_find(`${key}:${date.old}0${i + end}`)) || 0
+                    };
+                }
+            }
+        } else {
+            for(let channel of channels) {
+                for(let i = 0; i < +hour + 1; i++) {
+                    if(i >= 10) {
+                        if(data[`${i}:00-${i+1}:00`]) {
+                            data[`${i}:00-${i+1}:00`].now +=
+                                await (_find(`${key}:${date.now + i + channel + end}`)) || 0;
+                            data[`${i}:00-${i+1}:00`].old +=
+                                await (_find(`${key}:${date.old + i + channel + end}`)) || 0;
+                        } else {
+                            data[`${i}:00-${i+1}:00`] = {
+                                now : await (_find(`${key}:${date.now + i + channel + end}`)) || 0,
+                                old : await (_find(`${key}:${date.old + i + channel + end}`)) || 0
+                            };
+                        }
+                    } else {
+                        if(data[`0${i}:00-0${i+1}:00`]) {
+                            data[`0${i}:00-0${i+1}:00`].now +=
+                                await (_find(`${key}:${date.now}0${i + channel + end}`)) || 0;
+                            data[`0${i}:00-0${i+1}:00`].now +=
+                                await (_find(`${key}:${date.old}0${i + channel + end}`)) || 0;
+                        } else {
+                            data[`0${i}:00-0${i+1}:00`] = {
+                                now : await (_find(`${key}:${date.now}0${i + channel + end}`)) || 0,
+                                old : await (_find(`${key}:${date.old}0${i + channel + end}`)) || 0
+                            };
+                        }
+                    }
+                }
+            }
+        }
+
+        return data;
+    }
 
     function _render(res, sendData, modules) {
         res.json({
             code: 200,
             modelData: sendData,
             components: {
-                flexible_btn: modules.flexible_btn,
+                flexible_btn: modules.flexible_btn || [],
                 date_picker: {
                     show: false
                 },
                 drop_down: {
                     platform: false
                 },
-                filter_select: modules.filter_select
+                filter_select: modules.filter_select || []
             }
         })
     }
+
+    var _find = async((key) => {
+        return new Promise((resolve, reject) => {
+            cluster.get(key, (err, data) => {
+                if(err) {
+                    reject(err);
+                } else {
+                    resolve(data);
+                }
+            })
+        })
+    });
+
     return Router;
 };

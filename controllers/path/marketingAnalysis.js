@@ -11,45 +11,53 @@ module.exports = {
             path: "/marketingAnalysis/overview",
             display: true,
             defaultData: [{
-            //    type: "chart",
-            //    title: "",
-            //    query_api: "/marketingAnalysis/overviewZero"
-            //}, {
+                type: "chart",
+                title: "",
+                query_api: "/marketingAnalysis/overviewZero"
+            }, {
                 type: "table",
                 title: "实时概况",
                 query_api: "/marketingAnalysis/overviewOne"
+            }, {
+                type: "chart",
+                title: "实时流量趋势",
+                query_api: "/marketingAnalysis/overviewTwo"
             }]
         };
     },
-    activityFlow() {
+    all() {
         return {
             name: "活动流量",
             path: "/marketingAnalysis/activityFlow",
             display: true,
             defaultData: [{
+                type: "table",
+                title: "营销流量总览",
+                query_api: "/marketingAnalysis/allOne"
+            },{
                 type: "chart",
-                title: "营销流量趋势",
-                query_api: "/marketingAnalysis/activityFlowOne"
+                title: "营销趋势",
+                query_api: "/marketingAnalysis/allTwo"
             },{
                 type: "table",
-                title: "营销流量明细表",
-                query_api: "/marketingAnalysis/activityFlowTwo"
+                title: "营销列表",
+                query_api: "/marketingAnalysis/allThree"
             }]
         };
     },
-    couponInfo() {
+    operating() {
         return {
-            name: "优惠券信息",
-            path: "/marketingAnalysis/couponInfo",
+            name: "活动流量",
+            path: "/marketingAnalysis/operating",
             display: true,
             defaultData: [{
                 type: "chart",
-                title: "优惠券分布",
-                query_api: "/marketingAnalysis/couponInfoOne"
+                title: "活动效果分布",
+                query_api: "/marketingAnalysis/operatingOne"
             },{
                 type: "table",
-                title: "优惠券明细",
-                query_api: "/marketingAnalysis/couponInfoTwo"
+                title: "活动效果明细",
+                query_api: "/marketingAnalysis/operatingTwo"
             }]
         };
     }
