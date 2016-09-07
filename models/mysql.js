@@ -21,7 +21,7 @@ var orm = require('orm'),
             obj[fileName] = require("./" + key);
         }
     }
-
+console.log(mysql);
 function connect(app) {
     app.use(orm.express('mysql://' + mysql.username + ':' + mysql.pwd + '@' + mysql.host + '/' + mysql.database + '?timezone=CST', {
         define: function(db, models, next) {
@@ -113,6 +113,9 @@ function connect(app) {
             models.ItemPie = db.define("ads2_itm_pie" , obj.ItemPie);
             models.ItemRunSales = db.define("ads2_itm_run_sales" , obj.ItemRunSales);
             models.ItemRunTop = db.define("ads2_itm_run_top" , obj.ItemRunTop);
+
+            // 美店
+            models.VshopInfo = db.define("ads2_vshop_item_details" , obj.VshopInfo);
 
             models.db1 = db;
             next();
