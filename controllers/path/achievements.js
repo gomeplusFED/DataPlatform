@@ -84,23 +84,32 @@ module.exports = {
             display : true,
             defaultData : [
                 {
+                    type : "chart",
+                    query_api : "/achievements/productZero"
+                },
+                {
+                    type : "chart",
+                    query_api : "/achievements/productZero2"
+                },
+                {
                     type : "table",
                     title : "商品销售总览",
-                    // query_api : "/achievements/productOne"
-                },{
-                    type : "table",
-                    title : "商品销售趋势",
-                    // query_api : "/achievements/productOne"
-                },{
+                    query_api : "/achievements/productSaleOne"
+                },//{
+                //     type : "table",
+                //     title : "商品销售趋势",
+                //     // query_api : "/achievements/productSaleTwo"
+                // },
+                {
                     type : "table",
                     title : "商品销售明细",
-                    // query_api : "/achievements/productOne"
-                },{
+                    query_api : "/achievements/productSaleThree"
+                },
+                {
                     type : "table",
                     title : "商品排行TOP100",
-                    // query_api : "/achievements/productOne"
+                    query_api : "/achievements/productSaleFour"
                 }
-               
             ]
         }
     },
