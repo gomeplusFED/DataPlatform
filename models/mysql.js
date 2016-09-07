@@ -21,7 +21,7 @@ var orm = require('orm'),
             obj[fileName] = require("./" + key);
         }
     }
-console.log(mysql);
+
 function connect(app) {
     app.use(orm.express('mysql://' + mysql.username + ':' + mysql.pwd + '@' + mysql.host + '/' + mysql.database + '?timezone=CST', {
         define: function(db, models, next) {
