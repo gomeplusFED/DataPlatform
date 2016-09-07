@@ -103,13 +103,14 @@ module.exports = (Router) => {
         router : "/marketingAnalysis/allThree",
         modelName : ["CamCamlistActive", "Activity"],
         platform : false,
+        paging : [true, false],
         filter(data) {
             return filter.allThree(data);
         },
         firstSql(query, params, isCount) {
             if(isCount) {
-                let config = ["date BETWEEN ? AND ?"],
-                    params = [query.startTime, query.endTime],
+                let config = ["date BETWEEN ? AND ?", "day_type=?"],
+                    params = [query.startTime, query.endTime, 1],
                     active_type = [];
                 for(let item of query.active_type) {
                     active_type.push("?");
@@ -126,8 +127,8 @@ module.exports = (Router) => {
                     params : params
                 };
             } else {
-                let config = ["date BETWEEN ? AND ?"],
-                    params = [query.startTime, query.endTime],
+                let config = ["date BETWEEN ? AND ?", "day_type=?"],
+                    params = [query.startTime, query.endTime, 1],
                     active_type = [],
                     page = query.from || query.page || 1,
                     limit = query.to || query.limit || 20;

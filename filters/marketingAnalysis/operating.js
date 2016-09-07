@@ -73,5 +73,137 @@ module.exports = {
                 stack: false // 图的堆叠
             }
         }];
+    },
+    operatingTwo(data, query, dates) {
+        let source = data.first.data,
+            count = data.first.count,
+            second = data.second.data[0],
+            filter_type = query.filter_type || "date",
+            filter_key = query.filter_key,
+            rowsObj = {
+                flow : ["active_pv", "active_uv", "register", "share_button_uv",
+                    "share_button_pv", "product_rate"],
+                orderForm : ["order_num", "pay_user", "pay_num_money", "return_user",
+                    "return_num_money"],
+                coupon : ["product_rate", "coupon_get_user", "coupon_get_num", "coupon_use_user",
+                    "coupon_use_num", "rate"],
+                product : ["product_pv", "product_rate", "order_num", "order_num_money",
+                    "pay_user", "pay_num_money", "pay_rate", "return_user",
+                    "return_num_money"]
+            },
+            colsObj = {
+                flow : [
+                    {
+                        caption : "活动页PV",
+                        type : "number"
+                    }, {
+                        caption : "活动页UV",
+                        type : "number"
+                    }, {
+                        caption : "新增注册",
+                        type : "number"
+                    }, {
+                        caption : "分享按钮点击人数",
+                        type : "number"
+                    }, {
+                        caption : "分享按钮点击次数",
+                        type : "number"
+                    }, {
+                        caption : "进入商品页转化率",
+                        type : "string",
+                        help : "通过活动页跳转商品页的浏览人数/活动页浏览人数"
+                    }
+                ],
+                orderForm : [
+                    {
+                        caption : "商品页转化率",
+                        type : "string",
+                        help : "通过活动页跳转商品页的浏览人数/活动页浏览人数"
+                    },
+                    {
+                        caption : "订单总量",
+                        type : "number"
+                    }, {
+                        caption : "支付用户数",
+                        type : "number"
+                    }, {
+                        caption : "实际支付金额",
+                        type : "number"
+                    }, {
+                        caption : "退货用户数",
+                        type : "number"
+                    }, {
+                        caption : "实际退货总金额",
+                        type : "number"
+                    }
+                ],
+                coupon : [
+                    {
+                        caption : "领取人数",
+                        type : "number"
+                    }, {
+                        caption : "领取数量",
+                        type : "number"
+                    }, {
+                        caption : "使用人数",
+                        type : "number"
+                    }, {
+                        caption : "使用数量",
+                        type : "number"
+                    }, {
+                        caption : "使用转化率",
+                        type : "string",
+                        help : "优惠券使用数量/优惠券领取数量"
+                    }
+                ],
+                product : [
+                    {
+                        caption : "商品页面PV",
+                        type : "number"
+                    },
+                    {
+                        caption : "页面转化率",
+                        type : "string"
+                    }, {
+                        caption : "订单总量",
+                        type : "number"
+                    }, {
+                        caption : "订单总金额",
+                        type : "number"
+                    }, {
+                        caption : "支付用户数",
+                        type : "number"
+                    }, {
+                        caption : "实际支付总金额",
+                        type : "number"
+                    }, {
+                        caption : "支付转化率",
+                        type : "string",
+                        help : "支付用户数/活动页UV"
+                    }, {
+                        caption : "退货用户数",
+                        type : "number"
+                    }, {
+                        caption : "退货总金额",
+                        type : "number"
+                    }
+                ]
+            },
+            rows,
+            cols;
+
+        if(filter_type === "date") {
+            rows = [["date"].concat(rowsObj[filter_key])];
+            cols = [[{
+                caption : "日期",
+                type : "string"
+            }].concat(colsObj[filter_key])];
+        } else {
+            rows = [["channel"].concat(rowsObj[filter_key])];
+            cols = [[{
+                caption : "渠道",
+                type : "string"
+            }].concat(colsObj[filter_key])];
+        }
     }
 };
