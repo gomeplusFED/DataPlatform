@@ -1,0 +1,374 @@
+/**
+ * @author lzn
+ * @date 20160906
+ * @fileoverview 美店
+ */
+var util = require("../../utils"),
+    _ = require("lodash");
+
+var convertDate =function(date) {
+    // 将日期变为当天的0点
+    return (new Date(util.getDate(date)+ " 00:00:00"));
+}
+var trimData = function (source, keyArray, sdate, edate) {
+    var filterData = _.filter(source, function(obj) {
+        return (sdate.getTime() <= obj.date.getTime() &&
+                obj.date.getTime() < edate.getTime() );
+    });
+    
+    //累加数据
+    let res =  _.reduce(filterData, function(result, obj) {
+        _.keys(obj).forEach(function(key) {
+            if (keyArray.indexOf(key) !== -1) {
+                result[key] = obj[key] + result[key] || 0;
+            }
+        });
+      return result;
+    }, {});
+    // console.log(JSON.stringify(res,null,4));
+    return res;
+}
+
+module.exports = {
+    vshopOne(data, type) {
+        var source = data.first.data[0],
+            now = new Date(),
+            _type = 'product, shop',
+            _rows = [
+                [['name', 'new_shelve_item_num', 'del_item_num', 'off_shelve_item_num', 'browse_item_num', 'browse_item_time', 'add2cart_item_num', 'add2cart_quantity', 'ordered_item_num', 'ordered_quantity', 'paid_item_num', 'paid_quantity', 'shared_item_num', 'item_share_time', 'favorited_item_num', 'item_favorited_num', 'delivery_quantity']],
+                [['name', 'new_vshop_num', 'total_vshop_num', 'open_vshop_num', 'silent_vshop_num', 'visited_vshop_num', 'favorite_vshop_num', 'ordered_vshop_num', 'paid_vshop_num']]
+            ],
+            _cols = [
+                        [[
+                            {
+                                "caption": " ",
+                                "type": "string"
+                            },
+                            {
+                                "caption": "美店新增上架商品数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "美店新删除商品数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "美店新下架商品数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "浏览商品数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "浏览商品次数",
+                                "type": "string"
+                            },
+                            {
+                                "caption": "加购商品数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "加购商品件数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "下单商品数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "下单商品件数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "支付商品数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "支付商品件数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "被分享商品数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "商品被分享次数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "被收藏商品数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "商品被收藏数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "妥投商品件数",
+                                "type": "number"
+                            }
+                        ]],
+                        [[
+                            {
+                                "caption": " ",
+                                "type": "string"
+                            },
+                            {
+                                "caption": "新增美店数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "运营中美店数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "沉默美店数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "被访问美店数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "被分享美店数",
+                                "type": "string"
+                            },
+                            {
+                                "caption": "被收藏美店数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "下单美店数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "支付美店数",
+                                "type": "number"
+                            }
+                        ]]
+                    ],
+            rows = [],
+            cols = [];
+        if(_type.indexOf(type) === 0) {
+            //商品
+            rows = _rows[0];
+            cols = _cols[0];
+
+        } else {
+            rows = _rows[1];
+            cols = _cols[1];
+        }
+
+        // 昨天的数据
+        // 昨天0点 到 今天0 点
+        var qdate = convertDate(new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000));
+        var zdate = convertDate(new Date(now.getTime() - 1 * 24 * 60 * 60 * 1000));
+        var jdate = convertDate(new Date(now.getTime()));
+        var zData = trimData(source, rows[0], zdate, jdate);
+        zData.name = '昨天';
+        // console.log('vshopOne filter');
+        // console.log(JSON.stringify(zData,null,4));
+        //前天的数据
+        // 前天0点 到 昨天0 点
+        var qData = trimData(source, rows[0], qdate, zdate);
+        qData.name = '前天';
+        //环比
+        var hb = _.clone(zData);
+        _.merge(hb, qData, function(a, b) {
+          if (_.isNumber(a)) {
+            return util.toFixed(a,b);
+          }
+        });
+        hb.name = '环比';
+        // console.log(JSON.stringify(hb,null,4));
+        // 7日平均环比：昨日/（average（最近7日之和））
+        // 最近7日之和: 7天前的0点 到今天 0 点
+        var date7ago = convertDate(new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000));
+        var hb7day = trimData(source, rows[0], date7ago, jdate);
+        _.merge(hb7day, zData, function(a, b) {
+          if (_.isNumber(a)) {
+            return util.toFixed(b, a/8);
+          }
+        });
+        hb7day.name = '7日平均环比';
+        // console.log(JSON.stringify(hb7day,null,4));
+        var newData = [zData, qData, hb, hb7day];
+        return util.toTable([newData], rows, cols);
+    },
+    vshopTwo(data, query, dates) {
+        var source = data.first.data[0],
+            newData = {},
+            type = "line",
+            map = {
+                    new_vshop_num: '新增美店数',
+                    open_vshop_num: '运营中美店数',
+                    visited_vshop_num: '被访问美店数',
+                    ordered_vshop_num: '下单美店数',
+                    paid_vshop_num: '支付美店数',
+                    favorite_vshop_num: '被收藏美店数',
+                    new_shelve_item_num: '美店新增上架商品数',
+                    browse_item_num: '浏览商品数',
+                    browse_item_time: '浏览商品次数',
+                    ordered_item_num: '下单商品数',
+                    ordered_quantity: '下单商品件数',
+                    paid_item_num: '支付商品数',
+                    paid_quantity: '支付商品件数'
+                };
+        var keyArray = _.keys(map);
+        dates.forEach(function(date) {
+            var date0clock = new Date(date+ " 00:00:00");
+            var date24clock = new Date(date+ " 23:59:59");
+            newData[date] = trimData(source, keyArray, date0clock, date24clock);
+        });
+
+        return [{
+            type : type,
+            map : map,
+            data : newData,
+            config: {
+                stack: false
+            }
+        }];
+    },
+    vshopThree(data, type, dates) {
+        var source = data.first.data[0],
+            now = new Date(),
+            _type = 'product, shop',
+            _rows = [
+                [['name', 'new_shelve_item_num', 'del_item_num', 'off_shelve_item_num', 'browse_item_num', 'browse_item_time', 'add2cart_item_num', 'add2cart_quantity', 'ordered_item_num', 'ordered_quantity', 'paid_item_num', 'paid_quantity', 'shared_item_num', 'item_share_time', 'favorited_item_num', 'item_favorited_num', 'delivery_quantity']],
+                [['name', 'new_vshop_num', 'total_vshop_num', 'open_vshop_num', 'silent_vshop_num', 'visited_vshop_num', 'favorite_vshop_num', 'ordered_vshop_num', 'paid_vshop_num']]
+            ],
+            _cols = [
+                        [[
+                            {
+                                "caption": "日期",
+                                "type": "string"
+                            },
+                            {
+                                "caption": "美店新增上架商品数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "美店新删除商品数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "美店新下架商品数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "浏览商品数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "浏览商品次数",
+                                "type": "string"
+                            },
+                            {
+                                "caption": "加购商品数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "加购商品件数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "下单商品数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "下单商品件数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "支付商品数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "支付商品件数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "被分享商品数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "商品被分享次数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "被收藏商品数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "商品被收藏数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "妥投商品件数",
+                                "type": "number"
+                            }
+                        ]],
+                        [[
+                            {
+                                "caption": "日期",
+                                "type": "string"
+                            },
+                            {
+                                "caption": "新增美店数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "运营中美店数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "沉默美店数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "被访问美店数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "被分享美店数",
+                                "type": "string"
+                            },
+                            {
+                                "caption": "被收藏美店数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "下单美店数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "支付美店数",
+                                "type": "number"
+                            }
+                        ]]
+                    ],
+            rows = [],
+            cols = [];
+        if(_type.indexOf(type) === 0) {
+            //商品
+            rows = _rows[0];
+            cols = _cols[0];
+
+        } else {
+            rows = _rows[1];
+            cols = _cols[1];
+        }
+        var keyArray = rows[0];
+        var newData = dates.map(function(date) {
+            //当天0点到24点
+            var date0clock = new Date(date+ " 00:00:00");
+            var date24clock = new Date(date+ " 23:59:59");
+            var data =  trimData(source, keyArray, date0clock, date24clock);
+            data.name = date;
+            return data;
+        });
+        return util.toTable([newData], rows, cols);
+    }
+};
