@@ -309,7 +309,7 @@ module.exports = (Router) => {
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
-        page : [true],
+        paging : [false],
         filter_select : [
             {
                 title : "类型",
@@ -326,8 +326,16 @@ module.exports = (Router) => {
                 }]
             }
         ],
-        order : [],
-        params : function(query , params , sendData){
+        firstSql(query , params , isCount){
+            var num = query.filter_key / 1;
+
+            console.log("isCount" , isCount);
+            return {
+                sql : "select * from ads2_itm_run_top",
+                params : []
+            }
+        },
+        /*params : function(query , params , sendData){
             var num = query.filter_key / 1,
                 order;
             switch(num){
@@ -342,9 +350,10 @@ module.exports = (Router) => {
                     break;
             }
             this.order = order;
-            console.log("gs",num);
+            console.log("gs",num , order , this.order);
+            console.log(params);
             return params;
-        },
+        },*/
         //set in filter function.
         cols : [
             []

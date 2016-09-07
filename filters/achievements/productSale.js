@@ -276,7 +276,7 @@ module.exports = {
         data.rows[0] = Rows[num];
         data.cols[0] = Columns[num];
 
-        console.log(query);
+        // console.log(query);
 
 
         return util.toTable([source], data.rows, data.cols); 
