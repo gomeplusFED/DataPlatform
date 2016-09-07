@@ -30,13 +30,13 @@ module.exports = (Router) => {
             return params;
         },
         rows : [
-            ["new_play_num" /*, "active_user" */],
+            ["sid_num" /*, "active_user" */],
             ["health_play" , "port_succ" , "start_frame_succ" , "stop_play_num" , "play_fluent"],
             ["unhealth_play" , "port_io_failed" , "port_data_failed" , "port_overtime" , "play_failed" , "play_error" , "improper_play"]
         ],
         cols : [
             [{
-                caption : "新增播放次数",
+                caption : "播放次数",
                 type    : "number"
             }/*,{
                 caption : "活跃用户数",

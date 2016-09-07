@@ -92,7 +92,7 @@ module.exports = (Router) => {
                 }
             }
         });
-    });
+    }); 
 
 
 
@@ -109,7 +109,7 @@ module.exports = (Router) => {
             query.dates = dates;
             return params;
         },
-        fixedParams(req , query , cb){
+       /* fixedParams(req , query , cb){
             if(!query.category_id){
                 cb(null , query);
             }else{
@@ -121,7 +121,7 @@ module.exports = (Router) => {
                     cb(null , query);
                 });
             }
-        },
+        },*/
         filter_select : [
             {
                 title : "类型",
@@ -172,7 +172,7 @@ module.exports = (Router) => {
     });
 
 
-    //商品管理总览
+    //商品销售趋势
     Router = new api(Router,{
         router : "/achievements/productSaleTwo",
         modelName : ["ItemManager"],
@@ -233,81 +233,125 @@ module.exports = (Router) => {
         }
     });
 
-    //商品价格区间分布－总商品数（万）
+    //商品销售明细
     Router = new api(Router,{
         router : "/achievements/productSaleThree",
-        modelName : ["ItemPie"],
+        modelName : ["ItemRunSales"],
         platform : false,
-        params : function(query , params , sendData){
-            delete params.category_id;
-            return params;
-        },
-        fixedParams(req , query , cb){
-            if(!query.category_id){
-                cb(null , query);
-            }else{
-                req.models.ConfCategories.find({
-                    pid : query.category_id
-                } , 1 , (err , data)=>{
-                    if(err) cb(err);
-                    switch(data[0].level){
-                        case 1:
-                            query.category_id_1 = query.category_id;
-                            break;
-                        case 2:
-                            query.category_id_2 = query.category_id;
-                            break;
-                        case 3:
-                            query.category_id_3 = query.category_id;
-                            break;
-                        case 4:
-                            query.category_id_4 = query.category_id;
-                            break;
-                    }
-                    cb(null , query);
-                });
+        excel_export : true,
+        flexible_btn : [{
+            content: '<a href="javascript:void(0)">导出</a>',
+            preMethods: ['excel_export']
+        }],
+        filter_select : [
+            {
+                title : "类型",
+                filter_key : "filter_key",
+                groups: [{
+                    key: "ITEM",
+                    value: "ITEM"
+                },{
+                    key: "SKU",
+                    value: "SKU"
+                }]
             }
-        },
+        ],
+        order : ["-date"],
+        cols : [
+            [{
+                comment : "日期/日期",
+                type : "string"
+            }, {
+                comment: '被访问商品数/商品访问量',
+                type: 'string'
+            }, {
+                comment: '被收藏商品数/商品收藏次数',
+                type: 'string'
+            }, {
+                comment: '被分享商品数/商品被分享次数',
+                type: 'string'
+            }, {
+                comment: '加购商品数/加购商品件数',
+                type: 'string'
+            }, {
+                comment: '下单商品数/下单商品件数',
+                type: 'string'
+            }, {
+                comment: '支付商品数/支付商品件数',
+                type: 'string'
+            }, {
+                comment: '支付金额/支付金额',
+                type: 'string'
+            }, {
+                comment: '退货商品数/退货商品件数',
+                type: 'string'
+            }, {
+                comment: '退货金额/退货金额',
+                type: 'string'
+            }]
+        ],
+        //set in filter function.
+        rows : [
+            []
+        ],
         filter(data, query, dates) {
             return filter.productSaleThree(data, query);
         }
     });
 
-    //商品价格区间分布－总商品数（万）
+    //商品排行TOP100
     Router = new api(Router,{
         router : "/achievements/productSaleFour",
-        modelName : ["ItemPie"],
+        modelName : ["ItemRunTop"],
         platform : false,
+        excel_export : true,
+        flexible_btn : [{
+            content: '<a href="javascript:void(0)">导出</a>',
+            preMethods: ['excel_export']
+        }],
+        page : [true],
+        filter_select : [
+            {
+                title : "类型",
+                filter_key : "filter_key",
+                groups: [{
+                    key: "0",
+                    value: "流量"
+                },{
+                    key: "1",
+                    value: "销售"
+                },{
+                    key: "2",
+                    value: "分享"
+                }]
+            }
+        ],
+        order : [],
         params : function(query , params , sendData){
-            delete params.category_id;
+            var num = query.filter_key / 1,
+                order;
+            switch(num){
+                case 0:
+                    order = ["-product_acc_pv"];
+                    break;
+                case 1:
+                    order = ["-order_commodity_num"];
+                    break;
+                case 2:
+                    order = ["-share_commodity_num"];
+                    break;
+            }
+            this.order = order;
+            console.log("gs",num);
             return params;
         },
-        fixedParams(req , query , cb){
-            if(!query.category_id){
-                cb(null , query);
-            }else{
-                req.models.ConfCategories.find({
-                    pid : query.category_id
-                } , 1 , (err , data)=>{
-                    if(err) cb(err);
-                    switch(data[0].level){
-                        case 1:
-                            query.category_id_1 = query.category_id;
-                            break;
-                        case 2:
-                            query.category_id_2 = query.category_id;
-                            break;
-                        case 3:
-                            query.category_id_3 = query.category_id;
-                            break;
-                        case 4:
-                            query.category_id_4 = query.category_id;
-                            break;
-                    }
-                    cb(null , query);
-                });
-            }
-        },
+        //set in filter function.
+        cols : [
+            []
+        ],
+        rows : [
+            []
+        ],
         filter(data, query, dates) {
             return filter.productSaleFour(data, query);
         }

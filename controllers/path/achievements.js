@@ -98,17 +98,18 @@ module.exports = {
                 },//{
                 //     type : "table",
                 //     title : "商品销售趋势",
-                //     // query_api : "/achievements/productSaleOne"
-                // },{
-                //     type : "table",
-                //     title : "商品销售明细",
-                //     // query_api : "/achievements/productSaleOne"
-                // },{
-                //     type : "table",
-                //     title : "商品排行TOP100",
-                //     // query_api : "/achievements/productSaleOne"
-                // }
-               
+                //     // query_api : "/achievements/productSaleTwo"
+                // },
+                {
+                    type : "table",
+                    title : "商品销售明细",
+                    query_api : "/achievements/productSaleThree"
+                },
+                {
+                    type : "table",
+                    title : "商品排行TOP100",
+                    query_api : "/achievements/productSaleFour"
+                }
             ]
         }
     },
