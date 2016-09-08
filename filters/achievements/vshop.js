@@ -6,6 +6,23 @@
 var util = require("../../utils"),
     _ = require("lodash");
 
+var reduceObj = function(objArray, keyArray) {
+    return _.reduce(objArray, function(result, obj) {
+        _.keys(obj).forEach(function(key) {
+
+            if (keyArray.indexOf(key) !== -1) {
+                if (_.isNumber(obj[key])) {
+                    result[key] = obj[key] + (result[key] || 0);
+                }
+                else {
+                    result[key] = obj[key];
+                }
+            }
+        });
+      return result;
+    }, {});
+}
+
 var convertDate =function(date) {
     // 将日期变为当天的0点
     return (new Date(util.getDate(date)+ " 00:00:00"));
@@ -17,16 +34,7 @@ var trimData = function (source, keyArray, sdate, edate) {
     });
     
     //累加数据
-    let res =  _.reduce(filterData, function(result, obj) {
-        _.keys(obj).forEach(function(key) {
-            if (keyArray.indexOf(key) !== -1) {
-                result[key] = obj[key] + result[key] || 0;
-            }
-        });
-      return result;
-    }, {});
-    // console.log(JSON.stringify(res,null,4));
-    return res;
+    return reduceObj(filterData, keyArray);
 }
 
 module.exports = {
@@ -370,5 +378,74 @@ module.exports = {
             return data;
         });
         return util.toTable([newData], rows, cols);
-    }
+    },
+    vshopFour(data, dates) {
+        // console.log(JSON.stringify(data, null, 4));
+        // console.log(JSON.stringify(dates, null, 4));
+        var source = data.first.data[0],
+            now = new Date(),
+            _rows = [
+                [['merchandise_resources', 'ordered_num', 'paid_num', 'ordered_item_num', 'ordered_quantity', 'paid_item_num', 'paid_quantity', 'ordered_user_num', 'paid_user_num']]
+            ],
+            _cols = [
+                        [[
+                            {
+                                "caption": "来源",
+                                "type": "string"
+                            },
+                            {
+                                "caption": "下单总量",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "支付订单量",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "下单商品数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "下单商品件数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "支付商品数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "支付商品件数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "下单人数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "支付人数",
+                                "type": "number"
+                            }
+                        ]]
+                    ],
+            rows = [],
+            cols = [];
+        rows = _rows[0];
+        cols = _cols[0];
+        var keyArray = rows[0];
+
+        //groupBy 来源
+        var newData = _(source).groupBy(function(x) {
+            return x.merchandise_resources;
+        })
+        .mapValues(function(v) {
+            // console.log(JSON.stringify(v, null, 4));
+            //累加已分组的数据
+            var res = reduceObj(v, keyArray);   
+            console.log(JSON.stringify(res, null, 4));
+            return res;
+        })
+        .value();
+
+        return util.toTable([newData], rows, cols);
+    },
 };

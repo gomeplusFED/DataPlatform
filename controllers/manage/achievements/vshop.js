@@ -68,6 +68,12 @@ module.exports = (Router) => {
         modelName: ['VshopInfo'],
         date_picker: {show: true, defaultData: 7},
         platform : false,
+        paging : [true],
+        excel_export : true,
+        flexible_btn:[{
+             content: '<a href="javascript:void(0)">导出</a>',
+            preMethods: ["excel_export"]
+        }],
         "filter_select": [
             {
                 "title": "",
@@ -91,6 +97,28 @@ module.exports = (Router) => {
         },
         filter(data, query, dates, type) {
             return vshopFilter.vshopThree(data, query.type, dates);
+        }
+    });
+
+    // 商品来源分布
+    Router = new api(Router, {
+        router: "/achievements/vshopFour",
+        modelName: ['VshopMerchandiseResources'],
+        date_picker: {show: true, defaultData: 1, showDayUnit: true},
+        platform : false,
+        paging : [true],
+        excel_export : true,
+        date_picker_data : 1,
+        showDayUnit : true,
+        flexible_btn:[{
+             content: '<a href="javascript:void(0)">导出</a>',
+            preMethods: ["excel_export"]
+        }],
+        params : function(query , params , sendData){
+            return params;
+        },
+        filter(data, query, dates, type) {
+            return vshopFilter.vshopFour(data, dates);
         }
     });
 
