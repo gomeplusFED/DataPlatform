@@ -24,21 +24,21 @@ addRouter('./login');
 addRouter('./count');
 addRouter('./categories');
 
-    var data = fs.readdirSync(files);
-    for (var file of data) {
-        if (file.indexOf(".js") < 0 && file.indexOf('.') !== 0) {
-            var f = fs.readdirSync(files + "/" + file);
-            for (var key of f) {
-                if (key.indexOf("js") >= 0) {
-                    try {
-                        addRouter("." + files + "/" + file + "/" + key);
-                    } catch (err) {
-                        console.log(err, ",ERROR in router/index,", "file in "+"." + files + "/" + file + "/" + key);
-                    }
+var data = fs.readdirSync(files);
+for (var file of data) {
+    if (file.indexOf(".js") < 0 && file.indexOf('.') !== 0) {
+        var f = fs.readdirSync(files + "/" + file);
+        for (var key of f) {
+            if (key.indexOf("js") >= 0) {
+                try {
+                    addRouter("." + files + "/" + file + "/" + key);
+                } catch (err) {
+                    console.log(err, ",ERROR in router/index,", "file in "+"." + files + "/" + file + "/" + key);
                 }
             }
         }
     }
+}
 
 
 Object.keys(config.limit).forEach((key) => {
