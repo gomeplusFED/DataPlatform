@@ -110,6 +110,12 @@ module.exports = (Router) => {
         level_select : true,
         level_select_name : "category_id",
         level_select_url : "/api/socialAnalysisCategories",
+        params(query, params) {
+            if(params.activity_id === "all") {
+                delete params.activity_id;
+            }
+            return params;
+        },
         filter_select : [{
         //    title: "平台选择",
         //    filter_key : 'type',
