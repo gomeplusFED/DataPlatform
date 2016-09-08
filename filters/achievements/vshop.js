@@ -622,5 +622,50 @@ module.exports = {
         var newData = [zData, qData, hb, hb7day];
 
         return util.toTable([newData], rows, cols);
-    }
+    },
+    vtradeTwo(data, query, dates) {
+        var source = data.first.data[0],
+            newData = {},
+            type = "line",
+            map = {
+                    ordered_num: '下单总量',
+                    paid_num: '支付订单量',
+                    ordered_user_num: '下单人数',
+                    paid_user_num: '支付人数',
+                    ordered_amount: '下单金额',
+                    trading_amount: '成交金额',
+                    paid_amount: '支付金额',
+                    custmer_price: '客单价',
+                    order_price: '笔单价',
+                    rebuy_rate: '复购率'
+                };
+        var keyArray = _.keys(map);
+        //添加复购率需要的字段
+        keyArray.push('ordered_usernum_last30day');
+        keyArray.push('paid_usernum_last30day');
+
+        dates.forEach(function(date) {
+            var date0clock = new Date(date+ " 00:00:00");
+            var date24clock = new Date(date+ " 23:59:59");
+            var x = trimData(source, keyArray, date0clock, date24clock);
+            //处理客单价和笔单价
+            // 'custmer_price', 'order_price'
+            var amount = x.paid_amount || 0;
+            x.custmer_price = x.paid_user_num ? (amount / x.paid_user_num).toFixed(2) :0;
+            x.order_price = x.paid_num ? (amount / x.paid_num).toFixed(2) :0;
+            //计算复购率
+            // 复购率：30天内在美店中产生二次及二次以上付款成功的会员数/30天内美店中付款成功的会员总数
+            x.rebuy_rate = util.toFixed(x.ordered_usernum_last30day, x.paid_usernum_last30day);
+            newData[date] = x;
+        });
+
+        return [{
+            type : type,
+            map : map,
+            data : newData,
+            config: {
+                stack: false
+            }
+        }];
+    },
 };

@@ -183,6 +183,21 @@ module.exports = (Router) => {
         }
     });
 
+    // 交易趋势
+
+    Router = new api(Router, {
+        router: "/achievements/vtradeTwo",
+        modelName: ["VtradeInfo"],
+        platform : false,
+        params(query) {
+            return {
+                day_type : 1
+            }
+        },
+        filter(data, query, dates, type) {
+            return vshopFilter.vtradeTwo(data, query, dates);
+        }
+    });
 
     return Router;
 };
