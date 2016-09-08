@@ -6,14 +6,14 @@
 
 module.exports = {
     id: { type: 'number', key: true },
-    add2cart_item_num: Number, // 加购商品数
-    add2cart_quantity: Number, // 加购商品件数
+    ordered_num: Number, // 下单总量
+    paid_num: Number, // 支付订单量
     ordered_item_num: Number, // 下单商品数
     ordered_quantity: Number, // 下单商品件数
     paid_item_num: Number, // 支付商品数
     paid_quantity: Number, // 支付商品件数
-    shared_item_num: Number, // 被分享商品数
-    favorited_item_num: Number, // 被收藏商品数
+    ordered_user_num: Number, // 下单人数
+    paid_user_num: Number, // 支付人数
     merchandise_resources: String, // 商品来源
     date: Date, // 数据日期
     day_type: Number, // 1==>天，2==>周，3==>月
