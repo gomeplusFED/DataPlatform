@@ -196,7 +196,7 @@ module.exports = {
         var hb7day = trimData(source, rows[0], date7ago, jdate);
         _.merge(hb7day, zData, function(a, b) {
           if (_.isNumber(a)) {
-            return util.toFixed(b, a/8);
+            return util.toFixed(b, a/7);
           }
         });
         hb7day.name = '7日平均环比';
@@ -501,6 +501,125 @@ module.exports = {
             return v;
         })
         .value();
+
+        return util.toTable([newData], rows, cols);
+    },
+    vtradeOne(data) {
+        var source = data.first.data[0],
+            now = new Date(),
+            _rows = [
+                [['name', 'ordered_num', 'paid_num', 'ordered_user_num', 'paid_user_num', 'ordered_amount', 'trading_amount', 'paid_amount', 'custmer_price', 'order_price']]
+            ],
+            _cols = [
+                        [[
+                            {
+                                "caption": " ",
+                                "type": "string"
+                            },
+                            {
+                                "caption": "下单总量",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "支付订单量",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "下单人数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "支付人数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "下单金额",
+                                "type": "string"
+                            },
+                            {
+                                "caption": "成交金额",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "支付金额",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "客单价",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "笔单价",
+                                "type": "number"
+                            }
+                        ]]
+                    ],
+            rows = [],
+            cols = [];
+        var rows = _rows[0];
+        var cols = _cols[0];
+
+        var keyArray = rows[0];
+
+        // 昨天的数据
+        // 昨天0点 到 今天0 点
+        var qdate = convertDate(new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000));
+        var zdate = convertDate(new Date(now.getTime() - 1 * 24 * 60 * 60 * 1000));
+        var jdate = convertDate(new Date(now.getTime()));
+        var zData = trimData(source, keyArray, zdate, jdate);
+        handlePrice(zData);
+        zData.name = '昨天';
+
+
+        //前天的数据
+        // 前天0点 到 昨天0 点
+        var qData = trimData(source, keyArray, qdate, zdate);
+        handlePrice(qData);
+        qData.name = '前天';
+
+        //环比
+        var hb = _.clone(zData);
+        _.merge(hb, qData, function(a, b) {
+          if (_.isNumber(a)) {
+            return util.toFixed(a,b);
+          }
+        });
+        hb.name = '环比';
+        // console.log(JSON.stringify(hb,null,4));
+        // 7日平均环比：昨日/（average（最近7日之和））
+        // 最近7日之和: 7天前的0点 到今天 0 点
+        var date7ago = convertDate(new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000));
+        var data7day = trimData(source, keyArray, date7ago, jdate);
+        var hb7day = _.clone(data7day);
+
+        _.merge(hb7day, zData, function(a, b) {
+          if (_.isNumber(a)) {
+            return util.toFixed(b, a/7);
+          }
+        });
+        hb7day.name = '7日平均环比';
+        // console.log(JSON.stringify(hb7day,null,4));
+        
+        //处理客单价和笔单价
+        // 'custmer_price', 'order_price'
+        function handlePrice(x) {
+            var amount = x.paid_amount || 0;
+            x.custmer_price = x.paid_user_num ? amount / x.paid_user_num :0;
+            x.order_price = x.paid_num ? amount / x.paid_num :0;
+        }
+
+        // 修正7日平均环比单价
+        handlePrice(data7day);
+        hb7day.custmer_price = util.toFixed(zData.custmer_price, data7day.custmer_price);
+        hb7day.order_price = util.toFixed(zData.order_price, data7day.order_price);
+
+        [zData, qData].forEach(function(x) {
+            x.custmer_price = x.custmer_price.toFixed(2);
+            x.order_price = x.order_price.toFixed(2);
+        });
+
+
+        var newData = [zData, qData, hb, hb7day];
 
         return util.toTable([newData], rows, cols);
     }

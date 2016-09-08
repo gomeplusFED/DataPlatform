@@ -159,6 +159,30 @@ module.exports = (Router) => {
         }
     });
 
+    /**
+     * 美店交易
+     */
+    // 美店交易总览
+    Router = new api(Router, {
+        router: "/achievements/vtradeOne",
+        modelName: ['VtradeInfo'],
+        date_picker : false,
+        platform : false,
+        params(query) {
+            // 取出近7天记录
+            var now = new Date(),
+                ydate = util.getDate(new Date(now.getTime() - 24 * 60 * 60 * 1000)),
+                qdate = util.getDate(new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000));
+            return {
+                date : orm.between(new Date(qdate + " 00:00:00"), new Date(ydate + " 23:59:59")),
+                day_type : 1
+            }
+        },
+        filter(data, query, dates, type) {
+            return vshopFilter.vtradeOne(data);
+        }
+    });
+
 
     return Router;
 };
