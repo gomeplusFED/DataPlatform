@@ -91,11 +91,11 @@ module.exports = {
                     type : "table",
                     title : "商品销售总览",
                     query_api : "/achievements/productSaleOne"
-                },//{
-                //     type : "table",
-                //     title : "商品销售趋势",
-                //     // query_api : "/achievements/productSaleTwo"
-                // },
+                },{
+                    type : "chart",
+                    title : "商品销售趋势",
+                    query_api : "/achievements/productSaleTwo"
+                },
                 {
                     type : "table",
                     title : "商品销售明细",

@@ -5,14 +5,9 @@
  * @二次开发 ，20160830 ， Mr.He
  */
 
-var api = require(global.RootPath+"/base/main"),
-    filter = require(global.RootPath+"/filters/achievements/product"),
-    utils  = require(global.RootPath+"/utils");
-// =======
-// var api = require("../../../base/main"),
-//     filter = require("../../../filters/achievements/product"),
-//     utils  = require("../../../utils");
-// >>>>>>> a89e6c2adef1fb1992b3243858cd9f5f94c28c0b
+var api = require("../../../base/main"),
+    filter = require("../../../filters/achievements/product"),
+    utils  = require("../../../utils");
 
 module.exports = (Router) => {
 
@@ -30,7 +25,6 @@ module.exports = (Router) => {
             }
         });
     });
-
 
 
     Router = new api(Router,{
