@@ -118,6 +118,7 @@ function connect(app) {
             models.VshopInfo = db.define("ads2_vshop_item_details" , obj.VshopInfo);
             models.VshopMerchandiseResources = db.define("ads2_vshop_merchandise_resources" , obj.VshopMerchandiseResources);
             models.VshopTransaction = db.define("ads2_vshop_transaction_details" , obj.VshopTransaction);
+            models.VshopFlowTop = db.define("ads2_vshop_flow_top" , obj.VshopFlowTop);
             
             models.db1 = db;
             next();
