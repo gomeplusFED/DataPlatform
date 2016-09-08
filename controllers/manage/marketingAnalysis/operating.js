@@ -40,9 +40,9 @@ module.exports = (Router) => {
             groups: [{
                 key: 'active_pv-register',
                 value: '活动页PV、新增注册'
-            }, {
-                key: 'coupon_get_num-coupon_use_num',
-                value: '优惠卷领取数量、优惠卷使用数量'
+            //}, {
+            //    key: 'coupon_get_num-coupon_use_num',
+            //    value: '优惠卷领取数量、优惠卷使用数量'
             }, {
                 key: 'order_num-pay_num',
                 value: '订单总量、支付总量'
@@ -124,9 +124,9 @@ module.exports = (Router) => {
             }, {
                 key: 'orderForm',
                 value: '订单'
-            }, {
-                key: 'coupon',
-                value: '优惠券'
+            //}, {
+            //    key: 'coupon',
+            //    value: '优惠券'
             }, {
                 key: 'product',
                 value: '活动商品'
