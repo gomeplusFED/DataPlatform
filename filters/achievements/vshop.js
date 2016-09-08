@@ -438,14 +438,70 @@ module.exports = {
             return x.merchandise_resources;
         })
         .mapValues(function(v) {
-            // console.log(JSON.stringify(v, null, 4));
             //累加已分组的数据
             var res = reduceObj(v, keyArray);   
-            console.log(JSON.stringify(res, null, 4));
             return res;
         })
+        .values()
         .value();
 
         return util.toTable([newData], rows, cols);
     },
+    vshopFive(data, type) {
+        var source = data.first.data[0],
+            _rows = [
+                [['rank', 'vshop_name', 'visitor_num', 'visited_time', 'shared_time', 'favorited_time']]
+            ],
+            _cols = [
+                        [[
+                            {
+                                "caption": "排行",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "美店名称",
+                                "type": "string"
+                            },
+                            {
+                                "caption": "美店访问人数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "美店访问次数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "美店被分享次数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "美店被收藏次数",
+                                "type": "number"
+                            }
+                        ]]
+                    ];
+        var rows = _rows[0];
+        var cols = _cols[0];
+        var sortName;
+        var keyArray = rows[0];
+
+        //groupBy 美店名称
+        var newData = _(source).groupBy(function(x) {
+            return x.vshop_name;
+        })
+        .mapValues(function(v) {
+            //累加已分组的数据
+            var res = reduceObj(v, keyArray);   
+            return res;
+        })
+        .values()
+        .sortByOrder([type],['desc'])
+        .map(function(v,i) {
+            v.rank = i + 1;
+            return v;
+        })
+        .value();
+
+        return util.toTable([newData], rows, cols);
+    }
 };

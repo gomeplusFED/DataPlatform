@@ -104,7 +104,6 @@ module.exports = (Router) => {
     Router = new api(Router, {
         router: "/achievements/vshopFour",
         modelName: ['VshopMerchandiseResources'],
-        date_picker: {show: true, defaultData: 1, showDayUnit: true},
         platform : false,
         paging : [true],
         excel_export : true,
@@ -119,6 +118,44 @@ module.exports = (Router) => {
         },
         filter(data, query, dates, type) {
             return vshopFilter.vshopFour(data, dates);
+        }
+    });
+
+    // 流量Top 100
+    Router = new api(Router, {
+        router: "/achievements/vshopFive",
+        modelName: ['VshopFlowTop'],
+        platform : false,
+        paging : [true],
+        excel_export : true,
+        date_picker_data : 1,
+        showDayUnit : true,
+        flexible_btn:[{
+            content: '<a href="javascript:void(0)">导出</a>',
+            preMethods: ["excel_export"]
+        }],
+        "filter_select": [
+            {
+                "title": "",
+                "filter_key": "type",
+                "groups": [
+                    {
+                        "key": "visitor_num",
+                        "value": "访问人数"
+                    },
+                    {
+                        "key": "visited_time",
+                        "value": "访问次数"
+                    }
+                ]
+            }
+        ],
+        params : function(query , params , sendData){
+            delete params.type;
+            return params;
+        },
+        filter(data, query, dates, type) {
+            return vshopFilter.vshopFive(data, query.type);
         }
     });
 
