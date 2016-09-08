@@ -85,12 +85,8 @@ module.exports = {
             defaultData : [
                  {
                      type : "chart",
-                     query_api : "/achievements/productZero"
+                     query_api : "/achievements/product22Zero"
                  },
-                // {
-                //     type : "chart",
-                //     query_api : "/achievements/productZero2"
-                // },
                 {
                     type : "table",
                     title : "商品销售总览",
