@@ -95,19 +95,24 @@ module.exports = {
                 flow : [
                     {
                         caption : "活动页PV",
-                        type : "number"
+                        type : "number",
+                        help : "活动页的访问次数"
                     }, {
                         caption : "活动页UV",
-                        type : "number"
+                        type : "number",
+                        help : "活动页的访问人数"
                     }, {
                         caption : "新增注册",
-                        type : "number"
+                        type : "number",
+                        help : "通过活动带来的注册数"
                     }, {
                         caption : "分享按钮点击人数",
-                        type : "number"
+                        type : "number",
+                        help : "分享按钮点击人数"
                     }, {
                         caption : "分享按钮点击次数",
-                        type : "number"
+                        type : "number",
+                        help : "分享按钮的点击次数"
                     }, {
                         caption : "进入商品页转化率",
                         type : "string",
@@ -122,19 +127,24 @@ module.exports = {
                     },
                     {
                         caption : "订单总量",
-                        type : "number"
+                        type : "number",
+                        help : "活动页带来的订单总量（支付成功）"
                     }, {
                         caption : "支付用户数",
-                        type : "number"
+                        type : "number",
+                        help : "支付成功订单的用户数量"
                     }, {
                         caption : "实际支付金额",
-                        type : "number"
+                        type : "number",
+                        help : "支付成功订单的实际支付总金额"
                     }, {
                         caption : "退货用户数",
-                        type : "number"
+                        type : "number",
+                        help : "时间段内活动退货的用户数量"
                     }, {
                         caption : "实际退货总金额",
-                        type : "number"
+                        type : "number",
+                        help : "时间段内活动退货的总金额"
                     }
                 ],
                 coupon : [
@@ -163,29 +173,35 @@ module.exports = {
                     },
                     {
                         caption : "页面转化率",
-                        type : "string"
+                        type : "string",
+                        help : "通过活动页跳转商品页的浏览人数/活动页浏览人数"
                     }, {
                         caption : "订单总量",
-                        type : "number"
+                        type : "number",
+                        help : "活动页带来的订单总量（支付成功）"
                     }, {
                         caption : "订单总金额",
                         type : "number"
                     }, {
                         caption : "支付用户数",
-                        type : "number"
+                        type : "number",
+                        help : "支付成功订单的用户数量"
                     }, {
                         caption : "实际支付总金额",
-                        type : "number"
+                        type : "number",
+                        help : "支付成功订单的实际支付总金额"
                     }, {
                         caption : "支付转化率",
                         type : "string",
                         help : "支付用户数/活动页UV"
                     }, {
                         caption : "退货用户数",
-                        type : "number"
+                        type : "number",
+                        help : "时间段内活动退货的用户数量"
                     }, {
                         caption : "退货总金额",
-                        type : "number"
+                        type : "number",
+                        help : "时间段内活动退货的总金额"
                     }
                 ]
             },

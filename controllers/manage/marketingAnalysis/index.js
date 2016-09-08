@@ -73,13 +73,16 @@ module.exports = (Router) => {
                         type : "string"
                     },{
                         caption : "活动页UV",
-                        type : "number"
+                        type : "number",
+                        help : "活动页的访问人数"
                     },{
                         caption : "活动页PV",
-                        type : "number"
+                        type : "number",
+                        help : "活动页的访问次数"
                     },{
                         caption : "新增注册",
-                        type: "number"
+                        type: "number",
+                        help : "通过活动带来的注册数"
                     },{
                         caption : "分享人数",
                         type : "number"
