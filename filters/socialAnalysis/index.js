@@ -266,7 +266,7 @@ module.exports = {
 
         for(let key of source){
             var date = util.getDate(key.date);
-            newData[date].value = key[query.filter_key];
+            newData[date].value += key[query.filter_key];
         }
 
         return [{
