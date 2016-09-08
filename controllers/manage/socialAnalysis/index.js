@@ -107,27 +107,26 @@ module.exports = (Router) => {
         router : "/socialAnalysis/groupEight",
         modelName : [ "GroupStatistics" ],
         platform : false,
-        // date_picker : false,
-        // level_select : false,
-        // level_select_name : "group_type",
-        // level_select_url : "/api/socialAnalysisCategories",
+        level_select : true,
+        level_select_name : "category_id",
+        level_select_url : "/api/socialAnalysisCategories",
         filter_select : [{
-            title: "平台选择",
-            filter_key : 'type',
-            groups: [{
-                key: ['APP','WAP','PC'],
-                value: '全部平台'
-            },{
-                key: 'APP',
-                value: 'APP'
-            },{
-                key: 'WAP',
-                value: 'WAP'
-            },{
-                key: 'PC',
-                value: 'PC'
-            }]
-        },{
+        //    title: "平台选择",
+        //    filter_key : 'type',
+        //    groups: [{
+        //        key: ['APP','WAP','PC'],
+        //        value: '全部平台'
+        //    },{
+        //        key: 'APP',
+        //        value: 'APP'
+        //    },{
+        //        key: 'WAP',
+        //        value: 'WAP'
+        //    },{
+        //        key: 'PC',
+        //        value: 'PC'
+        //    }]
+        //},{
             title: '指标',
             filter_key : 'filter_key',
             groups: [{
@@ -182,23 +181,23 @@ module.exports = (Router) => {
             });
         },
         filter_select: [
-            {
-                title: "平台选择",
-                filter_key : 'type',
-                groups: [{
-                    key: ['APP','WAP','PC'],
-                    value: '全部平台'
-                },{
-                    key: 'APP',
-                    value: 'APP'
-                },{
-                    key: 'WAP',
-                    value: 'WAP'
-                },{
-                    key: 'PC',
-                    value: 'PC'
-                }]
-            },
+            //{
+            //    title: "平台选择",
+            //    filter_key : 'type',
+            //    groups: [{
+            //        key: ['APP','WAP','PC'],
+            //        value: '全部平台'
+            //    },{
+            //        key: 'APP',
+            //        value: 'APP'
+            //    },{
+            //        key: 'WAP',
+            //        value: 'WAP'
+            //    },{
+            //        key: 'PC',
+            //        value: 'PC'
+            //    }]
+            //},
             {
                 title: '指标选择',
                 filter_key: 'filter_key',
@@ -261,11 +260,11 @@ module.exports = (Router) => {
                         var obj = {
                             key : key.id,
                             value:key.name
-                        }
+                        };
                         filter_select.groups.push(obj);
                     }
-                    
-                    if(this.filter_select.length < 3){
+
+                    if(this.filter_select.length < 2){
                         this.filter_select.push(filter_select);
                     }
                     
@@ -276,23 +275,23 @@ module.exports = (Router) => {
             });
         },
         filter_select: [
-            {
-                title: "平台选择",
-                filter_key : 'type',
-                groups: [{
-                    key: ['APP','WAP','PC'],
-                    value: '全部平台'
-                },{
-                    key: 'APP',
-                    value: 'APP'
-                },{
-                    key: 'WAP',
-                    value: 'WAP'
-                },{
-                    key: 'PC',
-                    value: 'PC'
-                }]
-            },
+            //{
+            //    title: "平台选择",
+            //    filter_key : 'type',
+            //    groups: [{
+            //        key: ['APP','WAP','PC'],
+            //        value: '全部平台'
+            //    },{
+            //        key: 'APP',
+            //        value: 'APP'
+            //    },{
+            //        key: 'WAP',
+            //        value: 'WAP'
+            //    },{
+            //        key: 'PC',
+            //        value: 'PC'
+            //    }]
+            //},
             {
                 title: "指标选择",
                 filter_key : "filter_key2",
@@ -319,8 +318,11 @@ module.exports = (Router) => {
     Router = new api(Router , {
         router : "/socialAnalysis/groupEleven",
         modelName : ["SocialGroupList" , "SocialCategory" , "Statistics" ],
+        date_picker_data : 1,
+        showDayUnit : true,
         platform : false,
         paging : [true, false],
+        control_table_col : true,
         order  : ["-involve_group_user_num"],
         excel_export : true,
         procedure : [false, {
@@ -340,7 +342,7 @@ module.exports = (Router) => {
             var param = {
                 group_id : [],
                 key : ["group_person_num", "group_topic_num", "topic_praise_num",
-                    "topic_collect_num", "topic_reply_num"]
+                    "topic_collect_num", "topic_reply_num", "topic_subreply_num"]
             };
             for(let item of sendData.first.data[0]){
                 param.group_id.push(item.group_id);
@@ -369,7 +371,7 @@ module.exports = (Router) => {
                 "topic_praise_num", "topic_collect_num", "new_group_topic_like_num",
                 "new_group_topic_save_num", "new_group_topic_share_num",
                 "new_group_topic_reply_num", "new_group_topic_reply_user_num",
-                "topic_reply_num", "operating"]
+                "reply_num", "operating"]
         ],
         cols: [
             [{
@@ -446,26 +448,26 @@ module.exports = (Router) => {
             }, {
                 caption : "话题"
             }]
-        ],
-        filter_select : [
-            {
-                title: "平台选择",
-                filter_key : 'type',
-                groups: [{
-                    key: ['APP','WAP','PC'],
-                    value: '全部平台'
-                },{
-                    key: 'APP',
-                    value: 'APP'
-                },{
-                    key: 'WAP',
-                    value: 'WAP'
-                },{
-                    key: 'PC',
-                    value: 'PC'
-                }]
-            }
         ]
+        //filter_select : [
+        //    {
+        //        title: "平台选择",
+        //        filter_key : 'type',
+        //        groups: [{
+        //            key: ['APP','WAP','PC'],
+        //            value: '全部平台'
+        //        },{
+        //            key: 'APP',
+        //            value: 'APP'
+        //        },{
+        //            key: 'WAP',
+        //            value: 'WAP'
+        //        },{
+        //            key: 'PC',
+        //            value: 'PC'
+        //        }]
+        //    }
+        //]
 
     });
 

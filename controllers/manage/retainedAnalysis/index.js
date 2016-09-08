@@ -3,7 +3,7 @@
  * @date 20160414
  * @fileoverview 留存分析
  */
-var api = require("../../../base/api"),
+var api = require("../../../base/main"),
     filter = require("../../../filters/retainedAnalysis");
 
 module.exports = (Router) => {
@@ -12,9 +12,9 @@ module.exports = (Router) => {
         router : "/retainedAnalysis/retainedOne",
         modelName : ["UserKeepResult"],
         platform : true,
-        paging : true,
+        paging : [true],
         order : ["-date"],
-        filter(data, filter_key, dates) {
+        filter(data) {
             return filter.retainedOne(data);
         },
         excel_export : true,

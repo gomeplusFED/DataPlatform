@@ -3,9 +3,7 @@
  * @date 20160415
  * @fileoverview 分享数据
  */
-var api = require("../../../base/api"),
-    help = require("../../../base/help"),
-    config = require("../../../utils/config.json"),
+var api = require("../../../base/main"),
     orm = require("orm"),
     filter = require("../../../filters/share");
 
@@ -20,7 +18,7 @@ module.exports = (Router) => {
             preMethods: ["show_help"],
             customMethods: ''
         }],
-        filter(data, filter_key, dates) {
+        filter(data) {
             return filter.indexOne(data);
         },
         rows : [
@@ -42,7 +40,8 @@ module.exports = (Router) => {
                     type : "number"
                 },{
                     caption : "有效分享占比",
-                    type : "string"
+                    type : "string",
+                    help : "有效点击次数/分享次数"
                 }
             ]
         ]
@@ -52,11 +51,11 @@ module.exports = (Router) => {
         router : "/share/indexTwo",
         modelName : ["ShareAnalyzeTrend"],
         platform : false,
-        fixedParams : {
+        params : {
             share_source_name : "all"
         },
-        filter(data, filter_key, dates) {
-            return filter.indexTwo(data, filter_key, dates);
+        filter(data, query, dates) {
+            return filter.indexTwo(data, query.filter_key, dates);
         },
         filter_select: [{
             title: '',
@@ -78,7 +77,7 @@ module.exports = (Router) => {
         router : "/share/indexThree",
         modelName : ["ShareAnalyzeChannel"],
         platform : false,
-        filter(data, filter_key, dates) {
+        filter(data) {
             return filter.indexThree(data);
         }
     });
@@ -87,25 +86,25 @@ module.exports = (Router) => {
         router : "/share/indexFour",
         modelName : ["ShareAnalyzeTrend"],
         platform : false,
-        paging : true,
+        paging : [true],
         date_picker_data : 1,
         excel_export : true,
-        filter(data, filter_key, dates, filter_key2, page) {
-            return filter.indexFour(data, filter_key, page);
+        filter(data, query, dates) {
+            return filter.indexFour(data, query.filter_key, query.page);
         },
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
-        params(query, filter_key) {
-            if(filter_key === "all") {
-                query.share_source_name = ["all"];
-                delete query.share_source;
+        params(query, params) {
+            if(query.filter_key === "all") {
+                params.share_source_name = ["all"];
+                delete params.share_source;
             } else {
-                query.share_source = filter_key;
-                query.share_source_name = orm.not_in(["all"]);
+                params.share_source = query.filter_key;
+                params.share_source_name = orm.not_in(["all"]);
             }
-            return query;
+            return params;
         },
         filter_select: [{
             title: '',
@@ -154,7 +153,8 @@ module.exports = (Router) => {
                     type : "number"
                 },{
                     caption : "有效分享占比",
-                    type : "string"
+                    type : "string",
+                    help : "有效点击次数/分享次数"
                 },{
                     caption : "操作"
                 }
@@ -166,26 +166,27 @@ module.exports = (Router) => {
         router : "/share/operating",
         modelName : ["ShareAnalyzeChannelTrend"],
         platform : false,
-        paging : true,
-        fixedParams(query, filter_key, req, cb) {
+        paging : [true],
+        params(query, params) {
+            let filter_key = query.filter_key;
             if(filter_key === "all") {
-                query.share_source_name = "all";
+                params.share_source_name = "all";
             }
             if(query.share_source === "店铺") {
-                query.share_source = "shop";
+                params.share_source = "shop";
             }
             if(query.share_source === "商品") {
-                query.share_source = "product";
+                params.share_source = "product";
             }
             if(query.share_source === "话题") {
-                query.share_source = "topic";
+                params.share_source = "topic";
             }
             if(query.share_source === "圈子") {
-                query.share_source = "group";
+                params.share_source = "group";
             }
-            cb(null, query);
+            return params;
         },
-        filter(data, filter_key, dates) {
+        filter(data) {
             return filter.operating(data);
         },
         rows : [
@@ -211,25 +212,10 @@ module.exports = (Router) => {
                     type : "number"
                 },{
                     caption : "分享回流率",
-                    type : "string"
+                    type : "string",
+                    help : "分享文案中的链接点击次数/分享次数"
                 }
             ]
-        ]
-    });
-
-    Router = new help(Router, {
-        router : "/share/index/help",
-        rows : config.help.rows,
-        cols : config.help.cols,
-        data : [
-            {
-                name : "有效分享占比",
-                help : "有效点击次数/分享次数"
-            },
-            {
-                name : "分享回流率",
-                help : "分享文案中的链接点击次数/分享次数"
-            }
         ]
     });
 

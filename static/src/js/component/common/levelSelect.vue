@@ -17,7 +17,7 @@
 						<div class="select_group" v-for="(index,item) in level">
 							<h2>{{numberMap[index] + '级'}}</h2>
 							<ul>
-								<li v-for="value in item" :key="value.id" track-by="$index" @click="createNext($event,index)">{{value.name}}</li>							
+								<li v-for="value in item" :key="value.id" track-by="$index" @click="createNext($event,index)">{{value.name}}</li>
 							</ul>
 						</div>
 					</div>

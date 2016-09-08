@@ -11,15 +11,15 @@ module.exports = {
         var source = data.first.data[0],
             newData = {
                 group_leader_num : 0,
-                two : 0,
-                three : 0,
-                four : 0,
-                five : 0
+                person_funs_num : 0,
+                person_friends_num : 0
             };
 
         for(let key of source) {
-            newData.group_leader_num = key.sum_value;
+            newData[key.key] = key.sum_value;
         }
+
+        newData.rate = util.division(newData.person_funs_num, newData.group_leader_num);
 
         return util.toTable([[newData]], data.rows, data.cols);
     },

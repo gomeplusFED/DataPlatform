@@ -27,8 +27,6 @@ Object.keys(config).forEach(function(key) {
     app.locals[key] = config[key];
 });
 
-global.RootPath = __dirname;
-
 //var logger = require("morgan");
 /* 测试使用 */
 // app.use(logger('dev'));

@@ -3,10 +3,7 @@
  * @date 20160413
  * @fileoverview 访问页面
  */
-var api = require("../../../base/api"),
-    orm = require("orm"),
-    help = require("../../../base/help"),
-    config = require("../../../utils/config.json"),
+var api = require("../../../base/main"),
     filter = require("../../../filters/useAnalysis/accessPage");
 
 module.exports = (Router) => {
@@ -14,8 +11,23 @@ module.exports = (Router) => {
         router : "/useAnalysis/accessPageOne",
         modelName : ["UsersAccess"],
         platform : false,
-        fixedParams : {
-            type : orm.not_in(["H5"])
+        params(query, params) {
+            params.type = query.type || "ios";
+            return params;
+        },
+        global_platform : {
+            show: true,
+            key: 'type',
+            list: [{
+                key: 'ios',
+                name: 'IOS'
+            }, {
+                key: 'android',
+                name: 'Android'
+            }, {
+                key: 'app',
+                name: 'APP'
+            }]
         },
         flexible_btn: [{
             content: '<a href="javascript:void(0)" help_url="/useAnalysis/accessPage/help_json">帮助</a>',
@@ -36,8 +48,8 @@ module.exports = (Router) => {
                 value: '跳出率'
             }]
         }],
-        filter(data, filter_key, dates) {
-            return filter.accessPageOne(data, filter_key, dates);
+        filter(data, query, dates) {
+            return filter.accessPageOne(data, query.filter_key, dates);
         }
     });
 
@@ -46,18 +58,19 @@ module.exports = (Router) => {
         modelName : ["UsersAccess"],
         platform : false,
         excel_export : true,
-        paging : true,
+        paging : [true],
         sum : ["acc_num", "acc_time"],
         order : ["-date"],
-        fixedParams : {
-            type : orm.not_in(["H5"])
+        params(query, params) {
+            params.type = query.type || 'ios';
+            return params;
         },
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
-        filter(data, filter_key, dates, filter_key2, page) {
-            return filter.accessPageTwo(data, page);
+        filter(data, query, dates) {
+            return filter.accessPageTwo(data, query.page);
         },
         rows : [
             [ 'id','url','url_comment','acc_num', 'acc_num_rate', 'acc_time', 'acc_time_rate', 'bounce_rate',
@@ -79,19 +92,23 @@ module.exports = (Router) => {
                 },
                 {
                     caption: '访问次数',
-                    type: 'number'
+                    type: 'number',
+                    help : "统计时间内，访问次数"
                 },
                 {
                     caption: '访问次数占比',
-                    type: 'string'
+                    type: 'string',
+                    help : "页面访问次数/总访问次数"
                 },
                 {
                     caption: '平均停留时间(s)',
-                    type: 'number'
+                    type: 'number',
+                    help : "总时长/访问次数"
                 },
                 {
                     caption: '停留时间占比',
-                    type: 'string'
+                    type: 'string',
+                    help : "页面访问时长/总时长"
                 },
                 {
                     caption: '页面跳出率',
@@ -107,14 +124,15 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/useAnalysis/page",
         modelName : ["UsersAccess"],
-        paging : true,
+        paging : [true],
         order : [ "-date" ],
         platform : false,
-        fixedParams : {
-            type : orm.not_in(["H5"])
+        params(query, params) {
+            params.type = query.type || "ios";
+            return params;
         },
-        filter(data, filter_key, dates, filter_key2, page) {
-            return filter.page(data, page);
+        filter(data, query, dates) {
+            return filter.page(data, query.page);
         },
         rows : [
             [ "id", "date", "acc_num", "acc_time", "bounce_rate" ]
@@ -136,30 +154,6 @@ module.exports = (Router) => {
                 caption : "页面跳出率",
                 type : "number"
             } ]
-        ]
-    });
-
-    Router = new help(Router, {
-        router : "/useAnalysis/accessPage/help",
-        rows : config.help.rows,
-        cols : config.help.cols,
-        data : [
-            {
-                name : "访问次数",
-                help : "统计时间内，访问次数"
-            },
-            {
-                name : "平均停留时长",
-                help : "总时长/访问次数"
-            },
-            {
-                name : "访问次数占比",
-                help : "页面访问次数/总访问次数"
-            },
-            {
-                name : "停留时间占比",
-                help : "页面访问时长/总时长"
-            }
         ]
     });
 

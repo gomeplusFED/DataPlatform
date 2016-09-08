@@ -34,8 +34,10 @@ module.exports = (Router) => {
             return filter.allOne(data, dates, params);
         },
         rows: [
-            ["name", "create_num", "create_amount", "give_num", "receive_num", "receive_rate",
-                "used_num", "used_amount", "used_rate", "invalid_num"]
+            ["name", "published_num", "published_amount", "give_num", "receive_num", "receive_rate",
+                "used_num", "used_amount",
+                //"used_rate",
+                "invalid_num"]
         ],
         cols: [
             [
@@ -43,10 +45,10 @@ module.exports = (Router) => {
                     caption : "",
                     type : "string"
                 },{
-                    caption : "创建数量",
+                    caption : "发行数量",
                     type : "number"
                 },{
-                    caption : "创建总金额",
+                    caption : "发行总金额",
                     type : "number"
                 },{
                     caption : "发送数量",
@@ -63,9 +65,9 @@ module.exports = (Router) => {
                 },{
                     caption : "使用总金额",
                     type : "number"
-                },{
-                    caption : "使用率",
-                    type : "string"
+                //},{
+                //    caption : "使用率",
+                //    type : "string"
                 },{
                     caption : "过期数量",
                     type : "number"
@@ -96,13 +98,13 @@ module.exports = (Router) => {
             title: '指标',
             filter_key : 'filter_key',
             groups: [{
-                key: 'create_num',
-                value: '平台商家创建占比'
+                key: 'published',
+                value: '平台商家发行占比'
             }, {
-                key: 'receive_num',
+                key: 'receive',
                 value: '平台商家领取占比'
             }, {
-                key: 'used_num',
+                key: 'used',
                 value: '平台商家使用占比'
             }]
         }]
@@ -114,12 +116,12 @@ module.exports = (Router) => {
         cols : config.help.cols,
         data : [
             {
-                name : "创建数量",
-                help : "时间段内新建优惠券总数量（平台+商家）"
+                name : "发行数量",
+                help : "时间段内平台优惠券发行总数量"
             },
             {
-                name : "创建总金额",
-                help : "时间段内新建优惠券总金额（平台+商家）"
+                name : "发行总金额",
+                help : "时间段内平台优惠券发行总金额"
             },
             {
                 name : "发放数量",
@@ -152,6 +154,10 @@ module.exports = (Router) => {
             {
                 name : "平台商家使用占比",
                 help : "平台使用数量/总使用优惠券数量，商家使用数量/总使用优惠券数量"
+            },
+            {
+                name : "领取率",
+                help : "（当日/当周/当月）领取数量/（当日/当周/当月）发行数量"
             }
         ]
     });
