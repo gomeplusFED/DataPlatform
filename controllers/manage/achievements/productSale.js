@@ -4,9 +4,9 @@
  * @fileoverview 商品,销售分析
  * @二次开发 ，20160905 ， Mr.He
  */
-var api = require(global.RootPath+"/base/main"),
-    filter = require(global.RootPath+"/filters/achievements/productSale"),
-    utils  = require(global.RootPath+"/utils"),
+var api = require("../../../base/main"),
+    filter = require("../../../filters/achievements/productSale"),
+    utils  = require("../../../utils"),
     orm = require("orm");
 
 module.exports = (Router) => {
