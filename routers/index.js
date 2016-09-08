@@ -2,8 +2,6 @@ var express = require('express'),
     router = express.Router(),
     config = require('../config'),
     fs = require("fs"),
-    async = require("asyncawait/async"),
-    await = require("asyncawait/await"),
     files = "./controllers/manage",
     renderApi = require("./renderApi");
 
@@ -21,40 +19,26 @@ function addRouter(path) {
     module.exports.push(require(path)(router));
 }
 
-var filePath = async((path) => {
-    return new Promise((resolve, reject) => {
-        fs.readdir(path, (err, data) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(data);
-            }
-        })
-    });
-});
-
 // addRouter('./combine');
 addRouter('./login');
 addRouter('./count');
 addRouter('./categories');
 
-async(() => {
-    try {
-        var data = await (filePath(files));
-        for (var file of data) {
-            if (file.indexOf(".js") < 0 && file.indexOf('.') !== 0) {
-                var f = await (filePath(files + "/" + file));
-                for (var key of f) {
-                    if (key.indexOf("js") >= 0) {
+    var data = fs.readdirSync(files);
+    for (var file of data) {
+        if (file.indexOf(".js") < 0 && file.indexOf('.') !== 0) {
+            var f = fs.readdirSync(files + "/" + file);
+            for (var key of f) {
+                if (key.indexOf("js") >= 0) {
+                    try {
                         addRouter("." + files + "/" + file + "/" + key);
+                    } catch (err) {
+                        console.log(err, ",ERROR in router/index,", "file in "+"." + files + "/" + file + "/" + key);
                     }
                 }
             }
         }
-    } catch (err) {
-        console.log(err, ",ERROR in router/index");
     }
-})();
 
 
 Object.keys(config.limit).forEach((key) => {

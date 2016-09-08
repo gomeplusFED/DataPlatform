@@ -10,7 +10,6 @@ var api = require(global.RootPath+"/base/main"),
     orm = require("orm");
 
 module.exports = (Router) => {
-
     Router = Router.get("/achievements/product22Zero_json" , function(req , res , next){
         res.json({
             code: 200,
