@@ -163,11 +163,15 @@ module.exports = {
 
          for(let item of newData) {
              item.reply_user_num =
-                 config[item.topic_id].topic_reply_user_num + config[item.topic_id].topic_subreply_user_num;
+                 config[item.topic_id] ? config[item.topic_id].topic_reply_user_num || 0 : 0 +
+                 config[item.topic_id] ? config[item.topic_id].topic_subreply_user_num || 0 : 0;
              item.topic_reply_num =
-                 config[item.topic_id].topic_reply_num + config[item.topic_id].topic_subreply_num;
-             item.topic_praise_num = config[item.topic_id].topic_praise_num;
-             item.topic_collect_num = config[item.topic_id].topic_collect_num;
+                 config[item.topic_id] ? config[item.topic_id].topic_reply_num || 0 : 0 +
+                 config[item.topic_id] ? config[item.topic_id].topic_subreply_num || 0 : 0;
+             item.topic_praise_num =
+                 config[item.topic_id] ? config[item.topic_id].topic_praise_num || 0 : 0;
+             item.topic_collect_num =
+                 config[item.topic_id] ? config[item.topic_id].topic_collect_num || 0 : 0;
          }
 
         return util.toTable([newData], data.rows, data.cols, [count]);
