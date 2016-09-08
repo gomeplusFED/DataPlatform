@@ -146,6 +146,74 @@ module.exports = {
                 }
             ]
         }
+    },
+    vshop() {
+        return {
+            name : "美店店铺商品",
+            path : "/achievements/vshop",
+            display : true,
+            defaultData : [
+                {
+                    type : "table",
+                    title : "美店总览",
+                    query_api : "/achievements/vshopOne"
+                },
+                {
+                    type : "chart",
+                    title : "数据趋势",
+                    query_api : "/achievements/vshopTwo"
+                },
+                {
+                    type : "table",
+                    title : "每日明细",
+                    query_api : "/achievements/vshopThree"
+                },
+                {
+                    type : "table",
+                    title : "商品来源分布",
+                    query_api : "/achievements/vshopFour"
+                },
+                {
+                    type : "table",
+                    title : "流量top100",
+                    query_api : "/achievements/vshopFive"
+                }
+            ]
+        }
+    },
+    vtrade() {
+        return {
+            name : "美店交易",
+            path : "/achievements/vtrade",
+            display : true,
+            defaultData : [
+                {
+                    type : "table",
+                    title : "美店交易总览",
+                    query_api : "/achievements/vtradeOne"
+                },
+                {
+                    type : "chart",
+                    title : "交易趋势",
+                    query_api : "/achievements/vtradeTwo"
+                },
+                {
+                    type : "table",
+                    title : "交易明细",
+                    query_api : "/achievements/vtradeThree"
+                },
+                {
+                    type : "table",
+                    title : "妥投与退货",
+                    query_api : "/achievements/vtradeFour"
+                },
+                {
+                    type : "table",
+                    title : "交易top100",
+                    query_api : "/achievements/vtradeFive"
+                }
+            ]
+        }
     }
 
 };

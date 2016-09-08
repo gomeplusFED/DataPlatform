@@ -118,6 +118,16 @@ function connect(app) {
             //9.1
             models.AdsKeyValue = db.define("ads2_key_value" , obj.AdsKeyValue);
 
+            // 美店
+            models.VshopInfo = db.define("ads2_vshop_item_details" , obj.VshopInfo);
+            models.VshopMerchandiseResources = db.define("ads2_vshop_merchandise_resources" , obj.VshopMerchandiseResources);
+            models.VshopTransaction = db.define("ads2_vshop_transaction_details" , obj.VshopTransaction);
+            models.VshopFlowTop = db.define("ads2_vshop_flow_top" , obj.VshopFlowTop);
+            
+            //美店交易
+            models.VtradeInfo = db.define("ads2_vshop_transaction_details" , obj.VtradeInfo);
+
+
             models.db1 = db;
             next();
         }
