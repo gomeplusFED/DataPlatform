@@ -198,8 +198,14 @@ module.exports = (Router) => {
                     caption : "新增注册",
                     type : "number"
                 },{
+                //    caption : "分享按钮点击人数",
+                //    type : "number"
+                //},{
                     caption : "分享按钮点击次数",
                     type : "number"
+                //},{
+                //    caption : "进入商品页转化率",
+                //    type : "string"
                 },{
                     caption : "优惠券领取量",
                     type : "number"
@@ -209,6 +215,24 @@ module.exports = (Router) => {
                 },{
                     caption : "订单总金额",
                     type : "number"
+                //},{
+                //    caption : "支付总量",
+                //    type : "number"
+                //},{
+                //    caption : "支付用户数",
+                //    type : "number"
+                //},{
+                //    caption : "实际支付总金额",
+                //    type : "number"
+                //},{
+                //    caption : "退货订单总量",
+                //    type : "number"
+                //},{
+                //    caption : "退货用户数",
+                //    type : "number"
+                //},{
+                //    caption : "退货总金额",
+                //    type : "number"
                 },{
                     caption : "操作"
                 }
