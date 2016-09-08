@@ -9,7 +9,7 @@ var util = require("../../utils"),
 
 module.exports = {
     shopOne(data, filter_key, dates) {
-        var source = data.data,
+        var source = data.first.data[0],
             filter_name = {
                 xpop_shops_num_add_al : "新增注册店铺",
                 xpop_shops_num_succ_add_al : "成功入驻店铺",
@@ -28,7 +28,7 @@ module.exports = {
         }
         for(var key of source) {
             date = util.getDate(key.date);
-            newData[date].value += key[filter_key];
+            newData[date].value += key["sum_" + filter_key];
         }
         return [{
             type : type,

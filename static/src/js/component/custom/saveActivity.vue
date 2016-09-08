@@ -193,8 +193,9 @@
 						if(res.code === 200){
 							_this.model = res.data;
 							if (_this.model.activity_start_time && _this.model.activity_end_time) {
-								_this.dateConifg.argvs.startTime = _this.model.activity_start_time;
-								_this.dateConifg.argvs.endTime = _this.model.activity_end_time;
+								// _this.dateConifg.argvs.startTime = _this.model.activity_start_time;
+								// _this.dateConifg.argvs.endTime = _this.model.activity_end_time;
+								$('.date_picker>input').val(`${_this.model.activity_start_time}-${_this.model.activity_end_time}`);
 							}
 							$('.date_picker>input').attr('disabled', 'disabled');
 						}

@@ -280,7 +280,7 @@ module.exports = function(Router) {
 默认值
 <pre><code>{
     search : {
-	show : false
+        show : false
     }
 }
 </code></pre>
@@ -288,18 +288,20 @@ module.exports = function(Router) {
 
 默认值
 <pre><code>{
-    show : false
+    control_table_col : false
 }
 </code></pre>
--  **global_platfomr** --- 全局模块
+-  **global_platform** --- 全局模块
 
 默认值
 <pre><code>{
-    show : false,
-    key : '参数名',
-    list : [{
-	key : '参数值',
-	name : '名称'
-    }]
+    golbal_platform : {
+        show : false,
+        key : '参数名',
+        list : [{
+            key : '参数值',
+            name : '名称'
+        }]
+    }
 }
 </code></pre>

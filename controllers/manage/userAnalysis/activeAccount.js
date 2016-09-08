@@ -3,22 +3,45 @@
  * @date 20160411
  * @fileoverview 活跃用户分析
  */
-var api = require("../../../base/api"),
-    help = require("../../../base/help"),
-    config = require("../../../utils/config.json"),
+var api = require("../../../base/main"),
     userAnalysis = require("../../../filters/userAnalysis");
 
 module.exports = (Router) => {
     Router = new api(Router,{
         router : "/userAnalysis/activeAccountOne",
         modelName : ["NewAccount"],
-        version : true,
+        platform : false,
         flexible_btn: [{
             content: '<a href="javascript:void(0)" help_url="/userAnalysis/activeAccount/help_json">帮助</a>',
             preMethods: ["show_help"],
             customMethods: ''
         }],
-        filter(data, filter_key, dates) {
+        params(query, params) {
+            params.type = query.type || "ios";
+
+            return params;
+        },
+        global_platform : {
+            show: true,
+            key: 'type',
+            list: [{
+                key: 'ios',
+                name: 'IOS'
+            }, {
+                key: 'android',
+                name: 'Android'
+            }, {
+                key: 'app',
+                name: 'APP'
+            }, {
+                key: 'pc',
+                name: 'PC'
+            }, {
+                key: 'm',
+                name: 'H5'
+            }]
+        },
+        filter(data, query, dates) {
             return userAnalysis.One(data,
                 [ "active_users", "active_account" ],
                 [ "活跃用户", "活跃账号" ],
@@ -30,8 +53,13 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/userAnalysis/activeAccountTwe",
         modelName : ["NewAccount"],
-        version : true,
-        paging : true,
+        paging : [true],
+        platform : false,
+        params(query, params) {
+            params.type = query.type || "ios";
+
+            return params;
+        },
         order : [ "-date" ],
         rows : [['date', 'active_users', 'active_account' ]],
         cols : [
@@ -42,7 +70,8 @@ module.exports = (Router) => {
                     width: 20
                 }, {
                 caption: '活跃用户',
-                type: 'number'
+                type: 'number',
+                help : "当日启动过应用的用户（去重）"
             }, {
                 caption: '活跃账户',
                 type: 'number'
@@ -54,21 +83,9 @@ module.exports = (Router) => {
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
-        filter(data, filter_key, dates) {
+        filter(data, query, dates) {
             return userAnalysis.activeUsersTwe(data, dates);
         }
-    });
-
-    Router = new help(Router, {
-        router : "/userAnalysis/activeAccount/help",
-        rows : config.help.rows,
-        cols : config.help.cols,
-        data : [
-            {
-                name : "活跃用户",
-                help : "当日启动过应用的用户（去重）"
-            }
-        ]
     });
 
     return Router;

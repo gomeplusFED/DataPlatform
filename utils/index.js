@@ -185,7 +185,7 @@ exports.toRound = function(one, two) {
 };
 
 exports.division = function(one, two) {
-    return (one / (two === 0 ? 1 : two)).toFixed(2);
+    return (one / (Math.ceil(two) === 0 ? 1 : two)).toFixed(2);
 };
 
 exports.round = function(one, two) {

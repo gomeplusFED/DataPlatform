@@ -12,12 +12,15 @@ module.exports = {
             newData = {
                 all_topic_num : 0,
                 all_topic_reply_num : 0,
+                all_topic_subReply_num       : 0,
                 all_praise_num : 0
             };
 
         for(let key of source) {
             newData[key.key] += key.sum_value;
         }
+
+        newData.all = newData.all_topic_reply_num + newData.all_topic_subReply_num;
 
         return util.toTable([[newData]], data.rows, data.cols);
     },
@@ -226,10 +229,14 @@ module.exports = {
             let obj = config[key.topic_id] || {};
             key.top = (page - 1) * limit + i +1;
             key.topic_reply_num = obj.topic_reply_num || 0;
+            key.topic_subreply_num = obj.topic_subreply_num || 0;
             key.topic_praise_num = obj.topic_praise_num || 0;
             key.topic_reply_user_num = obj.topic_reply_user_num || 0;
+            key.topic_subreply_user_num = obj.topic_subreply_user_num || 0;
             key.topic_collect_num = obj.topic_collect_num || 0;
-            key.topic_rate = util.round(key.topic_praise_num, key.topic_reply_user_num);
+            key.reply_num = key.topic_reply_num + key.topic_subreply_num;
+            key.reply_user_num = key.topic_reply_user_num + key.topic_subreply_user_num;
+            key.topic_rate = util.round(key.reply_num, key.topic_reply_user_num);
             key.rate = "0.00%";
             key.weiding = 0;
             key.category_id_1 = category[key.category_id_1];
@@ -246,6 +253,7 @@ module.exports = {
         var source = data.first.data[0],
             newData = {
                 topic_subreply_num : 0,
+                topic_reply_num : 0,
                 topic_praise_num : 0,
                 three : 0,
                 four : 0,
@@ -255,6 +263,8 @@ module.exports = {
         for(let key of source) {
             newData[key.key] = key.sum_value;
         }
+
+        newData.num = newData.topic_reply_num + newData.topic_subreply_num;
 
         return util.toTable([[newData]], data.rows, data.cols);
     },

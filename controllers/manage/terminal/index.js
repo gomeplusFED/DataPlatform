@@ -3,7 +3,7 @@
  * @date 20160418
  * @fileoverview 设备终端
  */
-var api = require("../../../base/api"),
+var api = require("../../../base/main"),
     filter = require("../../../filters/terminal");
 
 module.exports = (Router) => {
@@ -59,8 +59,8 @@ module.exports = (Router) => {
                 }
             }]
         }],
-        filter(data, filter_key, dates) {
-            return filter.modelOne(data, filter_key);
+        filter(data, query, dates) {
+            return filter.modelOne(data, query.filter_key);
         }
     });
 
@@ -68,7 +68,7 @@ module.exports = (Router) => {
         router : "/terminal/modelTwo",
         modelName : ["KeyValue"],
         platform : false,
-        paging : true,
+        paging : [true],
         order : ["-date"],
         sum : ["value", "value3"],
         filter_select: [{
@@ -90,8 +90,8 @@ module.exports = (Router) => {
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
-        filter(data, filter_key, dates) {
-            return filter.modelTwo(data, filter_key);
+        filter(data, query, dates) {
+            return filter.modelTwo(data, query.filter_key);
         },
         rows : [
             [ 'key_name', 'value', 'new_users_rate', 'value3', 'start_up_rate' ]

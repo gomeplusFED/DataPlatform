@@ -3,19 +3,53 @@
  * @date 20160413
  * @fileoverview 访问页面数量分布
  */
-var api = require("../../../base/api"),
+var api = require("../../../base/main"),
     num = [ '1-2个', '3-5个', '6-9个', '10-19个', '20-30个', '30-99个', '100+个' ],
     filter = require("../../../filters/useAnalysis/accessPageNum");
 
 module.exports = (Router) => {
+    const procedure = [
+        {
+            aggregate : {
+                value : ["distribution"]
+            },
+            sum : ["num"],
+            groupBy : ["distribution"],
+            get : ""
+        }
+    ];
 
     Router = new api(Router,{
         router : "/useAnalysis/accessPageNumOne",
         modelName : ["UserCompose"],
-        fixedParams : {
-            use_type : 3
+        global_platform : {
+            show: true,
+            key: 'type',
+            list: [{
+                key: 'ios',
+                name: 'IOS'
+            }, {
+                key: 'android',
+                name: 'Android'
+            }, {
+                key: 'app',
+                name: 'APP'
+            }, {
+                key: 'pc',
+                name: 'PC'
+            }, {
+                key: 'm',
+                name: 'H5'
+            }]
         },
-        filter(data, filter_key, dates) {
+        platform : false,
+        procedure : procedure,
+        params(query, params) {
+            params.use_type = 3;
+            params.type = query.type || 'ios';
+            return params;
+        },
+        filter(data) {
             return filter.accessPageNumOne(data, num);
         }
     });
@@ -24,11 +58,18 @@ module.exports = (Router) => {
         router : "/useAnalysis/accessPageNumTwo",
         modelName : ["UserCompose"],
         excel_export : true,
+        platform : false,
+        procedure : procedure,
+        params(query, params) {
+            params.use_type = 3;
+            params.type = query.type || 'ios';
+            return params;
+        },
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
-        filter(data, filter_key, dates) {
+        filter(data) {
             return filter.accessPageNumTwo(data, num);
         },
         rows : [

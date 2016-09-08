@@ -3,7 +3,11 @@
  * @date 20160415
  * @fileoverview 商品分析
  */
+<<<<<<< HEAD
 var util = require(global.RootPath+"/utils"),
+=======
+var util = require("../../utils"),
+>>>>>>> a89e6c2adef1fb1992b3243858cd9f5f94c28c0b
     moment = require("moment");
 
 var prizeRange = {

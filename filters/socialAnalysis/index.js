@@ -193,41 +193,52 @@ module.exports = {
     groupSeven(data){
         var source = data.first.data[0],
             newData = [],
+            obj = {},
             array = ["APP", "WAP", "PC", "总计"];
-    
-        var total = {
-            one : "总计",
-            two : 0,
-            three : 0,
-            four : 0,
-            five : 0,
-            six  : 0,
-            seven:0,
-            eight:0
+
+        for(let key of array) {
+            obj[key] = {
+                two : 0,
+                three : 0,
+                four : 0,
+                five : 0,
+                six  : 0,
+                seven:0,
+                eight:0,
+                new_register_group_user_num : 0
+            };
         }
 
         for(let key of source) {
-            var obj = {
-                one : key.type,
-                two : key.new_group_num,
-                three : key.new_join_group_num,
-                four : key.new_quit_group_num,
-                five : key.first_group_user_num,
-                six : key.new_group_user_num,
-                seven:0,
-                eight:key.new_group_disband_num
-            };
-
-            newData.push(obj);
-            for(let key in total){
-                if(key == "one"){
-                    continue;
-                }
-                total[key] += obj[key];
+            if(obj[key.type]) {
+                obj[key.type].two += key.new_group_num;
+                obj[key.type].three += key.new_join_group_num;
+                obj[key.type].four += key.new_quit_group_num;
+                obj[key.type].five += key.first_group_user_num;
+                obj[key.type].six += key.new_group_user_num;
+                obj[key.type].eight += key.new_group_disband_num;
+                obj[key.type].new_register_group_user_num += key.new_register_group_user_num;
             }
+            obj["总计"].two += key.new_group_num;
+            obj["总计"].three += key.new_join_group_num;
+            obj["总计"].four += key.new_quit_group_num;
+            obj["总计"].five += key.first_group_user_num;
+            obj["总计"].six += key.new_group_user_num;
+            obj["总计"].eight += key.new_group_disband_num;
+            obj["总计"].new_register_group_user_num += key.new_register_group_user_num;
         }
-
-        newData.push(total);
+        for(let key in obj) {
+            newData.push({
+                one : key,
+                two : obj[key].two,
+                three : obj[key].three,
+                four : obj[key].four,
+                five : obj[key].five,
+                six : obj[key].six,
+                seven : util.toFixed(obj[key].five, obj[key].new_register_group_user_num),
+                eight : obj[key].eight
+            });
+        }
 
         return util.toTable([newData], data.rows, data.cols);
     },
@@ -399,9 +410,11 @@ module.exports = {
             item.top = (page - 1) * 20 + i;
             item.group_person_num = config[item.group_id].group_person_num || 0;
             item.group_topic_num = config[item.group_id].group_topic_num || 0;
+            item.topic_subreply_num = config[item.group_id].topic_subreply_num || 0;
             item.topic_praise_num = config[item.group_id].topic_praise_num || 0;
             item.topic_collect_num = config[item.group_id].topic_collect_num || 0;
             item.topic_reply_num = config[item.group_id].topic_reply_num || 0;
+            item.reply_num = key.topic_reply_num + key.topic_subreply_num;
             item.category_id_1 = obj[item.category_id_1];
             item.category_id_2 = obj[item.category_id_2];
             item.creater_flag = config[item.creater_flag];

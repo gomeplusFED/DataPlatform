@@ -1,6 +1,6 @@
 /**
  * @author yanglei
- * @date 20160628
+ * @date 20160831
  * @fileoverview
  */
 
@@ -9,6 +9,7 @@ module.exports = {
     date : Date,
     day_type : Number,
     plan_type : String,
+    rebate_type : String,
     category_id_1 : String,
     category_id_2 : String,
     category_id_3 : String,
@@ -40,5 +41,5 @@ module.exports = {
     cancel_order_num : Number,
     is_over_rebate_order_amount : Number,
     expect_rebate_amount : Number,
-    cancel_rebate_amount : Number
+    cancel_rebate_amount : Number,
 };
