@@ -19,6 +19,7 @@ module.exports = (Router) => {
         platform : false,
         date_picker_data : 1,
         showDayUnit: true,
+        order : ["-date"],
         params : function(query , params , sendData){
 
             params.sdk_app_type = "ALL";

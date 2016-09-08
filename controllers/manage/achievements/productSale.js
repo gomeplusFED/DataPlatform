@@ -4,97 +4,26 @@
  * @fileoverview 商品,销售分析
  * @二次开发 ，20160905 ， Mr.He
  */
-var api = require(RootPath+"/base/main"),
-    filter = require(RootPath+"/filters/achievements/productSale"),
-    utils  = require(RootPath+"/utils");
+var api = require(global.RootPath+"/base/main"),
+    filter = require(global.RootPath+"/filters/achievements/productSale"),
+    utils  = require(global.RootPath+"/utils"),
+    orm = require("orm");
 
 module.exports = (Router) => {
 
-    Router = Router.get("/achievements/productZero_json" , function(req , res , next){
-
+    Router = Router.get("/achievements/product22Zero_json" , function(req , res , next){
         res.json({
             code: 200,
             modelData: [],
             components: {
-                flexible_btn: [ ],
-                date_picker: {
-                    show: false,
-                    defaultData: 7
-                },
-                drop_down: {
-                    platform: false,
-                    channel: false,
-                    version: false,
-                    coupon: false
-                },
                 level_select: {
                     show: true,
                     url: "/api/categories",
                     name: "category_id"
-                },
-                filter_select: [],
-                search: {
-                    show: false
-                },
-                control_table_col: {
-                    show: false
-                },
-                global_plataform: {
-                    show: false
                 }
             }
         });
     });
-
-
-    Router = Router.get("/achievements/productZero2_json" , function(req , res , next){
-
-        res.json({
-            code: 200,
-            modelData: [],
-            components: {
-                flexible_btn: [ ],
-                date_picker: {
-                    show: false,
-                    defaultData: 7
-                },
-                drop_down: {
-                    platform: false,
-                    channel: false,
-                    version: false,
-                    coupon: false
-                },
-                filter_select: [{
-                    title: "平台选择",
-                    filter_key : 'filter_key',
-                    groups: [{
-                        key: ['APP','WAP','PC'],
-                        value: '全部平台'
-                    },{
-                        key: 'APP',
-                        value: 'APP'
-                    },{
-                        key: 'WAP',
-                        value: 'WAP'
-                    },{
-                        key: 'PC',
-                        value: 'PC'
-                    }]
-                }],
-                search: {
-                    show: false
-                },
-                control_table_col: {
-                    show: false
-                },
-                global_plataform: {
-                    show: false
-                }
-            }
-        });
-    }); 
-
-
 
     Router = new api(Router,{
         router : "/achievements/productSaleOne",
@@ -108,6 +37,27 @@ module.exports = (Router) => {
             params.date = dates;
             query.dates = dates;
             return params;
+        },
+        global_platform: {
+            show: true,
+            key : "filter_key",
+            name : "平台切换（默认全部平台）",
+            list : [{
+                key: ['Android','IOS','H5','PC'],
+                name: '全部平台'
+            },{
+                key: 'Android',
+                name: 'Android'
+            },{
+                key: 'IOS',
+                name: 'IOS'
+            },{
+                key: 'H5',
+                name: 'H5'
+            },{
+                key: 'PC',
+                name: 'PC'
+            }]
         },
        /* fixedParams(req , query , cb){
             if(!query.category_id){
@@ -309,11 +259,11 @@ module.exports = (Router) => {
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
-        page : [true],
+        paging : [true],
         filter_select : [
             {
                 title : "类型",
-                filter_key : "filter_key",
+                filter_key : "filter_key22",
                 groups: [{
                     key: "0",
                     value: "流量"
@@ -326,8 +276,49 @@ module.exports = (Router) => {
                 }]
             }
         ],
-        order : [],
-        params : function(query , params , sendData){
+        firstSql(query , params , isCount){
+            var num = query.filter_key / 1,
+                arrParam = [],
+                list = ["product_acc_pv", "order_commodity_num", "share_commodity_num"];
+
+            arrParam[0] = utils.getDate(params.date.from) + " 00:00:00",
+            arrParam[1] = utils.getDate(params.date.to) + " 23:59:59",
+            arrParam[2] = params.category_id || "",
+            arrParam[3] = list[num],
+            arrParam[4] = (params.page-1)*params.limit;
+            arrParam[5] = params.limit / 1;
+            if(isCount){
+                //统计总数
+                let sql = `SELECT COUNT(*) count FROM ads2_itm_run_top WHERE date BETWEEN ? AND ? AND day_type = 1 AND category_id = ?`;
+                return {
+                    sql : sql,
+                    params : arrParam
+                }
+            }
+            let sql = `SELECT * FROM ads2_itm_run_top WHERE DATE BETWEEN ? AND ? AND day_type = 1 AND category_id = ? ORDER BY ? LIMIT ?,?`;
+            return {
+                sql : sql,
+                params : arrParam
+            }
+        },
+       /* secondSql(query , params){
+            var num = query.filter_key / 1,
+                arrParam = [];
+
+            arrParam[0] = utils.getDate(params.date.from) + " 00:00:00",
+            arrParam[1] = utils.getDate(params.date.to) + " 23:59:59",
+            arrParam[2] = params.category_id || "";
+            let sql = `SELECT 
+            SUM(product_acc_pv) AS sum_product_acc_pv,
+            SUM(product_acc_pv) AS sum_product_acc_pv,
+                
+             FROM ads2_itm_run_top WHERE DATE BETWEEN ? AND ? AND day_type = 1 AND category_id = ? ORDER BY ? LIMIT ?,?`;
+            return {
+                sql : sql,
+                params : arrParam
+            }
+        }*/
+        /*params : function(query , params , sendData){
             var num = query.filter_key / 1,
                 order;
             switch(num){
@@ -342,9 +333,10 @@ module.exports = (Router) => {
                     break;
             }
             this.order = order;
-            console.log("gs",num);
+            console.log("gs",num , order , this.order);
+            console.log(params);
             return params;
-        },
+        },*/
         //set in filter function.
         cols : [
             []
@@ -356,6 +348,26 @@ module.exports = (Router) => {
             return filter.productSaleFour(data, query);
         }
     });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     Router = new api(Router,{
         router : "/achievements/productSaleFive",

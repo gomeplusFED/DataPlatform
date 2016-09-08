@@ -4,9 +4,15 @@
  * @fileoverview 商品分析
  * @二次开发 ，20160830 ， Mr.He
  */
-var api = require("../../../base/main"),
-    filter = require("../../../filters/achievements/product"),
-    utils  = require("../../../utils");
+
+var api = require(global.RootPath+"/base/main"),
+    filter = require(global.RootPath+"/filters/achievements/product"),
+    utils  = require(global.RootPath+"/utils");
+// =======
+// var api = require("../../../base/main"),
+//     filter = require("../../../filters/achievements/product"),
+//     utils  = require("../../../utils");
+// >>>>>>> a89e6c2adef1fb1992b3243858cd9f5f94c28c0b
 
 module.exports = (Router) => {
 
@@ -16,31 +22,10 @@ module.exports = (Router) => {
             code: 200,
             modelData: [],
             components: {
-                flexible_btn: [ ],
-                date_picker: {
-                    show: false,
-                    defaultData: 7
-                },
-                drop_down: {
-                    platform: false,
-                    channel: false,
-                    version: false,
-                    coupon: false
-                },
                 level_select: {
                     show: true,
                     url: "/api/categories",
                     name: "category_id"
-                },
-                filter_select: [],
-                search: {
-                    show: false
-                },
-                control_table_col: {
-                    show: false
-                },
-                global_plataform: {
-                    show: false
                 }
             }
         });

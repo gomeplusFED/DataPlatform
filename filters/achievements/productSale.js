@@ -3,7 +3,7 @@
  * @date 20160905
  * @fileoverview 商品分析,销售分析
  */
-var util = require(RootPath+"/utils"),
+var util = require(global.RootPath+"/utils"),
     moment = require("moment");
 
 var prizeRange = {
@@ -208,8 +208,8 @@ module.exports = {
 
     //top 100
     productSaleFour(data , query , dates){
-        var source = data.first.data[0],
-            num=query.filter_key / 1;
+        var source = data.first.data,
+            num=query.filter_key22 / 1;
         if(num == 2) num = 0;
         var Columns = [
             //流量
@@ -276,9 +276,18 @@ module.exports = {
         data.rows[0] = Rows[num];
         data.cols[0] = Columns[num];
 
-        console.log(query);
+        console.log(123,data.first.count);
+        console.log(source);
+        console.log(data);
+
+        //处理计算字段
+        for(let item of source){
+            
+        }
 
 
-        return util.toTable([source], data.rows, data.cols); 
+
+
+        return util.toTable([source], data.rows, data.cols , [data.first.count]); 
     }
 };
