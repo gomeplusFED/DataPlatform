@@ -46,15 +46,18 @@ module.exports = {
 
         for(let key of source) {
             let type = key.type;
-            obj[type].new_topic_num = key.new_topic_num;
-            obj[type].delete_topic_num = key.delete_topic_num;
-            obj[type].new_topic_reply_num = key.new_topic_reply_num;
-            obj[type].new_topic_reply_user_num = key.new_topic_reply_user_num;
-            obj[type].delete_topic_reply_num = key.delete_topic_reply_num;
-            obj[type].new_topic_like_num = key.new_topic_like_num;
-            obj[type].new_topic_save_num = key.new_topic_save_num;
-            obj[type].new_topic_share_num = key.new_topic_share_num;
-            obj[type].new_reply_topic_num = key.new_reply_topic_num;
+            if(obj[type]) {
+                obj[type].new_topic_num = key.new_topic_num;
+                obj[type].delete_topic_num = key.delete_topic_num;
+                obj[type].new_topic_reply_num = key.new_topic_reply_num;
+                obj[type].new_topic_reply_user_num = key.new_topic_reply_user_num;
+                obj[type].delete_topic_reply_num = key.delete_topic_reply_num;
+                obj[type].new_topic_like_num = key.new_topic_like_num;
+                obj[type].new_topic_save_num = key.new_topic_save_num;
+                obj[type].new_topic_share_num = key.new_topic_share_num;
+                obj[type].new_reply_topic_num = key.new_reply_topic_num;
+            }
+
             obj["总计"].new_topic_num += key.new_topic_num;
             obj["总计"].delete_topic_num += key.delete_topic_num;
             obj["总计"].new_topic_reply_num += key.new_topic_reply_num;
