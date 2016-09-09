@@ -5,31 +5,6 @@
 const util = require("../../utils"),
     moment = require("moment");
 
-const trimData = function (source, keyArray, sdate, edate) {
-    var filterData = _.filter(source, function(obj) {
-        return (sdate.getTime() <= obj.date.getTime() &&
-        obj.date.getTime() < edate.getTime() );
-    });
-
-    //累加数据
-    return reduceObj(filterData, keyArray);
-};
-const reduceObj = function(objArray, keyArray) {
-    return _.reduce(objArray, function(result, obj) {
-        _.keys(obj).forEach(function(key) {
-
-            if (keyArray.indexOf(key) !== -1) {
-                if (_.isNumber(obj[key])) {
-                    result[key] = obj[key] + (result[key] || 0);
-                }
-                else {
-                    result[key] = obj[key];
-                }
-            }
-        });
-        return result;
-    }, {});
-};
 module.exports = {
     vtradeOne(data, dates) {
         let source = data.first.data[0],
@@ -88,6 +63,7 @@ module.exports = {
         var source = data.first.data[0],
             newData = {},
             type = "line",
+            filter_key = query.filter_key,
             filter_name = {
                 ordered_num: '下单总量',
                 paid_num: '支付订单量',
@@ -100,27 +76,30 @@ module.exports = {
                 order_price: '笔单价',
                 rebuy_rate: '复购率'
             },
-            map = {};
-        map[query.filter_key] = filter_name[query.filter_key];
-        var keyArray = _.keys(map);
-        //添加复购率需要的字段
-        keyArray.push('ordered_usernum_last30day');
-        keyArray.push('paid_usernum_last30day');
+            map = {
+                value : filter_name[filter_key]
+            };
+        for(let date of dates) {
+            newData[date] = {
+                value : 0
+            };
+        }
 
-        dates.forEach(function(date) {
-            var date0clock = new Date(date+ " 00:00:00");
-            var date24clock = new Date(date+ " 23:59:59");
-            var x = trimData(source, keyArray, date0clock, date24clock);
-            //处理客单价和笔单价
-            // 'custmer_price', 'order_price'
-            var amount = x.paid_amount || 0;
-            x.custmer_price = x.paid_user_num ? (amount / x.paid_user_num).toFixed(2) :0;
-            x.order_price = x.paid_num ? (amount / x.paid_num).toFixed(2) :0;
-            //计算复购率
-            // 复购率：30天内在美店中产生二次及二次以上付款成功的会员数/30天内美店中付款成功的会员总数
-            x.rebuy_rate = (x.ordered_usernum_last30day/x.paid_usernum_last30day).toFixed(2);
-            newData[date] = x;
-        });
+        for(let key of source) {
+            let date = util.getDate(key.date);
+            if(filter_key === "custmer_price") {
+                newData[date].value += +util.division(key.paid_amount, key.paid_user_num);
+            } else if(filter_key === "order_price") {
+                newData[date].value += +util.division(key.paid_amount, key.paid_num);
+            } else if(filter_key === "rebuy_rate") {
+                newData[date].value += +util.division(
+                    key.ordered_usernum_last30day,
+                    key.paid_usernum_last30day
+                );
+            } else {
+                newData[date].value += key[filter_key];
+            }
+        }
 
         return [{
             type : type,
