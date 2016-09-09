@@ -459,10 +459,12 @@ module.exports = {
 
         return util.toTable([newData], rows, cols);
     },
-    vshopFive(data, type) {
+    vshopFive(data, query) {
+
+        var type = query.type;
         var source = data.first.data[0],
             _rows = [
-                [['rank', 'vshop_name', 'visitor_num', 'visited_time', 'shared_time', 'favorited_time']]
+                [['rank', 'vshop_name', 'sum_visitor_num', 'sum_visited_time', 'sum_shared_time', 'sum_favorited_time']]
             ],
             _cols = [
                         [[
@@ -497,24 +499,29 @@ module.exports = {
         var keyArray = rows[0];
 
         //groupBy 美店名称
-        var newData = _(source).groupBy(function(x) {
-            return x.vshop_name;
-        })
-        .mapValues(function(v) {
-            //累加已分组的数据
-            var res = reduceObj(v, keyArray);   
-            return res;
-        })
-        .values()
-        .sortByOrder([type],['desc'])
-        .slice(0,100)
+        var newData = _(source)
+        // .groupBy(function(x) {
+        //     return x.vshop_name;
+        // })
+        // .mapValues(function(v) {
+        //     //累加已分组的数据
+        //     var res = reduceObj(v, keyArray);   
+        //     return res;
+        // })
+        // .values()
+        .sortByOrder(['sum_'+type],['desc'])
+        // .slice(0,100)
         .map(function(v,i) {
             v.rank = i + 1;
             return v;
         })
         .value();
 
-        return util.toTable([newData], rows, cols);
+        var count = newData.length;
+        var base = (query.page-1)*20;
+        newData = newData.slice(base, base + 20);
+
+        return util.toTable([newData], rows, cols, [count]);
     },
     vtradeOne(data) {
         var source = data.first.data[0],

@@ -89,8 +89,11 @@ module.exports = (Router) => {
                 ]
             }
         ],
-        params(query) {
+        params(query,param) {
+            // 取出近7天记录
+            // console.log(JSON.stringify(arguments,null,4));
             return {
+                date : orm.between(param.date.from, param.date.to),
                 day_type : 1
             }
         },
@@ -123,6 +126,15 @@ module.exports = (Router) => {
     Router = new api(Router, {
         router: "/achievements/vshopFive",
         modelName: ['VshopFlowTop'],
+        procedure : [{
+            aggregate : {
+                value : ["vshop_name"]
+            },
+            sum : ["visitor_num", "visited_time", "shared_time",
+                "favorited_time"],
+            groupBy : ["vshop_name"],
+            get : ""
+        }],
         platform : false,
         excel_export : true,
         date_picker_data : 1,
@@ -152,7 +164,7 @@ module.exports = (Router) => {
             return params;
         },
         filter(data, query, dates, type) {
-            return vshopFilter.vshopFive(data, query.type);
+            return vshopFilter.vshopFive(data, query);
         }
     });
 
@@ -237,13 +249,15 @@ module.exports = (Router) => {
             preMethods: ["excel_export"]
         }],
         filter_select: filter_select_platform,
-        params(query) {
+        params(query, param) {
             var obj = {
+                date : orm.between(param.date.from, param.date.to),
                 day_type : 1
             }
             if(query.type && query.type !== 'all') {
                 obj.type = query.type;
             }
+
             return obj;
         },
         filter(data, query, dates, type) {
@@ -263,8 +277,9 @@ module.exports = (Router) => {
             preMethods: ["excel_export"]
         }],
         filter_select: filter_select_platform,
-        params(query) {
+        params(query, param) {
             var obj = {
+                date : orm.between(param.date.from, param.date.to),
                 day_type : 1
             }
             if(query.type && query.type !== 'all') {
