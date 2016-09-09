@@ -677,7 +677,7 @@ module.exports = {
             _cols = [
                         [[
                             {
-                                "caption": " ",
+                                "caption": "日期",
                                 "type": "string"
                             },
                             {
