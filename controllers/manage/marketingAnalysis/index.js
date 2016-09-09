@@ -62,7 +62,7 @@ module.exports = (Router) => {
                 now : {},
                 old : {}
             },
-            now = new Date("2016-08-31 17:00:00"),
+            now = new Date(),
             date = moment(now).format("MMDD"),
             oldDate = moment(new Date(now - 24 * 60 * 60 * 1000)).format("MMDD"),
             hour = moment(now).format("HH"),
@@ -141,6 +141,7 @@ module.exports = (Router) => {
                                     );
                                 }
                             }
+
                             data.now.uv.push(
                                 await (_find(`all:market:activity:${date}:${key}:uv`))
                             );
@@ -195,6 +196,7 @@ module.exports = (Router) => {
                                 );
                             }
                         }
+
                         data.now.uv.push(
                             await (_find(`all:market:activity:${date}:uv`))
                         );
@@ -214,7 +216,6 @@ module.exports = (Router) => {
                             await (_find(`all:market:activity:share:${oldDate}:uv`))
                         );
                     }
-
                     _render(res, filter.overviewOne(data, rows, cols), {});
                 } catch(err) {
                     next(err);
@@ -286,8 +287,26 @@ module.exports = (Router) => {
                     next(err);
                 }
             })();
+
         }
     });
+
+    function _render(res, sendData, modules) {
+        res.json({
+            code: 200,
+            modelData: sendData,
+            components: {
+                flexible_btn: modules.flexible_btn || [],
+                date_picker: {
+                    show: false
+                },
+                drop_down: {
+                    platform: false
+                },
+                filter_select: modules.filter_select || []
+            }
+        })
+    }
 
     function _findRedis(filter_key, date, hour, channels) {
         let data = {},
@@ -301,13 +320,13 @@ module.exports = (Router) => {
             key = "all:market:activity:";
             end = "pv";
         } else if(filter_key === "new_user") {
-            key = "all:market:activity:register";
+            key = "all:market:activity:register:";
             end = "uv";
         } else if(filter_key === "share_user") {
-            key = "all:market:activity:share";
+            key = "all:market:activity:share:";
             end = "pv";
         } else {
-            key = "all:market:activity:share";
+            key = "all:market:activity:share:";
             end = "uv";
         }
 
@@ -315,13 +334,13 @@ module.exports = (Router) => {
             for(let i = 0; i < +hour + 1; i++) {
                 if(i >= 10) {
                     data[`${i}:00-${i+1}:00`] = {
-                        now : await (_find(`${key}:${date.now + i + end}`)) || 0,
-                        old : await (_find(`${key}:${date.old + i + end}`)) || 0
+                        now : await (_find(`${key + date.now + i}:${end}`)) || 0,
+                        old : await (_find(`${key + date.old + i}:${end}`)) || 0
                     };
                 } else {
                     data[`0${i}:00-0${i+1}:00`] = {
-                        now : await (_find(`${key}:${date.now}0${i + end}`)) || 0,
-                        old : await (_find(`${key}:${date.old}0${i + end}`)) || 0
+                        now : await (_find(`${key + date.now}0${i}:${end}`)) || 0,
+                        old : await (_find(`${key + date.old}0${i}:${end}`)) || 0
                     };
                 }
             }
@@ -358,23 +377,6 @@ module.exports = (Router) => {
         }
 
         return data;
-    }
-
-    function _render(res, sendData, modules) {
-        res.json({
-            code: 200,
-            modelData: sendData,
-            components: {
-                flexible_btn: modules.flexible_btn || [],
-                date_picker: {
-                    show: false
-                },
-                drop_down: {
-                    platform: false
-                },
-                filter_select: modules.filter_select || []
-            }
-        })
     }
 
     var _find = async((key) => {
