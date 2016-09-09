@@ -239,8 +239,8 @@ module.exports = {
             key.topic_rate = util.round(key.reply_num, key.topic_reply_user_num);
             key.rate = "0.00%";
             key.weiding = 0;
-            key.category_id_1 = category[key.category_id_1];
-            key.category_id_2 = category[key.category_id_2];
+            key.category_id_1 = category[key.category_id_1] || null;
+            key.category_id_2 = category[key.category_id_2] || null;
             key.operating =
                 `<button class='btn btn-default' url_link='/socialAnalysis/topicsDetail' url_fixed_params='{"topic_id": "${key.topic_id}"}'>详细>></button>`;
             source[i] = key;
