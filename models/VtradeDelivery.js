@@ -17,6 +17,4 @@ module.exports = {
 	date: Date, // 数据日期
 	day_type: Number, // 1==>天，2==>周，3==>月
 	type: String, // 数据类型：ios android app h5 pc
-	ver: String, // 版本
-	channel: String // 渠道
 };
