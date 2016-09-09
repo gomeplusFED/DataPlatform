@@ -212,7 +212,7 @@ module.exports = (Router) => {
         secondParams(query, params, sendData) {
             return {
                 pid : ""
-            }
+            };
         },
         procedure : [{
             aggregate : {

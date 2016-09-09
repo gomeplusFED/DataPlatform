@@ -145,7 +145,7 @@ module.exports = {
             }
         }
         for(var key of source) {
-            obj[key.group_type].value = key["sum_" + filter_key];
+            obj[key.category_id].value = key["sum_" + filter_key];
         }
         for(var key of orderData) {
             newData[key.name] = {
