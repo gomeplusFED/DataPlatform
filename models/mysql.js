@@ -122,7 +122,7 @@ function connect(app) {
             
             //美店交易
             models.VtradeDetail = db.define("ads2_vshop_transaction_details" , obj.VtradeDetail);
-
+            models.VtradeDelivery = db.define("ads2_vshop_delivery_returns" , obj.VtradeDelivery);
 
             models.db1 = db;
             next();
