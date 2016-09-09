@@ -668,7 +668,7 @@ module.exports = {
             }
         }];
     },
-    vtradeThree(data, type, dates) {
+    vtradeThree(data, dates) {
         var source = data.first.data[0],
             now = new Date(),
             _rows = [
@@ -745,6 +745,71 @@ module.exports = {
             data.order_price = data.paid_num ? (amount / data.paid_num).toFixed(2) :0;
             // 复购率：30天内在美店中产生二次及二次以上付款成功的会员数/30天内美店中付款成功的会员总数
             data.rebuy_rate = util.toFixed(data.ordered_usernum_last30day, data.paid_usernum_last30day);
+            data.name = date;
+            return data;
+        });
+        return util.toTable([newData], rows, cols);
+    },
+    vtradeFour(data, dates) {
+        var source = data.first.data[0],
+            now = new Date(),
+            _rows = [
+                [['name', 'delivery_item_quantity', 'delivery_amount', 'refund_amount', 'refund_item_quantity', 'refund_item_num', 'refund_user_num', 'refund_order_num', 'refund_rate']]
+            ],
+            _cols = [
+                        [[
+                            {
+                                "caption": "日期",
+                                "type": "string"
+                            },
+                            {
+                                "caption": "妥投商品件数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "妥投金额",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "退款额",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "退货商品件数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "退货商品数",
+                                "type": "string"
+                            },
+                            {
+                                "caption": "退款人数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "退货订单数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "退货率",
+                                "type": "string"
+                            }
+                        ]]
+                    ];
+        var rows = _rows[0];
+        var cols = _cols[0];
+
+        var keyArray = rows[0];
+        //添加退货率需要的字段
+        keyArray.push('paid_item_quantity');
+
+        var newData = dates.map(function(date) {
+            //当天0点到24点
+            var date0clock = new Date(date+ " 00:00:00");
+            var date24clock = new Date(date+ " 23:59:59");
+            var data =  trimData(source, keyArray, date0clock, date24clock);
+            // 退货率：统计时间内，退货商品件数/支付商品件数
+            data.refund_rate = util.toFixed(data.refund_item_quantity, data.paid_item_quantity);
             data.name = date;
             return data;
         });

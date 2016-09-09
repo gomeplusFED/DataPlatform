@@ -196,18 +196,7 @@ module.exports = (Router) => {
         }
     });
 
-    // 交易明细
-    Router = new api(Router, {
-        router: "/achievements/vtradeThree",
-        modelName: ['VtradeDetail'],
-        date_picker: {show: true, defaultData: 7},
-        platform : false,
-        excel_export : true,
-        flexible_btn:[{
-            content: '<a href="javascript:void(0)">导出</a>',
-            preMethods: ["excel_export"]
-        }],
-        "filter_select": [
+    var filter_select_platform = [
             {
                 "title": "",
                 "filter_key": "type",
@@ -234,7 +223,20 @@ module.exports = (Router) => {
                     }
                 ]
             }
-        ],
+        ];
+
+    // 交易明细
+    Router = new api(Router, {
+        router: "/achievements/vtradeThree",
+        modelName: ['VtradeDetail'],
+        date_picker: {show: true, defaultData: 7},
+        platform : false,
+        excel_export : true,
+        flexible_btn:[{
+            content: '<a href="javascript:void(0)">导出</a>',
+            preMethods: ["excel_export"]
+        }],
+        filter_select: filter_select_platform,
         params(query) {
             var obj = {
                 day_type : 1
@@ -245,7 +247,33 @@ module.exports = (Router) => {
             return obj;
         },
         filter(data, query, dates, type) {
-            return vshopFilter.vtradeThree(data, query.type, dates);
+            return vshopFilter.vtradeThree(data, dates);
+        }
+    });
+
+    // 妥投与退货
+    Router = new api(Router, {
+        router: "/achievements/vtradeFour",
+        modelName: ['VtradeDelivery'],
+        date_picker: {show: true, defaultData: 7},
+        platform : false,
+        excel_export : true,
+        flexible_btn:[{
+            content: '<a href="javascript:void(0)">导出</a>',
+            preMethods: ["excel_export"]
+        }],
+        filter_select: filter_select_platform,
+        params(query) {
+            var obj = {
+                day_type : 1
+            }
+            if(query.type && query.type !== 'all') {
+                obj.type = query.type;
+            }
+            return obj;
+        },
+        filter(data, query, dates, type) {
+            return vshopFilter.vtradeFour(data, dates);
         }
     });
 
