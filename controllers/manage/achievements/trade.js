@@ -25,16 +25,17 @@ module.exports = (Router) => {
             var now = new Date(),
                 ydate = util.getDate(new Date(now.getTime() - 24 * 60 * 60 * 1000)),
                 qdate = util.getDate(new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000));
+
             return {
                 date : orm.between(new Date(qdate + " 00:00:00"), new Date(ydate + " 23:59:59")),
                 day_type : 1
-            }
+            };
         },
-        filter(data, query, dates, type) {
+        filter(data) {
             let now = new Date(),
-                ydate = new Date(now.getTime() - 24 * 60 * 60 * 1000),
-                qdate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-            dates = utils.times(qdate, ydate, 1);
+                ydate = util.getDate(new Date(now.getTime() - 24 * 60 * 60 * 1000)),
+                qdate = util.getDate(new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)),
+                dates = util.times(qdate, ydate, '1');
             return filter.vtradeOne(data, dates);
         },
         rows : [

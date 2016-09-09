@@ -8,14 +8,56 @@ const util = require("../../utils"),
 module.exports = {
     vtradeOne(data, dates) {
         let source = data.first.data[0],
+            total = {},
+            obj = {},
+            _one = {},
+            _seven = {},
             newData = [];
 
-        for(let key of data.rows[0]) {
-            let obj = {};
-            obj[key] = 0;
+        for(let date of dates) {
+            obj[date] = {};
+            for(let key of data.rows[0]) {
+                if(key !== "name") {
+                    obj[date][key] = 0;
+                }
+            }
         }
 
-        return util.toTable([newData], rows, cols);
+        for(let item of source) {
+            let date = util.getDate(item.date);
+            for(let key in obj[0]) {
+                obj[date][key] += item[key] || 0;
+            }
+        }
+
+        for(let key in obj) {
+            for(let k in obj[dates[0]]) {
+                total[k] += obj[key][k];
+            }
+            obj[key].custmer_price = util.division(obj[key].paid_amount, obj[key].paid_user_num);
+            obj[key].order_price = util.division(obj[key].paid_amount, obj[key].paid_num);
+        }
+
+        for(let key in obj[dates[0]]) {
+            total[key] = 0;
+            _one[key] = util.division(+obj[dates[0]][key], +obj[dates[1]][key]);
+        }
+
+        obj[dates[0]].name = "昨天";
+        obj[dates[1]].name = "前天";
+        _one.name = "环比";
+
+        for(let key in obj[dates[0]]) {
+            _seven[key] = util.division(obj[dates[0]][key], total[key]);
+        }
+        _seven.name = "7日平均环比";
+
+        newData.push(obj[dates[0]]);
+        newData.push(obj[dates[1]]);
+        newData.push(_one);
+        newData.push(_seven);
+
+        return util.toTable([newData], data.rows, data.cols);
     },
     vtradeTwo(data, query, dates) {
         var source = data.first.data[0],
