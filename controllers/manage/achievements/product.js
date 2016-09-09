@@ -10,8 +10,8 @@ var api = require(RootPath+"/base/main"),
 
 module.exports = (Router) => {
 
-    //本页面商品类目接口
     Router = Router.get("/achievements/productZero_json" , function(req , res , next){
+
         res.json({
             code: 200,
             modelData: [],
@@ -46,19 +46,31 @@ module.exports = (Router) => {
         });
     });
 
-    //商品总览
+
+
     Router = new api(Router,{
         router : "/achievements/productOne",
         modelName : ["ItemOverview"],
         platform : false,
-        date_picker : false, 
+        date_picker : false,
         params : function(query , params , sendData){
             var dates = utils.beforeDate(new Date() , 2);
             //取昨天的数据
             params.date = dates[1];
-            params.category_id = -6;
-
             return params;
+        },
+        fixedParams(req , query , cb){
+            if(!query.category_id){
+                cb(null , query);
+            }else{
+                req.models.ConfCategories.find({
+                    pid : query.category_id
+                } , 1 , (err , data)=>{
+                    if(err) cb(err);
+                    query.category_level = data[0].level;
+                    cb(null , query);
+                });
+            }
         },
         filter(data, filter_key, dates) {
             return filter.productOne(data, filter_key);
@@ -67,19 +79,24 @@ module.exports = (Router) => {
             [
                 {
                     caption: '商品总数',
-                    type: 'number'
+                    type: 'number',
+                    help: "平台累计商品总数（ITEM）"
                 }, {
                     caption: '冻结总数',
-                    type: 'number'
+                    type: 'number',
+                    help: "统计时间内，平台冻结商品数(ITEM)"
                 }, {
                     caption: '上架总数',
-                    type: 'number'
+                    type: 'number',
+                    help: "统计时间内，平台上架商品数(ITEM)"
                 },{
                     caption: '下架总数',
-                    type: 'number'
+                    type: 'number',
+                    help: "统计时间内，平台下架商品数(ITEM)"
                 },{
                     caption: '当前SPU使用总数',
-                    type: 'number'
+                    type: 'number',
+                    help: "累计当前SPU ID使用总数，去重"
                 }
             ]
         ],
@@ -87,6 +104,7 @@ module.exports = (Router) => {
             [ 'items_count_sum', 'items_frost_sum', 'items_put_sum', "items_down_sum", "items_spu_sum" ]
         ]
     });
+
 
     //商品管理总览
     Router = new api(Router,{
@@ -101,10 +119,21 @@ module.exports = (Router) => {
             var dates = utils.beforeDate(new Date() , 8);
 
             params.date = dates;
-            params.category_id = -6;
             query.date = dates;
-
             return params;
+        },
+        fixedParams(req , query , cb){
+            if(!query.category_id){
+                cb(null , query);
+            }else{
+                req.models.ConfCategories.find({
+                    pid : query.category_id
+                } , 1 , (err , data)=>{
+                    if(err) cb(err);
+                    query.category_level = data[0].level;
+                    cb(null , query);
+                });
+            }
         },
         cols : [
             [{
@@ -112,19 +141,24 @@ module.exports = (Router) => {
                 type: 'string'
             },{
                 caption: '新增商品数',
-                type: 'number'
+                type: 'number',
+                help: "统计时间内，平台新增商品数（SPU）"
             },{
                 caption: '上架商品数',
-                type: 'number'
+                type: 'number',
+                help: "统计时间内，平台上架商品数(ITEM)"
             },{
                 caption: '下架商品数',
-                type: 'number'
+                type: 'number',
+                help: "统计时间内，平台下架商品数(ITEM)"
             },{
                 caption: '冻结商品数',
-                type: 'number'
+                type: 'number',
+                help: "统计时间内，平台冻结商品数(ITEM)"
             },{
                 caption: '删除商品数',
-                type: 'number'
+                type: 'number',
+                help: "统计时间内，平台删除商品数（SPU)"
             },]
         ],
 
@@ -138,114 +172,136 @@ module.exports = (Router) => {
         router : "/achievements/productThree",
         modelName : ["ItemPie"],
         platform : false,
+        params : function(query , params , sendData){
+            delete params.category_id;
+            return params;
+        },
+        fixedParams(req , query , cb){
+            if(!query.category_id){
+                cb(null , query);
+            }else{
+                req.models.ConfCategories.find({
+                    pid : query.category_id
+                } , 1 , (err , data)=>{
+                    if(err) cb(err);
+                    switch(data[0].level){
+                        case 1:
+                            query.category_id_1 = query.category_id;
+                            break;
+                        case 2:
+                            query.category_id_2 = query.category_id;
+                            break;
+                        case 3:
+                            query.category_id_3 = query.category_id;
+                            break;
+                        case 4:
+                            query.category_id_4 = query.category_id;
+                            break;
+                    }
+                    cb(null , query);
+                });
+            }
+        },
         filter(data, query, dates) {
             return filter.productThree(data, query);
         }
     });
 
+    //商品价格区间分布－总商品数（万）
     Router = new api(Router,{
         router : "/achievements/productFour",
-        modelName : ["SalesProductFlowtTop"],
-        paging : true,
-        order : ["-access_num"],
-        sum : ["access_num", "access_users"],
+        modelName : ["ItemPie"],
         platform : false,
-        date_picker_data : 1,
-        showDayUnit : true,
-        excel_export : true,
-        flexible_btn : [{
-            content: '<a href="javascript:void(0)">导出</a>',
-            preMethods: ['excel_export']
-        }],
-        filter(data, filter_key, dates, filter_key2, page) {
-            return filter.productFour(data, page);
+        params : function(query , params , sendData){
+            delete params.category_id;
+            return params;
         },
-        rows : [
-            [ 'top', 'commodity_name', 'access_num', 'access_num_rate', 'access_users',
-                'access_users_rate', 'share_num']
-        ],
-        cols : [
-            [{
-                caption: '排名',
-                type: 'number'
-            }, {
-                caption: '商品名称',
-                type: 'string'
-            }, {
-                caption: '商品访问量',
-                type: 'number'
-            }, {
-                caption: '商品访问量占比',
-                type: 'string'
-            }, {
-                caption: '商品访客数',
-                type: 'number'
-            }, {
-                caption: '商品访客数占比',
-                type: 'string'
-            }, {
-                caption: '商品被分享次数',
-                type: 'number'
-            }]
-        ]
+        fixedParams(req , query , cb){
+            if(!query.category_id){
+                cb(null , query);
+            }else{
+                req.models.ConfCategories.find({
+                    pid : query.category_id
+                } , 1 , (err , data)=>{
+                    if(err) cb(err);
+                    switch(data[0].level){
+                        case 1:
+                            query.category_id_1 = query.category_id;
+                            break;
+                        case 2:
+                            query.category_id_2 = query.category_id;
+                            break;
+                        case 3:
+                            query.category_id_3 = query.category_id;
+                            break;
+                        case 4:
+                            query.category_id_4 = query.category_id;
+                            break;
+                    }
+                    cb(null , query);
+                });
+            }
+        },
+        filter(data, query, dates) {
+            return filter.productFour(data, query);
+        }
     });
 
     Router = new api(Router,{
         router : "/achievements/productFive",
-        modelName : ["SalesProductMarketTop"],
+        modelName : ["ItemManager"],
         platform : false,
-        paging : true,
-        order : ["-order_price"],
-        sum : ["pay_price"],
-        date_picker_data : 1,
-        showDayUnit : true,
+        // date_picker_data : 1,
+        // showDayUnit : true,
+        filter(data, query , dates) {
+            return filter.productFive(data, query ,dates);
+        }
+    });
+
+    Router = new api(Router , {
+        router : "/achievements/productSix",
+        modelName:["ItemManager"],
         excel_export : true,
+        platform : false,
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
-        filter(data, filter_key, dates, filter_key2, page) {
-            return filter.productFive(data, page);
-        },
+        order : ["-date"],
         rows : [
-            [ 'top', 'commodity_name', 'order_users', 'oder_products',
-                'order_price', 'pay_users', 'pay_products',
-                'pay_price', 'pay_price_rate', "refund_num" ]
+            ["date" , "items_add" , "items_put" , "items_down" , "items_frost" , "items_delete"]
         ],
         cols : [
             [{
-                caption: '排名',
-                type: 'number'
-            }, {
-                caption: '商品名称',
-                type: 'string'
-            }, {
-                caption: '下单人数',
-                type: 'number'
-            }, {
-                caption: '下单件数',
-                type: 'number'
+                caption : "日期",
+                type : "date"
             },{
-                caption: '下单金额',
-                type: 'number'
+                caption : "新增商品数",
+                type : "number",
+                help : "统计时间内，平台新增商品数（SPU）"
             },{
-                caption: '支付人数',
-                type: 'number'
+                caption : "上架商品数",
+                type : "number",
+                help : "统计时间内，平台上架商品数(ITEM)"
             },{
-                caption: '支付件数',
-                type: 'number'
-            }, {
-                caption: '支付金额',
-                type: 'number'
-            }, {
-                caption: '支付金额占比',
-                type: 'string'
-            }, {
-                caption: '退货件数',
-                type: 'number'
+                caption : "下架商品数",
+                type : "number",
+                help : "统计时间内，平台下架商品数(ITEM)"
+            },{
+                caption : "冻结商品数",
+                type : "number",
+                help : "统计时间内，平台冻结商品数(ITEM)"
+            },{
+                caption : "删除商品数",
+                type : "number",
+                help : "统计时间内，平台删除商品数（SPU)"
             }]
-        ]
-    });
+        ],
+        filter( data , query ,dates ){
+            return filter.productSix(data, query ,dates);
+        }
+
+    })
 
     return Router;
 };
