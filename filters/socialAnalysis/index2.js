@@ -81,7 +81,7 @@ module.exports = {
                 if(newData[num] && newData[num][key]) {
                     newData[num][key] += item[key];
                 }
-                newData["总计"][key] += item[key];
+                newData[3][key] += item[key];
             }
         }
 
