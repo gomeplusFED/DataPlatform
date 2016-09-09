@@ -5,6 +5,8 @@
  */
 
 var api = require("../../../base/main"),
+    util = require("../../../utils"),
+    orm = require("orm"),
     filter = require("../../../filters/achievements/trade");
 
 module.exports = (Router) => {
@@ -29,8 +31,56 @@ module.exports = (Router) => {
             }
         },
         filter(data, query, dates, type) {
-            return vshopFilter.vtradeOne(data);
-        }
+            return filter.vtradeOne(data);
+        },
+        rows : [
+            ['name', 'ordered_num', 'paid_num',
+                'ordered_user_num', 'paid_user_num',
+                'ordered_amount', 'trading_amount',
+                'paid_amount', 'custmer_price', 'order_price']
+        ],
+        cols : [[
+            {
+                "caption": " ",
+                "type": "string"
+            },
+            {
+                "caption": "下单总量",
+                "type": "number"
+            },
+            {
+                "caption": "支付订单量",
+                "type": "number"
+            },
+            {
+                "caption": "下单人数",
+                "type": "number"
+            },
+            {
+                "caption": "支付人数",
+                "type": "number"
+            },
+            {
+                "caption": "下单金额",
+                "type": "string"
+            },
+            {
+                "caption": "成交金额",
+                "type": "number"
+            },
+            {
+                "caption": "支付金额",
+                "type": "number"
+            },
+            {
+                "caption": "客单价",
+                "type": "number"
+            },
+            {
+                "caption": "笔单价",
+                "type": "number"
+            }
+        ]]
     });
 
     // 交易趋势
@@ -39,13 +89,8 @@ module.exports = (Router) => {
         router: "/achievements/vtradeTwo",
         modelName: ["VtradeDetail"],
         platform : false,
-        params(query) {
-            return {
-                day_type : 1
-            }
-        },
-        filter(data, query, dates, type) {
-            return vshopFilter.vtradeTwo(data, query, dates);
+        filter(data, query, dates) {
+            return filter.vtradeTwo(data, query, dates);
         }
     });
 

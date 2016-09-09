@@ -10,51 +10,10 @@ module.exports = {
         var source = data.first.data[0],
             now = new Date(),
             _rows = [
-                [['name', 'ordered_num', 'paid_num', 'ordered_user_num', 'paid_user_num', 'ordered_amount', 'trading_amount', 'paid_amount', 'custmer_price', 'order_price']]
+
             ],
             _cols = [
-                [[
-                    {
-                        "caption": " ",
-                        "type": "string"
-                    },
-                    {
-                        "caption": "下单总量",
-                        "type": "number"
-                    },
-                    {
-                        "caption": "支付订单量",
-                        "type": "number"
-                    },
-                    {
-                        "caption": "下单人数",
-                        "type": "number"
-                    },
-                    {
-                        "caption": "支付人数",
-                        "type": "number"
-                    },
-                    {
-                        "caption": "下单金额",
-                        "type": "string"
-                    },
-                    {
-                        "caption": "成交金额",
-                        "type": "number"
-                    },
-                    {
-                        "caption": "支付金额",
-                        "type": "number"
-                    },
-                    {
-                        "caption": "客单价",
-                        "type": "number"
-                    },
-                    {
-                        "caption": "笔单价",
-                        "type": "number"
-                    }
-                ]]
+
             ];
         var rows = _rows[0];
         var cols = _cols[0];
