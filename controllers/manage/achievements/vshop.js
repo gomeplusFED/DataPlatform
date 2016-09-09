@@ -15,18 +15,18 @@ module.exports = (Router) => {
         modelName: ['VshopDetail'],
         date_picker : false,
         platform : false,
-        "filter_select": [
+        filter_select: [
             {
-                "title": "",
-                "filter_key": "type",
-                "groups": [
+                title: '',
+                filter_key: 'type',
+                groups: [
                     {
-                        "key": "shop",
-                        "value": "店铺"
+                        key: 'shop',
+                        value: '店铺'
                     },
                     {
-                        "key": "product",
-                        "value": "商品"
+                        key: 'product',
+                        value: '商品'
                     }
                 ]
             }
@@ -73,18 +73,18 @@ module.exports = (Router) => {
              content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ["excel_export"]
         }],
-        "filter_select": [
+        filter_select: [
             {
-                "title": "",
-                "filter_key": "type",
-                "groups": [
+                title: '',
+                filter_key: 'type',
+                groups: [
                     {
-                        "key": "shop",
-                        "value": "店铺"
+                        key: 'shop',
+                        value: '店铺'
                     },
                     {
-                        "key": "product",
-                        "value": "商品"
+                        key: 'product',
+                        value: '商品'
                     }
                 ]
             }
@@ -131,18 +131,18 @@ module.exports = (Router) => {
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ["excel_export"]
         }],
-        "filter_select": [
+        filter_select: [
             {
-                "title": "",
-                "filter_key": "type",
-                "groups": [
+                title: '',
+                filter_key: 'type',
+                groups: [
                     {
-                        "key": "visitor_num",
-                        "value": "访问人数"
+                        key: 'visitor_num',
+                        value: '访问人数'
                     },
                     {
-                        "key": "visited_time",
-                        "value": "访问次数"
+                        key: 'visited_time',
+                        value: '访问次数'
                     }
                 ]
             }
@@ -198,28 +198,28 @@ module.exports = (Router) => {
 
     var filter_select_platform = [
             {
-                "title": "",
-                "filter_key": "type",
-                "groups": [
+                title: '',
+                filter_key: 'type',
+                groups: [
                     {
-                        "key": "all",
-                        "value": "全部"
+                        key: 'all',
+                        value: '全部'
                     },
                     {
-                        "key": "pc",
-                        "value": "PC"
+                        key: 'pc',
+                        value: 'PC'
                     },
                     {
-                        "key": "ios",
-                        "value": "iOS"
+                        key: 'ios',
+                        value: 'iOS'
                     },
                     {
-                        "key": "android",
-                        "value": "Android"
+                        key: 'android',
+                        value: 'Android'
                     },
                     {
-                        "key": "h5",
-                        "value": "WAP"
+                        key: 'h5',
+                        value: 'WAP'
                     }
                 ]
             }
@@ -289,18 +289,18 @@ module.exports = (Router) => {
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ["excel_export"]
         }],
-        "filter_select": [
+        filter_select: [
             {
-                "title": "",
-                "filter_key": "type",
-                "groups": [
+                title: '',
+                filter_key: 'type',
+                groups: [
                     {
-                        "key": "paid_order_num",
-                        "value": "支付订单数"
+                        key: 'paid_order_num',
+                        value: '支付订单数'
                     },
                     {
-                        "key": "paid_amount",
-                        "value": "支付金额"
+                        key: 'paid_amount',
+                        value: '支付金额'
                     }
                 ]
             }
