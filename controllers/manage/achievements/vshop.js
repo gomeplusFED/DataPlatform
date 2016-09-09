@@ -66,7 +66,6 @@ module.exports = (Router) => {
     Router = new api(Router, {
         router: "/achievements/vshopThree",
         modelName: ['VshopDetail'],
-        date_picker: {show: true, defaultData: 7},
         platform : false,
         excel_export : true,
         flexible_btn:[{
@@ -111,9 +110,6 @@ module.exports = (Router) => {
              content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ["excel_export"]
         }],
-        params : function(query , params , sendData){
-            return params;
-        },
         filter(data, query, dates, type) {
             return vshopFilter.vshopFour(data, dates);
         }
@@ -229,7 +225,6 @@ module.exports = (Router) => {
     Router = new api(Router, {
         router: "/achievements/vtradeThree",
         modelName: ['VtradeDetail'],
-        date_picker: {show: true, defaultData: 7},
         platform : false,
         excel_export : true,
         flexible_btn:[{
@@ -240,7 +235,7 @@ module.exports = (Router) => {
         params(query) {
             var obj = {
                 day_type : 1
-            }
+            };
             if(query.type && query.type !== 'all') {
                 obj.type = query.type;
             }
@@ -255,7 +250,6 @@ module.exports = (Router) => {
     Router = new api(Router, {
         router: "/achievements/vtradeFour",
         modelName: ['VtradeDelivery'],
-        date_picker: {show: true, defaultData: 7},
         platform : false,
         excel_export : true,
         flexible_btn:[{

@@ -43,8 +43,18 @@ module.exports = {
             now = new Date(),
             _type = 'product, shop',
             _rows = [
-                [['name', 'new_shelve_item_num', 'del_item_num', 'off_shelve_item_num', 'browse_item_num', 'browse_item_time', 'add2cart_item_num', 'add2cart_quantity', 'ordered_item_num', 'ordered_quantity', 'paid_item_num', 'paid_quantity', 'shared_item_num', 'item_share_time', 'favorited_item_num', 'item_favorited_num', 'delivery_quantity']],
-                [['name', 'new_vshop_num', 'total_vshop_num', 'open_vshop_num', 'silent_vshop_num', 'visited_vshop_num', 'favorite_vshop_num', 'ordered_vshop_num', 'paid_vshop_num']]
+                [['name', 'new_shelve_item_num', 'del_item_num',
+                    'off_shelve_item_num', 'browse_item_num',
+                    'browse_item_time', 'add2cart_item_num',
+                    'add2cart_quantity', 'ordered_item_num',
+                    'ordered_quantity', 'paid_item_num',
+                    'paid_quantity', 'shared_item_num',
+                    'item_share_time', 'favorited_item_num',
+                    'item_favorited_num', 'delivery_quantity']],
+                [['name', 'new_vshop_num', 'total_vshop_num',
+                    'open_vshop_num', 'silent_vshop_num',
+                    'visited_vshop_num', 'favorite_vshop_num',
+                    'ordered_vshop_num', 'paid_vshop_num']]
             ],
             _cols = [
                         [[
@@ -256,8 +266,18 @@ module.exports = {
             now = new Date(),
             _type = 'product, shop',
             _rows = [
-                [['name', 'new_shelve_item_num', 'del_item_num', 'off_shelve_item_num', 'browse_item_num', 'browse_item_time', 'add2cart_item_num', 'add2cart_quantity', 'ordered_item_num', 'ordered_quantity', 'paid_item_num', 'paid_quantity', 'shared_item_num', 'item_share_time', 'favorited_item_num', 'item_favorited_num', 'delivery_quantity']],
-                [['name', 'new_vshop_num', 'total_vshop_num', 'open_vshop_num', 'silent_vshop_num', 'visited_vshop_num', 'favorite_vshop_num', 'ordered_vshop_num', 'paid_vshop_num']]
+                [['name', 'new_shelve_item_num', 'del_item_num',
+                    'off_shelve_item_num', 'browse_item_num',
+                    'browse_item_time', 'add2cart_item_num',
+                    'add2cart_quantity', 'ordered_item_num',
+                    'ordered_quantity', 'paid_item_num',
+                    'paid_quantity', 'shared_item_num',
+                    'item_share_time', 'favorited_item_num',
+                    'item_favorited_num', 'delivery_quantity']],
+                [['name', 'new_vshop_num', 'total_vshop_num',
+                    'open_vshop_num', 'silent_vshop_num',
+                    'visited_vshop_num', 'favorite_vshop_num',
+                    'ordered_vshop_num', 'paid_vshop_num']]
             ],
             _cols = [
                         [[
@@ -397,7 +417,10 @@ module.exports = {
         var source = data.first.data[0],
             now = new Date(),
             _rows = [
-                [['merchandise_resources', 'ordered_num', 'paid_num', 'ordered_item_num', 'ordered_quantity', 'paid_item_num', 'paid_quantity', 'ordered_user_num', 'paid_user_num']]
+                [['merchandise_resources', 'ordered_num',
+                    'paid_num', 'ordered_item_num',
+                    'ordered_quantity', 'paid_item_num',
+                    'paid_quantity', 'ordered_user_num', 'paid_user_num']]
             ],
             _cols = [
                         [[
@@ -566,9 +589,7 @@ module.exports = {
                                 "type": "number"
                             }
                         ]]
-                    ],
-            rows = [],
-            cols = [];
+                    ];
         var rows = _rows[0];
         var cols = _cols[0];
 
@@ -767,8 +788,8 @@ module.exports = {
             //处理客单价和笔单价
             // 'custmer_price', 'order_price'
             var amount = data.paid_amount || 0;
-            data.custmer_price = data.paid_user_num ? (amount / data.paid_user_num).toFixed(2) :0;
-            data.order_price = data.paid_num ? (amount / data.paid_num).toFixed(2) :0;
+            data.custmer_price = data.paid_user_num ? (amount / data.paid_user_num).toFixed(2) : 0.00;
+            data.order_price = data.paid_num ? (amount / data.paid_num).toFixed(2) :0.00;
             // 复购率：30天内在美店中产生二次及二次以上付款成功的会员数/30天内美店中付款成功的会员总数
             data.rebuy_rate = util.toFixed(data.ordered_usernum_last30day, data.paid_usernum_last30day);
             data.name = date;
