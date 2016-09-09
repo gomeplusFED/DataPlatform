@@ -4,7 +4,7 @@
  * @fileoverview 交易分析
  */
 
-var api = require("../../../base/main"),
+let api = require("../../../base/main"),
     util = require("../../../utils"),
     orm = require("orm"),
     filter = require("../../../filters/achievements/trade");
@@ -31,7 +31,11 @@ module.exports = (Router) => {
             }
         },
         filter(data, query, dates, type) {
-            return filter.vtradeOne(data);
+            let now = new Date(),
+                ydate = new Date(now.getTime() - 24 * 60 * 60 * 1000),
+                qdate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+            dates = utils.times(qdate, ydate, 1);
+            return filter.vtradeOne(data, dates);
         },
         rows : [
             ['name', 'ordered_num', 'paid_num',

@@ -182,11 +182,11 @@ module.exports = {
                     type : "table",
                     title : "美店交易总览",
                     query_api : "/achievements/vtradeOne"
-                },
-                {
-                    type : "chart",
-                    title : "交易趋势",
-                    query_api : "/achievements/vtradeTwo"
+                //},
+                //{
+                //    type : "chart",
+                //    title : "交易趋势",
+                //    query_api : "/achievements/vtradeTwo"
                 //},
                 //{
                 //    type : "table",
