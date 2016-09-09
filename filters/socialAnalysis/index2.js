@@ -78,14 +78,11 @@ module.exports = {
             }
             for(var key in item){
                 if(key == "type") continue;
-                newData[num][key] += item[key];
+                if(newData[num] && newData[num][key]) {
+                    newData[num][key] += item[key];
+                }
+                newData["总计"][key] += item[key];
             }
-        }
-
-        /* 对APP , WAP , PC 求和 得出总计 */
-        for(var key in newData[3]){
-            if(key == "type") continue;
-            newData[3][key] = newData[0][key] + newData[1][key] + newData[2][key];
         }
 
         return util.toTable([newData], data.rows, data.cols);
