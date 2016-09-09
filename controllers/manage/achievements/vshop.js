@@ -51,6 +51,74 @@ module.exports = (Router) => {
         router: "/achievements/vshopTwo",
         modelName: ["VshopDetail"],
         platform : false,
+        filter_select: [
+            {
+                title: '',
+                filter_key: 'type',
+                groups: [
+                    {
+                        key: 'new_vshop_num',
+                        value: '新增美店数'
+                    },
+                    {
+                        key: 'open_vshop_num',
+                        value: '运营中美店数'
+                    },
+                    {
+                        key: 'visited_vshop_num',
+                        value: '被访问美店数'
+                    },
+                    {
+                        key: 'ordered_vshop_num',
+                        value: '下单美店数'
+                    },
+                    {
+                        key: 'paid_vshop_num',
+                        value: '支付美店数'
+                    },
+                    {
+                        key: 'favorite_vshop_num',
+                        value: '被收藏美店数'
+                    },
+                    {
+                        key: 'new_shelve_item_num',
+                        value: '美店新增上架商品数'
+                    },
+                    {
+                        key: 'browse_item_num',
+                        value: '浏览商品数'
+                    },
+                    {
+                        key: 'browse_item_time',
+                        value: '浏览商品次数'
+                    },
+                    {
+                        key: 'ordered_item_num',
+                        value: '下单商品数'
+                    },
+                    {
+                        key: 'ordered_quantity',
+                        value: '下单商品件数'
+                    },
+                    {
+                        key: 'paid_item_num',
+                        value: '支付商品数'
+                    },
+                    {
+                        key: 'paid_quantity',
+                        value: '支付商品件数'
+                    }
+                ]
+            }
+        ],
+        firstSql(query, params, isCount) {
+            var sql = 'select sum(`'+ query.type + '`) as `'+ query.type +'`,date from ads2_vshop_item_details group by date';
+            return {
+                sql: sql,
+                params: params
+            }
+
+        },
         params(query, param) {
             return {
                 date : orm.between(param.date.from, param.date.to),
