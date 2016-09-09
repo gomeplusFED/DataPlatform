@@ -5,6 +5,31 @@
 const util = require("../../utils"),
     moment = require("moment");
 
+const trimData = function (source, keyArray, sdate, edate) {
+    var filterData = _.filter(source, function(obj) {
+        return (sdate.getTime() <= obj.date.getTime() &&
+        obj.date.getTime() < edate.getTime() );
+    });
+
+    //累加数据
+    return reduceObj(filterData, keyArray);
+};
+const reduceObj = function(objArray, keyArray) {
+    return _.reduce(objArray, function(result, obj) {
+        _.keys(obj).forEach(function(key) {
+
+            if (keyArray.indexOf(key) !== -1) {
+                if (_.isNumber(obj[key])) {
+                    result[key] = obj[key] + (result[key] || 0);
+                }
+                else {
+                    result[key] = obj[key];
+                }
+            }
+        });
+        return result;
+    }, {});
+};
 module.exports = {
     vtradeOne(data, dates) {
         let source = data.first.data[0],
@@ -63,7 +88,7 @@ module.exports = {
         var source = data.first.data[0],
             newData = {},
             type = "line",
-            map = {
+            filter_name = {
                 ordered_num: '下单总量',
                 paid_num: '支付订单量',
                 ordered_user_num: '下单人数',
@@ -74,7 +99,9 @@ module.exports = {
                 custmer_price: '客单价',
                 order_price: '笔单价',
                 rebuy_rate: '复购率'
-            };
+            },
+            map = {};
+        map[query.filter_key] = filter_name[query.filter_key];
         var keyArray = _.keys(map);
         //添加复购率需要的字段
         keyArray.push('ordered_usernum_last30day');

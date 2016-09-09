@@ -94,6 +94,54 @@ module.exports = (Router) => {
         router: "/achievements/vtradeTwo",
         modelName: ["VtradeDetail"],
         platform : false,
+        filter_select : [
+            {
+                title: '',
+                filter_key: 'filter_key',
+                groups: [
+                    {
+                        key: 'ordered_num',
+                        value: '下单总量'
+                    },
+                    {
+                        key: 'paid_num',
+                        value: '支付订单量'
+                    },
+                    {
+                        key: 'ordered_user_num',
+                        value: '下单人数'
+                    },
+                    {
+                        key: 'paid_user_num',
+                        value: '支付人数'
+                    },
+                    {
+                        key: 'ordered_amount',
+                        value: '下单金额'
+                    },
+                    {
+                        key: 'trading_amount',
+                        value: '成交金额'
+                    },
+                    {
+                        key: 'paid_amount',
+                        value: '支付金额'
+                    },
+                    {
+                        key: 'custmer_price',
+                        value: '客单价'
+                    },
+                    {
+                        key: 'order_price',
+                        value: '笔单价'
+                    },
+                    {
+                        key: 'rebuy_rate',
+                        value: '复购率'
+                    }
+                ]
+            }
+        ],
         filter(data, query, dates) {
             return filter.vtradeTwo(data, query, dates);
         }
