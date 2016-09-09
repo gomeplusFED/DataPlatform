@@ -122,7 +122,13 @@ module.exports = {
             data : newData,
             config: { // 配置信息
                 stack: false, // 图的堆叠
-                categoryY : false //柱状图竖着
+                categoryY : false, //柱状图竖着
+                toolBox : {
+                    magicType : {
+                        type: ['line', 'bar']
+                    },
+                    dataView: {readOnly: true}
+                }
             }
         }];
     },
