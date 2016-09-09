@@ -3,8 +3,7 @@
  * @date 20160512
  * @fileoverview 话题数据
  */
-var util = require("../../utils"),
-    _ = require("lodash");
+var util = require("../../utils");
 
 module.exports = {
     topicsOne(data){
