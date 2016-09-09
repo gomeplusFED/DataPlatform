@@ -517,7 +517,6 @@ module.exports = {
                     ];
         var rows = _rows[0];
         var cols = _cols[0];
-        var sortName;
         var keyArray = rows[0];
 
         //groupBy 美店名称
@@ -702,7 +701,7 @@ module.exports = {
             x.order_price = x.paid_num ? (amount / x.paid_num).toFixed(2) :0;
             //计算复购率
             // 复购率：30天内在美店中产生二次及二次以上付款成功的会员数/30天内美店中付款成功的会员总数
-            x.rebuy_rate = util.toFixed(x.ordered_usernum_last30day, x.paid_usernum_last30day);
+            x.rebuy_rate = (x.ordered_usernum_last30day/x.paid_usernum_last30day).toFixed(2);
             newData[date] = x;
         });
 
@@ -905,7 +904,6 @@ module.exports = {
                     ];
         var rows = _rows[0];
         var cols = _cols[0];
-        var sortName;
         var keyArray = rows[0];
 
         //groupBy 美店名称
