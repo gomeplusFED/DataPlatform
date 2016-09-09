@@ -51,8 +51,9 @@ module.exports = (Router) => {
         router: "/achievements/vshopTwo",
         modelName: ["VshopDetail"],
         platform : false,
-        params(query) {
+        params(query, param) {
             return {
+                date : orm.between(param.date.from, param.date.to),
                 day_type : 1
             }
         },
@@ -97,7 +98,7 @@ module.exports = (Router) => {
             }
         },
         filter(data, query, dates, type) {
-            return vshopFilter.vshopThree(data, query.type, dates);
+            return vshopFilter.vshopThree(data, query, dates);
         }
     });
 
@@ -105,6 +106,15 @@ module.exports = (Router) => {
     Router = new api(Router, {
         router: "/achievements/vshopFour",
         modelName: ['VshopMerchandiseResources'],
+        procedure : [{
+            aggregate : {
+                value : ["merchandise_resources"]
+            },
+            sum : ["ordered_num", "paid_num", "ordered_item_num",
+                "ordered_quantity", "paid_item_num", "paid_quantity", "ordered_user_num", "paid_user_num"],
+            groupBy : ["merchandise_resources"],
+            get : ""
+        }],
         platform : false,
         excel_export : true,
         date_picker_data : 1,
@@ -114,7 +124,7 @@ module.exports = (Router) => {
             preMethods: ["excel_export"]
         }],
         filter(data, query, dates, type) {
-            return vshopFilter.vshopFour(data, dates);
+            return vshopFilter.vshopFour(data, query, dates);
         }
     });
 

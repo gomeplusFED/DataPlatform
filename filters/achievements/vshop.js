@@ -261,7 +261,8 @@ module.exports = {
             }
         }];
     },
-    vshopThree(data, type, dates) {
+    vshopThree(data, query, dates) {
+        var type = query.type;
         var source = data.first.data[0],
             now = new Date(),
             _type = 'product, shop',
@@ -409,18 +410,26 @@ module.exports = {
             data.name = date;
             return data;
         });
-        return util.toTable([newData], rows, cols);
+        var count = newData.length;
+        if(count>20) {
+            
+            var base = (query.page-1)*20;
+            newData = newData.slice(base, base + 20);
+            return util.toTable([newData], rows, cols, [count]);
+        } else {
+            return util.toTable([newData], rows, cols);
+        }
     },
-    vshopFour(data, dates) {
+    vshopFour(data, query, dates) {
         // console.log(JSON.stringify(data, null, 4));
         // console.log(JSON.stringify(dates, null, 4));
         var source = data.first.data[0],
             now = new Date(),
             _rows = [
-                [['merchandise_resources', 'ordered_num',
-                    'paid_num', 'ordered_item_num',
-                    'ordered_quantity', 'paid_item_num',
-                    'paid_quantity', 'ordered_user_num', 'paid_user_num']]
+                [['merchandise_resources', 'sum_ordered_num',
+                    'sum_paid_num', 'sum_ordered_item_num',
+                    'sum_ordered_quantity', 'sum_paid_item_num',
+                    'sum_paid_quantity', 'sum_ordered_user_num', 'sum_paid_user_num']]
             ],
             _cols = [
                         [[
@@ -469,18 +478,28 @@ module.exports = {
         var keyArray = rows[0];
 
         //groupBy 来源
-        var newData = _(source).groupBy(function(x) {
-            return x.merchandise_resources;
-        })
-        .mapValues(function(v) {
-            //累加已分组的数据
-            var res = reduceObj(v, keyArray);   
-            return res;
-        })
-        .values()
-        .value();
+        // var newData = _(source)
+        // .groupBy(function(x) {
+        //     return x.merchandise_resources;
+        // })
+        // .mapValues(function(v) {
+        //     //累加已分组的数据
+        //     var res = reduceObj(v, keyArray);   
+        //     return res;
+        // })
+        // .values()
+        // .value();
+        var newData = source;
+        var count = newData.length;
+        if(count>20) {
 
-        return util.toTable([newData], rows, cols);
+            var base = (query.page-1)*20;
+            newData = newData.slice(base, base + 20);
+            return util.toTable([newData], rows, cols, [count]);
+        } else {
+            return util.toTable([newData], rows, cols);
+        }
+
     },
     vshopFive(data, query) {
 
@@ -539,7 +558,10 @@ module.exports = {
             return v;
         })
         .value();
+        var count = newData.length;
+        var base = (query.page-1)*20;
+        newData = newData.slice(base, base + 20);
 
-        return util.toTable([newData], rows, cols);
+        return util.toTable([newData], rows, cols, [count]);
     }
 };
