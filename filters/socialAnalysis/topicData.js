@@ -289,13 +289,15 @@ module.exports = {
         }
 
         for(let key of source) {
-            obj[key.type].new_topic_user_num = key.sum_new_topic_user_num;
-            obj[key.type].new_topic_reply_num = key.sum_new_topic_reply_num;
-            obj[key.type].new_topic_reply_user_num = key.sum_new_topic_reply_user_num;
-            obj[key.type].delete_topic_reply_num = key.sum_delete_topic_reply_num;
-            obj[key.type].new_topic_like_num = key.sum_new_topic_like_num;
-            obj[key.type].new_topic_save_num = key.sum_new_topic_save_num;
-            obj[key.type].new_topic_share_num = key.sum_new_topic_share_num;
+            if(obj[key.type]) {
+                obj[key.type].new_topic_user_num = key.sum_new_topic_user_num;
+                obj[key.type].new_topic_reply_num = key.sum_new_topic_reply_num;
+                obj[key.type].new_topic_reply_user_num = key.sum_new_topic_reply_user_num;
+                obj[key.type].delete_topic_reply_num = key.sum_delete_topic_reply_num;
+                obj[key.type].new_topic_like_num = key.sum_new_topic_like_num;
+                obj[key.type].new_topic_save_num = key.sum_new_topic_save_num;
+                obj[key.type].new_topic_share_num = key.sum_new_topic_share_num;
+            }
             obj["总计"].new_topic_user_num = key.sum_new_topic_user_num;
             obj["总计"].new_topic_reply_num = key.sum_new_topic_reply_num;
             obj["总计"].new_topic_reply_user_num = key.sum_new_topic_reply_user_num;
