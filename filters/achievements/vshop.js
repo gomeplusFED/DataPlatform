@@ -494,7 +494,6 @@ module.exports = {
                     ];
         var rows = _rows[0];
         var cols = _cols[0];
-        var sortName;
         var keyArray = rows[0];
 
         //groupBy 美店名称
@@ -884,7 +883,6 @@ module.exports = {
                     ];
         var rows = _rows[0];
         var cols = _cols[0];
-        var sortName;
         var keyArray = rows[0];
 
         //groupBy 美店名称
