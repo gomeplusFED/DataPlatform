@@ -242,7 +242,6 @@ module.exports = {
         return util.toTable([newData], rows, cols);
     },
     vshopTwo(data, query, dates) {
-        console.log(JSON.stringify(data,null,4));
 
         var source = data.first.data,
             newData = {},
@@ -546,7 +545,7 @@ module.exports = {
         var keyArray = rows[0];
 
         //groupBy 美店名称
-        var newData = _(source)
+        // var newData = _(source)
         // .groupBy(function(x) {
         //     return x.vshop_name;
         // })
@@ -556,17 +555,30 @@ module.exports = {
         //     return res;
         // })
         // .values()
-        .sortByOrder(['sum_'+type],['desc'])
+        // .sortByOrder(['sum_'+type],['desc'])
         // .slice(0,100)
-        .map(function(v,i) {
-            v.rank = i + 1;
-            return v;
-        })
-        .value();
-        var count = newData.length;
-        var base = (query.page-1)*20;
-        newData = newData.slice(base, base + 20);
+        // .map(function(v,i) {
+        //     v.rank = i + 1;
+        //     return v;
+        // })
+        // .value();
 
-        return util.toTable([newData], rows, cols, [count]);
+        var newData = _.sortByOrder(source, ['sum_'+type] ,['desc']);
+        var count = newData.length;
+        if (count >20) {
+            var base = (query.page-1)*20;
+            newData = newData.slice(base, base + 20);
+            newData = _.map(newData, function(v,i) {
+                v.rank = base + i + 1;
+                return v;
+            });
+            return util.toTable([newData], rows, cols, [count]);
+        } else {
+            newData = _.map(newData, function(v,i) {
+                v.rank = base + i + 1;
+                return v;
+            });
+            return util.toTable([newData], rows, cols);
+        }
     }
 };
