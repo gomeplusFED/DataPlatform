@@ -12,7 +12,7 @@ module.exports = (Router) => {
 
     Router = new api(Router, {
         router: "/achievements/vshopOne",
-        modelName: ['VshopInfo'],
+        modelName: ['VshopDetail'],
         date_picker : false,
         platform : false,
         "filter_select": [
@@ -49,7 +49,7 @@ module.exports = (Router) => {
 
     Router = new api(Router, {
         router: "/achievements/vshopTwo",
-        modelName: ["VshopInfo"],
+        modelName: ["VshopDetail"],
         platform : false,
         params(query) {
             return {
@@ -65,7 +65,7 @@ module.exports = (Router) => {
     // 每日明细
     Router = new api(Router, {
         router: "/achievements/vshopThree",
-        modelName: ['VshopInfo'],
+        modelName: ['VshopDetail'],
         date_picker: {show: true, defaultData: 7},
         platform : false,
         excel_export : true,
@@ -162,7 +162,7 @@ module.exports = (Router) => {
     // 美店交易总览
     Router = new api(Router, {
         router: "/achievements/vtradeOne",
-        modelName: ['VtradeInfo'],
+        modelName: ['VtradeDetail'],
         date_picker : false,
         platform : false,
         params(query) {
@@ -184,7 +184,7 @@ module.exports = (Router) => {
 
     Router = new api(Router, {
         router: "/achievements/vtradeTwo",
-        modelName: ["VtradeInfo"],
+        modelName: ["VtradeDetail"],
         platform : false,
         params(query) {
             return {
@@ -199,7 +199,7 @@ module.exports = (Router) => {
     // 交易明细
     Router = new api(Router, {
         router: "/achievements/vtradeThree",
-        modelName: ['VtradeInfo'],
+        modelName: ['VtradeDetail'],
         date_picker: {show: true, defaultData: 7},
         platform : false,
         excel_export : true,

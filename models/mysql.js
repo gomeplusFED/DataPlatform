@@ -115,13 +115,13 @@ function connect(app) {
             models.ItemRunTop = db.define("ads2_itm_run_top" , obj.ItemRunTop);
 
             // 美店
-            models.VshopInfo = db.define("ads2_vshop_item_details" , obj.VshopInfo);
+            models.VshopDetail = db.define("ads2_vshop_item_details" , obj.VshopDetail);
             models.VshopMerchandiseResources = db.define("ads2_vshop_merchandise_resources" , obj.VshopMerchandiseResources);
             models.VshopTransaction = db.define("ads2_vshop_transaction_details" , obj.VshopTransaction);
             models.VshopFlowTop = db.define("ads2_vshop_flow_top" , obj.VshopFlowTop);
             
             //美店交易
-            models.VtradeInfo = db.define("ads2_vshop_transaction_details" , obj.VtradeInfo);
+            models.VtradeDetail = db.define("ads2_vshop_transaction_details" , obj.VtradeDetail);
 
 
             models.db1 = db;
