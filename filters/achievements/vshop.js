@@ -254,7 +254,7 @@ module.exports = {
         dates.forEach(function(date) {
             newData[date] = _.find(source,function(x){
                 return util.getDate(x.date) === date;
-            });
+            }) || 0;
         });
 
         return [{
