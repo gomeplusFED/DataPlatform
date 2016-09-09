@@ -442,8 +442,13 @@ module.exports = (Router) => {
                     params : keys
                 };
             } else {
-                let offset = (query.page - 1) * query.limit;
-                let limit = query.limit;
+                let offset;
+                if(query.from) {
+                    offset = +query.from - 1;
+                } else {
+                    offset = (query.page - 1) * query.limit;
+                }
+                let limit = +query.to || query.limit;
                 let sql = `SELECT * FROM ads2_soc_topic_list WHERE ${where.join(" AND ")} ORDER BY ${query.filter_key} DESC LIMIT ${offset},${limit}`;
                 return {
                     sql : sql,
@@ -490,7 +495,7 @@ module.exports = (Router) => {
         filter(data, query) {
             return filter.topicsSix(data, query);
         },
-         excel_export : true,
+        excel_export : true,
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
