@@ -847,10 +847,11 @@ module.exports = {
         });
         return util.toTable([newData], rows, cols);
     },
-    vtradeFive(data, type) {
+    vtradeFive(data, query) {
+        var type = query.type;
         var source = data.first.data[0],
             _rows = [
-                [['rank', 'vshop_name', 'paid_order_num', 'paid_item_num', 'paid_user_num', 'paid_item_quantity', 'paid_amount', 'brokerage']]
+                [['rank', 'vshop_name', 'sum_paid_order_num', 'sum_paid_item_num', 'sum_paid_user_num', 'sum_paid_item_quantity', 'sum_paid_amount', 'sum_brokerage']]
             ],
             _cols = [
                         [[
@@ -893,23 +894,28 @@ module.exports = {
         var keyArray = rows[0];
 
         //groupBy 美店名称
-        var newData = _(source).groupBy(function(x) {
-            return x.vshop_name;
-        })
-        .mapValues(function(v) {
-            //累加已分组的数据
-            var res = reduceObj(v, keyArray);   
-            return res;
-        })
-        .values()
-        .sortByOrder([type],['desc'])
-        .slice(0,100)
+        var newData = _(source)
+        // .groupBy(function(x) {
+        //     return x.vshop_name;
+        // })
+        // .mapValues(function(v) {
+        //     //累加已分组的数据
+        //     var res = reduceObj(v, keyArray);   
+        //     return res;
+        // })
+        // .values()
+        .sortByOrder(['sum_'+type],['desc'])
+        // .slice(0,100)
         .map(function(v,i) {
             v.rank = i + 1;
             return v;
         })
         .value();
 
-        return util.toTable([newData], rows, cols);
+        var count = newData.length;
+        var base = (query.page-1)*20;
+        newData = newData.slice(base, base + 20);
+
+        return util.toTable([newData], rows, cols, [count]);
     }
 };

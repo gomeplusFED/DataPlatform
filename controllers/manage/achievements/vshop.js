@@ -296,6 +296,15 @@ module.exports = (Router) => {
     Router = new api(Router, {
         router: "/achievements/vtradeFive",
         modelName: ['VtradeTop'],
+        procedure : [{
+            aggregate : {
+                value : ["vshop_name"]
+            },
+            sum : ["paid_order_num", "paid_item_num", "paid_user_num",
+                "paid_item_quantity", "paid_amount", "brokerage"],
+            groupBy : ["vshop_name"],
+            get : ""
+        }],
         platform : false,
         excel_export : true,
         date_picker_data : 1,
@@ -325,7 +334,7 @@ module.exports = (Router) => {
             return params;
         },
         filter(data, query, dates, type) {
-            return vshopFilter.vtradeFive(data, query.type);
+            return vshopFilter.vtradeFive(data, query);
         }
     });
 
