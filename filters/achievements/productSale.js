@@ -6,15 +6,6 @@
 var util = require("../../utils"),
     moment = require("moment");
 
-var prizeRange = {
-    "0" : "0~10",
-    "2" : "10~20",
-    "3" : "20~30",
-    "4" : "30~40",
-    "5" : "40~50",
-    "6" : "50~60"
-}
-
 /* 环比计算 , 昨天－前天  ／  前天 */
 function Chain(lastObj , bObj , columns){
     var obj = {};

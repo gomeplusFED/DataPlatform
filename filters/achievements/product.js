@@ -7,15 +7,76 @@
 var util = require("../../utils"),
     moment = require("moment");
 
-var prizeRange = {
-    "0" : "0~10",
-    "2" : "10~20",
-    "3" : "20~30",
-    "4" : "30~40",
-    "5" : "40~50",
-    "6" : "50~60"
+/* 环比计算 , 昨天－前天  ／  前天 */
+function Chain(lastObj , bObj , columns){
+    var obj = {};
+    for(let key of columns){
+        if(key == "names"){
+            obj[key] = "日环比";
+            continue;
+        }
+        if(!lastObj[key] || !bObj[key]){
+            obj[key] = "0%";
+        }else{
+            obj[key] = (lastObj[key] - bObj[key]) / bObj[key];
+            obj[key] = util.toFixed(obj[key] , 0);
+        }        
+    }
+    return obj;
 }
 
+/* 7日环比, 传入7天的数据 */
+function Chain7(thisObj , allObj , columns){
+    var result={};
+
+    for(let item of columns){
+        if(item == "names") continue;
+        result[item] = 0;
+    }
+    var n = 0;
+    for(let key in allObj){
+        n++;
+        for(let item of columns){
+            if(item == "names") continue;
+            result[item] += allObj[key][item];
+        }
+    }
+    // console.log("gg" , result , n);
+    for(let item of columns){
+        if(item == "names") continue;
+        if(result[item] == 0){
+            result[item] = "0%";
+            continue;
+        }
+        // console.log("ss" ,thisObj[item] ,  result[item]);
+        var averg = result[item] / n;
+        result[item] = (thisObj[item] - averg) / averg;
+        result[item] = util.toFixed( result[item] , 0 );
+
+    }
+
+    result.names = "7日平均环比";
+    return result;
+}
+
+/*Object.prototype.clone = function () {
+    var Constructor = this.constructor;
+    var obj = new Constructor();
+
+    for (var attr in this) {
+        if (this.hasOwnProperty(attr)) {
+            if (typeof(this[attr]) !== "function") {
+                if (this[attr] === null) {
+                    obj[attr] = null;
+                }
+                else {
+                    obj[attr] = this[attr].clone();
+                }
+            }
+        }
+    }
+    return obj;
+};*/
 
 module.exports = {
     productOne(data, filter_key) {
@@ -29,50 +90,37 @@ module.exports = {
             result = [],
             configRow = data.rows[0],
             dates = query.date;
+        console.log(source.length);
 
         //给默认值0.
-        for(let key of rows){
+        var sourceObj = {};
+        for(let date of dates){
             var obj = {};
             for(let item of configRow){
                 obj[item] = 0;
             }
-            obj.names = key;
-            result.push(obj);
+            sourceObj[date] = obj;
         }
-        
         //整理数据
-        var sourceObj = {};
         for(let item of source){
+            item.date = util.getDate(item.date);
             sourceObj[item.date] = item;
         }
 
         //昨日
-        var data1 = sourceObj[dates[1]];
-        if(data1){
-            var obj = {};
-            for(let item of configRow){
-                obj[item] = data1[item];
-            }
-            obj.names = "昨日";
-            result.push(obj);
-        }
+        result[0] = sourceObj[dates[1]];
+        result[0].names = "昨日";
 
         //前日
-        var data2 = sourceObj[dates[2]];
-        if(data2){
-            var obj = {};
-            for(let item of configRow){
-                obj[item] = data1[item];
-            }
-            obj.names = "前日";
-            result.push(obj);
-        }
+        result[1] = sourceObj[dates[2]];
+        result[1].names = "前日";
 
         //环比
-
+        result[2] = Chain(sourceObj[dates[1]] ,sourceObj[dates[2]] , data.rows[0]);
 
         //7日平均环比
-
+        // delete sourceObj[dates[0]];
+        result[3] = Chain7(sourceObj[dates[1]] ,sourceObj , data.rows[0]);
 
        return util.toTable([result], data.rows, data.cols);
     },
@@ -82,15 +130,11 @@ module.exports = {
             map    = {
                 value : "总商品数(万)"
             },
-            newData = {
-                "gg" : { value: 12 },
-                "gg1": { value: 13 },
-                "gg2": { value: 14 }
-            };
+            newData = {};
 
         var n = 0;
         for(let item of source){
-            newData["gg"+n] = {
+            newData[util.prizeRange[item.tag]] = {
                 value : item.items_count
             }
         }
@@ -111,16 +155,12 @@ module.exports = {
             map    = {
                 value : "新增商品数"
             },
-            newData = {
-                "gg" : { value: 12 },
-                "gg1": { value: 13 },
-                "gg2": { value: 14 }
-            };
+            newData = {};
 
         var n = 0;
         for(let item of source){
             if(item.isnew == 0) continue;
-            newData["gg"+n] = {
+            newData[util.prizeRange[item.tag]] = {
                 value : item.items_count
             }
         }

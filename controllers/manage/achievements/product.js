@@ -36,6 +36,10 @@ module.exports = (Router) => {
             var dates = utils.beforeDate(new Date() , 2);
             //取昨天的数据
             params.date = dates[1];
+
+            params.date = "2016-09-01";
+            params.category_id = "4788";
+            params.category_level = "4";
             return params;
         },
         fixedParams(req , query , cb){
@@ -95,10 +99,15 @@ module.exports = (Router) => {
             ["names" , "items_add" , "items_put" , "items_down" , "items_frost" , "items_delete"]
         ],
         params : function(query , params , sendData){
-            var dates = utils.beforeDate(new Date() , 8);
+            var dates = utils.beforeDate(new Date("2016-09-02") , 8);
 
             params.date = dates;
             query.date = dates;
+
+
+            // params.date = "2016-09-01";
+            params.category_id = "4803";
+            params.category_level = "4";
             return params;
         },
         fixedParams(req , query , cb){
