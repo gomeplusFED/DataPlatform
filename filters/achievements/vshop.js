@@ -668,4 +668,86 @@ module.exports = {
             }
         }];
     },
+    vtradeThree(data, type, dates) {
+        var source = data.first.data[0],
+            now = new Date(),
+            _rows = [
+                [['name', 'ordered_num', 'paid_num', 'ordered_user_num', 'paid_user_num', 'ordered_amount', 'trading_amount', 'paid_amount', 'custmer_price', 'order_price', 'rebuy_rate', 'brokerage']]
+            ],
+            _cols = [
+                        [[
+                            {
+                                "caption": " ",
+                                "type": "string"
+                            },
+                            {
+                                "caption": "下单总量",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "支付订单量",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "下单人数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "支付人数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "下单金额",
+                                "type": "string"
+                            },
+                            {
+                                "caption": "成交金额",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "支付金额",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "客单价",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "笔单价",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "复购率",
+                                "type": "string"
+                            },
+                            {
+                                "caption": "佣金金额",
+                                "type": "number"
+                            }
+                        ]]
+                    ];
+        var rows = _rows[0];
+        var cols = _cols[0];
+
+        var keyArray = rows[0];
+        //添加复购率需要的字段
+        keyArray.push('ordered_usernum_last30day');
+        keyArray.push('paid_usernum_last30day');
+        var newData = dates.map(function(date) {
+            //当天0点到24点
+            var date0clock = new Date(date+ " 00:00:00");
+            var date24clock = new Date(date+ " 23:59:59");
+            var data =  trimData(source, keyArray, date0clock, date24clock);
+            //处理客单价和笔单价
+            // 'custmer_price', 'order_price'
+            var amount = data.paid_amount || 0;
+            data.custmer_price = data.paid_user_num ? (amount / data.paid_user_num).toFixed(2) :0;
+            data.order_price = data.paid_num ? (amount / data.paid_num).toFixed(2) :0;
+            // 复购率：30天内在美店中产生二次及二次以上付款成功的会员数/30天内美店中付款成功的会员总数
+            data.rebuy_rate = util.toFixed(data.ordered_usernum_last30day, data.paid_usernum_last30day);
+            data.name = date;
+            return data;
+        });
+        return util.toTable([newData], rows, cols);
+    }
 };

@@ -68,7 +68,6 @@ module.exports = (Router) => {
         modelName: ['VshopInfo'],
         date_picker: {show: true, defaultData: 7},
         platform : false,
-        paging : [true],
         excel_export : true,
         flexible_btn:[{
              content: '<a href="javascript:void(0)">导出</a>',
@@ -105,7 +104,6 @@ module.exports = (Router) => {
         router: "/achievements/vshopFour",
         modelName: ['VshopMerchandiseResources'],
         platform : false,
-        paging : [true],
         excel_export : true,
         date_picker_data : 1,
         showDayUnit : true,
@@ -126,7 +124,6 @@ module.exports = (Router) => {
         router: "/achievements/vshopFive",
         modelName: ['VshopFlowTop'],
         platform : false,
-        paging : [true],
         excel_export : true,
         date_picker_data : 1,
         showDayUnit : true,
@@ -196,6 +193,59 @@ module.exports = (Router) => {
         },
         filter(data, query, dates, type) {
             return vshopFilter.vtradeTwo(data, query, dates);
+        }
+    });
+
+    // 交易明细
+    Router = new api(Router, {
+        router: "/achievements/vtradeThree",
+        modelName: ['VtradeInfo'],
+        date_picker: {show: true, defaultData: 7},
+        platform : false,
+        excel_export : true,
+        flexible_btn:[{
+            content: '<a href="javascript:void(0)">导出</a>',
+            preMethods: ["excel_export"]
+        }],
+        "filter_select": [
+            {
+                "title": "",
+                "filter_key": "type",
+                "groups": [
+                    {
+                        "key": "all",
+                        "value": "全部"
+                    },
+                    {
+                        "key": "pc",
+                        "value": "PC"
+                    },
+                    {
+                        "key": "ios",
+                        "value": "iOS"
+                    },
+                    {
+                        "key": "android",
+                        "value": "Android"
+                    },
+                    {
+                        "key": "h5",
+                        "value": "WAP"
+                    }
+                ]
+            }
+        ],
+        params(query) {
+            var obj = {
+                day_type : 1
+            }
+            if(query.type && query.type !== 'all') {
+                obj.type = query.type;
+            }
+            return obj;
+        },
+        filter(data, query, dates, type) {
+            return vshopFilter.vtradeThree(data, query.type, dates);
         }
     });
 
