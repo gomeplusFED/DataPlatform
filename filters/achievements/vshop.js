@@ -6,6 +6,21 @@
 var util = require("../../utils"),
     _ = require("lodash");
 
+var vshopdict = {
+                    new_vshop_num: '新增美店数',
+                    open_vshop_num: '运营中美店数',
+                    visited_vshop_num: '被访问美店数',
+                    ordered_vshop_num: '下单美店数',
+                    paid_vshop_num: '支付美店数',
+                    favorite_vshop_num: '被收藏美店数',
+                    new_shelve_item_num: '美店新增上架商品数',
+                    browse_item_num: '浏览商品数',
+                    browse_item_time: '浏览商品次数',
+                    ordered_item_num: '下单商品数',
+                    ordered_quantity: '下单商品件数',
+                    paid_item_num: '支付商品数',
+                    paid_quantity: '支付商品件数'
+                };
 var reduceObj = function(objArray, keyArray) {
     return _.reduce(objArray, function(result, obj) {
         _.keys(obj).forEach(function(key) {
@@ -227,29 +242,19 @@ module.exports = {
         return util.toTable([newData], rows, cols);
     },
     vshopTwo(data, query, dates) {
-        var source = data.first.data[0],
+        console.log(JSON.stringify(data,null,4));
+
+        var source = data.first.data,
             newData = {},
             type = "line",
-            map = {
-                    new_vshop_num: '新增美店数',
-                    open_vshop_num: '运营中美店数',
-                    visited_vshop_num: '被访问美店数',
-                    ordered_vshop_num: '下单美店数',
-                    paid_vshop_num: '支付美店数',
-                    favorite_vshop_num: '被收藏美店数',
-                    new_shelve_item_num: '美店新增上架商品数',
-                    browse_item_num: '浏览商品数',
-                    browse_item_time: '浏览商品次数',
-                    ordered_item_num: '下单商品数',
-                    ordered_quantity: '下单商品件数',
-                    paid_item_num: '支付商品数',
-                    paid_quantity: '支付商品件数'
-                };
+            map = {};
+        map[query.type] = vshopdict[query.type];
         var keyArray = _.keys(map);
+
         dates.forEach(function(date) {
-            var date0clock = new Date(date+ " 00:00:00");
-            var date24clock = new Date(date+ " 23:59:59");
-            newData[date] = trimData(source, keyArray, date0clock, date24clock);
+            newData[date] = _.find(source,function(x){
+                return util.getDate(x.date) === date;
+            }) || 0;
         });
 
         return [{
@@ -261,7 +266,8 @@ module.exports = {
             }
         }];
     },
-    vshopThree(data, type, dates) {
+    vshopThree(data, query, dates) {
+        var type = query.type;
         var source = data.first.data[0],
             now = new Date(),
             _type = 'product, shop',
@@ -409,18 +415,26 @@ module.exports = {
             data.name = date;
             return data;
         });
-        return util.toTable([newData], rows, cols);
+        var count = newData.length;
+        if(count>20) {
+            
+            var base = (query.page-1)*20;
+            newData = newData.slice(base, base + 20);
+            return util.toTable([newData], rows, cols, [count]);
+        } else {
+            return util.toTable([newData], rows, cols);
+        }
     },
-    vshopFour(data, dates) {
+    vshopFour(data, query, dates) {
         // console.log(JSON.stringify(data, null, 4));
         // console.log(JSON.stringify(dates, null, 4));
         var source = data.first.data[0],
             now = new Date(),
             _rows = [
-                [['merchandise_resources', 'ordered_num',
-                    'paid_num', 'ordered_item_num',
-                    'ordered_quantity', 'paid_item_num',
-                    'paid_quantity', 'ordered_user_num', 'paid_user_num']]
+                [['merchandise_resources', 'sum_ordered_num',
+                    'sum_paid_num', 'sum_ordered_item_num',
+                    'sum_ordered_quantity', 'sum_paid_item_num',
+                    'sum_paid_quantity', 'sum_ordered_user_num', 'sum_paid_user_num']]
             ],
             _cols = [
                         [[
@@ -469,18 +483,28 @@ module.exports = {
         var keyArray = rows[0];
 
         //groupBy 来源
-        var newData = _(source).groupBy(function(x) {
-            return x.merchandise_resources;
-        })
-        .mapValues(function(v) {
-            //累加已分组的数据
-            var res = reduceObj(v, keyArray);   
-            return res;
-        })
-        .values()
-        .value();
+        // var newData = _(source)
+        // .groupBy(function(x) {
+        //     return x.merchandise_resources;
+        // })
+        // .mapValues(function(v) {
+        //     //累加已分组的数据
+        //     var res = reduceObj(v, keyArray);   
+        //     return res;
+        // })
+        // .values()
+        // .value();
+        var newData = source;
+        var count = newData.length;
+        if(count>20) {
 
-        return util.toTable([newData], rows, cols);
+            var base = (query.page-1)*20;
+            newData = newData.slice(base, base + 20);
+            return util.toTable([newData], rows, cols, [count]);
+        } else {
+            return util.toTable([newData], rows, cols);
+        }
+
     },
     vshopFive(data, query) {
 
@@ -539,7 +563,10 @@ module.exports = {
             return v;
         })
         .value();
+        var count = newData.length;
+        var base = (query.page-1)*20;
+        newData = newData.slice(base, base + 20);
 
-        return util.toTable([newData], rows, cols);
+        return util.toTable([newData], rows, cols, [count]);
     }
 };

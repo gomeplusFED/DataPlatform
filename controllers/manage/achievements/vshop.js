@@ -51,8 +51,77 @@ module.exports = (Router) => {
         router: "/achievements/vshopTwo",
         modelName: ["VshopDetail"],
         platform : false,
-        params(query) {
+        filter_select: [
+            {
+                title: '',
+                filter_key: 'type',
+                groups: [
+                    {
+                        key: 'new_vshop_num',
+                        value: '新增美店数'
+                    },
+                    {
+                        key: 'open_vshop_num',
+                        value: '运营中美店数'
+                    },
+                    {
+                        key: 'visited_vshop_num',
+                        value: '被访问美店数'
+                    },
+                    {
+                        key: 'ordered_vshop_num',
+                        value: '下单美店数'
+                    },
+                    {
+                        key: 'paid_vshop_num',
+                        value: '支付美店数'
+                    },
+                    {
+                        key: 'favorite_vshop_num',
+                        value: '被收藏美店数'
+                    },
+                    {
+                        key: 'new_shelve_item_num',
+                        value: '美店新增上架商品数'
+                    },
+                    {
+                        key: 'browse_item_num',
+                        value: '浏览商品数'
+                    },
+                    {
+                        key: 'browse_item_time',
+                        value: '浏览商品次数'
+                    },
+                    {
+                        key: 'ordered_item_num',
+                        value: '下单商品数'
+                    },
+                    {
+                        key: 'ordered_quantity',
+                        value: '下单商品件数'
+                    },
+                    {
+                        key: 'paid_item_num',
+                        value: '支付商品数'
+                    },
+                    {
+                        key: 'paid_quantity',
+                        value: '支付商品件数'
+                    }
+                ]
+            }
+        ],
+        firstSql(query, params, isCount) {
+            var sql = 'select sum(`'+ query.type + '`) as `'+ query.type +'`,date from ads2_vshop_item_details group by date';
             return {
+                sql: sql,
+                params: params
+            }
+
+        },
+        params(query, param) {
+            return {
+                date : orm.between(param.date.from, param.date.to),
                 day_type : 1
             }
         },
@@ -97,7 +166,7 @@ module.exports = (Router) => {
             }
         },
         filter(data, query, dates, type) {
-            return vshopFilter.vshopThree(data, query.type, dates);
+            return vshopFilter.vshopThree(data, query, dates);
         }
     });
 
@@ -105,6 +174,15 @@ module.exports = (Router) => {
     Router = new api(Router, {
         router: "/achievements/vshopFour",
         modelName: ['VshopMerchandiseResources'],
+        procedure : [{
+            aggregate : {
+                value : ["merchandise_resources"]
+            },
+            sum : ["ordered_num", "paid_num", "ordered_item_num",
+                "ordered_quantity", "paid_item_num", "paid_quantity", "ordered_user_num", "paid_user_num"],
+            groupBy : ["merchandise_resources"],
+            get : ""
+        }],
         platform : false,
         excel_export : true,
         date_picker_data : 1,
@@ -114,7 +192,7 @@ module.exports = (Router) => {
             preMethods: ["excel_export"]
         }],
         filter(data, query, dates, type) {
-            return vshopFilter.vshopFour(data, dates);
+            return vshopFilter.vshopFour(data, query, dates);
         }
     });
 
