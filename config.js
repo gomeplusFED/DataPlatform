@@ -178,8 +178,10 @@ module.exports = {
             href: "#",
             path: [
                 obj.marketingAnalysis.overview(),
-                obj.marketingAnalysis.activityFlow(),
-                obj.marketingAnalysis.couponInfo()
+                obj.marketingAnalysis.all()
+            ],
+            routers : [
+                obj.marketingAnalysis.operating()
             ]
         },
         "15": {

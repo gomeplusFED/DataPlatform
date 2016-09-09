@@ -34,9 +34,6 @@ function connect(app) {
             models.Configure = db.define("tbl_rt_configure", obj.Configure);
             models.UsersAccess = db.define("tbl_rt_user_access", obj.UsersAccess);
             models.UserCompose = db.define("tbl_rt_use_time", obj.UserCompose);
-            models.MarketingFlow = db.define("tbl_rt_marketing_flow", obj.MarketingFlow);
-            models.MarketingCoupon = db.define("tbl_rt_marketing_coupon", obj.MarketingCoupon);
-            models.MarketingCouponDetails = db.define("tbl_rt_marketing_coupon_details", obj.MarketingCouponDetails);
             models.OverviewPage = db.define("ads2_overview_page", obj.OverviewPage);
             models.OverviewPlatf = db.define("ads2_overview_platf", obj.OverviewPlatf);
             models.KpiValue = db.define("tbl_rt_kpi_value", obj.KpiValue);
@@ -113,6 +110,13 @@ function connect(app) {
             models.ItemPie = db.define("ads2_itm_pie" , obj.ItemPie);
             models.ItemRunSales = db.define("ads2_itm_run_sales" , obj.ItemRunSales);
             models.ItemRunTop = db.define("ads2_itm_run_top" , obj.ItemRunTop);
+            //营销
+            models.CamOverview = db.define("ads2_cam_overview" , obj.CamOverview);
+            models.CamCamlistActive = db.define("ads2_cam_camlist_active" , obj.CamCamlistActive);
+            models.CamCamlistChannel = db.define("ads2_cam_camlist_channel" , obj.CamCamlistChannel);
+
+            //9.1
+            models.AdsKeyValue = db.define("ads2_key_value" , obj.AdsKeyValue);
 
             // 美店
             models.VshopDetail = db.define("ads2_vshop_item_details" , obj.VshopDetail);

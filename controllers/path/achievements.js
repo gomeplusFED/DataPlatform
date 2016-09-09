@@ -62,17 +62,17 @@ module.exports = {
                 {
                     type : "chart",
                     title : "商品价格区间分布－新增商品数",
-                    // query_api : "/achievements/productThree"
+                    query_api : "/achievements/productFour"
                 },
                 {
                     type : "chart",
                     title : "商品运营趋势",
-                    // query_api : "/achievements/productFour"
+                    query_api : "/achievements/productFive"
                 },
                 {
                     type : "table",
                     title : "商品运营明细",
-                    // query_api : "/achievements/productFive"
+                    query_api : "/achievements/productSix"
                 }
             ]
         }
@@ -187,21 +187,21 @@ module.exports = {
                     type : "chart",
                     title : "交易趋势",
                     query_api : "/achievements/vtradeTwo"
-                },
-                {
-                    type : "table",
-                    title : "交易明细",
-                    query_api : "/achievements/vtradeThree"
-                },
-                {
-                    type : "table",
-                    title : "妥投与退货",
-                    query_api : "/achievements/vtradeFour"
-                },
-                {
-                    type : "table",
-                    title : "交易top100",
-                    query_api : "/achievements/vtradeFive"
+                //},
+                //{
+                //    type : "table",
+                //    title : "交易明细",
+                //    query_api : "/achievements/vtradeThree"
+                //},
+                //{
+                //    type : "table",
+                //    title : "妥投与退货",
+                //    query_api : "/achievements/vtradeFour"
+                //},
+                //{
+                //    type : "table",
+                //    title : "交易top100",
+                //    query_api : "/achievements/vtradeFive"
                 }
             ]
         }

@@ -17,5 +17,5 @@ module.exports = {
     date : Date,               // COMMENT '时间', 
     ver : String,              // COMMENT '版本', 
     channel : String,          // COMMENT '渠道', 
-    type : String,             // COMMENT '平台',
+    type : String             // COMMENT '平台',
 };
