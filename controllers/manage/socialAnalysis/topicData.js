@@ -80,7 +80,7 @@ module.exports = (Router) => {
         platform : false,
         procedure : [{
             aggregate : {
-                value : topicsTwo.concat(["type"])
+                value : ["type"]
             },
             sum : topicsTwo,
             groupBy : ["type"],
