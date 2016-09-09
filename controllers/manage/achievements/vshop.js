@@ -277,5 +277,42 @@ module.exports = (Router) => {
         }
     });
 
+    // Top 100
+    Router = new api(Router, {
+        router: "/achievements/vtradeFive",
+        modelName: ['VtradeTop'],
+        platform : false,
+        excel_export : true,
+        date_picker_data : 1,
+        showDayUnit : true,
+        flexible_btn:[{
+            content: '<a href="javascript:void(0)">导出</a>',
+            preMethods: ["excel_export"]
+        }],
+        "filter_select": [
+            {
+                "title": "",
+                "filter_key": "type",
+                "groups": [
+                    {
+                        "key": "paid_order_num",
+                        "value": "支付订单数"
+                    },
+                    {
+                        "key": "paid_amount",
+                        "value": "支付金额"
+                    }
+                ]
+            }
+        ],
+        params : function(query , params , sendData){
+            delete params.type;
+            return params;
+        },
+        filter(data, query, dates, type) {
+            return vshopFilter.vtradeFive(data, query.type);
+        }
+    });
+
     return Router;
 };

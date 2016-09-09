@@ -496,6 +496,7 @@ module.exports = {
         })
         .values()
         .sortByOrder([type],['desc'])
+        .slice(0,100)
         .map(function(v,i) {
             v.rank = i + 1;
             return v;
@@ -813,6 +814,72 @@ module.exports = {
             data.name = date;
             return data;
         });
+        return util.toTable([newData], rows, cols);
+    },
+    vtradeFive(data, type) {
+        var source = data.first.data[0],
+            _rows = [
+                [['rank', 'vshop_name', 'paid_order_num', 'paid_item_num', 'paid_user_num', 'paid_item_quantity', 'paid_amount', 'brokerage']]
+            ],
+            _cols = [
+                        [[
+                            {
+                                "caption": "排行",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "美店名称",
+                                "type": "string"
+                            },
+                            {
+                                "caption": "美店支付订单数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "美店支付商品数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "美店支付人数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "美店支付商品件数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "美店支付金额",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "美店佣金金额",
+                                "type": "number"
+                            }
+                        ]]
+                    ];
+        var rows = _rows[0];
+        var cols = _cols[0];
+        var sortName;
+        var keyArray = rows[0];
+
+        //groupBy 美店名称
+        var newData = _(source).groupBy(function(x) {
+            return x.vshop_name;
+        })
+        .mapValues(function(v) {
+            //累加已分组的数据
+            var res = reduceObj(v, keyArray);   
+            return res;
+        })
+        .values()
+        .sortByOrder([type],['desc'])
+        .slice(0,100)
+        .map(function(v,i) {
+            v.rank = i + 1;
+            return v;
+        })
+        .value();
+
         return util.toTable([newData], rows, cols);
     }
 };
