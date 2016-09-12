@@ -209,7 +209,7 @@ module.exports = {
             source[i].person_funs_num = key.person_funs_num || 0;
             source[i].person_funs_num = key.person_funs_num || 0;
             source[i].weiding = 0;
-            source[i].daren_flag = daren_flag[source[i].daren_flag];
+            source[i].daren_flag = daren_flag[source[i].daren_flag] || "";
             newData.push(source[i]);
         }
         return util.toTable([newData], data.rows, data.cols, [count]);
