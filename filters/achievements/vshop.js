@@ -274,7 +274,6 @@ module.exports = {
     vshopThree(data, query, dates) {
         var type = query.type;
         var source = data.first.data[0],
-            now = new Date(),
             _type = 'product, shop',
             _rows = [
                 [['name', 'new_shelve_item_num', 'del_item_num',
@@ -437,7 +436,6 @@ module.exports = {
 
         // console.log(JSON.stringify(dates, null, 4));
         var source = data.first.data[0],
-            now = new Date(),
             _rows = [
                 [['merchandise_resources', 'sum_ordered_num',
                     'sum_paid_num', 'sum_ordered_item_num',
