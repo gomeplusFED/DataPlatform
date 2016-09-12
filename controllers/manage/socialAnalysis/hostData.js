@@ -293,7 +293,7 @@ module.exports = (Router) => {
         secondParams(query, params, data) {
             var group_ids = _.uniq(_.pluck(data.first.data[0], "groupOwner_id")),
                 _params = {
-                    date : params.date,
+                    date : util.getDate(new Date(new Date() - 24 * 60 * 60 * 1000)),
                     group_leader_id : group_ids,
                     key : ["person_topic_num", "person_friends_num", "person_funs_num", "person_funs_num"]
                 };
