@@ -39,13 +39,16 @@ module.exports = {
         }
 
         for(let key of source) {
-            obj[key.type].sum_first_groupOwner_num = key.sum_first_groupOwner_num;
+            if(obj[key.type]) {
+                obj[key.type].sum_first_groupOwner_num = key.sum_first_groupOwner_num;
+                obj[key.type].sum_attention_groupOwner_num = key.sum_attention_groupOwner_num;
+                obj[key.type].sum_cancel_attention_groupOwner_num = key.sum_cancel_attention_groupOwner_num;
+                obj[key.type].sum_new_groupOwner_num = key.sum_new_groupOwner_num;
+            }
+
             obj["总计"].sum_first_groupOwner_num += key.sum_first_groupOwner_num;
-            obj[key.type].sum_new_groupOwner_num = key.sum_new_groupOwner_num;
             obj["总计"].sum_new_groupOwner_num += key.sum_new_groupOwner_num;
-            obj[key.type].sum_attention_groupOwner_num = key.sum_attention_groupOwner_num;
             obj["总计"].sum_attention_groupOwner_num += key.sum_attention_groupOwner_num;
-            obj[key.type].sum_cancel_attention_groupOwner_num = key.sum_cancel_attention_groupOwner_num;
             obj["总计"].sum_cancel_attention_groupOwner_num += key.sum_cancel_attention_groupOwner_num;
         }
 
