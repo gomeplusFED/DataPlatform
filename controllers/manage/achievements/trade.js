@@ -187,18 +187,75 @@ module.exports = (Router) => {
             preMethods: ["excel_export"]
         }],
         filter_select: filter_select_platform,
-        params(query) {
-            var obj = {
-                day_type : 1
-            };
-            if(query.type && query.type !== 'all') {
-                obj.type = query.type;
-            }
-            return obj;
-        },
+        //params(query) {
+        //    var obj = {
+        //        day_type : 1
+        //    };
+        //    if(query.type && query.type !== 'all') {
+        //        obj.type = query.type;
+        //    }
+        //    return obj;
+        //},
         filter(data, query, dates, type) {
             return vshopFilter.vtradeThree(data, dates);
-        }
+        },
+        rows : [
+            ['name', 'ordered_num', 'paid_num',
+                'ordered_user_num', 'paid_user_num',
+                'ordered_amount', 'trading_amount',
+                'paid_amount', 'custmer_price',
+                'order_price', 'rebuy_rate', 'brokerage']
+        ],
+        cols : [[
+            {
+                "caption": "日期",
+                "type": "string"
+            },
+            {
+                "caption": "下单总量",
+                "type": "number"
+            },
+            {
+                "caption": "支付订单量",
+                "type": "number"
+            },
+            {
+                "caption": "下单人数",
+                "type": "number"
+            },
+            {
+                "caption": "支付人数",
+                "type": "number"
+            },
+            {
+                "caption": "下单金额",
+                "type": "string"
+            },
+            {
+                "caption": "成交金额",
+                "type": "number"
+            },
+            {
+                "caption": "支付金额",
+                "type": "number"
+            },
+            {
+                "caption": "客单价",
+                "type": "number"
+            },
+            {
+                "caption": "笔单价",
+                "type": "number"
+            },
+            {
+                "caption": "复购率",
+                "type": "string"
+            },
+            {
+                "caption": "佣金金额",
+                "type": "number"
+            }
+        ]]
     });
 
     // 妥投与退货
