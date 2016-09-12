@@ -23,16 +23,13 @@ var vshopdict = {
                 };
 var reduceObj = function(objArray, keyArray) {
     return _.reduce(objArray, function(result, obj) {
-        _.keys(obj).forEach(function(key) {
-
-            if (keyArray.indexOf(key) !== -1) {
+        keyArray.forEach(function(key) {
                 if (_.isNumber(obj[key])) {
                     result[key] = obj[key] + (result[key] || 0);
                 }
                 else {
-                    result[key] = obj[key];
+                    result[key] = obj[key] || 0;
                 }
-            }
         });
       return result;
     }, {});
@@ -47,7 +44,11 @@ var trimData = function (source, keyArray, sdate, edate) {
         return (sdate.getTime() <= obj.date.getTime() &&
                 obj.date.getTime() < edate.getTime() );
     });
-    
+    if(filterData.length === 0) {
+        var obj = {};
+        keyArray.forEach(x => obj[x] = 0);
+        filterData.push(obj);
+    }
     //累加数据
     return reduceObj(filterData, keyArray);
 }
@@ -252,11 +253,11 @@ module.exports = {
             map = {};
         map[query.type] = vshopdict[query.type];
         var keyArray = _.keys(map);
-
+        console.log(JSON.stringify(source,null,4));
         dates.forEach(function(date) {
             newData[date] = _.find(source,function(x){
                 return util.getDate(x.date) === date;
-            }) || 0;
+            }) || { new_vshop_num: 0};
         });
 
         return [{
