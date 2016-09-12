@@ -515,79 +515,15 @@ module.exports = {
 
     },
     vshopFive(data, query) {
-        var type = query.type;
-        var source = data.first.data[0],
-            _rows = [
-                [['rank', 'vshop_name', 'sum_visitor_num', 'sum_visited_time', 'sum_shared_time', 'sum_favorited_time']]
-            ],
-            _cols = [
-                        [[
-                            {
-                                "caption": "排行",
-                                "type": "number"
-                            },
-                            {
-                                "caption": "美店名称",
-                                "type": "string"
-                            },
-                            {
-                                "caption": "美店访问人数",
-                                "type": "number"
-                            },
-                            {
-                                "caption": "美店访问次数",
-                                "type": "number"
-                            },
-                            {
-                                "caption": "美店被分享次数",
-                                "type": "number"
-                            },
-                            {
-                                "caption": "美店被收藏次数",
-                                "type": "number"
-                            }
-                        ]]
-                    ];
-        var rows = _rows[0];
-        var cols = _cols[0];
-        var keyArray = rows[0];
+        var source = data.first.data,
+            count = data.first.count[0].count,
+            page = query.page || 1;
 
-        //groupBy 美店名称
-        // var newData = _(source)
-        // .groupBy(function(x) {
-        //     return x.vshop_name;
-        // })
-        // .mapValues(function(v) {
-        //     //累加已分组的数据
-        //     var res = reduceObj(v, keyArray);   
-        //     return res;
-        // })
-        // .values()
-        // .sortByOrder(['sum_'+type],['desc'])
-        // .slice(0,100)
-        // .map(function(v,i) {
-        //     v.rank = i + 1;
-        //     return v;
-        // })
-        // .value();
-
-        var newData = _.sortByOrder(source, ['sum_'+type] ,['desc']);
-        var count = newData.length;
-        if (count >20) {
-            count = count >100 ? 100 :count;
-            var base = (query.page-1)*20;
-            newData = newData.slice(base, base + 20);
-            newData = _.map(newData, function(v,i) {
-                v.rank = base + i + 1;
-                return v;
-            });
-            return util.toTable([newData], rows, cols, [count]);
-        } else {
-            newData = _.map(newData, function(v,i) {
-                v.rank = i + 1;
-                return v;
-            });
-            return util.toTable([newData], rows, cols);
+        for(let i = 0; i < source.length; i++) {
+            source[i].rank = (page - 1) * 20 + i + 1;
         }
+        // console.log(JSON.stringify(source,null,4));
+
+        return util.toTable([source], data.rows, data.cols, [count]);
     }
 };

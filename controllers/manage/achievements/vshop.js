@@ -189,19 +189,32 @@ module.exports = (Router) => {
         }
     });
 
-    // 流量Top 100
+    // Top 100
     Router = new api(Router, {
         router: "/achievements/vshopFive",
         modelName: ['VshopFlowTop'],
-        procedure : [{
-            aggregate : {
-                value : ["vshop_name"]
-            },
-            sum : ["visitor_num", "visited_time", "shared_time",
-                "favorited_time"],
-            groupBy : ["vshop_name"],
-            get : ""
-        }],
+        paging : [true],
+        firstSql(query, params, isCount) {
+            let _params = [query.startTime];
+            if(isCount) {
+                let sql = `SELECT COUNT(*) count FROM ads2_vshop_flow_top WHERE date=?`;
+
+                return {
+                    sql : sql,
+                    params : _params
+                };
+            } else {
+                let sql = `SELECT * FROM ads2_vshop_flow_top WHERE date=? ORDER BY ${query.filter_key} LIMIT ?,?`,
+                    page = query.page - 1 || 0,
+                    offset = query.to || (page * query.limit),
+                    limit = query.from || query.limit || 0;
+
+                return {
+                    sql : sql,
+                    params : _params.concat([offset, +limit])
+                };
+            }
+        },
         platform : false,
         excel_export : true,
         date_picker_data : 1,
@@ -213,7 +226,7 @@ module.exports = (Router) => {
         filter_select: [
             {
                 title: '',
-                filter_key: 'type',
+                filter_key: 'filter_key',
                 groups: [
                     {
                         key: 'visitor_num',
@@ -226,14 +239,40 @@ module.exports = (Router) => {
                 ]
             }
         ],
-        params : function(query , params , sendData){
-            delete params.type;
-            return params;
-        },
         filter(data, query, dates, type) {
             return vshopFilter.vshopFive(data, query);
-        }
+        },
+        rows : [
+            ['rank', 'vshop_name', 'visitor_num', 'visited_time', 'shared_time', 'favorited_time']
+        ],
+        cols : [[
+                    {
+                        "caption": "排行",
+                        "type": "number"
+                    },
+                    {
+                        "caption": "美店名称",
+                        "type": "string"
+                    },
+                    {
+                        "caption": "美店访问人数",
+                        "type": "number"
+                    },
+                    {
+                        "caption": "美店访问次数",
+                        "type": "number"
+                    },
+                    {
+                        "caption": "美店被分享次数",
+                        "type": "number"
+                    },
+                    {
+                        "caption": "美店被收藏次数",
+                        "type": "number"
+                    }
+        ]]
     });
+
 
     return Router;
 };
