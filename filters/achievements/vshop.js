@@ -3,8 +3,10 @@
  * @date 20160906
  * @fileoverview 美店
  */
-var util = require("../../utils"),
-    _ = require("lodash");
+const util = require("../../utils"),
+    _ = require("lodash"),
+    moment = require("moment");
+
 
 var vshopdict = {
                     new_vshop_num: '新增美店数',
@@ -273,10 +275,11 @@ module.exports = {
     },
     vshopThree(data, query, dates) {
         var type = query.type;
+        var count = data.first.count;
         var source = data.first.data[0],
             _type = 'product, shop',
             _rows = [
-                [['name', 'new_shelve_item_num', 'del_item_num',
+                [['date', 'new_shelve_item_num', 'del_item_num',
                     'off_shelve_item_num', 'browse_item_num',
                     'browse_item_time', 'add2cart_item_num',
                     'add2cart_quantity', 'ordered_item_num',
@@ -284,7 +287,7 @@ module.exports = {
                     'paid_quantity', 'shared_item_num',
                     'item_share_time', 'favorited_item_num',
                     'item_favorited_num', 'delivery_quantity']],
-                [['name', 'new_vshop_num', 'total_vshop_num',
+                [['date', 'new_vshop_num', 'total_vshop_num',
                     'open_vshop_num', 'silent_vshop_num',
                     'visited_vshop_num', 'favorite_vshop_num',
                     'ordered_vshop_num', 'paid_vshop_num']]
@@ -414,27 +417,16 @@ module.exports = {
             cols = _cols[1];
         }
         var keyArray = rows[0];
-        var newData = dates.map(function(date) {
-            //当天0点到24点
-            var date0clock = new Date(date+ " 00:00:00");
-            var date24clock = new Date(date+ " 23:59:59");
-            var data =  trimData(source, keyArray, date0clock, date24clock);
-            data.name = date;
-            return data;
+
+        source.forEach(item => {
+            item.date = moment(item.date).format("YYYY-MM-DD");
         });
-        var count = newData.length;
-        if(count>20) {
-            
-            var base = (query.page-1)*20;
-            newData = newData.slice(base, base + 20);
-            return util.toTable([newData], rows, cols, [count]);
-        } else {
-            return util.toTable([newData], rows, cols);
-        }
+
+        return util.toTable([source], rows, cols, [count]);
     },
     vshopFour(data, query, dates) {
 
-        // console.log(JSON.stringify(dates, null, 4));
+        var count = data.first.count;
         var source = data.first.data[0],
             _rows = [
                 [['merchandise_resources', 'ordered_num',
@@ -488,7 +480,6 @@ module.exports = {
         cols = _cols[0];
         var keyArray = rows[0];
         var newData = source;
-        var count = newData.length;
         return util.toTable([newData], rows, cols, [count]);
 
     },

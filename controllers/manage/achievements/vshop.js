@@ -128,6 +128,7 @@ module.exports = (Router) => {
     Router = new api(Router, {
         router: "/achievements/vshopThree",
         modelName: ['VshopDetail'],
+        paging : [true],
         platform : false,
         excel_export : true,
         flexible_btn:[{
@@ -152,11 +153,8 @@ module.exports = (Router) => {
         ],
         params(query,param) {
             // 取出近7天记录
-            // console.log(JSON.stringify(arguments,null,4));
-            return {
-                date : orm.between(param.date.from, param.date.to),
-                day_type : 1
-            }
+            delete param.type;
+            return param
         },
         filter(data, query, dates, type) {
             return vshopFilter.vshopThree(data, query, dates);
