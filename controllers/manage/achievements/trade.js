@@ -316,15 +316,28 @@ module.exports = (Router) => {
     Router = new api(Router, {
         router: "/achievements/vtradeFive",
         modelName: ['VtradeTop'],
-        procedure : [{
-            aggregate : {
-                value : ["vshop_name"]
-            },
-            sum : ["paid_order_num", "paid_item_num", "paid_user_num",
-                "paid_item_quantity", "paid_amount", "brokerage"],
-            groupBy : ["vshop_name"],
-            get : ""
-        }],
+        paging : [true],
+        fistSql(query, params, isCount) {
+            let _params = [query.startTime];
+            if(isCount) {
+                let sql = `SELECT COUNT(*) FROM ads2_vshop_delivery_returns WHERE date=?`;
+
+                return {
+                    sql : sql,
+                    params : _params
+                };
+            } else {
+                let sql = `SELECT * FROM ads2_vshop_delivery_returns WHERE date=? ORDER BY ${query.filter_key} LIMIT ?,?`,
+                    page = query.page - 1 || 0,
+                    offset = query.to || (page * query.limit),
+                    limit = query.from || query.limit || 0;
+
+                return {
+                    sql : sql,
+                    params : _params.concat([offset, limit])
+                };
+            }
+        },
         platform : false,
         excel_export : true,
         date_picker_data : 1,
@@ -336,7 +349,7 @@ module.exports = (Router) => {
         filter_select: [
             {
                 title: '',
-                filter_key: 'type',
+                filter_key: 'filter_key',
                 groups: [
                     {
                         key: 'paid_order_num',

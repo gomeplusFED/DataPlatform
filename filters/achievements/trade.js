@@ -135,9 +135,12 @@ module.exports = {
 
         for(let item of source) {
             item.date = moment(item.date).format("YYYY-MM-DD");
+            item.refund_rate = util.toFixed(item.refund_item_quantity, item.paid_item_quantity);
+            item.delivery_amount = item.delivery_amount.toFixed(2);
+            item.refund_amount = item.refund_amount.toFixed(2);
         }
 
-        return util.toTable([source], rows, cols, [count]);
+        return util.toTable([source], data.rows, data.cols, [count]);
     },
     vtradeFive(data, query) {
         var type = query.type;
