@@ -146,7 +146,6 @@ module.exports = {
 
         for(let item of source){
             ids.push(item.topic_id);
-            item.topic_create_time = util.getDate(item.topic_create_time);
             newData.push(item);
         }
 
