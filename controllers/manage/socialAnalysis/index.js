@@ -21,7 +21,7 @@ module.exports = (Router) => {
         date_picker : false,
         //date_picker_data: 1,
         params() {
-            var now = new Date(new Date() - 24 * 60 * 60 * 1000),
+            var now = new Date(),
                 date = util.getDate(now);
 
             return {
@@ -337,12 +337,10 @@ module.exports = (Router) => {
             return {};
         },
         thirdParams(query , params ,sendData){
-            var date = util.getDate(new Date(new Date() - 24 * 60 * 60 * 1000));
             var param = {
                 group_id : [],
                 key : ["group_person_num", "group_topic_num", "topic_praise_num",
-                    "topic_collect_num", "topic_reply_num"],
-                date : date
+                    "topic_collect_num", "topic_reply_num"]
             };
             for(let item of sendData.first.data[0]){
                 param.group_id.push(item.group_id);
