@@ -182,25 +182,17 @@ module.exports = (Router) => {
         modelName: ['VtradeDetail'],
         platform : false,
         excel_export : true,
+        paging : [true],
         flexible_btn:[{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ["excel_export"]
         }],
         filter_select: filter_select_platform,
-        //params(query) {
-        //    var obj = {
-        //        day_type : 1
-        //    };
-        //    if(query.type && query.type !== 'all') {
-        //        obj.type = query.type;
-        //    }
-        //    return obj;
-        //},
         filter(data, query, dates, type) {
-            return vshopFilter.vtradeThree(data, dates);
+            return filter.vtradeThree(data, dates);
         },
         rows : [
-            ['name', 'ordered_num', 'paid_num',
+            ['date', 'ordered_num', 'paid_num',
                 'ordered_user_num', 'paid_user_num',
                 'ordered_amount', 'trading_amount',
                 'paid_amount', 'custmer_price',
@@ -263,39 +255,89 @@ module.exports = (Router) => {
         router: "/achievements/vtradeFour",
         modelName: ['VtradeDelivery'],
         platform : false,
+        paging : [true],
         excel_export : true,
         flexible_btn:[{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ["excel_export"]
         }],
         filter_select: filter_select_platform,
-        params(query) {
-            var obj = {
-                day_type : 1
-            }
-            if(query.type && query.type !== 'all') {
-                obj.type = query.type;
-            }
-            return obj;
-        },
         filter(data, query, dates, type) {
-            return vshopFilter.vtradeFour(data, dates);
-        }
+            return filter.vtradeFour(data, dates);
+        },
+        rows : [
+            ['date', 'delivery_item_quantity',
+                'delivery_amount', 'refund_amount',
+                'refund_item_quantity', 'refund_item_num',
+                'refund_user_num', 'refund_order_num', 'refund_rate']
+        ],
+        cols : [[
+            {
+                "caption": "日期",
+                "type": "string"
+            },
+            {
+                "caption": "妥投商品件数",
+                "type": "number"
+            },
+            {
+                "caption": "妥投金额",
+                "type": "number"
+            },
+            {
+                "caption": "退款额",
+                "type": "number"
+            },
+            {
+                "caption": "退货商品件数",
+                "type": "number"
+            },
+            {
+                "caption": "退货商品数",
+                "type": "string"
+            },
+            {
+                "caption": "退款人数",
+                "type": "number"
+            },
+            {
+                "caption": "退货订单数",
+                "type": "number"
+            },
+            {
+                "caption": "退货率",
+                "type": "string",
+                help : "统计时间内，退货商品件数/支付商品件数"
+            }
+        ]]
     });
 
     // Top 100
     Router = new api(Router, {
         router: "/achievements/vtradeFive",
         modelName: ['VtradeTop'],
-        procedure : [{
-            aggregate : {
-                value : ["vshop_name"]
-            },
-            sum : ["paid_order_num", "paid_item_num", "paid_user_num",
-                "paid_item_quantity", "paid_amount", "brokerage"],
-            groupBy : ["vshop_name"],
-            get : ""
-        }],
+        paging : [true],
+        firstSql(query, params, isCount) {
+            let _params = [query.startTime];
+            if(isCount) {
+                let sql = `SELECT COUNT(*) count FROM ads2_vshop_transaction_top WHERE date=?`;
+
+                return {
+                    sql : sql,
+                    params : _params
+                };
+            } else {
+                let sql = `SELECT * FROM ads2_vshop_transaction_top WHERE date=? ORDER BY ${query.filter_key} LIMIT ?,?`,
+                    page = query.page - 1 || 0,
+                    offset = query.to || (page * query.limit),
+                    limit = query.from || query.limit || 0;
+
+                return {
+                    sql : sql,
+                    params : _params.concat([offset, +limit])
+                };
+            }
+        },
         platform : false,
         excel_export : true,
         date_picker_data : 1,
@@ -307,7 +349,7 @@ module.exports = (Router) => {
         filter_select: [
             {
                 title: '',
-                filter_key: 'type',
+                filter_key: 'filter_key',
                 groups: [
                     {
                         key: 'paid_order_num',
@@ -320,13 +362,49 @@ module.exports = (Router) => {
                 ]
             }
         ],
-        params : function(query , params , sendData){
-            delete params.type;
-            return params;
-        },
         filter(data, query, dates, type) {
-            return vshopFilter.vtradeFive(data, query);
-        }
+            return filter.vtradeFive(data, query);
+        },
+        rows : [
+            ['rank', 'vshop_name', 'sum_paid_order_num',
+                'sum_paid_item_num', 'sum_paid_user_num',
+                'sum_paid_item_quantity', 'sum_paid_amount',
+                'sum_brokerage']
+        ],
+        cols : [[
+            {
+                "caption": "排行",
+                "type": "number"
+            },
+            {
+                "caption": "美店名称",
+                "type": "string"
+            },
+            {
+                "caption": "美店支付订单数",
+                "type": "number"
+            },
+            {
+                "caption": "美店支付商品数",
+                "type": "number"
+            },
+            {
+                "caption": "美店支付人数",
+                "type": "number"
+            },
+            {
+                "caption": "美店支付商品件数",
+                "type": "number"
+            },
+            {
+                "caption": "美店支付金额",
+                "type": "number"
+            },
+            {
+                "caption": "美店佣金金额",
+                "type": "number"
+            }
+        ]]
     });
 
     return Router;

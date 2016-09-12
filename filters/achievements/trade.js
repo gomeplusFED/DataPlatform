@@ -111,148 +111,46 @@ module.exports = {
         }];
     },
     vtradeThree(data, dates) {
-        let source = data.first.data[0];
+        let source = data.first.data[0],
+            count = data.first.count;
 
         for(let item of source) {
+            item.ordered_amount = item.ordered_amount.toFixed(2);
+            item.trading_amount = item.trading_amount.toFixed(2);
+            item.paid_amount = item.paid_amount.toFixed(2);
             item.date = moment(item.date).format("YYYY-MM-DD");
+            item.custmer_price = util.division(item.paid_amount, item.paid_user_num);
+            item.order_price = util.division(item.paid_amount, item.paid_num);
+            item.rebuy_rate = util.division(
+                item.ordered_usernum_last30day,
+                item.paid_usernum_last30day
+            );
         }
 
-        return util.toTable([newData], rows, cols);
+        return util.toTable([source], data.rows, data.cols, [count]);
     },
     vtradeFour(data, dates) {
         var source = data.first.data[0],
-            now = new Date(),
-            _rows = [
-                [['name', 'delivery_item_quantity', 'delivery_amount', 'refund_amount', 'refund_item_quantity', 'refund_item_num', 'refund_user_num', 'refund_order_num', 'refund_rate']]
-            ],
-            _cols = [
-                [[
-                    {
-                        "caption": "日期",
-                        "type": "string"
-                    },
-                    {
-                        "caption": "妥投商品件数",
-                        "type": "number"
-                    },
-                    {
-                        "caption": "妥投金额",
-                        "type": "number"
-                    },
-                    {
-                        "caption": "退款额",
-                        "type": "number"
-                    },
-                    {
-                        "caption": "退货商品件数",
-                        "type": "number"
-                    },
-                    {
-                        "caption": "退货商品数",
-                        "type": "string"
-                    },
-                    {
-                        "caption": "退款人数",
-                        "type": "number"
-                    },
-                    {
-                        "caption": "退货订单数",
-                        "type": "number"
-                    },
-                    {
-                        "caption": "退货率",
-                        "type": "string"
-                    }
-                ]]
-            ];
-        var rows = _rows[0];
-        var cols = _cols[0];
+            count = data.first.count;
 
-        var keyArray = rows[0];
-        //添加退货率需要的字段
-        keyArray.push('paid_item_quantity');
+        for(let item of source) {
+            item.date = moment(item.date).format("YYYY-MM-DD");
+            item.refund_rate = util.toFixed(item.refund_item_quantity, item.paid_item_quantity);
+            item.delivery_amount = item.delivery_amount.toFixed(2);
+            item.refund_amount = item.refund_amount.toFixed(2);
+        }
 
-        var newData = dates.map(function(date) {
-            //当天0点到24点
-            var date0clock = new Date(date+ " 00:00:00");
-            var date24clock = new Date(date+ " 23:59:59");
-            var data =  trimData(source, keyArray, date0clock, date24clock);
-            // 退货率：统计时间内，退货商品件数/支付商品件数
-            data.refund_rate = util.toFixed(data.refund_item_quantity, data.paid_item_quantity);
-            data.name = date;
-            return data;
-        });
-        return util.toTable([newData], rows, cols);
+        return util.toTable([source], data.rows, data.cols, [count]);
     },
     vtradeFive(data, query) {
-        var type = query.type;
-        var source = data.first.data[0],
-            _rows = [
-                [['rank', 'vshop_name', 'sum_paid_order_num', 'sum_paid_item_num', 'sum_paid_user_num', 'sum_paid_item_quantity', 'sum_paid_amount', 'sum_brokerage']]
-            ],
-            _cols = [
-                        [[
-                            {
-                                "caption": "排行",
-                                "type": "number"
-                            },
-                            {
-                                "caption": "美店名称",
-                                "type": "string"
-                            },
-                            {
-                                "caption": "美店支付订单数",
-                                "type": "number"
-                            },
-                            {
-                                "caption": "美店支付商品数",
-                                "type": "number"
-                            },
-                            {
-                                "caption": "美店支付人数",
-                                "type": "number"
-                            },
-                            {
-                                "caption": "美店支付商品件数",
-                                "type": "number"
-                            },
-                            {
-                                "caption": "美店支付金额",
-                                "type": "number"
-                            },
-                            {
-                                "caption": "美店佣金金额",
-                                "type": "number"
-                            }
-                        ]]
-                    ];
-        var rows = _rows[0];
-        var cols = _cols[0];
-        var keyArray = rows[0];
+        var source = data.first.data,
+            count = data.first.count[0].count,
+            page = query.page || 1;
 
-        //groupBy 美店名称
-        var newData = _(source)
-        // .groupBy(function(x) {
-        //     return x.vshop_name;
-        // })
-        // .mapValues(function(v) {
-        //     //累加已分组的数据
-        //     var res = reduceObj(v, keyArray);   
-        //     return res;
-        // })
-        // .values()
-        .sortByOrder(['sum_'+type],['desc'])
-        // .slice(0,100)
-        .map(function(v,i) {
-            v.rank = i + 1;
-            return v;
-        })
-        .value();
+        for(let i = 0; i < source.length; i++) {
+            source[i].rank = (page - 1) * 20 + i + 1;
+        }
 
-        var count = newData.length;
-        var base = (query.page-1)*20;
-        newData = newData.slice(base, base + 20);
-
-        return util.toTable([newData], rows, cols, [count]);
+        return util.toTable([source], data.rows, data.cols, [count]);
     }
 };
