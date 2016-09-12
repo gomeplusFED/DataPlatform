@@ -167,15 +167,7 @@ module.exports = (Router) => {
     Router = new api(Router, {
         router: "/achievements/vshopFour",
         modelName: ['VshopMerchandiseResources'],
-        procedure : [{
-            aggregate : {
-                value : ["merchandise_resources"]
-            },
-            sum : ["ordered_num", "paid_num", "ordered_item_num",
-                "ordered_quantity", "paid_item_num", "paid_quantity", "ordered_user_num", "paid_user_num"],
-            groupBy : ["merchandise_resources"],
-            get : ""
-        }],
+        paging : [true],
         platform : false,
         excel_export : true,
         date_picker_data : 1,
