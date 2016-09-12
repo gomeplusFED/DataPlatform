@@ -115,6 +115,9 @@ module.exports = {
 
         for(let item of source) {
             item.date = moment(item.date).format("YYYY-MM-DD");
+            item.custmer_price = util.division(item.paid_amount, item.paid_user_num);
+            item.order_price = util.division(item.paid_amount, item.paid_num);
+            item.order_price = util.division(item.paid_amount, item.paid_num);
         }
 
         return util.toTable([newData], rows, cols);
