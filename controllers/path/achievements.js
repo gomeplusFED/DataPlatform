@@ -83,23 +83,20 @@ module.exports = {
             path : "/achievements/productSale",
             display : true,
             defaultData : [
-                {
-                    type : "chart",
-                    query_api : "/achievements/productZero"
-                },
-                {
-                    type : "chart",
-                    query_api : "/achievements/productZero2"
-                },
+                 {
+                     type : "chart",
+                     query_api : "/achievements/product22Zero"
+                 },
                 {
                     type : "table",
                     title : "商品销售总览",
                     query_api : "/achievements/productSaleOne"
-                },//{
-                //     type : "table",
-                //     title : "商品销售趋势",
-                //     // query_api : "/achievements/productSaleTwo"
-                // },
+                },
+                {
+                    type : "chart",
+                    title : "商品销售趋势",
+                    query_api : "/achievements/productSaleTwo"
+                },
                 {
                     type : "table",
                     title : "商品销售明细",

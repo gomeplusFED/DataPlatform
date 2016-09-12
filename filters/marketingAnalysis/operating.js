@@ -4,8 +4,7 @@
  * @fileoverview 活动流量
  */
 var util = require("../../utils"),
-    moment = require("moment"),
-    _ = require("lodash");
+    moment = require("moment");
 
 module.exports = {
     operatingOne(data, query, dates) {
@@ -78,6 +77,7 @@ module.exports = {
         let source = data.first.data,
             count = data.first.count,
             second = data.second.data[0],
+            config = {},
             filter_type = query.filter_type || "date",
             filter_key = query.filter_key,
             rowsObj = {
@@ -204,6 +204,22 @@ module.exports = {
                 caption : "渠道",
                 type : "string"
             }].concat(colsObj[filter_key])];
+            for(let key of second) {
+                config[key.channel_id] = key.channel_name;
+            }
         }
+
+        for(let item of source) {
+            if(item.channel_no) {
+                item.channel_no = config[item.channel_no];
+            } else {
+                item.date = moment(item.date).format("YYYY-MM-DD");
+            }
+            item.rate = util.toFixed(item.coupon_use_num, item.coupon_get_num);
+            item.pay_rate = util.toFixed(item.pay_user, item.active_uv);
+            item.product_rate = util.toFixed(item.product_pv, item.active_pv);
+        }
+
+        return util.toTable([source], rows, cols, [count]);
     }
 };

@@ -8,7 +8,7 @@ var _ = require("lodash"),
 
 module.exports = {
     provincesOne(data, filter_key) {
-        var source = data.data,
+        var source = data.first.data[0],
             newData = {},
             tArray = [],
             array = util.uniq(_.pluck(source, "key_name")),
@@ -52,9 +52,9 @@ module.exports = {
         }]
     },
     provincesTwo(data, filter_key) {
-        var source = data.data,
-            count = data.dataCount,
-            sum = data.dataSum,
+        var source = data.first.data[0],
+            count = data.first.count,
+            sum = data.first.sum,
             cols_name = "";
         if(filter_key === "terminal_province") {
             cols_name = "省市";
@@ -63,8 +63,8 @@ module.exports = {
         }
         data.cols[0][0].caption = cols_name;
         for(var key of source) {
-            key.new_users_rate = util.toFixed(key.value, sum[1]);
-            key.start_up_rate = util.toFixed(key.value3, sum[2]);
+            key.new_users_rate = util.toFixed(key.value, sum[0]);
+            key.start_up_rate = util.toFixed(key.value3, sum[1]);
         }
         return util.toTable([source], data.rows, data.cols, [count]);
     }

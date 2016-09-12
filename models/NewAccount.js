@@ -15,7 +15,5 @@ module.exports = {
     start_up: Number,
     startup_per: Number,
     type: String,
-    ver: String,
-    channel: String,
     day_type: Number
 };

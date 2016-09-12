@@ -30,7 +30,7 @@ module.exports = (Router) => {
 
             return {
                 date : orm.between(date + " 00:00:00", date + " 23:59:59"),
-                key : ["all_topic_num", "all_topic_reply_num", "all_praise_num"]
+                key : ["all_topic_num", "all_topic_reply_num", "all_topic_subReply_num", "all_praise_num"]
             };
         },
         procedure : [{
@@ -50,7 +50,7 @@ module.exports = (Router) => {
             customMethods: ''
         }],*/
         rows: [
-            ["all_topic_num", "all_topic_reply_num", "all_praise_num"]
+            ["all_topic_num", "all", "all_praise_num"]
         ],
         cols: [
             [{
@@ -150,23 +150,23 @@ module.exports = (Router) => {
             get : ""
         }],
         filter_select: [
-            {
-                title: '平台选择',
-                filter_key: 'type',
-                groups: [{
-                    key: ['APP','WAP','PC'],
-                    value: '全部平台'
-                },{
-                    key: 'APP',
-                    value: 'APP'
-                },{
-                    key: 'WAP',
-                    value: 'WAP'
-                },{
-                    key: 'PC',
-                    value: 'PC'
-                }]
-            },
+            //{
+            //    title: '平台选择',
+            //    filter_key: 'type',
+            //    groups: [{
+            //        key: ['APP','WAP','PC'],
+            //        value: '全部平台'
+            //    },{
+            //        key: 'APP',
+            //        value: 'APP'
+            //    },{
+            //        key: 'WAP',
+            //        value: 'WAP'
+            //    },{
+            //        key: 'PC',
+            //        value: 'PC'
+            //    }]
+            //},
             {
                 title: "指标",
                 filter_key: "filter_key",
@@ -234,23 +234,23 @@ module.exports = (Router) => {
             });
         },
         filter_select: [
-            {
-                title: "平台选择",
-                filter_key : 'type',
-                groups: [{
-                    key: ['APP','WAP','PC'],
-                    value: '全部平台'
-                },{
-                    key: 'APP',
-                    value: 'APP'
-                },{
-                    key: 'WAP',
-                    value: 'WAP'
-                },{
-                    key: 'PC',
-                    value: 'PC'
-                }]
-            },
+            //{
+            //    title: "平台选择",
+            //    filter_key : 'type',
+            //    groups: [{
+            //        key: ['APP','WAP','PC'],
+            //        value: '全部平台'
+            //    },{
+            //        key: 'APP',
+            //        value: 'APP'
+            //    },{
+            //        key: 'WAP',
+            //        value: 'WAP'
+            //    },{
+            //        key: 'PC',
+            //        value: 'PC'
+            //    }]
+            //},
             {
                 title: '指标选择',
                 filter_key: 'filter_key',
@@ -331,8 +331,8 @@ module.exports = (Router) => {
                         };
                         filter_select.groups.push(obj);
                     }
-                    
-                    if(this.filter_select.length <3){
+
+                    if(this.filter_select.length < 2){
                         this.filter_select.push(filter_select);
                     }
                     cb(null, this.filter_select);
@@ -342,23 +342,23 @@ module.exports = (Router) => {
             });
         },
         filter_select: [
-            {
-                title: "平台选择",
-                filter_key : 'type',
-                groups: [{
-                    key: ['APP','WAP','PC'],
-                    value: '全部平台'
-                },{
-                    key: 'APP',
-                    value: 'APP'
-                },{
-                    key: 'WAP',
-                    value: 'WAP'
-                },{
-                    key: 'PC',
-                    value: 'PC'
-                }]
-            },
+            //{
+            //    title: "平台选择",
+            //    filter_key : 'type',
+            //    groups: [{
+            //        key: ['APP','WAP','PC'],
+            //        value: '全部平台'
+            //    },{
+            //        key: 'APP',
+            //        value: 'APP'
+            //    },{
+            //        key: 'WAP',
+            //        value: 'WAP'
+            //    },{
+            //        key: 'PC',
+            //        value: 'PC'
+            //    }]
+            //},
             {
                 title: '指标选择',
                 filter_key: 'filter_key2',
@@ -393,6 +393,7 @@ module.exports = (Router) => {
         paging : [true, false, false],
         date_picker_data: 1,
         showDayUnit: true,
+        control_table_col : true,
         search : {
             show : true,
             title: "请输入话题ID",
@@ -406,7 +407,8 @@ module.exports = (Router) => {
             return {
                 topic_id : topic_ids,
                 date : orm.between(date + " 00:00:00", date + " 23:59:59"),
-                key : ["topic_reply_num", "topic_praise_num", "topic_subreply_num", "topic_collect_num"]
+                key : ["topic_reply_num", "topic_praise_num", "topic_subreply_user_num",
+                    "topic_reply_user_num", "topic_subreply_num", "topic_collect_num"]
             };
         },
         thirdParams(query, params, data) {
@@ -421,8 +423,8 @@ module.exports = (Router) => {
             get : ""
         }, false],
         firstSql(query, params, isCount) {
-            let keys = [query.startTime, query.endTime, query.day_type, query.type];
-            let where = ["date BETWEEN ? AND ?", "day_type=?", "type in ?"];
+            let keys = [query.startTime, query.endTime, query.day_type];
+            let where = ["date BETWEEN ? AND ?", "day_type=?"];
             if(query.topic_id) {
                 keys.push(query.topic_id);
                 where.push("topic_id=?");
@@ -444,23 +446,24 @@ module.exports = (Router) => {
             }
         },
         filter_select: [
+            //{
+            //    title: '',
+            //    filter_key: 'type',
+            //    groups: [{
+            //        key: ['APP', "WAP", "PC"],
+            //        value: '全部'
+            //    }, {
+            //        key: 'APP',
+            //        value: 'APP'
+            //    }, {
+            //        key: 'WAP',
+            //        value: 'WAP'
+            //    }, {
+            //        key: 'PC',
+            //        value: 'PC'
+            //    }]
+            //},
             {
-                title: '',
-                filter_key: 'type',
-                groups: [{
-                    key: ['APP', "WAP", "PC"],
-                    value: '全部'
-                }, {
-                    key: 'APP',
-                    value: 'APP'
-                }, {
-                    key: 'WAP',
-                    value: 'WAP'
-                }, {
-                    key: 'PC',
-                    value: 'PC'
-                }]
-            }, {
                 title: '排行',
                 filter_key: 'filter_key',
                 groups: [{
@@ -491,7 +494,7 @@ module.exports = (Router) => {
                 "category_id_2", "PV", "UV", "publisher_id", "publisher_name",
                 "new_topic_reply_num", "new_topic_reply_user_num",
                 //"rate",
-                "topic_reply_num", "topic_reply_user_num", "topic_rate", "new_topic_like_num",
+                "reply_num", "reply_user_num", "topic_rate", "new_topic_like_num",
                 "topic_praise_num", "new_topic_save_num", "topic_collect_num", "new_topic_share_num",
                 "operating"]
         ],

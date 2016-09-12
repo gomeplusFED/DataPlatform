@@ -8,7 +8,7 @@ var util = require("../../utils");
 module.exports = {
     useFrequencyOne(data, array, filter_key) {
         var newData = {},
-            source = data.data,
+            source = data.first.data[0],
             total = 0,
             type = "bar",
             obj = {},
@@ -46,7 +46,7 @@ module.exports = {
         var newData = [],
             count = array.length,
             total_num = 0,
-            source = data.data;
+            source = data.first.data[0];
         //var array = [ '1-3秒', '4-10秒', '11-30秒', '31-60秒', '1-3分', '4-10分', '11-30分', '30分+' ];
         for(var key of array) {
             var obj = {

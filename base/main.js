@@ -153,7 +153,6 @@ api.prototype = {
                         if(err) {
                             next(err);
                         } else {
-
                             query = data;
                             dates = utils.times(query.startTime, query.endTime, query.day_type);
                             this._getCache(type, req, res, next, query, params, dates);

@@ -3,17 +3,8 @@
  * @date 20160905
  * @fileoverview 商品分析,销售分析
  */
-var util = require(RootPath+"/utils"),
+var util = require("../../utils"),
     moment = require("moment");
-
-var prizeRange = {
-    "0" : "0~10",
-    "2" : "10~20",
-    "3" : "20~30",
-    "4" : "30~40",
-    "5" : "40~50",
-    "6" : "50~60"
-}
 
 /* 环比计算 , 昨天－前天  ／  前天 */
 function Chain(lastObj , bObj , columns){
@@ -56,10 +47,10 @@ function Chain7(thisObj , allObj , columns){
             result[item] = "0%";
             continue;
         }
-        // console.log("ss" ,thisObj[item] ,  result[item]);
-        result[item] = thisObj[item] / (result[item] / n);
-        result[item] = util.toFixed( result[item] , 0 );
 
+        var averg = result[item] / n;
+        result[item] = (thisObj[item] - averg) / averg;
+        result[item] = util.toFixed( result[item] , 0 );
     }
 
     result.names = "7日平均环比";
@@ -134,30 +125,53 @@ module.exports = {
     productSaleTwo(data, query, dates) {
         var source = data.first.data[0],
             type   = "line",
-            map    = {
-                "items_add"   : "新增商品数",
-                "items_put"   : "上架商品数",
-                "items_down"  : "下架商品数",
-                "items_frost" : "冻结商品数",
-                "items_delete": "删除商品数"
-            },
+            map    = {},
             newData = {};
+        var Words = [
+                    '被访问商品数',
+                    '商品访问量',
+                    '被收藏商品数',
+                    '商品收藏次数',
+                    '被分享商品数',
+                    '商品被分享次数',
+                    '加购商品数',
+                    '加购商品件数',
+                    '下单商品数',
+                    '下单商品件数',
+                    '支付商品数',
+                    '支付商品件数',        
+                    '退货商品数',
+                    '退货商品件数'
+                ],
+            Keys = [
+                "product_scan",
+                "product_acc_pv",
+                "product_collect",
+                "product_collect_num",
+                "share_commodity",
+                "share_commodity_num",
+                "product_cart",
+                "product_cart_num",
+                "order_commodity",
+                "order_commodity_num",
+                "pay_commodity",
+                "pay_commodity_num",
+                "products_return",
+                "products_return_num"
+            ];
+        var names = Keys.indexOf(query.filter_key_column);
+        map.value = Words[names];
 
-        //初始化数据为0.
+        //init data.
         for(let date of dates){
-            newData[date] = { 
-                "items_add" : 0,
-                "items_put" : 0,
-                "items_down": 0,
-                "items_frost": 0,
-                "items_delete":0
-            };
+            newData[date] = {
+                value : 0
+            }
         }
 
         for(let item of source){
-            for(var key in newData[item.date]){
-                newData[item.date][key] += item[key];
-            }
+            item.date = util.getDate(item.date);
+            newData[item.date].value = item[Keys[names]];
         }
 
         return [{
@@ -208,8 +222,11 @@ module.exports = {
 
     //top 100
     productSaleFour(data , query , dates){
-        var source = data.first.data[0],
-            num=query.filter_key / 1;
+
+        var source = data.first.data,
+            num=query.filter_key22 / 1,
+            sourceSum = data.second.data[0];
+
         if(num == 2) num = 0;
         var Columns = [
             //流量
@@ -276,9 +293,27 @@ module.exports = {
         data.rows[0] = Rows[num];
         data.cols[0] = Columns[num];
 
-        console.log(query);
+        //求和的字段
+        var TotalObj = [
+            "product_acc_pv",
+            "product_acc_uv",
+            "shop_pay_price"
+        ];
 
+        //处理计算字段
+        let n = 0;
+        for(let item of source){
+            n++;
+            item.number = query.limit * (query.page - 1) + n;
+            for(let key of TotalObj){
+                if(!sourceSum[key]){
+                    sourceSum[key] = 1;
+                }
+                item[key+"_lv"] = item[key] / sourceSum[key];
+                item[key+"_lv"] = util.toFixed(item[key+"_lv"] , 0);
+            }
+        }
 
-        return util.toTable([source], data.rows, data.cols); 
+        return util.toTable([source], data.rows, data.cols , [data.first.count[0].count]); 
     }
 };

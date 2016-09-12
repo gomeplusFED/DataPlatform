@@ -9,7 +9,7 @@ var util = require("../../utils"),
 
 module.exports = {
     accessWapOne(data, filter_key, dates) {
-        var source = data.data,
+        var source = data.first.data[0],
             type = "line",
             filter_name = {
                 page_view : "浏览量",
@@ -38,8 +38,8 @@ module.exports = {
         }]
     },
     accessWapTwo(data, page) {
-        var source = data.data,
-            count = data.dataCount,
+        var source = data.first.data[0],
+            count = data.first.count,
             page = page || 1,
             newData = [];
         for(var i = 0; i < source.length; i++) {
@@ -52,8 +52,8 @@ module.exports = {
         return util.toTable([newData], data.rows, data.cols, [count]);
     },
     wap(data) {
-        var source = data.data,
-            count = data.dataCount;
+        var source = data.first.data[0],
+            count = data.first.count;
         for(var i = 0; i < source.length; i++) {
             source[i].date = moment(source[i].date).format("YYYY-MM-DD");
             source[i].avg_stay_time = Math.round(source[i].avg_stay_time);

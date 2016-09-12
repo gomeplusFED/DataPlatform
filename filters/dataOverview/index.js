@@ -163,8 +163,8 @@ module.exports = {
                 create : 0
             };
             for(var key of orderData) {
-                if(new Date(date + " 00:00:00").getTime() < key.date.getTime() &&
-                    key.date.getTime() < new Date(date + " 23:59:59")) {
+                var _date = util.getDate(key.date);
+                if(date === _date) {
                     if(key.kpi_type === 1) {
                         zObj.pv1 += key.kpi_value;
                     }

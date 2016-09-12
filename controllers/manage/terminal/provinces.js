@@ -3,7 +3,7 @@
  * @date 20160418
  * @fileoverview 网络及运营商
  */
-var api = require("../../../base/api"),
+var api = require("../../../base/main"),
     filter = require("../../../filters/terminal/provinces");
 
 module.exports = (Router) => {
@@ -45,15 +45,15 @@ module.exports = (Router) => {
             }
             ]
         }],
-        filter(data, filter_key, dates) {
-            return filter.provincesOne(data, filter_key);
+        filter(data, query, dates) {
+            return filter.provincesOne(data, query.filter_key);
         }
     });
 
     Router = new api(Router,{
         router : "/terminal/provincesTwo",
         modelName : ["KeyValue"],
-        paging : true,
+        paging : [true],
         sum : ["value", "value3"],
         order : ["-date"],
         filter_select: [{
@@ -72,8 +72,8 @@ module.exports = (Router) => {
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
-        filter(data, filter_key, dates) {
-            return filter.provincesTwo(data, filter_key);
+        filter(data, query, dates) {
+            return filter.provincesTwo(data, query.filter_key);
         },
         rows : [
             [ 'key_name', 'value', 'new_users_rate', 'value3', 'start_up_rate' ]

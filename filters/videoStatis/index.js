@@ -20,7 +20,8 @@ function Chain(lastday , beforeLastday){
 
 module.exports = {
     
-    videoOne(data , query , params){
+    videoOne(data , query , dates){
+
         //查询数据
         var allSource = data.first.data[0];
 
@@ -42,6 +43,8 @@ module.exports = {
         for(var i=0;i<2;i++){
             if(allSource[i] == undefined){
                 allSource.push(initObj);
+            }else{
+                allSource[i].date = util.getDate(allSource[i].date);
             }
         }
 
@@ -49,7 +52,8 @@ module.exports = {
         var one = [],two = [], three = [];
 
         //用于第一行的数据
-        var source = allSource[0];
+        var source = allSource[0].date == dates[0] ? allSource[0] : allSource[1];
+
         one.push({
             "sid_num" : source.sid_num,
             "active_user"  : source.active_user

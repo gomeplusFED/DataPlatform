@@ -5,6 +5,7 @@
  */
 
 var api = require("../../../base/main"),
+    moment = require("moment"),
     util = require("../../../utils");
 
 module.exports = (Router) => {
@@ -32,6 +33,8 @@ module.exports = (Router) => {
 
             for(let i = 0; i < source.length; i++) {
                 source[i].top = (page - 1) * limit + i + 1;
+                source[i].activity_start_time = moment(source[i].activity_start_time).format("YYYY-MM-DD");
+                source[i].activity_end_time = moment(source[i].activity_end_time).format("YYYY-MM-DD");
                 source[i].operating =
                     `<button class='btn btn-default' url_link='/custom/saveActivity' url_fixed_params='{"activity_id": "${source[i].activity_id}"}'>修改>></button>`;
             }
@@ -111,6 +114,10 @@ module.exports = (Router) => {
                                 item.channel_name = obj[item.channel_id];
                             }
                             data[0].activity_channel_relationship = ships;
+                            data[0].activity_start_time =
+                                moment(data[0].activity_start_time).format("YYYY-MM-DD");
+                            data[0].activity_end_time =
+                                moment(data[0].activity_end_time).format("YYYY-MM-DD");
 
                             res.json({
                                 code : 200,

@@ -22,12 +22,10 @@ var redisConfig = require("./db/config.json").redis;
 var cluster = new redis.Cluster(redisInfo[redisConfig]);
 
 orm.settings.set("connection.pool", true);
-//orm.settings.set("connection.debug", true);
+orm.settings.set("connection.debug", true);
 Object.keys(config).forEach(function(key) {
     app.locals[key] = config[key];
 });
-
-global.RootPath = __dirname;
 
 //var logger = require("morgan");
 /* 测试使用 */

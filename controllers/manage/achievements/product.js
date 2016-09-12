@@ -4,9 +4,10 @@
  * @fileoverview 商品分析
  * @二次开发 ，20160830 ， Mr.He
  */
-var api = require(RootPath+"/base/main"),
-    filter = require(RootPath+"/filters/achievements/product"),
-    utils  = require(RootPath+"/utils");
+
+var api = require("../../../base/main"),
+    filter = require("../../../filters/achievements/product"),
+    utils  = require("../../../utils");
 
 module.exports = (Router) => {
 
@@ -16,36 +17,14 @@ module.exports = (Router) => {
             code: 200,
             modelData: [],
             components: {
-                flexible_btn: [ ],
-                date_picker: {
-                    show: false,
-                    defaultData: 7
-                },
-                drop_down: {
-                    platform: false,
-                    channel: false,
-                    version: false,
-                    coupon: false
-                },
                 level_select: {
                     show: true,
                     url: "/api/categories",
                     name: "category_id"
-                },
-                filter_select: [],
-                search: {
-                    show: false
-                },
-                control_table_col: {
-                    show: false
-                },
-                global_plataform: {
-                    show: false
                 }
             }
         });
     });
-
 
 
     Router = new api(Router,{
@@ -61,6 +40,8 @@ module.exports = (Router) => {
         },
         fixedParams(req , query , cb){
             if(!query.category_id){
+                query.category_id = "";
+                query.category_level = "ALL";
                 cb(null , query);
             }else{
                 req.models.ConfCategories.find({
@@ -124,6 +105,8 @@ module.exports = (Router) => {
         },
         fixedParams(req , query , cb){
             if(!query.category_id){
+                query.category_id = "ALL";
+                query.category_level = "ALL";
                 cb(null , query);
             }else{
                 req.models.ConfCategories.find({
@@ -172,12 +155,17 @@ module.exports = (Router) => {
         router : "/achievements/productThree",
         modelName : ["ItemPie"],
         platform : false,
+        order : ["tag"],
         params : function(query , params , sendData){
             delete params.category_id;
             return params;
         },
         fixedParams(req , query , cb){
             if(!query.category_id){
+                query.category_id_1 = "ALL";
+                query.category_id_2 = "ALL";
+                query.category_id_3 = "ALL";
+                query.category_id_4 = "ALL";
                 cb(null , query);
             }else{
                 req.models.ConfCategories.find({
@@ -212,12 +200,17 @@ module.exports = (Router) => {
         router : "/achievements/productFour",
         modelName : ["ItemPie"],
         platform : false,
+        order : ["tag"],
         params : function(query , params , sendData){
             delete params.category_id;
             return params;
         },
         fixedParams(req , query , cb){
             if(!query.category_id){
+                query.category_id_1 = "ALL";
+                query.category_id_2 = "ALL";
+                query.category_id_3 = "ALL";
+                query.category_id_4 = "ALL";
                 cb(null , query);
             }else{
                 req.models.ConfCategories.find({
@@ -251,8 +244,21 @@ module.exports = (Router) => {
         router : "/achievements/productFive",
         modelName : ["ItemManager"],
         platform : false,
-        // date_picker_data : 1,
-        // showDayUnit : true,
+        fixedParams(req , query , cb){
+            if(!query.category_id){
+                query.category_id = "ALL";
+                query.category_level = "ALL";
+                cb(null , query);
+            }else{
+                req.models.ConfCategories.find({
+                    pid : query.category_id
+                } , 1 , (err , data)=>{
+                    if(err) cb(err);
+                    query.category_level = data[0].level;
+                    cb(null , query);
+                });
+            }
+        },
         filter(data, query , dates) {
             return filter.productFive(data, query ,dates);
         }
@@ -297,6 +303,21 @@ module.exports = (Router) => {
                 help : "统计时间内，平台删除商品数（SPU)"
             }]
         ],
+        fixedParams(req , query , cb){
+            if(!query.category_id){
+                query.category_id = "ALL";
+                query.category_level = "ALL";
+                cb(null , query);
+            }else{
+                req.models.ConfCategories.find({
+                    pid : query.category_id
+                } , 1 , (err , data)=>{
+                    if(err) cb(err);
+                    query.category_level = data[0].level;
+                    cb(null , query);
+                });
+            }
+        },
         filter( data , query ,dates ){
             return filter.productSix(data, query ,dates);
         }
