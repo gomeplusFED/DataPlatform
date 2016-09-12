@@ -27,12 +27,13 @@ module.exports = {
             };
 
         for(let item of source){
-            newData.group_person_num += DealNumber(item.group_person_num);
-            newData.group_topic_num +=  DealNumber(item.group_topic_num);
-            newData.topic_praise_num += DealNumber(item.topic_praise_num);
-            newData.topic_reply_num  += DealNumber(item.topic_reply_num);
-            newData.topic_subreply_num  += DealNumber(item.topic_subreply_num);
-            newData.topic_collect_num  += DealNumber(item.topic_collect_num);
+            newData[item.key] += DealNumber(item.value);
+            //newData.group_person_num += DealNumber(item.group_person_num);
+            //newData.group_topic_num +=  DealNumber(item.group_topic_num);
+            //newData.topic_praise_num += DealNumber(item.topic_praise_num);
+            //newData.topic_reply_num  += DealNumber(item.topic_reply_num);
+            //newData.topic_subreply_num  += DealNumber(item.topic_subreply_num);
+            //newData.topic_collect_num  += DealNumber(item.topic_collect_num);
         }
 
         newData.reply_num = newData.topic_reply_num + newData.topic_subreply_num;
