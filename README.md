@@ -63,7 +63,7 @@ module.exports = function(Router) {
     modelName : ['xxx', 'xxx']
 }
 </code></pre>
--  **dataName** --- <a name="3" >查询数据后对应的数据名称</a>
+-  **dataName** --- <a name="3" hrf="#03">查询数据后对应的数据名称</a>
 
 默认值
 <ol>
@@ -76,7 +76,7 @@ module.exports = function(Router) {
     dataName : ['first', 'second', 'third', 'fourth']
 }
 </code></pre>
--  **paramsName** --- <a name="4">添加动态参数所用</a>
+-  **paramsName** --- <a name="4" hrf="#04">添加动态参数所用</a>
 
 默认值
 <ol>
@@ -93,13 +93,13 @@ module.exports = function(Router) {
     params : {} || function(query, params, data){}
 }
 </code></pre>
--  **fixedName** --- <a name="5">添加动态参数，主用于需要查库添加参数所用</a>
+-  **fixedName** --- <a name="5" hrf="#05">添加动态参数，主用于需要查库添加参数所用</a>
 
 <pre><code>{
     pixedName : fucntion(req, query, cb) {}
 }
 </code></pre>
--  **procedure** --- <a name="6">查库流程</a>
+-  **procedure** --- <a name="6" hrf="#06">查库流程</a>
 
 默认情况下分三种情况
 <pre><code>{
@@ -146,7 +146,7 @@ module.exports = function(Router) {
     ]
 }
 </code></pre>
--  **sql** --- <a name="7">支持sql查询</a>
+-  **sql** --- <a name="7" hrf="#07">支持sql查询</a>
 
 默认值
 <pre><code>{
@@ -161,37 +161,37 @@ module.exports = function(Router) {
     firstSql : function(query, params, true || false){}
 }
 </code></pre>
--  **paging** --- <a name="8">对应表是否分页</a>
+-  **paging** --- <a name="8" hrf="#08">对应表是否分页</a>
 
 <pre><code>{
     paging : [true, false]
 }
 </code></pre>
--  **page** --- <a name="9">分页时每页条数</a>
+-  **page** --- <a name="9" hrf="#09">分页时每页条数</a>
 
 <pre><code>{
     page : 20
 }
 </code></pre>
--  **sum** --- <a name="10">需要求和字段</a>
+-  **sum** --- <a name="10" hrf="#010">需要求和字段</a>
 
 <pre><code>{
     sum : ['xx', 'xxx']
 }
 </code></pre>
--  **order** --- <a name="11">排序字段</a>
+-  **order** --- <a name="11" hrf="#011">排序字段</a>
 
 <pre><code>{
     order : ['xx', 'xxx']
 }
 </code></pre>
--  **selectFilter** --- <a name="12">前端模块需查表完成</a>
+-  **selectFilter** --- <a name="12" hrf="#012">前端模块需查表完成</a>
 
 <pre><code>{
     selectFilter : function(req, cb) {}
 }
 </code></pre>
--  **rows** --- <a name="13">行,用于下载</a>
+-  **rows** --- <a name="13" hrf="#013">行,用于下载</a>
 
 <pre><code>{
     rows : [
@@ -201,7 +201,7 @@ module.exports = function(Router) {
     ]
 }
 </code></pre>
-- **cols** --- <a name="14">列,用于下载</a>
+- **cols** --- <a name="14" hrf="#014">列,用于下载</a>
 
 <pre><code>{
     cols : [
@@ -213,42 +213,42 @@ module.exports = function(Router) {
     ]
 }
 </code></pre>
--  **platform** --- <a name="15">是否显示平台</a>
+-  **platform** --- <a name="15" hrf="#015">是否显示平台</a>
 
 默认值
 <pre><code>{
     platform : true
 }
 </code></pre>
--  **channel** --- <a name="16">是否显示渠道</a>
+-  **channel** --- <a name="16" hrf="#016">是否显示渠道</a>
 
 默认值
 <pre><code>{
     channel : false
 }
 </code></pre>
--  **version** --- <a name="17">是否显示版本</a>
+-  **version** --- <a name="17" hrf="#017">是否显示版本</a>
 
 默认值
 <pre><code>{
     version : false
 }
 </code></pre>
--  **coupon** --- <a name="18">是否显示优惠券类型</a>
+-  **coupon** --- <a name="18" hrf="#018">是否显示优惠券类型</a>
 
 默认值
 <pre><code>{
     coupon : false
 }
 </code></pre>
--  **excel_export** --- <a name="19">是否有导出路径</a>
+-  **excel_export** --- <a name="19" hrf="#019">是否有导出路径</a>
 
 默认值
 <pre><code>{
     excel_export : false
 }
 </code></pre>
--  **flexible_btn** --- <a name="20">按钮设置</a>
+-  **flexible_btn** --- <a name="20" hrf="#020">按钮设置</a>
 
 <pre><code>{
     flexible_btn : [{
@@ -257,14 +257,14 @@ module.exports = function(Router) {
     }]
 }
 </code></pre>
-- **date_picker** --- <a name="21">是否显示时间</a>
+- **date_picker** --- <a name="21" hrf="#021">是否显示时间</a>
 
 默认值
 <pre><code>{
     date_picker : true
 }
 </code></pre>
--  **date_picker_data** --- <a name="22">初始时间</a>
+-  **date_picker_data** --- <a name="22" hrf="#022">初始时间</a>
 
 默认值
 <pre><code>{
@@ -272,26 +272,26 @@ module.exports = function(Router) {
     date_picker_data : 7
 }
 </code></pre>
--  **level_select** --- <a name="23">联动菜单是否显示</a>
+-  **level_select** --- <a name="23" hrf="#023">联动菜单是否显示</a>
 
 默认值
 <pre><code>{
     level_select : false
 }
 </code></pre>
--  **level_select_url** --- <a name="24">联动菜单地址</a>
+-  **level_select_url** --- <a name="24" hrf="#024">联动菜单地址</a>
 
 <pre><code>{
     level_select_url : '/xxx/xxx'
 }
 </code></pre>
--  **level_select_name** --- <a name="25">查询字段名称</a>
+-  **level_select_name** --- <a name="25" hrf="#025">查询字段名称</a>
 
 <pre><code>{
     level_select_name : 'xxxx'
 }
 </code></pre>
--  **filter_select** --- <a name="26">单选</a>
+-  **filter_select** --- <a name="26" hrf="#026">单选</a>
 
 <pre><code>{
     filter_select : [{
@@ -304,13 +304,13 @@ module.exports = function(Router) {
     }]
 }
 </code></pre>
--  **filter** --- <a name="27">数据过滤</a>
+-  **filter** --- <a name="27" hrf="#027">数据过滤</a>
 
 <pre><code>{
     filter : function(data, query, dates, type) {}
 }
 </code></pre>
--  **search** --- <a name="28">搜索框</a>
+-  **search** --- <a name="28" hrf="#028">搜索框</a>
 
 默认值
 <pre><code>{
@@ -319,14 +319,14 @@ module.exports = function(Router) {
     }
 }
 </code></pre>
--  **control_table_col** --- <a name="29">表格字段选择框</a>
+-  **control_table_col** --- <a name="29" hrf="#029">表格字段选择框</a>
 
 默认值
 <pre><code>{
     control_table_col : false
 }
 </code></pre>
--  **global_platform** --- <a name="30">全局模块</a>
+-  **global_platform** --- <a name="30" hrf="#030">全局模块</a>
 
 默认值
 <pre><code>{
