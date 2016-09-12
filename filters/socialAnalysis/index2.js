@@ -164,7 +164,6 @@ module.exports = {
              config[item.topic_id][item.key] = item.sum_value;
          }
 
-         console.log(config);
          for(let item of newData) {
              let _obj = config[item.topic_id] || {};
              item.reply_user_num = (_obj.topic_reply_user_num || 0) +
