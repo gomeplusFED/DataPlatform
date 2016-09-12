@@ -341,26 +341,26 @@ module.exports = (Router) => {
                 type: "string"
             }, {
                 caption: "圈主ID",
-                type: ""
+                type: "string"
             }, {
                 caption: "是否达人",
-                type: ""
+                type: "string"
             }, {
                 caption: "累计发布话题数",
-                type: ""
+                type: "number"
             }, {
                 caption: "新增邀请好友数",
-                type: ""
+                type: "number"
             }, {
                 caption: "累计好友数",
-                type: ""
+                type: "number"
             }, {
                 caption: "新增粉丝数",
                 type: "number",
                 help : "圈主本时间区间新关注粉丝数（第一次关注时间不在此时间区，不+1）"
             },{
                 caption: "当前粉丝数",
-                type: "",
+                type: "number",
                 help : "当前累计的关注粉丝数"
             }, {
                 caption: "新增圈子数",
@@ -372,13 +372,13 @@ module.exports = (Router) => {
             //    help : "此圈主下圈子数"
             }, {
                 caption: "新增关注次数",
-                type: ""
+                type: "number"
             //}, {
             //    caption: "累计关注次数",
             //    type: ""
             }, {
                 caption: "新增取关次数",
-                type: ""
+                type: "number"
             }]
         ]
     });
