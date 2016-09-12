@@ -161,20 +161,18 @@ module.exports = {
          }
 
          for(let item of source2) {
-             config[item.topic_id][key.key] = key.sum_value;
+             config[item.topic_id][item.key] = item.sum_value;
          }
 
+         console.log(config);
          for(let item of newData) {
-             item.reply_user_num =
-                 config[item.topic_id] ? config[item.topic_id].topic_reply_user_num || 0 : 0 +
-                 config[item.topic_id] ? config[item.topic_id].topic_subreply_user_num || 0 : 0;
-             item.topic_reply_num =
-                 config[item.topic_id] ? config[item.topic_id].topic_reply_num || 0 : 0 +
-                 config[item.topic_id] ? config[item.topic_id].topic_subreply_num || 0 : 0;
-             item.topic_praise_num =
-                 config[item.topic_id] ? config[item.topic_id].topic_praise_num || 0 : 0;
-             item.topic_collect_num =
-                 config[item.topic_id] ? config[item.topic_id].topic_collect_num || 0 : 0;
+             let _obj = config[item.topic_id] || {};
+             item.reply_user_num = (_obj.topic_reply_user_num || 0) +
+                 (_obj.topic_subreply_user_num || 0);
+             item.topic_reply_num = _obj.topic_reply_num || 0 +
+                 _obj.topic_subreply_num || 0;
+             item.topic_praise_num = _obj.topic_praise_num || 0;
+             item.topic_collect_num = _obj.topic_collect_num || 0;
          }
 
         return util.toTable([newData], data.rows, data.cols, [count]);

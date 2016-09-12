@@ -183,10 +183,10 @@ module.exports = (Router) => {
         }],
         procedure : [false, {
             aggregate : {
-                value : ["key"]
+                value : ["topic_id", "key"]
             },
             sum : ["value"],
-            groupBy : ["key"],
+            groupBy : ["topic_id", "key"],
             get : ""
         }],
         secondParams(query , params , sendData){
