@@ -19,7 +19,7 @@ module.exports = {
             newData[key.key] = key.sum_value;
         }
 
-        newData.rate = util.division(newData.person_funs_num, newData.group_leader_num);
+        newData.rate = util.ceil(newData.person_funs_num, newData.group_leader_num);
 
         return util.toTable([[newData]], data.rows, data.cols);
     },
