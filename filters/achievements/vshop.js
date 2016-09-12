@@ -574,6 +574,7 @@ module.exports = {
         var newData = _.sortByOrder(source, ['sum_'+type] ,['desc']);
         var count = newData.length;
         if (count >20) {
+            count = count >100 ? 100 :count;
             var base = (query.page-1)*20;
             newData = newData.slice(base, base + 20);
             newData = _.map(newData, function(v,i) {
