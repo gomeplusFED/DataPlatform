@@ -27,7 +27,7 @@ module.exports = {
             };
 
         for(let item of source){
-            newData[item.key] += DealNumber(item.value);
+            newData[item.key] += DealNumber(item.sum_value);
             //newData.group_person_num += DealNumber(item.group_person_num);
             //newData.group_topic_num +=  DealNumber(item.group_topic_num);
             //newData.topic_praise_num += DealNumber(item.topic_praise_num);
