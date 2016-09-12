@@ -139,7 +139,8 @@ module.exports = {
                             },
                             {
                                 "caption": "妥投商品件数",
-                                "type": "number"
+                                "type": "number",
+                                "help": "订单被签收的商品件数，不考虑订单的创建时间;"
                             }
                         ]],
                         [[
@@ -153,11 +154,13 @@ module.exports = {
                             },
                             {
                                 "caption": "运营中美店数",
-                                "type": "number"
+                                "type": "number",
+                                "help": "美店主访问我的店铺页;"
                             },
                             {
                                 "caption": "沉默美店数",
-                                "type": "number"
+                                "type": "number",
+                                "help": "1个月以上美店主未访问我的店铺页;"
                             },
                             {
                                 "caption": "被访问美店数",
@@ -352,7 +355,8 @@ module.exports = {
                             },
                             {
                                 "caption": "妥投商品件数",
-                                "type": "number"
+                                "type": "number",
+                                "help": "订单被签收的商品件数，不考虑订单的创建时间;"
                             }
                         ]],
                         [[
@@ -366,11 +370,13 @@ module.exports = {
                             },
                             {
                                 "caption": "运营中美店数",
-                                "type": "number"
+                                "type": "number",
+                                "help": "美店主访问我的店铺页;"
                             },
                             {
                                 "caption": "沉默美店数",
-                                "type": "number"
+                                "type": "number",
+                                "help": "1个月以上美店主未访问我的店铺页;"
                             },
                             {
                                 "caption": "被访问美店数",
