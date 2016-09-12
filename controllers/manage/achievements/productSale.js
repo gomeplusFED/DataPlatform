@@ -9,6 +9,39 @@ var api = require("../../../base/main"),
     utils  = require("../../../utils"),
     orm = require("orm");
 
+/*
+    categories function
+*/
+function CategoryDeal(query , level){
+    var level = level / 1;
+    query.category_id_1 = "ALL";
+    query.category_id_2 = "ALL";
+    query.category_id_3 = "ALL";
+    query.category_id_4 = "ALL";
+    switch(level){
+        case 1:
+            query.category_id_1 = query.category_id;
+            break;
+        case 2:
+            query.category_id_2 = query.category_id;
+            break;
+        case 3:
+            query.category_id_3 = query.category_id;
+            break;
+        case 4:
+            query.category_id_4 = query.category_id;
+            break;
+    }
+    try{
+        delete query.category_id;
+    }catch(e){};
+    
+    return query;
+}
+
+
+
+
 module.exports = (Router) => {
 
     Router = Router.get("/achievements/product22Zero_json" , function(req , res , next){
@@ -43,7 +76,7 @@ module.exports = (Router) => {
             key : "type",
             name : "平台切换（默认全部平台）",
             list : [{
-                key: ['Android','IOS','H5','PC'],
+                key: 'ALL',
                 name: '全部平台'
             },{
                 key: 'Android',
@@ -103,6 +136,22 @@ module.exports = (Router) => {
         rows : [
             []
         ],
+        fixedParams(req , query , cb){
+            if(!query.type){
+                query.type = "ALL";
+            }
+
+            if(!query.category_id){
+                cb(null , CategoryDeal(query , 0));
+            }else{
+                req.models.ConfCategories.find({
+                    pid : query.category_id
+                } , 1 , (err , data)=>{
+                    if(err) cb(err);
+                    cb(null , CategoryDeal(query , data[0].level));
+                });
+            }
+        },
         filter(data, query) {
             return filter.productSaleOne(data, query);
         }
@@ -165,6 +214,22 @@ module.exports = (Router) => {
             }
             this.filter_select[0] = obj;
             cb(null , this.filter_select);
+        },
+        fixedParams(req , query , cb){
+            if(!query.type){
+                query.type = "ALL";
+            }
+
+            if(!query.category_id){
+                cb(null , CategoryDeal(query , 0));
+            }else{
+                req.models.ConfCategories.find({
+                    pid : query.category_id
+                } , 1 , (err , data)=>{
+                    if(err) cb(err);
+                    cb(null , CategoryDeal(query , data[0].level));
+                });
+            }
         },
         filter(data, query, dates) {
             return filter.productSaleTwo(data, query, dates);
@@ -235,6 +300,22 @@ module.exports = (Router) => {
         rows : [
             []
         ],
+        fixedParams(req , query , cb){
+            if(!query.type){
+                query.type = "ALL";
+            }
+
+            if(!query.category_id){
+                cb(null , CategoryDeal(query , 0));
+            }else{
+                req.models.ConfCategories.find({
+                    pid : query.category_id
+                } , 1 , (err , data)=>{
+                    if(err) cb(err);
+                    cb(null , CategoryDeal(query , data[0].level));
+                });
+            }
+        },
         filter(data, query, dates) {
             return filter.productSaleThree(data, query);
         }
@@ -243,14 +324,14 @@ module.exports = (Router) => {
     //商品排行TOP100
     Router = new api(Router,{
         router : "/achievements/productSaleFour",
-        modelName : ["ItemRunTop"],
+        modelName : ["ItemRunTop" , "ItemRunTop"],
         platform : false,
         excel_export : true,
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
-        paging : [true],
+        paging : [true , false],
         filter_select : [
             {
                 title : "类型",
@@ -267,6 +348,22 @@ module.exports = (Router) => {
                 }]
             }
         ],
+        fixedParams(req , query , cb){
+            if(!query.type){
+                query.type = "ALL";
+            }
+
+            if(!query.category_id){
+                cb(null , CategoryDeal(query , 0));
+            }else{
+                req.models.ConfCategories.find({
+                    pid : query.category_id
+                } , 1 , (err , data)=>{
+                    if(err) cb(err);
+                    cb(null , CategoryDeal(query , data[0].level));
+                });
+            }
+        },
         firstSql(query , params , isCount){
             var num = query.filter_key22 / 1 || 0,
                 arrParam = [],
@@ -274,19 +371,43 @@ module.exports = (Router) => {
 
             arrParam[0] = utils.getDate(params.date.from) + " 00:00:00",
             arrParam[1] = utils.getDate(params.date.to) + " 23:59:59",
-            arrParam[2] = params.category_id || "",
-            arrParam[3] = list[num],
-            arrParam[4] = (params.page-1)*params.limit;
-            arrParam[5] = params.limit / 1;
+            arrParam[2] = params.category_id_1,
+            arrParam[3] = params.category_id_2,
+            arrParam[4] = params.category_id_3,
+            arrParam[5] = params.category_id_4,
+            arrParam[6] = params.type,            
+            arrParam[7] = list[num],
+            arrParam[8] = (params.page-1)*params.limit;
+            arrParam[9] = params.limit / 1;
             if(isCount){
                 //统计总数
-                let sql = `SELECT COUNT(*) count FROM ads2_itm_run_top WHERE date BETWEEN ? AND ? AND day_type = 1 AND category_id = ?`;
+                let sql = `SELECT COUNT(*) count FROM ads2_itm_run_top WHERE date BETWEEN ? AND ? AND day_type = 1 AND category_id_1 = ? AND category_id_2 = ? AND category_id_3 = ? AND category_id_4 = ? AND type = ?`;
                 return {
                     sql : sql,
                     params : arrParam
                 }
             }
-            let sql = `SELECT * FROM ads2_itm_run_top WHERE DATE BETWEEN ? AND ? AND day_type = 1 AND category_id = ? ORDER BY ? LIMIT ?,?`;
+            let sql = `SELECT * FROM ads2_itm_run_top WHERE DATE BETWEEN ? AND ? AND day_type = 1 AND category_id_1 = ? AND category_id_2 = ? AND category_id_3 = ? AND category_id_4 = ? AND type = ? ORDER BY ? LIMIT ?,?`;
+            return {
+                sql : sql,
+                params : arrParam
+            }
+        },
+        secondSql(query , params , isCount){
+            var arrParam = [];
+            arrParam[0] = utils.getDate(params.date.from) + " 00:00:00",
+            arrParam[1] = utils.getDate(params.date.to) + " 23:59:59",
+            arrParam[2] = params.category_id_1,
+            arrParam[3] = params.category_id_2,
+            arrParam[4] = params.category_id_3,
+            arrParam[5] = params.category_id_4,
+            arrParam[6] = params.type;
+
+            let sql = `SELECT
+                SUM(product_acc_pv) product_acc_pv,
+                SUM(product_acc_uv) product_acc_uv,
+                SUM(shop_pay_price) shop_pay_price from ads2_itm_run_top WHERE date BETWEEN ? AND ? AND day_type = 1 AND category_id_1 = ? AND category_id_2 = ? AND category_id_3 = ? AND category_id_4 = ? AND type = ?
+            `;
             return {
                 sql : sql,
                 params : arrParam

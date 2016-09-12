@@ -47,11 +47,10 @@ function Chain7(thisObj , allObj , columns){
             result[item] = "0%";
             continue;
         }
-        // console.log("ss" ,thisObj[item] ,  result[item]);
+
         var averg = result[item] / n;
         result[item] = (thisObj[item] - averg) / averg;
         result[item] = util.toFixed( result[item] , 0 );
-
     }
 
     result.names = "7日平均环比";
@@ -223,8 +222,11 @@ module.exports = {
 
     //top 100
     productSaleFour(data , query , dates){
+
         var source = data.first.data,
-            num=query.filter_key22 / 1;
+            num=query.filter_key22 / 1,
+            sourceSum = data.second.data[0];
+
         if(num == 2) num = 0;
         var Columns = [
             //流量
@@ -291,29 +293,27 @@ module.exports = {
         data.rows[0] = Rows[num];
         data.cols[0] = Columns[num];
 
-        //求和
-        var TotalObj = {
-            "product_acc_pv" : 0,
-            "product_acc_uv" : 0,
-            "shop_pay_price" : 0
-        };
-        for(let item of source){
-            for(let key in TotalObj){
-                TotalObj[key] += item[key];
-            }
-        }
+        //求和的字段
+        var TotalObj = [
+            "product_acc_pv",
+            "product_acc_uv",
+            "shop_pay_price"
+        ];
 
         //处理计算字段
         let n = 0;
         for(let item of source){
             n++;
             item.number = query.limit * (query.page - 1) + n;
-            for(let key in TotalObj){
-                item[key+"_lv"] = item[key] / TotalObj[key];
+            for(let key of TotalObj){
+                if(!sourceSum[key]){
+                    sourceSum[key] = 1;
+                }
+                item[key+"_lv"] = item[key] / sourceSum[key];
                 item[key+"_lv"] = util.toFixed(item[key+"_lv"] , 0);
             }
         }
 
-        return util.toTable([source], data.rows, data.cols , [data.first.count]); 
+        return util.toTable([source], data.rows, data.cols , [data.first.count[0].count]); 
     }
 };

@@ -41,15 +41,15 @@ function Chain7(thisObj , allObj , columns){
             result[item] += allObj[key][item];
         }
     }
-    // console.log("gg" , result , n);
+
     for(let item of columns){
         if(item == "names") continue;
         if(result[item] == 0){
             result[item] = "0%";
             continue;
         }
-        // console.log("ss" ,thisObj[item] ,  result[item]);
         var averg = result[item] / n;
+
         result[item] = (thisObj[item] - averg) / averg;
         result[item] = util.toFixed( result[item] , 0 );
 
@@ -59,24 +59,6 @@ function Chain7(thisObj , allObj , columns){
     return result;
 }
 
-/*Object.prototype.clone = function () {
-    var Constructor = this.constructor;
-    var obj = new Constructor();
-
-    for (var attr in this) {
-        if (this.hasOwnProperty(attr)) {
-            if (typeof(this[attr]) !== "function") {
-                if (this[attr] === null) {
-                    obj[attr] = null;
-                }
-                else {
-                    obj[attr] = this[attr].clone();
-                }
-            }
-        }
-    }
-    return obj;
-};*/
 
 module.exports = {
     productOne(data, filter_key) {
@@ -90,7 +72,6 @@ module.exports = {
             result = [],
             configRow = data.rows[0],
             dates = query.date;
-        console.log(source.length);
 
         //给默认值0.
         var sourceObj = {};
@@ -119,7 +100,6 @@ module.exports = {
         result[2] = Chain(sourceObj[dates[1]] ,sourceObj[dates[2]] , data.rows[0]);
 
         //7日平均环比
-        // delete sourceObj[dates[0]];
         result[3] = Chain7(sourceObj[dates[1]] ,sourceObj , data.rows[0]);
 
        return util.toTable([result], data.rows, data.cols);
@@ -135,7 +115,7 @@ module.exports = {
         var n = 0;
         for(let item of source){
             newData[util.prizeRange[item.tag]] = {
-                value : item.items_count
+                value : item.items_count / 10000
             }
         }
 
@@ -161,7 +141,7 @@ module.exports = {
         for(let item of source){
             if(item.isnew == 0) continue;
             newData[util.prizeRange[item.tag]] = {
-                value : item.items_count
+                value : item.items_count / 10000
             }
         }
 
@@ -199,6 +179,7 @@ module.exports = {
         }
 
         for(let item of source){
+            item.date = util.getDate(item.date);
             for(var key in newData[item.date]){
                 newData[item.date][key] += item[key];
             }
@@ -218,11 +199,9 @@ module.exports = {
         var source = data.first.data[0],
             result = [];
 
-       /* console.log(123,dates);
-        for(var len=dates.length-1;len>=0;len--){
-            console.log(dates[len]);
-        }*/
-
+        for(let item of source){
+            item.date = util.getDate(item.date);
+        }
 
         return util.toTable([source], data.rows, data.cols); 
     }

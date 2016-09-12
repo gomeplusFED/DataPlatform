@@ -36,14 +36,12 @@ module.exports = (Router) => {
             var dates = utils.beforeDate(new Date() , 2);
             //取昨天的数据
             params.date = dates[1];
-
-            params.date = "2016-09-01";
-            params.category_id = "4788";
-            params.category_level = "4";
             return params;
         },
         fixedParams(req , query , cb){
             if(!query.category_id){
+                query.category_id = "";
+                query.category_level = "ALL";
                 cb(null , query);
             }else{
                 req.models.ConfCategories.find({
@@ -99,19 +97,16 @@ module.exports = (Router) => {
             ["names" , "items_add" , "items_put" , "items_down" , "items_frost" , "items_delete"]
         ],
         params : function(query , params , sendData){
-            var dates = utils.beforeDate(new Date("2016-09-02") , 8);
+            var dates = utils.beforeDate(new Date() , 8);
 
             params.date = dates;
             query.date = dates;
-
-
-            // params.date = "2016-09-01";
-            params.category_id = "4803";
-            params.category_level = "4";
             return params;
         },
         fixedParams(req , query , cb){
             if(!query.category_id){
+                query.category_id = "ALL";
+                query.category_level = "ALL";
                 cb(null , query);
             }else{
                 req.models.ConfCategories.find({
@@ -160,12 +155,17 @@ module.exports = (Router) => {
         router : "/achievements/productThree",
         modelName : ["ItemPie"],
         platform : false,
+        order : ["tag"],
         params : function(query , params , sendData){
             delete params.category_id;
             return params;
         },
         fixedParams(req , query , cb){
             if(!query.category_id){
+                query.category_id_1 = "ALL";
+                query.category_id_2 = "ALL";
+                query.category_id_3 = "ALL";
+                query.category_id_4 = "ALL";
                 cb(null , query);
             }else{
                 req.models.ConfCategories.find({
@@ -200,12 +200,17 @@ module.exports = (Router) => {
         router : "/achievements/productFour",
         modelName : ["ItemPie"],
         platform : false,
+        order : ["tag"],
         params : function(query , params , sendData){
             delete params.category_id;
             return params;
         },
         fixedParams(req , query , cb){
             if(!query.category_id){
+                query.category_id_1 = "ALL";
+                query.category_id_2 = "ALL";
+                query.category_id_3 = "ALL";
+                query.category_id_4 = "ALL";
                 cb(null , query);
             }else{
                 req.models.ConfCategories.find({
@@ -239,8 +244,21 @@ module.exports = (Router) => {
         router : "/achievements/productFive",
         modelName : ["ItemManager"],
         platform : false,
-        // date_picker_data : 1,
-        // showDayUnit : true,
+        fixedParams(req , query , cb){
+            if(!query.category_id){
+                query.category_id = "ALL";
+                query.category_level = "ALL";
+                cb(null , query);
+            }else{
+                req.models.ConfCategories.find({
+                    pid : query.category_id
+                } , 1 , (err , data)=>{
+                    if(err) cb(err);
+                    query.category_level = data[0].level;
+                    cb(null , query);
+                });
+            }
+        },
         filter(data, query , dates) {
             return filter.productFive(data, query ,dates);
         }
@@ -285,6 +303,21 @@ module.exports = (Router) => {
                 help : "统计时间内，平台删除商品数（SPU)"
             }]
         ],
+        fixedParams(req , query , cb){
+            if(!query.category_id){
+                query.category_id = "ALL";
+                query.category_level = "ALL";
+                cb(null , query);
+            }else{
+                req.models.ConfCategories.find({
+                    pid : query.category_id
+                } , 1 , (err , data)=>{
+                    if(err) cb(err);
+                    query.category_level = data[0].level;
+                    cb(null , query);
+                });
+            }
+        },
         filter( data , query ,dates ){
             return filter.productSix(data, query ,dates);
         }

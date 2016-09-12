@@ -94,8 +94,8 @@ module.exports = (Router) => {
                 help    : "视频出现错误等级warn的视频"
             }]
         ],
-        filter (data , query , params){
-            return filter.videoOne(data , query , params);
+        filter (data , query , dates){
+            return filter.videoOne(data , query , dates);
         }
     });
 
