@@ -24,7 +24,8 @@ module.exports = (Router) => {
         },
         params : function(query , params , sendData){
             return {
-                "group_id" : params.group_id
+                "group_id" : params.group_id,
+                date : util.getDate(new Date(new Date() - 24 * 60 * 60 * 1000))
             }
         },
         rows: [
