@@ -144,7 +144,8 @@ module.exports = {
     },
     vtradeFive(data, query) {
         var source = data.first.data,
-            count = data.first.count[0].count,
+            _count = data.first.count[0].count,
+            count = _count > 100 ? 100 : _count,
             page = query.page || 1;
 
         for(let i = 0; i < source.length; i++) {
