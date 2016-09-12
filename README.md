@@ -44,7 +44,7 @@ module.exports = function(Router) {
 <li><a href="#29" id="29">表格字段选择框</a></li>
 <li><a href="#30" id="30">全局模块</a></li>
 </ol>
--  **router** --- <a name="1" href="1">路由</a>
+-  **router** --- <a name="1" href=".1">路由</a>
 
 设置了路由之后会默认生成三个路由，在router后添加后缀
 <ol>
@@ -56,7 +56,7 @@ module.exports = function(Router) {
     router : '/xxx/xxx' || '/xxx'
 }
 </code></pre>
--  **modelName** --- <a name="2" href="2">数据表名</a>
+-  **modelName** --- <a name="2" href=".2">数据表名</a>
 
 同一路由可以查询多个表
 <pre><code>{
