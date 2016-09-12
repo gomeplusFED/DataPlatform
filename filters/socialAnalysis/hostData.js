@@ -25,6 +25,8 @@ module.exports = {
     },
     hostTwo(data) {
         var source = data.first.data[0],
+            second = data.second.data[0],
+            total = 0,
             array = ["APP", "WAP", "PC", "总计"],
             newData = [],
             obj = {};
@@ -36,6 +38,10 @@ module.exports = {
                 sum_attention_groupOwner_num : 0,
                 sum_cancel_attention_groupOwner_num : 0
             }
+        }
+
+        for(let key of second) {
+            total += key.value;
         }
 
         for(let key of source) {
@@ -56,7 +62,7 @@ module.exports = {
             newData.push({
                 type : key,
                 sum_first_groupOwner_num : obj[key].sum_first_groupOwner_num,
-                rate : util.toFixed(obj[key].sum_first_groupOwner_num, obj["总计"].sum_first_groupOwner_num),
+                rate : util.toFixed(obj[key].sum_first_groupOwner_num, total),
                 sum_new_groupOwner_num : obj[key].sum_new_groupOwner_num,
                 sum_attention_groupOwner_num : obj[key].sum_attention_groupOwner_num,
                 sum_cancel_attention_groupOwner_num : obj[key].sum_cancel_attention_groupOwner_num

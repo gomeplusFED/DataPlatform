@@ -67,8 +67,14 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/socialAnalysis/hostTwo",
-        modelName : ["GroupownerStatistics"],
+        modelName : ["GroupownerStatistics", "Statistics"],
         platform : false,
+        secondParams() {
+            return {
+                date : util.getDate(new Date(new Date() - 24 * 60 * 60 * 1000)),
+                key : "group_leader_num"
+            }
+        },
         procedure : [{
             aggregate : {
                 value : ["type"]
@@ -77,7 +83,7 @@ module.exports = (Router) => {
                 "attention_groupOwner_num", "cancel_attention_groupOwner_num"],
             groupBy : ["type"],
             get : ""
-        }],
+        },false],
         filter(data) {
             return filter.hostTwo(data);
         },
