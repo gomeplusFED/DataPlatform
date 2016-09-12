@@ -80,7 +80,7 @@ module.exports = (Router) => {
         platform : false,
         procedure : [{
             aggregate : {
-                value : topicsTwo.concat(["type"])
+                value : ["type"]
             },
             sum : topicsTwo,
             groupBy : ["type"],
@@ -139,6 +139,12 @@ module.exports = (Router) => {
         level_select : true,
         level_select_name : "category_id",
         level_select_url : "/api/socialAnalysisCategories",
+        params(query, params) {
+            if(params.category_id === "all") {
+                delete params.category_id;
+            }
+            return params;
+        },
         procedure : [{
             aggregate : {
                 value : ["date"]
@@ -206,7 +212,7 @@ module.exports = (Router) => {
         secondParams(query, params, sendData) {
             return {
                 pid : ""
-            }
+            };
         },
         procedure : [{
             aggregate : {
@@ -436,8 +442,13 @@ module.exports = (Router) => {
                     params : keys
                 };
             } else {
-                let offset = (query.page - 1) * query.limit;
-                let limit = query.limit;
+                let offset;
+                if(query.from) {
+                    offset = +query.from - 1;
+                } else {
+                    offset = (query.page - 1) * query.limit;
+                }
+                let limit = +query.to || query.limit;
                 let sql = `SELECT * FROM ads2_soc_topic_list WHERE ${where.join(" AND ")} ORDER BY ${query.filter_key} DESC LIMIT ${offset},${limit}`;
                 return {
                     sql : sql,
@@ -484,7 +495,7 @@ module.exports = (Router) => {
         filter(data, query) {
             return filter.topicsSix(data, query);
         },
-         excel_export : true,
+        excel_export : true,
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']

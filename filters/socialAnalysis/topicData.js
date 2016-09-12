@@ -3,8 +3,7 @@
  * @date 20160512
  * @fileoverview 话题数据
  */
-var util = require("../../utils"),
-    _ = require("lodash");
+var util = require("../../utils");
 
 module.exports = {
     topicsOne(data){
@@ -46,24 +45,27 @@ module.exports = {
 
         for(let key of source) {
             let type = key.type;
-            obj[type].new_topic_num = key.new_topic_num;
-            obj[type].delete_topic_num = key.delete_topic_num;
-            obj[type].new_topic_reply_num = key.new_topic_reply_num;
-            obj[type].new_topic_reply_user_num = key.new_topic_reply_user_num;
-            obj[type].delete_topic_reply_num = key.delete_topic_reply_num;
-            obj[type].new_topic_like_num = key.new_topic_like_num;
-            obj[type].new_topic_save_num = key.new_topic_save_num;
-            obj[type].new_topic_share_num = key.new_topic_share_num;
-            obj[type].new_reply_topic_num = key.new_reply_topic_num;
-            obj["总计"].new_topic_num += key.new_topic_num;
-            obj["总计"].delete_topic_num += key.delete_topic_num;
-            obj["总计"].new_topic_reply_num += key.new_topic_reply_num;
-            obj["总计"].new_topic_reply_user_num += key.new_topic_reply_user_num;
-            obj["总计"].delete_topic_reply_num += key.delete_topic_reply_num;
-            obj["总计"].new_topic_like_num += key.new_topic_like_num;
-            obj["总计"].new_topic_save_num += key.new_topic_save_num;
-            obj["总计"].new_topic_share_num += key.new_topic_share_num;
-            obj["总计"].new_reply_topic_num += key.new_reply_topic_num;
+            if(obj[type]) {
+                obj[type].new_topic_num = key.sum_new_topic_num;
+                obj[type].delete_topic_num = key.sum_delete_topic_num;
+                obj[type].new_topic_reply_num = key.sum_new_topic_reply_num;
+                obj[type].new_topic_reply_user_num = key.sum_new_topic_reply_user_num;
+                obj[type].delete_topic_reply_num = key.sum_delete_topic_reply_num;
+                obj[type].new_topic_like_num = key.sum_new_topic_like_num;
+                obj[type].new_topic_save_num = key.sum_new_topic_save_num;
+                obj[type].new_topic_share_num = key.sum_new_topic_share_num;
+                obj[type].new_reply_topic_num = key.sum_new_reply_topic_num;
+            }
+
+            obj["总计"].new_topic_num += key.sum_new_topic_num;
+            obj["总计"].delete_topic_num += key.sum_delete_topic_num;
+            obj["总计"].new_topic_reply_num += key.sum_new_topic_reply_num;
+            obj["总计"].new_topic_reply_user_num += key.sum_new_topic_reply_user_num;
+            obj["总计"].delete_topic_reply_num += key.dsum_elete_topic_reply_num;
+            obj["总计"].new_topic_like_num += key.sum_new_topic_like_num;
+            obj["总计"].new_topic_save_num += key.sum_new_topic_save_num;
+            obj["总计"].new_topic_share_num += key.sum_new_topic_share_num;
+            obj["总计"].new_reply_topic_num += key.sum_new_reply_topic_num;
         }
 
         for(let key in obj) {
@@ -143,7 +145,7 @@ module.exports = {
             }
         }
         for(var key of source) {
-            obj[key.group_type].value = key["sum_" + filter_key];
+            obj[key.category_id].value = key["sum_" + filter_key];
         }
         for(var key of orderData) {
             newData[key.name] = {
@@ -239,8 +241,8 @@ module.exports = {
             key.topic_rate = util.round(key.reply_num, key.topic_reply_user_num);
             key.rate = "0.00%";
             key.weiding = 0;
-            key.category_id_1 = category[key.category_id_1];
-            key.category_id_2 = category[key.category_id_2];
+            key.category_id_1 = category[key.category_id_1] || null;
+            key.category_id_2 = category[key.category_id_2] || null;
             key.operating =
                 `<button class='btn btn-default' url_link='/socialAnalysis/topicsDetail' url_fixed_params='{"topic_id": "${key.topic_id}"}'>详细>></button>`;
             source[i] = key;
@@ -287,13 +289,15 @@ module.exports = {
         }
 
         for(let key of source) {
-            obj[key.type].new_topic_user_num = key.sum_new_topic_user_num;
-            obj[key.type].new_topic_reply_num = key.sum_new_topic_reply_num;
-            obj[key.type].new_topic_reply_user_num = key.sum_new_topic_reply_user_num;
-            obj[key.type].delete_topic_reply_num = key.sum_delete_topic_reply_num;
-            obj[key.type].new_topic_like_num = key.sum_new_topic_like_num;
-            obj[key.type].new_topic_save_num = key.sum_new_topic_save_num;
-            obj[key.type].new_topic_share_num = key.sum_new_topic_share_num;
+            if(obj[key.type]) {
+                obj[key.type].new_topic_user_num = key.sum_new_topic_user_num;
+                obj[key.type].new_topic_reply_num = key.sum_new_topic_reply_num;
+                obj[key.type].new_topic_reply_user_num = key.sum_new_topic_reply_user_num;
+                obj[key.type].delete_topic_reply_num = key.sum_delete_topic_reply_num;
+                obj[key.type].new_topic_like_num = key.sum_new_topic_like_num;
+                obj[key.type].new_topic_save_num = key.sum_new_topic_save_num;
+                obj[key.type].new_topic_share_num = key.sum_new_topic_share_num;
+            }
             obj["总计"].new_topic_user_num = key.sum_new_topic_user_num;
             obj["总计"].new_topic_reply_num = key.sum_new_topic_reply_num;
             obj["总计"].new_topic_reply_user_num = key.sum_new_topic_reply_user_num;

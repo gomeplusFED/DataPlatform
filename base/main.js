@@ -109,37 +109,34 @@ api.prototype = {
             params = {},
             dates = [];
 
-        //不带任何参数时，给一个空的数据
+        //无参数时，返回组件信息
         if(Object.keys(query).length === 0) {
 
-            //如果有该参数，说明前端某一部分参数需要sql查询获取
-            //注意这里仅仅在接口初始化，没有任何参数时走。
+            //用于查库添加组件信息
             if(this.selectFilter) {
                 this.selectFilter(req, (err, data) => {
                     if(!err) {
 
-                        //将查询的结果写入该参数，返回给前端
-
-                        // console.log(data);
+                        //将查询结果返回组件中
                         this.filter_select = data;
 
-                        //拼接固定的数据结构，并返回请求结果
+                        //返回组件信息
                         this._render(res, [], type);
                     } else {
                         next(err);
                     }
                 });
             } else {
-            //前端不需要额外的参数直接走
+                //如无查库添加组件，直接返回组件信息
                 this._render(res, [], type);
             }
         } else {
-        //包含参数时针对传递的参数做处理
+            //有参数时，返回数据以及组件信息
 
-            //检查时间字段是否符合标准。如果不符合，_checkDate方法直接返回错误
+            //校验时间，正确返回true，否则返回false
             if(this._checkDate(query, next)) {
                 if(query.startTime && query.endTime) {
-                    //设置查询时间区间
+                    //添加查询条件，时间
                     params.date = orm.between(
                         new Date(query.startTime + " 00:00:00"),
                         new Date(query.endTime + " 23:59:59")
@@ -148,7 +145,7 @@ api.prototype = {
 
 
                 if(typeof this.fixedParams === "function") {
-                    //fixedParams方法，将结果挂载到了query上
+                    //需查库添加查询条件
                     this.fixedParams(req, query, (err, data) => {
                         if(err) {
                             next(err);
@@ -159,7 +156,7 @@ api.prototype = {
                         }
                     });
                 } else {
-                    //得到时间区间内包含每一天的时间数组
+                    //根据时间单位分割时间
                     dates = utils.times(query.startTime, query.endTime, query.day_type);
                     this._getCache(type, req, res, next, query, params, dates);
                 }
@@ -414,11 +411,6 @@ api.prototype = {
             }
         }
 
-        /*console.log("===============sql params=============");
-        console.log(req.url , modelName);
-        console.log(params);
-        console.log(keys);
-        console.log("================== END =====================");*/
         return new Promise((resolve, reject) => {
             var sql = req.models[modelName];
             if (length > 1){
@@ -427,10 +419,7 @@ api.prototype = {
                         sql[key](function () {
                             var args = Array.prototype.slice.call(arguments),
                                 err = args.shift();
-                                /*console.log("==== result ===");
-                                console.log(key);
-                                console.log(args);
-                                console.log("======= END ======")*/
+
                             err ? reject(err) : resolve(args);
                         });
                     } else if (arrayFn.indexOf(key) >= 0) {
@@ -446,10 +435,6 @@ api.prototype = {
             } else {
                 // console.log(req.url);
                 sql[keys[0]](_obj.params, (err, data) => {
-                    /*console.log("==== result ===");
-                    console.log(keys);
-                    console.log(data);
-                    console.log("======= END222 ======")*/
                     err ? reject(err) : resolve(data);
                 });
             }
