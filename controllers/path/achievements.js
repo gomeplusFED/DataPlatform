@@ -187,11 +187,11 @@ module.exports = {
                     type : "chart",
                     title : "交易趋势",
                     query_api : "/achievements/vtradeTwo"
-                //},
-                //{
-                //    type : "table",
-                //    title : "交易明细",
-                //    query_api : "/achievements/vtradeThree"
+                },
+                {
+                    type : "table",
+                    title : "交易明细",
+                    query_api : "/achievements/vtradeThree"
                 //},
                 //{
                 //    type : "table",
