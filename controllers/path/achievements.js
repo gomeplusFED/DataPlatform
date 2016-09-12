@@ -192,11 +192,11 @@ module.exports = {
                     type : "table",
                     title : "交易明细",
                     query_api : "/achievements/vtradeThree"
-                //},
-                //{
-                //    type : "table",
-                //    title : "妥投与退货",
-                //    query_api : "/achievements/vtradeFour"
+                },
+                {
+                    type : "table",
+                    title : "妥投与退货",
+                    query_api : "/achievements/vtradeFour"
                 //},
                 //{
                 //    type : "table",

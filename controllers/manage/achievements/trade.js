@@ -189,10 +189,10 @@ module.exports = (Router) => {
         }],
         filter_select: filter_select_platform,
         filter(data, query, dates, type) {
-            return vshopFilter.vtradeThree(data, dates);
+            return filter.vtradeThree(data, dates);
         },
         rows : [
-            ['name', 'ordered_num', 'paid_num',
+            ['date', 'ordered_num', 'paid_num',
                 'ordered_user_num', 'paid_user_num',
                 'ordered_amount', 'trading_amount',
                 'paid_amount', 'custmer_price',
@@ -255,24 +255,61 @@ module.exports = (Router) => {
         router: "/achievements/vtradeFour",
         modelName: ['VtradeDelivery'],
         platform : false,
+        paging : [true],
         excel_export : true,
         flexible_btn:[{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ["excel_export"]
         }],
         filter_select: filter_select_platform,
-        params(query) {
-            var obj = {
-                day_type : 1
-            }
-            if(query.type && query.type !== 'all') {
-                obj.type = query.type;
-            }
-            return obj;
-        },
         filter(data, query, dates, type) {
-            return vshopFilter.vtradeFour(data, dates);
-        }
+            return filter.vtradeFour(data, dates);
+        },
+        rows : [
+            ['date', 'delivery_item_quantity',
+                'delivery_amount', 'refund_amount',
+                'refund_item_quantity', 'refund_item_num',
+                'refund_user_num', 'refund_order_num', 'refund_rate']
+        ],
+        cols : [[
+            {
+                "caption": "日期",
+                "type": "string"
+            },
+            {
+                "caption": "妥投商品件数",
+                "type": "number"
+            },
+            {
+                "caption": "妥投金额",
+                "type": "number"
+            },
+            {
+                "caption": "退款额",
+                "type": "number"
+            },
+            {
+                "caption": "退货商品件数",
+                "type": "number"
+            },
+            {
+                "caption": "退货商品数",
+                "type": "string"
+            },
+            {
+                "caption": "退款人数",
+                "type": "number"
+            },
+            {
+                "caption": "退货订单数",
+                "type": "number"
+            },
+            {
+                "caption": "退货率",
+                "type": "string",
+                help : "统计时间内，退货商品件数/支付商品件数"
+            }
+        ]]
     });
 
     // Top 100
