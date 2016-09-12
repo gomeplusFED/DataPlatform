@@ -197,11 +197,11 @@ module.exports = {
                     type : "table",
                     title : "妥投与退货",
                     query_api : "/achievements/vtradeFour"
-                //},
-                //{
-                //    type : "table",
-                //    title : "交易top100",
-                //    query_api : "/achievements/vtradeFive"
+                },
+                {
+                    type : "table",
+                    title : "交易top100",
+                    query_api : "/achievements/vtradeFive"
                 }
             ]
         }

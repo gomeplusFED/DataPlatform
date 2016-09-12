@@ -317,24 +317,24 @@ module.exports = (Router) => {
         router: "/achievements/vtradeFive",
         modelName: ['VtradeTop'],
         paging : [true],
-        fistSql(query, params, isCount) {
+        firstSql(query, params, isCount) {
             let _params = [query.startTime];
             if(isCount) {
-                let sql = `SELECT COUNT(*) FROM ads2_vshop_delivery_returns WHERE date=?`;
+                let sql = `SELECT COUNT(*) count FROM ads2_vshop_transaction_top WHERE date=?`;
 
                 return {
                     sql : sql,
                     params : _params
                 };
             } else {
-                let sql = `SELECT * FROM ads2_vshop_delivery_returns WHERE date=? ORDER BY ${query.filter_key} LIMIT ?,?`,
+                let sql = `SELECT * FROM ads2_vshop_transaction_top WHERE date=? ORDER BY ${query.filter_key} LIMIT ?,?`,
                     page = query.page - 1 || 0,
                     offset = query.to || (page * query.limit),
                     limit = query.from || query.limit || 0;
 
                 return {
                     sql : sql,
-                    params : _params.concat([offset, limit])
+                    params : _params.concat([offset, +limit])
                 };
             }
         },
@@ -362,13 +362,49 @@ module.exports = (Router) => {
                 ]
             }
         ],
-        params : function(query , params , sendData){
-            delete params.type;
-            return params;
-        },
         filter(data, query, dates, type) {
-            return vshopFilter.vtradeFive(data, query);
-        }
+            return filter.vtradeFive(data, query);
+        },
+        rows : [
+            ['rank', 'vshop_name', 'sum_paid_order_num',
+                'sum_paid_item_num', 'sum_paid_user_num',
+                'sum_paid_item_quantity', 'sum_paid_amount',
+                'sum_brokerage']
+        ],
+        cols : [[
+            {
+                "caption": "排行",
+                "type": "number"
+            },
+            {
+                "caption": "美店名称",
+                "type": "string"
+            },
+            {
+                "caption": "美店支付订单数",
+                "type": "number"
+            },
+            {
+                "caption": "美店支付商品数",
+                "type": "number"
+            },
+            {
+                "caption": "美店支付人数",
+                "type": "number"
+            },
+            {
+                "caption": "美店支付商品件数",
+                "type": "number"
+            },
+            {
+                "caption": "美店支付金额",
+                "type": "number"
+            },
+            {
+                "caption": "美店佣金金额",
+                "type": "number"
+            }
+        ]]
     });
 
     return Router;
