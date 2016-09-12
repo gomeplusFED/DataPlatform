@@ -33,7 +33,8 @@ module.exports = (Router) => {
             return filter.groupSix(data);
         },
         rows: [
-            ["group_num", "group_persons_num", "three",
+            ["group_num", "group_persons_num",
+                //"three",
             "all_topic_num", "del_group_num"]
         ],
         cols: [
@@ -45,10 +46,10 @@ module.exports = (Router) => {
                 caption: "累计入圈用户数",
                 type: "number",
                 help: "入圈用户数去重"
-            }, {
-                caption: "用户入圈率",
-                type: "number",
-                help: "累计入圈用户数/注册用户数"
+            //}, {
+            //    caption: "用户入圈率",
+            //    type: "number",
+            //    help: "累计入圈用户数/注册用户数"
             }, {
                 caption: "累计话题数",
                 type: "number"
