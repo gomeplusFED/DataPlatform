@@ -253,11 +253,13 @@ module.exports = {
             map = {};
         map[query.type] = vshopdict[query.type];
         var keyArray = _.keys(map);
-        console.log(JSON.stringify(source,null,4));
+        var _emptyObj = {};
+        _emptyObj[query.type] = 0;
+
         dates.forEach(function(date) {
             newData[date] = _.find(source,function(x){
                 return util.getDate(x.date) === date;
-            }) || { new_vshop_num: 0};
+            }) || _emptyObj;
         });
 
         return [{
