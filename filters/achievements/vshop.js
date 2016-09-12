@@ -425,7 +425,7 @@ module.exports = {
         }
     },
     vshopFour(data, query, dates) {
-        // console.log(JSON.stringify(data, null, 4));
+
         // console.log(JSON.stringify(dates, null, 4));
         var source = data.first.data[0],
             now = new Date(),
@@ -506,7 +506,6 @@ module.exports = {
 
     },
     vshopFive(data, query) {
-
         var type = query.type;
         var source = data.first.data[0],
             _rows = [
@@ -575,7 +574,7 @@ module.exports = {
             return util.toTable([newData], rows, cols, [count]);
         } else {
             newData = _.map(newData, function(v,i) {
-                v.rank = base + i + 1;
+                v.rank = i + 1;
                 return v;
             });
             return util.toTable([newData], rows, cols);
