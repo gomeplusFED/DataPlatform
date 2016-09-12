@@ -13,38 +13,38 @@ module.exports = function(Router) {
 
 
 <ol>
-<li><a href="#1">路由</a></li>
-<li><a href="#2">数据表名</a></li>
-<li><a href="#3">查询数据后对应的数据名称</a></li>
-<li><a href="#4">添加动态参数所用</a></li>
-<li><a href="#5">添加动态参数，主用于需要查库添加参数所用</a></li>
-<li><a href="#6">查库流程</a></li>
-<li><a href="#7">支持sql查询</a></li>
-<li><a href="#8">对应表是否分页</a></li>
-<li><a href="#9">分页时每页条数</a></li>
-<li><a href="#10">需要求和字段</a></li>
-<li><a href="#11">排序字段</a></li>
-<li><a href="#12">前端模块需查表完成</a></li>
-<li><a href="#13">行</a></li>
-<li><a href="#14">列</a></li>
-<li><a href="#15">是否显示平台</a></li>
-<li><a href="#16">是否显示渠道</a></li>
-<li><a href="#17">是否显示版本</a></li>
-<li><a href="#18">是否显示优惠券类型</a></li>
-<li><a href="#19">是否有导出路径</a></li>
-<li><a href="#20">按钮设置</a></li>
-<li><a href="#21">是否显示时间</a></li>
-<li><a href="#22">初始时间</a></li>
-<li><a href="#23">联动菜单是否显示</a></li>
-<li><a href="#24">联动菜单地址</a></li>
-<li><a href="#25">查询字段名称</a></li>
-<li><a href="#26">单选</a></li>
-<li><a href="#27">数据过滤</a></li>
-<li><a href="#28">搜索框</a></li>
-<li><a href="#29">表格字段选择框</a></li>
-<li><a href="#30">全局模块</a></li>
+<li><a href="#1" id="1">路由</a></li>
+<li><a href="#2" id="2">数据表名</a></li>
+<li><a href="#3" id="3">查询数据后对应的数据名称</a></li>
+<li><a href="#4" id="4">添加动态参数所用</a></li>
+<li><a href="#5" id="5">添加动态参数，主用于需要查库添加参数所用</a></li>
+<li><a href="#6" id="6">查库流程</a></li>
+<li><a href="#7" id="7">支持sql查询</a></li>
+<li><a href="#8" id="8">对应表是否分页</a></li>
+<li><a href="#9" id="9">分页时每页条数</a></li>
+<li><a href="#10" id="10">需要求和字段</a></li>
+<li><a href="#11" id="11">排序字段</a></li>
+<li><a href="#12" id="12">前端模块需查表完成</a></li>
+<li><a href="#13" id="13">行</a></li>
+<li><a href="#14" id="14">列</a></li>
+<li><a href="#15" id="15">是否显示平台</a></li>
+<li><a href="#16" id="16">是否显示渠道</a></li>
+<li><a href="#17" id="17">是否显示版本</a></li>
+<li><a href="#18" id="18">是否显示优惠券类型</a></li>
+<li><a href="#19" id="19">是否有导出路径</a></li>
+<li><a href="#20" id="20">按钮设置</a></li>
+<li><a href="#21" id="21">是否显示时间</a></li>
+<li><a href="#22" id="22">初始时间</a></li>
+<li><a href="#23" id="23">联动菜单是否显示</a></li>
+<li><a href="#24" id="24">联动菜单地址</a></li>
+<li><a href="#25" id="25">查询字段名称</a></li>
+<li><a href="#26" id="26">单选</a></li>
+<li><a href="#27" id="27">数据过滤</a></li>
+<li><a href="#28" id="28">搜索框</a></li>
+<li><a href="#29" id="29">表格字段选择框</a></li>
+<li><a href="#30" id="30">全局模块</a></li>
 </ol>
--  **router** --- <a name="1">路由</a>
+-  **router** --- <a name="1" href="1">路由</a>
 
 设置了路由之后会默认生成三个路由，在router后添加后缀
 <ol>
@@ -56,7 +56,7 @@ module.exports = function(Router) {
     router : '/xxx/xxx' || '/xxx'
 }
 </code></pre>
--  **modelName** --- <a name="2">数据表名</a>
+-  **modelName** --- <a name="2" href="2">数据表名</a>
 
 同一路由可以查询多个表
 <pre><code>{
