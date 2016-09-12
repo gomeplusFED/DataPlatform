@@ -225,7 +225,8 @@ module.exports = (Router) => {
             },
             {
                 "caption": "成交金额",
-                "type": "number"
+                "type": "number",
+                help : "订单原价-店铺优惠券-店铺直降"
             },
             {
                 "caption": "支付金额",
@@ -241,7 +242,8 @@ module.exports = (Router) => {
             },
             {
                 "caption": "复购率",
-                "type": "string"
+                "type": "string",
+                help : "30天内在美店中产生二次及二次以上付款成功的会员数/30天内美店中付款成功的会员总数"
             },
             {
                 "caption": "佣金金额",
@@ -286,7 +288,8 @@ module.exports = (Router) => {
             },
             {
                 "caption": "退款额",
-                "type": "number"
+                "type": "number",
+                help : "退货款金额+退运费金额"
             },
             {
                 "caption": "退货商品件数",
