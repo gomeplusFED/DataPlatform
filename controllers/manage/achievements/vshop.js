@@ -112,18 +112,11 @@ module.exports = (Router) => {
             }
         ],
         firstSql(query, params, isCount) {
-            var sql = 'select sum(`'+ query.type + '`) as `'+ query.type +'`,date from ads2_vshop_item_details group by date';
+            var sql = 'select sum(`'+ query.type + '`) as `'+ query.type +'`,date from ads2_vshop_item_details where date between "'+ query.startTime +'" and "'+ query.endTime +'" and day_type = 1 group by date';
             return {
-                sql: sql,
-                params: params
+                sql: sql
             }
 
-        },
-        params(query, param) {
-            return {
-                date : orm.between(param.date.from, param.date.to),
-                day_type : 1
-            }
         },
         filter(data, query, dates, type) {
             return vshopFilter.vshopTwo(data, query, dates);
