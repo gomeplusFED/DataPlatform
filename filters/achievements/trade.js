@@ -111,16 +111,20 @@ module.exports = {
         }];
     },
     vtradeThree(data, dates) {
-        let source = data.first.data[0];
+        let source = data.first.data[0],
+            count = data.first.count;
 
         for(let item of source) {
             item.date = moment(item.date).format("YYYY-MM-DD");
             item.custmer_price = util.division(item.paid_amount, item.paid_user_num);
             item.order_price = util.division(item.paid_amount, item.paid_num);
-            item.order_price = util.division(item.paid_amount, item.paid_num);
+            item.rebuy_rate = util.division(
+                key.ordered_usernum_last30day,
+                key.paid_usernum_last30day
+            );
         }
 
-        return util.toTable([newData], rows, cols);
+        return util.toTable([source], rows, cols, [count]);
     },
     vtradeFour(data, dates) {
         var source = data.first.data[0],

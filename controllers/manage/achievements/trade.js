@@ -182,20 +182,12 @@ module.exports = (Router) => {
         modelName: ['VtradeDetail'],
         platform : false,
         excel_export : true,
+        paging : [true],
         flexible_btn:[{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ["excel_export"]
         }],
         filter_select: filter_select_platform,
-        //params(query) {
-        //    var obj = {
-        //        day_type : 1
-        //    };
-        //    if(query.type && query.type !== 'all') {
-        //        obj.type = query.type;
-        //    }
-        //    return obj;
-        //},
         filter(data, query, dates, type) {
             return vshopFilter.vtradeThree(data, dates);
         },
