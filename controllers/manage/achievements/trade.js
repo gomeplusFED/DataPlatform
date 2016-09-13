@@ -369,10 +369,10 @@ module.exports = (Router) => {
             return filter.vtradeFive(data, query);
         },
         rows : [
-            ['rank', 'vshop_name', 'sum_paid_order_num',
-                'sum_paid_item_num', 'sum_paid_user_num',
-                'sum_paid_item_quantity', 'sum_paid_amount',
-                'sum_brokerage']
+            ['rank', 'vshop_name', 'paid_order_num',
+                'paid_item_num', 'paid_user_num',
+                'paid_item_quantity', 'paid_amount',
+                'brokerage']
         ],
         cols : [[
             {

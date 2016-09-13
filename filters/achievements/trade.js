@@ -23,9 +23,13 @@ module.exports = {
             }
         }
 
+        for(let key of data.rows[0]) {
+            total[key] = 0;
+        }
+
         for(let item of source) {
             let date = util.getDate(item.date);
-            for(let key in obj[0]) {
+            for(let key in obj[dates[0]]) {
                 obj[date][key] += item[key] || 0;
             }
         }
@@ -39,24 +43,25 @@ module.exports = {
         }
 
         for(let key in obj[dates[0]]) {
-            total[key] = 0;
             _one[key] = util.toFixed(
-                obj[dates[0]][key] - obj[dates[1]][key],
-                obj[dates[1]][key]
+                obj[dates[6]][key] - obj[dates[5]][key],
+                obj[dates[5]][key]
             );
         }
 
-        obj[dates[0]].name = "昨天";
-        obj[dates[1]].name = "前天";
+        obj[dates[6]].name = "昨天";
+        obj[dates[5]].name = "前天";
         _one.name = "环比";
 
+        total.custmer_price = util.division(total.paid_amount, total.paid_user_num);
+        total.order_price = util.division(total.paid_amount, total.paid_num);
         for(let key in obj[dates[0]]) {
-            _seven[key] = util.toFixed(obj[dates[0]][key], total[key] / 7);
+            _seven[key] = util.toFixed(obj[dates[6]][key], total[key] / 7);
         }
         _seven.name = "7日平均环比";
 
-        newData.push(obj[dates[0]]);
-        newData.push(obj[dates[1]]);
+        newData.push(obj[dates[6]]);
+        newData.push(obj[dates[5]]);
         newData.push(_one);
         newData.push(_seven);
 
