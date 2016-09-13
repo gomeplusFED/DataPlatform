@@ -21,7 +21,7 @@ module.exports = (Router) => {
         date_picker : false,
         //date_picker_data: 1,
         params() {
-            var now = new Date(),
+            var now = new Date(new Date() - 24 * 60 * 60 *1000),
                 date = util.getDate(now);
 
             return {
@@ -33,7 +33,8 @@ module.exports = (Router) => {
             return filter.groupSix(data);
         },
         rows: [
-            ["group_num", "group_persons_num", "three",
+            ["group_num", "group_persons_num",
+                //"three",
             "all_topic_num", "del_group_num"]
         ],
         cols: [
@@ -45,10 +46,10 @@ module.exports = (Router) => {
                 caption: "累计入圈用户数",
                 type: "number",
                 help: "入圈用户数去重"
-            }, {
-                caption: "用户入圈率",
-                type: "number",
-                help: "累计入圈用户数/注册用户数"
+            //}, {
+            //    caption: "用户入圈率",
+            //    type: "number",
+            //    help: "累计入圈用户数/注册用户数"
             }, {
                 caption: "累计话题数",
                 type: "number"
@@ -110,6 +111,12 @@ module.exports = (Router) => {
         level_select : true,
         level_select_name : "category_id",
         level_select_url : "/api/socialAnalysisCategories",
+        params(query, params) {
+            if(params.category_id === "all") {
+                delete params.category_id;
+            }
+            return params;
+        },
         filter_select : [{
         //    title: "平台选择",
         //    filter_key : 'type',
@@ -342,7 +349,8 @@ module.exports = (Router) => {
             var param = {
                 group_id : [],
                 key : ["group_person_num", "group_topic_num", "topic_praise_num",
-                    "topic_collect_num", "topic_reply_num", "topic_subreply_num"]
+                    "topic_collect_num", "topic_reply_num", "topic_subreply_num"],
+                date : util.getDate(new Date(new Date() - 24 * 60 * 60 * 1000))
             };
             for(let item of sendData.first.data[0]){
                 param.group_id.push(item.group_id);

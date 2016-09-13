@@ -43,7 +43,6 @@ function CategoryDeal(query , level){
 
 
 module.exports = (Router) => {
-
     Router = Router.get("/achievements/product22Zero_json" , function(req , res , next){
         res.json({
             code: 200,

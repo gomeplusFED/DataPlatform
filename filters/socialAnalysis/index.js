@@ -266,7 +266,7 @@ module.exports = {
 
         for(let key of source){
             var date = util.getDate(key.date);
-            newData[date].value = key[query.filter_key];
+            newData[date].value += key[query.filter_key];
         }
 
         return [{
@@ -408,16 +408,18 @@ module.exports = {
         var i = 1;
         for(let item of source){
             item.top = (page - 1) * 20 + i;
-            item.group_person_num = config[item.group_id].group_person_num || 0;
-            item.group_topic_num = config[item.group_id].group_topic_num || 0;
-            item.topic_subreply_num = config[item.group_id].topic_subreply_num || 0;
-            item.topic_praise_num = config[item.group_id].topic_praise_num || 0;
-            item.topic_collect_num = config[item.group_id].topic_collect_num || 0;
-            item.topic_reply_num = config[item.group_id].topic_reply_num || 0;
-            item.reply_num = key.topic_reply_num + key.topic_subreply_num;
-            item.category_id_1 = obj[item.category_id_1];
-            item.category_id_2 = obj[item.category_id_2];
-            item.creater_flag = config[item.creater_flag];
+            item.group_person_num = config[item.group_id] ? config[item.group_id].group_person_num || 0 : 0;
+            item.group_topic_num = config[item.group_id] ? config[item.group_id].group_topic_num || 0 : 0;
+            item.topic_subreply_num = config[item.group_id] ? config[item.group_id].topic_subreply_num || 0 : 0;
+            item.topic_praise_num = config[item.group_id] ? config[item.group_id].topic_praise_num || 0 : 0;
+            item.topic_collect_num = config[item.group_id] ? config[item.group_id].topic_collect_num || 0 : 0;
+            item.topic_reply_num = config[item.group_id] ? config[item.group_id].topic_reply_num || 0 : 0;
+            item.reply_num =
+                config[item.group_id] ? config[item.group_id].topic_reply_num || 0 : 0 +
+                config[item.group_id] ? config[item.group_id].topic_subreply_num || 0 : 0;
+            item.category_id_1 = obj[item.category_id_1] || null;
+            item.category_id_2 = obj[item.category_id_2] || null;
+            item.creater_flag = config[item.creater_flag] || null;
             item.operating = `<button class="btn btn-default" url_link='/socialAnalysis/groupDetail' url_fixed_params='{"group_id":"${item.group_id}"}'>详情</button>`;
             newData.push(item);
             i++;

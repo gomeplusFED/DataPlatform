@@ -27,12 +27,13 @@ module.exports = {
             };
 
         for(let item of source){
-            newData.group_person_num += DealNumber(item.group_person_num);
-            newData.group_topic_num +=  DealNumber(item.group_topic_num);
-            newData.topic_praise_num += DealNumber(item.topic_praise_num);
-            newData.topic_reply_num  += DealNumber(item.topic_reply_num);
-            newData.topic_subreply_num  += DealNumber(item.topic_subreply_num);
-            newData.topic_collect_num  += DealNumber(item.topic_collect_num);
+            newData[item.key] += DealNumber(item.sum_value);
+            //newData.group_person_num += DealNumber(item.group_person_num);
+            //newData.group_topic_num +=  DealNumber(item.group_topic_num);
+            //newData.topic_praise_num += DealNumber(item.topic_praise_num);
+            //newData.topic_reply_num  += DealNumber(item.topic_reply_num);
+            //newData.topic_subreply_num  += DealNumber(item.topic_subreply_num);
+            //newData.topic_collect_num  += DealNumber(item.topic_collect_num);
         }
 
         newData.reply_num = newData.topic_reply_num + newData.topic_subreply_num;
@@ -78,14 +79,11 @@ module.exports = {
             }
             for(var key in item){
                 if(key == "type") continue;
-                newData[num][key] += item[key];
+                if(newData[num] && newData[num][key]) {
+                    newData[num][key] += item[key];
+                }
+                newData[3][key] += item[key];
             }
-        }
-
-        /* 对APP , WAP , PC 求和 得出总计 */
-        for(var key in newData[3]){
-            if(key == "type") continue;
-            newData[3][key] = newData[0][key] + newData[1][key] + newData[2][key];
         }
 
         return util.toTable([newData], data.rows, data.cols);
@@ -125,7 +123,13 @@ module.exports = {
             data : newData,
             config: { // 配置信息
                 stack: false, // 图的堆叠
-                categoryY : false //柱状图竖着
+                categoryY : false, //柱状图竖着
+                toolBox : {
+                    magicType : {
+                        type: ['line', 'bar']
+                    },
+                    dataView: {readOnly: true}
+                }
             }
         }];
     },
@@ -163,11 +167,15 @@ module.exports = {
 
          for(let item of newData) {
              item.reply_user_num =
-                 config[item.topic_id].topic_reply_user_num + config[item.topic_id].topic_subreply_user_num;
+                 config[item.topic_id] ? config[item.topic_id].topic_reply_user_num || 0 : 0 +
+                 config[item.topic_id] ? config[item.topic_id].topic_subreply_user_num || 0 : 0;
              item.topic_reply_num =
-                 config[item.topic_id].topic_reply_num + config[item.topic_id].topic_subreply_num;
-             item.topic_praise_num = config[item.topic_id].topic_praise_num;
-             item.topic_collect_num = config[item.topic_id].topic_collect_num;
+                 config[item.topic_id] ? config[item.topic_id].topic_reply_num || 0 : 0 +
+                 config[item.topic_id] ? config[item.topic_id].topic_subreply_num || 0 : 0;
+             item.topic_praise_num =
+                 config[item.topic_id] ? config[item.topic_id].topic_praise_num || 0 : 0;
+             item.topic_collect_num =
+                 config[item.topic_id] ? config[item.topic_id].topic_collect_num || 0 : 0;
          }
 
         return util.toTable([newData], data.rows, data.cols, [count]);

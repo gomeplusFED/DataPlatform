@@ -67,8 +67,14 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/socialAnalysis/hostTwo",
-        modelName : ["GroupownerStatistics"],
+        modelName : ["GroupownerStatistics", "Statistics"],
         platform : false,
+        secondParams() {
+            return {
+                date : util.getDate(new Date(new Date() - 24 * 60 * 60 * 1000)),
+                key : "group_leader_num"
+            }
+        },
         procedure : [{
             aggregate : {
                 value : ["type"]
@@ -77,7 +83,7 @@ module.exports = (Router) => {
                 "attention_groupOwner_num", "cancel_attention_groupOwner_num"],
             groupBy : ["type"],
             get : ""
-        }],
+        },false],
         filter(data) {
             return filter.hostTwo(data);
         },
@@ -117,6 +123,13 @@ module.exports = (Router) => {
         level_select : true,
         level_select_name : "category_id",
         level_select_url : "/api/socialAnalysisCategories",
+        params(query, params) {
+            if(params.category_id === "all") {
+                delete params.category_id;
+            }
+
+            return params;
+        },
         procedure : [{
             aggregate : {
                 value : ["date"]
@@ -280,7 +293,7 @@ module.exports = (Router) => {
         secondParams(query, params, data) {
             var group_ids = _.uniq(_.pluck(data.first.data[0], "groupOwner_id")),
                 _params = {
-                    date : params.date,
+                    date : util.getDate(new Date(new Date() - 24 * 60 * 60 * 1000)),
                     group_leader_id : group_ids,
                     key : ["person_topic_num", "person_friends_num", "person_funs_num", "person_funs_num"]
                 };
@@ -328,26 +341,26 @@ module.exports = (Router) => {
                 type: "string"
             }, {
                 caption: "圈主ID",
-                type: ""
+                type: "string"
             }, {
                 caption: "是否达人",
-                type: ""
+                type: "string"
             }, {
                 caption: "累计发布话题数",
-                type: ""
+                type: "number"
             }, {
                 caption: "新增邀请好友数",
-                type: ""
+                type: "number"
             }, {
                 caption: "累计好友数",
-                type: ""
+                type: "number"
             }, {
                 caption: "新增粉丝数",
                 type: "number",
                 help : "圈主本时间区间新关注粉丝数（第一次关注时间不在此时间区，不+1）"
             },{
                 caption: "当前粉丝数",
-                type: "",
+                type: "number",
                 help : "当前累计的关注粉丝数"
             }, {
                 caption: "新增圈子数",
@@ -359,13 +372,13 @@ module.exports = (Router) => {
             //    help : "此圈主下圈子数"
             }, {
                 caption: "新增关注次数",
-                type: ""
+                type: "number"
             //}, {
             //    caption: "累计关注次数",
             //    type: ""
             }, {
                 caption: "新增取关次数",
-                type: ""
+                type: "number"
             }]
         ]
     });
