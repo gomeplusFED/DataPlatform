@@ -91,7 +91,7 @@
 				let _this = this;
 				for(let key in this.model) {
 					if(!this.model[key]) {
-						alert(key + '不允许为空');
+						alert('所有字段都为必填选项!');
 						return false;
 					}
 				}
