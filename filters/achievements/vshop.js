@@ -222,7 +222,7 @@ module.exports = {
                 hb = _.clone(zData);
                 _.merge(hb, qData, function(a, b) {
                   if (_.isNumber(b)) {
-                    return util.toFixed(a,b);
+                    return util.toFixed(a-b,b);
                   }
                 }); 
             }
