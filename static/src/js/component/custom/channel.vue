@@ -76,18 +76,30 @@
 					show: true,
 					noLoaded: 0
 				},
-				model: {},
+				model: {
+					channel_type: '',
+					channel_type_code:'',
+					channel_name: '',
+					channel_type: '',
+					channel_ex: ''
+				},
 				list: []
 			}
 		},
 		methods: {
 			addChannel: function() {
 				let _this = this;
+				for(let key in this.model) {
+					if(!this.model[key]) {
+						alert(key + '不允许为空');
+						return false;
+					}
+				}
 				$.post('/custom/channel', {data: JSON.stringify(this.model)}, function(res) {
 					if(res.code===200) {
 						_this.list.push(res.data);
 					}else {
-						alert(res.msg)
+						alert(res.msg);
 					}
 				})
 			}
