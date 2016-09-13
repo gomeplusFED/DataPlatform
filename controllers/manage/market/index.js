@@ -218,7 +218,7 @@ module.exports = (Router) => {
         body.create_time = new Date();
         body.update_time = new Date();
 
-        if(Object.keys(body).length === 0) {
+        if(Object.keys(body).length !== 5) {
             res.json({
                 code : 400,
                 msg : "所有项为必填项"
