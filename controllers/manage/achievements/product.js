@@ -40,7 +40,7 @@ module.exports = (Router) => {
         },
         fixedParams(req , query , cb){
             if(!query.category_id){
-                query.category_id = "";
+                query.category_id = "ALL";
                 query.category_level = "ALL";
                 cb(null , query);
             }else{
