@@ -218,7 +218,9 @@ module.exports = (Router) => {
         body.create_time = new Date();
         body.update_time = new Date();
 
-        req.models.Channel.find(body, (err, items) => {
+        req.models.Channel.find({
+            channel_id : body.channel_id
+        }, (err, items) => {
             if(err) {
                 res.json({
                     code : 400,
