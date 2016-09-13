@@ -40,7 +40,10 @@ module.exports = {
 
         for(let key in obj[dates[0]]) {
             total[key] = 0;
-            _one[key] = util.division(+obj[dates[0]][key], +obj[dates[1]][key]);
+            _one[key] = util.toFixed(
+                obj[dates[0]][key] - obj[dates[1]][key],
+                obj[dates[1]][key]
+            );
         }
 
         obj[dates[0]].name = "昨天";
@@ -48,7 +51,7 @@ module.exports = {
         _one.name = "环比";
 
         for(let key in obj[dates[0]]) {
-            _seven[key] = util.division(obj[dates[0]][key], total[key]);
+            _seven[key] = util.toFixed(obj[dates[0]][key], total[key] / 7);
         }
         _seven.name = "7日平均环比";
 
