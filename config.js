@@ -166,7 +166,9 @@ module.exports = {
                 obj.achievements.shop(),
                 obj.achievements.product(),
                 obj.achievements.productSale(),
-                obj.achievements.trade()
+                obj.achievements.trade(),
+                obj.achievements.vshop(),
+                obj.achievements.vtrade()
             ]
         },
         "14": {

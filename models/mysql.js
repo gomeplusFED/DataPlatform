@@ -30,36 +30,29 @@ function connect(app) {
             //db.settings.set('instance.autoFetchLimit', 9999);
             //db.settings.set('instance.cacheSaveCheck', false);
             //db.settings.set('instance.autoSave', true);
-            models.NewAccount = db.define("ads2_user_analysis_users", obj.NewAccount);
-            models.UserAnalysisVersion = db.define("ads2_rebate_order_overview", obj.UserAnalysisVersion);
+            models.NewAccount = db.define("tbl_rt_useranalysis_newuser", obj.NewAccount);
             models.Configure = db.define("tbl_rt_configure", obj.Configure);
-            models.UsersAccess = db.define("ads2_user_access", obj.UsersAccess);
-            models.UserCompose = db.define("ads2_use_time", obj.UserCompose);
-            models.MarketingFlow = db.define("tbl_rt_marketing_flow", obj.MarketingFlow);
-            models.MarketingCoupon = db.define("tbl_rt_marketing_coupon", obj.MarketingCoupon);
-            models.MarketingCouponDetails = db.define("tbl_rt_marketing_coupon_details", obj.MarketingCouponDetails);
+            models.UsersAccess = db.define("tbl_rt_user_access", obj.UsersAccess);
+            models.UserCompose = db.define("tbl_rt_use_time", obj.UserCompose);
             models.OverviewPage = db.define("ads2_overview_page", obj.OverviewPage);
             models.OverviewPlatf = db.define("ads2_overview_platf", obj.OverviewPlatf);
             models.KpiValue = db.define("tbl_rt_kpi_value", obj.KpiValue);
-            models.Rebate = db.define("ads2_rebate_order_overview", obj.Rebate);
-            models.RebateOrderMuiltipleOverview = db.define("ads2_rebate_order_muiltiple_overview", obj.RebateOrderMuiltipleOverview);
-            models.RebateOrderMuiltipleTrend = db.define("ads2_rebate_order_muiltiple_trend", obj.RebateOrderMuiltipleTrend);
+            models.Rebate = db.define("tbl_rt_rebate", obj.Rebate);
             models.RebateRefund = db.define("tbl_rt_rebate_refund", obj.RebateRefund);
             models.RebateShopOverview = db.define("tbl_rt_rebate_shop_overview", obj.RebateShopOverview);
             models.RebateShopRefund = db.define("tbl_rt_rebate_shop_refund", obj.RebateShopRefund);
             models.RebateShopTop = db.define("tbl_rt_rebate_shop_top", obj.RebateShopTop);
             models.RebateShopPlanTop = db.define("tbl_rt_rebate_shop_plan_top", obj.RebateShopPlanTop);
             models.RebateInvitepartner = db.define("tbl_rt_rebate_invitepartner", obj.RebateInvitepartner);
-            models.RebatetSheduleDetails = db.define("ads2_rebate_order_plan_info", obj.RebatetSheduleDetails);
+            models.RebatetSheduleDetails = db.define("tbl_rt_rebate_schedule_details", obj.RebatetSheduleDetails);
             models.RebatetInviteseller = db.define("tbl_rt_rebate_inviteseller", obj.RebatetInviteseller);
             models.RebatetRegisterTrendency = db.define("tbl_rt_rebate_register_trendency", obj.RebatetRegisterTrendency);
             models.RebatetRegisterSheduleDetails = db.define("tbl_rt_rebate_register_schedule_details", obj.RebatetRegisterSheduleDetails);
             models.ConfCategories = db.define("ecp_back_categories", obj.ConfCategories);
-            models.UrlAccessWap = db.define("ads2_url_access_wap", obj.UrlAccessWap);
-            models.KeyValue = db.define("ads2_terminal_key_value", obj.KeyValue);
-            //models.KeyValue = db.define("tbl_rt_key_value", obj.KeyValue);
-            models.RebateOrderTredencyDetails = db.define("ads2_rebate_order_trend", obj.RebateOrderTredencyDetails);
-            models.RebateTypeLevelDetails = db.define("ads2_rebate_order_level_sum", obj.RebateTypeLevelDetails);
+            models.UrlAccessWap = db.define("tbl_rt_url_access_wap", obj.UrlAccessWap);
+            models.KeyValue = db.define("tbl_rt_key_value", obj.KeyValue);
+            models.RebateOrderTredencyDetails = db.define("tbl_rt_rebate_order_tredency_details", obj.RebateOrderTredencyDetails);
+            models.RebateTypeLevelDetails = db.define("tbl_rt_rebate_type_level_details", obj.RebateTypeLevelDetails);
             models.RebateShopOrderTredencyDetails = db.define("tbl_rt_rebate_shop_order_tredency_details", obj.RebateShopOrderTredencyDetails);
             models.RebateShopTypeLevelDetails = db.define("tbl_rt_rebate_shop_type_level_details", obj.RebateShopTypeLevelDetails);
             models.Count = db.define("tbl_dataplatform_count", obj.Count);
@@ -69,23 +62,22 @@ function connect(app) {
             models.SocialCategory = db.define("tbl_social_category", obj.SocialCategory);
             models.ShopPayTop = db.define("tbl_rt_shop_pay_top", obj.ShopPayTop);
             models.ShopAccesTop = db.define("tbl_rt_shop_acces_top", obj.ShopAccesTop);
-            //models.TradeCaty = db.define("ads2_deal_caty", obj.TradeCaty);
-            models.DealCaty = db.define("tbl_rt_deal_caty", obj.DealCaty);
+            models.TradeCaty = db.define("ads2_spt_rt_deal_caty", obj.TradeCaty);
             models.TradeUser = db.define("tbl_rt_deal_user", obj.TradeUser);
             models.SalesPerfProductKv = db.define("tbl_rt_sales_perf_product_kv", obj.SalesPerfProductKv);
             models.SalesPerfShopKv = db.define("tbl_rt_sales_perf_shop_kv", obj.SalesPerfShopKv);
             models.SalesPerfTranKv = db.define("tbl_rt_sales_perf_tran_kv", obj.SalesPerfTranKv);
             models.SalesProductMarketTop = db.define("tbl_rt_sales_product_market_top", obj.SalesProductMarketTop);
             models.SalesProductFlowtTop = db.define("tbl_rt_sales_product_flow_top", obj.SalesProductFlowtTop);
-            models.UserKeepResult = db.define("ads2_user_analysis_keep", obj.UserKeepResult);
+            models.UserKeepResult = db.define("tbl_rt_user_keep_result", obj.UserKeepResult);
             models.ChannelAnalysis = db.define("tbl_rt_channel_analysis", obj.ChannelAnalysis);
             models.ChannelUserKeep = db.define("tbl_rt_channel_user_keep", obj.ChannelUserKeep);
             models.ChannelUserActive = db.define("tbl_rt_channel_user_active", obj.ChannelUserActive);
             models.ChannelIdNameChart = db.define("tbl_rt_channel_id_name_chart", obj.ChannelIdNameChart);
-            models.ShareAnalyzeOverview = db.define("ads2_share_analyze_overview", obj.ShareAnalyzeOverview);
-            models.ShareAnalyzeTrend = db.define("ads2_share_analyze_trend", obj.ShareAnalyzeTrend);
-            models.ShareAnalyzeChannel = db.define("ads2_share_analyze_channel", obj.ShareAnalyzeChannel);
-            models.ShareAnalyzeChannelTrend = db.define("ads2_share_analyze_channel_trend", obj.ShareAnalyzeChannelTrend);
+            models.ShareAnalyzeOverview = db.define("tbl_rt_share_analyze_overview", obj.ShareAnalyzeOverview);
+            models.ShareAnalyzeTrend = db.define("tbl_rt_share_analyze_trend", obj.ShareAnalyzeTrend);
+            models.ShareAnalyzeChannel = db.define("tbl_rt_share_analyze_channel", obj.ShareAnalyzeChannel);
+            models.ShareAnalyzeChannelTrend = db.define("tbl_rt_share_analyze_channel_trend", obj.ShareAnalyzeChannelTrend);
             models.UrlToName = db.define("tbl_rt_url_to_name", obj.UrlToName);
             models.CouponGroupPriceInterrgional = db.define("ads2_coupon_group_price_interrgional", obj.CouponGroupPriceInterrgional);
             models.CouponGroupShopTop = db.define("ads2_coupon_group_shop_top", obj.CouponGroupShopTop);
@@ -122,6 +114,20 @@ function connect(app) {
             models.CamOverview = db.define("ads2_cam_overview" , obj.CamOverview);
             models.CamCamlistActive = db.define("ads2_cam_camlist_active" , obj.CamCamlistActive);
             models.CamCamlistChannel = db.define("ads2_cam_camlist_channel" , obj.CamCamlistChannel);
+
+            //9.1
+            models.AdsKeyValue = db.define("ads2_key_value" , obj.AdsKeyValue);
+
+            // 美店
+            models.VshopDetail = db.define("ads2_vshop_item_details" , obj.VshopDetail);
+            models.VshopMerchandiseResources = db.define("ads2_vshop_merchandise_resources" , obj.VshopMerchandiseResources);
+            models.VshopTransaction = db.define("ads2_vshop_transaction_details" , obj.VshopTransaction);
+            models.VshopFlowTop = db.define("ads2_vshop_flow_top" , obj.VshopFlowTop);
+            
+            //美店交易
+            models.VtradeDetail = db.define("ads2_vshop_transaction_details" , obj.VtradeDetail);
+            models.VtradeDelivery = db.define("ads2_vshop_delivery_returns" , obj.VtradeDelivery);
+            models.VtradeTop = db.define("ads2_vshop_transaction_top" , obj.VtradeTop);
 
             models.db1 = db;
             next();
