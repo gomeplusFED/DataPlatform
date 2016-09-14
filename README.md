@@ -8,6 +8,19 @@ module.exports = function(Router) {
     return Router;
 };
 </code></pre>
+##创建表模板工具
+
+<pre><code>let createModel = require("./utils/createModel");
+createModel(options);</code></pre>
+**options**  
+
+|字段|是否必需|类型|注释|  
+|---|---|---|  
+|filename|是|string|表格信息地址|  
+|writePath|是|string|模板写入地址|  
+|author|否|string|作者|  
+|tableName|否认|array|模板名|  
+  
 ##options配置##
 
 
