@@ -197,7 +197,7 @@ module.exports = (Router) => {
                 let sql = `SELECT * FROM ads2_vshop_flow_top WHERE date=? ORDER BY ${query.filter_key} LIMIT ?,?`,
                     page = query.page - 1 || 0,
                     offset = query.to || (page * query.limit),
-                    limit = query.from || query.limit || 0;
+                    limit = query.from || query.limit || 20;
 
                 return {
                     sql : sql,
