@@ -14,12 +14,14 @@ module.exports = function(Router) {
 createModel(options);</code></pre>
 **options**  
 
-字段 | 是否必需 | 类型 | 注释  
---- | --- | --- | ---  
-filename | 是 | string | 表格信息地址  
-writePath | 是 | string | 模板写入地址  
-author | 否 | string | 作者  
-tableName | 否 | array | 模板名  
+字段 | 是否必需 | 类型 | 默认值 | 注释  
+--- | --- | --- | --- | ---  
+filename | 是 | string |   | 表格信息地址  
+writePath | 是 | string |   | 模板写入地址  
+author | 否 | string |   |作者  
+tableName | 否 | array | [] |模板名  
+buffer | 否 | string | utf-8 | 编码  
+desc | 否 | string |   | 备注
   
 ##options配置##
 
