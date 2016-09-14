@@ -4,6 +4,7 @@
  * @fileoverview 用于创建数据模型
  */
 const fs = require("fs");
+const moment = require("moment");
 const config = {
     "date" : "Date",
     "varchar" : "String",
@@ -13,9 +14,21 @@ const config = {
 };
 
 module.exports = (options) => {
-    const file = fs.readFileSync("./test.txt", "utf-8");
+    if(!options.filename) {
+        return console.log(`读取文件是必需的`);
+    }
+    if(!options.writePath) {
+        return console.log(`模板路径是必需的`);
+    }
+    console.log("开始");
+    let file;
+    try{
+        file = fs.readFileSync(options.filename, options.buffer || "utf-8");
+    } catch(err) {
+        return console.log(`没有找到读取文件：${options.filename}`);
+    }
     const tables = file.split(";");
-    for(let key of tables) {
+    tables.forEach((key, index) => {
         let _array = key.split("`");
         let isTableName = false;
         let tableName;
@@ -56,13 +69,20 @@ module.exports = (options) => {
                 }
             }
             let desc = `/**
- * @author yanglei
- * @date 20160628
- * @fileoverview
+ * @author ${options.author || ""}
+ * @date ${moment(new Date()).format("YYYY-MM-DD")}
+ * @fileoverview ${options.desc || ""}
  */
 module.exports = `;
             table += "};";
-            fs.writeFileSync(tableName + ".js", desc.concat(table));
+            const _talbeName = options.tableName || [];
+            tableName = _talbeName[index] || tableName;
+            try{
+                fs.writeFileSync(`${options.writePath + tableName}.js`, desc.concat(table));
+            } catch(err){
+                return console.log(`创建模板文件失败`);
+            }
         }
-    }
+    });
+    console.log("结束");
 };
