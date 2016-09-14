@@ -14,7 +14,7 @@ module.exports = {
             let num = 0;
             for(let item of data.now[key]) {
                 if(item) {
-                    num += item;
+                    num += +item;
                 }
             }
             now[key] = num;
@@ -24,7 +24,7 @@ module.exports = {
             let num = 0;
             for(let item of data.old[key]) {
                 if(item) {
-                    num += item;
+                    num += +item;
                 }
             }
             old[key] = num;
