@@ -137,11 +137,18 @@ module.exports = {
             },
             newData = {};
 
+        console.log(123,dates);
+
         var n = 0;
         for(let item of source){
             if(item.isnew == 0) continue;
+            if(!newData[util.prizeRange[item.tag]]){
+                newData[util.prizeRange[item.tag]] = {
+                    value : 0
+                }
+            }
             newData[util.prizeRange[item.tag]] = {
-                value : item.items_count / 10000
+                value : item.items_count / 10000 + newData[util.prizeRange[item.tag]].value / 1
             }
         }
 

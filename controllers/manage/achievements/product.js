@@ -155,9 +155,11 @@ module.exports = (Router) => {
         router : "/achievements/productThree",
         modelName : ["ItemPie"],
         platform : false,
+        date_picker : false,
         order : ["tag"],
         params : function(query , params , sendData){
             delete params.category_id;
+            params.isnew = 0;
             return params;
         },
         fixedParams(req , query , cb){
@@ -195,7 +197,7 @@ module.exports = (Router) => {
         }
     });
 
-    //商品价格区间分布－总商品数（万）
+    //商品价格区间分布－新增商品数（万）
     Router = new api(Router,{
         router : "/achievements/productFour",
         modelName : ["ItemPie"],
@@ -203,6 +205,7 @@ module.exports = (Router) => {
         order : ["tag"],
         params : function(query , params , sendData){
             delete params.category_id;
+            params.isnew = 1;
             return params;
         },
         fixedParams(req , query , cb){
@@ -236,7 +239,7 @@ module.exports = (Router) => {
             }
         },
         filter(data, query, dates) {
-            return filter.productFour(data, query);
+            return filter.productFour(data, query, dates);
         }
     });
 
