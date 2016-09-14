@@ -38,6 +38,9 @@ module.exports = {
             for(let k in obj[dates[0]]) {
                 total[k] += obj[key][k];
             }
+            obj[key].trading_amount = obj[key].trading_amount.toFixed(2);
+            obj[key].ordered_amount = obj[key].ordered_amount.toFixed(2);
+            obj[key].paid_amount = obj[key].paid_amount.toFixed(2);
             obj[key].custmer_price = util.division(obj[key].paid_amount, obj[key].paid_user_num);
             obj[key].order_price = util.division(obj[key].paid_amount, obj[key].paid_num);
         }
