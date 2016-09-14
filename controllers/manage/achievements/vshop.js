@@ -3,7 +3,7 @@
  * @date 20160906
  * @fileoverview 美店
  */
-var api = require(RootPath+"/base/main"),
+let api = require("../../../base/main"),
     vshopFilter = require("../../../filters/achievements/vshop"),
     orm = require("orm"),
     util = require("../../../utils");
