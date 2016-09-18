@@ -4,8 +4,6 @@
  * @fileoverview 平台促销返利
  */
 var api = require("../../../base/main"),
-    help = require("../../../base/help"),
-    config = require("../../../utils/config.json"),
     filter = require("../../../filters/platformRebate/platformPromotions");
 
 module.exports = (Router) => {
@@ -230,7 +228,7 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/platformRebate/platformPromotionsFour",
-        modelName : [ "RebateOrderMuiltipleTrend", "TypeFlow" ],
+        modelName : [ "RebateOrderPlantypeRebatetypeCategorySum", "TypeFlow" ],
         params(query, params) {
             params.plan_type = "2";
             return params;
@@ -311,10 +309,10 @@ module.exports = (Router) => {
         excel_export : true,
         showDayUnit : true,
         date_picker_data : 1,
-        //flexible_btn : [{
-        //    content: '<a href="javascript:void(0)">导出</a>',
-        //    preMethods: ['excel_export']
-        //}],
+        flexible_btn : [{
+            content: '<a href="javascript:void(0)">导出</a>',
+            preMethods: ['excel_export']
+        }],
         filter(data, query) {
             return filter.platformPromotionsFive(data, query.page);
         },
