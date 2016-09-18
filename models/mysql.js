@@ -31,7 +31,7 @@ function connect(app) {
             //db.settings.set('instance.cacheSaveCheck', false);
             //db.settings.set('instance.autoSave', true);
             models.NewAccount = db.define("ads2_user_analysis_users", obj.NewAccount);
-            models.UserAnalysisVersion = db.define("ads2_rebate_order_overview", obj.UserAnalysisVersion);
+            models.UserAnalysisVersion = db.define("ads2_user_analysis_version", obj.UserAnalysisVersion);
             models.Configure = db.define("tbl_rt_configure", obj.Configure);
             models.UsersAccess = db.define("ads2_user_access", obj.UsersAccess);
             models.UserCompose = db.define("ads2_use_time", obj.UserCompose);
@@ -41,16 +41,24 @@ function connect(app) {
             models.OverviewPage = db.define("ads2_overview_page", obj.OverviewPage);
             models.OverviewPlatf = db.define("ads2_overview_platf", obj.OverviewPlatf);
             models.KpiValue = db.define("tbl_rt_kpi_value", obj.KpiValue);
+            //返利
             models.Rebate = db.define("ads2_rebate_order_overview", obj.Rebate);
             models.RebateOrderMuiltipleOverview = db.define("ads2_rebate_order_muiltiple_overview", obj.RebateOrderMuiltipleOverview);
             models.RebateOrderMuiltipleTrend = db.define("ads2_rebate_order_muiltiple_trend", obj.RebateOrderMuiltipleTrend);
             models.RebatetSheduleDetails = db.define("ads2_rebate_order_plan_info", obj.RebatetSheduleDetails);
+            models.RebateOrderTredencyDetails = db.define("ads2_rebate_order_trend", obj.RebateOrderTredencyDetails);
+            models.RebateTypeLevelDetails = db.define("ads2_rebate_order_level_sum", obj.RebateTypeLevelDetails);
+            models.RebateOrderPlantypeLevelSum = db.define("ads2_rebate_order_plantype_level_sum", obj.RebateOrderPlantypeLevelSum);
+            models.RebateInviteOverview = db.define("ads2_rebate_invite_overview", obj.RebateInviteOverview);
+            models.RebateInvitePlanInfo = db.define("ads2_rebate_invite_plan_info", obj.RebateInvitePlanInfo);
+            models.RebateInviteTrend = db.define("ads2_rebate_invite_trend", obj.RebateInviteTrend);
+            models.RebateOrderPlantypeRebatetypeCategorySum = db.define("ads2_rebate_order_plantype_rebatetype_category_sum", obj.RebateOrderPlantypeRebatetypeCategorySum);
+            models.RebateOrderTypeSum = db.define("ads2_rebate_order_type_sum", obj.RebateOrderTypeSum);
+
             models.ConfCategories = db.define("ecp_back_categories", obj.ConfCategories);
             models.UrlAccessWap = db.define("ads2_url_access_wap", obj.UrlAccessWap);
             models.KeyValue = db.define("ads2_terminal_key_value", obj.KeyValue);
             //models.KeyValue = db.define("tbl_rt_key_value", obj.KeyValue);
-            models.RebateOrderTredencyDetails = db.define("ads2_rebate_order_trend", obj.RebateOrderTredencyDetails);
-            models.RebateTypeLevelDetails = db.define("ads2_rebate_order_level_sum", obj.RebateTypeLevelDetails);
             models.Count = db.define("tbl_dataplatform_count", obj.Count);
             models.User2 = db.define("tbl_dataplatform_nodejs_users2", obj.User2);
             models.Role = db.define("tbl_dataplatform_nodejs_role", obj.Role);

@@ -33,15 +33,14 @@ module.exports = (Router) => {
             return filter.platformPromotionsOne(data);
         },
         rows: [
-            ["unique_plan_id_num", "unique_is_rebate_shop_num", "unique_is_rebate_merchandise_num",
-                "unique_is_rebate_order_num", "unique_is_rebate_user_num" ],
-            ["unique_is_over_rebate_order_num", "is_rebate_fee",
+            ["defate_plan_count", "participate_seller_count", "participate_goods_count", "order_count",
+                "participate_user_count" ],
+            ["rebate_order_count", "rebate_order_amount_count",
                 //"rebate_order_amount_actual_count",
-                "is_over_rebate_order_amount"
+                "rebate_amount_count"
                 //, "rate"
             ],
-            ["name", "unique_is_rebate_back_merchandise_num", "is_rebate_back_merchandise_num",
-                "unique_is_rebate_back_user_num", "is_rebate_back_merchandise_amount"
+            ["name", "spu_count", "sku_count", "refund_user_count", "refund_goods_amount_count"
                 //"refund_goods_amount_actual_count"
             ]
         ],
@@ -64,7 +63,8 @@ module.exports = (Router) => {
             }],
             [{
                 caption: "返利到账订单数",
-                type: "string"
+                type: "string",
+                help : "返利订单中已经返利到账的订单数，统计时间为订单返利到账时间"
             }, {
                 caption: "返利订单总金额",
                 type: "string"
@@ -73,7 +73,8 @@ module.exports = (Router) => {
             //    type: "string"
             }, {
                 caption: "返利到账金额",
-                type: "string"
+                type: "string",
+                help : "返利订单中已返利总金额，统计时间为订单返利到账时间"
             //}, {
             //    caption: "返利比率",
             //    type: "string"
@@ -165,97 +166,148 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/platformRebate/platformPromotionsThree",
-        modelName : [ "RebateTypeLevelDetails", "TypeFlow" ],
-        orderParams : {
-            type_code : 2,
-            type : 1,
-            status : 1
+        modelName : [ "RebateOrderPlantypeLevelSum", "TypeFlow" ],
+        fixedParams(req, query, cb) {
+            if(query.category_id) {
+                req.models.ConfCategories.find({
+                    id : query.category_id
+                }, (err, data) => {
+                    if(err) {
+                        cb(err);
+                    } else {
+                        query['category_id_' + (data[0].level + 1)] = query.category_id;
+                        delete query.category_id;
+                        cb(null, query);
+                    }
+                });
+            } else {
+                cb(null, query);
+            }
         },
+        params(query, params) {
+            params.plan_type = "2";
+
+            return params;
+        },
+        secondParams() {
+            return {
+                type_code : 2,
+                type : 1,
+                status : 1
+            };
+        },
+        procedure : [{
+            aggregate : {
+                value : ["level", "rebate_level"]
+            },
+            sum : ["is_rebate_merchandise_num", "is_rebate_fee",
+                "is_over_rebate_order_amount"],
+            groupBy : ["level", "rebate_level"],
+            get : ""
+        }, false],
         platform : false,
         level_select : true,
         level_select_name : "category_id",
         level_select_url : "/api/categories",
-        fixedParams(query, filter_key, req, cb) {
-            if(query.category_id === undefined) {
-                query.category_id = "all";
-            }
-            query.user_party = "2";
-            query.day_type = 1;
-            cb(null, query);
-        },
         filter_select: [{
             title: '指标选择',
             filter_key: 'filter_key',
             groups: [{
-                key: 'goods_sku_count',
+                key: 'is_rebate_merchandise_num',
                 value: '商品件数'
             }, {
-                key: 'goods_amount_count',
+                key: 'is_rebate_fee',
                 value: '商品总金额'
             }, {
-                key: 'rebate_amount_count',
+                key: 'is_over_rebate_order_amount',
                 value: '返利到账金额'
             }]
         }],
-        filter(data, filter_key, dates) {
-            return filter.platformPromotionsThree(data, filter_key);
+        filter(data, query, dates) {
+            return filter.platformPromotionsThree(data, query.filter_key);
         }
     });
 
     Router = new api(Router,{
         router : "/platformRebate/platformPromotionsFour",
-        modelName : [ "RebateTypeLevelDetails", "TypeFlow" ],
-        orderParams : {
-            type_code : 2,
-            type : 1,
-            status : 1
+        modelName : [ "RebateOrderMuiltipleTrend", "TypeFlow" ],
+        params(query, params) {
+            params.plan_type = "2";
+            return params;
         },
+        secondParams() {
+            return {
+                type_code : 2,
+                type : 1,
+                status : 1
+            }
+        },
+        fixedParams(req, query, cb) {
+            if(query.category_id) {
+                req.models.ConfCategories.find({
+                    id : query.category_id
+                }, (err, data) => {
+                    if(err) {
+                        cb(err);
+                    } else {
+                        query['category_id_' + (data[0].level + 1)] = query.category_id;
+                        delete query.category_id;
+                        cb(null, query);
+                    }
+                });
+            } else {
+                cb(null, query);
+            }
+        },
+        procedure : [{
+            aggregate : {
+                value : ["rebate_type"]
+            },
+            sum : ["is_rebate_merchandise_num", "is_rebate_fee",
+                "is_over_rebate_order_amount"],
+            groupBy : ["rebate_type"],
+            get : ""
+        }, false],
         platform : false,
         level_select : true,
         level_select_name : "category_id",
         level_select_url : "/api/categories",
-        fixedParams(query, filter_key, req, cb) {
-            if(query.category_id === undefined) {
-                query.category_id = "all";
-            }
-            query.user_party = "2";
-            query.day_type = 1;
-            cb(null, query);
-        },
         filter_select: [{
             title: '指标选择',
             filter_key: 'filter_key',
             groups: [{
-                key: 'goods_sku_count',
+                key: 'sum_is_rebate_merchandise_num',
                 value: '商品件数'
             }, {
-                key: 'goods_amount_count',
+                key: 'sum_is_rebate_fee',
                 value: '商品总金额'
             }, {
-                key: 'rebate_amount_count',
+                key: 'sum_is_over_rebate_order_amount',
                 value: '返利到账金额'
             }]
         }],
-        filter(data, filter_key, dates) {
-            return filter.platformPromotionsFour(data, filter_key);
+        filter(data, query, dates) {
+            return filter.platformPromotionsFour(data, query.filter_key);
         }
     });
 
     Router = new api(Router,{
         router : "/platformRebate/platformPromotionsFive",
         modelName : [ "RebatetSheduleDetails", "TypeFlow" ],
-        orderParams : {
-            type_code : 2,
-            type : 1,
-            status : 1,
-            limit : 100
+        params(query, params) {
+            params.plan_type = "2";
+            return params;
+        },
+        secondParams() {
+            return {
+                type_code : 2,
+                type : 1,
+                status : 1,
+                limit : 100
+            };
         },
         platform : false,
-        paging : true,
-        order : ["-date"],
-        fixedParams : {
-            user_party : "2"
-        },
+        paging : [true, false],
         excel_export : true,
         showDayUnit : true,
         date_picker_data : 1,
@@ -263,13 +315,13 @@ module.exports = (Router) => {
         //    content: '<a href="javascript:void(0)">导出</a>',
         //    preMethods: ['excel_export']
         //}],
-        filter(data, filter_key, dates, filter_key2, page) {
-            return filter.platformPromotionsFive(data, page);
+        filter(data, query) {
+            return filter.platformPromotionsFive(data, query.page);
         },
         rows : [
-            [ "id", "rebate_plan_name", "user_party", "deadline", "correlate_flow", "level", "participate_seller_count",
-                "participate_goods_count", "participate_user_count", "order_rate", "price_rate",
-                "rebate_amount" ]
+            [ "id", "plan_name", "plan_type", "validscope_time", "rebate_type", "level", "unique_is_rebate_shop_num",
+                "unique_is_rebate_merchandise_num", "unique_is_rebate_user_num", "order_rate", "price_rate",
+                "is_over_rebate_order_amount" ]
         ],
         cols : [
             [
@@ -311,46 +363,6 @@ module.exports = (Router) => {
                 type : "number"
             }
             ]
-        ]
-    });
-
-    Router = new help(Router, {
-        router : "/platformPromotions/help",
-        rows : config.help.rows,
-        cols : config.help.cols,
-        data : [
-            {
-                name : "商品件数",
-                help : "所有订单中，带返利的商品总件数，统计时间为订单生成时间"
-            },
-            {
-                name : "返利到账订单数",
-                help : "返利订单中已经返利到账的订单数，统计时间为订单返利到账时间"
-            },
-            {
-                name : "返利到账订单总金额",
-                help : "统计时间内所有已返利订单的成交金额，统计时间为订单返利到账时间"
-            },
-            {
-                name : "返利到账订单实付金额",
-                help : "统计时间内所有已返利订单的实际支付金额，统计时间为订单返利到账时间"
-            },
-            {
-                name : "返利到账金额",
-                help : "返利订单中已返利总金额，统计时间为订单返利到账时间"
-            },
-            {
-                name : "返利比率",
-                help : "返利到账金额/返利到账订单实付金额"
-            },
-            {
-                name : "返利退货订单占比",
-                help : "（例）退货商品数/（所有退货商品数，包括无返利商品），统计时间为订单生成时间"
-            },
-            {
-                name : "返利层级分布",
-                help : "返利商品件数，返利商品总金额，统计时间为订单生成时间；返利到账金额，统计时间为订单返利到账时间"
-            }
         ]
     });
 
