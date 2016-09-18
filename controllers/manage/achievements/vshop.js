@@ -16,6 +16,7 @@ module.exports = (Router) => {
         modelName: ['VshopDetail'],
         date_picker : false,
         platform : false,
+        control_table_col: true,
         filter_select: [
             {
                 title: '',
