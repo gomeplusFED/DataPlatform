@@ -247,14 +247,13 @@ module.exports = {
         var newData = [zData, qData, hb, hb7day];
         return util.toTable([newData], rows, cols);
     },
-    vshopTwo(data, query, dates) {
+    vshopTwo(data, query, dates, value) {
 
         var source = data.first.data,
             newData = {},
             type = "line",
             map = {};
-        map[query.type] = vshopdict[query.type];
-        var keyArray = _.keys(map);
+        map[query.type] = value || 'test';
         var _emptyObj = {};
         _emptyObj[query.type] = 0;
 

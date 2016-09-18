@@ -6,6 +6,7 @@
 var api = require(RootPath+"/base/main"),
     vshopFilter = require("../../../filters/achievements/vshop"),
     orm = require("orm"),
+    _ = require("lodash"),
     util = require("../../../utils");
 
 module.exports = (Router) => {
@@ -78,11 +79,15 @@ module.exports = (Router) => {
                     },
                     {
                         key: 'favorite_vshop_num',
-                        value: '被收藏美店数'
+                        value: '收藏美店数'
+                    },
+                    {
+                        key: 'favorited_item_num',
+                        value: '收藏商品数'
                     },
                     {
                         key: 'new_shelve_item_num',
-                        value: '美店新增上架商品数'
+                        value: '新增上架商品数'
                     },
                     {
                         key: 'browse_item_num',
@@ -119,7 +124,9 @@ module.exports = (Router) => {
 
         },
         filter(data, query, dates, type) {
-            return vshopFilter.vshopTwo(data, query, dates);
+            let valobj = _.find(this.filter_select[0].groups, x => x.key === query.type);
+            let value = valobj ? valobj.value : 'error';
+            return vshopFilter.vshopTwo(data, query, dates, value);
         }
     });
 
