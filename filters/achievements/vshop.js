@@ -98,7 +98,7 @@ module.exports = {
                             },
                             {
                                 "caption": "浏览商品次数",
-                                "type": "string"
+                                "type": "number"
                             },
                             {
                                 "caption": "加购商品数",
@@ -171,7 +171,7 @@ module.exports = {
                             },
                             {
                                 "caption": "被分享美店数",
-                                "type": "string"
+                                "type": "number"
                             },
                             {
                                 "caption": "被收藏美店数",
@@ -319,7 +319,7 @@ module.exports = {
                             },
                             {
                                 "caption": "浏览商品次数",
-                                "type": "string"
+                                "type": "number"
                             },
                             {
                                 "caption": "加购商品数",
@@ -396,7 +396,7 @@ module.exports = {
                             },
                             {
                                 "caption": "被分享美店数",
-                                "type": "string"
+                                "type": "number"
                             },
                             {
                                 "caption": "被收藏美店数",
