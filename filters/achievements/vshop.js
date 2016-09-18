@@ -278,8 +278,8 @@ module.exports = {
         var source = data.first.data[0],
             _type = 'product, shop',
             _rows = [
-                [['date', 'new_shelve_item_num', 'del_item_num',
-                    'off_shelve_item_num', 'browse_item_num',
+                [['date', 'new_shelve_item_num', 'total_shelve_item_num', 'off_shelve_item_num', 'del_item_num',
+                    'browse_item_num',
                     'browse_item_time', 'add2cart_item_num',
                     'add2cart_quantity', 'ordered_item_num',
                     'ordered_quantity', 'paid_item_num',
@@ -288,7 +288,7 @@ module.exports = {
                     'item_favorited_num', 'delivery_quantity']],
                 [['date', 'new_vshop_num', 'total_vshop_num',
                     'open_vshop_num', 'silent_vshop_num',
-                    'visited_vshop_num', 'favorite_vshop_num',
+                    'visited_vshop_num', 'shared_vshop_num', 'favorite_vshop_num',
                     'ordered_vshop_num', 'paid_vshop_num']]
             ],
             _cols = [
@@ -302,11 +302,15 @@ module.exports = {
                                 "type": "number"
                             },
                             {
-                                "caption": "美店新删除商品数",
+                                "caption": "美店当前上架商品数",
                                 "type": "number"
                             },
                             {
-                                "caption": "美店新下架商品数",
+                                "caption": "美店下架商品数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "美店删除商品数",
                                 "type": "number"
                             },
                             {
@@ -370,6 +374,10 @@ module.exports = {
                             },
                             {
                                 "caption": "新增美店数",
+                                "type": "number"
+                            },
+                            {
+                                "caption": "当日累计美店数",
                                 "type": "number"
                             },
                             {
