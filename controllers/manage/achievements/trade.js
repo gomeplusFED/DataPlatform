@@ -108,14 +108,6 @@ module.exports = (Router) => {
                         value: '支付订单量'
                     },
                     {
-                        key: 'ordered_user_num',
-                        value: '下单人数'
-                    },
-                    {
-                        key: 'paid_user_num',
-                        value: '支付人数'
-                    },
-                    {
                         key: 'ordered_amount',
                         value: '下单金额'
                     },
