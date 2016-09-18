@@ -10,100 +10,70 @@ var util = require("../../utils"),
 
 module.exports = {
     platformPromotionsOne(data) {
-        var source = data.data,
-            orderSource = data.orderData,
-            one = [],
-            two = [],
-            three = [],
-            objOne = {
-                defate_plan_count: 0,
-                participate_seller_count: 0,
-                participate_goods_count: 0,
-                order_count: 0,
-                participate_user_count: 0
-            },
-            objTwo = {
-                rebate_order_count: 0,
-                rebate_order_amount_count: 0,
-                rebate_order_amount_actual_count: 0,
-                rebate_amount_count: 0
-            },
-            objThree = {
-                name: "返利订单",
-                spu_count: 0,
-                total_spu_num: 0,
-                sku_count: 0,
-                total_sku_num: 0,
-                refund_user_count: 0,
-                total_user_num: 0,
-                refund_goods_amount_count: 0,
-                total_amount: 0,
-                refund_goods_amount_actual_count: 0,
-                total_amount_actual: 0
-            };
-        for (var key of source) {
-            objOne.defate_plan_count += key.defate_plan_count;
-            objOne.participate_seller_count += key.participate_seller_count;
-            objOne.participate_goods_count += key.participate_goods_count;
-            objOne.order_count += key.order_count;
-            objOne.participate_user_count += key.participate_user_count;
-            objTwo.rebate_order_count += key.rebate_order_count;
-            objTwo.rebate_order_amount_count += key.rebate_order_amount_count;
-            objTwo.rebate_order_amount_actual_count += key.rebate_order_amount_actual_count;
-            objTwo.rebate_amount_count += key.rebate_amount_count;
-        }
-        for (var key of orderSource) {
-            objThree.spu_count += key.spu_count;
-            objThree.sku_count += key.sku_count;
-            objThree.refund_user_count += key.refund_user_count;
-            objThree.refund_goods_amount_count += key.refund_goods_amount_count;
-            objThree.refund_goods_amount_actual_count += key.refund_goods_amount_actual_count;
-            objThree.total_spu_num += key.total_spu_num;
-            objThree.total_sku_num += key.total_sku_num;
-            objThree.total_user_num += key.total_user_num;
-            objThree.total_amount += key.total_amount;
-            objThree.total_amount_actual += key.total_amount_actual;
-        }
-        one.push(objOne);
-        objTwo.rate = util.toFixed(objTwo.rebate_amount_count, objTwo.rebate_order_amount_actual_count);
-        objTwo.rebate_amount_count = objTwo.rebate_amount_count.toFixed(2);
-        objTwo.rebate_order_amount_count = objTwo.rebate_order_amount_count.toFixed(2);
-        two.push(objTwo);
-        objThree.refund_goods_amount_count = objThree.refund_goods_amount_count.toFixed(2);
-        three.push(objThree);
+        var source = data.first.data,
+            one = [{
+                defate_plan_count: source[0] || 0,
+                participate_seller_count: source[1] || 0,
+                participate_goods_count: source[2] || 0,
+                order_count: source[3] || 0,
+                participate_user_count: source[4] || 0
+            }],
+            two = [{
+                rebate_order_count: source[5] || 0,
+                rebate_order_amount_count: source[6] || 0,
+                rebate_amount_count: source[7] || 0
+            }],
+            three = [];
+        three.push({
+            name: "返利订单",
+            spu_count: source[8] || 0,
+            sku_count: source[10] || 0,
+            refund_user_count: source[12] || 0,
+            refund_goods_amount_count: source[14] || 0
+        });
         three.push({
             name: "返利退货订单占比",
-            spu_count: util.toFixed(objThree.spu_count, objThree.total_spu_num),
-            sku_count: util.toFixed(objThree.sku_count, objThree.total_sku_num),
-            refund_user_count: util.toFixed(objThree.refund_user_count, objThree.total_user_num),
-            refund_goods_amount_count: util.toFixed(objThree.refund_goods_amount_count, objThree.total_amount),
-            refund_goods_amount_actual_count: util.toFixed(objThree.refund_goods_amount_actual_count, objThree.total_amount_actual)
+            spu_count : util.toFixed(
+                three[0].spu_count,
+                source[9] || 0
+            ),
+            sku_count : util.toFixed(
+                three[0].sku_count,
+                source[11] || 0
+            ),
+            refund_user_count : util.toFixed(
+                three[0].refund_user_count,
+                source[13] || 0
+            ),
+            refund_goods_amount_count : util.toFixed(
+                three[0].refund_goods_amount_count,
+                source[15] || 0
+            )
         });
         return util.toTable([one, two, three], data.rows, data.cols);
     },
     platformPromotionsTwo(data, filter_key, dates) {
-        var source = data.data,
-            orderSource = data.orderData,
+        var source = data.first.data[0],
+            orderData = data.second.data[0],
             type = "line",
-            array = [],
             newData = {},
             map = {};
-        for(var key of orderSource) {
-            array.push({
-                key : key.flow_name,
-                value : key.flow_code
-            });
-            map[filter_key + "_" + key.flow_code] = key.flow_name;
+
+        for(var key of orderData) {
+            map[key.flow_code] = key.flow_name;
         }
+
         for(var date of dates) {
-            newData[date] = {};
-            for(key of array) {
-                newData[date][filter_key + "_" + key.value] = 0;
+            var obj = {};
+            for (key of orderData) {
+                obj[key.flow_code] = 0;
             }
+            newData[date] = obj;
         }
+
         for(key of source) {
             date = util.getDate(key.date);
-            newData[date][filter_key + "_" + key.correlate_flow] += Math.round(key[filter_key]);
+            newData[date][key.rebate_type] += Math.round(key[filter_key]);
         }
         return [{
             type: type,

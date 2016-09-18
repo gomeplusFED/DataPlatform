@@ -3,7 +3,7 @@
  * @date 20160408
  * @fileoverview 平台促销返利
  */
-var api = require("../../../base/api"),
+var api = require("../../../base/main"),
     help = require("../../../base/help"),
     config = require("../../../utils/config.json"),
     filter = require("../../../filters/platformRebate/platformPromotions");
@@ -11,30 +11,37 @@ var api = require("../../../base/api"),
 module.exports = (Router) => {
     Router = new api(Router, {
         router : "/platformRebate/platformPromotionsOne",
-        modelName : ["Rebate", "RebateRefund"],
-        platform : false,
-        fixedParams : {
-            category_id : "all",
-            user_party : "2"
+        modelName : ["RebateOrderMuiltipleOverview"],
+        params(query, params) {
+            params.plan_type = "2";
+            return params;
         },
-        flexible_btn: [{
-            content: '<a href="javascript:void(0)" help_url="/platformPromotions/help_json">帮助</a>',
-            preMethods: ["show_help"],
-            customMethods: ''
+        procedure : [{
+            aggregate : "params",
+            sum : ["unique_plan_id_num", "unique_is_rebate_shop_num",
+                "unique_is_rebate_merchandise_num", "unique_is_rebate_order_num",
+                "unique_is_rebate_user_num", "unique_is_over_rebate_order_num",
+                "is_rebate_fee", "is_over_rebate_order_amount",
+                "unique_is_rebate_back_merchandise_num", "unique_back_merchandise_num",
+                "is_rebate_back_merchandise_num", "back_merchandise_num",
+                "unique_is_rebate_back_user_num", "unique_back_user_num",
+                "is_rebate_back_merchandise_amount", "back_merchandise_amount"],
+            get : ""
         }],
-        //date_picker_data: 1,
-        filter(data, filter_key, dates) {
+        platform : false,
+        filter(data) {
             return filter.platformPromotionsOne(data);
         },
         rows: [
-            ["defate_plan_count", "participate_seller_count", "participate_goods_count", "order_count",
-                "participate_user_count" ],
-            ["rebate_order_count", "rebate_order_amount_count",
+            ["unique_plan_id_num", "unique_is_rebate_shop_num", "unique_is_rebate_merchandise_num",
+                "unique_is_rebate_order_num", "unique_is_rebate_user_num" ],
+            ["unique_is_over_rebate_order_num", "is_rebate_fee",
                 //"rebate_order_amount_actual_count",
-                "rebate_amount_count"
+                "is_over_rebate_order_amount"
                 //, "rate"
             ],
-            ["name", "spu_count", "sku_count", "refund_user_count", "refund_goods_amount_count",
+            ["name", "unique_is_rebate_back_merchandise_num", "is_rebate_back_merchandise_num",
+                "unique_is_rebate_back_user_num", "is_rebate_back_merchandise_amount"
                 //"refund_goods_amount_actual_count"
             ]
         ],
@@ -95,40 +102,64 @@ module.exports = (Router) => {
 
     Router = new api(Router, {
         router : "/platformRebate/platformPromotionsTwo",
-        modelName : [ "RebateOrderTredencyDetails", "TypeFlow" ],
-        orderParams : {
-            type_code : 2,
-            type : 1,
-            status : 1
+        modelName : [ "RebateOrderMuiltipleTrend", "TypeFlow"  ],
+        params(query, params) {
+            params.plan_type = "2";
+            return params;
+        },
+        secondParams() {
+            return {
+                type_code : 2,
+                type : 1,
+                status : 1
+            }
+        },
+        fixedParams(req, query, cb) {
+            if(query.category_id) {
+                req.models.ConfCategories.find({
+                    id : query.category_id
+                }, (err, data) => {
+                    if(err) {
+                        cb(err);
+                    } else {
+                        query['category_id_' + (data[0].level + 1)] = query.category_id;
+                        delete query.category_id;
+                        cb(null, query);
+                    }
+                });
+            } else {
+                cb(null, query);
+            }
         },
         platform : false,
         level_select : true,
         level_select_name : "category_id",
         level_select_url : "/api/categories",
-        fixedParams(query, filter_key, req, cb) {
-            if(query.category_id === undefined) {
-                query.category_id = "all";
-            }
-            query.user_party = "2";
-            query.day_type = 1;
-            cb(null, query);
-        },
+        procedure : [{
+            aggregate : {
+                value : ["rebate_type", "date"]
+            },
+            sum : ["unique_is_rebate_order_num", "is_rebate_fee",
+                "is_rebate_merchandise_num"],
+            groupBy : ["date", "rebate_type"],
+            get : ""
+        }, false],
         filter_select: [{
             title: '指标选择',
             filter_key: 'filter_key',
             groups: [{
-                key: 'order_count',
+                key: 'sum_unique_is_rebate_order_num',
                 value: '订单数'
             }, {
-                key: 'order_amount_count',
+                key: 'sum_is_rebate_fee',
                 value: '订单总金额'
             }, {
-                key: 'goods_sku_count',
+                key: 'sum_is_rebate_merchandise_num',
                 value: '商品件数'
             }]
         }],
-        filter(data, filter_key, dates) {
-            return filter.platformPromotionsTwo(data, filter_key, dates);
+        filter(data, query, dates) {
+            return filter.platformPromotionsTwo(data, query.filter_key, dates);
         }
     });
 
