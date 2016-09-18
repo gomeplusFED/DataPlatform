@@ -4,8 +4,7 @@
  * @fileoverview 邀请商户入驻
  */
 var util = require("../../utils"),
-    config = require("../../utils/config.json"),
-    _ = require("lodash");
+    config = require("../../utils/config.json");
 
 module.exports = {
     inviteBusinessOne(data) {
