@@ -87,11 +87,12 @@ module.exports = (Router) => {
                 type: "number"
             }, {
                 caption: "首次入圈用户数",
-                type: "number"
+                type: "number",
+                help : "第一次加入圈子的用户数"
             }, {
                 caption: "新增入圈用户数",
                 type: "number",
-                help: "首次加入圈子的用户去重"
+                help: "新增入圈用户数去重"
             }, {
                 caption: "新增用户入圈率",
                 type: "number",
