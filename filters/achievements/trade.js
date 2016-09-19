@@ -132,6 +132,10 @@ module.exports = {
                 newData[date].value =
                     util.percentage(newData[date].ordered_usernum_last30day, newData[date].paid_usernum_last30day);
             }
+        } else {
+            for(let date in newData) {
+                newData[date].value = Math.ceil(newData[date].value);
+            }
         }
 
         return [{
