@@ -4,101 +4,74 @@
  * @fileoverview 邀请商户入驻
  */
 var util = require("../../utils"),
-    config = require("../../utils/config.json"),
-    _ = require("lodash");
+    config = require("../../utils/config.json");
 
 module.exports = {
     inviteBusinessOne(data) {
-        var source = data.data,
-            orderSource = data.orderData,
-            one = [],
-            two = [],
-            three = [],
-            objOne = {
-                defate_plan_count: 0,
-                participate_seller_count: 0,
-                participate_goods_count: 0,
-                order_count: 0,
-                participate_user_count: 0
-            },
-            objTwo = {
-                rebate_order_count: 0,
-                rebate_order_amount_count: 0,
-                rebate_order_amount_actual_count: 0,
-                rebate_amount_count: 0
-            },
-            objThree = {
-                name: "返利订单",
-                spu_count: 0,
-                total_spu_num: 0,
-                sku_count: 0,
-                total_sku_num: 0,
-                refund_user_count: 0,
-                total_user_num: 0,
-                refund_goods_amount_count: 0,
-                total_amount: 0,
-                refund_goods_amount_actual_count: 0,
-                total_amount_actual: 0
-            };
-        for (var key of source) {
-            objOne.defate_plan_count += key.defate_plan_count;
-            objOne.participate_seller_count += key.participate_seller_count;
-            objOne.participate_goods_count += key.participate_goods_count;
-            objOne.order_count += key.order_count;
-            objOne.participate_user_count += key.participate_user_count;
-            objTwo.rebate_order_count += key.rebate_order_count;
-            objTwo.rebate_order_amount_count += key.rebate_order_amount_count;
-            objTwo.rebate_order_amount_actual_count += key.rebate_order_amount_actual_count;
-            objTwo.rebate_amount_count += key.rebate_amount_count;
-        }
-        for (var key of orderSource) {
-            objThree.spu_count += key.spu_count;
-            objThree.sku_count += key.sku_count;
-            objThree.refund_user_count += key.refund_user_count;
-            objThree.refund_goods_amount_count += key.refund_goods_amount_count;
-            objThree.refund_goods_amount_actual_count += key.refund_goods_amount_actual_count;
-            objThree.total_spu_num += key.total_spu_num;
-            objThree.total_sku_num += key.total_sku_num;
-            objThree.total_user_num += key.total_user_num;
-            objThree.total_amount += key.total_amount;
-            objThree.total_amount_actual += key.total_amount_actual;
-        }
-        one.push(objOne);
-        objTwo.rate = util.toFixed(objTwo.rebate_amount_count, objTwo.rebate_order_amount_actual_count);
-        objTwo.rebate_amount_count = objTwo.rebate_amount_count.toFixed(2);
-        objTwo.rebate_order_amount_count = objTwo.rebate_order_amount_count.toFixed(2);
-        two.push(objTwo);
-        objThree.refund_goods_amount_count = objThree.refund_goods_amount_count.toFixed(2);
-        three.push(objThree);
+        var source = data.first.data,
+            one = [{
+                defate_plan_count: source[0] || 0,
+                participate_seller_count: source[1] || 0,
+                participate_goods_count: source[2] || 0,
+                order_count: source[3] || 0,
+                participate_user_count: source[4] || 0
+            }],
+            two = [{
+                rebate_order_count: source[5] || 0,
+                rebate_order_amount_count: source[6] || 0,
+                rebate_amount_count: source[7] || 0
+            }],
+            three = [];
+        three.push({
+            name: "返利订单",
+            spu_count: source[8] || 0,
+            sku_count: source[10] || 0,
+            refund_user_count: source[12] || 0,
+            refund_goods_amount_count: source[14] || 0
+        });
         three.push({
             name: "返利退货订单占比",
-            spu_count: util.toFixed(objThree.spu_count, objThree.total_spu_num),
-            sku_count: util.toFixed(objThree.sku_count, objThree.total_sku_num),
-            refund_user_count: util.toFixed(objThree.refund_user_count, objThree.total_user_num),
-            refund_goods_amount_count: util.toFixed(objThree.refund_goods_amount_count, objThree.total_amount),
-            refund_goods_amount_actual_count: util.toFixed(objThree.refund_goods_amount_actual_count, objThree.total_amount_actual)
+            spu_count : util.toFixed(
+                three[0].spu_count,
+                source[9] || 0
+            ),
+            sku_count : util.toFixed(
+                three[0].sku_count,
+                source[11] || 0
+            ),
+            refund_user_count : util.toFixed(
+                three[0].refund_user_count,
+                source[13] || 0
+            ),
+            refund_goods_amount_count : util.toFixed(
+                three[0].refund_goods_amount_count,
+                source[15] || 0
+            )
         });
         return util.toTable([one, two, three], data.rows, data.cols);
     },
     inviteBusinessTwo(data, filter_key, dates) {
-        var source = data.data,
-            orderSource = data.orderData,
+        var source = data.first.data[0],
+            orderData = data.second.data[0],
             type = "line",
             newData = {},
             map = {};
-        for(var key of orderSource) {
+
+        for(var key of orderData) {
             map[key.flow_code] = key.flow_name;
         }
+
         for(var date of dates) {
             var obj = {};
-            for(key of orderSource) {
+            for (key of orderData) {
                 obj[key.flow_code] = 0;
             }
             newData[date] = obj;
         }
+
         for(key of source) {
             date = util.getDate(key.date);
-            newData[date][key.correlate_flow] += Math.round(key[filter_key]);
+            newData[date][key.rebate_type] += Math.round(key[filter_key]);
         }
         return [{
             type: type,
@@ -110,8 +83,8 @@ module.exports = {
         }];
     },
     inviteBusinessThree(data, filter_key) {
-        var source = data.data,
-            orderSource = data.orderData,
+        var source = data.first.data[0],
+            orderSource = data.second.data[0],
             typePie = "pie",
             typeBar = "bar",
             mapPie = {},
@@ -119,21 +92,27 @@ module.exports = {
             newDataPie = {},
             newDataBar = {},
             filter_name = {
-                goods_sku_count: "商品件数",
-                goods_amount_count: "商品总金额",
-                rebate_amount_count: "返利到账金额"
+                is_rebate_merchandise_num: "商品件数",
+                is_rebate_fee: "商品总金额",
+                is_over_rebate_order_amount: "返利到账金额"
             },
             objPie = {},
             objBar = {},
             XPie = [],
             XBar = [];
-        for(var i = 0; i < orderSource[0].rebate_level; i++) {
+        orderSource.sort((a, b) => {
+            return b.rebate_level - a.rebate_level;
+        });
+
+        var levelMax = orderSource[0].rebate_level;
+
+        for(var i = 0; i < levelMax; i++) {
             XPie.push({
-                key : i + 1 + "级",
+                key :  i + 1 + "级",
                 value : i + 1
             });
             XBar.push({
-                key : i + 1 + "层级",
+                key :  i + 1 + "层级",
                 value : i + 1
             });
         }
@@ -142,22 +121,35 @@ module.exports = {
                 value : 0
             };
             objBar[level.value] = {};
-            for (var i = 0; i < XBar.length; i++) {
-                objBar[level.value][i] = 0;
+            for (var n = 0; n < XBar.length; n++) {
+                objBar[level.value][n] = 0;
             }
         }
-        for(var key of source) {
-            objPie[key.level].value += Math.round(key[filter_key]);
-            objBar[key.level][key.grade - 1] += Math.round(key[filter_key]);
+        for(key of source) {
+            objPie[key.level].value += key["sum_" + filter_key];
+            objBar[key.level][key.rebate_level] += key["sum_" + filter_key];
         }
-        for(var level of XPie) {
+
+        if(filter_key !== "is_rebate_merchandise_num") {
+            for(var key in objPie) {
+                objPie[key].value = (objPie[key].value / 100).toFixed(2);
+            }
+            for(var key in objBar) {
+                for(var k in objBar[key]) {
+                    objBar[key][k] = (objBar[key][k] / 100).toFixed(2);
+                }
+            }
+        }
+
+        for(level of XPie) {
             newDataPie[level.key] = objPie[level.value];
             newDataBar[level.key] = objBar[level.value];
         }
-        for (var i = 0; i < XBar.length; i++) {
+        for (i = 0; i < XBar.length; i++) {
             mapBar[i] = XBar[i].key;
         }
         mapPie.value = filter_name[filter_key];
+
         return [{
             type: typePie,
             map: mapPie,
@@ -172,12 +164,12 @@ module.exports = {
             config: {
                 stack: true
             }
-        }]
+        }];
     },
     inviteBusinessFour(data, page) {
-        var source = data.data,
-            count = data.dataCount,
-            orderSource = data.orderData,
+        var source = data.first.data[0],
+            orderSource = data.second.data[0],
+            count = data.first.count,
             page = page || 1,
             user_party = {},
             correlate_flow = {};
@@ -187,11 +179,11 @@ module.exports = {
         }
         source.forEach((key, value) => {
             key.id = (page - 1) * 20 + value + 1;
-            key.user_party = user_party[key.user_party];
-            key.correlate_flow = correlate_flow[key.correlate_flow];
-            key.order_rate = key.new_order_count + "/" + key.order_all_count;
-            key.price_rate = key.new_order_amount.toFixed(2) + "/" + key.order_all_amount.toFixed(2);
-            key.rebate_amount = key.rebate_amount.toFixed(2);
+            key.plan_type = user_party[key.plan_type];
+            key.rebate_type = correlate_flow[key.rebate_type];
+            key.order_rate = key.unique_is_rebate_order_num + "/" + key.unique_order_num;
+            key.price_rate = key.is_rebate_fee.toFixed(2) + "/" + key.fee.toFixed(2);
+            key.is_over_rebate_order_amount = key.is_over_rebate_order_amount.toFixed(2);
         });
         return util.toTable([source], data.rows, data.cols, [count]);
     }

@@ -27,7 +27,6 @@ module.exports = (Router) => {
             get : ""
         }],
         platform : false,
-        //date_picker_data: 1,
         filter(data) {
             return filter.individualEventOne(data);
         },
@@ -168,7 +167,7 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/platformRebate/individualEventThree",
-        modelName : [ "RebateOrderMuiltipleTrend", "TypeFlow" ],
+        modelName : [ "RebateOrderPlantypeRebatetypeCategorySum", "TypeFlow" ],
         params(query, params) {
             params.plan_type = "6";
             return params;
