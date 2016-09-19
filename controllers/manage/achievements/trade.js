@@ -329,7 +329,7 @@ module.exports = (Router) => {
 
                 return {
                     sql : sql,
-                    params : _params.concat([+offset, +limit])
+                    params : _params.concat([offset, +limit])
                 };
             }
         },
