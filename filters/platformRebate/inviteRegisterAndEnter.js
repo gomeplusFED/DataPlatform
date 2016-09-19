@@ -22,16 +22,17 @@ module.exports = {
             "rebate_amount_count": 0
         };
         for (var item of source) {
-            one.rebate_plan_count += item.rebate_plan_count;
-            one.participate_user_count += item.participate_user_count;
-            one.registered_count += item.registered_count;
-            one.rebate_amount_count += item.rebate_amount_count;
+            one.rebate_plan_count += item.unique_rebate_invite_friend_plan_id_num;
+            one.participate_user_count += item.unique_rebate_invite_friend_user_num;
+            one.registered_count += item.unique_rebate_invite_friend_success_user_num;
+            one.rebate_amount_count += item.is_over_rebate_invite_friend_amount;
+            one.all_register_user_num += item.all_register_user_num;
         }
         _current.data.push({
             "rebate_plan_count": one.rebate_plan_count,
             "participate_user_count": one.participate_user_count,
             "registered_count": one.registered_count,
-            "registered_rate": util.toFixed(one.registered_count, one.participate_user_count),
+            "registered_rate": util.toFixed(one.registered_count, one.all_register_user_num),
             "rebate_amount_count": one.rebate_amount_count.toFixed(2)
         });
         resultData.push(_current);
@@ -48,11 +49,11 @@ module.exports = {
                 rebate_amount_count : 0
             };
         for(var key of source) {
-            registered_all_count += key.registered_all_count;
-            obj.rebate_plan_count += key.rebate_plan_count;
-            obj.participate_user_count += key.participate_user_count;
-            obj.registered_count += key.registered_count;
-            obj.rebate_amount_count += key.rebate_amount_count;
+            registered_all_count += key.all_enter_shop_num;
+            obj.rebate_plan_count += key.unique_rebate_invite_shop_plan_id_num;
+            obj.participate_user_count += key.unique_rebate_invite_shop_num;
+            obj.registered_count += key.unique_rebate_invite_shop_success_num;
+            obj.rebate_amount_count += key.is_over_rebate_invite_shop_amount;
         }
         obj.registered_rate = util.toFixed(obj.registered_count, registered_all_count);
         obj.rebate_amount_count = obj.rebate_amount_count.toFixed(2);

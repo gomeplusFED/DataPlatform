@@ -3,39 +3,34 @@
  * @date 20160407
  * @fileoverview 邀请注册 / 入驻
  */
-var api = require("../../../base/api"),
-    help = require("../../../base/help"),
+var api = require("../../../base/main"),
     _ = require("lodash"),
-    config = require("../../../utils/config.json"),
     filter = require("../../../filters/platformRebate/inviteRegisterAndEnter");
 
 module.exports = (Router) => {
     Router = new api(Router,{
         router : "/platformRebate/inviteRegisterAndEnterOne",
-        modelName : ["RebateInvitepartner"],
-        //date_picker_data: 1,
+        modelName : ["RebateInviteOverview"],
         platform : false,
-        flexible_btn: [{
-            content: '<a href="javascript:void(0)" help_url="/inviteRegisterAndEnter/help_json">帮助</a>',
-            preMethods: ["show_help"],
-            customMethods: ''
-        }],
-        filter(data, filter_key, dates) {
+        filter(data) {
             return filter.inviteRegisterAndEnterOne(data);
         },
         rows: ["rebate_plan_count", "participate_user_count", "registered_count", "registered_rate", "rebate_amount_count"],
         cols: [{
             "caption": "返利计划数",
-            "type": "string"
+            "type": "string",
+            help : "统计时间内所有平台邀请返利计划数"
         }, {
             "caption": "参与用户数",
-            "type": "number"
+            "type": "number",
+            help : "时间段内所有参与邀请返利的用户，并且所邀请的用户注册成功或商家入驻成功"
         }, {
             "caption": "注册成功数",
             "type": "number"
         }, {
             "caption": "注册成功占比",
-            "type": "number"
+            "type": "number",
+            help : "时间段内（返利注册成功数/总注册成功数）"
         }, {
             "caption": "返利到账金额",
             "type": "number"
@@ -46,7 +41,7 @@ module.exports = (Router) => {
         router : "/platformRebate/inviteRegisterAndEnterTwo",
         //date_picker_data: 1,
         platform : false,
-        modelName : [ "RebatetInviteseller" ],
+        modelName : [ "RebateInviteOverview" ],
         filter(data, filter_key, dates) {
             return filter.inviteRegisterAndEnterTwo(data);
         },
@@ -57,16 +52,19 @@ module.exports = (Router) => {
         cols: [
             [{
                 "caption": "返利计划数",
-                "type": "string"
+                "type": "string",
+                help : "统计时间内所有平台邀请返利计划数"
             }, {
                 "caption": "参与用户数",
-                "type": "number"
+                "type": "number",
+                help : "时间段内所有参与邀请返利的用户，并且所邀请的用户注册成功或商家入驻成功"
             }, {
                 "caption": "入驻成功数",
                 "type": "number"
             }, {
                 "caption": "入驻成功占比",
-                "type": "number"
+                "type": "number",
+                help : "时间段内（返利入驻成功数/总入驻成功数）"
             }, {
                 "caption": "返利到账金额",
                 "type": "number"
@@ -207,30 +205,6 @@ module.exports = (Router) => {
                     type : "number"
                 }
             ]
-        ]
-    });
-
-    Router = new help(Router, {
-        router : "/inviteRegisterAndEnter/help",
-        rows : config.help.rows,
-        cols : config.help.cols,
-        data : [
-            {
-                name : "返利计划数",
-                help : "统计时间内所有平台邀请返利计划数"
-            },
-            {
-                name : "参与用户数",
-                help : "时间段内所有参与邀请返利的用户，并且所邀请的用户注册成功或商家入驻成功"
-            },
-            {
-                name : "注册成功占比",
-                help : "时间段内（返利注册成功数/总注册成功数）"
-            },
-            {
-                name : "入驻成功占比",
-                help : "时间段内（返利入驻成功数/总入驻成功数）"
-            }
         ]
     });
 
