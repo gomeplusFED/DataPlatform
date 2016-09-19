@@ -79,6 +79,7 @@ module.exports = {
                 ordered_num: '下单总量',
                 paid_num: '支付订单量',
                 ordered_user_num: '下单人数',
+                ordered_amount: '下单金额',
                 trading_amount: '成交金额',
                 paid_amount: '支付金额',
                 custmer_price: '客单价',
