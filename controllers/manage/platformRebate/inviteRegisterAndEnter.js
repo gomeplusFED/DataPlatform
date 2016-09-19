@@ -75,7 +75,7 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/platformRebate/inviteRegisterAndEnterThree",
         platform : false,
-        modelName : ["RebatetRegisterTrendency", "TypeFlow"],
+        modelName : ["RebateInviteTrend", "TypeFlow"],
         orderParams : {
             type_code : [1, 2, 5],
             type : 1,
