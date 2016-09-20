@@ -108,14 +108,6 @@ module.exports = (Router) => {
                         value: '支付订单量'
                     },
                     {
-                        key: 'ordered_user_num',
-                        value: '下单人数'
-                    },
-                    {
-                        key: 'paid_user_num',
-                        value: '支付人数'
-                    },
-                    {
                         key: 'ordered_amount',
                         value: '下单金额'
                     },
@@ -330,14 +322,14 @@ module.exports = (Router) => {
                     params : _params
                 };
             } else {
-                let sql = `SELECT * FROM ads2_vshop_transaction_top WHERE date=? ORDER BY ${query.filter_key} LIMIT ?,?`,
+                let sql = `SELECT * FROM ads2_vshop_transaction_top WHERE date=? ORDER BY ${query.filter_key} DESC LIMIT ?,?`,
                     page = query.page - 1 || 0,
-                    offset = query.to || (page * query.limit),
-                    limit = query.from || query.limit || 0;
+                    offset = query.from || (page * query.limit),
+                    limit = query.to || query.limit || 0;
 
                 return {
                     sql : sql,
-                    params : _params.concat([offset, +limit])
+                    params : _params.concat([+offset, +limit])
                 };
             }
         },

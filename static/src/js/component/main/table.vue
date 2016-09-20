@@ -38,10 +38,10 @@
 	.table_con td,
 	.table_con th {
 		box-sizing: border-box;
-		max-width: 200px;
+		/*max-width: 200px;*/
 		min-width: 120px;
-		overflow: hidden;
-		text-overflow: ellipsis;
+		/*overflow: hidden;
+		text-overflow: ellipsis;*/
 		-webkit-line-clamp: 1;
 		-webkit-box-orient: vertical;
 		white-space: nowrap;

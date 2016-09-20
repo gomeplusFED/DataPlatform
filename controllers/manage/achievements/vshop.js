@@ -6,6 +6,7 @@
 let api = require("../../../base/main"),
     vshopFilter = require("../../../filters/achievements/vshop"),
     orm = require("orm"),
+    _ = require("lodash"),
     util = require("../../../utils");
 
 module.exports = (Router) => {
@@ -15,6 +16,7 @@ module.exports = (Router) => {
         modelName: ['VshopDetail'],
         date_picker : false,
         platform : false,
+        control_table_col: true,
         filter_select: [
             {
                 title: '',
@@ -78,11 +80,15 @@ module.exports = (Router) => {
                     },
                     {
                         key: 'favorite_vshop_num',
-                        value: '被收藏美店数'
+                        value: '收藏美店数'
+                    },
+                    {
+                        key: 'favorited_item_num',
+                        value: '收藏商品数'
                     },
                     {
                         key: 'new_shelve_item_num',
-                        value: '美店新增上架商品数'
+                        value: '新增上架商品数'
                     },
                     {
                         key: 'browse_item_num',
@@ -119,7 +125,9 @@ module.exports = (Router) => {
 
         },
         filter(data, query, dates, type) {
-            return vshopFilter.vshopTwo(data, query, dates);
+            let valobj = _.find(this.filter_select[0].groups, x => x.key === query.type);
+            let value = valobj ? valobj.value : 'error';
+            return vshopFilter.vshopTwo(data, query, dates, value);
         }
     });
 
@@ -194,14 +202,15 @@ module.exports = (Router) => {
                     params : _params
                 };
             } else {
-                let sql = `SELECT * FROM ads2_vshop_flow_top WHERE date=? ORDER BY ${query.filter_key} LIMIT ?,?`,
+                let sql = `SELECT * FROM ads2_vshop_flow_top WHERE date=? ORDER BY ${query.filter_key} DESC LIMIT ? OFFSET ?`,
                     page = query.page - 1 || 0,
-                    offset = query.to || (page * query.limit),
-                    limit = query.from || query.limit || 20;
-
+                    offset = query.from ? (query.from - 1) : (page * query.limit),
+                    limit = query.to ?  (query.to - query.from + 1) : query.limit || 20;
+                offset = parseInt(offset);
+                limit = parseInt(limit);
                 return {
                     sql : sql,
-                    params : _params.concat([offset, +limit])
+                    params : _params.concat([limit, offset])
                 };
             }
         },

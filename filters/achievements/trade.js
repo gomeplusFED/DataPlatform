@@ -79,36 +79,62 @@ module.exports = {
                 ordered_num: '下单总量',
                 paid_num: '支付订单量',
                 ordered_user_num: '下单人数',
-                paid_user_num: '支付人数',
                 ordered_amount: '下单金额',
                 trading_amount: '成交金额',
                 paid_amount: '支付金额',
                 custmer_price: '客单价',
                 order_price: '笔单价',
-                rebuy_rate: '复购率'
+                rebuy_rate: '复购率(%)'
             },
             map = {
                 value : filter_name[filter_key]
             };
         for(let date of dates) {
             newData[date] = {
-                value : 0
+                value : 0,
+                paid_amount : 0,
+                paid_user_num : 0,
+                paid_num : 0,
+                ordered_usernum_last30day : 0,
+                paid_usernum_last30day : 0
             };
         }
 
         for(let key of source) {
             let date = util.getDate(key.date);
             if(filter_key === "custmer_price") {
-                newData[date].value += +util.division(key.paid_amount, key.paid_user_num);
+                newData[date].paid_amount += key.paid_amount;
+                newData[date].paid_user_num += key.paid_user_num;
             } else if(filter_key === "order_price") {
-                newData[date].value += +util.division(key.paid_amount, key.paid_num);
+                newData[date].paid_amount += key.paid_amount;
+                newData[date].paid_num += key.paid_num;
             } else if(filter_key === "rebuy_rate") {
-                newData[date].value += +util.division(
-                    key.ordered_usernum_last30day,
-                    key.paid_usernum_last30day
-                );
+                newData[date].ordered_usernum_last30day += key.ordered_usernum_last30day;
+                newData[date].paid_usernum_last30day += key.paid_usernum_last30day;
             } else {
                 newData[date].value += key[filter_key];
+            }
+        }
+
+        if(filter_key === "custmer_price") {
+            for(let date in newData) {
+                newData[date].value =
+                    util.division(newData[date].paid_amount, newData[date].paid_user_num);
+            }
+
+        } else if(filter_key === "order_price") {
+            for(let date in newData) {
+                newData[date].value =
+                    util.division(newData[date].paid_amount, newData[date].paid_num);
+            }
+        } else if(filter_key === "rebuy_rate") {
+            for(let date in newData) {
+                newData[date].value =
+                    util.percentage(newData[date].ordered_usernum_last30day, newData[date].paid_usernum_last30day);
+            }
+        } else {
+            for(let date in newData) {
+                newData[date].value = Math.ceil(newData[date].value);
             }
         }
 
@@ -132,7 +158,7 @@ module.exports = {
             item.date = moment(item.date).format("YYYY-MM-DD");
             item.custmer_price = util.division(item.paid_amount, item.paid_user_num);
             item.order_price = util.division(item.paid_amount, item.paid_num);
-            item.rebuy_rate = util.division(
+            item.rebuy_rate = util.toFixed(
                 item.ordered_usernum_last30day,
                 item.paid_usernum_last30day
             );
