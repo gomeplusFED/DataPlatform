@@ -276,5 +276,8 @@ module.exports = {
     },
     "ads2_vshop_transaction_top": {
         "modelName": "VtradeTop"
+    },
+    "ads2_user_analysis_version": {
+        "modelName": "UserAnalysisVersion"
     }
 }

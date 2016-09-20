@@ -1,7 +1,7 @@
 const fs = require("fs");
-const getModule = require("./getmodule");
-const config    = require("../db/config.json");
-const mysqlConfig=require("../db/mysql.json");
+const getModule = require("./models2/getmodule");
+const config    = require("./db/config.json");
+const mysqlConfig=require("./db/mysql.json");
 
 const DBinfo = mysqlConfig[config.db];
 let ConfigObj = {
@@ -13,7 +13,7 @@ let ConfigObj = {
 }
 
 new getModule(ConfigObj).then((result)=>{
-    var source = fs.createWriteStream(__dirname + "/allModules.json");
+    var source = fs.createWriteStream(__dirname + "/models2/allModules.json");
 
     var str = JSON.stringify(result);
     let string = "";

@@ -71,7 +71,7 @@ GetModels.prototype.doSql = function(){
                 });
             }
             ep.after("column" , len , (result)=>{
-                console.log("获取字段数据总计：",len);
+                console.log("获取字段数据总计: ",len);
                 resolve(result);
             });
         });
