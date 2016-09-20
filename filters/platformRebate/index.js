@@ -13,7 +13,10 @@ module.exports = {
             one = [],
             two = [{
                 rebate_order_count : source[10] || 0,
-                rebate_amount_count : source[11] || 0
+                rebate_amount_count : source[11] || 0,
+                expect_rebate_amount : source[24] || 0,
+                unique_expect_rebate_user_num : source[25] || 0,
+                cancel_rebate_amount : source[26] || 0
             }],
             three = [];
 
@@ -23,7 +26,9 @@ module.exports = {
             rebate_order_amount_count : source[3] || 0,
             participate_seller_count : source[5] || 0,
             participate_user_count : source[7] || 0,
-            productSku_num : source[9] || 0
+            productSku_num : source[9] || 0,
+            unique_is_rebate_user_num : source[21] || 0,
+            cancel_is_rebate_order_num : source[23] || 0
         });
         one.push({
             name : "总占比",
@@ -46,6 +51,14 @@ module.exports = {
             productSku_num : util.toFixed(
                 one[0].participate_user_count,
                 source[8] || 0
+            ),
+            unique_is_rebate_user_num : util.toFixed(
+                one[0].unique_is_rebate_user_num,
+                source[20] || 0
+            ),
+            cancel_is_rebate_order_num : util.toFixed(
+                one[0].cancel_is_rebate_order_num,
+                source[22] || 0
             )
         });
 
@@ -117,7 +130,8 @@ module.exports = {
             filter_name = {
                 is_rebate_merchandise_num: "商品件数",
                 is_rebate_fee: "商品总金额",
-                is_over_rebate_order_amount: "返利到账金额"
+                is_over_rebate_order_amount: "返利到账金额",
+                unique_is_rebate_order_num: "订单数"
             },
             objPie = {},
             objBar = {},
@@ -208,7 +222,8 @@ module.exports = {
             filter_name = {
                 unique_is_rebate_merchandise_num: "商品件数",
                 is_rebate_fee: "商品总金额",
-                is_over_rebate_order_amount: "返利到账金额"
+                is_over_rebate_order_amount: "返利到账金额",
+                unique_is_rebate_order_num: "订单数"
             };
         for(var key of orderSource) {
             obj[key.type_code] = {
@@ -265,5 +280,22 @@ module.exports = {
             key.is_over_rebate_order_amount = key.is_over_rebate_order_amount.toFixed(2);
         });
         return util.toTable([source], data.rows, data.cols, [count]);
+    },
+    platformOrderSix(data) {
+        let source = data.first.data[0],
+            obj = {
+                unique_order_num : 0,
+                unique_user_num : 0,
+                one : 0,
+                cancel_order_num : 0
+            };
+
+        for(let item of source) {
+            for(let key in obj) {
+                obj[key] += item[key] || 0;
+            }
+        }
+
+        return util.toTable([[obj]], data.rows, data.cols);
     }
 };

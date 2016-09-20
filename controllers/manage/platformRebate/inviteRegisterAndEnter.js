@@ -15,7 +15,8 @@ module.exports = (Router) => {
         filter(data) {
             return filter.inviteRegisterAndEnterOne(data);
         },
-        rows: ["rebate_plan_count", "participate_user_count", "registered_count", "registered_rate", "rebate_amount_count"],
+        rows: ["rebate_plan_count", "participate_user_count", "registered_count",
+            "registered_rate", "rebate_amount_count"],
         cols: [{
             "caption": "返利计划数",
             "type": "string",
@@ -31,6 +32,9 @@ module.exports = (Router) => {
             "caption": "注册成功占比",
             "type": "number",
             help : "时间段内（返利注册成功数/总注册成功数）"
+        //}, {
+        //    "caption": "预计返利金额",
+        //    "type": "number"
         }, {
             "caption": "返利到账金额",
             "type": "number"
@@ -76,39 +80,47 @@ module.exports = (Router) => {
         router : "/platformRebate/inviteRegisterAndEnterThree",
         platform : false,
         modelName : ["RebateInviteTrend", "TypeFlow"],
-        orderParams : {
-            type_code : [1, 2, 5],
-            type : 1,
-            status : 1
+        params(query, params) {
+            params.plan_type = ["1", "2", "5"];
+
+            return params;
+        },
+        secondParams() {
+            return {
+                type_code : [1, 2, 5],
+                type : 1,
+                status : 1
+            };
         },
         filter_select: [{
             title: '指标选择',
             filter_key: 'filter_key',
             groups: [{
-                key: 'registered_count',
+                key: 'count',
                 value: '邀请成功数'
             }, {
-                key: 'rebate_amount_count',
+                key: 'rebate',
                 value: '返利到账金额'
             }]
         }],
-        filter(data, filter_key, dates) {
-            return filter.inviteRegisterAndEnterThree(data, filter_key, dates);
+        filter(data, query, dates) {
+            return filter.inviteRegisterAndEnterThree(data, query.filter_key, dates);
         }
     });
 
     Router = new api(Router,{
         router : "/platformRebate/inviteRegisterAndEnterFour",
         platform : false,
-        modelName : ["RebatetRegisterSheduleDetails", "TypeFlow"],
-        orderParams : {
-            type : 1,
-            status : 1,
-            limit : 100
+        modelName : ["RebateInvitePlanInfo", "TypeFlow"],
+        secondParams() {
+            return {
+                type : 1,
+                status : 1,
+                limit : 100
+            };
         },
         excel_export : true,
-        paging : true,
-        order : ["-date"],
+        paging : [true, false],
         showDayUnit : true,
         date_picker_data : 1,
         flexible_btn: [{
@@ -129,13 +141,13 @@ module.exports = (Router) => {
                         user_party = _.uniq(_.pluck(data, "type_code"));
                     filter_select.push({
                         title: '使用方',
-                        filter_key: 'user_party',
+                        filter_key: 'plan_type',
                         groups: [ {
                             key: user_party,
                             value: '全部使用方',
                             cell: {
                                 title: '关联流程',
-                                filter_key : 'correlate_flow',
+                                filter_key : 'rebate_type',
                                 groups : [{
                                     key: '',
                                     value: '全部相关流程'
@@ -148,7 +160,7 @@ module.exports = (Router) => {
                             key: key,
                             cell: {
                                 title: '关联流程',
-                                filter_key : 'correlate_flow',
+                                filter_key : 'rebate_type',
                                 groups : [{
                                     key: '',
                                     value: '全部相关流程'
@@ -170,12 +182,12 @@ module.exports = (Router) => {
                 }
             });
         },
-        filter(data, filter_key, dates, filter_key2, page) {
-            return filter.inviteRegisterAndEnterFour(data, page);
+        filter(data, query) {
+            return filter.inviteRegisterAndEnterFour(data, query.page);
         },
         rows : [
-            ["id", "rebate_plan_name", "user_party", "deadline", "correlate_flow", "participate_user_count",
-                "registered_count", "rebate_amount_count"]
+            ["id", "plan_name", "plan_type", "validscope_time", "rebate_type", "unique_rebate_benefit_user_num",
+                "unique_rebate_invite_success_user_num", "is_over_rebate_invite_amount"]
         ],
         cols : [
             [

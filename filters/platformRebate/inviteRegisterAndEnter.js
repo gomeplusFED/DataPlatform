@@ -3,13 +3,11 @@
  * @date 20160407
  * @fileoverview 平台返利汇总
  */
-var _ = require("lodash"),
-    config = require("../../utils/config.json"),
-    util = require("../../utils");
+var util = require("../../utils");
 
 module.exports = {
     inviteRegisterAndEnterOne(data) {
-        var source = data.data;
+        var source = data.first.data[0];
         var resultData = [];
         var _current = {};
         _current.rows = data.rows;
@@ -21,7 +19,7 @@ module.exports = {
             "registered_count": 0,
             "rebate_amount_count": 0
         };
-        for (var item of source) {
+        for (let item of source) {
             one.rebate_plan_count += item.unique_rebate_invite_friend_plan_id_num;
             one.participate_user_count += item.unique_rebate_invite_friend_user_num;
             one.registered_count += item.unique_rebate_invite_friend_success_user_num;
@@ -39,7 +37,7 @@ module.exports = {
         return resultData;
     },
     inviteRegisterAndEnterTwo(data) {
-        var source = data.data,
+        var source = data.first.data[0],
             registered_all_count = 0,
             newData = [],
             obj = {
@@ -61,24 +59,34 @@ module.exports = {
         return util.toTable([newData], data.rows, data.cols);
     },
     inviteRegisterAndEnterThree(data, filter_key, dates) {
-        var source = data.data,
-            orderSource = data.orderData,
+        let source = data.first.data[0],
+            orderSource = data.second.data[0],
             type = "line",
             map = {},
             newData = {};
-        for(var key of orderSource) {
+        for(let key of orderSource) {
             map[key.type_code] = key.type_name;
         }
-        for(var date of dates) {
+        for(let date of dates) {
             var obj = {};
             for(key of orderSource) {
                 obj[key.type_code] = 0;
             }
             newData[date] = obj;
         }
-        for(key of source) {
-            date = util.getDate(key.date);
-            newData[date][key.user_party] += Math.round(key[filter_key]);
+        for(let key of source) {
+            let date = util.getDate(key.date);
+            if(filter_key === "count") {
+                newData[date][key.plan_type] += Math.round(
+                    key.unique_rebate_invite_friend_success_user_num +
+                        key.unique_rebate_invite_shop_success_num
+                );
+            } else {
+                newData[date][key.plan_type] += Math.round(
+                    key.is_over_rebate_invite_friend_amount +
+                    key.is_over_rebate_invite_shop_amount
+                );
+            }
         }
         return [{
             type : type,
@@ -90,9 +98,9 @@ module.exports = {
         }];
     },
     inviteRegisterAndEnterFour(data, page) {
-        var source = data.data,
-            orderSource = data.orderData,
-            count = data.dataCount,
+        var source = data.first.data[0],
+            orderSource = data.second.data[0],
+            count = data.first.count,
             page = page || 1,
             user_party = {},
             correlate_flow = {};
@@ -102,8 +110,8 @@ module.exports = {
         }
         for(var i = 0; i < source.length; i++) {
             source[i].id = (page - 1) * 20 + i + 1;
-            source[i].user_party = user_party[source[i].user_party];
-            source[i].correlate_flow = correlate_flow[source[i].correlate_flow];
+            source[i].plan_type = user_party[source[i].plan_type];
+            source[i].rebate_type = correlate_flow[source[i].rebate_type];
             source[i].rebate_amount_count = source[i].rebate_amount_count.toFixed(2);
         }
         return util.toTable([source], data.rows, data.cols, [count]);

@@ -23,7 +23,9 @@ module.exports = (Router) => {
                 "unique_is_rebate_back_merchandise_num", "unique_back_merchandise_num",
                 "is_rebate_back_merchandise_num", "back_merchandise_num",
                 "unique_is_rebate_back_user_num", "unique_back_user_num",
-                "is_rebate_back_merchandise_amount", "back_merchandise_amount"],
+                "is_rebate_back_merchandise_amount", "back_merchandise_amount",
+                "cancel_is_rebate_order_num",
+                "expect_rebate_amount", "unique_expect_rebate_user_num", "cancel_rebate_amount"],
             get : ""
         }],
         platform : false,
@@ -32,14 +34,12 @@ module.exports = (Router) => {
         },
         rows: [
             ["defate_plan_count", "participate_seller_count", "participate_goods_count", "order_count",
-                "participate_user_count" ],
-            ["rebate_order_count", "rebate_order_amount_count",
-                //"rebate_order_amount_actual_count",
+                "participate_user_count", "cancel_is_rebate_order_num" ],
+            ["expect_rebate_amount", "unique_expect_rebate_user_num", "cancel_rebate_amount",
+                "rebate_order_count", "rebate_order_amount_count",
                 "rebate_amount_count"
-                //, "rate"
             ],
             ["name", "spu_count", "sku_count", "refund_user_count", "refund_goods_amount_count"
-                //"refund_goods_amount_actual_count"
             ]
         ],
         cols: [
@@ -56,26 +56,32 @@ module.exports = (Router) => {
                 caption: "订单数",
                 type: "number"
             }, {
-                caption: "用户数",
+                caption: "购买用户数",
+                type: "number"
+            }, {
+                caption: "取消订单数",
                 type: "number"
             }],
             [{
+                caption : "预计返利金额",
+                type : "string"
+            }, {
+                caption : "预计获利人次",
+                type : "string"
+            }, {
+                caption : "已取消返利金额",
+                type : "string"
+            }, {
                 caption: "返利到账订单数",
                 type: "string",
                 help : "返利订单中已经返利到账的订单数，统计时间为订单返利到账时间"
             }, {
                 caption: "返利订单总金额",
                 type: "string"
-            //}, {
-            //    caption: "返利订单实付金额",
-            //    type: "string"
             }, {
                 caption: "返利到账金额",
                 type: "string",
                 help : "返利订单中已返利总金额，统计时间为订单返利到账时间"
-            //}, {
-            //    caption: "返利比率",
-            //    type: "string"
             }],
             [{
                 caption: "",
@@ -92,9 +98,6 @@ module.exports = (Router) => {
             }, {
                 caption: "退货商品总金额",
                 type: "string"
-            //}, {
-            //    caption: "实际退货金额",
-            //    type: "string"
             }]
         ]
     });
@@ -219,6 +222,9 @@ module.exports = (Router) => {
             }, {
                 key: 'is_over_rebate_order_amount',
                 value: '返利到账金额'
+            }, {
+                key: 'unique_is_rebate_order_num',
+                value: '订单数'
             }]
         }],
         filter(data, query, dates) {
@@ -282,6 +288,9 @@ module.exports = (Router) => {
             }, {
                 key: 'sum_is_over_rebate_order_amount',
                 value: '返利到账金额'
+            }, {
+                key: 'sum_unique_is_rebate_order_num',
+                value: '订单数'
             }]
         }],
         filter(data, query, dates) {
