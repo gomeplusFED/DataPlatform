@@ -103,7 +103,7 @@ GetModels.prototype.CreateModule = function(data){
             }
             if(item.Key == "PRI"){
                 obj.Columns[item.Field] = {
-                    type: 'number', key: true
+                    "type": 'number', "key": true
                 };
             }else{
                 obj.Columns[item.Field] = type;

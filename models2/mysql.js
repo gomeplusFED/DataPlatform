@@ -28,7 +28,7 @@ for(let item of ColumnData){
             case "Date":
                 item.Columns[key] = Date;
                 break;
-            default:
+            case "Number":
                 item.Columns[key] = Number;
         }
     }
@@ -52,6 +52,7 @@ function connect(app){
             //db.settings.set('instance.autoSave', true);
 
             for(let item of ColumnData){
+
                 let thisModuleName = ModuleName[item.TableName].modelName;
                 models[thisModuleName] = db.define(item.TableName , item.Columns);
             }
