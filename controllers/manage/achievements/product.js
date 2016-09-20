@@ -356,6 +356,7 @@ module.exports = (Router) => {
         modelName:["ItemManager"],
         excel_export : true,
         platform : false,
+        paging : [true],
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
