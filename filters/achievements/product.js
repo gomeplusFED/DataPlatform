@@ -50,7 +50,7 @@ function Chain7(thisObj , allObj , columns){
         }
         var averg = result[item] / n;
 
-        result[item] = (thisObj[item] - averg) / averg;
+        result[item] = thisObj[item] / averg;
         result[item] = util.toFixed( result[item] , 0 );
 
     }
