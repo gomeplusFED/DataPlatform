@@ -46,11 +46,21 @@ module.exports = (Router) => {
             });
         },
         platform : false,
+        date_picker : false,
+        params(query, params) {
+            params.category_id_1 = "ALL";
+            params.category_id_2 = "ALL";
+            params.category_id_3 = "ALL";
+            params.category_id_4 = "ALL";
+
+            return params;
+        },
         filter(data) {
             return filter.platformOrderSix(data);
         },
         rows: [
-            ["unique_order_num", "unique_user_num", "one", "cancel_order_num", "one", "one"]
+            ["unique_order_num", "unique_user_num", "expect_rebate_amount",
+                "cancel_order_num", "cancel_rebate_amount", "is_over_rebate_order_amount"]
         ],
         cols: [
             [{
@@ -95,6 +105,10 @@ module.exports = (Router) => {
                     }
                 });
             } else {
+                query.category_id_1 = "ALL";
+                query.category_id_2 = "ALL";
+                query.category_id_3 = "ALL";
+                query.category_id_4 = "ALL";
                 cb(null, query);
             }
         },
@@ -116,7 +130,6 @@ module.exports = (Router) => {
             get : ""
         }],
         platform : false,
-        //date_picker_data: 1,
         filter(data) {
             return filter.platformOrderOne(data);
         },
@@ -125,14 +138,9 @@ module.exports = (Router) => {
                 "participate_user_count","unique_is_rebate_user_num", "productSku_num",
                 "cancel_is_rebate_order_num"],
             ["expect_rebate_amount", "unique_expect_rebate_user_num", "cancel_rebate_amount",
-                "rebate_order_count",
-                //"rebate_order_amount_count", "rebate_order_amount_actual_count",
-                "rebate_amount_count"
-                //, "rate"
+                "rebate_order_count", "rebate_amount_count"
             ],
-            ["name", "spu_count", "sku_count", "refund_user_count", "refund_goods_amount_count"
-                //"refund_goods_amount_actual_count"
-            ]
+            ["name", "spu_count", "sku_count", "refund_user_count", "refund_goods_amount_count"]
         ],
         cols: [
             [{
@@ -174,22 +182,10 @@ module.exports = (Router) => {
                 caption: "返利到账订单数",
                 type: "string",
                 help : "返利订单中已经返利到账的订单数，统计时间为订单返利到账时间"
-            //}, {
-            //    caption: "返利到账订单总金额",
-            //    type: "string",
-            //    help : "统计时间内所有已返利订单的成交金额，统计时间为订单返利到账时间"
-            //}, {
-            //    caption: "返利到账订单实付金额",
-            //    type: "string",
-            //    help : "统计时间内所有已返利订单的实际支付金额，统计时间为订单返利到账时间"
             }, {
                 caption: "返利到账金额",
                 type: "string",
                 help : "返利订单中已返利总金额，统计时间为订单返利到账时间"
-            //}, {
-            //    caption: "返利比率",
-            //    type: "string",
-            //    help : "返利到账金额/返利到账订单实付金额"
             }],
             [{
                 caption: "",
@@ -206,9 +202,6 @@ module.exports = (Router) => {
             }, {
                 caption: "退货商品总金额",
                 type: "string"
-            //}, {
-            //    caption: "实际退货金额",
-            //    type: "string"
             }]
         ]
     });
@@ -230,6 +223,10 @@ module.exports = (Router) => {
                     }
                 });
             } else {
+                query.category_id_1 = "ALL";
+                query.category_id_2 = "ALL";
+                query.category_id_3 = "ALL";
+                query.category_id_4 = "ALL";
                 cb(null, query);
             }
         },
@@ -291,6 +288,10 @@ module.exports = (Router) => {
                     }
                 });
             } else {
+                query.category_id_1 = "ALL";
+                query.category_id_2 = "ALL";
+                query.category_id_3 = "ALL";
+                query.category_id_4 = "ALL";
                 cb(null, query);
             }
         },
@@ -337,7 +338,7 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/platformRebate/platformOrderFour",
-        modelName : [ "RebatetSheduleDetails", "TypeFlow" ],
+        modelName : [ "RebateOrderTredencyDetails", "TypeFlow" ],
         level_select : true,
         level_select_name : "category_id",
         level_select_url : "/api/categories",
@@ -368,6 +369,10 @@ module.exports = (Router) => {
                     } else {
                         var user_party = _.uniq(_.pluck(data, "type_code"));
                         query.plan_type = user_party;
+                        query.category_id_1 = "ALL";
+                        query.category_id_2 = "ALL";
+                        query.category_id_3 = "ALL";
+                        query.category_id_4 = "ALL";
                         cb(null, query);
                     }
                 });

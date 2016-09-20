@@ -14,6 +14,7 @@ module.exports = {
         _current.cols = data.cols;
         _current.data = [];
         var one = {
+            "all_register_user_num": 0,
             "rebate_plan_count": 0,
             "participate_user_count": 0,
             "registered_count": 0,

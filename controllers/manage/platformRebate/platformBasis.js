@@ -12,6 +12,10 @@ module.exports = (Router) => {
         modelName : ["RebateOrderMuiltipleOverview"],
         params(query, params) {
             params.plan_type = "1";
+            query.category_id_1 = "ALL";
+            query.category_id_2 = "ALL";
+            query.category_id_3 = "ALL";
+            query.category_id_4 = "ALL";
             return params;
         },
         platform : false,
@@ -131,6 +135,10 @@ module.exports = (Router) => {
                     }
                 });
             } else {
+                query.category_id_1 = "ALL";
+                query.category_id_2 = "ALL";
+                query.category_id_3 = "ALL";
+                query.category_id_4 = "ALL";
                 cb(null, query);
             }
         },
@@ -183,6 +191,10 @@ module.exports = (Router) => {
                     }
                 });
             } else {
+                query.category_id_1 = "ALL";
+                query.category_id_2 = "ALL";
+                query.category_id_3 = "ALL";
+                query.category_id_4 = "ALL";
                 cb(null, query);
             }
         },
@@ -261,6 +273,10 @@ module.exports = (Router) => {
                     }
                 });
             } else {
+                query.category_id_1 = "ALL";
+                query.category_id_2 = "ALL";
+                query.category_id_3 = "ALL";
+                query.category_id_4 = "ALL";
                 cb(null, query);
             }
         },
