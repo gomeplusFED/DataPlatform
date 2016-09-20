@@ -48,8 +48,20 @@ module.exports = (Router) => {
                     pid : query.category_id
                 } , 1 , (err , data)=>{
                     if(err) cb(err);
-                    query.category_level = data[0].level;
-                    cb(null , query);
+
+                    if(data.length == 0){
+                        req.models.ConfCategories.find({
+                                id : query.category_id
+                            } , 1 , (err , data)=>{
+                                if(err) cb(err);
+                                query.category_level = data[0].level;
+                                cb(null , query);
+                            });
+                    }else{
+                        query.category_level = data[0].level;
+                        cb(null , query);
+                    }
+                    
                 });
             }
         },
@@ -113,8 +125,20 @@ module.exports = (Router) => {
                     pid : query.category_id
                 } , 1 , (err , data)=>{
                     if(err) cb(err);
-                    query.category_level = data[0].level;
-                    cb(null , query);
+
+                    if(data.length==0){
+                        req.models.ConfCategories.find({
+                                id : query.category_id
+                            } , 1 , (err , data)=>{
+                                if(err) cb(err);
+                                query.category_level = data[0].level;
+                                cb(null , query);
+                            });
+                    }else{
+                        query.category_level = data[0].level;
+                        cb(null , query);
+                    }
+                        
                 });
             }
         },
@@ -174,21 +198,45 @@ module.exports = (Router) => {
                     pid : query.category_id
                 } , 1 , (err , data)=>{
                     if(err) cb(err);
-                    switch(data[0].level){
-                        case 1:
-                            query.category_id_1 = query.category_id;
-                            break;
-                        case 2:
-                            query.category_id_2 = query.category_id;
-                            break;
-                        case 3:
-                            query.category_id_3 = query.category_id;
-                            break;
-                        case 4:
-                            query.category_id_4 = query.category_id;
-                            break;
+
+                    if(data.length == 0){
+                        req.models.ConfCategories.find({
+                            id : query.category_id
+                        } , 1 , (err , data)=>{
+                            if(err) cb(err);
+                            switch(data[0].level){
+                                case 1:
+                                    query.category_id_1 = query.category_id;
+                                    break;
+                                case 2:
+                                    query.category_id_2 = query.category_id;
+                                    break;
+                                case 3:
+                                    query.category_id_3 = query.category_id;
+                                    break;
+                                case 4:
+                                    query.category_id_4 = query.category_id;
+                                    break;
+                            }
+                            cb(null , query);
+                        });
+                    }else{
+                        switch(data[0].level){
+                            case 1:
+                                query.category_id_1 = query.category_id;
+                                break;
+                            case 2:
+                                query.category_id_2 = query.category_id;
+                                break;
+                            case 3:
+                                query.category_id_3 = query.category_id;
+                                break;
+                            case 4:
+                                query.category_id_4 = query.category_id;
+                                break;
+                        }
+                        cb(null , query);
                     }
-                    cb(null , query);
                 });
             }
         },
@@ -220,21 +268,46 @@ module.exports = (Router) => {
                     pid : query.category_id
                 } , 1 , (err , data)=>{
                     if(err) cb(err);
-                    switch(data[0].level){
-                        case 1:
-                            query.category_id_1 = query.category_id;
-                            break;
-                        case 2:
-                            query.category_id_2 = query.category_id;
-                            break;
-                        case 3:
-                            query.category_id_3 = query.category_id;
-                            break;
-                        case 4:
-                            query.category_id_4 = query.category_id;
-                            break;
+                    if(data.length == 0){
+                        req.models.ConfCategories.find({
+                            id : query.category_id
+                        } , 1 , (err , data)=>{
+                            if(err) cb(err);
+                            
+                            switch(data[0].level){
+                                case 1:
+                                    query.category_id_1 = query.category_id;
+                                    break;
+                                case 2:
+                                    query.category_id_2 = query.category_id;
+                                    break;
+                                case 3:
+                                    query.category_id_3 = query.category_id;
+                                    break;
+                                case 4:
+                                    query.category_id_4 = query.category_id;
+                                    break;
+                            }
+                            cb(null , query);
+                        });
+                    }else{
+                        switch(data[0].level){
+                            case 1:
+                                query.category_id_1 = query.category_id;
+                                break;
+                            case 2:
+                                query.category_id_2 = query.category_id;
+                                break;
+                            case 3:
+                                query.category_id_3 = query.category_id;
+                                break;
+                            case 4:
+                                query.category_id_4 = query.category_id;
+                                break;
+                        }
+                        cb(null , query);
                     }
-                    cb(null , query);
+                        
                 });
             }
         },
@@ -257,8 +330,19 @@ module.exports = (Router) => {
                     pid : query.category_id
                 } , 1 , (err , data)=>{
                     if(err) cb(err);
-                    query.category_level = data[0].level;
-                    cb(null , query);
+                    if(data.length == 0){
+                        req.models.ConfCategories.find({
+                            id : query.category_id
+                        } , 1 , (err , data)=>{
+                            if(err) cb(err);
+                            
+                            query.category_level = data[0].level;
+                            cb(null , query);
+                        });
+                    }else{
+                        query.category_level = data[0].level;
+                        cb(null , query);
+                    }
                 });
             }
         },
@@ -316,8 +400,19 @@ module.exports = (Router) => {
                     pid : query.category_id
                 } , 1 , (err , data)=>{
                     if(err) cb(err);
-                    query.category_level = data[0].level;
-                    cb(null , query);
+                    if(data.length == 0){
+                        req.models.ConfCategories.find({
+                            id : query.category_id
+                        } , 1 , (err , data)=>{
+                            if(err) cb(err);
+                            query.category_level = data[0].level;
+                            cb(null , query);
+                        });
+                    }else{
+                        query.category_level = data[0].level;
+                        cb(null , query);
+                    }
+                    
                 });
             }
         },
