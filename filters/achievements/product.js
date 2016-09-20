@@ -136,9 +136,6 @@ module.exports = {
                 value : "新增商品数"
             },
             newData = {};
-
-        console.log(123,dates);
-
         var n = 0;
         for(let item of source){
             if(item.isnew == 0) continue;
