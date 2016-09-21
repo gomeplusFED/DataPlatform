@@ -89,18 +89,18 @@ module.exports = {
         }
 
         //昨日
-        result[0] = sourceObj[dates[1]];
+        result[0] = sourceObj[dates[0]];
         result[0].names = "昨日";
 
         //前日
-        result[1] = sourceObj[dates[2]];
+        result[1] = sourceObj[dates[1]];
         result[1].names = "前日";
 
         //环比
-        result[2] = Chain(sourceObj[dates[1]] ,sourceObj[dates[2]] , data.rows[0]);
+        result[2] = Chain(sourceObj[dates[0]] ,sourceObj[dates[1]] , data.rows[0]);
 
         //7日平均环比
-        result[3] = Chain7(sourceObj[dates[1]] ,sourceObj , data.rows[0]);
+        result[3] = Chain7(sourceObj[dates[0]] ,sourceObj , data.rows[0]);
 
        return util.toTable([result], data.rows, data.cols);
     },
