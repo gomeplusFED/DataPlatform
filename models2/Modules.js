@@ -279,5 +279,8 @@ module.exports = {
     },
     "ads2_user_analysis_version": {
         "modelName": "UserAnalysisVersion"
+    },
+    "ads2_search_analyse": {
+        "modelName": "SearchAnalyse"
     }
 }
