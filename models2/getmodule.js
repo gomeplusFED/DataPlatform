@@ -3,7 +3,6 @@ const async = require('asyncawait/async');
 const await = require('asyncawait/await');
 const eventproxy = require("eventproxy");
 const fs = require("fs");
-const http = require("http");
 const Modules = require("./Modules");
 
 let NumberArr = ["INT" , "TINYINT" , "SMALLINT" , "MEDIUMINT" , "BIGINT" , "FLOAT" , "DOUBLE" , "DECIMAL" , "BIT"];
