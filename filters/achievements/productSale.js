@@ -272,7 +272,7 @@ module.exports = {
                 caption:"下单件数",
                 type : "number"
             },{
-                caption:"成绩金额",
+                caption:"成交金额",
                 type : "number"
             },{
                 caption:"成交金额占比",
