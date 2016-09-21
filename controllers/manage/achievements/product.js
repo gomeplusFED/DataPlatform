@@ -109,7 +109,7 @@ module.exports = (Router) => {
             ["names" , "items_add" , "items_put" , "items_down" , "items_frost" , "items_delete"]
         ],
         params : function(query , params , sendData){
-            var dates = utils.beforeDate(new Date() , 8);
+            var dates = utils.beforeDate(new Date() , 8).splice(1,20);
 
             params.date = dates;
             query.date = dates;
