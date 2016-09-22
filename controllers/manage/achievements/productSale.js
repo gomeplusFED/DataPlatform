@@ -244,6 +244,7 @@ module.exports = (Router) => {
         modelName : ["ItemRunSales"],
         platform : false,
         excel_export : true,
+        paging : [true],
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
@@ -265,34 +266,34 @@ module.exports = (Router) => {
         cols : [
             [{
                 comment : "日期/日期",
-                type : "string"
+                type : "date"
             }, {
                 comment: '被访问商品数/商品访问量',
-                type: 'string'
+                type: 'number'
             }, {
                 comment: '被收藏商品数/商品收藏次数',
-                type: 'string'
+                type: 'number'
             }, {
                 comment: '被分享商品数/商品被分享次数',
-                type: 'string'
+                type: 'number'
             }, {
                 comment: '加购商品数/加购商品件数',
-                type: 'string'
+                type: 'number'
             }, {
                 comment: '下单商品数/下单商品件数',
-                type: 'string'
+                type: 'number'
             }, {
                 comment: '支付商品数/支付商品件数',
-                type: 'string'
+                type: 'number'
             }, {
                 comment: '支付金额/支付金额',
-                type: 'string'
+                type: 'number'
             }, {
                 comment: '退货商品数/退货商品件数',
-                type: 'string'
+                type: 'number'
             }, {
                 comment: '退货金额/退货金额',
-                type: 'string'
+                type: 'number'
             }]
         ],
         //set in filter function.
