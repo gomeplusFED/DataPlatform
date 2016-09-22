@@ -17,10 +17,9 @@ new getModule(ConfigObj).then((result)=>{
 
     var str = JSON.stringify(result);
     let string = "";
-
     let n = 0;
     for(var i=0,len=str.length;i<len;i++){
-        
+
         switch(str[i]){
             case "{":
                 n++;
@@ -29,11 +28,11 @@ new getModule(ConfigObj).then((result)=>{
                 }else if(n==2){
                     string += str[i]+"\r\t\t";
                 }else if(n==3){
-                    string += str[i]+"\r\t\t";
+                    string += str[i]+"\r\t\t\t";
                 }else{
                     string += str[i];
                 }
-                
+
                 break;
             case ",":
                 if(n == 1){
@@ -41,7 +40,7 @@ new getModule(ConfigObj).then((result)=>{
                 }else if(n==2){
                     string += str[i]+"\r\t\t";
                 }else if(n==3){
-                    string += str[i]+"\r\t\t";
+                    string += str[i]+"\r\t\t\t";
                 }else{
                     string += str[i];
                 }
@@ -55,7 +54,7 @@ new getModule(ConfigObj).then((result)=>{
                 }else if(n==3){
                     string += "\r\t\t\t"+str[i];
                 }else{
-                    string += str[i];
+                    string += "\r" + str[i];
                 }
                 break;
             default:

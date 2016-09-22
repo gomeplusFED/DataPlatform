@@ -97,3 +97,5 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(7879);
+
+console.log("启动成功");
