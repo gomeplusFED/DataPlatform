@@ -376,9 +376,16 @@ module.exports = (Router) => {
             arrParam[4] = params.category_id_3,
             arrParam[5] = params.category_id_4,
             arrParam[6] = params.type,            
-            arrParam[7] = list[num],
-            arrParam[8] = (params.page-1)*params.limit;
-            arrParam[9] = params.limit / 1;
+            arrParam[7] = list[num];
+            
+            if(params.page && params.limit){
+                arrParam[8] = (params.page-1)*params.limit;
+                arrParam[9] = params.limit / 1;
+            }else{
+                arrParam[8] = params.from;
+                arrParam[9] = params.to;
+            }
+            
             if(isCount){
                 //统计总数
                 let sql = `SELECT COUNT(*) count FROM ads2_itm_run_top WHERE date BETWEEN ? AND ? AND day_type = 1 AND category_id_1 = ? AND category_id_2 = ? AND category_id_3 = ? AND category_id_4 = ? AND type = ?`;
