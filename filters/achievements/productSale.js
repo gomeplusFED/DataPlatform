@@ -232,7 +232,7 @@ module.exports = {
             //流量
             [{
                 caption:"排名",
-                type : "string"
+                type : "number"
             },{
                 caption:"商品名称",
                 type : "string"
@@ -258,7 +258,7 @@ module.exports = {
             //销售
             [{
                 caption:"排名",
-                type : "string"
+                type : "number"
             },{
                 caption:"商品名称",
                 type : "string"

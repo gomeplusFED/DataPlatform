@@ -375,15 +375,15 @@ module.exports = (Router) => {
             arrParam[3] = params.category_id_2,
             arrParam[4] = params.category_id_3,
             arrParam[5] = params.category_id_4,
-            arrParam[6] = params.type,            
-            arrParam[7] = list[num];
+            arrParam[6] = params.type;            
+            // arrParam[7] = list[num];
             
             if(params.page && params.limit){
-                arrParam[8] = (params.page-1)*params.limit;
-                arrParam[9] = params.limit / 1;
+                arrParam[7] = (params.page-1)*params.limit;
+                arrParam[8] = params.limit / 1;
             }else{
-                arrParam[8] = params.from;
-                arrParam[9] = params.to;
+                arrParam[7] = params.from / 1;
+                arrParam[8] = params.to / 1;
             }
             
             if(isCount){
@@ -394,7 +394,8 @@ module.exports = (Router) => {
                     params : arrParam
                 }
             }
-            let sql = `SELECT * FROM ads2_itm_run_top WHERE DATE BETWEEN ? AND ? AND day_type = 1 AND category_id_1 = ? AND category_id_2 = ? AND category_id_3 = ? AND category_id_4 = ? AND type = ? ORDER BY ? LIMIT ?,?`;
+            let sql = `SELECT * FROM ads2_itm_run_top WHERE DATE BETWEEN ? AND ? AND day_type = 1 AND category_id_1 = ? AND category_id_2 = ? AND category_id_3 = ? AND category_id_4 = ? AND type = ? ORDER BY `+list[num]+` LIMIT ?,?`;
+
             return {
                 sql : sql,
                 params : arrParam
