@@ -33,9 +33,17 @@ module.exports = {
         let source = data.first.data[0];
         if(!source[0]){
             source[0] = {};
+            for(let key of keys){
+                source[0][key] = 0;
+            }
+            source[0].date = query.date[0];
         }
         if(!source[1]){
             source[1] = {};
+            for(let key of keys){
+                source[1][key] = 0;
+            }
+            source[1].date = query.date[1];
         }
 
         let Result = [source[0] , source[1]];
@@ -70,13 +78,30 @@ module.exports = {
                 continue;
             }
 
-            if(source[0][key]/1 && source[1][key]/1){
+            /*if( typeof source[0][key] == "number" && typeof source[1][key] == "number"){
                 obj[key] = (source[0][key] - source[1][key]) / source[1][key];
             }else{
                 let num = source[0][key].replace(Reg , "") / 1.0;
                 let num1= source[1][key].replace(Reg , "") / 1.0;
                 obj[key] = (num - num1) / num1;
+            }*/
+
+            let num = source[0][key];
+            let num1= source[1][key];
+            if(typeof num == "string"){
+                num = num.replace(Reg , "") / 1;
             }
+            if(typeof num1 == "string"){
+                num1 = num1.replace(Reg , "") / 1;
+            }
+
+            if(num1 == 0){
+                obj[key] = (num - num1) / 1;
+            }else{
+                obj[key] = (num - num1) / num1;
+            }
+            
+
             obj[key] = utils.toFixed(obj[key] , 0);
         }
 
