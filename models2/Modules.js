@@ -5,7 +5,6 @@
  */
 
 
-
 /**
  * 手动指定主键eg:
  * "tbl_rt_useranalysis_newuser": {
@@ -13,8 +12,6 @@
  *      "primary"  : "channal_id"
  *   }
  */
-
-
 
 module.exports = {
     "tbl_rt_useranalysis_newuser": {
@@ -282,5 +279,11 @@ module.exports = {
     },
     "ads2_search_analyse": {
         "modelName": "SearchAnalyse"
+    },
+    "ads2_search_souloca_analyse": {
+        "modelName": "SearchSource"
+    },
+    "ads2_recommend_analyse": {
+        "modelName": "SearchRecommend"
     }
 }

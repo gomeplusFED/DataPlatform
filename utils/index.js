@@ -204,6 +204,23 @@ exports.getDate = function(date){
     return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
 };
 
+
+/*numberLeave("234.567789" , 3) // 234.567*/
+exports.numberLeave = function(number , num){
+    if(typeof number != "number"){
+        console.error("must be a number");
+        return false;
+    }
+    let a = 1;
+    let i = 0;
+    while(i<num){
+        a *= 10;
+        i++;
+    }
+    number = parseInt(number*a);
+    return number/a;
+}
+
 exports.times = function(startTime, endTime, day_type) {
     var start = new Date(startTime).getTime(),
         end = new Date(endTime).getTime(),
