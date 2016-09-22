@@ -26,8 +26,8 @@ module.exports = {
 
         let keys = data.rows[0].concat(data.rows[1]);
         
-        console.log(keys);
-        console.log(123,query.date , data);
+        // console.log(keys);
+        // console.log(123,query.date , data);
 
 
         let source = data.first.data[0];
@@ -56,11 +56,31 @@ module.exports = {
                     Computer(key , "search_order_uv" , "search_prodet_ipv_uv" , source[0] ,source[1]);
                     break;
                 case "8_ctr":
-                //没有曝光商品数
-                    // Computer(key , "search_prodet_ipv" , "??" , source[0] ,source[1]);
+                    Computer(key , "search_prodet_ipv" , "search_exposure_product_num" , source[0] ,source[1]);
                     break;
             }
         }
+
+
+        let obj = {};
+        let Reg = /\%/ig;
+        for(let key of keys){
+            if(key == "date"){
+                obj.date = "GAP";
+                continue;
+            }
+
+            if(source[0][key]/1 && source[1][key]/1){
+                obj[key] = (source[0][key] - source[1][key]) / source[1][key];
+            }else{
+                let num = source[0][key].replace(Reg , "") / 1.0;
+                let num1= source[1][key].replace(Reg , "") / 1.0;
+                obj[key] = (num - num1) / num1;
+            }
+            obj[key] = utils.toFixed(obj[key] , 0);
+        }
+
+        Result.push(obj);
 
         return utils.toTable([Result , Result], data.rows, data.cols);
     }
