@@ -382,8 +382,8 @@ module.exports = (Router) => {
                 arrParam[8] = (params.page-1)*params.limit;
                 arrParam[9] = params.limit / 1;
             }else{
-                arrParam[8] = params.from;
-                arrParam[9] = params.to;
+                arrParam[8] = params.from / 1;
+                arrParam[9] = params.to / 1;
             }
             
             if(isCount){
