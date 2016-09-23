@@ -435,7 +435,7 @@ api.prototype = {
             } else {
                 // console.log(req.url);
                 sql[keys[0]](_obj.params, (err, data) => {
-                    err ? reject(err) : resolve(data);
+                    err ? reject(modelName + err) : resolve(data);
                 });
             }
         });
