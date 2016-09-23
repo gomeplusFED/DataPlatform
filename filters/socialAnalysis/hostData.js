@@ -197,7 +197,9 @@ module.exports = {
             newData = [];
 
         for(let key of secondSource) {
-            config[key.group_leader_id] = {};
+            if(!config[key.group_leader_id]) {
+                config[key.group_leader_id] = {};
+            }
             config[key.group_leader_id][key.key] = key.sum_value;
         }
 

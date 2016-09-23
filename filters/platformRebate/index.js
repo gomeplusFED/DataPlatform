@@ -12,19 +12,25 @@ module.exports = {
         var source = data.first.data,
             one = [],
             two = [{
-                rebate_order_count : source[10] || 0,
-                rebate_amount_count : source[11] || 0
+                rebate_order_count : source[10]  || 0,
+                rebate_amount_count : source[11] ? source[11].toFixed(2) : "0.00",
+                expect_rebate_amount : source[24] ? source[24].toFixed(2) : "0.00",
+                unique_expect_rebate_user_num : source[25] || 0,
+                cancel_rebate_amount : source[26] ? source[26].toFixed(2) : "0.00"
             }],
             three = [];
 
         one.push({
             name : "返利订单",
             order_count : source[1] || 0,
-            rebate_order_amount_count : source[3] || 0,
+            rebate_order_amount_count : source[3] ? source[3].toFixed(2) : "0.00",
             participate_seller_count : source[5] || 0,
             participate_user_count : source[7] || 0,
-            productSku_num : source[9] || 0
+            productSku_num : source[9] || 0,
+            unique_is_rebate_user_num : source[21] || 0,
+            cancel_is_rebate_order_num : source[23] || 0
         });
+
         one.push({
             name : "总占比",
             order_count : util.toFixed(
@@ -46,6 +52,14 @@ module.exports = {
             productSku_num : util.toFixed(
                 one[0].participate_user_count,
                 source[8] || 0
+            ),
+            unique_is_rebate_user_num : util.toFixed(
+                one[0].unique_is_rebate_user_num,
+                source[20] || 0
+            ),
+            cancel_is_rebate_order_num : util.toFixed(
+                one[0].cancel_is_rebate_order_num,
+                source[22] || 0
             )
         });
 
@@ -54,7 +68,7 @@ module.exports = {
             spu_count: source[13] || 0,
             sku_count: source[15] || 0,
             refund_user_count: source[17] || 0,
-            refund_goods_amount_count: source[19] || 0
+            refund_goods_amount_count: source[19] ? source[19].toFixed(2) : 0
         });
         three.push({
             name: "返利退货订单占比",
@@ -117,7 +131,8 @@ module.exports = {
             filter_name = {
                 is_rebate_merchandise_num: "商品件数",
                 is_rebate_fee: "商品总金额",
-                is_over_rebate_order_amount: "返利到账金额"
+                is_over_rebate_order_amount: "返利到账金额",
+                unique_is_rebate_order_num: "订单数"
             },
             objPie = {},
             objBar = {},
@@ -208,7 +223,8 @@ module.exports = {
             filter_name = {
                 unique_is_rebate_merchandise_num: "商品件数",
                 is_rebate_fee: "商品总金额",
-                is_over_rebate_order_amount: "返利到账金额"
+                is_over_rebate_order_amount: "返利到账金额",
+                unique_is_rebate_order_num: "订单数"
             };
         for(var key of orderSource) {
             obj[key.type_code] = {
@@ -265,5 +281,28 @@ module.exports = {
             key.is_over_rebate_order_amount = key.is_over_rebate_order_amount.toFixed(2);
         });
         return util.toTable([source], data.rows, data.cols, [count]);
+    },
+    platformOrderSix(data) {
+        let source = data.first.data[0],
+            obj = {
+                unique_order_num : 0,
+                unique_user_num : 0,
+                expect_rebate_amount : 0,
+                cancel_order_num : 0,
+                cancel_rebate_amount : 0,
+                is_over_rebate_order_amount : 0
+            };
+
+        for(let item of source) {
+            for(let key in obj) {
+                obj[key] += item[key];
+            }
+        }
+
+        obj.expect_rebate_amount = obj.expect_rebate_amount.toFixed(2);
+        obj.cancel_rebate_amount = obj.cancel_rebate_amount.toFixed(2);
+        obj.is_over_rebate_order_amount = obj.is_over_rebate_order_amount.toFixed(2);
+
+        return util.toTable([[obj]], data.rows, data.cols);
     }
 };

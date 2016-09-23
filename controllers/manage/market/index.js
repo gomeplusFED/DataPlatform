@@ -214,37 +214,46 @@ module.exports = (Router) => {
 
     Router = Router.post("/custom/channel", (req, res, next) => {
         let body = JSON.parse(req.body.data);
-        body.channel_id = [body.channel_type_code, body.channel_code, body.channel_ex].join("");
-        body.create_time = new Date();
-        body.update_time = new Date();
 
-        req.models.Channel.find(body, (err, items) => {
-            if(err) {
-                res.json({
-                    code : 400,
-                    msg : "创建失败"
-                });
-            } else if(items.length > 0) {
-                res.json({
-                    code : 400,
-                    msg : "已经存在"
-                });
-            } else {
-                req.models.Channel.create(body, (err,data) => {
-                    if(err) {
-                        res.json({
-                            code : 400,
-                            msg : "创建失败"
-                        });
-                    } else {
-                        res.json({
-                            code : 200,
-                            data : data
-                        });
-                    }
-                });
-            }
-        });
+        if(Object.keys(body).length !== 5) {
+            res.json({
+                code : 400,
+                msg : "所有项为必填项"
+            });
+        } else {
+            body.channel_id = [body.channel_type_code, body.channel_code, body.channel_ex].join("");
+            body.create_time = new Date();
+            body.update_time = new Date();
+            req.models.Channel.find({
+                channel_id : body.channel_id
+            }, (err, items) => {
+                if(err) {
+                    res.json({
+                        code : 400,
+                        msg : "创建失败"
+                    });
+                } else if(items.length > 0) {
+                    res.json({
+                        code : 400,
+                        msg : "已经存在"
+                    });
+                } else {
+                    req.models.Channel.create(body, (err,data) => {
+                        if(err) {
+                            res.json({
+                                code : 400,
+                                msg : "创建失败"
+                            });
+                        } else {
+                            res.json({
+                                code : 200,
+                                data : data
+                            });
+                        }
+                    });
+                }
+            });
+        }
     });
 
     return Router;

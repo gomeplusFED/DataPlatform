@@ -9,6 +9,83 @@ var api = require("../../../base/main"),
 
 module.exports = (Router) => {
     Router = new api(Router,{
+        router : "/platformRebate/platformOrderSix",
+        modelName : ["RebateOrderMuiltipleOverview"],
+        selectFilter(req, cb) {
+            req.models.TypeFlow.find({
+                type : 1,
+                status : 1
+            }, (err, data) => {
+                if(err) {
+                    cb(err);
+                } else {
+                    var filter_select = [],
+                        obj = {},
+                        user_party = _.uniq(_.pluck(data, "type_code"));
+                    filter_select.push({
+                        title: '使用方',
+                        filter_key: 'plan_type',
+                        groups : [
+                            {
+                                key: user_party,
+                                value: '全部使用方'
+                            }
+                        ]
+                    });
+                    for(let key of data) {
+                        obj[key.type_code] = key.type_name;
+                    }
+                    for(let key in obj) {
+                        filter_select[0].groups.push({
+                            key : key,
+                            value : obj[key]
+                        });
+                    }
+                    cb(null, filter_select);
+                }
+            });
+        },
+        platform : false,
+        date_picker : false,
+        params(query, params) {
+            params.category_id_1 = "ALL";
+            params.category_id_2 = "ALL";
+            params.category_id_3 = "ALL";
+            params.category_id_4 = "ALL";
+
+            return params;
+        },
+        filter(data) {
+            return filter.platformOrderSix(data);
+        },
+        rows: [
+            ["unique_order_num", "unique_user_num", "expect_rebate_amount",
+                "cancel_order_num", "cancel_rebate_amount", "is_over_rebate_order_amount"]
+        ],
+        cols: [
+            [{
+                caption: "累计订单数",
+                type: "string"
+            }, {
+                caption: "累计返利参与人次",
+                type: "string"
+            }, {
+                caption: "累计预计返利金额",
+                type: "string"
+            }, {
+                caption: "累计取消订单数",
+                type: "string"
+            }, {
+                caption: "累计取消返利金额",
+                type: "string"
+            }, {
+                caption: "累计到账金额",
+                type: "string"
+            }]
+        ]
+    });
+
+    Router = new api(Router,{
         router : "/platformRebate/platformOrderOne",
         modelName : ["Rebate"],
         level_select : true,
@@ -28,6 +105,10 @@ module.exports = (Router) => {
                     }
                 });
             } else {
+                query.category_id_1 = "ALL";
+                query.category_id_2 = "ALL";
+                query.category_id_3 = "ALL";
+                query.category_id_4 = "ALL";
                 cb(null, query);
             }
         },
@@ -41,25 +122,25 @@ module.exports = (Router) => {
                 "unique_back_merchandise_num", "unique_is_rebate_back_merchandise_num",
                 "back_merchandise_num", "is_rebate_back_merchandise_num",
                 "unique_back_user_num", "unique_is_rebate_back_user_num",
-                "back_merchandise_amount", "is_rebate_back_merchandise_amount"],
+                "back_merchandise_amount", "is_rebate_back_merchandise_amount",
+
+                "unique_user_num", "unique_is_rebate_user_num",
+                "cancel_order_num", "cancel_is_rebate_order_num",
+                "expect_rebate_amount", "unique_expect_rebate_user_num", "cancel_rebate_amount"],
             get : ""
         }],
         platform : false,
-        //date_picker_data: 1,
         filter(data) {
             return filter.platformOrderOne(data);
         },
         rows: [
             ["name", "order_count", "rebate_order_amount_count", "participate_seller_count",
-                "participate_user_count", "productSku_num"],
-            ["rebate_order_count",
-                //"rebate_order_amount_count", "rebate_order_amount_actual_count",
-                "rebate_amount_count"
-                //, "rate"
+                "participate_user_count","unique_is_rebate_user_num", "productSku_num",
+                "cancel_is_rebate_order_num"],
+            ["expect_rebate_amount", "unique_expect_rebate_user_num", "cancel_rebate_amount",
+                "rebate_order_count", "rebate_amount_count"
             ],
-            ["name", "spu_count", "sku_count", "refund_user_count", "refund_goods_amount_count"
-                //"refund_goods_amount_actual_count"
-            ]
+            ["name", "spu_count", "sku_count", "refund_user_count", "refund_goods_amount_count"]
         ],
         cols: [
             [{
@@ -78,30 +159,33 @@ module.exports = (Router) => {
                 caption: "用户数",
                 type: "string"
             }, {
+                caption: "购买用户数",
+                type: "string"
+            }, {
                 caption: "商品件数",
                 type: "string",
                 help : "所有订单中，带返利的商品总件数，统计时间为订单生成时间"
+            },{
+                caption: "取消订单数",
+                type: "string"
             }],
             [{
+                caption : "预计返利金额",
+                type : "string"
+            },{
+                caption : "预计获利人次",
+                type : "string"
+            },{
+                caption : "已取消返利金额",
+                type : "string"
+            },{
                 caption: "返利到账订单数",
                 type: "string",
                 help : "返利订单中已经返利到账的订单数，统计时间为订单返利到账时间"
-            //}, {
-            //    caption: "返利到账订单总金额",
-            //    type: "string",
-            //    help : "统计时间内所有已返利订单的成交金额，统计时间为订单返利到账时间"
-            //}, {
-            //    caption: "返利到账订单实付金额",
-            //    type: "string",
-            //    help : "统计时间内所有已返利订单的实际支付金额，统计时间为订单返利到账时间"
             }, {
                 caption: "返利到账金额",
                 type: "string",
                 help : "返利订单中已返利总金额，统计时间为订单返利到账时间"
-            //}, {
-            //    caption: "返利比率",
-            //    type: "string",
-            //    help : "返利到账金额/返利到账订单实付金额"
             }],
             [{
                 caption: "",
@@ -118,9 +202,6 @@ module.exports = (Router) => {
             }, {
                 caption: "退货商品总金额",
                 type: "string"
-            //}, {
-            //    caption: "实际退货金额",
-            //    type: "string"
             }]
         ]
     });
@@ -142,6 +223,10 @@ module.exports = (Router) => {
                     }
                 });
             } else {
+                query.category_id_1 = "ALL";
+                query.category_id_2 = "ALL";
+                query.category_id_3 = "ALL";
+                query.category_id_4 = "ALL";
                 cb(null, query);
             }
         },
@@ -159,7 +244,7 @@ module.exports = (Router) => {
                 value : ["plan_type", "date"]
             },
             sum : ["unique_is_rebate_order_num", "is_rebate_fee",
-                "is_rebate_merchandise_num"],
+                "is_rebate_merchandise_num", "cancel_is_rebate_order_num"],
             groupBy : ["date"],
             get : ""
         }, false],
@@ -176,6 +261,9 @@ module.exports = (Router) => {
             }, {
                 key: 'is_rebate_merchandise_num',
                 value: '商品件数'
+            }, {
+                key: 'cancel_is_rebate_order_num',
+                value: '取消订单数'
             }]
         }],
         filter(data, query, dates) {
@@ -200,6 +288,10 @@ module.exports = (Router) => {
                     }
                 });
             } else {
+                query.category_id_1 = "ALL";
+                query.category_id_2 = "ALL";
+                query.category_id_3 = "ALL";
+                query.category_id_4 = "ALL";
                 cb(null, query);
             }
         },
@@ -214,7 +306,7 @@ module.exports = (Router) => {
                 value : ["level", "rebate_level"]
             },
             sum : ["is_rebate_merchandise_num", "is_rebate_fee",
-                "is_over_rebate_order_amount"],
+                "is_over_rebate_order_amount", "unique_is_rebate_order_num"],
             groupBy : ["level", "rebate_level"],
             get : ""
         }, false],
@@ -234,6 +326,9 @@ module.exports = (Router) => {
             }, {
                 key: 'is_over_rebate_order_amount',
                 value: '返利到账金额'
+            }, {
+                key: 'unique_is_rebate_order_num',
+                value: '订单数'
             }]
         }],
         filter(data, query, dates) {
@@ -243,7 +338,7 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/platformRebate/platformOrderFour",
-        modelName : [ "RebatetSheduleDetails", "TypeFlow" ],
+        modelName : [ "RebateOrderTredencyDetails", "TypeFlow" ],
         level_select : true,
         level_select_name : "category_id",
         level_select_url : "/api/categories",
@@ -274,6 +369,10 @@ module.exports = (Router) => {
                     } else {
                         var user_party = _.uniq(_.pluck(data, "type_code"));
                         query.plan_type = user_party;
+                        query.category_id_1 = "ALL";
+                        query.category_id_2 = "ALL";
+                        query.category_id_3 = "ALL";
+                        query.category_id_4 = "ALL";
                         cb(null, query);
                     }
                 });
@@ -290,7 +389,7 @@ module.exports = (Router) => {
                 value : ["plan_type"]
             },
             sum : ["unique_is_rebate_merchandise_num", "is_rebate_fee",
-                "is_over_rebate_order_amount"],
+                "is_over_rebate_order_amount", "unique_is_rebate_order_num"],
             groupBy : ["plan_type"],
             get : ""
         }, false],
@@ -307,6 +406,9 @@ module.exports = (Router) => {
             }, {
                 key: 'is_over_rebate_order_amount',
                 value: '返利到账金额'
+            }, {
+                key: 'unique_is_rebate_order_num',
+                value: '订单数'
             }]
         }],
         filter(data, query, dates) {
