@@ -177,13 +177,20 @@ module.exports = (Router) => {
     //商品价格区间分布－总商品数（万）
     Router = new api(Router,{
         router : "/achievements/productThree",
-        modelName : ["ItemPie"],
+        modelName : ["ItemPie" , "ItemPie"],
         platform : false,
-        date_picker : false,
+        // date_picker : false,
         order : ["tag"],
         params : function(query , params , sendData){
             delete params.category_id;
             params.isnew = 0;
+            query.date = params.date;
+            params.date = utils.beforeDate(new Date() , 2)[1];
+            return params;
+        },
+        secondParams : function(query , params , sendData){
+            params.isnew = 1;
+            params.date = query.date;
             return params;
         },
         fixedParams(req , query , cb){

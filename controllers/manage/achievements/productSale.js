@@ -394,7 +394,7 @@ module.exports = (Router) => {
                     params : arrParam
                 }
             }
-            let sql = `SELECT * FROM ads2_itm_run_top WHERE DATE BETWEEN ? AND ? AND day_type = 1 AND category_id_1 = ? AND category_id_2 = ? AND category_id_3 = ? AND category_id_4 = ? AND type = ? ORDER BY `+list[num]+` LIMIT ?,?`;
+            let sql = `SELECT * FROM ads2_itm_run_top WHERE DATE BETWEEN ? AND ? AND day_type = 1 AND category_id_1 = ? AND category_id_2 = ? AND category_id_3 = ? AND category_id_4 = ? AND type = ? ORDER BY `+list[num]+` DESC LIMIT ?,?`;
 
             return {
                 sql : sql,
