@@ -89,6 +89,20 @@ models.NewAccount = db.define("ads2_user_analysis_users", obj.NewAccount);
             models.CamOverview = db.define("ads2_cam_overview" , obj.CamOverview);
             models.CamCamlistActive = db.define("ads2_cam_camlist_active" , obj.CamCamlistActive);
             models.CamCamlistChannel = db.define("ads2_cam_camlist_channel" , obj.CamCamlistChannel);
+
+            //9.1
+            models.AdsKeyValue = db.define("ads2_key_value" , obj.AdsKeyValue);
+
+            // 美店
+            models.VshopDetail = db.define("ads2_vshop_item_details" , obj.VshopDetail);
+            models.VshopMerchandiseResources = db.define("ads2_vshop_merchandise_resources" , obj.VshopMerchandiseResources);
+            models.VshopTransaction = db.define("ads2_vshop_transaction_details" , obj.VshopTransaction);
+            models.VshopFlowTop = db.define("ads2_vshop_flow_top" , obj.VshopFlowTop);
+
+            //美店交易
+            models.VtradeDetail = db.define("ads2_vshop_transaction_details" , obj.VtradeDetail);
+            models.VtradeDelivery = db.define("ads2_vshop_delivery_returns" , obj.VtradeDelivery);
+            models.VtradeTop = db.define("ads2_vshop_transaction_top" , obj.VtradeTop);
 `;
 
 
