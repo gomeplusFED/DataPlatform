@@ -65,6 +65,10 @@ module.exports = (Router) => {
         router : "/socialAnalysis/groupSeven",
         modelName : ["GroupStatistics"],
         platform : false,
+        params(query, params) {
+            params.category_id = "ALL";
+            return params;
+        },
         filter(data) {
             return filter.groupSeven(data);
         },
