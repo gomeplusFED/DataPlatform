@@ -5,28 +5,27 @@
  */
 var utils = require("../../utils");
 
-/* 统一计算 */
-function Computer(key , son , mother , obj1 , obj2){
-    if(!obj1[son] || !obj1[mother]){
-        obj1[key] = 0;
-    }else{
-        obj1[key] = utils.toFixed(obj1[son] / obj1[mother] , 0);
-    }
-    
-    if(!obj2[son] || !obj2[mother]){
-        obj2[key] = 0;
-    }else{
-        obj2[key] = utils.toFixed(obj2[son] / obj2[mother] , 0);
-    }
-}
+
+//逛逛首页搜索框、分类页搜索框、便宜好货页搜索框
+//直接输入、历史记录、下拉推荐
 
 module.exports = {
     wordOne(data , query , dates){
         let source = data.first.data[0];
-        let newData= {};
+        let newData= {
+            "逛逛首页搜索框" : {
+                value : 0
+            },
+            "分类页搜索框" : {
+                value : 0
+            },
+            "便宜好货页搜索框" : {
+                value : 0
+            }
+        };
         for(let item of source){
-            newData[item.search_position] = {
-                value : item.search_num
+            if(newData[item.search_position]){
+                newData[item.search_position].value += item.search_num;
             }
         }
 
@@ -45,10 +44,20 @@ module.exports = {
 
     wordTwo(data , query , dates){
         let source = data.first.data[0];
-        let newData= {};
+        let newData= {
+            "直接输入" : {
+                value : 0
+            },
+            "历史记录" : {
+                value : 0
+            },
+            "下拉推荐" : {
+                value : 0
+            }
+        };
         for(let item of source){
-            newData[item.search_source] = {
-                value : item.search_num
+            if(newData[item.search_source]){
+                newData[item.search_source].value += item.search_num;
             }
         }
 
@@ -66,6 +75,15 @@ module.exports = {
     },
 
     wordThree(data , query , dates){
-        return utils.toTable([[]], data.rows, data.cols);
+        let source = data.first.data[0];
+
+        for(let item of source){
+            item.uv_lv = utils.toFixed(item.search_order_uv / item.search_result_uv , 0);
+            item.ipv_lv = utils.toFixed(item.search_order_uv / item.search_prodet_ipv_uv , 0);
+            item.ctr_lv = utils.toFixed(item.search_prodet_ipv / item.search_exposure_product_num , 0);
+            item.date = utils.getDate(item.date);
+        }
+
+        return utils.toTable([source], data.rows, data.cols);
     }
 }

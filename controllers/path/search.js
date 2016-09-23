@@ -51,19 +51,19 @@ module.exports = {
     searchRecommend(){
         return {
             name : "商品推荐关键指标",
-            path : "/search/index3",
+            path : "/search/recommend",
             display : true,
             defaultData : [
-                // {
-                //     type : "table",
-                //     title: "商品搜索大盘指标",
-                //     query_api : "/search/indexOne"
-                // },
-                // {
-                //     type : "chart",
-                //     title: "商品搜索大盘趋势图",
-                //     query_api : "/search/indexTwo"
-                // }
+                {
+                    type : "table",
+                    title: "商品推荐大盘指标",
+                    query_api : "/search/recommendOne"
+                },
+                {
+                    type : "chart",
+                    title: "商品搜索推荐大盘指标趋势图",
+                    query_api : "/search/recommendTwo"
+                }
             ]
         }
     }

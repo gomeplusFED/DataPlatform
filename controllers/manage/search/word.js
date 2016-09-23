@@ -60,37 +60,28 @@ module.exports = (Router) => {
         router: "/search/WordThree",
         modelName: ["SearchAnalyse"],
         platform: false,
-        order: ["-date"],
-        params: function(query, params, sendData) {
-            return params;
-        },
+        order: ["-search_result_pv"],
+        excel_export : true,
+        paging : [true],
+        flexible_btn:[{
+             content: '<a href="javascript:void(0)">导出</a>',
+            preMethods: ["excel_export"]
+        }],
         filter_select: [TypeObj],
         rows: [
             [
                 "search_keyword",
-
                 "date",
-
                 "search_recall_product",
-
                 "search_result_pv",
-
                 "search_result_uv",
-
                 "search_prodet_ipv",
-
                 "search_prodet_ipv_uv",
-
                 "search_order_sum",
-
                 "search_order_uv",
-
                 "search_order_spu",
-
                 "uv_lv",
-
                 "ipv_lv",
-
                 "ctr_lv"
             ]
         ],
