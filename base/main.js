@@ -440,7 +440,7 @@ api.prototype = {
                     });
                 }
             }catch(err) {
-                reject(modelName + err);
+                reject(modelName + "\r" + err);
             }
         });
     }),
