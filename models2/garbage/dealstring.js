@@ -1,5 +1,6 @@
 var str = `
 models.NewAccount = db.define("ads2_user_analysis_users", obj.NewAccount);
+            models.NewAccount = db.define("ads2_user_analysis_users", obj.NewAccount);
             models.UserAnalysisVersion = db.define("ads2_user_analysis_version", obj.UserAnalysisVersion);
             models.Configure = db.define("tbl_rt_configure", obj.Configure);
             models.UsersAccess = db.define("ads2_user_access", obj.UsersAccess);
@@ -87,7 +88,8 @@ models.NewAccount = db.define("ads2_user_analysis_users", obj.NewAccount);
             //营销
             models.CamOverview = db.define("ads2_cam_overview" , obj.CamOverview);
             models.CamCamlistActive = db.define("ads2_cam_camlist_active" , obj.CamCamlistActive);
-            models.CamCamlistChannel = db.define("ads2_cam_camlist_channel" , obj.CamCamlistChannel);`;
+            models.CamCamlistChannel = db.define("ads2_cam_camlist_channel" , obj.CamCamlistChannel);
+`;
 
 
 module.exports = str;

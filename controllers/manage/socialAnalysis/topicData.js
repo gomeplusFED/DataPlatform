@@ -78,6 +78,11 @@ module.exports = (Router) => {
         router : "/socialAnalysis/topicsTwo",
         modelName : [ "SocialTopicStatistics" ],
         platform : false,
+        params(query, params) {
+            params.category_id = "ALL";
+
+            return params;
+        },
         procedure : [{
             aggregate : {
                 value : ["type"]

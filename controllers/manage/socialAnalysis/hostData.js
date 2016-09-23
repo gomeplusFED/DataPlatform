@@ -69,6 +69,11 @@ module.exports = (Router) => {
         router : "/socialAnalysis/hostTwo",
         modelName : ["GroupownerStatistics", "Statistics"],
         platform : false,
+        params(query, params) {
+            params.category_id = "ALL";
+
+            return params;
+        },
         secondParams() {
             return {
                 date : util.getDate(new Date(new Date() - 24 * 60 * 60 * 1000)),
