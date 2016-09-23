@@ -5,9 +5,9 @@
  * @二次开发 ，20160830 ， Mr.He
  */
 
- var api = require("../../../base/main"),
-     filter = require("../../../filters/achievements/product"),
-     utils  = require("../../../utils");
+var api = require("../../../base/main"),
+    filter = require("../../../filters/achievements/product"),
+    utils  = require("../../../utils");
 
 module.exports = (Router) => {
 
@@ -27,7 +27,6 @@ module.exports = (Router) => {
     });
 
 
-
     Router = new api(Router,{
         router : "/achievements/productOne",
         modelName : ["ItemOverview"],
@@ -41,14 +40,28 @@ module.exports = (Router) => {
         },
         fixedParams(req , query , cb){
             if(!query.category_id){
+                query.category_id = "ALL";
+                query.category_level = "ALL";
                 cb(null , query);
             }else{
                 req.models.ConfCategories.find({
                     pid : query.category_id
                 } , 1 , (err , data)=>{
                     if(err) cb(err);
-                    query.category_level = data[0].level;
-                    cb(null , query);
+
+                    if(data.length == 0){
+                        req.models.ConfCategories.find({
+                                id : query.category_id
+                            } , 1 , (err , data)=>{
+                                if(err) cb(err);
+                                query.category_level = data[0].level;
+                                cb(null , query);
+                            });
+                    }else{
+                        query.category_level = data[0].level;
+                        cb(null , query);
+                    }
+                    
                 });
             }
         },
@@ -96,7 +109,7 @@ module.exports = (Router) => {
             ["names" , "items_add" , "items_put" , "items_down" , "items_frost" , "items_delete"]
         ],
         params : function(query , params , sendData){
-            var dates = utils.beforeDate(new Date() , 8);
+            var dates = utils.beforeDate(new Date() , 8).splice(1,20);
 
             params.date = dates;
             query.date = dates;
@@ -104,14 +117,28 @@ module.exports = (Router) => {
         },
         fixedParams(req , query , cb){
             if(!query.category_id){
+                query.category_id = "ALL";
+                query.category_level = "ALL";
                 cb(null , query);
             }else{
                 req.models.ConfCategories.find({
                     pid : query.category_id
                 } , 1 , (err , data)=>{
                     if(err) cb(err);
-                    query.category_level = data[0].level;
-                    cb(null , query);
+
+                    if(data.length==0){
+                        req.models.ConfCategories.find({
+                                id : query.category_id
+                            } , 1 , (err , data)=>{
+                                if(err) cb(err);
+                                query.category_level = data[0].level;
+                                cb(null , query);
+                            });
+                    }else{
+                        query.category_level = data[0].level;
+                        cb(null , query);
+                    }
+                        
                 });
             }
         },
@@ -152,33 +179,64 @@ module.exports = (Router) => {
         router : "/achievements/productThree",
         modelName : ["ItemPie"],
         platform : false,
+        date_picker : false,
+        order : ["tag"],
         params : function(query , params , sendData){
             delete params.category_id;
+            params.isnew = 0;
             return params;
         },
         fixedParams(req , query , cb){
             if(!query.category_id){
+                query.category_id_1 = "ALL";
+                query.category_id_2 = "ALL";
+                query.category_id_3 = "ALL";
+                query.category_id_4 = "ALL";
                 cb(null , query);
             }else{
                 req.models.ConfCategories.find({
                     pid : query.category_id
                 } , 1 , (err , data)=>{
                     if(err) cb(err);
-                    switch(data[0].level){
-                        case 1:
-                            query.category_id_1 = query.category_id;
-                            break;
-                        case 2:
-                            query.category_id_2 = query.category_id;
-                            break;
-                        case 3:
-                            query.category_id_3 = query.category_id;
-                            break;
-                        case 4:
-                            query.category_id_4 = query.category_id;
-                            break;
+
+                    if(data.length == 0){
+                        req.models.ConfCategories.find({
+                            id : query.category_id
+                        } , 1 , (err , data)=>{
+                            if(err) cb(err);
+                            switch(data[0].level){
+                                case 1:
+                                    query.category_id_1 = query.category_id;
+                                    break;
+                                case 2:
+                                    query.category_id_2 = query.category_id;
+                                    break;
+                                case 3:
+                                    query.category_id_3 = query.category_id;
+                                    break;
+                                case 4:
+                                    query.category_id_4 = query.category_id;
+                                    break;
+                            }
+                            cb(null , query);
+                        });
+                    }else{
+                        switch(data[0].level){
+                            case 1:
+                                query.category_id_1 = query.category_id;
+                                break;
+                            case 2:
+                                query.category_id_2 = query.category_id;
+                                break;
+                            case 3:
+                                query.category_id_3 = query.category_id;
+                                break;
+                            case 4:
+                                query.category_id_4 = query.category_id;
+                                break;
+                        }
+                        cb(null , query);
                     }
-                    cb(null , query);
                 });
             }
         },
@@ -187,43 +245,74 @@ module.exports = (Router) => {
         }
     });
 
-    //商品价格区间分布－总商品数（万）
+    //商品价格区间分布－新增商品数（万）
     Router = new api(Router,{
         router : "/achievements/productFour",
         modelName : ["ItemPie"],
         platform : false,
+        order : ["tag"],
         params : function(query , params , sendData){
             delete params.category_id;
+            params.isnew = 1;
             return params;
         },
         fixedParams(req , query , cb){
             if(!query.category_id){
+                query.category_id_1 = "ALL";
+                query.category_id_2 = "ALL";
+                query.category_id_3 = "ALL";
+                query.category_id_4 = "ALL";
                 cb(null , query);
             }else{
                 req.models.ConfCategories.find({
                     pid : query.category_id
                 } , 1 , (err , data)=>{
                     if(err) cb(err);
-                    switch(data[0].level){
-                        case 1:
-                            query.category_id_1 = query.category_id;
-                            break;
-                        case 2:
-                            query.category_id_2 = query.category_id;
-                            break;
-                        case 3:
-                            query.category_id_3 = query.category_id;
-                            break;
-                        case 4:
-                            query.category_id_4 = query.category_id;
-                            break;
+                    if(data.length == 0){
+                        req.models.ConfCategories.find({
+                            id : query.category_id
+                        } , 1 , (err , data)=>{
+                            if(err) cb(err);
+                            
+                            switch(data[0].level){
+                                case 1:
+                                    query.category_id_1 = query.category_id;
+                                    break;
+                                case 2:
+                                    query.category_id_2 = query.category_id;
+                                    break;
+                                case 3:
+                                    query.category_id_3 = query.category_id;
+                                    break;
+                                case 4:
+                                    query.category_id_4 = query.category_id;
+                                    break;
+                            }
+                            cb(null , query);
+                        });
+                    }else{
+                        switch(data[0].level){
+                            case 1:
+                                query.category_id_1 = query.category_id;
+                                break;
+                            case 2:
+                                query.category_id_2 = query.category_id;
+                                break;
+                            case 3:
+                                query.category_id_3 = query.category_id;
+                                break;
+                            case 4:
+                                query.category_id_4 = query.category_id;
+                                break;
+                        }
+                        cb(null , query);
                     }
-                    cb(null , query);
+                        
                 });
             }
         },
         filter(data, query, dates) {
-            return filter.productFour(data, query);
+            return filter.productFour(data, query, dates);
         }
     });
 
@@ -231,8 +320,32 @@ module.exports = (Router) => {
         router : "/achievements/productFive",
         modelName : ["ItemManager"],
         platform : false,
-        // date_picker_data : 1,
-        // showDayUnit : true,
+        fixedParams(req , query , cb){
+            if(!query.category_id){
+                query.category_id = "ALL";
+                query.category_level = "ALL";
+                cb(null , query);
+            }else{
+                req.models.ConfCategories.find({
+                    pid : query.category_id
+                } , 1 , (err , data)=>{
+                    if(err) cb(err);
+                    if(data.length == 0){
+                        req.models.ConfCategories.find({
+                            id : query.category_id
+                        } , 1 , (err , data)=>{
+                            if(err) cb(err);
+                            
+                            query.category_level = data[0].level;
+                            cb(null , query);
+                        });
+                    }else{
+                        query.category_level = data[0].level;
+                        cb(null , query);
+                    }
+                });
+            }
+        },
         filter(data, query , dates) {
             return filter.productFive(data, query ,dates);
         }
@@ -243,6 +356,7 @@ module.exports = (Router) => {
         modelName:["ItemManager"],
         excel_export : true,
         platform : false,
+        paging : [true],
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
@@ -277,6 +391,32 @@ module.exports = (Router) => {
                 help : "统计时间内，平台删除商品数（SPU)"
             }]
         ],
+        fixedParams(req , query , cb){
+            if(!query.category_id){
+                query.category_id = "ALL";
+                query.category_level = "ALL";
+                cb(null , query);
+            }else{
+                req.models.ConfCategories.find({
+                    pid : query.category_id
+                } , 1 , (err , data)=>{
+                    if(err) cb(err);
+                    if(data.length == 0){
+                        req.models.ConfCategories.find({
+                            id : query.category_id
+                        } , 1 , (err , data)=>{
+                            if(err) cb(err);
+                            query.category_level = data[0].level;
+                            cb(null , query);
+                        });
+                    }else{
+                        query.category_level = data[0].level;
+                        cb(null , query);
+                    }
+                    
+                });
+            }
+        },
         filter( data , query ,dates ){
             return filter.productSix(data, query ,dates);
         }

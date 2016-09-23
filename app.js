@@ -8,10 +8,9 @@ var express = require('express');
 var session = require('cookie-session');
 var lactate = require('lactate');
 var config = require('./config');
-var routers = require('./routers');
 var bodyParser = require('body-parser');
 var flash = require('flashify');
-var mysql = require('./models/mysql');
+var mysql = require('./models2/mysql');
 var app = express();
 var async = require("asyncawait/async");
 var await = require("asyncawait/await");
@@ -20,9 +19,11 @@ var redis = require("ioredis");
 var redisInfo = require("./db/redis.json");
 var redisConfig = require("./db/config.json").redis;
 var cluster = new redis.Cluster(redisInfo[redisConfig]);
+global.cluster = cluster;
+var routers = require('./routers');
 
 orm.settings.set("connection.pool", true);
-//orm.settings.set("connection.debug", true);
+// orm.settings.set("connection.debug", true);
 Object.keys(config).forEach(function(key) {
     app.locals[key] = config[key];
 });
@@ -69,7 +70,6 @@ app.use(function(req, res, next) {
 require('./helps')(app);
 
 new mysql(app);
-global.cluster = cluster;
 
 routers.forEach(function(router) {
     app.use(router);
@@ -97,3 +97,5 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(7879);
+
+console.log("启动成功");

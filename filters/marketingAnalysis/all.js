@@ -90,7 +90,6 @@ module.exports = {
             second = data.second.data[0],
             config = {};
 
-        console.log(count);
         for(let item of second) {
             config[item.activity_id] = {
                 name : item.activity_name,
@@ -103,6 +102,7 @@ module.exports = {
             let obj = config[item.active_no];
             item.name = obj.name;
             item.date = `${obj.start}到${obj.end}`;
+            item.rate = util.toFixed(item.product_pv, item.active_pv);
             item.operating =
                 `<button class='btn btn-default' url_link='/marketingAnalysis/operating' url_fixed_params='{"active_no": "${item.active_no}"}'>详细>></button>`;
         }

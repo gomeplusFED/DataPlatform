@@ -12,6 +12,10 @@ module.exports = {
             display : true,
             defaultData : [{
                 type : "table",
+                title : "返利汇总",
+                query_api : "/platformRebate/platformOrderSix"
+            },{
+                type : "table",
                 title : "返利订单总览",
                 query_api : "/platformRebate/platformOrderOne"
             },{
@@ -116,11 +120,11 @@ module.exports = {
     inviteBusiness() {
         return {
             path : "/platformRebate/inviteBusiness",
-            name : "邀请商户入驻",
+            name : "邀请商户分享返利",
             display : true,
             defaultData : [{
                 type : "table",
-                title : "邀请商户入驻总览",
+                title : "邀请商户分享返利总览",
                 query_api : "/platformRebate/inviteBusinessOne"
             }, {
                 type : "chart",
@@ -132,7 +136,7 @@ module.exports = {
                 query_api : "/platformRebate/inviteBusinessThree"
             }, {
                 type : "table",
-                title : "邀请商户入驻汇总",
+                title : "邀请商户分享返利汇总",
                 query_api : "/platformRebate/inviteBusinessFour"
             }]
         }

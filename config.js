@@ -166,7 +166,9 @@ module.exports = {
                 obj.achievements.shop(),
                 obj.achievements.product(),
                 obj.achievements.productSale(),
-                obj.achievements.trade()
+                obj.achievements.trade(),
+                obj.achievements.vshop(),
+                obj.achievements.vtrade()
             ]
         },
         "14": {
@@ -231,6 +233,17 @@ module.exports = {
             path : [
                 obj.videoStatis.video(),
                 obj.videoStatis.videoEdition()
+            ]
+        },
+        "19": {
+            name : "搜索推荐",
+            display : true,
+            className : "fa  fa-laptop fa-fw",
+            href : "#",
+            path : [
+                obj.search.searchIndex(),
+                obj.search.searchWord(),
+                obj.search.searchRecommend()
             ]
         },
         "29" : {

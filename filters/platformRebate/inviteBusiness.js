@@ -14,12 +14,16 @@ module.exports = {
                 participate_seller_count: source[1] || 0,
                 participate_goods_count: source[2] || 0,
                 order_count: source[3] || 0,
-                participate_user_count: source[4] || 0
+                participate_user_count: source[4] || 0,
+                cancel_rebate_amount: source[16] || 0
             }],
             two = [{
+                expect_rebate_amount: source[17] ? source[17].toFixed(2) : "0.00",
+                unique_expect_rebate_user_num: source[18] || 0,
+                cancel_rebate_amount: source[19] ? source[19].toFixed(2) : "0.00",
                 rebate_order_count: source[5] || 0,
-                rebate_order_amount_count: source[6] || 0,
-                rebate_amount_count: source[7] || 0
+                rebate_order_amount_count: source[6] ? source[6].toFixed(2) : "0.00",
+                rebate_amount_count: source[7] ? source[7].toFixed(2) : "0.00"
             }],
             three = [];
         three.push({
@@ -27,7 +31,7 @@ module.exports = {
             spu_count: source[8] || 0,
             sku_count: source[10] || 0,
             refund_user_count: source[12] || 0,
-            refund_goods_amount_count: source[14] || 0
+            refund_goods_amount_count: source[14] ? source[14].toFixed(2) : "0.00"
         });
         three.push({
             name: "返利退货订单占比",
@@ -92,6 +96,7 @@ module.exports = {
             newDataPie = {},
             newDataBar = {},
             filter_name = {
+                unique_is_rebate_order_num: "订单数",
                 is_rebate_merchandise_num: "商品件数",
                 is_rebate_fee: "商品总金额",
                 is_over_rebate_order_amount: "返利到账金额"

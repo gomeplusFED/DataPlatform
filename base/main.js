@@ -412,39 +412,47 @@ api.prototype = {
         }
 
         return new Promise((resolve, reject) => {
-            var sql = req.models[modelName];
-            if (length > 1){
-                for (var key in procedure) {
-                    if (endFn.indexOf(key) >= 0) {
-                        sql[key](function () {
-                            var args = Array.prototype.slice.call(arguments),
-                                err = args.shift();
+            try{
+                var sql = req.models[modelName];
+                if (length > 1){
+                    for (var key in procedure) {
+                        if (endFn.indexOf(key) >= 0) {
+                            sql[key](function () {
+                                var args = Array.prototype.slice.call(arguments),
+                                    err = args.shift();
 
-                            err ? reject(err) : resolve(args);
-                        });
-                    } else if (arrayFn.indexOf(key) >= 0) {
-                        for (var k of procedure[key]) {
-                            sql[key](k);
+                                err ? reject(err) : resolve(args);
+                            });
+                        } else if (arrayFn.indexOf(key) >= 0) {
+                            for (var k of procedure[key]) {
+                                sql[key](k);
+                            }
+                        } else if (objectFn.indexOf(key) >= 0) {
+                            sql = sql[key](procedure[key].value || [], _obj.params);
+                        } else {
+                            sql = sql[key](_obj[procedure[key]]);
                         }
-                    } else if (objectFn.indexOf(key) >= 0) {
-                        sql = sql[key](procedure[key].value || [], _obj.params);
-                    } else {
-                        sql = sql[key](_obj[procedure[key]]);
                     }
+                } else {
+                    // console.log(req.url);
+                    sql[keys[0]](_obj.params, (err, data) => {
+                        err ? reject(modelName + err) : resolve(data);
+                    });
                 }
-            } else {
-                // console.log(req.url);
-                sql[keys[0]](_obj.params, (err, data) => {
-                    err ? reject(err) : resolve(data);
-                });
+            }catch(err) {
+                reject(modelName + err);
             }
         });
     }),
     _findDatabaseSql : async((req, sqlObject) => {
         return new Promise((resolve, reject) => {
-            req.models.db1.driver.execQuery(sqlObject.sql, sqlObject.params, (err, data) => {
-                err ? reject(err) : resolve(data);
-            });
+            try{
+                req.models.db1.driver.execQuery(sqlObject.sql, sqlObject.params, (err, data) => {
+                    err ? reject(err) : resolve(data);
+                });
+            }catch(err) {
+                reject(sqlObject + err);
+            }
         });
     }),
     setRouter(Router) {
