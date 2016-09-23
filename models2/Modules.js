@@ -38,39 +38,6 @@ module.exports = {
     "tbl_rt_kpi_value": {
         "modelName": "KpiValue"
     },
-    "tbl_rt_rebate": {
-        "modelName": "Rebate"
-    },
-    "tbl_rt_rebate_refund": {
-        "modelName": "RebateRefund"
-    },
-    "tbl_rt_rebate_shop_overview": {
-        "modelName": "RebateShopOverview"
-    },
-    "tbl_rt_rebate_shop_refund": {
-        "modelName": "RebateShopRefund"
-    },
-    "tbl_rt_rebate_shop_top": {
-        "modelName": "RebateShopTop"
-    },
-    "tbl_rt_rebate_shop_plan_top": {
-        "modelName": "RebateShopPlanTop"
-    },
-    "tbl_rt_rebate_invitepartner": {
-        "modelName": "RebateInvitepartner"
-    },
-    "tbl_rt_rebate_schedule_details": {
-        "modelName": "RebatetSheduleDetails"
-    },
-    "tbl_rt_rebate_inviteseller": {
-        "modelName": "RebatetInviteseller"
-    },
-    "tbl_rt_rebate_register_trendency": {
-        "modelName": "RebatetRegisterTrendency"
-    },
-    "tbl_rt_rebate_register_schedule_details": {
-        "modelName": "RebatetRegisterSheduleDetails"
-    },
     "ecp_back_categories": {
         "modelName": "ConfCategories"
     },
@@ -79,18 +46,6 @@ module.exports = {
     },
     "tbl_rt_key_value": {
         "modelName": "KeyValue"
-    },
-    "tbl_rt_rebate_order_tredency_details": {
-        "modelName": "RebateOrderTredencyDetails"
-    },
-    "tbl_rt_rebate_type_level_details": {
-        "modelName": "RebateTypeLevelDetails"
-    },
-    "tbl_rt_rebate_shop_order_tredency_details": {
-        "modelName": "RebateShopOrderTredencyDetails"
-    },
-    "tbl_rt_rebate_shop_type_level_details": {
-        "modelName": "RebateShopTypeLevelDetails"
     },
     "tbl_dataplatform_count": {
         "modelName": "Count"
@@ -280,7 +235,40 @@ module.exports = {
     "ads2_user_analysis_version": {
         "modelName": "UserAnalysisVersion"
     },
-    "ads2_search_analyse": {
-        "modelName": "SearchAnalyse"
+    "ads2_rebate_order_overview": {
+        "modelName": "Rebate"
+    },
+    "ads2_rebate_order_muiltiple_overview": {
+        "modelName": "RebateOrderMuiltipleOverview"
+    },
+    "ads2_rebate_order_muiltiple_trend": {
+        "modelName": "RebateOrderMuiltipleTrend"
+    },
+    "ads2_rebate_order_plan_info": {
+        "modelName": "RebatetSheduleDetails"
+    },
+    "ads2_rebate_order_trend": {
+        "modelName": "RebateOrderTredencyDetails"
+    },
+    "ads2_rebate_order_level_sum": {
+        "modelName": "RebateTypeLevelDetails"
+    },
+    "ads2_rebate_order_plantype_level_sum": {
+        "modelName": "RebateOrderPlantypeLevelSum"
+    },
+    "ads2_rebate_invite_overview": {
+        "modelName": "RebateInviteOverview"
+    },
+    "ads2_rebate_invite_plan_info": {
+        "modelName": "RebateInvitePlanInfo"
+    },
+    "ads2_rebate_invite_trend": {
+        "modelName": "RebateInviteTrend"
+    },
+    "ads2_rebate_order_plantype_rebatetype_category_sum": {
+        "modelName": "RebateOrderPlantypeRebatetypeCategorySum"
+    },
+    "RebateOrderTypeSum": {
+        "modelName": "ads2_rebate_order_type_sum"
     }
 }
