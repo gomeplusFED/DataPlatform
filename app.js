@@ -23,7 +23,7 @@ global.cluster = cluster;
 var routers = require('./routers');
 
 orm.settings.set("connection.pool", true);
-// orm.settings.set("connection.debug", true);
+//orm.settings.set("connection.debug", true);
 Object.keys(config).forEach(function(key) {
     app.locals[key] = config[key];
 });
@@ -96,6 +96,7 @@ app.use((err, req, res, next) => {
     }
 });
 
-app.listen(7879);
+app.listen(7879 , function(){
+    console.log("启动成功");
+});
 
-console.log("启动成功");

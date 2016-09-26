@@ -134,7 +134,44 @@ module.exports = (Router)=>{
         }
     });
 
-
+    //商品搜索大盘指标趋势图
+    Router = new api(Router , {
+        router : "/search/indexTwo",
+        modelName : ["SearchAnalyse"],
+        platform : false,
+        order : ["-date"],
+        params : function(query , params , sendData){
+            params.search_keyword = "ALL";
+            return params;
+        },
+        filter_select : [
+            {
+                title : "平台选择",
+                filter_key : "type",
+                groups : [
+                    {
+                        key : "ALL",
+                        value:"全部平台"
+                    },{
+                        key : "ios",
+                        value:"IOS"
+                    },{
+                        key : "android",
+                        value:"Android"
+                    },{
+                        key : "pc",
+                        value:"PC"
+                    },{
+                        key : "h5",
+                        value:"H5"
+                    }
+                ]
+            }
+        ],
+        filter (data , query , dates){
+            return filter.indexTwo(data , query , dates);
+        }
+    });
 
     return Router;
 }

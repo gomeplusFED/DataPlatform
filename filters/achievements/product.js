@@ -106,23 +106,43 @@ module.exports = {
     },
     productThree(data, query) {
         var source = data.first.data[0],
-            type   = "pie",
-            map    = {
-                value : "总商品数(万)"
-            },
+            source2= data.second.data[0],
             newData = {};
+            newData2= {};
 
-        var n = 0;
         for(let item of source){
             newData[util.prizeRange[item.tag]] = {
                 value : item.items_count / 10000
             }
         }
 
+        for(let item of source2){
+            if(!newData2[util.prizeRange[item.tag]]){
+                newData2[util.prizeRange[item.tag]] = {
+                    value : 0
+                }
+            }
+            newData2[util.prizeRange[item.tag]] = {
+                value : item.items_count / 10000 + newData2[util.prizeRange[item.tag]].value / 1
+            }
+        }
+
         return [{
-            type : type,
-            map : map,
+            type : "pie",
+            map : {
+                value : "总商品数(万)"
+            },
             data : newData,
+            config: { // 配置信息
+                stack: false, // 图的堆叠
+                categoryY : false //柱状图竖着
+            }
+        },{
+            type : "pie",
+            map : {
+                value : "新增商品数(万)"
+            },
+            data : newData2,
             config: { // 配置信息
                 stack: false, // 图的堆叠
                 categoryY : false //柱状图竖着

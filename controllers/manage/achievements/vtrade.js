@@ -28,8 +28,7 @@ module.exports = (Router) => {
 
             return {
                 date : orm.between(new Date(qdate + " 00:00:00"), new Date(ydate + " 23:59:59")),
-                day_type : 1,
-                type : "ALL"
+                day_type : 1
             };
         },
         filter(data) {
@@ -94,11 +93,6 @@ module.exports = (Router) => {
     Router = new api(Router, {
         router: "/achievements/vtradeTwo",
         modelName: ["VtradeDetail"],
-        params(query, params) {
-            params.type = "ALL";
-
-            return params;
-        },
         platform : false,
         filter_select : [
             {
@@ -321,14 +315,14 @@ module.exports = (Router) => {
         firstSql(query, params, isCount) {
             let _params = [query.startTime];
             if(isCount) {
-                let sql = `SELECT COUNT(*) count FROM ads2_vshop_transaction_top WHERE date=? AND type='ALL'`;
+                let sql = `SELECT COUNT(*) count FROM ads2_vshop_transaction_top WHERE date=? AND day_type=${query.day_type} AND type="ALL"`;
 
                 return {
                     sql : sql,
                     params : _params
                 };
             } else {
-                let sql = `SELECT * FROM ads2_vshop_transaction_top WHERE date=? AND type='ALL' ORDER BY ${query.filter_key} DESC LIMIT ?,?`,
+                let sql = `SELECT * FROM ads2_vshop_transaction_top WHERE date=? AND day_type=${query.day_type} AND type="ALL" ORDER BY ${query.filter_key} DESC LIMIT ?,?`,
                     page = query.page - 1 || 0,
                     offset = query.from || (page * query.limit),
                     limit = query.to || query.limit || 0;
