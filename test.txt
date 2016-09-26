@@ -1,0 +1,93 @@
+CREATE TABLE `ads2_itm_overview` (
+  `id` varchar(36) NOT NULL COMMENT '主键ID',
+  `date` date NOT NULL COMMENT '日期',
+  `day_type` tinyint(1) DEFAULT NULL COMMENT '日期类型',
+  `category_id` varchar(25) DEFAULT NULL COMMENT '类目ID',
+  `category_level` varchar(25) DEFAULT NULL COMMENT '类目级别',
+  `items_count_sum` double(11,2) DEFAULT NULL COMMENT '商品总数',
+  `items_frost_sum` double(11,2) DEFAULT NULL COMMENT '冻结总数',
+  `items_put_sum` double(11,2) DEFAULT NULL COMMENT '上架总数',
+  `items_down_sum` double(11,2) DEFAULT NULL COMMENT '下架总数',
+  `items_spu_sum` double(11,2) DEFAULT NULL COMMENT 'SPU使用总数',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `ads2_itm_manager` (
+  `id` varchar(36) NOT NULL COMMENT '主键ID',
+  `date` date NOT NULL COMMENT '日期',
+  `day_type` tinyint(1) DEFAULT NULL COMMENT '日期类型',
+  `category_id` varchar(25) DEFAULT NULL COMMENT '类目ID',
+  `category_level` varchar(25) DEFAULT NULL COMMENT '类目级别',
+  `items_add` double(11,2) DEFAULT NULL COMMENT '新增商品数',
+  `items_put` double(11,2) DEFAULT NULL COMMENT '上架商品数',
+  `items_down` double(11,2) DEFAULT NULL COMMENT '下架商品数',
+  `items_frost` double(11,2) DEFAULT NULL COMMENT '冻结商品数',
+  `items_delete` double(11,2) DEFAULT NULL COMMENT '删除商品数',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `ads2_itm_pie` (
+  `id` varchar(36) NOT NULL COMMENT '主键ID',
+  `date` date NOT NULL COMMENT '日期',
+  `day_type` tinyint(1) DEFAULT NULL COMMENT '日期类型',
+  `category_id_1` varchar(25) DEFAULT NULL COMMENT '一级类目ID',
+  `category_id_2` varchar(25) DEFAULT NULL COMMENT '二级类目ID',
+  `category_id_3` varchar(25) DEFAULT NULL COMMENT '三级类目ID',
+  `category_id_4` varchar(25) DEFAULT NULL COMMENT '四级类目ID',
+  `items_count` double(11,2) DEFAULT NULL COMMENT '价格分布总数',
+  `tag` int(2) DEFAULT NULL COMMENT '价格分布',
+  `isnew` tinyint(1) DEFAULT NULL COMMENT '是否是新增商品指标',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `ads2_itm_run_sales` (
+  `id` varchar(36) NOT NULL COMMENT '主键ID',
+  `date` date NOT NULL COMMENT '日期',
+  `day_type` tinyint(1) DEFAULT NULL COMMENT '日期类型',
+  `type` varchar(36) DEFAULT NULL COMMENT '平台类型',
+  `product_scan` double(11,2) DEFAULT NULL COMMENT '被访问的商品数',
+  `product_collect` double(11,2) DEFAULT NULL COMMENT '被收藏的商品数',
+  `share_commodity` double(11,2) DEFAULT NULL COMMENT '被分享商品数',
+  `product_cart` double(11,2) DEFAULT NULL COMMENT '加购商品数',
+  `order_commodity` double(11,2) DEFAULT NULL COMMENT '下单商品数',
+  `pay_commodity` double(11,2) DEFAULT NULL COMMENT '支付商品数',
+  `products_return` double(11,2) DEFAULT NULL COMMENT '退货商品数',
+  `product_acc_pv` double(11,2) DEFAULT NULL COMMENT '商品访问量',
+  `product_collect_num` double(11,2) DEFAULT NULL COMMENT '商品收藏次数',
+  `share_commodity_num` double(11,2) DEFAULT NULL COMMENT '商品被分享次数',
+  `product_cart_num` double(11,2) DEFAULT NULL COMMENT '加购商品件数',
+  `order_commodity_num` double(11,2) DEFAULT NULL COMMENT '下单商品件数',
+  `pay_commodity_num` double(11,2) DEFAULT NULL COMMENT '支付商品件数',
+  `products_return_num` double(11,2) DEFAULT NULL COMMENT '退货商品件数',
+  `shop_pay_price` double(11,2) DEFAULT NULL COMMENT '支付金额',
+  `refund_fee` double(11,2) DEFAULT NULL COMMENT '退货金额',
+  `category_id_1` varchar(25) DEFAULT NULL COMMENT '一级类目ID',
+  `category_id_2` varchar(25) DEFAULT NULL COMMENT '二级类目ID',
+  `category_id_3` varchar(25) DEFAULT NULL COMMENT '三级类目ID',
+  `category_id_4` varchar(25) DEFAULT NULL COMMENT '四级类目ID',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `ads2_itm_run_top` (
+  `id` varchar(36) NOT NULL COMMENT '主键ID',
+  `date` date NOT NULL COMMENT '日期',
+  `day_type` tinyint(1) DEFAULT NULL COMMENT '日期类型',
+  `type` varchar(36) DEFAULT NULL COMMENT '平台类型',
+  `name` varchar(36) DEFAULT NULL COMMENT '商品名称',
+  `product_acc_pv` double(11,2) DEFAULT NULL COMMENT '商品访问量',
+  `product_acc_uv` double(11,2) DEFAULT NULL COMMENT '访客数',
+  `product_collect` double(11,2) DEFAULT NULL COMMENT '被收藏次数',
+  `share_commodity_num` double(11,2) DEFAULT NULL COMMENT '被分享次数',
+  `product_cart` double(11,2) DEFAULT NULL COMMENT '加购商品数',
+  `products_order` double(11,2) DEFAULT NULL COMMENT '下单人数',
+  `order_commodity_num` double(11,2) DEFAULT NULL COMMENT '下单商品件数',
+  `shop_pay_price` double(11,2) DEFAULT NULL COMMENT '支付金额',
+  `products_return_num` double(11,2) DEFAULT NULL COMMENT '退货商品件数',
+  `refund_fee` double(11,2) DEFAULT NULL COMMENT '退货金额',
+  `category_id_1` varchar(25) DEFAULT NULL COMMENT '一级类目ID',
+  `category_id_2` varchar(25) DEFAULT NULL COMMENT '二级类目ID',
+  `category_id_3` varchar(25) DEFAULT NULL COMMENT '三级类目ID',
+  `category_id_4` varchar(25) DEFAULT NULL COMMENT '四级类目ID',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+

@@ -335,7 +335,7 @@ module.exports = (Router) => {
         platform : false,
         paging : [true, false],
         control_table_col : true,
-        order  : ["-involve_group_user_num"],
+        order  : ["-new_group_topic_num"],
         excel_export : true,
         procedure : [false, {
             find : "params"
