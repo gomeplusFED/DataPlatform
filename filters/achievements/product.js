@@ -50,7 +50,7 @@ function Chain7(thisObj , allObj , columns){
         }
         var averg = result[item] / n;
 
-        result[item] = (thisObj[item] - averg) / averg;
+        result[item] = thisObj[item] / averg;
         result[item] = util.toFixed( result[item] , 0 );
 
     }
@@ -89,40 +89,60 @@ module.exports = {
         }
 
         //昨日
-        result[0] = sourceObj[dates[1]];
+        result[0] = sourceObj[dates[0]];
         result[0].names = "昨日";
 
         //前日
-        result[1] = sourceObj[dates[2]];
+        result[1] = sourceObj[dates[1]];
         result[1].names = "前日";
 
         //环比
-        result[2] = Chain(sourceObj[dates[1]] ,sourceObj[dates[2]] , data.rows[0]);
+        result[2] = Chain(sourceObj[dates[0]] ,sourceObj[dates[1]] , data.rows[0]);
 
         //7日平均环比
-        result[3] = Chain7(sourceObj[dates[1]] ,sourceObj , data.rows[0]);
+        result[3] = Chain7(sourceObj[dates[0]] ,sourceObj , data.rows[0]);
 
        return util.toTable([result], data.rows, data.cols);
     },
     productThree(data, query) {
         var source = data.first.data[0],
-            type   = "pie",
-            map    = {
-                value : "总商品数(万)"
-            },
+            source2= data.second.data[0],
             newData = {};
+            newData2= {};
 
-        var n = 0;
         for(let item of source){
             newData[util.prizeRange[item.tag]] = {
                 value : item.items_count / 10000
             }
         }
 
+        for(let item of source2){
+            if(!newData2[util.prizeRange[item.tag]]){
+                newData2[util.prizeRange[item.tag]] = {
+                    value : 0
+                }
+            }
+            newData2[util.prizeRange[item.tag]] = {
+                value : item.items_count / 10000 + newData2[util.prizeRange[item.tag]].value / 1
+            }
+        }
+
         return [{
-            type : type,
-            map : map,
+            type : "pie",
+            map : {
+                value : "总商品数(万)"
+            },
             data : newData,
+            config: { // 配置信息
+                stack: false, // 图的堆叠
+                categoryY : false //柱状图竖着
+            }
+        },{
+            type : "pie",
+            map : {
+                value : "新增商品数(万)"
+            },
+            data : newData2,
             config: { // 配置信息
                 stack: false, // 图的堆叠
                 categoryY : false //柱状图竖着
@@ -136,8 +156,6 @@ module.exports = {
                 value : "新增商品数"
             },
             newData = {};
-
-        console.log(123,dates);
 
         var n = 0;
         for(let item of source){

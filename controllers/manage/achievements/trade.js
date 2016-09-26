@@ -324,12 +324,12 @@ module.exports = (Router) => {
             } else {
                 let sql = `SELECT * FROM ads2_vshop_transaction_top WHERE date=? ORDER BY ${query.filter_key} DESC LIMIT ?,?`,
                     page = query.page - 1 || 0,
-                    offset = query.to || (page * query.limit),
-                    limit = query.from || query.limit || 0;
+                    offset = query.from || (page * query.limit),
+                    limit = query.to || query.limit || 0;
 
                 return {
                     sql : sql,
-                    params : _params.concat([offset, +limit])
+                    params : _params.concat([+offset, +limit])
                 };
             }
         },

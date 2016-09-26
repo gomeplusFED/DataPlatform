@@ -1,36 +1,5 @@
-/**
- * @author fuqiang
- * @fileoverview orm for dataabase
- * @date 20151201
- */
-
-var orm = require('orm'),
-    config = require('../db/config.json'),
-    db = require('../db/mysql.json'),
-    mysql = db[config.db],
-    fs = require("fs"),
-    path = require("path"),
-    files = fs.readdirSync(path.join(__dirname)),
-    obj = {},
-    rebateDb = require("../db/rebate.json"),
-    rebate = rebateDb[config.rebate];
-
-    for(var key of files) {
-        if(key !== "mysql.js" && key.indexOf(".js") > 0) {
-            var fileName = key.replace(".js", "");
-            obj[fileName] = require("./" + key);
-        }
-    }
-
-function connect(app) {
-    app.use(orm.express('mysql://' + mysql.username + ':' + mysql.pwd + '@' + mysql.host + '/' + mysql.database + '?timezone=CST', {
-        define: function(db, models, next) {
-            db.settings.set('instance.cache', false);
-            db.settings.set('instance.autoFetch', true);
-            //db.settings.set('instance.autoFetchLimit', 9999);
-            //db.settings.set('instance.cacheSaveCheck', false);
-            //db.settings.set('instance.autoSave', true);
-            models.NewAccount = db.define("ads2_user_analysis_users", obj.NewAccount);
+var str = `
+models.NewAccount = db.define("ads2_user_analysis_users", obj.NewAccount);
             models.UserAnalysisVersion = db.define("ads2_user_analysis_version", obj.UserAnalysisVersion);
             models.Configure = db.define("tbl_rt_configure", obj.Configure);
             models.UsersAccess = db.define("ads2_user_access", obj.UsersAccess);
@@ -93,12 +62,12 @@ function connect(app) {
             models.GroupownerList = db.define("ads2_soc_groupowner_list", obj.GroupownerList);
             models.GroupReport = db.define("ads2_soc_group_report", obj.GroupReport);
             models.Statistics = db.define("tbl_soc_statistics", obj.Statistics);
-            //8.15 
+            //8.15
             models.GroupStatistics = db.define("ads2_soc_group_statistics" , obj.GroupStatistics);
             models.GroupCategoryDistribution = db.define("ads2_soc_group_category_distribution" , obj.GroupCategoryDistribution);
-            models.SocialGroupList = db.define("ads2_soc_group_list" , obj.SocialGroupList); 
+            models.SocialGroupList = db.define("ads2_soc_group_list" , obj.SocialGroupList);
             models.SocialGroupDetailStatistic = db.define("ads2_soc_group_detail_statistic" , obj.SocialGroupDetailStatistic);
-            models.SocialGroupDetailList = db.define("ads2_soc_group_detail_list" , obj.SocialGroupDetailList); 
+            models.SocialGroupDetailList = db.define("ads2_soc_group_detail_list" , obj.SocialGroupDetailList);
             models.SocialTopicStatistics = db.define("ads2_soc_topic_statistics" , obj.SocialTopicStatistics);
             models.SocialTopicCategoryDistribution = db.define("ads2_soc_topic_category_distribution" , obj.SocialTopicCategoryDistribution);
             models.SocialTopicList = db.define("ads2_soc_topic_list" , obj.SocialTopicList);
@@ -118,21 +87,9 @@ function connect(app) {
             //营销
             models.CamOverview = db.define("ads2_cam_overview" , obj.CamOverview);
             models.CamCamlistActive = db.define("ads2_cam_camlist_active" , obj.CamCamlistActive);
-            models.CamCamlistChannel = db.define("ads2_cam_camlist_channel" , obj.CamCamlistChannel);
+            models.CamCamlistChannel = db.define("ads2_cam_camlist_channel" , obj.CamCamlistChannel);`;
 
-            models.db1 = db;
-            next();
-        }
-    }));
-    app.use(orm.express('mysql://' + rebate.username + ':' + rebate.pwd + '@' + rebate.host + '/' + rebate.database + '?timezone=CST', {
-        define: function(db, models, next) {
-            db.settings.set('instance.cache', false);
-            db.settings.set('instance.autoFetch', true);
-            models.TypeFlow = db.define("t_rebate_type_flow", obj.TypeFlow);
-            models.db2 = db;
-            next();
-        }
-    }));
-};
 
-module.exports = connect;
+module.exports = str;
+
+

@@ -10,7 +10,7 @@ var lactate = require('lactate');
 var config = require('./config');
 var bodyParser = require('body-parser');
 var flash = require('flashify');
-var mysql = require('./models/mysql');
+var mysql = require('./models2/mysql');
 var app = express();
 var async = require("asyncawait/async");
 var await = require("asyncawait/await");
@@ -96,4 +96,7 @@ app.use((err, req, res, next) => {
     }
 });
 
-app.listen(7879);
+app.listen(7879 , function(){
+    console.log("启动成功");
+});
+

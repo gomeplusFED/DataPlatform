@@ -244,6 +244,7 @@ module.exports = (Router) => {
         modelName : ["ItemRunSales"],
         platform : false,
         excel_export : true,
+        paging : [true],
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
@@ -265,34 +266,34 @@ module.exports = (Router) => {
         cols : [
             [{
                 comment : "日期/日期",
-                type : "string"
+                type : "date"
             }, {
                 comment: '被访问商品数/商品访问量',
-                type: 'string'
+                type: 'number'
             }, {
                 comment: '被收藏商品数/商品收藏次数',
-                type: 'string'
+                type: 'number'
             }, {
                 comment: '被分享商品数/商品被分享次数',
-                type: 'string'
+                type: 'number'
             }, {
                 comment: '加购商品数/加购商品件数',
-                type: 'string'
+                type: 'number'
             }, {
                 comment: '下单商品数/下单商品件数',
-                type: 'string'
+                type: 'number'
             }, {
                 comment: '支付商品数/支付商品件数',
-                type: 'string'
+                type: 'number'
             }, {
                 comment: '支付金额/支付金额',
-                type: 'string'
+                type: 'number'
             }, {
                 comment: '退货商品数/退货商品件数',
-                type: 'string'
+                type: 'number'
             }, {
                 comment: '退货金额/退货金额',
-                type: 'string'
+                type: 'number'
             }]
         ],
         //set in filter function.
@@ -374,10 +375,17 @@ module.exports = (Router) => {
             arrParam[3] = params.category_id_2,
             arrParam[4] = params.category_id_3,
             arrParam[5] = params.category_id_4,
-            arrParam[6] = params.type,            
-            arrParam[7] = list[num],
-            arrParam[8] = (params.page-1)*params.limit;
-            arrParam[9] = params.limit / 1;
+            arrParam[6] = params.type;            
+            // arrParam[7] = list[num];
+            
+            if(params.page && params.limit){
+                arrParam[7] = (params.page-1)*params.limit;
+                arrParam[8] = params.limit / 1;
+            }else{
+                arrParam[7] = params.from / 1;
+                arrParam[8] = params.to / 1;
+            }
+            
             if(isCount){
                 //统计总数
                 let sql = `SELECT COUNT(*) count FROM ads2_itm_run_top WHERE date BETWEEN ? AND ? AND day_type = 1 AND category_id_1 = ? AND category_id_2 = ? AND category_id_3 = ? AND category_id_4 = ? AND type = ?`;
@@ -386,7 +394,8 @@ module.exports = (Router) => {
                     params : arrParam
                 }
             }
-            let sql = `SELECT * FROM ads2_itm_run_top WHERE DATE BETWEEN ? AND ? AND day_type = 1 AND category_id_1 = ? AND category_id_2 = ? AND category_id_3 = ? AND category_id_4 = ? AND type = ? ORDER BY ? LIMIT ?,?`;
+            let sql = `SELECT * FROM ads2_itm_run_top WHERE DATE BETWEEN ? AND ? AND day_type = 1 AND category_id_1 = ? AND category_id_2 = ? AND category_id_3 = ? AND category_id_4 = ? AND type = ? ORDER BY `+list[num]+` DESC LIMIT ?,?`;
+
             return {
                 sql : sql,
                 params : arrParam

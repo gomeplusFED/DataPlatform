@@ -49,7 +49,7 @@ function Chain7(thisObj , allObj , columns){
         }
 
         var averg = result[item] / n;
-        result[item] = (thisObj[item] - averg) / averg;
+        result[item] = thisObj[item] / averg;
         result[item] = util.toFixed( result[item] , 0 );
     }
 
@@ -232,7 +232,7 @@ module.exports = {
             //流量
             [{
                 caption:"排名",
-                type : "string"
+                type : "number"
             },{
                 caption:"商品名称",
                 type : "string"
@@ -258,7 +258,7 @@ module.exports = {
             //销售
             [{
                 caption:"排名",
-                type : "string"
+                type : "number"
             },{
                 caption:"商品名称",
                 type : "string"
@@ -272,7 +272,7 @@ module.exports = {
                 caption:"下单件数",
                 type : "number"
             },{
-                caption:"成绩金额",
+                caption:"成交金额",
                 type : "number"
             },{
                 caption:"成交金额占比",
