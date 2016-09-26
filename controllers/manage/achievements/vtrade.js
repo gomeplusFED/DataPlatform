@@ -315,14 +315,14 @@ module.exports = (Router) => {
         firstSql(query, params, isCount) {
             let _params = [query.startTime];
             if(isCount) {
-                let sql = `SELECT COUNT(*) count FROM ads2_vshop_transaction_top WHERE date=? AND day_type=${query.day_type}`;
+                let sql = `SELECT COUNT(*) count FROM ads2_vshop_transaction_top WHERE date=? AND day_type=${query.day_type} AND type="ALL"`;
 
                 return {
                     sql : sql,
                     params : _params
                 };
             } else {
-                let sql = `SELECT * FROM ads2_vshop_transaction_top WHERE date=? AND day_type=${query.day_type} ORDER BY ${query.filter_key} DESC LIMIT ?,?`,
+                let sql = `SELECT * FROM ads2_vshop_transaction_top WHERE date=? AND day_type=${query.day_type} AND type="ALL" ORDER BY ${query.filter_key} DESC LIMIT ?,?`,
                     page = query.page - 1 || 0,
                     offset = query.from || (page * query.limit),
                     limit = query.to || query.limit || 0;
