@@ -321,7 +321,7 @@ module.exports = (Router) => {
                     sql : sql,
                     params : _params
                 };
-            } else {AND day_type=${query.day_type}
+            } else {
                 let sql = `SELECT * FROM ads2_vshop_transaction_top WHERE date=? AND day_type=${query.day_type} ORDER BY ${query.filter_key} DESC LIMIT ?,?`,
                     page = query.page - 1 || 0,
                     offset = query.to || (page * query.limit),
