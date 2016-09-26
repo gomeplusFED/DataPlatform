@@ -53,8 +53,12 @@ function connect(app){
 
             for(let item of ColumnData){
 
-                let thisModuleName = ModuleName[item.TableName].modelName;
-                models[thisModuleName] = db.define(item.TableName , item.Columns);
+                try {
+                    let thisModuleName = ModuleName[item.TableName].modelName;
+                    models[thisModuleName] = db.define(item.TableName , item.Columns);
+                } catch(err) {
+                    console.log(item);
+                }
             }
 
             models.db1 = db;
