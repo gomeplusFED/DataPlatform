@@ -119,6 +119,13 @@ function connect(app) {
             models.CamOverview = db.define("ads2_cam_overview" , obj.CamOverview);
             models.CamCamlistActive = db.define("ads2_cam_camlist_active" , obj.CamCamlistActive);
             models.CamCamlistChannel = db.define("ads2_cam_camlist_channel" , obj.CamCamlistChannel);
+            //商家返利
+            models.RebateShopOverview = db.define("tbl_rt_rebate_shop_overview" , obj.RebateShopOverview);
+            models.RebateShopRefund = db.define("tbl_rt_rebate_shop_refund" , obj.RebateShopRefund);
+            models.RebateShopOrderTredencyDetails = db.define("tbl_rt_rebate_shop_order_tredency_details" , obj.RebateShopOrderTredencyDetails);
+            models.RebateShopTypeLevelDetails = db.define("tbl_rt_rebate_shop_type_level_details" , obj.RebateShopTypeLevelDetails);
+            models.RebateShopTop = db.define("tbl_rt_rebate_shop_top" , obj.RebateShopTop);
+            models.RebateShopPlanTop = db.define("tbl_rt_rebate_shop_plan_top" , obj.RebateShopPlanTop);
 
             models.db1 = db;
             next();
