@@ -195,14 +195,14 @@ module.exports = (Router) => {
         firstSql(query, params, isCount) {
             let _params = [query.startTime];
             if(isCount) {
-                let sql = `SELECT COUNT(*) count FROM ads2_vshop_flow_top WHERE date=?`;
+                let sql = `SELECT COUNT(*) count FROM ads2_vshop_flow_top WHERE date=? AND day_type=${query.day_type}`;
 
                 return {
                     sql : sql,
                     params : _params
                 };
             } else {
-                let sql = `SELECT * FROM ads2_vshop_flow_top WHERE date=? ORDER BY ${query.filter_key} DESC LIMIT ? OFFSET ?`,
+                let sql = `SELECT * FROM ads2_vshop_flow_top WHERE date=? AND day_type=${query.day_type} ORDER BY ${query.filter_key} DESC LIMIT ? OFFSET ?`,
                     page = query.page - 1 || 0,
                     offset = query.from ? (query.from - 1) : (page * query.limit),
                     limit = query.to ?  (query.to - query.from + 1) : query.limit || 20;

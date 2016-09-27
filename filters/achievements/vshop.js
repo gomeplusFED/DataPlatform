@@ -53,10 +53,7 @@ module.exports = {
                     'paid_quantity', 'shared_item_num',
                     'item_share_time', 'favorited_item_num',
                     'item_favorited_num', 'delivery_quantity']],
-                [['name', 'new_vshop_num', 'total_vshop_num',
-                    'open_vshop_num', 'silent_vshop_num',
-                    'visited_vshop_num', 'favorite_vshop_num',
-                    'ordered_vshop_num', 'paid_vshop_num']]
+                [['name', 'new_vshop_num', 'open_vshop_num', 'silent_vshop_num', 'visited_vshop_num', 'shared_vshop_num', 'favorite_vshop_num', 'ordered_vshop_num', 'paid_vshop_num']]
             ],
             _cols = [
                         [[
