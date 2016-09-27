@@ -18,6 +18,5 @@ module.exports = {
     is_over_rebate_invite_shop_amount : Number,
     unique_rebate_invite_num : Number,
     is_over_rebate_invite_amount : Number,
-    all_register_user_num : Number,
-    all_enter_shop_num : Number,
+    all_register_user_num : Number
 };
