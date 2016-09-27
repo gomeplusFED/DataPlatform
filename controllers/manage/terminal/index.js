@@ -12,6 +12,15 @@ module.exports = (Router) => {
         router : "/terminal/modelOne",
         modelName : ["KeyValue"],
         platform : false,
+        firstSql(query, params) {
+            let sql = `SELECT SUM(value) value, SUM(value3) value3, key_name FROM ads2_terminal_key_value WHERE date <= ? AND date >= ? AND key_type=? GROUP BY key_name ORDER BY ${query.filter_key} DESC LIMIT 0,10`,
+                _params = [query.endTime, query.startTime, query.key_type];
+
+            return {
+                sql : sql,
+                params : _params
+            }
+        },
         filter_select: [{
             title: '',
             filter_key : 'key_type',

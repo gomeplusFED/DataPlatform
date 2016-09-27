@@ -79,7 +79,6 @@ module.exports = {
                 tran_acc_pro_num : '浏览商品数',
                 tran_order_money_amount : '下单金额',
                 tred_deal_money_amount : '成交金额',
-                tran_order_money_amount : '付款金额',
                 tred_order_all_amount : '下单总量',
                 tred_pay_all_amount : '付款订单量',
                 tred_pay_user_num : '付款人数',

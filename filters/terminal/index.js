@@ -8,7 +8,7 @@ var _ = require("lodash"),
 
 module.exports = {
     modelOne(data, filter_key) {
-        var source = data.first.data[0],
+        var source = data.first.data,
             newData = {},
             tArray = [],
             array = util.uniq(_.pluck(source, "key_name")),

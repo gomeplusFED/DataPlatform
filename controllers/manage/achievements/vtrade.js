@@ -175,6 +175,7 @@ module.exports = (Router) => {
         platform : false,
         excel_export : true,
         paging : [true],
+        order : ["-date"],
         flexible_btn:[{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ["excel_export"]
@@ -250,6 +251,7 @@ module.exports = (Router) => {
         modelName: ['VtradeDelivery'],
         platform : false,
         paging : [true],
+        order : ["-date"],
         excel_export : true,
         flexible_btn:[{
             content: '<a href="javascript:void(0)">导出</a>',
