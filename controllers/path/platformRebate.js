@@ -54,10 +54,10 @@ module.exports = {
                 type : "chart",
                 title : "返利类型分布",
                 query_api : "/platformRebate/individualEventThree"
-            }, {
-                type : "table",
-                title : "单项单级返利汇总",
-                query_api : "/platformRebate/individualEventFour"
+            //}, {
+            //    type : "table",
+            //    title : "单项单级返利汇总",
+            //    query_api : "/platformRebate/individualEventFour"
             }]
         };
     },
@@ -82,10 +82,10 @@ module.exports = {
                 type : "chart",
                 title : "返利类型分布",
                 query_api : "/platformRebate/platformPromotionsFour"
-            }, {
-                type : "table",
-                title : "平台促销返利汇总",
-                query_api : "/platformRebate/platformPromotionsFive"
+            //}, {
+            //    type : "table",
+            //    title : "平台促销返利汇总",
+            //    query_api : "/platformRebate/platformPromotionsFive"
             }]
         }
     },
@@ -110,10 +110,10 @@ module.exports = {
                 type : "chart",
                 title : "返利类型分布",
                 query_api : "/platformRebate/platformBasisFour"
-            }, {
-                type : "table",
-                title : "平台基础返利汇总",
-                query_api : "/platformRebate/platformBasisFive"
+            //}, {
+            //    type : "table",
+            //    title : "平台基础返利汇总",
+            //    query_api : "/platformRebate/platformBasisFive"
             }]
         }
     },
@@ -134,10 +134,10 @@ module.exports = {
                 type : "chart",
                 title : "返利层级分布",
                 query_api : "/platformRebate/inviteBusinessThree"
-            }, {
-                type : "table",
-                title : "邀请商户分享返利汇总",
-                query_api : "/platformRebate/inviteBusinessFour"
+            //}, {
+            //    type : "table",
+            //    title : "邀请商户分享返利汇总",
+            //    query_api : "/platformRebate/inviteBusinessFour"
             }]
         }
     },
