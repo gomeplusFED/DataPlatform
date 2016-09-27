@@ -28,7 +28,8 @@ module.exports = (Router) => {
 
             return {
                 date : orm.between(new Date(qdate + " 00:00:00"), new Date(ydate + " 23:59:59")),
-                day_type : 1
+                day_type : 1,
+                type : "ALL"
             };
         },
         filter(data) {
@@ -94,6 +95,11 @@ module.exports = (Router) => {
         router: "/achievements/vtradeTwo",
         modelName: ["VtradeDetail"],
         platform : false,
+        params(query, params) {
+            params.type = "ALL";
+
+            return params;
+        },
         filter_select : [
             {
                 title: '',
