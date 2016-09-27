@@ -117,8 +117,9 @@ module.exports = (Router) => {
         level_select_name : "category_id",
         level_select_url : "/api/socialAnalysisCategories",
         params(query, params) {
+            params.category_id = query.category_id || "ALL";
             if(params.category_id === "all") {
-                delete params.category_id;
+                params.category_id = "ALL";
             }
             return params;
         },

@@ -23,8 +23,8 @@ module.exports = {
         }
 
         for(var key of source) {
-            obj[ key.distribution].value += key.num;
-            total += key.num;
+            obj[ key.distribution].value += key.sum_num;
+            total += key.sum_num;
         }
 
         for(var key of array) {
@@ -56,8 +56,8 @@ module.exports = {
             };
             for(var k of source) {
                 if(key === k.distribution) {
-                    total_num += k.num;
-                    obj.num += k.num;
+                    total_num += k.sum_num;
+                    obj.num += k.sum_num;
                 }
             }
             newData.push(obj);
