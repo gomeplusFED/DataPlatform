@@ -101,7 +101,7 @@ module.exports = (Router) => {
             filter_key: 'filter_key',
             groups: [{
                 key: 'tred_acc_shop_num',
-                value: '浏览店铺数'
+                value: '被访问店铺数'
             }, {
                 key: 'tred_deal_shop_num',
                 value: '支付店铺数'
