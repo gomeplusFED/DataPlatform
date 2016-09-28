@@ -40,6 +40,25 @@ function CategoryDeal(query , level){
 }
 
 
+function GetLevel(req , query , cb){
+    req.models.ConfCategories.find({
+        pid : query.category_id
+    } , 1 , (err , data)=>{
+        if(err) cb(err);
+        if(data.length == 0 || !data){
+            req.models.ConfCategories.find({
+                id : query.category_id
+            } , 1 , (err , data)=>{
+                if(err) cb(err);
+                cb(null , CategoryDeal(query , data[0].level));
+            });
+        }else{
+            cb(null , CategoryDeal(query , data[0].level));
+        }
+    });
+}
+
+
 
 
 module.exports = (Router) => {
@@ -143,12 +162,7 @@ module.exports = (Router) => {
             if(!query.category_id){
                 cb(null , CategoryDeal(query , 0));
             }else{
-                req.models.ConfCategories.find({
-                    pid : query.category_id
-                } , 1 , (err , data)=>{
-                    if(err) cb(err);
-                    cb(null , CategoryDeal(query , data[0].level));
-                });
+                GetLevel(req , query , cb);
             }
         },
         filter(data, query) {
@@ -222,12 +236,7 @@ module.exports = (Router) => {
             if(!query.category_id){
                 cb(null , CategoryDeal(query , 0));
             }else{
-                req.models.ConfCategories.find({
-                    pid : query.category_id
-                } , 1 , (err , data)=>{
-                    if(err) cb(err);
-                    cb(null , CategoryDeal(query , data[0].level));
-                });
+                GetLevel(req , query , cb);
             }
         },
         filter(data, query, dates) {
@@ -308,12 +317,7 @@ module.exports = (Router) => {
             if(!query.category_id){
                 cb(null , CategoryDeal(query , 0));
             }else{
-                req.models.ConfCategories.find({
-                    pid : query.category_id
-                } , 1 , (err , data)=>{
-                    if(err) cb(err);
-                    cb(null , CategoryDeal(query , data[0].level));
-                });
+                GetLevel(req , query , cb);
             }
         },
         filter(data, query, dates) {
@@ -356,12 +360,7 @@ module.exports = (Router) => {
             if(!query.category_id){
                 cb(null , CategoryDeal(query , 0));
             }else{
-                req.models.ConfCategories.find({
-                    pid : query.category_id
-                } , 1 , (err , data)=>{
-                    if(err) cb(err);
-                    cb(null , CategoryDeal(query , data[0].level));
-                });
+                GetLevel(req , query , cb);
             }
         },
         firstSql(query , params , isCount){
