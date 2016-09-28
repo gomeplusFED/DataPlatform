@@ -74,7 +74,7 @@ module.exports = {
     tradeTwo(data, filter_key, dates) {
         var source = data.first.data[0],
             filter_name = {
-                tred_acc_shop_num : '浏览店铺数',
+                tred_acc_shop_num : '被访问店铺数',
                 tred_deal_shop_num : '支付店铺数',
                 tran_acc_pro_num : '浏览商品数',
                 tran_pay_money_amount : '支付金额',
