@@ -22,6 +22,15 @@ module.exports = (Router) => {
                 name: 'H5'
             }]
         },
+        procedure : [{
+            aggregate : {
+                params : "params",
+                value : ["date"]
+            },
+            sum : ["page_view", "access_num", "ip_num"],
+            groupBy : ["date"],
+            get : ""
+        }],
         params(query, params) {
             params.type = query.type || 'pc';
             params.url_type = 1;
@@ -36,13 +45,13 @@ module.exports = (Router) => {
             title: '',
             filter_key : 'filter_key',
             groups: [{
-                key: 'page_view',
+                key: 'sum_page_view',
                 value: '浏览量'
             }, {
-                key: 'access_num',
+                key: 'sum_access_num',
                 value: '访客数'
             }, {
-                key: 'ip_num',
+                key: 'sum_ip_num',
                 value: 'ip数'
             }]
         }],

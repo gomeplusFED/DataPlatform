@@ -167,8 +167,8 @@ module.exports = {
                 obj.achievements.product(),
                 obj.achievements.productSale(),
                 obj.achievements.trade(),
-                obj.achievements.vshop(),
-                obj.achievements.vtrade()
+                //obj.achievements.vshop(),
+                //obj.achievements.vtrade()
             ]
         },
         "14": {
@@ -235,17 +235,17 @@ module.exports = {
                 obj.videoStatis.videoEdition()
             ]
         },
-        "19": {
-            name : "搜索推荐",
-            display : true,
-            className : "fa  fa-laptop fa-fw",
-            href : "#",
-            path : [
-                obj.search.searchIndex(),
-                obj.search.searchWord(),
-                obj.search.searchRecommend()
-            ]
-        },
+        //"19": {
+        //    name : "搜索推荐",
+        //    display : true,
+        //    className : "fa  fa-laptop fa-fw",
+        //    href : "#",
+        //    path : [
+        //        obj.search.searchIndex(),
+        //        obj.search.searchWord(),
+        //        obj.search.searchRecommend()
+        //    ]
+        //},
         "29" : {
             name : "营销管理后台",
             display : true,

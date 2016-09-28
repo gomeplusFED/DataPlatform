@@ -12,9 +12,9 @@ module.exports = {
         var source = data.first.data[0],
             type = "line",
             filter_name = {
-                page_view : "浏览量",
-                access_num : "访客数",
-                ip_num : "ip数"
+                sum_page_view : "浏览量",
+                sum_access_num : "访客数",
+                sum_ip_num : "ip数"
             },
             map = {
                 value : filter_name[filter_key]

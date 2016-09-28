@@ -8,5 +8,5 @@ create({
     filename : path.join(__dirname, "./test.txt"),
     writePath : path.join(__dirname, "./models/"),
     author : "hexisen",
-    tableName : ["ItemOverview", "ItemManager", "ItemPie", "ItemRunSales", "ItemRunTop"]
+    tableName : ["SalesPerfTranKv", "DealCaty", "TradeUser"]
 });

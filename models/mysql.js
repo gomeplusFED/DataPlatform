@@ -67,11 +67,11 @@ function connect(app) {
             models.ShopPayTop = db.define("tbl_rt_shop_pay_top", obj.ShopPayTop);
             models.ShopAccesTop = db.define("tbl_rt_shop_acces_top", obj.ShopAccesTop);
             //models.TradeCaty = db.define("ads2_deal_caty", obj.TradeCaty);
-            models.DealCaty = db.define("tbl_rt_deal_caty", obj.DealCaty);
-            models.TradeUser = db.define("tbl_rt_deal_user", obj.TradeUser);
+            models.DealCaty = db.define("ads2_deal_caty", obj.DealCaty);
+            models.TradeUser = db.define("ads2_deal_user", obj.TradeUser);
             models.SalesPerfProductKv = db.define("tbl_rt_sales_perf_product_kv", obj.SalesPerfProductKv);
             models.SalesPerfShopKv = db.define("tbl_rt_sales_perf_shop_kv", obj.SalesPerfShopKv);
-            models.SalesPerfTranKv = db.define("tbl_rt_sales_perf_tran_kv", obj.SalesPerfTranKv);
+            models.SalesPerfTranKv = db.define("ads2_sales_perf_tran_kv", obj.SalesPerfTranKv);
             models.SalesProductMarketTop = db.define("tbl_rt_sales_product_market_top", obj.SalesProductMarketTop);
             models.SalesProductFlowtTop = db.define("tbl_rt_sales_product_flow_top", obj.SalesProductFlowtTop);
             models.UserKeepResult = db.define("ads2_user_analysis_keep", obj.UserKeepResult);

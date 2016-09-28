@@ -495,7 +495,7 @@ module.exports = (Router) => {
             return filter.platformOrderFive(data, query.page);
         },
         rows : [
-            [ "id", "plan_name", "plan_type", "validscope_time", "rebate_type", "level", "unique_is_rebate_shop_num",
+            [ "id", "plan_name", "plan", "validscope_time", "rebate", "rebate_level", "unique_is_rebate_shop_num",
                 "unique_is_rebate_merchandise_num", "unique_is_rebate_user_num", "order_rate", "price_rate",
                 "is_over_rebate_order_amount" ]
         ],

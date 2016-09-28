@@ -4,7 +4,7 @@
  * @fileoverview 交易分析
  */
 
-var api = require("../../../base/api"),
+var api = require("../../../base/main"),
     filter = require("../../../filters/achievements/trade");
 
 module.exports = (Router) => {
@@ -101,7 +101,7 @@ module.exports = (Router) => {
             filter_key: 'filter_key',
             groups: [{
                 key: 'tred_acc_shop_num',
-                value: '被访问店铺数'
+                value: '浏览店铺数'
             }, {
                 key: 'tred_deal_shop_num',
                 value: '支付店铺数'
@@ -121,7 +121,7 @@ module.exports = (Router) => {
                 key: 'tred_deal_money_amount',
                 value: '成交金额'
             }, {
-                key: 'tran_order_money_amount',
+                key: 'tran_pay_money_amount',
                 value: '支付金额'
             }, {
                 key: 'tred_order_all_amount',
@@ -155,8 +155,8 @@ module.exports = (Router) => {
                 value: '笔单价'
             }]
         }],
-        filter(data, filter_key, dates) {
-            return filter.tradeTwo(data, filter_key, dates);
+        filter(data, query, dates) {
+            return filter.tradeTwo(data, query.filter_key, dates);
         }
     });
 
@@ -165,13 +165,13 @@ module.exports = (Router) => {
         modelName : ["SalesPerfTranKv"],
         platform : false,
         excel_export : true,
-        paging : true,
+        paging : [true],
         order : ["-date"],
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
-        filter(data, filter_key, dates) {
+        filter(data, query, dates) {
             return filter.tradeThree(data, dates);
         },
         rows : [
@@ -226,7 +226,7 @@ module.exports = (Router) => {
         router : "/achievements/tradeFour",
         modelName : ["DealCaty"],
         platform : false,
-        paging : true,
+        paging : [true],
         sum : ["pay_money_amount"],
         date_picker_data : 1,
         excel_export : true,
@@ -255,11 +255,11 @@ module.exports = (Router) => {
         //level_select : true,
         //level_select_name : "category_id",
         //level_select_url : "/api/categories",
-        filter(data, filter_key, dates, filter_key2, page, params) {
-            return filter.tradeFour(data, params);
+        filter(data, query) {
+            return filter.tradeFour(data, query);
         },
         rows : [
-            [ 'caty_name', 'access_num', 'access_users', 'sales_pro_num',
+            [ 'category_name', 'access_num', 'access_users', 'sales_pro_num',
             'pay_money_amount', 'pay_money_amount_ratio']
         ],
         cols : [
@@ -297,13 +297,13 @@ module.exports = (Router) => {
         modelName : ["TradeUser"],
         platform : false,
         date_picker_data : 1,
-        paging : true,
+        paging : [true],
         excel_export : true,
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
-        filter(data, filter_key, dates) {
+        filter(data, query, dates) {
             return filter.tradeFive(data, dates);
         },
         rows : [

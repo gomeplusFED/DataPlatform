@@ -4,7 +4,7 @@
  * @fileoverview 访问页面数量分布
  */
 var api = require("../../../base/main"),
-    num = [ '1-2个', '3-5个', '6-9个', '10-19个', '20-30个', '30-99个', '100+个' ],
+    num = [ '1-2个', '3-5个', '6-9个', '10-19个', '20-30个', '31-99个', '100+个' ],
     filter = require("../../../filters/useAnalysis/accessPageNum");
 
 module.exports = (Router) => {

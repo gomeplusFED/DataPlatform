@@ -7,7 +7,7 @@ var util = require("../../utils"),
 
 module.exports = {
     tradeOne(data) {
-        var source = data.data,
+        var source = data.first.data[0],
             one = [],
             two = [],
             obj = {
@@ -72,18 +72,22 @@ module.exports = {
         return util.toTable([one, two], data.rows, data.cols);
     },
     tradeTwo(data, filter_key, dates) {
-        var source = data.data,
+        var source = data.first.data[0],
             filter_name = {
                 tred_acc_shop_num : '浏览店铺数',
-                tred_deal_shop_num : '成交店铺数',
+                tred_deal_shop_num : '支付店铺数',
                 tran_acc_pro_num : '浏览商品数',
+                tran_pay_money_amount : '支付金额',
                 tran_order_money_amount : '下单金额',
                 tred_deal_money_amount : '成交金额',
                 tred_order_all_amount : '下单总量',
-                tred_pay_all_amount : '付款订单量',
-                tred_pay_user_num : '付款人数',
+                tred_pay_all_amount : '支付订单量',
+                tred_pay_user_num : '支付人数',
+                tran_pay_pro_num_spu : '支付商品数',
+                tran_pay_pro_num_sku : '支付商品件数',
                 tran_order_pro_num_spu : '下单商品数',
                 tran_order_pro_num_sku : '下单商品件数',
+                tran_order_user_num : '下单人数',
                 tran_guest_unit_price : '客单价',
                 tran_row_unit_price : '笔单价'
             },
@@ -117,8 +121,8 @@ module.exports = {
         }]
     },
     tradeThree(data) {
-        var source = data.data,
-            count = data.dataCount;
+        var source = data.first.data[0],
+            count = data.first.count;
 
         for(var key of source) {
             key.date = moment(key.date).format("YYYY-MM-DD");
@@ -131,19 +135,19 @@ module.exports = {
         return util.toTable([source], data.rows, data.cols, [count]);
     },
     tradeFour(data, params) {
-        var source = data.data,
-            count = data.dataCount,
-            sourceSum = data.dataSum;
+        var source = data.first.data[0],
+            count = data.first.count,
+            sourceSum = data.first.sum;
 
         for(var key of source) {
             key.pay_money_amount = key.pay_money_amount.toFixed(2);
-            key.pay_money_amount_ratio = util.toFixed(key.pay_money_amount, sourceSum["1"]);
+            key.pay_money_amount_ratio = util.toFixed(key.pay_money_amount, sourceSum["0"]);
         }
         return util.toTable([source], data.rows, data.cols, [count]);
     },
     tradeFive(data) {
-        var source = data.data,
-            count = data.dataCount,
+        var source = data.first.data[0],
+            count = data.first.count,
             pay_ttl = 0,
             product_ttl = 0;
         for (var key of source) {

@@ -10,6 +10,7 @@ const config = {
     "varchar" : "String",
     "double" : "Number",
     "tinyint" : "Number",
+    "float" : "Number",
     "int" : "Number"
 };
 

@@ -264,7 +264,7 @@ module.exports = {
     platformOrderFive(data, page) {
         var source = data.first.data[0],
             count = data.first.count,
-            orderSource = data.second.data,
+            orderSource = data.second.data[0],
             page = page || 1,
             user_party = {},
             correlate_flow = {};
@@ -274,8 +274,8 @@ module.exports = {
         }
         source.forEach((key, value) => {
             key.id = (page - 1) * 20 + value + 1;
-            key.plan_type = user_party[key.plan_type];
-            key.rebate_type = correlate_flow[key.rebate_type];
+            key.plan = user_party[key.plan_type];
+            key.rebate = correlate_flow[key.rebate_type];
             key.order_rate = key.unique_is_rebate_order_num + "/" + key.unique_order_num;
             key.price_rate = key.is_rebate_fee.toFixed(2) + "/" + key.fee.toFixed(2);
             key.is_over_rebate_order_amount = key.is_over_rebate_order_amount.toFixed(2);

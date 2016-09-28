@@ -15,7 +15,7 @@ module.exports = {
                 participate_goods_count: source[2] || 0,
                 order_count: source[3] || 0,
                 participate_user_count: source[4] || 0,
-                cancel_rebate_amount: source[16] || 0
+                cancel_is_rebate_order_num: source[16] || 0
             }],
             two = [{
                 expect_rebate_amount: source[17] ? source[17].toFixed(2) : "0.00",

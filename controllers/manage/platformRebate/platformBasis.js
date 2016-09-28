@@ -29,7 +29,7 @@ module.exports = (Router) => {
                 "is_rebate_back_merchandise_num", "back_merchandise_num",
                 "unique_is_rebate_back_user_num", "unique_back_user_num",
                 "is_rebate_back_merchandise_amount", "back_merchandise_amount",
-                "cancel_rebate_amount",
+                "cancel_is_rebate_order_num",
                 "expect_rebate_amount", "unique_expect_rebate_user_num", "cancel_rebate_amount"],
             get : ""
         }],
@@ -43,8 +43,7 @@ module.exports = (Router) => {
                 "rebate_order_count", "rebate_order_amount_count",
                 "rebate_amount_count"
             ],
-            ["name", "spu_count", "sku_count", "refund_user_count", "refund_goods_amount_count",
-            ]
+            ["name", "spu_count", "sku_count", "refund_user_count", "refund_goods_amount_count"]
         ],
         cols: [
             [{
