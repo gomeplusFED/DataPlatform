@@ -3,7 +3,7 @@
  * @date 201600928
  * @fileoverview 命令行创建文件
  */
-    
+
 const fs      = require("fs"),
     _path     = require("path"),
     moment    = require("moment");
