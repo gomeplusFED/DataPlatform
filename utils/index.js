@@ -346,6 +346,14 @@ exports.mergeCell = function(data, rows) {
                             });
                         }
                     } else {
+                        _array.push({
+                            col : i,
+                            row : col,
+                            end : {
+                                col : i,
+                                row : j - col
+                            }
+                        });
                         col = j;
                     }
                 } else if(j === data.length - 1){
