@@ -23,7 +23,7 @@ module.exports = (Router) => {
             preMethods: ['excel_export']
         }],
         rows: [
-            [ 'date', 'new_user', 'last_1_keep', 'last_7_keep', "last_14_keep", "last_30_keep"]
+            [ 'date', 'new_users', 'last_1_keep', 'last_7_keep', "last_14_keep", "last_30_keep"]
         ],
         cols: [
             [
