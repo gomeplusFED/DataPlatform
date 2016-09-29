@@ -138,6 +138,7 @@ module.exports = (Router) => {
         modelName: ['VshopDetail'],
         paging : [true],
         platform : false,
+        order : ["-date"],
         excel_export : true,
         flexible_btn:[{
              content: '<a href="javascript:void(0)">导出</a>',
