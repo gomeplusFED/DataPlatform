@@ -13,7 +13,7 @@ module.exports = (Router) => {
 
     Router = new api(Router, {
         router: "/achievements/vshopOne",
-        modelName: ['VshopDetail'],
+        modelName : ['VshopDetail'],
         date_picker : false,
         platform : false,
         control_table_col: true,
@@ -51,7 +51,7 @@ module.exports = (Router) => {
 
     Router = new api(Router, {
         router: "/achievements/vshopTwo",
-        modelName: ["VshopDetail"],
+        modelName : ["VshopDetail"],
         platform : false,
         filter_select: [
             {
@@ -135,9 +135,10 @@ module.exports = (Router) => {
     // 每日明细
     Router = new api(Router, {
         router: "/achievements/vshopThree",
-        modelName: ['VshopDetail'],
+        modelName : ['VshopDetail'],
         paging : [true],
         platform : false,
+        order : ["-date"],
         excel_export : true,
         flexible_btn:[{
              content: '<a href="javascript:void(0)">导出</a>',
@@ -190,7 +191,7 @@ module.exports = (Router) => {
     // Top 100
     Router = new api(Router, {
         router: "/achievements/vshopFive",
-        modelName: ['VshopFlowTop'],
+        modelName : ['VshopFlowTop'],
         paging : [true],
         firstSql(query, params, isCount) {
             let _params = [query.startTime];

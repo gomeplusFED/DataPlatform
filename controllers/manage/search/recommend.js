@@ -34,7 +34,7 @@ module.exports = (Router) => {
     //商品搜索大盘指标
     Router = new api(Router, {
         router: "/search/recommendOne",
-        modelName: ["SearchRecommend"],
+        modelName : ["SearchRecommend"],
         platform: false,
         date_picker_data: 1,
         order: ["-date"],
@@ -136,7 +136,7 @@ module.exports = (Router) => {
     //商品搜索大盘指标趋势图
     Router = new api(Router, {
         router: "/search/recommendTwo",
-        modelName: ["SearchRecommend"],
+        modelName : ["SearchRecommend"],
         platform: false,
         order: ["-date"],
         params: function(query, params, sendData) {
