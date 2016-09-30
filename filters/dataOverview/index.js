@@ -352,8 +352,6 @@ module.exports = {
         }
         for(var key of source) {
             let date = util.getDate(key.date);
-            newData[date].register_rate += key.new_account /
-                (key.new_user === 0 ? 1 : key.new_user) * 100;
             newData[date].open_user_total += key.open_user_total;
             newData[date].open_total += key.open_total;
             newData[date].new_user += key.new_user;
@@ -365,7 +363,7 @@ module.exports = {
             newData[date].using_time_avg += key.using_time_avg;
         }
         Object.keys(newData).forEach((key) => {
-            newData[key].value = newData[key].register_rate.toFixed(2);
+            newData[key].register_rate = util.percentage(newData[key].new_account, newData[key].new_user);
         });
         return [{
             type : type,

@@ -12,7 +12,7 @@ var api = require("../../../base/main"),
 module.exports = (Router) => {
     Router = new api(Router, {
         router: "/dataOverview/dataOverviewAllOne",
-        modelName: ['OverviewPlatf', "KpiValue"],
+        modelName : ['OverviewPlatf', "KpiValue"],
         date_picker : false,
         platform : false,
         global_platform : {
@@ -62,7 +62,7 @@ module.exports = (Router) => {
 
     Router = new api(Router, {
         router: "/dataOverview/dataOverviewAllTwo",
-        modelName: ["OverviewPlatf"],
+        modelName : ["OverviewPlatf"],
         platform : false,
         params(query, params) {
             params.type = params.type || 'ios';
@@ -132,7 +132,7 @@ module.exports = (Router) => {
 
     Router = new api(Router, {
         router: "/dataOverview/dataOverviewAllThree",
-        modelName: ["OverviewPlatf"],
+        modelName : ["OverviewPlatf"],
         paging : [true],
         order : [ "-open_total" ],
         sum : ["open_total"],
@@ -160,7 +160,7 @@ module.exports = (Router) => {
 
     Router = new api(Router, {
         router: "/dataOverview/dataOverviewAllFour",
-        modelName: ["OverviewPage"],
+        modelName : ["OverviewPage"],
         platform : false,
         date_picker : false,
         paging : [true],
