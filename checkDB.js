@@ -45,7 +45,7 @@ for(let key in models) {
 console.log("尚未使用过的表数 : " + noPlayModel.length);
 console.log("尚未使用过的表为 : " + noPlayModel);
 function stringToModels(data) {
-    let r = /modelName : [\[](.*)[\]]/g,
+    let r = /modelName[ ]*:[ ]*[\[](.*)[\]]/g,
         array = data.match(r),
         models = [];
     if(!array) {
