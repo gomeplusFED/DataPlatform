@@ -11,6 +11,7 @@ module.exports = {
         var source = data.first.data[0],
             orderData = data.second.data[0],
             newData = [],
+            newObj = {},
             now = new Date(),
             _type = 'android，ios，app',
             _rows = [
@@ -140,7 +141,7 @@ module.exports = {
                 name : '对比效果'
             };
 
-        for(var date of dates) {
+        for(let date of dates) {
             var zObj = {
                 name : "",
                 open_total : 0,
@@ -162,7 +163,7 @@ module.exports = {
                 pv2 : 0,
                 create : 0
             };
-            for(var key of orderData) {
+            for(let key of orderData) {
                 var _date = util.getDate(key.date);
                 if(date === _date) {
                     if(key.kpi_type === 1) {
@@ -176,29 +177,29 @@ module.exports = {
                     }
                 }
             }
-            for(var key of source) {
-                if(new Date(date + " 00:00:00").getTime() < key.date.getTime() &&
-                    key.date.getTime() < new Date(date + " 23:59:59")) {
-                    zObj.open_total += key.open_total;
-                    zObj.open_user_total += key.open_user_total;
-                    zObj.new_user += key.new_user;
-                    zObj.new_account += key.new_account;
-                    zObj.stay_time_avg += Math.round(key.stay_time_avg);
-                    zObj.using_time_avg += Math.round(key.using_time_avg);
-                    zObj.uv += key.uv;
-                    zObj.pv += key.pv;
-                    zObj.ip_count += key.ip_count;
-                    zObj.jump_loss_rate += key.jump_loss_rate;
-                    zObj.visit_time_avg += Math.round(key.visit_time_avg);
-                }
-            }
-            newData.push(zObj);
+            newObj[date] = zObj;
         }
-        for(var key of newData) {
+        for(let key of source) {
+            let date = util.getDate(key.date);
+            newObj[date].open_total += key.open_total;
+            newObj[date].open_user_total += key.open_user_total;
+            newObj[date].new_user += key.new_user;
+            newObj[date].new_account += key.new_account;
+            newObj[date].stay_time_avg += Math.round(key.stay_time_avg);
+            newObj[date].using_time_avg += Math.round(key.using_time_avg);
+            newObj[date].uv += key.uv;
+            newObj[date].pv += key.pv;
+            newObj[date].ip_count += key.ip_count;
+            newObj[date].jump_loss_rate += key.jump_loss_rate;
+            newObj[date].visit_time_avg += Math.round(key.visit_time_avg);
+        }
+        for(let date in newObj) {
+            let key = newObj[date];
             key.new_user_rate = util.toFixed(key.new_user, key.open_user_total);
             key.new_user_rate_two = util.toFixed(key.new_user, key.uv);
             key.open_user_avg = util.division(key.open_total, key.open_user_total);
             key.register_rate = util.toFixed(key.new_account, key.new_user);
+            newData.push(key);
         }
         newData[0].name = "昨天";
         newData[1].name = "前天";

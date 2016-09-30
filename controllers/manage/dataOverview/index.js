@@ -38,15 +38,16 @@ module.exports = (Router) => {
         params(query) {
             var now = new Date(),
                 ydate = util.getDate(new Date(now.getTime() - 24 * 60 * 60 * 1000)),
-                qdate = util.getDate(new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000));
-            return {
-                date : orm.between(new Date(qdate + " 00:00:00"), new Date(ydate + " 23:59:59")),
-                region : "ALL",
-                day_type : 1,
-                type : query.type || 'ios'
-            }
+                qdate = util.getDate(new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000)),
+                params = {
+                    date : orm.between(new Date(qdate + " 00:00:00"), new Date(ydate + " 23:59:59")),
+                    region : "ALL",
+                    day_type : 1,
+                    type : query.type || "ios"
+                };
+            return params;
         },
-        secondParams() {
+        secondParams(query, params) {
             var now = new Date(),
                 ydate = util.getDate(new Date(now.getTime() - 24 * 60 * 60 * 1000)),
                 qdate = util.getDate(new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000));
@@ -55,8 +56,8 @@ module.exports = (Router) => {
                 day_type : 1
             }
         },
-        filter(data, query, dates, type) {
-            return dataOverview.dataOverviewAllOne(data, query.type);
+        filter(data, query, dates) {
+            return dataOverview.dataOverviewAllOne(data, query.type || "ios");
         }
     });
 
