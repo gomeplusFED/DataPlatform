@@ -44,7 +44,17 @@ module.exports = (Router) => {
             query.date = date;
             return params;
         },
-        filter_select: [TypeObj],
+        filter_select: [TypeObj , {
+            title: "推荐位所在页面",
+            filter_key: "recommend_page",
+            groups: [{
+                key: "逛逛首页",
+                value: "逛逛首页"
+            }, {
+                key: "商品详情页",
+                value: "商品详情页"
+            }]
+        }],
         rows: [
             ["date",
                 "recommend_result_pv",
