@@ -123,7 +123,7 @@ module.exports = {
                 }
             }
             newData2[util.prizeRange[item.tag]] = {
-                value : util.numberLeave(item.items_count / 10000 , 5) + newData2[util.prizeRange[item.tag]].value / 1
+                value : util.numberLeave(item.items_count / 10000  + newData2[util.prizeRange[item.tag]].value / 1 , 5)
             }
         }
 
@@ -167,7 +167,7 @@ module.exports = {
                 }
             }
             newData[util.prizeRange[item.tag]] = {
-                value : util.numberLeave(item.items_count / 10000 , 5) + newData[util.prizeRange[item.tag]].value / 1
+                value : util.numberLeave(item.items_count / 10000 + newData[util.prizeRange[item.tag]].value / 1 , 5)
             }
         }
 
