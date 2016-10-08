@@ -86,6 +86,10 @@ module.exports = {
             }else{
                 obj[key] = (num - num1) / num1;
             }
+
+            if(!obj[key]){
+                obj[key] = "0";
+            }
             
             obj[key] = utils.toFixed(obj[key] , 0);
         }

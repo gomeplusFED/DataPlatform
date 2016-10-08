@@ -55,7 +55,7 @@ module.exports = (Router) => {
     });
 
 
-    //商品搜索大盘指标趋势图
+    //top 100
     Router = new api(Router, {
         router: "/search/WordThree",
         modelName: ["SearchAnalyse"],
