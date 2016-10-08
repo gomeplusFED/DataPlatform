@@ -112,7 +112,7 @@ module.exports = {
 
         for(let item of source){
             newData[util.prizeRange[item.tag]] = {
-                value : item.items_count / 10000
+                value : util.numberLeave(item.items_count / 10000 , 5)
             }
         }
 
@@ -123,9 +123,10 @@ module.exports = {
                 }
             }
             newData2[util.prizeRange[item.tag]] = {
-                value : item.items_count / 10000 + newData2[util.prizeRange[item.tag]].value / 1
+                value : util.numberLeave(item.items_count / 10000 , 5) + newData2[util.prizeRange[item.tag]].value / 1
             }
         }
+
 
         return [{
             type : "pie",
@@ -166,7 +167,7 @@ module.exports = {
                 }
             }
             newData[util.prizeRange[item.tag]] = {
-                value : item.items_count / 10000 + newData[util.prizeRange[item.tag]].value / 1
+                value : util.numberLeave(item.items_count / 10000 , 5) + newData[util.prizeRange[item.tag]].value / 1
             }
         }
 
