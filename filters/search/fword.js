@@ -79,10 +79,6 @@ module.exports = {
         let source = data.first.data[0];
         let Result = [];
         for(let item of source){
-            if(item.search_keyword == "ALL"){
-                continue;
-            }
-
             if(!item.search_result_uv){
                 item.uv_lv = "0%";
             }else{
