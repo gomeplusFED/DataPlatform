@@ -57,7 +57,9 @@ function connect(app){
                     let thisModuleName = ModuleName[item.TableName].modelName;
                     models[thisModuleName] = db.define(item.TableName , item.Columns);
                 } catch(err) {
-                    console.log(item);
+                    console.log(err);
+                    console.log(item.TableName);
+                    console.log("========================");
                 }
             }
 
