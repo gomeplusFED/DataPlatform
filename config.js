@@ -167,8 +167,8 @@ module.exports = {
                 obj.achievements.product(),
                 obj.achievements.productSale(),
                 obj.achievements.trade(),
-                //obj.achievements.vshop(),
-                //obj.achievements.vtrade()
+                obj.achievements.vshop(),
+                obj.achievements.vtrade()
             ]
         },
         "14": {
@@ -199,17 +199,17 @@ module.exports = {
             ],
             routers: []
         },
-        "16": {
-            name: "商家返利汇总",
-            display: true,
-            className: "fa fa-desktop fa-fw",
-            href: "#",
-            path: [
-                obj.businessRebate.all(),
-                obj.businessRebate.plan()
-            ],
-            routers: []
-        },
+        //"16": {
+        //    name: "商家返利汇总",
+        //    display: true,
+        //    className: "fa fa-desktop fa-fw",
+        //    href: "#",
+        //    path: [
+        //        obj.businessRebate.all(),
+        //        obj.businessRebate.plan()
+        //    ],
+        //    routers: []
+        //},
         "17": {
             name : "社交分析",
             display : true,
@@ -235,17 +235,17 @@ module.exports = {
                 obj.videoStatis.videoEdition()
             ]
         },
-        "19": {
-           name : "搜索推荐",
-           display : true,
-           className : "fa  fa-laptop fa-fw",
-           href : "#",
-           path : [
-               obj.search.searchIndex(),
-               obj.search.searchWord(),
-               obj.search.searchRecommend()
-           ]
-        },
+        //"19": {
+        //   name : "搜索推荐",
+        //   display : true,
+        //   className : "fa  fa-laptop fa-fw",
+        //   href : "#",
+        //   path : [
+        //       obj.search.searchIndex(),
+        //       obj.search.searchWord(),
+        //       obj.search.searchRecommend()
+        //   ]
+        //},
         "29" : {
             name : "营销管理后台",
             display : true,
