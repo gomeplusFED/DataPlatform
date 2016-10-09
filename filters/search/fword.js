@@ -80,19 +80,19 @@ module.exports = {
         let Result = [];
         for(let item of source){
             if(!item.search_result_uv){
-                item.uv_lv = "0%";
+                item.uv_lv = "0.00%";
             }else{
                 item.uv_lv = utils.toFixed(item.search_order_uv / item.search_result_uv , 0);
             }
 
             if(!item.search_prodet_ipv_uv){
-                item.ipv_lv = "0%";
+                item.ipv_lv = "0.00%";
             }else{
                 item.ipv_lv = utils.toFixed(item.search_order_uv / item.search_prodet_ipv_uv , 0);
             }
 
             if(!item.search_exposure_product_num){
-                item.ctr_lv = "0%";
+                item.ctr_lv = "0.00%";
             }else{
                 item.ctr_lv = utils.toFixed(item.search_prodet_ipv / item.search_exposure_product_num , 0);
             }
