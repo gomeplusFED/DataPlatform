@@ -100,22 +100,16 @@ function createAllFile() {
     let _manage = _path.join(path, `/controllers/manage/${catalog}/${name}.${type}`),
         _p = _path.join(path, `/controllers/path/${name}.${type}`),
         _filter = _path.join(path, `/filters/${catalog}/${name}.${type}`);
-    path = _manage;
-    createFile(path);
-    path = _p;
-    createFile(path);
-    path = _filter;
-    createFile(path);
+    createFile(_manage);
+    createFile(_p);
+    createFile(_filter);
 }
 function deleteAllFile() {
     let manage = `${path}/controllers/manage/${catalog}`,
         path = `${path}/controllers/path`,
         filter = `${path}/filters`;
-    path = manage;
     deleteFile(manage, name);
-    path = path;
     deleteFile(path, name);
-    path = filter;
     deleteFile(filter, name);
 }
 function createSomeFile() {
@@ -129,16 +123,12 @@ function createSomeFile() {
     }
     let _manage = _path.join(path, `/controllers/manage/${catalog}/${name}.${type}`),
         _filter = _path.join(path, `/filters/${catalog}/${name}.${type}`);
-    path = _manage;
-    createFile(path);
-    path = _filter;
-    createFile(path);
+    createFile(_manage);
+    createFile(_filter);
 }
 function deleteSomeFile() {
     let manage = `${path}/controllers/manage/${catalog}`,
         filter = `${path}/filters`;
-    path = manage;
     deleteFile(manage, name);
-    path = filter;
     deleteFile(filter, name);
 }
