@@ -91,6 +91,8 @@
 						}
 					})
 					currentPageDefaultData.defaultData.splice(0, 1);
+				} else {
+					eventBus.$emit('loadGlobal', {});
 				}
 
 				actions.setCurrentPageDefaultData(store, currentPageDefaultData);
