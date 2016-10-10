@@ -23,6 +23,7 @@ function addRouter(path) {
 addRouter('./login');
 addRouter('./count');
 addRouter('./categories');
+addRouter('./addModule');
 
 var data = fs.readdirSync(files);
 for (var file of data) {
