@@ -435,6 +435,20 @@ exports.beforeDate = function( date , num , type ){
     return arr;
 }
 
+/* 调换数组顺序 */
+exports.ArraySort = function(arr){
+    if(arr instanceof Array && arr.length > 1){
+        let len = arr.length,
+            arr2= [];
+
+        for(let i=0;i<len;i++){
+            arr2.unshift(arr[i]);
+        }
+        return arr2;
+    }else{
+        return arr;
+    }
+}
 
 
 /* 商品价目对照表 */

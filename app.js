@@ -23,13 +23,14 @@ global.cluster = cluster;
 var routers = require('./routers');
 
 orm.settings.set("connection.pool", true);
-// orm.settings.set("connection.debug", true);
+orm.settings.set("connection.debug", true);
 Object.keys(config).forEach(function(key) {
     app.locals[key] = config[key];
 });
 
-//var logger = require("morgan");
-/* 测试使用 */
+
+// 测试使用 
+// var logger = require("morgan");
 // app.use(logger('dev'));
 
 app.use(function(req, res, next) {
