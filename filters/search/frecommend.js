@@ -104,7 +104,7 @@ module.exports = {
 
     recommendTwo(data , query , dates){
         let source = data.first.data[0];
-        let keys = ["date",
+        let keys = [
                 "recommend_result_pv",
                 "recommend_result_uv",
                 "recommend_prodet_ipv",
@@ -121,9 +121,6 @@ module.exports = {
 
         let Values = [
             {
-                caption: "日期",
-                type: "string"
-            }, {
                 caption: "PV",
                 type: "number",
                 help: "推荐位所在页面的浏览量"
