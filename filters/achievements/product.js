@@ -136,7 +136,8 @@ module.exports = {
             data : newData,
             config: { // 配置信息
                 stack: false, // 图的堆叠
-                categoryY : false //柱状图竖着
+                categoryY : false, //柱状图竖着
+                noline : true
             }
         },{
             type : "pie",
@@ -146,7 +147,8 @@ module.exports = {
             data : newData2,
             config: { // 配置信息
                 stack: false, // 图的堆叠
-                categoryY : false //柱状图竖着
+                categoryY : false, //柱状图竖着
+                noline : true
             }
         }];
     },
