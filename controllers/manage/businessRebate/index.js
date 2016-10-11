@@ -164,13 +164,13 @@ module.exports = (Router) => {
                 title: '指标选择',
                 filter_key: 'filter_key',
                 groups: [{
-                    key: 'product_sku_num',
+                    key: 'item_quantity',
                     value: '商品件数'
                 }, {
                     key: 'item_amount',
                     value: '商品总金额'
                 }, {
-                    key: 'rebate_amount',
+                    key: 'rebate2account_amount',
                     value: '返利到账金额'
                 }, {
                     key: 'order_num',
@@ -187,10 +187,9 @@ module.exports = (Router) => {
         router : "/businessRebate/businessAllFour",
         modelName : [ "RebateShopRebatetypeDistribution", "TypeFlow" ],
         params(query, params) {
-            if(query.category_id === undefined) {
-                params.category_id = "all";
-            }
+            params.category_id = params.category_id || "all";
             params.day_type = 1;
+            params.type = "all";
 
             return params;
         },
@@ -210,13 +209,13 @@ module.exports = (Router) => {
                 title: '指标选择',
                 filter_key: 'filter_key',
                 groups: [{
-                    key: 'product_sku_num',
+                    key: 'item_quantity',
                     value: '商品件数'
                 }, {
                     key: 'item_amount',
                     value: '商品总金额'
                 }, {
-                    key: 'rebate_amount',
+                    key: 'rebate2account_amount',
                     value: '返利到账金额'
                 }, {
                     key: 'order_num',
