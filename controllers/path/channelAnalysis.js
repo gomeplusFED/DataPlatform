@@ -40,5 +40,21 @@ module.exports = {
                 query_api: "/channelAnalysis/operatingThree"
             }]
         };
+    },
+    market() {
+        return {
+            name: "营销渠道分析",
+            path: "/channelAnalysis/market",
+            display: true,
+            defaultData: [{
+                type: "chart",
+                title: "TOP10渠道",
+                query_api: "/channelAnalysis/marketOne"
+            //}, {
+            //    type: "table",
+            //    title: "渠道TOP50列表",
+            //    query_api: "/channelAnalysis/marketTwo"
+            }]
+        };
     }
 };

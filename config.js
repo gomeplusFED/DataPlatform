@@ -86,7 +86,8 @@ module.exports = {
             className: "fa  fa-laptop fa-fw",
             href: "#",
             path: [
-                obj.channelAnalysis.channel()
+                obj.channelAnalysis.channel(),
+                obj.channelAnalysis.market()
             ],
             routers: [
                 obj.channelAnalysis.channelOperating()
