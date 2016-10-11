@@ -7,11 +7,11 @@ var utils = require("../../utils");
 
 module.exports = {
 
-    EventOne(data , query , dates){
+    FaceOne(data , query , dates){
         let source = data.first.data[0];
         let map = {
-            "click_uv" : "点击用户",
-            "click_pv" : "点击次数"
+            "load_uv" : "下载人数",
+            "load_pv" : "下载次数"
         }
 
         let newDate = {};
@@ -39,8 +39,7 @@ module.exports = {
         }];
     },
 
-    EventTwo(data , query , dates){
-
+    FaceTwo(data , query , dates){
         let dataSource = data.first.data[0];
         let Source = [];
         for(let date of dates){
@@ -50,11 +49,12 @@ module.exports = {
             Source.push(obj);
         }
 
+        console.log(dataSource)
         for(let item of dataSource){
             item.date = utils.getDate(item.date);
             let num;
             num = dates.indexOf(item.date);
-            item.click_lv = utils.numberLeave( item.click_pv / item.click_uv , 3 );
+            console.log(num)
             Source[num] = item;
         }
 

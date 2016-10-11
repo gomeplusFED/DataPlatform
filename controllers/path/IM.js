@@ -51,7 +51,7 @@ module.exports = {
                     query_api : "/IM/eventOne"
                 },
                 {
-                    type : "line",
+                    type : "table",
                     title: "数据详情",
                     query_api : "/IM/eventTwo"
                 }
@@ -64,11 +64,16 @@ module.exports = {
             path : "/IM/face",
             display : true,
             defaultData : [
-                // {
-                //     type : "table",
-                //     title: "商品推荐大盘指标",
-                //     query_api : "/search/recommendOne"
-                // },
+                {
+                    type : "chart",
+                    title: "数据趋势",
+                    query_api : "/IM/faceOne"
+                },
+                {
+                    type : "table",
+                    title: "数据详情",
+                    query_api : "/IM/faceTwo"
+                }
             ]
         }
     }

@@ -6,36 +6,35 @@
 
 const api = require("../../../base/main");
 const utils = require("../../../utils");
-const filter = require("../../../filters/im/f_event");
+const filter = require("../../../filters/im/f_face");
 
 module.exports = (Router)=>{
 
     //数据趋势
     Router = new api(Router , {
-        router : "/IM/eventOne",
-        modelName : ["ImEvent"],
+        router : "/IM/faceOne",
+        modelName : ["ImFaceLoad"],
         platform : false,
         order : ["-date"],
         params : function(query , params , sendData){
             return params;
         },
         filter (data , query , dates){
-            return filter.EventOne(data , query , dates);
+            return filter.FaceOne(data , query , dates);
         }
     });
 
     //数据详情
     Router = new api(Router , {
-        router : "/IM/eventTwo",
-        modelName : ["ImEvent"],
+        router : "/IM/faceTwo",
+        modelName : ["ImFaceLoad"],
         platform : false,
         order : ["-date"],
         rows : [
             [
                 "date",
-                "click_uv",
-                "click_pv",
-                "click_lv"
+                "load_uv",
+                "load_pv"
             ]
         ],
         cols : [
@@ -43,14 +42,11 @@ module.exports = (Router)=>{
                 caption : "日期",
                 type    : "string"
             }, {
-                caption : "点击用户",
+                caption : "下载人数",
                 type    : "number"
             }, {
-                caption : "点击次数",
+                caption : "下载次数",
                 type    : "number",
-            }, {
-                caption : "点击次数/点击用户",
-                type    : "string",
             }]
         ],
         excel_export : true,
@@ -63,7 +59,7 @@ module.exports = (Router)=>{
             return params;
         },
         filter (data , query , dates){
-            return filter.EventTwo(data , query , dates);
+            return filter.FaceTwo(data , query , dates);
         }
     });
 
