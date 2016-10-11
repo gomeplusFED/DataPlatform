@@ -6,6 +6,7 @@
 
 const api = require("../../../base/main");
 const utils = require("../../../utils");
+const orm = require("orm");
 const filter = require("../../../filters/search/fword");
 
 const TypeObj = {
@@ -63,6 +64,11 @@ module.exports = (Router) => {
         order: ["-search_result_pv"],
         excel_export : true,
         paging : [true],
+        params(query, params) {
+            params.search_keyword = orm.not_in(["ALL"]);
+
+            return params;
+        },
         flexible_btn:[{
              content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ["excel_export"]
