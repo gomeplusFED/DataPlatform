@@ -55,7 +55,7 @@ module.exports = (Router) => {
     });
 
 
-    //商品搜索大盘指标趋势图
+    //top 100
     Router = new api(Router, {
         router: "/search/WordThree",
         modelName : ["SearchAnalyse"],
@@ -92,7 +92,7 @@ module.exports = (Router) => {
                 row: 'search_keyword'
             }, {
                 caption: '日期',
-                type: 'date',
+                type: 'string',
                 row: 'date'
             }, {
                 caption: '召回商品数',

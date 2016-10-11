@@ -6,7 +6,7 @@
 var util = require("../../utils")
 
 module.exports = {
-    businessAllOne(data) {
+    businessAllOne(data, dates) {
         var source = data.first.data[0],
             now = util.getDate(new Date(new Date() - 24 * 60 * 60 * 1000)),
             obj = {
@@ -44,6 +44,13 @@ module.exports = {
             let date = util.getDate(item.date);
 
             if(date === now) {
+                for(let d of dates) {
+                    if(d === now) {
+                        for(let key in obj) {
+                            obj[key] += item[key];
+                        }
+                    }
+                }
                 for(let key in total) {
                     total[key] += item[key];
                 }

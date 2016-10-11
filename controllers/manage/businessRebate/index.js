@@ -22,8 +22,8 @@ module.exports = (Router) => {
                 type : "ALL"
             };
         },
-        filter(data) {
-            return businessRebate.businessAllOne(data);
+        filter(data,query, dates) {
+            return businessRebate.businessAllOne(data, dates);
         },
         rows: [
             [ "name", "order_num", "order_amount", "shop_num", "buyer_num",
@@ -99,10 +99,9 @@ module.exports = (Router) => {
         router : "/businessRebate/businessAllTwo",
         modelName : [ "RebateShopOrderTredency", "TypeFlow" ],
         params(query, params) {
-            if(query.category_id === undefined) {
-                params.category_id = "all";
-            }
+            params.category_id = query.category_id || "all";
             params.day_type = 1;
+            params.type = "all";
 
             return params;
         },
@@ -143,10 +142,9 @@ module.exports = (Router) => {
         router : "/businessRebate/businessAllThree",
         modelName : [ "RebateShopRebatelevelDistribution", "TypeFlow" ],
         params(query, params) {
-            if(query.category_id === undefined) {
-                params.category_id = "all";
-            }
             params.day_type = 1;
+            params.category_id = params.category_id || "all";
+            params.type = "all";
 
             return params;
         },

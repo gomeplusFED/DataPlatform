@@ -75,20 +75,37 @@ module.exports = {
     },
 
     wordThree(data , query , dates){
+
         let source = data.first.data[0];
         let Result = [];
         for(let item of source){
             if(item.search_keyword == "ALL"){
                 continue;
             }
-            item.uv_lv = utils.toFixed(item.search_order_uv / item.search_result_uv , 0);
-            item.ipv_lv = utils.toFixed(item.search_order_uv / item.search_prodet_ipv_uv , 0);
-            item.ctr_lv = utils.toFixed(item.search_prodet_ipv / item.search_exposure_product_num , 0);
+
+            if(!item.search_result_uv){
+                item.uv_lv = "0%";
+            }else{
+                item.uv_lv = utils.toFixed(item.search_order_uv / item.search_result_uv , 0);
+            }
+
+            if(!item.search_prodet_ipv_uv){
+                item.ipv_lv = "0%";
+            }else{
+                item.ipv_lv = utils.toFixed(item.search_order_uv / item.search_prodet_ipv_uv , 0);
+            }
+
+            if(!item.search_exposure_product_num){
+                item.ctr_lv = "0%";
+            }else{
+                item.ctr_lv = utils.toFixed(item.search_prodet_ipv / item.search_exposure_product_num , 0);
+            }
+           
             item.date = utils.getDate(item.date);
 
             Result.push(item);
         }
 
-        return utils.toTable([Result], data.rows, data.cols);
+        return utils.toTable([Result], data.rows, data.cols , [data.first.count]);
     }
 }

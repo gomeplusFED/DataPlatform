@@ -25,7 +25,14 @@ module.exports = {
         //需要输出两个一样的数组，每个数组包涵三条数据，每条数据包括两个表的所有字段
 
         let keys = data.rows[0].concat(data.rows[1]);
-        let source = data.first.data[0];
+        let DataSource = data.first.data[0];
+        let source = [null , null];
+
+        for(let item of DataSource){
+            var ss = query.date.indexOf(utils.getDate(item.date));
+            source[ss] = item;
+        }
+
         if(!source[0]){
             source[0] = {};
             for(let key of keys){
@@ -85,6 +92,10 @@ module.exports = {
                 obj[key] = (num - num1) / 1;
             }else{
                 obj[key] = (num - num1) / num1;
+            }
+
+            if(!obj[key]){
+                obj[key] = "0";
             }
             
             obj[key] = utils.toFixed(obj[key] , 0);
