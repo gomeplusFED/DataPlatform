@@ -11,6 +11,32 @@ module.exports = (Router) => {
         router : "/channelAnalysis/marketOne",
         modelName : ["ChaChalistChannel"],
         platform : false,
+        fixedParams(req, query, cb) {
+            let sql = `SELECT * FROM
+                (SELECT
+                    channel_no,
+                    SUM(${query.filter_key}) ${query.filter_key}
+                FROM
+                    ads2_cha_chalist_channel
+                WHERE
+                    date BETWEEN ${query.startTime} AND ${query.endTime}
+                AND
+                    '${query.filter_type}'=SUBSTR(channel_no, 1, 2)
+                GROUP BY channel_no) a
+                ORDER BY a.${query.filter_key} DESC LIMIT 0,10`;
+            let ids = [];
+            req.models.db1.driver.execQuery(sql, (err, data) => {
+                if(err) {
+                    cb(err);
+                } else {
+                    for(let item of data) {
+                        ids.push(item.channel_no);
+                    }
+                    query.channel_no = ids;
+                    cb(null, query);
+                }
+            });
+        },
         selectFilter(req, cb) {
             let filter_select = [{
                 title: '指标',
@@ -40,11 +66,84 @@ module.exports = (Router) => {
                     key: 'pay_num_money',
                     value: '实际支付总金额'
                 }]
-            }];
+            }],
+                select = {
+                    title: '渠道类型',
+                    filter_key : 'filter_type',
+                    groups: []
+                };
+            req.models.db1.driver.execQuery(`SELECT channel_type, channel_type_code FROM channel GROUP BY channel_type_code`, (err, data) => {
+                if(err) {
+                    cb(err);
+                } else {
+                    for(let item of data) {
+                        select.groups.push({
+                            key : item.channel_type_code,
+                            value : item.channel_type
+                        });
+                    }
+                    cb(null, [select].concat(filter_select));
+                }
+            });
         },
         filter(data, query, dates, type) {
-            return filter.shopOne(data, query.filter_key, dates);
+            return filter.marketOne(data, query.filter_key, dates);
         }
+    });
+
+    Router = new main(Router, {
+        router : "/channelAnalysis/marketTwo",
+        modelName : ["ChaChalistChannel"],
+        platform : false,
+        date_picker_data : 1,
+        search : {
+            show : true,
+            title : "渠道ID",
+            key : "channel_no"
+        },
+        excel_export : true,
+        flexible_btn : [{
+            content: '<a href="javascript:void(0)">导出</a>',
+            preMethods: ['excel_export']
+        }],
+        rows : [
+            []
+        ],
+        cols : [
+            [
+                {
+                    caption : "排名",
+                    type : "number"
+                },{
+                    caption : "渠道名称",
+                    type : "string"
+                },{
+                    caption : "渠道ID",
+                    type : "string"
+                },{
+                    caption : "活动页PV",
+                    type : "number"
+                },{
+                    caption : "排名",
+                    type : "number"
+                },{
+                    caption : "排名",
+                    type : "number"
+                },{
+                    caption : "排名",
+                    type : "number"
+                },{
+                    caption : "排名",
+                    type : "number"
+                },{
+                    caption : "排名",
+                    type : "number"
+                },{
+                    caption : "排名",
+                    type : "number"
+                }
+            ]
+        ]
     });
 
     return Router;

@@ -50,10 +50,10 @@ module.exports = {
                 type: "chart",
                 title: "TOP10渠道",
                 query_api: "/channelAnalysis/marketOne"
-            //}, {
-            //    type: "table",
-            //    title: "渠道TOP50列表",
-            //    query_api: "/channelAnalysis/marketTwo"
+            }, {
+                type: "table",
+                title: "渠道TOP50列表",
+                query_api: "/channelAnalysis/marketTwo"
             }]
         };
     }
