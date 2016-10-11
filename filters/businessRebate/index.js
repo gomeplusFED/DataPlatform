@@ -141,9 +141,9 @@ module.exports = {
             mapPie = {},
             mapBar = {},
             filter_name = {
-                product_sku_num : "商品件数",
+                item_quantity : "商品件数",
                 item_amount : "商品总金额",
-                rebate_amount : "返利到账金额",
+                rebate2account_amount : "返利到账金额",
                 order_num : "订单数"
             },
             typePie = "pie",
@@ -206,9 +206,9 @@ module.exports = {
             typePie = "pie",
             typeBar = "bar",
             filter_name = {
-                product_sku_num : "商品件数",
+                item_quantity : "商品件数",
                 item_amount : "商品总金额",
-                rebate_amount : "返利到账金额",
+                rebate2account_amount : "返利到账金额",
                 order_num : "订单数"
             },
             XData = [];
