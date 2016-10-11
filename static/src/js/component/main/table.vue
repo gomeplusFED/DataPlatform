@@ -1,6 +1,6 @@
 <template>
 	<div :id="'table_'+index" class="table_con table-responsive" v-show="currentData.type.indexOf('table') !== -1">
-		<table v-for="(outerTableIndex, tableItem) in tableData" class="table table-bordered table-hover" role="grid" aria-describedby="dataTables_info">
+		<table v-for="(outerTableIndex, tableItem) in tableData" class="table table-bordered table-hover" :class="tableData.nobordered" role="grid" aria-describedby="dataTables_info">
 			<thead>
 				<tr v-if="outerTableIndex === 0">
 					<th v-for="(captionIndex, captionItem) in tableItem.cols" v-show="tableColControl[captionIndex]">{{captionItem.caption}} <i v-show="captionItem.caption !== ' ' && captionItem.help" style="opacity: 0.8;cursor: pointer;" class="fa fa-question-circle-o" v-tips="{direction: 'top', msg: captionItem.help}"></i></th>
@@ -49,6 +49,14 @@
 
 	.table_con td[rowspan] {
 		vertical-align: middle;
+	}
+
+	.table-nobordered {
+	    border: 0px solid #ddd;
+	}
+	.table-nobordered>tbody>tr>td, .table-nobordered>tbody>tr>th, .table-nobordered>tfoot>tr>td, .table-nobordered>tfoot>tr>th, .table-nobordered>thead>tr>td, .table-nobordered>thead>tr>th {
+	    border: 0px solid #ddd;
+	    background: #fff !important;
 	}
 
 </style>
