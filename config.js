@@ -90,7 +90,8 @@ module.exports = {
                 obj.channelAnalysis.market()
             ],
             routers: [
-                obj.channelAnalysis.channelOperating()
+                obj.channelAnalysis.channelOperating(),
+                obj.channelAnalysis.marketOperating()
             ]
         },
         "6" : {

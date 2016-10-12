@@ -56,5 +56,21 @@ module.exports = {
                 query_api: "/channelAnalysis/marketTwo"
             }]
         };
+    },
+    marketOperating() {
+        return {
+            name: "营销渠道详情",
+            path: "/channelAnalysis/marketOperating",
+            display: true,
+            defaultData: [{
+                type: "chart",
+                title: "渠道效果趋势",
+                query_api: "/channelAnalysis/marketOperatingOne"
+            //}, {
+            //    type: "table",
+            //    title: "渠道效果明细",
+            //    query_api: "/channelAnalysis/marketOperatingTwo"
+            }]
+        };
     }
 };

@@ -93,9 +93,13 @@ module.exports = (Router) => {
 
     Router = new main(Router, {
         router : "/channelAnalysis/marketTwo",
-        modelName : ["ChaChalistChannel"],
+        modelName : ["ChaChalistChannel", "Channel"],
+        secondParams() {
+            return {};
+        },
         platform : false,
         date_picker_data : 1,
+        showDayUnit : true,
         search : {
             show : true,
             title : "渠道ID",
@@ -106,8 +110,24 @@ module.exports = (Router) => {
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
+        paging : [true, false],
+        procedure : [
+            [{
+                find : "params",
+                offset : "offset",
+                limit : "limit",
+                order : ["-active_pv"],
+                run : ""
+            },{
+                count : ""
+            }], false
+        ],
+        filter(data, query) {
+            return filter.marketTwo(data,query.page);
+        },
         rows : [
-            []
+            ["top", "channel_name", "channel_no", "active_pv", "register", "order_num",
+                "order_num_money", "pay_num", "pay_num_money", "operating"]
         ],
         cols : [
             [
@@ -122,25 +142,30 @@ module.exports = (Router) => {
                     type : "string"
                 },{
                     caption : "活动页PV",
-                    type : "number"
+                    type : "number",
+                    help : "活动页的访问次数"
                 },{
-                    caption : "排名",
-                    type : "number"
+                    caption : "新增注册",
+                    type : "number",
+                    help : "通过活动带来的注册数"
                 },{
-                    caption : "排名",
-                    type : "number"
+                    caption : "下单总量",
+                    type : "number",
+                    help : "活动页带来的订单总量"
                 },{
-                    caption : "排名",
-                    type : "number"
+                    caption : "下单总金额",
+                    type : "number",
+                    help : "活动订单下单总金额：商品总金额 - 所有优惠 + 运费"
                 },{
-                    caption : "排名",
-                    type : "number"
+                    caption : "支付总量",
+                    type : "number",
+                    help : "活动订单支付成功的总量"
                 },{
-                    caption : "排名",
-                    type : "number"
+                    caption : "实际支付总金额  ",
+                    type : "number",
+                    help : "活动订单的实际支付总金额：商品总金额 - 所有优惠 + 运费"
                 },{
-                    caption : "排名",
-                    type : "number"
+                    caption : "操作"
                 }
             ]
         ]
