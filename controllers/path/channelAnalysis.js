@@ -66,10 +66,10 @@ module.exports = {
                 type: "chart",
                 title: "渠道效果趋势",
                 query_api: "/channelAnalysis/marketOperatingOne"
-            //}, {
-            //    type: "table",
-            //    title: "渠道效果明细",
-            //    query_api: "/channelAnalysis/marketOperatingTwo"
+            }, {
+                type: "table",
+                title: "渠道效果明细",
+                query_api: "/channelAnalysis/marketOperatingTwo"
             }]
         };
     }

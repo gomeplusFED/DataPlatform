@@ -88,5 +88,20 @@ module.exports = (Router) => {
         }
     });
 
+    Router = new main(Router,{
+        router : "/channelAnalysis/marketOperatingTwo",
+        modelName : ["ChaChalistChannel"],
+        platform : false,
+        paging : [true],
+        excel_export : true,
+        flexible_btn : [{
+            content: '<a href="javascript:void(0)">导出</a>',
+            preMethods: ['excel_export']
+        }],
+        filter(data, query, dates, type) {
+            return filter.marketOperatingTwo(data);
+        }
+    });
+
     return Router;
 };

@@ -39,5 +39,8 @@ module.exports = {
                 stack: false // 图的堆叠
             }
         }];
+    },
+    marketOperatingTwo() {
+
     }
 };
