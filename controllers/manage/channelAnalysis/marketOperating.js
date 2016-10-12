@@ -12,9 +12,14 @@ module.exports = (Router) => {
         router : "/channelAnalysis/marketOperatingOne",
         modelName : ["ChaChalistChannel", "Channel"],
         platform : false,
+        params(query, params) {
+            params.channel_no = params.channel_no.split(",");
+
+            return params;
+        },
         secondParams(query) {
             return {
-                channel_id : query.channel_no
+                channel_id : query.channel_no.split(",")
             };
         },
         selectFilter(req, cb) {
