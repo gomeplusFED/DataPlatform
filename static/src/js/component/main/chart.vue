@@ -222,6 +222,22 @@ var Chart = Vue.extend({
 				delete options.xAxis;
 				delete options.yAxis;
 				delete options.grid;
+				if(config.noline && options.series && options.series.length) {
+					options.series[0].label = {
+		                normal: {
+		                    textStyle: {
+		                        color: 'rgba(255, 255, 255, 0)'
+		                    }
+		                }
+		            };
+		            options.series[0].labelLine = {
+		                normal: {
+		                    lineStyle: {
+		                        color: 'rgba(255, 255, 255, 0)'
+		                    }
+		                }
+		            };
+	            }
 			}
 
 			if (chartType === 'map') {

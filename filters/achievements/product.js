@@ -110,22 +110,51 @@ module.exports = {
             newData = {};
             newData2= {};
 
-        for(let item of source){
-            newData[util.prizeRange[item.tag]] = {
-                value : util.numberLeave(item.items_count / 10000 , 5)
+        if(query.category_id_1 == "ALL" && query.category_id_2 == "ALL" && query.category_id_3 == "ALL" && query.category_id_4 == "ALL"){
+
+            //未选择类目默认情况
+
+            //初值为0
+            for(let key in util.prizeRange){
+                if(key >= 33 && key <= 43){
+                    newData[util.prizeRange[key]] = { value : 0 };
+                    newData2[util.prizeRange[key]] = { value : 0 };
+                }
+            }
+
+            for(let item of source){
+                if(newData[util.prizeRange[item.tag]]){
+                    newData[util.prizeRange[item.tag]].value = util.numberLeave(item.items_count / 10000 , 5);
+                }
+            }
+
+            for(let item of source2){
+                if(newData2[util.prizeRange[item.tag]]){
+                    newData2[util.prizeRange[item.tag]].value = util.numberLeave(item.items_count / 10000 , 5);
+                }
+            }
+
+
+        }else{
+            for(let item of source){
+                newData[util.prizeRange[item.tag]] = {
+                    value : util.numberLeave(item.items_count / 10000 , 5)
+                }
+            }
+
+            for(let item of source2){
+                if(!newData2[util.prizeRange[item.tag]]){
+                    newData2[util.prizeRange[item.tag]] = {
+                        value : 0
+                    }
+                }
+                newData2[util.prizeRange[item.tag]] = {
+                    value : util.numberLeave(item.items_count / 10000  + newData2[util.prizeRange[item.tag]].value / 1 , 5)
+                }
             }
         }
 
-        for(let item of source2){
-            if(!newData2[util.prizeRange[item.tag]]){
-                newData2[util.prizeRange[item.tag]] = {
-                    value : 0
-                }
-            }
-            newData2[util.prizeRange[item.tag]] = {
-                value : util.numberLeave(item.items_count / 10000  + newData2[util.prizeRange[item.tag]].value / 1 , 5)
-            }
-        }
+            
 
 
         return [{
@@ -136,7 +165,8 @@ module.exports = {
             data : newData,
             config: { // 配置信息
                 stack: false, // 图的堆叠
-                categoryY : false //柱状图竖着
+                categoryY : false, //柱状图竖着
+                noline : true
             }
         },{
             type : "pie",
@@ -146,7 +176,8 @@ module.exports = {
             data : newData2,
             config: { // 配置信息
                 stack: false, // 图的堆叠
-                categoryY : false //柱状图竖着
+                categoryY : false, //柱状图竖着
+                noline : true
             }
         }];
     },
