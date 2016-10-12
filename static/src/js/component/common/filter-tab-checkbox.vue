@@ -67,6 +67,19 @@
 						type: 'warning'
 					});
 				}else{
+					let path = this.$route.path;
+					if (path.indexOf('?') > -1) {
+						let query = path.split('?')[1]
+						if (query) {
+							let params = query.split('&');
+							params.forEach(x => {
+								let val = x.split('=')[1];
+								if (arr.indexOf(val) == -1){
+									arr.push(val);
+								}
+							})
+						}
+					}
 					this.tabCheckboxConfig.apply(arr);
 				}
 			}
