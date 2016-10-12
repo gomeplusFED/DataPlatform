@@ -303,15 +303,12 @@ module.exports = (Router) => {
                     group_leader_id : group_ids,
                     key : ["person_topic_num", "person_friends_num", "person_funs_num", "person_funs_num"]
                 };
+
             return _params;
         },
         procedure : [false, {
-            aggregate : {
-                value : ["group_leader_id", "key"]
-            },
-            sum : ["value"],
-            groupBy : ["group_leader_id", "key"],
-            get : ""
+            find : "params",
+            run : ""
         }],
         showDayUnit : true,
         date_picker_data: 1,
