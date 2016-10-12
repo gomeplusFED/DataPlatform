@@ -94,13 +94,62 @@ module.exports = (Router) => {
         platform : false,
         paging : [true],
         excel_export : true,
+        order : ["-date"],
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
         filter(data, query, dates, type) {
             return filter.marketOperatingTwo(data);
-        }
+        },
+        rows : [
+            ["date", "active_uv", "active_pv", "register", "rate", "order_num", "order_num_money",
+                "pay_num", "pay_user", "pay_num_money"]
+        ],
+        cols : [
+            [
+                {
+                    caption : "日期",
+                    type : "string"
+                },{
+                    caption : "活动页UV",
+                    type : "number",
+                    help : "活动页的访问人数"
+                },{
+                    caption : "活动页PV",
+                    type : "number",
+                    help : "活动页的访问次数"
+                },{
+                    caption : "新增注册",
+                    type : "number",
+                    help : "通过活动带来的注册数"
+                },{
+                    caption : "进入商品页转化率",
+                    type : "string",
+                    help : "通过活动页跳转商品页的浏览人数 / 活动页浏览人数"
+                },{
+                    caption : "下单总量",
+                    type : "number",
+                    help : "活动页带来的订单总量"
+                },{
+                    caption : "下单总金额",
+                    type : "number",
+                    help : "活动订单下单总金额：商品总金额 - 所有优惠 + 运费"
+                },{
+                    caption : "支付总量",
+                    type : "number",
+                    help : "活动订单支付成功的总量"
+                },{
+                    caption : "支付用户数",
+                    type : "number",
+                    help : "支付成功订单的用户数量"
+                },{
+                    caption : "实际支付金额",
+                    type : "number",
+                    help : "活动订单的实际支付总金额：商品总金额 - 所有优惠 + 运费"
+                }
+            ]
+        ]
     });
 
     return Router;

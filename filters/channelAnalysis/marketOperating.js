@@ -40,7 +40,16 @@ module.exports = {
             }
         }];
     },
-    marketOperatingTwo() {
+    marketOperatingTwo(data) {
+        let source = data.first.data[0],
+            count = data.first.count;
+        for(let item of source) {
+            item.rate = util.toFixed(item.product_pv, item.active_pv);
+            item.date = util.getDate(item.date);
+            item.order_num_money = item.order_num_money.toFixed(2);
+            item.pay_num_money = item.pay_num_money.toFixed(2);
+        }
 
+        return util.toTable([source], data.rows, data.cols, [count]);
     }
 };
