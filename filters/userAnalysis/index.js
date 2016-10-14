@@ -129,8 +129,9 @@ module.exports = {
     },
     versionTwo(data) {
         var source = data.first.data[0],
+            second = data.second.data[0],
             count = data.first.count,
-            sum = data.first.sum[0] ? data.first.sum[0] : 0;
+            sum = second[0].total_users;
 
         for(var key of source) {
             key.total_users_rate = util.toFixed(key.total_users, sum);

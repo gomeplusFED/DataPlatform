@@ -66,14 +66,18 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/userAnalysis/versionTwo",
-        modelName : ["UserAnalysisVersion"],
+        modelName : ["UserAnalysisVersion", "UserAnalysisVersion"],
         params(query, params) {
             params.type = query.type || "ios";
             return params;
         },
+        secondParams(query, params) {
+            params.version = "all";
+
+            return params;
+        },
         platform : false,
-        paging : [true],
-        sum : ["total_users"],
+        paging : [true, false],
         date_picker_data : 1,
         rows : [
             ["version", "total_users", "total_users_rate"]
