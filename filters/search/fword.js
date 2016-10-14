@@ -24,8 +24,16 @@ module.exports = {
             }
         };
         for(let item of source){
+            if(item.search_position == "ALL" || item.search_position == "精品小店页搜索框"){
+                continue;
+            }
+
             if(newData[item.search_position]){
                 newData[item.search_position].value += item.search_num;
+            }else{
+                newData[item.search_position] = {
+                    value : item.search_num
+                }
             }
         }
 
@@ -56,8 +64,16 @@ module.exports = {
             }
         };
         for(let item of source){
+            if(item.search_source == "ALL"){
+                continue;
+            }
+
             if(newData[item.search_source]){
                 newData[item.search_source].value += item.search_num;
+            }else{
+                newData[item.search_source] = {
+                    value : item.search_num
+                }
             }
         }
 
