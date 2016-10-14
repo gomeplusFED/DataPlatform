@@ -103,10 +103,10 @@ module.exports = (Router) => {
                 key: 'IOS',
                 name: 'IOS'
             },{
-                key: 'H5',
+                key: 'm',
                 name: 'H5'
             },{
-                key: 'PC',
+                key: 'www',
                 name: 'PC'
             }]
         },
