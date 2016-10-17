@@ -87,11 +87,13 @@ module.exports = {
             href: "#",
             path: [
                 obj.channelAnalysis.channel(),
-                obj.channelAnalysis.market()
+                obj.channelAnalysis.market(),
+                obj.channelAnalysis.apk()
             ],
             routers: [
                 obj.channelAnalysis.channelOperating(),
-                obj.channelAnalysis.marketOperating()
+                obj.channelAnalysis.marketOperating(),
+                obj.channelAnalysis.apkOperating()
             ]
         },
         "6" : {

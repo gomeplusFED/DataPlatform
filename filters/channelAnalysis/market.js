@@ -8,31 +8,25 @@ const util = require("../../utils");
 module.exports = {
     marketOne(data, filter_key, dates) {
         const source = data.first.data[0],
-            filter_name = {
-                active_pv : "活动页面PV",
-                register : "活动新增注册",
-                coupon_get_num : "优惠券领取数量",
-                coupon_use_num : "优惠券使用数量",
-                order_num : "订单总量",
-                pay_num : "支付总量",
-                order_num_money : "订单总金额",
-                pay_num_money : "实际支付总金额"
-            },
-            type = "line",
-            map = {
-                value : filter_name[filter_key]
-            };
-        let newData = {};
+            second = data.second.data[0],
+            type = "line";
+        let newData = {},
+            map = {};
+
+        for(let item of second) {
+            map[item.channel_id] = item.channel_name;
+        }
 
         for(let date of dates) {
-            newData[date] = {
-                value : 0
-            };
+            newData[date] = {};
+            for(let item of second) {
+                newData[date][item.channel_id] = 0;
+            }
         }
 
         for(let item of source) {
             let date = util.getDate(item.date);
-            newData[date].value += item[filter_key];
+            newData[date][item.channel_no] += item[filter_key];
         }
 
         return [{

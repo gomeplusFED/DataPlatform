@@ -9,8 +9,13 @@ let main = require("../../../base/main.js"),
 module.exports = (Router) => {
     Router = new main(Router,{
         router : "/channelAnalysis/marketOne",
-        modelName : ["ChaChalistChannel"],
+        modelName : ["ChaChalistChannel","Channel"],
         platform : false,
+        secondParams(query, params) {
+            return {
+                channel_id : params.channel_no
+            };
+        },
         fixedParams(req, query, cb) {
             let sql = `SELECT * FROM
                 (SELECT

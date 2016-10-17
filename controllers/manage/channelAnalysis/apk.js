@@ -4,35 +4,70 @@
  * @fileoverview
  */
 let main = require("../../../base/main.js"),
+    util = require("../../../utils"),
     filter = require("../../../filters/channelAnalysis/apk");
 
 module.exports = (Router) => {
     Router = new main(Router,{
-        router : "/channelAnalysis/marketOne",
-        modelName : ["ChaChalistChannel"],
+        router : "/channelAnalysis/apkOne",
+        modelName : ["ChaChalistApkChannel", "ChaApkKeepChannel", "Channel"],
         platform : false,
+        date_picker : false,
+        secondParams(query, params) {
+            params.keep_type = "k1";
+
+            return params;
+        },
+        thirdParams(query, params) {
+            return {
+                channel_id : params.channel_id
+            }
+        },
         fixedParams(req, query, cb) {
-            let sql = `SELECT * FROM
+            let sql;
+            if(query.filter_key === "rate") {
+                sql = `SELECT * FROM
                 (SELECT
-                    channel_no,
+                    channel_id,
+                    SUM(keep_rate) keep_rate
+                FROM
+                    ads2_cha_apk_keep_channel
+                WHERE
+                    date=${util.getDate(new Date(new Date() - 24 * 60 * 60 * 1000))}
+                AND
+                    '${query.filter_type}'=SUBSTR(channel_id, 1, 2)
+                AND
+                    keep_type = 'k1'
+                GROUP BY channel_id) a
+                ORDER BY a.keep_rate DESC LIMIT 0,10`;
+            } else{
+                sql = `SELECT * FROM
+                (SELECT
+                    channel_id,
                     SUM(${query.filter_key}) ${query.filter_key}
                 FROM
-                    ads2_cha_chalist_channel
+                    ads2_cha_chalist_apk_channel
                 WHERE
-                    date BETWEEN ${query.startTime} AND ${query.endTime}
+                    date=${util.getDate(new Date(new Date() - 24 * 60 * 60 * 1000))}
                 AND
-                    '${query.filter_type}'=SUBSTR(channel_no, 1, 2)
-                GROUP BY channel_no) a
-                ORDER BY a.${query.filter_key} DESC LIMIT 0,10`;
+                    '${query.filter_type}'=SUBSTR(channel_id, 1, 2)
+                GROUP BY channel_id) a
+                ORDER BY a.${query.filter_key} DESC LIMIT 0,10`
+            }
+
+            let start = util.getDate(new Date(new Date() - 7 * 24 * 60 * 60 * 1000)),
+                end = util.getDate(new Date(new Date() - 24 * 60 * 60 * 1000));
+            query.startTime = start;
+            query.endTime = end;
             let ids = [];
             req.models.db1.driver.execQuery(sql, (err, data) => {
                 if(err) {
                     cb(err);
                 } else {
                     for(let item of data) {
-                        ids.push(item.channel_no);
+                        ids.push(item.channel_id);
                     }
-                    query.channel_no = ids;
+                    query.channel_id = ids;
                     cb(null, query);
                 }
             });
@@ -42,29 +77,20 @@ module.exports = (Router) => {
                     title: '指标',
                     filter_key : 'filter_key',
                     groups: [{
-                        key: 'active_pv',
-                        value: '活动页面PV'
+                        key: 'new_users',
+                        value: '新增用户'
                     }, {
-                        key: 'register',
-                        value: '活动新增注册'
+                        key: 'new_accounts',
+                        value: '新增账户'
                     }, {
-                        key: 'coupon_get_num',
-                        value: '优惠券领取数量'
+                        key: 'active_users',
+                        value: '活跃用户'
                     }, {
-                        key: 'coupon_use_num',
-                        value: '优惠券使用数量'
+                        key: 'start_num',
+                        value: '启动次数'
                     }, {
-                        key: 'order_num',
-                        value: '订单总量'
-                    }, {
-                        key: 'pay_num',
-                        value: '支付总量'
-                    }, {
-                        key: 'order_num_money',
-                        value: '订单总金额'
-                    }, {
-                        key: 'pay_num_money',
-                        value: '实际支付总金额'
+                        key: 'rate',
+                        value: '次日留存率'
                     }]
                 }],
                 select = {
@@ -87,13 +113,13 @@ module.exports = (Router) => {
             });
         },
         filter(data, query, dates, type) {
-            return filter.marketOne(data, query.filter_key, dates);
+            return filter.apkOne(data, query, dates);
         }
     });
 
     Router = new main(Router, {
-        router : "/channelAnalysis/marketTwo",
-        modelName : ["ChaChalistChannel", "Channel"],
+        router : "/channelAnalysis/apkTwo",
+        modelName : ["ChaChalistApkChannel", "Channel"],
         secondParams() {
             return {};
         },
@@ -103,7 +129,7 @@ module.exports = (Router) => {
         search : {
             show : true,
             title : "渠道ID",
-            key : "channel_no"
+            key : "channel_id"
         },
         excel_export : true,
         flexible_btn : [{
@@ -116,18 +142,18 @@ module.exports = (Router) => {
                 find : "params",
                 offset : "offset",
                 limit : "limit",
-                order : ["-active_pv"],
+                order : ["-new_users"],
                 run : ""
             },{
                 count : ""
             }], false
         ],
         filter(data, query) {
-            return filter.marketTwo(data,query.page);
+            return filter.apkTwo(data,query.page);
         },
         rows : [
-            ["top", "channel_name", "channel_no", "active_pv", "register", "order_num",
-                "order_num_money", "pay_num", "pay_num_money", "operating"]
+            ["top", "channel_name", "channel_id", "new_users", "new_accounts", "active_users",
+                "start_num", "pay_rate", "operating"]
         ],
         cols : [
             [
@@ -135,38 +161,34 @@ module.exports = (Router) => {
                     caption : "排名",
                     type : "number"
                 },{
-                caption : "渠道名称",
-                type : "string"
-            },{
-                caption : "渠道ID",
-                type : "string"
-            },{
-                caption : "活动页PV",
-                type : "number",
-                help : "活动页的访问次数"
-            },{
-                caption : "新增注册",
-                type : "number",
-                help : "通过活动带来的注册数"
-            },{
-                caption : "下单总量",
-                type : "number",
-                help : "活动页带来的订单总量"
-            },{
-                caption : "下单总金额",
-                type : "number",
-                help : "活动订单下单总金额：商品总金额 - 所有优惠 + 运费"
-            },{
-                caption : "支付总量",
-                type : "number",
-                help : "活动订单支付成功的总量"
-            },{
-                caption : "实际支付总金额  ",
-                type : "number",
-                help : "活动订单的实际支付总金额：商品总金额 - 所有优惠 + 运费"
-            },{
-                caption : "操作"
-            }
+                    caption : "渠道名称",
+                    type : "string"
+                },{
+                    caption : "渠道ID",
+                    type : "string"
+                },{
+                    caption : "新增用户",
+                    type : "number",
+                    help : "下载app以后有过启动行为"
+                },{
+                    caption : "新增账户",
+                    type : "number",
+                    help : "激活app后的注册账号或者第三方登陆行为"
+                },{
+                    caption : "活跃用户",
+                    type : "number",
+                    help : "启动过应用的用户，除去重复打开人数，包括新老用户"
+                },{
+                    caption : "启动次数",
+                    type : "number",
+                    help : "打开应用未为启动，完全退出或退至后台视为启动关闭"
+                },{
+                    caption : "付款率",
+                    type : "string",
+                    help : "统计时间段，消费用户数/活跃用户数"
+                },{
+                    caption : "操作"
+                }
             ]
         ]
     });
