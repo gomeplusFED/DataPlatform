@@ -12,7 +12,7 @@ var api = require("../../../base/main"),
 module.exports = (Router) => {
     Router = new api(Router, {
         router: "/dataOverview/dataOverviewAllOne",
-        modelName: ['OverviewPlatf', "KpiValue"],
+        modelName : ['OverviewPlatf', "KpiValue"],
         date_picker : false,
         platform : false,
         global_platform : {
@@ -38,15 +38,16 @@ module.exports = (Router) => {
         params(query) {
             var now = new Date(),
                 ydate = util.getDate(new Date(now.getTime() - 24 * 60 * 60 * 1000)),
-                qdate = util.getDate(new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000));
-            return {
-                date : orm.between(new Date(qdate + " 00:00:00"), new Date(ydate + " 23:59:59")),
-                region : "ALL",
-                day_type : 1,
-                type : query.type || 'ios'
-            }
+                qdate = util.getDate(new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000)),
+                params = {
+                    date : orm.between(new Date(qdate + " 00:00:00"), new Date(ydate + " 23:59:59")),
+                    region : "ALL",
+                    day_type : 1,
+                    type : query.type || "ios"
+                };
+            return params;
         },
-        secondParams() {
+        secondParams(query, params) {
             var now = new Date(),
                 ydate = util.getDate(new Date(now.getTime() - 24 * 60 * 60 * 1000)),
                 qdate = util.getDate(new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000));
@@ -55,14 +56,14 @@ module.exports = (Router) => {
                 day_type : 1
             }
         },
-        filter(data, query, dates, type) {
-            return dataOverview.dataOverviewAllOne(data, query.type);
+        filter(data, query, dates) {
+            return dataOverview.dataOverviewAllOne(data, query.type || "ios");
         }
     });
 
     Router = new api(Router, {
         router: "/dataOverview/dataOverviewAllTwo",
-        modelName: ["OverviewPlatf"],
+        modelName : ["OverviewPlatf"],
         platform : false,
         params(query, params) {
             params.type = params.type || 'ios';
@@ -132,7 +133,7 @@ module.exports = (Router) => {
 
     Router = new api(Router, {
         router: "/dataOverview/dataOverviewAllThree",
-        modelName: ["OverviewPlatf"],
+        modelName : ["OverviewPlatf"],
         paging : [true],
         order : [ "-open_total" ],
         sum : ["open_total"],
@@ -160,7 +161,7 @@ module.exports = (Router) => {
 
     Router = new api(Router, {
         router: "/dataOverview/dataOverviewAllFour",
-        modelName: ["OverviewPage"],
+        modelName : ["OverviewPage"],
         platform : false,
         date_picker : false,
         paging : [true],

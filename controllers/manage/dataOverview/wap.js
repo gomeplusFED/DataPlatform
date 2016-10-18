@@ -15,7 +15,7 @@ var api = require("../../../base/api"),
 module.exports = (Router) => {
     Router = new api(Router, {
         router: "/dataOverview/wapOne",
-        modelName: ['OverviewPlatf', "KpiValue"],
+        modelName : ['OverviewPlatf', "KpiValue"],
         date_picker : false,
         platform : false,
         flexible_btn: [{
@@ -50,7 +50,7 @@ module.exports = (Router) => {
 
     Router = new api(Router, {
         router: "/dataOverview/wapTwo",
-        modelName: ["OverviewPlatf"],
+        modelName : ["OverviewPlatf"],
         fixedParams : {
             region : "ALL",
             type : "H5"
@@ -93,7 +93,7 @@ module.exports = (Router) => {
 
     Router = new api(Router, {
         router: "/dataOverview/wapThree",
-        modelName: ["OverviewPlatf"],
+        modelName : ["OverviewPlatf"],
         paging : true,
         order : ["-pv"],
         sum : ["pv"],
@@ -121,7 +121,7 @@ module.exports = (Router) => {
 
     Router = new api(Router, {
         router: "/dataOverview/wapFour",
-        modelName: ["OverviewPage"],
+        modelName : ["OverviewPage"],
         date_picker : false,
         paging : true,
         order : ["-pv"],

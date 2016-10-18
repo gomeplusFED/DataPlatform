@@ -1,6 +1,5 @@
 var str = `
 models.NewAccount = db.define("ads2_user_analysis_users", obj.NewAccount);
-            models.NewAccount = db.define("ads2_user_analysis_users", obj.NewAccount);
             models.UserAnalysisVersion = db.define("ads2_user_analysis_version", obj.UserAnalysisVersion);
             models.Configure = db.define("tbl_rt_configure", obj.Configure);
             models.UsersAccess = db.define("ads2_user_access", obj.UsersAccess);
@@ -37,11 +36,11 @@ models.NewAccount = db.define("ads2_user_analysis_users", obj.NewAccount);
             models.ShopPayTop = db.define("tbl_rt_shop_pay_top", obj.ShopPayTop);
             models.ShopAccesTop = db.define("tbl_rt_shop_acces_top", obj.ShopAccesTop);
             //models.TradeCaty = db.define("ads2_deal_caty", obj.TradeCaty);
-            models.DealCaty = db.define("tbl_rt_deal_caty", obj.DealCaty);
-            models.TradeUser = db.define("tbl_rt_deal_user", obj.TradeUser);
+            models.DealCaty = db.define("ads2_deal_caty", obj.DealCaty);
+            models.TradeUser = db.define("ads2_deal_user", obj.TradeUser);
             models.SalesPerfProductKv = db.define("tbl_rt_sales_perf_product_kv", obj.SalesPerfProductKv);
             models.SalesPerfShopKv = db.define("tbl_rt_sales_perf_shop_kv", obj.SalesPerfShopKv);
-            models.SalesPerfTranKv = db.define("tbl_rt_sales_perf_tran_kv", obj.SalesPerfTranKv);
+            models.SalesPerfTranKv = db.define("ads2_sales_perf_tran_kv", obj.SalesPerfTranKv);
             models.SalesProductMarketTop = db.define("tbl_rt_sales_product_market_top", obj.SalesProductMarketTop);
             models.SalesProductFlowtTop = db.define("tbl_rt_sales_product_flow_top", obj.SalesProductFlowtTop);
             models.UserKeepResult = db.define("ads2_user_analysis_keep", obj.UserKeepResult);
@@ -89,20 +88,13 @@ models.NewAccount = db.define("ads2_user_analysis_users", obj.NewAccount);
             models.CamOverview = db.define("ads2_cam_overview" , obj.CamOverview);
             models.CamCamlistActive = db.define("ads2_cam_camlist_active" , obj.CamCamlistActive);
             models.CamCamlistChannel = db.define("ads2_cam_camlist_channel" , obj.CamCamlistChannel);
-
-            //9.1
-            models.AdsKeyValue = db.define("ads2_key_value" , obj.AdsKeyValue);
-
-            // 美店
-            models.VshopDetail = db.define("ads2_vshop_item_details" , obj.VshopDetail);
-            models.VshopMerchandiseResources = db.define("ads2_vshop_merchandise_resources" , obj.VshopMerchandiseResources);
-            models.VshopTransaction = db.define("ads2_vshop_transaction_details" , obj.VshopTransaction);
-            models.VshopFlowTop = db.define("ads2_vshop_flow_top" , obj.VshopFlowTop);
-
-            //美店交易
-            models.VtradeDetail = db.define("ads2_vshop_transaction_details" , obj.VtradeDetail);
-            models.VtradeDelivery = db.define("ads2_vshop_delivery_returns" , obj.VtradeDelivery);
-            models.VtradeTop = db.define("ads2_vshop_transaction_top" , obj.VtradeTop);
+            //商家返利
+            models.RebateShopOverview = db.define("tbl_rt_rebate_shop_overview" , obj.RebateShopOverview);
+            models.RebateShopRefund = db.define("tbl_rt_rebate_shop_refund" , obj.RebateShopRefund);
+            models.RebateShopOrderTredencyDetails = db.define("tbl_rt_rebate_shop_order_tredency_details" , obj.RebateShopOrderTredencyDetails);
+            models.RebateShopTypeLevelDetails = db.define("tbl_rt_rebate_shop_type_level_details" , obj.RebateShopTypeLevelDetails);
+            models.RebateShopTop = db.define("tbl_rt_rebate_shop_top" , obj.RebateShopTop);
+            models.RebateShopPlanTop = db.define("tbl_rt_rebate_shop_plan_top" , obj.RebateShopPlanTop);
 `;
 
 

@@ -34,7 +34,9 @@ function CategoryDeal(query , level){
     }
     try{
         delete query.category_id;
-    }catch(e){};
+    }catch(e){
+        console.log(e);
+    };
     
     return query;
 }

@@ -1,7 +1,7 @@
 <template>
 	<div class="plataform" v-show="platafromData.show">
 		<span v-if="platafromData.name !== undefined">{{platafromData.name}}</span>
-		<span v-else>平台切换（默认IOS）：</span>
+		<span v-else>平台切换：</span>
 		<div class="btn-group" role="group" aria-label="...">
 			<button type="button" :class="{'btn-primary': item.key === key}" class="btn btn-default" v-for="item in platafromData.list" @click="plataformLink(item)">{{item.name}}</button>
 		</div>
@@ -33,6 +33,7 @@ export default {
 	ready() {
 		eventBus.$on('globalPlataform', (data) => {
 			this.platafromData = data;
+			this.key = this.platafromData.list[0].key;
 		});
 	},
 	methods: {

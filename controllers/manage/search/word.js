@@ -36,7 +36,7 @@ module.exports = (Router) => {
     //商品搜索关键词分析－入口位置占比
     Router = new api(Router, {
         router: "/search/WordOne",
-        modelName: ["SearchSource"],
+        modelName : ["SearchSource"],
         platform: false,
         filter_select: [TypeObj],
         filter(data, query, dates) {
@@ -47,7 +47,7 @@ module.exports = (Router) => {
     //商品搜索关键词分析－来源占比
     Router = new api(Router, {
         router: "/search/WordTwo",
-        modelName: ["SearchSource"],
+        modelName : ["SearchSource"],
         platform: false,
         filter_select: [TypeObj],
         filter(data, query, dates) {
@@ -59,7 +59,7 @@ module.exports = (Router) => {
     //top 100
     Router = new api(Router, {
         router: "/search/WordThree",
-        modelName: ["SearchAnalyse"],
+        modelName : ["SearchAnalyse"],
         platform: false,
         order: ["-search_result_pv"],
         excel_export : true,

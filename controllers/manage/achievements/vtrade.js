@@ -17,7 +17,7 @@ module.exports = (Router) => {
         // 美店交易总览
     Router = new api(Router, {
         router: "/achievements/vtradeOne",
-        modelName: ['VtradeDetail'],
+        modelName : ['VtradeDetail'],
         date_picker : false,
         platform : false,
         params(query) {
@@ -93,7 +93,7 @@ module.exports = (Router) => {
 
     Router = new api(Router, {
         router: "/achievements/vtradeTwo",
-        modelName: ["VtradeDetail"],
+        modelName : ["VtradeDetail"],
         platform : false,
         params(query, params) {
             params.type = "ALL";
@@ -177,7 +177,7 @@ module.exports = (Router) => {
     // 交易明细
     Router = new api(Router, {
         router: "/achievements/vtradeThree",
-        modelName: ['VtradeDetail'],
+        modelName : ['VtradeDetail'],
         platform : false,
         excel_export : true,
         paging : [true],
@@ -254,7 +254,7 @@ module.exports = (Router) => {
     // 妥投与退货
     Router = new api(Router, {
         router: "/achievements/vtradeFour",
-        modelName: ['VtradeDelivery'],
+        modelName : ['VtradeDelivery'],
         platform : false,
         paging : [true],
         order : ["-date"],
@@ -318,7 +318,7 @@ module.exports = (Router) => {
     // Top 100
     Router = new api(Router, {
         router: "/achievements/vtradeFive",
-        modelName: ['VtradeTop'],
+        modelName : ['VtradeTop'],
         paging : [true],
         firstSql(query, params, isCount) {
             let _params = [query.startTime];

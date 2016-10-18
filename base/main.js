@@ -265,7 +265,7 @@ api.prototype = {
                 for(var i = 0; i < this.modelName.length; i++) {
                     if(this[this.paramsName[i]]) {
                         if (typeof this[this.paramsName[i]] === "function") {
-                            params = this[this.paramsName[i]](query, params, sendData);
+                            params = this[this.paramsName[i]](query, params, sendData, dates);
                         } else {
                             for (var key in this[this.paramsName[i]]) {
                                 params[key] = this[this.paramsName[i]][key];

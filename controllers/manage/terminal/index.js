@@ -80,7 +80,7 @@ module.exports = (Router) => {
         paging : [true],
         firstSql(query, params, isCount) {
             if(isCount) {
-                let sql = `SELECT COUNT(key_name) count FROM ads2_terminal_key_value WHERE date <= ? AND date >= ? AND key_type=? GROUP BY key_name`,
+                let sql = `SELECT COUNT(key_name) count, SUM(value) value, SUM(value3) value3  FROM ads2_terminal_key_value WHERE date <= ? AND date >= ? AND key_type=? GROUP BY key_name`,
                     _params = [query.endTime, query.startTime, query.key_type];
 
                 return {
