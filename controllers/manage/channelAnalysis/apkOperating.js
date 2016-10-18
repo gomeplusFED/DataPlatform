@@ -5,6 +5,7 @@
  */
 let main = require("../../../base/main.js"),
     filter = require("../../../filters/channelAnalysis/apkOperating"),
+    util = require("../../../utils"),
     orm = require("orm");
 
 module.exports = (Router) => {
@@ -31,7 +32,7 @@ module.exports = (Router) => {
             return {
                 channel_id : query.channel_id,
                 day_type : 1,
-                date : new Date(new Date() - 24 * 60 * 60 * 1000)
+                date : util.getDate(new Date(new Date() - 24 * 60 * 60 * 1000))
             };
         },
         procedure : [
@@ -45,16 +46,32 @@ module.exports = (Router) => {
             return filter.apkOperatingOne(data);
         },
         rows : [
+            ["one", "two", "three"],
             ["one", "two", "three"]
         ],
         cols : [
             [
                 {
-                    caption : "昨日活跃"
+                    caption : "昨日活跃",
+                    help : "统计该渠道当前日期前1天的使用产品用户数，去重"
                 },{
-                    caption : "过去7日活跃"
+                    caption : "过去7日活跃",
+                    help : "统计该渠道前7天的使用产品用户数，去重"
                 },{
-                    caption : "过去30日活跃"
+                    caption : "过去30日活跃",
+                    help : "统计该渠道前30天的使用产品用户数，去重"
+                }
+            ],
+            [
+                {
+                    caption : "次日留存率",
+                    help : "激活第二天扔有启动行为"
+                },{
+                    caption : "3日留存率",
+                    help : "激活后第三天扔有启动行为"
+                },{
+                    caption : "7日留存率",
+                    help : "激活后第七天扔有启动行为"
                 }
             ]
         ]
@@ -177,31 +194,31 @@ module.exports = (Router) => {
                 },{
                     caption : "新增用户",
                     type : "number",
-                    help : ""
+                    help : "下载app以后有过启动行为"
                 },{
                     caption : "新增账户",
                     type : "number",
-                    help : ""
+                    help : "激活app后的注册账号或者第三方登录行为"
                 },{
                     caption : "活跃用户",
                     type : "number",
-                    help : ""
+                    help : "启动过应用的用户，除去重复打开人数，包括新老用户"
                 },{
                     caption : "启动次数",
                     type : "number",
-                    help : ""
+                    help : "打开应用未为启动，完全退出或退至后台视为启动关闭"
                 },{
                     caption : "单次使用时长",
-                    type : "number",
-                    help : ""
+                    type : "string",
+                    help : "用户一次启动使用时长"
                 },{
                     caption : "次日留存率",
                     type : "string",
-                    help : ""
+                    help : "激活第二天扔有启动行为"
                 },{
                     caption : "付费率",
                     type : "string",
-                    help : ""
+                    help : "统计时间段，消费用户数/活跃用户数"
                 }
             ]
         ]

@@ -24,7 +24,7 @@ module.exports = (Router) => {
                 FROM
                     ads2_cha_chalist_channel
                 WHERE
-                    date BETWEEN ${query.startTime} AND ${query.endTime}
+                    date BETWEEN '${query.startTime}' AND '${query.endTime}'
                 AND
                     '${query.filter_type}'=SUBSTR(channel_no, 1, 2)
                 GROUP BY channel_no) a

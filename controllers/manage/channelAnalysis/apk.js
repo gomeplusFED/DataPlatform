@@ -33,7 +33,7 @@ module.exports = (Router) => {
                 FROM
                     ads2_cha_apk_keep_channel
                 WHERE
-                    date=${util.getDate(new Date(new Date() - 24 * 60 * 60 * 1000))}
+                    date='${util.getDate(new Date(new Date() - 24 * 60 * 60 * 1000))}'
                 AND
                     '${query.filter_type}'=SUBSTR(channel_id, 1, 2)
                 AND
@@ -48,7 +48,7 @@ module.exports = (Router) => {
                 FROM
                     ads2_cha_chalist_apk_channel
                 WHERE
-                    date=${util.getDate(new Date(new Date() - 24 * 60 * 60 * 1000))}
+                    date='${util.getDate(new Date(new Date() - 24 * 60 * 60 * 1000))}'
                 AND
                     '${query.filter_type}'=SUBSTR(channel_id, 1, 2)
                 GROUP BY channel_id) a

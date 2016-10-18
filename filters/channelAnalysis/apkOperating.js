@@ -9,7 +9,6 @@ module.exports = {
     apkOperatingOne(data) {
         let source = data.first.data[0],
             second = data.second.data[0],
-            newData = [],
             oneObj = {
                 one : 0,
                 two : 0,
@@ -30,12 +29,6 @@ module.exports = {
             }
             oneObj.three += source[i].active_users;
         }
-        newData.push(oneObj);
-        newData.push({
-            one : "次日留存率",
-            two : "3日留存率",
-            three : "7日留存率"
-        });
         for(let item of second) {
             if(item.keep_type === "k1") {
                 tweObj.one = (item.keep_rate * 100).toFixed(2) + "%";
@@ -45,9 +38,8 @@ module.exports = {
                 tweObj.three = (item.keep_rate * 100).toFixed(2) + "%";
             }
         }
-        newData.push(tweObj);
 
-        return util.toTable([newData], data.rows, data.cols);
+        return util.toTable([[oneObj],[tweObj]], data.rows, data.cols);
     },
     apkOperatingTwo(data, filter_key, dates) {
         let source = data.first.data[0],
@@ -99,7 +91,7 @@ module.exports = {
             let date = util.getDate(item.date);
             item.date = date;
             item.rate = config[date];
-            item.avg_use_timeout = item.avg_use_timeout.toFixed(2);
+            item.avg_use_timeout = item.avg_use_timeout.toFixed(2) + " s";
             item.pay_rate = (item.pay_rate * 100).toFixed(2) + "%";
         }
 
