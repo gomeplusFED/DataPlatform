@@ -90,6 +90,7 @@ module.exports = {
 
         for(let item of dataSource){
             item.date = utils.getDate(item.date);
+            item.group_mess_lv = utils.numberLeave( item.group_mess_pv / item.group_member_count , 3);
             let num;
             num = dates.indexOf(item.date);
             Source[num] = item;
