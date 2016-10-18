@@ -128,9 +128,6 @@ module.exports = (Router) => {
             }, {
                 key: 'item_quantity',
                 value: '商品件数'
-            }, {
-                key: 'order_num',
-                value: '订单数'
             }]
         }],
         filter(data, query, dates) {
