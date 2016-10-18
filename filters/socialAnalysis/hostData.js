@@ -200,7 +200,11 @@ module.exports = {
             if(!config[key.group_leader_id]) {
                 config[key.group_leader_id] = {};
             }
-            config[key.group_leader_id][key.key] = key.sum_value;
+            if(config[key.group_leader_id][key.key]) {
+                config[key.group_leader_id][key.key] += key.value;
+            } else {
+                config[key.group_leader_id][key.key] = key.value;
+            }
         }
 
         for(var i = 0; i < source.length; i++) {
