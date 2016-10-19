@@ -149,7 +149,7 @@ module.exports = (Router) => {
             }], false
         ],
         filter(data, query) {
-            return filter.apkTwo(data,query.page);
+            return filter.apkTwo(data,query.page || 1);
         },
         rows : [
             ["top", "channel_name", "channel_id", "new_users", "new_accounts", "active_users",
