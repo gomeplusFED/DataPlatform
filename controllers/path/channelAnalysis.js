@@ -40,5 +40,73 @@ module.exports = {
                 query_api: "/channelAnalysis/operatingThree"
             }]
         };
+    },
+    market() {
+        return {
+            name: "营销渠道分析",
+            path: "/channelAnalysis/market",
+            display: true,
+            defaultData: [{
+                type: "chart",
+                title: "TOP10渠道",
+                query_api: "/channelAnalysis/marketOne"
+            }, {
+                type: "table",
+                title: "渠道TOP50列表",
+                query_api: "/channelAnalysis/marketTwo"
+            }]
+        };
+    },
+    marketOperating() {
+        return {
+            name: "营销渠道详情",
+            path: "/channelAnalysis/marketOperating",
+            display: true,
+            defaultData: [{
+                type: "chart",
+                title: "渠道效果趋势",
+                query_api: "/channelAnalysis/marketOperatingOne"
+            }, {
+                type: "table",
+                title: "渠道效果明细",
+                query_api: "/channelAnalysis/marketOperatingTwo"
+            }]
+        };
+    },
+    apk() {
+        return {
+            name: "APK渠道列表",
+            path: "/channelAnalysis/apk",
+            display: true,
+            defaultData: [{
+                type: "chart",
+                title: "TOP 10 渠道",
+                query_api: "/channelAnalysis/apkOne"
+            }, {
+                type: "table",
+                title: "渠道TOP 50 列表",
+                query_api: "/channelAnalysis/apkTwo"
+            }]
+        };
+    },
+    apkOperating() {
+        return {
+            name: "渠道 分析",
+            path: "/channelAnalysis/apkOperating",
+            display: true,
+            defaultData: [{
+                type: "table",
+                title: "渠道统计",
+                query_api: "/channelAnalysis/apkOperatingOne"
+            }, {
+                type: "chart",
+                title: "日趋势变化",
+                query_api: "/channelAnalysis/apkOperatingTwo"
+            }, {
+                type: "table",
+                title: "渠道数据明细",
+                query_api: "/channelAnalysis/apkOperatingThree"
+            }]
+        };
     }
 };
