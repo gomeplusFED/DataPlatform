@@ -53,7 +53,8 @@ module.exports = {
     },
     modelTwo(data, filter_key) {
         var source = data.first.data,
-            count = data.first.count.length,
+            second = data.first.count,
+            count = second.length,
             total_value = 0,
             total_value3 = 0,
             cols_name = "";
@@ -65,7 +66,7 @@ module.exports = {
             cols_name = "操作系统";
         }
         data.cols[0][0].caption = cols_name;
-        for(let key of source) {
+        for(let key of second) {
             total_value += key.value;
             total_value3 += key.value3;
         }

@@ -124,6 +124,7 @@ module.exports = (Router) => {
         router : "/useAnalysis/wap",
         modelName : ["UrlAccessWap"],
         paging : [true],
+        platform : false,
         order : ["-date"],
         filter(data) {
             return filter.wap(data);

@@ -346,6 +346,14 @@ exports.mergeCell = function(data, rows) {
                             });
                         }
                     } else {
+                        _array.push({
+                            col : i,
+                            row : col,
+                            end : {
+                                col : i,
+                                row : j - col
+                            }
+                        });
                         col = j;
                     }
                 } else if(j === data.length - 1){
@@ -435,6 +443,20 @@ exports.beforeDate = function( date , num , type ){
     return arr;
 }
 
+/* 调换数组顺序 */
+exports.ArraySort = function(arr){
+    if(arr instanceof Array && arr.length > 1){
+        let len = arr.length,
+            arr2= [];
+
+        for(let i=0;i<len;i++){
+            arr2.unshift(arr[i]);
+        }
+        return arr2;
+    }else{
+        return arr;
+    }
+}
 
 
 /* 商品价目对照表 */
@@ -473,9 +495,19 @@ exports.prizeRange = {
     '29': '3000~5000元',
     '30': '5000~7000元',
     '31': '7000~10000元',
-    '32': '10000+元'
+    '32': '10000+元',
+
+
+    '33': '0~20元',
+    '34': '20~50元',
+    '35': '50~100元',
+    '36': '100~300元',
+    '37': '300~500元',
+    '38': '500~1000元',
+    '39': '1000~2000元',
+    '40': '2000~3000元',
+    '41': '3000~5000元',
+    '42': '5000~10000元',
+    '43': '10000+元'
 };
-
-
-
 

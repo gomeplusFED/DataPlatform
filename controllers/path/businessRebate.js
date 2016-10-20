@@ -13,6 +13,11 @@ module.exports = {
             defaultData : [
                 {
                     type : "table",
+                    title : "商家返利汇总",
+                    query_api : "/businessRebate/businessAllSeven"
+                },
+                {
+                    type : "table",
                     title : "商家设置返利总览",
                     query_api : "/businessRebate/businessAllOne"
                 },

@@ -34,7 +34,9 @@ function CategoryDeal(query , level){
     }
     try{
         delete query.category_id;
-    }catch(e){};
+    }catch(e){
+        console.log(e);
+    };
     
     return query;
 }
@@ -103,10 +105,10 @@ module.exports = (Router) => {
                 key: 'IOS',
                 name: 'IOS'
             },{
-                key: 'H5',
+                key: 'm',
                 name: 'H5'
             },{
-                key: 'PC',
+                key: 'www',
                 name: 'PC'
             }]
         },
