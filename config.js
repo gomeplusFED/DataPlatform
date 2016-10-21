@@ -8,8 +8,8 @@ var obj = {},
     filePath = "./controllers/path",
     fs = require("fs"),
     files = fs.readdirSync(filePath);
-for(var key of files) {
-    if(key.indexOf(".js") > -1) {
+for (var key of files) {
+    if (key.indexOf(".js") > -1) {
         obj[key.match(/(.*).js/)[1]] = require(filePath + "/" + key);
     }
 }
@@ -19,7 +19,7 @@ module.exports = {
     pageTitle: '',
     js: [],
     limit: {
-        "0" : {
+        "0": {
             name: "用户管理",
             display: true,
             className: "fa fa-user fa-fw",
@@ -28,17 +28,17 @@ module.exports = {
                 name: "帐号列表",
                 path: "/user",
                 display: true
-            },{
+            }, {
                 name: "角色列表",
                 path: "/role",
                 display: true
-            },{
+            }, {
                 name: "系统日志",
                 path: "/log",
                 display: true
             }]
         },
-        "1" : {
+        "1": {
             name: "实时分析",
             display: true,
             className: "fa fa-bar-chart-o fa-fw fa-fw",
@@ -47,7 +47,7 @@ module.exports = {
                 obj.realTime.index()
             ]
         },
-        "2" : {
+        "2": {
             name: "数据概览",
             display: true,
             className: "fa fa-dashboard fa-fw",
@@ -57,7 +57,7 @@ module.exports = {
                 //obj.dataOverview.wap()
             ]
         },
-        "3" : {
+        "3": {
             name: "用户分析",
             display: true,
             className: "fa fa-bar-chart-o fa-fw",
@@ -70,7 +70,7 @@ module.exports = {
                 obj.retainedAnalysis.retained()
             ]
         },
-        "4" : {
+        "4": {
             name: "留存分析",
             display: false,
             className: "fa fa-th-list fa-fw",
@@ -80,7 +80,7 @@ module.exports = {
                 obj.retainedAnalysis.retained()
             ]
         },
-        "5" : {
+        "5": {
             name: "渠道分析",
             display: true,
             className: "fa  fa-laptop fa-fw",
@@ -96,7 +96,7 @@ module.exports = {
                 obj.channelAnalysis.apkOperating()
             ]
         },
-        "6" : {
+        "6": {
             name: "使用分析",
             display: true,
             className: "fa fa-th fa-fw",
@@ -109,7 +109,7 @@ module.exports = {
                 obj.useAnalysis.accessPageNum()
             ]
         },
-        "7" : {
+        "7": {
             name: "优惠券分析",
             display: true,
             className: "fa fa-bar-chart-o fa-fw fa-fw",
@@ -120,7 +120,7 @@ module.exports = {
                 obj.coupon.shopCoupon()
             ]
         },
-        "8" : {
+        "8": {
             name: "终端属性",
             display: true,
             className: "fa fa-tablet fa-fw",
@@ -131,7 +131,7 @@ module.exports = {
                 obj.terminal.provinces()
             ]
         },
-        "9" : {
+        "9": {
             name: "分享收藏",
             display: true,
             className: "fa fa-external-link fa-fw",
@@ -184,7 +184,7 @@ module.exports = {
                 obj.marketingAnalysis.overview(),
                 obj.marketingAnalysis.all()
             ],
-            routers : [
+            routers: [
                 obj.marketingAnalysis.operating()
             ]
         },
@@ -215,11 +215,11 @@ module.exports = {
             routers: []
         },
         "17": {
-            name : "社交分析",
-            display : true,
-            className : "fa  fa-laptop fa-fw",
-            href : "#",
-            path : [
+            name: "社交分析",
+            display: true,
+            className: "fa  fa-laptop fa-fw",
+            href: "#",
+            path: [
                 obj.socialAnalysis.group(),
                 obj.socialAnalysis.topics(),
                 obj.socialAnalysis.groupHost()
@@ -230,42 +230,55 @@ module.exports = {
             ]
         },
         "18": {
-            name : "视频统计",
-            display : true,
-            className : "fa  fa-laptop fa-fw",
-            href : "#",
-            path : [
+            name: "视频统计",
+            display: true,
+            className: "fa  fa-laptop fa-fw",
+            href: "#",
+            path: [
                 obj.videoStatis.video(),
                 obj.videoStatis.videoEdition()
             ]
         },
-        //"19": {
-        //   name : "搜索推荐",
-        //   display : true,
-        //   className : "fa  fa-laptop fa-fw",
-        //   href : "#",
-        //   path : [
-        //       obj.search.searchIndex(),
-        //       obj.search.searchWord(),
-        //       obj.search.searchRecommend()
-        //   ]
-        //},
-        "29" : {
-            name : "营销管理后台",
-            display : true,
-            className : "fa  fa-laptop fa-fw",
-            href : "#",
-            path : [
+        "19": {
+            name: "搜索推荐",
+            display: true,
+            className: "fa  fa-laptop fa-fw",
+            href: "#",
+            path: [
+                obj.search.searchIndex(),
+                obj.search.searchWord(),
+                obj.search.searchRecommend()
+            ]
+        },
+        "20": {
+            name: "IM使用",
+            display: true,
+            className: "fa  fa-laptop fa-fw",
+            href: "#",
+            path: [
+                obj.IM.Index()
+            ],
+            routers: [
+                obj.IM.Event(),
+                obj.IM.FaceDownload()
+            ]
+        },
+        "29": {
+            name: "营销管理后台",
+            display: true,
+            className: "fa  fa-laptop fa-fw",
+            href: "#",
+            path: [
                 obj.market.channel(),
                 obj.market.activity()
             ]
         },
-        "30" : {
-            name : "报表导出",
-            display : true,
-            className : "fa  fa-laptop fa-fw",
-            href : "#",
-            path : [
+        "30": {
+            name: "报表导出",
+            display: true,
+            className: "fa  fa-laptop fa-fw",
+            href: "#",
+            path: [
                 obj.table.table()
             ]
         }

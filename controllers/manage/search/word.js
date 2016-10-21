@@ -39,7 +39,7 @@ module.exports = (Router) => {
         modelName : ["SearchSource"],
         platform: false,
         filter_select: [TypeObj],
-        params(query, params) {
+        params(query, params){
             params.search_source = "ALL";
             return params;
         },
@@ -54,7 +54,7 @@ module.exports = (Router) => {
         modelName : ["SearchSource"],
         platform: false,
         filter_select: [TypeObj],
-        params(query, params) {
+        params(query, params){
             params.search_position = "ALL";
             return params;
         },
