@@ -81,6 +81,7 @@
 			// 		},
 			// 		date_picker: {
 			// 			name: 'column_name',
+			// 			endname: '',
 			// 			defaultData: 7,
 			// 			show: true
 			// 		}
@@ -127,7 +128,7 @@
 			},
 			'argvs.endTime' : function (val, oldVal) {
 				// level_select
-				eventBus.$emit('platformChange',val, this.pageComponentsData.date_picker.knameey);
+				eventBus.$emit('platformChange',val, this.pageComponentsData.date_picker.endname);
 			}
 		}
 	};
