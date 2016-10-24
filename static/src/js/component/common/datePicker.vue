@@ -7,7 +7,7 @@
 <style>
 .date_picker{}
 .date_picker input{display: inline-block;vertical-align: middle;}
-.date_picker span{font-size: 12px;margin-left: -20px;position: absolute;top: 50%;transform: translateY(-50%);-webkit-transform: translateY(-50%);}
+.date_picker span{font-size: 12px;margin-left: -20px;position: absolute;right: 5px;top: 50%;transform: translateY(-50%);-webkit-transform: translateY(-50%);}
 </style>
 <script>
 

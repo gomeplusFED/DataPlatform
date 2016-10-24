@@ -62,6 +62,9 @@
 			
 			// setTimeout(function() {
 			// 	let data= {
+			// 		flexible_btn: {
+			// 			show: false
+			// 		},
 			// 		filter_select: [{
 			// 			filter_key: "filter_key2",
 			// 			title: "指标选择",
