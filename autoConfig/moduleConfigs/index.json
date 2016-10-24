@@ -1,0 +1,29 @@
+{
+    "name": "左侧大模块名称",
+    "foldName" : "test",
+    "path": [
+        {
+            "name": "帐号列表",
+            "filename": "index",
+            "defaultData":[{
+                "type" : "table",
+                "title": "数据总览",
+                "query_api" : {
+                    "router":"/IM/indexOne",
+                    "config":{
+                        "modelName": ["ImEvent"],
+                        "platform" : false,
+                        "order" : ["-date"]
+                    }
+                }
+            }]
+        },{
+            "name": "角色列表",
+            "filename": "role"
+        },{
+            "name": "系统日志",
+            "filename": "log"
+        }
+    ],
+    "routers":[]
+}

@@ -5,22 +5,21 @@
  */
 
 var obj = {},
-    filePath = "./controllers/path",
+    filePath = "../controllers/path",
     fs = require("fs"),
     files = fs.readdirSync(filePath);
-for (var key of files) {
-    if (key.indexOf(".js") > -1) {
+for(var key of files) {
+    if(key.indexOf(".js") > -1) {
         obj[key.match(/(.*).js/)[1]] = require(filePath + "/" + key);
     }
 }
 
-const ConfigAdd = require("./config_add");
-const Config = {
+module.exports = {
     siteName: '美信数据平台',
     pageTitle: '',
     js: [],
     limit: {
-        "0": {
+        "0" : {
             name: "用户管理",
             display: true,
             className: "fa fa-user fa-fw",
@@ -29,17 +28,17 @@ const Config = {
                 name: "帐号列表",
                 path: "/user",
                 display: true
-            }, {
+            },{
                 name: "角色列表",
                 path: "/role",
                 display: true
-            }, {
+            },{
                 name: "系统日志",
                 path: "/log",
                 display: true
             }]
         },
-        "1": {
+        "1" : {
             name: "实时分析",
             display: true,
             className: "fa fa-bar-chart-o fa-fw fa-fw",
@@ -48,7 +47,7 @@ const Config = {
                 obj.realTime.index()
             ]
         },
-        "2": {
+        "2" : {
             name: "数据概览",
             display: true,
             className: "fa fa-dashboard fa-fw",
@@ -58,7 +57,7 @@ const Config = {
                 //obj.dataOverview.wap()
             ]
         },
-        "3": {
+        "3" : {
             name: "用户分析",
             display: true,
             className: "fa fa-bar-chart-o fa-fw",
@@ -71,7 +70,7 @@ const Config = {
                 obj.retainedAnalysis.retained()
             ]
         },
-        "4": {
+        "4" : {
             name: "留存分析",
             display: false,
             className: "fa fa-th-list fa-fw",
@@ -81,23 +80,19 @@ const Config = {
                 obj.retainedAnalysis.retained()
             ]
         },
-        "5": {
+        "5" : {
             name: "渠道分析",
             display: true,
             className: "fa  fa-laptop fa-fw",
             href: "#",
             path: [
-                obj.channelAnalysis.channel(),
-                obj.channelAnalysis.market(),
-                obj.channelAnalysis.apk()
+                obj.channelAnalysis.channel()
             ],
             routers: [
-                obj.channelAnalysis.channelOperating(),
-                obj.channelAnalysis.marketOperating(),
-                obj.channelAnalysis.apkOperating()
+                obj.channelAnalysis.channelOperating()
             ]
         },
-        "6": {
+        "6" : {
             name: "使用分析",
             display: true,
             className: "fa fa-th fa-fw",
@@ -110,7 +105,7 @@ const Config = {
                 obj.useAnalysis.accessPageNum()
             ]
         },
-        "7": {
+        "7" : {
             name: "优惠券分析",
             display: true,
             className: "fa fa-bar-chart-o fa-fw fa-fw",
@@ -121,7 +116,7 @@ const Config = {
                 obj.coupon.shopCoupon()
             ]
         },
-        "8": {
+        "8" : {
             name: "终端属性",
             display: true,
             className: "fa fa-tablet fa-fw",
@@ -132,7 +127,7 @@ const Config = {
                 obj.terminal.provinces()
             ]
         },
-        "9": {
+        "9" : {
             name: "分享收藏",
             display: true,
             className: "fa fa-external-link fa-fw",
@@ -172,8 +167,8 @@ const Config = {
                 obj.achievements.product(),
                 obj.achievements.productSale(),
                 obj.achievements.trade(),
-                obj.achievements.vshop(),
-                obj.achievements.vtrade()
+                //obj.achievements.vshop(),
+                //obj.achievements.vtrade()
             ]
         },
         "14": {
@@ -185,7 +180,7 @@ const Config = {
                 obj.marketingAnalysis.overview(),
                 obj.marketingAnalysis.all()
             ],
-            routers: [
+            routers : [
                 obj.marketingAnalysis.operating()
             ]
         },
@@ -216,11 +211,11 @@ const Config = {
             routers: []
         },
         "17": {
-            name: "社交分析",
-            display: true,
-            className: "fa  fa-laptop fa-fw",
-            href: "#",
-            path: [
+            name : "社交分析",
+            display : true,
+            className : "fa  fa-laptop fa-fw",
+            href : "#",
+            path : [
                 obj.socialAnalysis.group(),
                 obj.socialAnalysis.topics(),
                 obj.socialAnalysis.groupHost()
@@ -231,66 +226,44 @@ const Config = {
             ]
         },
         "18": {
-            name: "视频统计",
-            display: true,
-            className: "fa  fa-laptop fa-fw",
-            href: "#",
-            path: [
+            name : "视频统计",
+            display : true,
+            className : "fa  fa-laptop fa-fw",
+            href : "#",
+            path : [
                 obj.videoStatis.video(),
                 obj.videoStatis.videoEdition()
             ]
         },
         "19": {
-            name: "搜索推荐",
-            display: true,
-            className: "fa  fa-laptop fa-fw",
-            href: "#",
-            path: [
-                obj.search.searchIndex(),
-                obj.search.searchWord(),
-                obj.search.searchRecommend()
-            ]
+           name : "搜索推荐",
+           display : true,
+           className : "fa  fa-laptop fa-fw",
+           href : "#",
+           path : [
+               obj.search.searchIndex(),
+               obj.search.searchWord(),
+               obj.search.searchRecommend()
+           ]
         },
-        "20": {
-            name: "IM使用",
-            display: true,
-            className: "fa  fa-laptop fa-fw",
-            href: "#",
-            path: [
-                obj.IM.Index()
-            ],
-            routers: [
-                obj.IM.Event(),
-                obj.IM.FaceDownload()
-            ]
-        },
-        "29": {
-            name: "营销管理后台",
-            display: true,
-            className: "fa  fa-laptop fa-fw",
-            href: "#",
-            path: [
+        "29" : {
+            name : "营销管理后台",
+            display : true,
+            className : "fa  fa-laptop fa-fw",
+            href : "#",
+            path : [
                 obj.market.channel(),
                 obj.market.activity()
             ]
         },
-        "30": {
-            name: "报表导出",
-            display: true,
-            className: "fa  fa-laptop fa-fw",
-            href: "#",
-            path: [
+        "30" : {
+            name : "报表导出",
+            display : true,
+            className : "fa  fa-laptop fa-fw",
+            href : "#",
+            path : [
                 obj.table.table()
             ]
         }
     }
 };
-
-for(let key in ConfigAdd){
-    if(Config.limit[key]) throw Error("config.js key 重复定义，请检查代码");
-    Config.limit[key] = ConfigAdd[key];
-}
-
-
-
-module.exports = Config;
