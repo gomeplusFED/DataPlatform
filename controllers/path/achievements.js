@@ -144,6 +144,49 @@ module.exports = {
             ]
         }
     },
+    tradePanel(){
+        return {
+            name : "交易面板",
+            path : "/achievements/tradePanel",
+            display : true,
+            defaultData : [
+                {
+                    type : "chart",
+                    query_api : "/achievements/tradePanelZero"
+                },
+                {
+                    type : "table",
+                    title : "交易汇总",
+                    // query_api : "/achievements/tradePanelOne"
+                },
+                {
+                    type : "table",
+                    title : "交易商品汇总",
+                    // query_api : "/achievements/tradePanelTwo"
+                },
+                {
+                    type : "table",
+                    title : "支付方式汇总",
+                    // query_api : "/achievements/tradePanelThree"
+                },
+                {
+                    type : "table",
+                    title : "国美币汇总",
+                    // query_api : "/achievements/tradePanelFour"
+                },
+                {
+                    type : "table",
+                    title : "交易优惠劵汇总",
+                    // query_api : "/achievements/tradePanelFive"
+                },
+                {
+                    type : "table",
+                    title : "转化率",
+                    // query_api : "/achievements/tradePanelSix"
+                }
+            ]
+        }
+    },
     vshop() {
         return {
             name : "美店店铺商品",

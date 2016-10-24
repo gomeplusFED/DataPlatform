@@ -172,6 +172,7 @@ const Config = {
                 obj.achievements.product(),
                 obj.achievements.productSale(),
                 obj.achievements.trade(),
+                obj.achievements.tradePanel(),
                 obj.achievements.vshop(),
                 obj.achievements.vtrade()
             ]
