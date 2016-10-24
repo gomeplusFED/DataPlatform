@@ -33,7 +33,9 @@ export default {
 	ready() {
 		eventBus.$on('globalPlataform', (data) => {
 			this.platafromData = data;
-			this.key = this.platafromData.list[0].key;
+			if (this.platafromData.list && this.platafromData.list.length) {
+				this.key = this.platafromData.list[0].key;
+			}
 		});
 	},
 	methods: {
