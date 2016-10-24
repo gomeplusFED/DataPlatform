@@ -102,6 +102,21 @@ var mapDefaultSeries = {
 	}
 };
 
+var funnelDefaultSeries = {
+	sort: 'ascending',
+	label: {
+		normal: {
+			show: true,
+			position: 'inside'
+		},
+		emphasis: {
+			textStyle: {
+				fontSize: 20
+			}
+		}
+	}
+};
+
 // echart 主模块，npm安装
 var echarts = require('echarts/lib/echarts');
 require('echarts/lib/component/legend'); // 图例
@@ -196,6 +211,9 @@ var Chart = Vue.extend({
 				if (chartType === 'map') {
 					_curr = Object.assign(mapDefaultSeries, _currentObj);
 				}
+				if (chartType === 'funnel') {
+					_curr = Object.assign(funnelDefaultSeries, _currentObj);
+				}
 				series.push(_curr);
 			}
 
@@ -246,6 +264,12 @@ var Chart = Vue.extend({
 				delete options.grid;
 				delete options.xAxis;
 				delete options.yAxis;
+			}
+
+			if (chartType === 'funnel') {
+				delete options.xAxis;
+				delete options.yAxis;
+				delete options.grid;
 			}
 
 			if (config.toolBox) {
