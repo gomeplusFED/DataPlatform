@@ -145,7 +145,7 @@ module.exports = (Router) => {
         }
 
         let foldname = obj.foldname;
-        let names    = req.query.filename;
+        let names    = req.query.filename + ".js";
         let paths     = path.join(__dirname , "../controllers/manage/" , foldname , names);
         let fpath    = path.join(__dirname , "../filters/" , foldname , names);
 
