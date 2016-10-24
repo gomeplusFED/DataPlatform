@@ -22,6 +22,9 @@ module.exports = (Router) => {
             return params;
         },
         secondParams(query, params) {
+            let start = util.getDate(new Date(new Date() - 7 * 24 * 60 * 60 * 1000)),
+                end = util.getDate(new Date(new Date() - 24 * 60 * 60 * 1000));
+            params.date = orm.between(start, end);
             params.keep_type = "k1";
 
             return params;
@@ -116,6 +119,9 @@ module.exports = (Router) => {
             });
         },
         filter(data, query, dates, type) {
+            let start = util.getDate(new Date(new Date() - 7 * 24 * 60 * 60 * 1000)),
+                end = util.getDate(new Date(new Date() - 24 * 60 * 60 * 1000));
+            dates = util.times(start, end, "1");
             return filter.apkOne(data, query, dates);
         }
     });
