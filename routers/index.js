@@ -16,6 +16,10 @@ var express = require('express'),
 module.exports = [];
 
 function addRouter(path) {
+    if(typeof require(path) == "object"){
+        console.warn("路由加载警告,",path);
+        return;
+    } 
     module.exports.push(require(path)(router));
 }
 

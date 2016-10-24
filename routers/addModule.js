@@ -20,6 +20,13 @@ const WriteConfig = (obj) => {
 }
 
 
+let content = `/**
+ * @author Mr.He
+ * @date ${moment(new Date()).format("YYYY-MM-DD")}
+ * @fileoverview
+ */`;
+
+
 module.exports = (Router) => {
 
     Router.get("/addpage" , (req , res , next) => {
@@ -147,8 +154,9 @@ module.exports = (Router) => {
         let foldname = obj.foldname;
         let names    = req.query.filename + ".js";
         let paths     = path.join(__dirname , "../controllers/manage/" , foldname , names);
-        let fpath    = path.join(__dirname , "../filters/" , foldname , names);
+        let fpath    = path.join(__dirname , "../filters/" , foldname , "f_"+names);
 
+        //创建文件
         if(fs.existsSync(paths) || fs.existsSync(fpath)){
             res.json({
                 state : 0,
@@ -157,25 +165,34 @@ module.exports = (Router) => {
             return;
         }
 
-        fs.writeFileSync(paths, `/**
- * @author Mr.He
- * @date ${moment(new Date()).format("YYYY-MM-DD")}
- * @fileoverview
- */
-module.exports = {}`);
-        fs.writeFileSync(fpath, `/**
- * @author Mr.He
- * @date ${moment(new Date()).format("YYYY-MM-DD")}
- * @fileoverview
- */
-module.exports = {}`);
+        fs.writeFileSync(paths, content);
+        fs.writeFileSync(fpath, content);
 
+        //修改config_add.json文件
+        let data = {
+            "name" : req.query.name,
+            "path" : path.join("/",foldname,req.query.filename),
+            "display":true,
+            defaultData:[]
+        }
+
+        if(req.query.type == "routers"){
+            obj.routers.push(data);
+        }else{
+            obj.path.push(data);
+        }
+
+        WriteConfig(ConfigAdd);
 
         res.json({
             state : 1,
             msg   : "文件创建"
         });
+    });
 
+
+    //add api
+    Router.get("/addApi" , (req , res , next) => {
 
     });
 
