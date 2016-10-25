@@ -31,7 +31,7 @@ module.exports = (Router) => {
 
     Router.get("/addpage" , (req , res , next) => {
         res.render("addModule/index" , {
-            pageTitle : "Yes"
+            pageTitle : "自动添加模块"
         });
     });
 
