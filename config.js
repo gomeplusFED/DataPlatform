@@ -169,6 +169,9 @@ const Config = {
             href: "#",
             path: [
                 obj.achievements.shop(),
+                obj.achievements.shopOverview(),
+                obj.achievements.shopRun(),
+
                 obj.achievements.product(),
                 obj.achievements.productSale(),
                 obj.achievements.trade(),

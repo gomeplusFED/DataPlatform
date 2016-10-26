@@ -34,6 +34,76 @@ module.exports = {
             ]
         }
     },
+    shopOverview(){
+        return {
+            name : "店铺总览",
+            path : "/achievements/shopOverview",
+            display : true,
+            defaultData : [
+                {
+                    type : "table",
+                    query_api : "/achievements/shopOverviewZero"
+                },
+                {
+                    type : "table",
+                    title : "店铺总览",
+                    query_api : "/achievements/shopOverviewOne"
+                },
+                {
+                    type : "table",
+                    title : "店铺申请运营",
+                    // query_api : "/achievements/shopOverviewTwo"
+                },
+                {
+                    type : "chart",
+                    title : "店铺运营趋势",
+                    // query_api : "/achievements/shopOverviewThree"
+                },
+                {
+                    type : "chart",
+                    title : "店铺评级分布",
+                    // query_api : "/achievements/shopOverviewFour"
+                },
+                {
+                    type : "table",
+                    title : "店铺TOP100",
+                    // query_api : "/achievements/shopOverviewFive"
+                }
+            ]
+        }
+    },
+
+    shopRun(){
+        return {
+            name : "店铺运营分析",
+            path : "/achievements/shopRun",
+            display : true,
+            defaultData : [
+                {
+                    type : "table",
+                    title : "店铺总览",
+                    // query_api : "/achievements/shopRunOne"
+                },
+                {
+                    type : "chart",
+                    title : "店铺趋势分析",
+                    // query_api : "/achievements/shopRunTwo"
+                },
+                {
+                    type : "table",
+                    title : "店铺流量排行TOP50",
+                    // query_api : "/achievements/shopRunThree"
+                },
+                {
+                    type : "table",
+                    title : "店铺交易排行TOP50",
+                    // query_api : "/achievements/shopRunFour"
+                }
+            ]
+        }
+    },
+
+
     product() {
         return {
             name : "商品运营分析",

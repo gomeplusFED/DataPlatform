@@ -17,9 +17,9 @@ var await = require("asyncawait/await");
 var orm = require('orm');
 var redis = require("ioredis");
 var redisInfo = require("./db/redis.json");
-var redisConfig = require("./db/config.json").redis;
+/*var redisConfig = require("./db/config.json").redis;
 var cluster = new redis.Cluster(redisInfo[redisConfig]);
-global.cluster = cluster;
+global.cluster = cluster;*/
 var routers = require('./routers');
 
 orm.settings.set("connection.pool", true);
