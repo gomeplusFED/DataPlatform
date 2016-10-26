@@ -52,7 +52,7 @@ module.exports = {
                 {
                     type : "table",
                     title : "店铺申请运营",
-                    // query_api : "/achievements/shopOverviewTwo"
+                    query_api : "/achievements/shopOverviewTwo"
                 },
                 {
                     type : "chart",

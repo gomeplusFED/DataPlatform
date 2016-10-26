@@ -23,7 +23,18 @@ module.exports = {
         return util.toTable([source], data.rows, data.cols);
     },
     shopOverviewTwo(data , query , dates){
-        
+        let source = data.first.data[0];
+        let obj = {};
+        for(let key of data.rows[0]){
+            obj[key] = 0;
+        }
+
+        for(let item of source){
+            for(let key of data.rows[0]){
+                obj[key] += item[key] ? item[key] : 0;
+            }
+        }obj
+        return util.toTable([[]], data.rows, data.cols);
     },
 
     shopThree(data, page) {
@@ -42,31 +53,30 @@ module.exports = {
 
         return util.toTable([source], data.rows, data.cols, [count]);
     },
-    shopFour(data, sku_type, page) {
-        var source = data.data,
-            sum = data.dataSum,
-            page = page || 1,
-            count = data.dataCount > 50 ? 50 : data.dataCount;
+    shopOverviewFour(data, query) {
+        let map = {
+            "avg_describe_tag":"商品描述",
+            "avg_service_tag":"卖家服务",
+            "avg_express_tag":"物流服务"
+        };
+        let source = data.first.data[0];
+        let score = [5,4.6,]
+        let newData = {
+            "5" : {
+                "avg_describe_tag" : 0,
+                "avg_service_tag"  : 0,
+                "avg_express_tag"  : 0
+            }
+        };
 
-        for(var i = 0; i < source.length; i++) {
-            var key = source[i];
-            key.top = (page - 1) * 20 + i + 1;
-            key.pay_price = key.pay_price.toFixed(2);
-            key.pay_price_rate = util.toFixed(key.pay_price, sum[1]);
-            key.pay_commodity_rate = util.toFixed(key.pay_commodity_num, sum[2]);
-            source[i] = key;
-        }
 
-        if(sku_type === "2") {
-            data.cols[0][4].caption = "支付商品件数";
-            data.cols[0][5].caption = "支付商品件数占比";
-            data.cols[0][6].caption = "商品被分享次数";
-        } else {
-            data.cols[0][4].caption = "支付商品数";
-            data.cols[0][5].caption = "支付商品数占比";
-            data.cols[0][6].caption = "被分享商品数";
-        }
-
-        return util.toTable([source], data.rows, data.cols, [count]);
+        return [{
+            type : "bar",
+            map : map,
+            data : newData,
+            config: { // 配置信息
+                stack: false  // 图的堆叠
+            }
+        }];
     }
 };

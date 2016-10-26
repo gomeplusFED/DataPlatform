@@ -89,49 +89,45 @@ module.exports = (Router) => {
         modelName : ["ShopOverview"],
         platform : false,
         params(query , params , sendData){
-            params.date = util.beforeDate(new Date , 2)[1];
             if(!query.shop_type){
                 params.shop_type = "shop_type_all";
             }
             return params;
         },
         rows : [
-            [ 'all', 'shop_check', 'shop_run', 'shop_rest',
-                "shop_frost",'shop_stop' ]
+            [ 'shop_run', 'shop_rest', 'shop_frost', 'shop_stop',
+                "shop_success" ]
         ],
         cols : [
             [
                 {
-                    caption : '累计店铺',
+                    caption : '新增营运店铺',
                     type : 'number'
                 },
                 {
-                    caption : '入驻中店铺',
+                    caption : '新增休店店铺',
                     type : 'number'
                 },
                 {
-                    caption : '运营中店铺',
+                    caption : '新增冻结店铺',
                     type : 'number'
                 },
                 {
-                    caption : '休店店铺',
+                    caption : '新增关闭店铺',
                     type : 'number'
                 },
                 {
-                    caption : '冻结店铺',
-                    type : 'number'
-                },
-                {
-                    caption : '关闭店铺',
+                    caption : '入驻成功店铺',
                     type : 'number'
                 }
             ]
         ],
         filter(data, query, dates) {
-            return filter.shopOverviewOne(data, query, dates);
+            return filter.shopOverviewTwo(data, query, dates);
         }
     });
 
+    //店铺运营趋势
     Router = new api(Router,{
         router : "/achievements/shopThree",
         modelName : ["ShopAccesTop"],
@@ -179,62 +175,18 @@ module.exports = (Router) => {
         ]
     });
 
+    //店铺评级分布
     Router = new api(Router,{
-        router : "/achievements/shopFour",
-        modelName : ["ShopPayTop"],
+        router : "/achievements/shopOverviewFour",
+        modelName : ["ShopLevel"],
         platform : false,
-        showDayUnit : true,
-        paging : true,
-        order : ["-pay_price"],
-        sum : ["pay_price", "pay_commodity_num"],
-        excel_export : true,
-        date_picker_data : 1,
-        filter_select: [{
-            title: '',
-            filter_key : 'sku_type',
-            groups: [{
-                key: '1',
-                value: 'item'
-            }, {
-                key: '2',
-                value: 'SKU'
-            }]
-        }],
-        flexible_btn : [{
-            content: '<a href="javascript:void(0)">导出</a>',
-            preMethods: ['excel_export']
-        }],
-        filter(data, filter_key, dates, filter_key2, page) {
-            return filter.shopFour(data, filter_key, page);
+        date_picker : false,
+        params(query , params , sendData){
+            return params;
         },
-        rows : [
-            [ 'top', 'shop_name', 'pay_price', 'pay_price_rate', 'pay_commodity_num',
-                'pay_commodity_rate', 'share_commodity_num']
-        ],
-        cols : [
-            [{
-                caption: '排名',
-                type: 'number'
-            }, {
-                caption: '店铺名称',
-                type: 'string'
-            }, {
-                caption: '支付金额',
-                type: 'number'
-            }, {
-                caption: '支付金额占比',
-                type: 'string'
-            }, {
-                caption: '支付商品数',
-                type: 'number'
-            }, {
-                caption: '支付商品数占比',
-                type: 'string'
-            }, {
-                caption: '被分享商品数',
-                type: 'number'
-            }]
-        ]
+        filter(data , query) {
+            return filter.shopOverviewFour(data, query);
+        }
     });
 
     return Router;
