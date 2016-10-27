@@ -43,23 +43,13 @@ module.exports = {
 
         let dataSource = data.first.data[0];
         let Source = [];
-        for(let date of dates){
-            let obj = {
-                "date" : date
-            }
-            Source.push(obj);
-        }
 
         for(let item of dataSource){
             item.date = utils.getDate(item.date);
-            let num;
-            num = dates.indexOf(item.date);
             item.click_lv = utils.numberLeave( item.click_pv / item.click_uv , 3 );
-            Source[num] = item;
+            Source.push(item);
         }
 
-        let Source2 = utils.ArraySort(Source);
-
-        return utils.toTable([Source2], data.rows, data.cols);
+        return utils.toTable([Source], data.rows, data.cols);
     }
 }
