@@ -69,7 +69,7 @@ module.exports = (Router) => {
             }]
         }],
         filter(data, query, dates) {
-            return filter.modelOne(data, query.filter_key);
+            return filter.modelOne(data, query);
         }
     });
 

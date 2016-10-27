@@ -14,7 +14,8 @@ for (var key of files) {
     }
 }
 
-module.exports = {
+const ConfigAdd = require("./config_add");
+const Config = {
     siteName: '美信数据平台',
     pageTitle: '',
     js: [],
@@ -284,3 +285,12 @@ module.exports = {
         }
     }
 };
+
+for(let key in ConfigAdd){
+    if(Config.limit[key]) throw Error("config.js key 重复定义，请检查代码");
+    Config.limit[key] = ConfigAdd[key];
+}
+
+
+
+module.exports = Config;

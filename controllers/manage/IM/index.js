@@ -85,6 +85,12 @@ module.exports = (Router)=>{
         modelName : ["ImDetail"],
         platform : false,
         order : ["-date"],
+        excel_export : true,
+        flexible_btn : [{
+            content: '<a href="javascript:void(0)">导出</a>',
+            preMethods: ['excel_export']
+        }],
+        paging : [true],
         rows : [
             [
                 "date",
@@ -142,7 +148,7 @@ module.exports = (Router)=>{
                 "message_event_name",
                 "click_uv",
                 "click_pv",
-                "detail"
+                "operating"
             ]
         ],
         cols : [
@@ -156,8 +162,7 @@ module.exports = (Router)=>{
                 caption : "点击次数",
                 type    : "number"
             }, {
-                caption : "详情",
-                type    : "string",
+                caption : "详情"
             }]
         ],
         excel_export : true,
@@ -187,7 +192,7 @@ module.exports = (Router)=>{
                 "face_id",
                 "load_uv",
                 "load_pv",
-                "detail"
+                "operating"
             ]
         ],
         cols : [
@@ -201,8 +206,7 @@ module.exports = (Router)=>{
                 caption : "下载次数",
                 type    : "number"
             }, {
-                caption : "趋势",
-                type    : "string",
+                caption : "趋势"
             }]
         ],
         excel_export : true,

@@ -137,6 +137,9 @@ var Main = Vue.extend({
 	methods: {
 		isnoComponent: function(componentData) {
 			// 如果没有组件，强制更新argvs
+			if (!componentData) {
+				return false;
+			}
 			if (!componentData.date_picker.show && !componentData.drop_down.channel && !componentData.drop_down.coupon && !componentData.drop_down.platform && !componentData.drop_down.version && !componentData.filter_select.length) {
 				return true;
 			}

@@ -15,54 +15,8 @@ let ConfigObj = {
 new getModule(ConfigObj).then((result)=>{
     var source = fs.createWriteStream(__dirname + "/models2/allModules.json");
 
-    var str = JSON.stringify(result);
-    let string = "";
-    let n = 0;
-    for(var i=0,len=str.length;i<len;i++){
-
-        switch(str[i]){
-            case "{":
-                n++;
-                if(n == 1){
-                    string += str[i]+"\r\t";
-                }else if(n==2){
-                    string += str[i]+"\r\t\t";
-                }else if(n==3){
-                    string += str[i]+"\r\t\t\t";
-                }else{
-                    string += str[i];
-                }
-
-                break;
-            case ",":
-                if(n == 1){
-                    string += str[i]+"\r\t";
-                }else if(n==2){
-                    string += str[i]+"\r\t\t";
-                }else if(n==3){
-                    string += str[i]+"\r\t\t\t";
-                }else{
-                    string += str[i];
-                }
-                break;
-            case "}":
-                n--;
-                if(n == 1){
-                    string += "\r\t"+str[i];
-                }else if(n==2){
-                    string += "\r\t\t"+str[i];
-                }else if(n==3){
-                    string += "\r\t\t\t"+str[i];
-                }else{
-                    string += "\r" + str[i];
-                }
-                break;
-            default:
-                string += str[i];
-        }
-    }
-
-    source.write(string);
+    var str = JSON.stringify(result , null , 2);
+    source.write(str);
     source.end(()=>{
         console.log("表结构模型文件写入结束");
         process.exit();
