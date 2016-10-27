@@ -5,19 +5,19 @@
  */
 
 module.exports = {
-    visual() {
+    visualbp() {
         return {
             name : "可视化埋点",
-            path : "/databp/visual",
+            path : "/databp/visualbp",
             display : true,
             defaultData : [
             ]
         }
     },
-    manage(){
+    bpmanage(){
         return {
             name : "埋点管理",
-            path : "/databp/manage",
+            path : "/databp/bpmanage",
             display : true,
             defaultData : [
 

@@ -270,8 +270,8 @@ const Config = {
             className: "fa  fa-laptop fa-fw",
             href: "#",
             path: [
-                obj.databp.visual(),
-                obj.databp.manage(),
+                obj.databp.visualbp(),
+                obj.databp.bpmanage(),
                 obj.databp.spread(),
                 obj.databp.task()
 
