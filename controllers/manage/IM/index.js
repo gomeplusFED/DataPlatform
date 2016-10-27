@@ -162,8 +162,7 @@ module.exports = (Router)=>{
                 caption : "点击次数",
                 type    : "number"
             }, {
-                caption : "详情",
-                type    : "string",
+                caption : "详情"
             }]
         ],
         excel_export : true,
@@ -207,8 +206,7 @@ module.exports = (Router)=>{
                 caption : "下载次数",
                 type    : "number"
             }, {
-                caption : "趋势",
-                type    : "string",
+                caption : "趋势"
             }]
         ],
         excel_export : true,
