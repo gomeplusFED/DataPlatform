@@ -264,6 +264,19 @@ const Config = {
                 obj.IM.FaceDownload()
             ]
         },
+        "21": {
+            name: "数据埋点",
+            display: true,
+            className: "fa  fa-laptop fa-fw",
+            href: "#",
+            path: [
+                obj.databp.visual(),
+                obj.databp.manage(),
+                obj.databp.spread(),
+                obj.databp.task()
+
+            ]
+        },
         "29": {
             name: "营销管理后台",
             display: true,
