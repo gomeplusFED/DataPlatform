@@ -21,7 +21,6 @@ module.exports = {
             map = {
                 value : filter_name[filter_key]
             };
-        console.log("======");
         if(main_show_type_filter === "table") {
             const rows = [
                 ["key_name", "value", "value3"]
