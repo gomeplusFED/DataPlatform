@@ -1,5 +1,5 @@
 <template>
-	<div :id="'chart_'+index" class="chart" v-show="checkIsChart()">
+	<div :id="'chart_'+index" class="chart" v-if="checkIsChart()">
 		<div class="chart_con" v-for="(index, item) in chartData" :style="{'height': chartHeight + 'px', 'width': shouldHalfWidth[index] ? '50%' : '100%'}">
 			<div class="nodata all_center">
 				<img src="/dist/img/nodata.png">
@@ -151,7 +151,7 @@ var Chart = Vue.extend({
 	created: function() {
 		this.initEd = true;
 	},
-	props: ['index', 'initData', 'resultArgvs', 'loading', 'currentData', 'pageComponentsData'],
+	props: ['index', 'initData', 'resultArgvs', 'loading', 'currentData', 'pageComponentsData', 'defaultData'],
 	methods: {
 		checkIsChart: function() {
 			return this.currentData.type.match(/chart/i) !== null;
@@ -160,6 +160,10 @@ var Chart = Vue.extend({
 			var _this = this;
 			if (_this.resultArgvs.forceChange) {
 				delete _this.resultArgvs.forceChange;
+			}
+			if (this.defaultData) {
+				cb && cb(this.defaultData);
+				return;
 			}
 			$.ajax({
 				url: _this.currentData.query_api + '_json',

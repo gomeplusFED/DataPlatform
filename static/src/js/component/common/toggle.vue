@@ -1,5 +1,5 @@
 <template>
-<div class="btn-group" v-if="pageComponentsData[componentType].show">
+<div class="btn-group" v-if="show || pageComponentsData[componentType].show">
     <button type="button" class="btn btn-default btn-sm" @click="fun('table')">
         <span class="glyphicon glyphicon-th"></span>表格
     </button>
@@ -13,7 +13,7 @@ var Vue = require('Vue');
 
 var Toggle = Vue.extend({
     name: 'Toggle',
-    props: ['pageComponentsData', 'componentType', 'fun']
+    props: ['pageComponentsData', 'componentType', 'show', 'fun']
 })
 module.exports = Toggle;
 </script>
