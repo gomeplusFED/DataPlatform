@@ -29,16 +29,22 @@ module.exports = {
             item.date = utils.getDate(item.date);
             let num = query.date.indexOf(item.date);
             Source[num] = item;
+            if(!item.group_member_count) item.group_member_count = 1;
             item.group_mess_lv = utils.numberLeave(item.group_mess_pv / item.group_member_count , 3);
         }
 
         //计算环比
-        if(Source[0].group_mess_pv && Source[1].group_mess_pv){
-            for(let key of data.rows[0]){
-                if(key == "date") continue;
+        for(let key of data.rows[0]){
+            if(key == "date") continue;
+            if(!Source[0][key]) Source[0][key] = 0;
+            if(Source[1][key]){
                 Source[2][key] = utils.toFixed((Source[0][key] - Source[1][key]) / Source[1][key] , 0);
+            }else{
+                Source[1][key] = 0;
+                Source[2][key] = utils.toFixed((Source[0][key] - Source[1][key]) / 1 , 0);
             }
         }
+        
         return utils.toTable([Source], data.rows, data.cols);
     },
 
@@ -81,31 +87,23 @@ module.exports = {
     indexThree(data , query , dates){
         let dataSource = data.first.data[0];
         let Source = [];
-        for(let date of dates){
-            let obj = {
-                "date" : date
-            }
-            Source.push(obj);
-        }
 
         for(let item of dataSource){
             item.date = utils.getDate(item.date);
+            if(!item.group_member_count) item.group_member_count = 1;
             item.group_mess_lv = utils.numberLeave( item.group_mess_pv / item.group_member_count , 3);
-            let num;
-            num = dates.indexOf(item.date);
-            Source[num] = item;
+
+            Source.push(item);
         }
 
-        let Source2 = utils.ArraySort(Source);
-
-        return utils.toTable([Source2], data.rows, data.cols);
+        return utils.toTable([Source], data.rows, data.cols);
     },
 
     indexFour(data , query , dates){
         let source = data.first.data[0];
 
         for(let item of source){
-            item.detail = `<button class='btn btn-default' url_link='/IM/event' url_fixed_params='{"id": "${item.id}"}'>查看>></button>`;
+            item.operating = `<button class='btn btn-default' url_link='/IM/event' url_fixed_params='{"id": "${item.id}"}'>查看>></button>`;
         }
 
         return utils.toTable([source], data.rows, data.cols);
@@ -115,7 +113,7 @@ module.exports = {
         let source = data.first.data[0];
 
         for(let item of source){
-            item.detail = `<button class='btn btn-default' url_link='/IM/face' url_fixed_params='{"id": "${item.id}"}'>查看>></button>`;
+            item.operating = `<button class='btn btn-default' url_link='/IM/face' url_fixed_params='{"id": "${item.id}"}'>查看>></button>`;
         }
 
         return utils.toTable([source], data.rows, data.cols);

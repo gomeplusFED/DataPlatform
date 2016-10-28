@@ -19,6 +19,10 @@ actions.setCurrentPageDefaultData = function(store, data) {
     store.dispatch('SETCURRENTPAGEDEFAULTDATA', data);
 }
 
+actions.updateCurrentPageDefaultData = function(store, query_api, type) {
+    store.dispatch('UPDATECURRENTPAGEDEFAULTDATA', query_api, type);
+}
+
 actions.confirm = function(store, params) {
 	store.dispatch('CONFIRM', params);
 }
