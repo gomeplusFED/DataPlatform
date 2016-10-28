@@ -54,20 +54,20 @@ module.exports = {
                     title : "店铺申请运营",
                     query_api : "/achievements/shopOverviewTwo"
                 },
-                {
-                    type : "chart",
-                    title : "店铺运营趋势",
-                    // query_api : "/achievements/shopOverviewThree"
-                },
+                // {
+                //     type : "chart",
+                //     title : "店铺运营趋势",
+                //     // query_api : "/achievements/shopOverviewThree"
+                // },
                 {
                     type : "chart",
                     title : "店铺评级分布",
-                    // query_api : "/achievements/shopOverviewFour"
+                    query_api : "/achievements/shopOverviewFour"
                 },
                 {
                     type : "table",
                     title : "店铺TOP100",
-                    // query_api : "/achievements/shopOverviewFive"
+                    query_api : "/achievements/shopOverviewFive"
                 }
             ]
         }
@@ -81,23 +81,27 @@ module.exports = {
             defaultData : [
                 {
                     type : "table",
-                    title : "店铺总览",
-                    // query_api : "/achievements/shopRunOne"
-                },
-                {
-                    type : "chart",
-                    title : "店铺趋势分析",
-                    // query_api : "/achievements/shopRunTwo"
+                    query_api : "/achievements/shopRunZero"
                 },
                 {
                     type : "table",
+                    title : "店铺总览",
+                    query_api : "/achievements/shopRunOne"
+                },
+                // {
+                //     type : "chart",
+                //     title : "店铺趋势分析",
+                //     // query_api : "/achievements/shopRunTwo"
+                // },
+                {
+                    type : "table",
                     title : "店铺流量排行TOP50",
-                    // query_api : "/achievements/shopRunThree"
+                    query_api : "/achievements/shopRunThree"
                 },
                 {
                     type : "table",
                     title : "店铺交易排行TOP50",
-                    // query_api : "/achievements/shopRunFour"
+                    query_api : "/achievements/shopRunFour"
                 }
             ]
         }

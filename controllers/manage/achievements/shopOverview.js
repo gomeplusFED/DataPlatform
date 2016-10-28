@@ -8,6 +8,9 @@ var api = require("../../../base/main"),
     filter = require("../../../filters/achievements/f_shopOverview"),
     util = require("../../../utils");
 
+let TestDate = new Date("2016-10-26");
+
+
 module.exports = (Router) => {
 
     //全页面
@@ -20,13 +23,13 @@ module.exports = (Router) => {
                     title: '商家类型',
                     filter_key : 'shop_type',
                     groups: [{
-                        key: 'shop_type_all',
+                        key: 'All',
                         value: '全部商家'
                     }, {
-                        key: '2',
+                        key: '1',
                         value: 'XPOP商家'
                     }, {
-                        key: '3',
+                        key: '2',
                         value: 'O2M商家'
                     }]
                 }]
@@ -40,9 +43,9 @@ module.exports = (Router) => {
         platform : false,
         date_picker: false,
         params(query , params , sendData){
-            params.date = util.beforeDate(new Date , 2)[1];
+            params.date = util.beforeDate(TestDate , 2)[1];
             if(!query.shop_type){
-                params.shop_type = "shop_type_all";
+                params.shop_type = "All";
             }
             return params;
         },
@@ -90,7 +93,7 @@ module.exports = (Router) => {
         platform : false,
         params(query , params , sendData){
             if(!query.shop_type){
-                params.shop_type = "shop_type_all";
+                params.shop_type = "All";
             }
             return params;
         },
@@ -128,52 +131,7 @@ module.exports = (Router) => {
     });
 
     //店铺运营趋势
-    Router = new api(Router,{
-        router : "/achievements/shopThree",
-        modelName : ["ShopAccesTop"],
-        platform : false,
-        showDayUnit : true,
-        paging : true,
-        order : ["-access_num"],
-        sum : ["access_num", "access_users"],
-        excel_export : true,
-        date_picker_data : 1,
-        flexible_btn : [{
-            content: '<a href="javascript:void(0)">导出</a>',
-            preMethods: ['excel_export']
-        }],
-        filter(data, filter_key, dates, filter_key2, page) {
-            return filter.shopThree(data, page);
-        },
-        rows : [
-            [ 'top', 'shop_name', 'access_num', 'access_num_rate', 'access_users',
-                'access_users_rate', 'share_num']
-        ],
-        cols : [
-            [{
-                caption: '排名',
-                type: 'number'
-            }, {
-                caption: '店铺名称',
-                type: 'string'
-            }, {
-                caption: '店铺访问量',
-                type: 'number'
-            }, {
-                caption: '店铺访问量占比',
-                type: 'string'
-            }, {
-                caption: '店铺访客数',
-                type: 'number'
-            }, {
-                caption: '店铺访客数占比',
-                type: 'string'
-            }, {
-                caption: '店铺被分享次数',
-                type: 'number'
-            }]
-        ]
-    });
+    
 
     //店铺评级分布
     Router = new api(Router,{
@@ -182,12 +140,103 @@ module.exports = (Router) => {
         platform : false,
         date_picker : false,
         params(query , params , sendData){
+            params.date = util.beforeDate(TestDate , 2)[1];
             return params;
         },
         filter(data , query) {
             return filter.shopOverviewFour(data, query);
         }
     });
+
+    //店铺TOP100
+    Router = new api(Router,{
+        router : "/achievements/shopOverviewFive",
+        modelName : ["RedisShopScores"],
+        platform : false,
+        date_picker : false,
+        paging : [true],
+        filter_select : [{
+            title: '排序',
+            filter_key : 'filter_key',
+            groups: [{
+                key: 'praise_count',
+                value: '点赞前TOP100'
+            }, {
+                key: 'collect_count',
+                value: '收藏前TOP100'
+            }, {
+                key: 'level',
+                value: '最低评级TOP100'
+            }]
+        }],
+        rows : [
+            ["sort","shop_name","shop_id","sum_describe", "sum_service" , "sum_express" , "praise_count" , "collect_count"]
+        ],
+        cols : [
+            [{
+                caption : '排名',
+                type : 'number'
+            },{
+                caption : '店铺名称',
+                type : 'number'
+            },{
+                caption : '店铺ID',
+                type : 'number'
+            },{
+                caption : '商品描述',
+                type : 'number'
+            },{
+                caption : '卖家服务',
+                type : 'number'
+            },{
+                caption : '物流服务',
+                type : 'number'
+            },{
+                caption : '点赞用户数',
+                type : 'number'
+            },{
+                caption : '收藏用户数',
+                type : 'number'
+            }]
+        ],
+        params(query , params , sendData){
+            params.date = util.beforeDate(TestDate , 2)[1];
+            return params;
+        },
+        firstSql(query , params , isCount){
+            let arrParam = [] , sql , orderBy;
+            arrParam[0] = params.date;
+            arrParam[1] = (query.page - 1)*query.limit;
+            arrParam[2] = query.limit / 1;
+
+
+            if(!query.filter_key){
+                orderBy = "praise_count";
+            }else{
+                orderBy = query.filter_key;
+            } 
+
+            if(isCount){
+                //统计总数
+                sql = `SELECT COUNT(*) count FROM ads2_redis_shop_scores WHERE date = ? AND day_type = 1`;
+                return {
+                    sql : sql,
+                    params : arrParam
+                }
+            }
+            sql = `SELECT * FROM ads2_redis_shop_scores WHERE DATE = ? AND day_type = 1 ORDER BY `+orderBy+` DESC LIMIT ?,?`;
+
+            return {
+                sql : sql,
+                params : arrParam
+            }
+        },
+        filter(data , query) {
+            return filter.shopOverviewFive(data, query);
+        }
+    });
+
+
 
     return Router;
 };

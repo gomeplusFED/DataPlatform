@@ -7,11 +7,20 @@ var util = require("../../utils"),
     moment = require("moment"),
     _ = require("lodash");
 
+//评级分布参数
+let ScoreLevel = {
+    "1" : "0-2.0",
+    "2" : "2.1-3.0",
+    "3" : "3.1-3.5",
+    "4" : "3.6-4.0",
+    "5" : "4.1-4.5",
+    "6" : "4.6-4.9",
+    "7" : "5"
+}
+
 module.exports = {
     shopOverviewOne(data, query, dates) {
-        // console.log(123,data);
         var source = data.first.data[0];
-
         for(var item of source) {
             item.all = 0;
             for(let key of data.rows[0]){
@@ -34,10 +43,11 @@ module.exports = {
                 obj[key] += item[key] ? item[key] : 0;
             }
         }obj
-        return util.toTable([[]], data.rows, data.cols);
+        return util.toTable([source], data.rows, data.cols);
     },
 
-    shopThree(data, page) {
+    //趋势
+    shopOverviewThree(data, page) {
         var source = data.data,
             page = page || 1,
             count = data.dataCount > 50 ? 50 : data.dataCount,
@@ -53,6 +63,8 @@ module.exports = {
 
         return util.toTable([source], data.rows, data.cols, [count]);
     },
+
+    //店铺评级分布
     shopOverviewFour(data, query) {
         let map = {
             "avg_describe_tag":"商品描述",
@@ -60,15 +72,32 @@ module.exports = {
             "avg_express_tag":"物流服务"
         };
         let source = data.first.data[0];
-        let score = [5,4.6,]
-        let newData = {
-            "5" : {
+        let newData = {};
+        let score = ["5" , "4.6-4.9" , "4.1-4.5" , "3.6-4.0" , "3.1-3.5" , "2.1-3.0" , "0-2.0"];
+
+        for(let key of score){
+            newData[key] = {
                 "avg_describe_tag" : 0,
                 "avg_service_tag"  : 0,
                 "avg_express_tag"  : 0
             }
-        };
+        }
 
+        for(let item of source){
+            if(item.avg_describe_tag != "ALL" && item.avg_service_tag == "ALL" && item.avg_express_tag == "ALL"){
+                //处理商品描述  avg_describe_tag
+                let key = ScoreLevel[item.avg_describe_tag];
+                newData[key].avg_describe_tag += item.count_sum;
+            }else if(item.avg_describe_tag == "ALL" && item.avg_service_tag != "ALL" && item.avg_express_tag == "ALL"){
+                //处理卖家服务  avg_service_tag
+                let key = ScoreLevel[item.avg_service_tag];
+                newData[key].avg_service_tag += item.count_sum;
+            }else{
+                //处理物流服务
+                let key = ScoreLevel[item.avg_express_tag];
+                newData[key].avg_express_tag += item.count_sum;
+            }
+        }
 
         return [{
             type : "bar",
@@ -78,5 +107,18 @@ module.exports = {
                 stack: false  // 图的堆叠
             }
         }];
-    }
+    },
+
+    shopOverviewFive(data, query) {
+        var source = data.first.data,
+            count = data.first.count[0].count;
+
+        let i = 1;
+        for(let item of source){
+            item.sort = (query.page - 1)*query.limit + i;
+            i++;
+        }
+
+        return util.toTable([source], data.rows, data.cols, [count]);
+    },
 };
