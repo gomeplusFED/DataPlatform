@@ -1,0 +1,19 @@
+<template>
+<div class="btn-group" v-if="pageComponentsData[componentType].show">
+    <button type="button" class="btn btn-default btn-sm" @click="fun('table')">
+        <span class="glyphicon glyphicon-th"></span>表格
+    </button>
+    <button type="button" class="btn btn-default btn-sm" @click="fun('chart')">
+        <span class="glyphicon glyphicon-stats"></span>图表
+    </button>
+</div>
+</template>
+<script>
+var Vue = require('Vue');
+
+var Toggle = Vue.extend({
+    name: 'Toggle',
+    props: ['pageComponentsData', 'componentType', 'fun']
+})
+module.exports = Toggle;
+</script>
