@@ -1,5 +1,9 @@
 <template>
-    <div class="btn-group date_picker" :id="'datePicker_'+index" :style="pageComponentsData[componentType].defaultData === 1 ? 'width: 120px;' : 'width: 210px'" v-show="pageComponentsData[componentType].show">
+    <div 
+    class="btn-group date_picker" 
+    :id="'datePicker_'+index" 
+    :style="pageComponentsData[componentType].defaultData === 1 ? 'width: 120px;' : 'width: 210px'" 
+    v-if="pageComponentsData[componentType].show">
         <input type="text" class="form-control">
         <span class="glyphicon glyphicon-calendar fa fa-calendar"></span>
     </div>
