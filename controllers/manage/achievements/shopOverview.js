@@ -23,7 +23,7 @@ module.exports = (Router) => {
                     title: '商家类型',
                     filter_key : 'shop_type',
                     groups: [{
-                        key: 'All',
+                        key: 'ALL',
                         value: '全部商家'
                     }, {
                         key: '1',
@@ -45,7 +45,7 @@ module.exports = (Router) => {
         params(query , params , sendData){
             params.date = util.beforeDate(TestDate , 2)[1];
             if(!query.shop_type){
-                params.shop_type = "All";
+                params.shop_type = "ALL";
             }
             return params;
         },
@@ -93,7 +93,7 @@ module.exports = (Router) => {
         platform : false,
         params(query , params , sendData){
             if(!query.shop_type){
-                params.shop_type = "All";
+                params.shop_type = "ALL";
             }
             return params;
         },
@@ -131,7 +131,101 @@ module.exports = (Router) => {
     });
 
     //店铺运营趋势
-    
+    Router = new api(Router,{
+        router : "/achievements/shopOverviewThree",
+        modelName : ["ShopOverviewDay"],
+        platform : false,
+        toggle : {
+            show : true
+        },
+        level_select: true,
+        level_select_url: "/api/categories?level=2",
+        level_select_name: "category_id",
+        params(query , params , sendData){
+            if(!query.shop_type){
+                params.shop_type = "ALL";
+            }
+            return params;
+        },
+        fixedParams(req , query , cb){
+            query.category_id_1 = "ALL";
+            query.category_id_2 = "ALL";
+            query.category_id_3 = "ALL";
+            if(query.category_id && query.category_id != "all"){
+                req.models.ConfCategories.find({
+                    id : query.category_id
+                } , (err , data) => {
+                    if(err){
+                        cb(err);
+                    }else{
+                        let theLevel = data[0].level + 1;
+                        switch(theLevel){
+                            case 1:
+                                query.category_id_1 = query.category_id;
+                                break;
+                            case 2:
+                                query.category_id_2 = query.category_id;
+                                break;
+                            case 3:
+                                query.category_id_3 = query.category_id;
+                        }
+                        delete query.category_id;
+                        cb(null , query);
+                    }
+                });
+            }else{
+                delete query.category_id;
+                cb(null , query);
+            }
+        },
+        rows : [
+            [ 'date', 'shop_run', 'shop_rest', 'shop_frost',
+                "shop_stop" , "XPOP" , "APP" , "WEB" , "shop_success" ]
+        ],
+        cols : [
+            [
+                {
+                    caption : '日期',
+                    type : 'date'
+                },
+                {
+                    caption : '新增营运店铺',
+                    type : 'number'
+                },
+                {
+                    caption : '新增休店店铺',
+                    type : 'number'
+                },
+                {
+                    caption : '新增冻结店铺',
+                    type : 'number'
+                },
+                {
+                    caption : '新增关闭店铺',
+                    type : 'number'
+                },
+                {
+                    caption : 'XPOP新用户',
+                    type : 'number'
+                },
+                {
+                    caption : 'APP申请入驻',
+                    type : 'number'
+                },
+                {
+                    caption : 'WEB申请入驻',
+                    type : 'number'
+                },
+                {
+                    caption : '入驻成功店铺',
+                    type : 'number'
+                }
+            ]
+        ],
+        filter(data, query, dates) {
+            return filter.shopOverviewThree(data, query, dates);
+        }
+    });
 
     //店铺评级分布
     Router = new api(Router,{

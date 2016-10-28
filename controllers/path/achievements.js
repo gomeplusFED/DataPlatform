@@ -54,11 +54,11 @@ module.exports = {
                     title : "店铺申请运营",
                     query_api : "/achievements/shopOverviewTwo"
                 },
-                // {
-                //     type : "chart",
-                //     title : "店铺运营趋势",
-                //     // query_api : "/achievements/shopOverviewThree"
-                // },
+                {
+                    type : "table",
+                    title : "店铺运营趋势",
+                    query_api : "/achievements/shopOverviewThree"
+                },
                 {
                     type : "chart",
                     title : "店铺评级分布",

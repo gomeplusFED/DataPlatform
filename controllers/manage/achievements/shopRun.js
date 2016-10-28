@@ -22,7 +22,7 @@ module.exports = (Router) => {
                     title: '商家类型',
                     filter_key : 'shop_type',
                     groups: [{
-                        key: 'All',
+                        key: 'ALL',
                         value: '全部商家'
                     }, {
                         key: '1',
@@ -44,7 +44,7 @@ module.exports = (Router) => {
         params(query , params , sendData){
             console.log(params);
             if(!query.shop_type){
-                params.shop_type = "All";
+                params.shop_type = "ALL";
             }
             return params;
         },
@@ -153,7 +153,7 @@ module.exports = (Router) => {
         },
         order : ["-shop_pv"],
         params(query , params , sendData){
-            if(!query.shop_type) params.shop_type = "All";
+            if(!query.shop_type) params.shop_type = "ALL";
 
             if(query.search_key && NumberReg.test(query.search_key)){
                 //店铺名
@@ -235,7 +235,7 @@ module.exports = (Router) => {
             key : "search_key"
         },
         params(query , params , sendData){
-            if(!query.shop_type) params.shop_type = "All";
+            if(!query.shop_type) params.shop_type = "ALL";
 
             if(query.search_key && NumberReg.test(query.search_key)){
                 //店铺名

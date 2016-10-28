@@ -47,21 +47,13 @@ module.exports = {
     },
 
     //趋势
-    shopOverviewThree(data, page) {
-        var source = data.data,
-            page = page || 1,
-            count = data.dataCount > 50 ? 50 : data.dataCount,
-            sum = data.dataSum;
+    shopOverviewThree(data, query , dates) {
+        let source = data.first.data[0],
+            type   = query.main_show_type_filter;
 
-        for(var i = 0; i < source.length; i++) {
-            var key = source[i];
-            key.top = (page - 1) * 20 + i + 1;
-            key.access_num_rate = util.toFixed(key.access_num, sum[1]);
-            key.access_users_rate = util.toFixed(key.access_users, sum[2]);
-            source[i] = key;
-        }
+            
 
-        return util.toTable([source], data.rows, data.cols, [count]);
+        return util.toTable([source], data.rows, data.cols, []);
     },
 
     //店铺评级分布
