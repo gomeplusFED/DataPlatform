@@ -87,10 +87,11 @@ module.exports = {
     shopRunThree(data, query , dates) {
         let source = data.first.data[0];
         let count = data.first.count;
-
         let i = 1;
         for(let item of source){
             item.sort = (query.page - 1)*query.limit + i;
+            item["shop_pv_lv"] = util.toFixed( item.shop_pv / data.first.sum[0] , 0);
+            item["shop_uv_lv"] = util.toFixed( item.shop_uv / data.first.sum[1] , 0 );
             i++;
         }
         
@@ -103,6 +104,9 @@ module.exports = {
         let i = 1;
         for(let item of source){
             item.sort = (query.page - 1)*query.limit + i;
+            item["shop_pay_order_lv"] = util.toFixed( item.shop_pay_order / data.first.sum[0] , 0);
+            item["Every_price"] = util.numberLeave(item.shop_pay / item.shop_pay_order , 2);
+            item["Every_Man_price"] = util.numberLeave(item.shop_pay / item.shop_pay_order , 2);
             i++;
         }
         

@@ -221,6 +221,7 @@ module.exports = (Router) => {
             key : "search_key"
         },
         order : ["-shop_pv"],
+        sum : ["shop_pv" , "shop_uv"],
         params(query , params , sendData){
             if(!query.shop_type) params.shop_type = "ALL";
 
@@ -305,6 +306,7 @@ module.exports = (Router) => {
             title : "请输入店铺名称或ID",
             key : "search_key"
         },
+        sum : ["shop_pay_order"],
         params(query , params , sendData){
             if(!query.shop_type) params.shop_type = "ALL";
 
