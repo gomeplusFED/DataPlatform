@@ -49,7 +49,6 @@ module.exports = {
             let map = {};
             let n = 0;
             for(let key of rows){
-                console.log(key);
                 if(key == "date"){
                     n++; 
                     continue;

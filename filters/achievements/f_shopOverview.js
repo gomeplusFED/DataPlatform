@@ -52,13 +52,9 @@ module.exports = {
             type   = query.main_show_type_filter,
             count  = data.first.count;
 
-            console.log(data);
         for(let item of source){
             item.date = util.getDate(item.date);
         }
-
-        
-
 
         if(type == "chart"){
             let map = {
