@@ -4,6 +4,7 @@
  * @fileoverview im模块 api 对应的数据整理函数
  */
 var utils = require("../../utils");
+let Reg = /\%/ig;
 
 module.exports = {
     indexOne(data , query , dates){
@@ -30,7 +31,7 @@ module.exports = {
             let num = query.date.indexOf(item.date);
             Source[num] = item;
             if(!item.group_member_count) item.group_member_count = 1;
-            item.group_mess_lv = utils.numberLeave(item.group_mess_pv / item.group_member_count , 3);
+            item.group_mess_lv = utils.toFixed(item.group_mess_pv / item.group_member_count , 0);
         }
 
         //计算环比
@@ -38,6 +39,17 @@ module.exports = {
             if(key == "date") continue;
             if(!Source[0][key]) Source[0][key] = 0;
             if(Source[1][key]){
+
+                if(key == "group_mess_lv"){
+                    if(Source[1][key].replace(Reg , "") == 0){
+                        Source[2][key] = "0.0%";
+                    }else{
+                        Source[2][key] = utils.toFixed((Source[0][key].replace(Reg , "") - Source[1][key].replace(Reg , "")) / Source[1][key].replace(Reg , "") , 0);
+                    }
+
+                    continue;
+                }
+
                 Source[2][key] = utils.toFixed((Source[0][key] - Source[1][key]) / Source[1][key] , 0);
             }else{
                 Source[1][key] = 0;
@@ -91,7 +103,7 @@ module.exports = {
         for(let item of dataSource){
             item.date = utils.getDate(item.date);
             if(!item.group_member_count) item.group_member_count = 1;
-            item.group_mess_lv = utils.numberLeave( item.group_mess_pv / item.group_member_count , 3);
+            item.group_mess_lv = utils.toFixed( item.group_mess_pv / item.group_member_count , 0);
 
             Source.push(item);
         }
@@ -123,7 +135,7 @@ module.exports = {
         let source = data.first.data[0];
 
         for(let item of source){
-            item.group_mess_lv = utils.numberLeave( item.group_mess_pv / item.group_member_count , 3);
+            item.group_mess_lv = utils.toFixed( item.group_mess_pv / item.group_member_count , 0);
         }
 
         return utils.toTable([source], data.rows, data.cols);
