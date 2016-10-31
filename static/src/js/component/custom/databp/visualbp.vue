@@ -18,7 +18,7 @@
         <div id="container" class="main">
 	        <div class="tabpanel_content" style="width: 100%; height: 1000px;">
 		        <div class="html_content" style="z-index: 2;">
-		        	<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" id="tab_baseQuery" src="https://www.gomeplus.com/" style=""></iframe>
+		        	<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" id="tab_baseQuery"  src="{{url}}"></iframe>
 		        </div>
 	        </div>
         </div>
@@ -45,6 +45,7 @@
 			return {
 				index: 1,
 				initData: {},
+				url: '',
 				argvs: {
 					channel: "",
 					coupon_type: "",
@@ -65,7 +66,8 @@
 			}
 		},
 		ready() {
-			this.pageComponentsData.date_picker.show = true;
+			var _this = this;
+			this.url = '/databp/html?url=https://www.gomeplus.com/';
 		},
 		methods: {
 
