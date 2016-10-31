@@ -1,39 +1,105 @@
 <template>
-<div>this is databp view可视化埋点</div>
+   <div class="page-content">
+	<form class="form-inline">
+	    <div class="form-group">
+	        <label>埋点URL</label>
+	        <input type="text" class="form-control" placeholder="" value="{{searchData.companyName}}">
+	    </div>
+	    <div class="form-group">
+	        <label>平台</label>
+		    <select>
+				<option value="pc">PC</option>
+				<option value="h5">H5</option>
+			</select>
+		 </div>
+	    <button on-click="search" type="button" class="btn ent-btn-blue search-btn ">检索页面</button>
+	</form>
+        <!-- nav -->
+        <div id="container" class="main">
+	        <div class="tabpanel_content" style="width: 100%; height: 1000px;">
+		        <div class="html_content" style="z-index: 2;">
+		        	<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" id="tab_baseQuery" src="https://www.gomeplus.com/" style=""></iframe>
+		        </div>
+	        </div>
+        </div>
+        
+    </div>
 </template>
 <script>
 	var Vue = require('Vue');
+	Vue.config.debug = true;
 	var $ = require('jQuery');
 
 	var Loading = require('../../common/loading.vue');
+	var DatePicker = require('../../common/datePicker.vue');
+	var FilterSelect = require('../../common/filterSelect.vue');
 	
 	var databp = Vue.extend({
 		name: 'databp',
 		components: {
-			'm-loading': Loading
+			'm-loading': Loading,
+			'm-filter-select': FilterSelect,
+			'm-date': DatePicker
 		},
 		data: function() {
 			return {
+				index: 1,
+				initData: {},
+				argvs: {
+					channel: "",
+					coupon_type: "",
+					day_type: 1,
+					endTime: '',
+					startTime: '',
+					type: "new_vshop_num",
+					ver: ""
+				},
 				loading: {
 					show: true,
 					noLoaded: 0
 				},
-				model: {
-					channel_type: '',
-					channel_type_code:'',
-					channel_name: '',
-					channel_type: '',
-					channel_ex: ''
+				pageComponentsData: {
+					date_picker: {show: false, defaultData: 7}
 				},
 				list: []
 			}
 		},
+		ready() {
+			this.pageComponentsData.date_picker.show = true;
+		},
 		methods: {
+
 		}
 	});
-
 	module.exports = databp;
 </script>
 <style scoped>
+.tabpanel_content {
+    position: relative;
+    z-index: 2;
+    background-color: #efefef;
+    overflow: hidden;
+}
+.tabpanel_content .html_content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #efefef;
+}
+iframe {
+	width:125%;
+	height:125%;
+	border:none;
+    -ms-zoom: 0.8;
+    -moz-transform: scale(0.8);
+    -moz-transform-origin: 0 0;
+    -o-transform: scale(0.8);
+    -o-transform-origin: 0 0;
+    -webkit-transform: scale(0.8);
+    -webkit-transform-origin: 0 0;
+}
 
 </style>
