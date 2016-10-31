@@ -88,11 +88,11 @@ module.exports = {
                     title : "店铺总览",
                     query_api : "/achievements/shopRunOne"
                 },
-                // {
-                //     type : "chart",
-                //     title : "店铺趋势分析",
-                //     // query_api : "/achievements/shopRunTwo"
-                // },
+                {
+                    type : "table",
+                    title : "店铺趋势分析",
+                    query_api : "/achievements/shopRunTwo"
+                },
                 {
                     type : "table",
                     title : "店铺流量排行TOP50",

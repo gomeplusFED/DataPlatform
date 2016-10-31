@@ -141,9 +141,11 @@ module.exports = (Router) => {
         level_select: true,
         level_select_url: "/api/categories?level=2",
         level_select_name: "category_id",
+        paging : [true],
+        order : ["-date"],
         params(query , params , sendData){
             if(!query.shop_type){
-                params.shop_type = "ALL";
+                // params.shop_type = "ALL";
             }
             return params;
         },
@@ -308,6 +310,9 @@ module.exports = (Router) => {
                 orderBy = "praise_count";
             }else{
                 orderBy = query.filter_key;
+                if(orderBy == "level"){
+                    orderBy = "sum_describe desc,sum_service desc,sum_express";
+                }
             } 
 
             if(isCount){

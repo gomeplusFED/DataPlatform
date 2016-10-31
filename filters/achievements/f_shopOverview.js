@@ -49,11 +49,49 @@ module.exports = {
     //趋势
     shopOverviewThree(data, query , dates) {
         let source = data.first.data[0],
-            type   = query.main_show_type_filter;
+            type   = query.main_show_type_filter,
+            count  = data.first.count;
 
-            
+            console.log(data);
+        for(let item of source){
+            item.date = util.getDate(item.date);
+        }
 
-        return util.toTable([source], data.rows, data.cols, []);
+        
+
+
+        if(type == "chart"){
+            let map = {
+                "shop_run" : "新增运营店铺",
+                "shop_rest": "新增休店店铺",
+                "shop_frost":"新增冻结店铺",
+                "shop_stop": "新增关闭店铺"
+            }
+            let newData = {};
+            for(let date of dates){
+                newData[date] = {};
+                for(let key in map){
+                    newData[date][key] = 0;
+                }
+            }
+
+            for(let item of source){
+                for(let key in map){
+                    newData[item.date][key] = item[key];
+                }
+            }
+
+            return [{
+                type : "line",
+                map : map,
+                data : newData,
+                config: { // 配置信息
+                    stack: false  // 图的堆叠
+                }
+            }];
+        }
+
+        return util.toTable([source], data.rows, data.cols, [count]);
     },
 
     //店铺评级分布
