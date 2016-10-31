@@ -51,13 +51,31 @@ module.exports = {
         }
         return util.toTable([newData], data.rows, data.cols, [count]);
     },
-    wap(data) {
+    wap(data, dates) {
         var source = data.first.data[0],
             count = data.first.count;
         for(var i = 0; i < source.length; i++) {
             source[i].date = moment(source[i].date).format("YYYY-MM-DD");
             source[i].avg_stay_time = Math.round(source[i].avg_stay_time);
         }
-        return util.toTable([source], data.rows, data.cols, [count]);
+        let newData = util.toTable([source], data.rows, data.cols, [count]);
+        let chart = {};
+        for(let date of dates) {
+            chart[date] = {
+                value : 0
+            };
+        }
+        newData.push({
+            type : "line",
+            map : {
+                value : "测试"
+            },
+            data : chart,
+            config: { // 配置信息
+                stack: false // 图的堆叠
+            }
+        });
+
+        return newData;
     }
 };

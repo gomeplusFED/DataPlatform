@@ -198,7 +198,7 @@
 					data: params,
 					success: function(data) {
 						// _this.hasRequestUrl = url;
-						var tableData = data.modelData[0];
+						var tableData = data.modelData;
 						actions.modalTable(store, {
 							show: true,
 							title: '详情',
