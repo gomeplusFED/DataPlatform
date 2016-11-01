@@ -153,7 +153,6 @@ module.exports = (Router) => {
             query.category_id_1 = "ALL";
             query.category_id_2 = "ALL";
             query.category_id_3 = "ALL";
-            query.main_show_type_filter = query.main_show_type_filter || "chart";
             if(query.category_id && query.category_id != "all"){
                 req.models.ConfCategories.find({
                     id : query.category_id
