@@ -148,7 +148,7 @@ module.exports = (Router) => {
         order : ["-date"],
         params(query , params , sendData){
             if(!query.shop_type){
-                // params.shop_type = "ALL";
+                params.shop_type = "ALL";
             }
             return params;
         },
@@ -209,7 +209,7 @@ module.exports = (Router) => {
                     caption : '新增关闭店铺',
                     type : 'number'
                 },
-                {
+               /* {
                     caption : 'XPOP新用户',
                     type : 'number'
                 },
@@ -220,7 +220,7 @@ module.exports = (Router) => {
                 {
                     caption : 'WEB申请入驻',
                     type : 'number'
-                },
+                },*/
                 {
                     caption : '入驻成功店铺',
                     type : 'number'
