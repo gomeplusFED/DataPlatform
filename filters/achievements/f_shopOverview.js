@@ -87,7 +87,7 @@ module.exports = {
             }];
         }
 
-        return util.toTable([source], data.rows, data.cols, [count]);
+        return util.toTable([source], data.rows, data.cols/*, [count]*/);
     },
 
     //店铺评级分布
@@ -113,14 +113,17 @@ module.exports = {
             if(item.avg_describe_tag != "ALL" && item.avg_service_tag == "ALL" && item.avg_express_tag == "ALL"){
                 //处理商品描述  avg_describe_tag
                 let key = ScoreLevel[item.avg_describe_tag];
+                if(!key) continue;
                 newData[key].avg_describe_tag += item.count_sum;
             }else if(item.avg_describe_tag == "ALL" && item.avg_service_tag != "ALL" && item.avg_express_tag == "ALL"){
                 //处理卖家服务  avg_service_tag
                 let key = ScoreLevel[item.avg_service_tag];
+                if(!key) continue;
                 newData[key].avg_service_tag += item.count_sum;
             }else{
                 //处理物流服务
                 let key = ScoreLevel[item.avg_express_tag];
+                if(!key) continue;
                 newData[key].avg_express_tag += item.count_sum;
             }
         }
