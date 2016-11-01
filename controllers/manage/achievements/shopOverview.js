@@ -89,12 +89,15 @@ module.exports = (Router) => {
     //店铺申请运营
     Router = new api(Router,{
         router : "/achievements/shopOverviewTwo",
-        modelName : ["ShopOverview"],
+        modelName : ["ShopOverviewDay"],
         platform : false,
         params(query , params , sendData){
             if(!query.shop_type){
                 params.shop_type = "ALL";
             }
+            params.category_id_1 = "ALL";
+            params.category_id_2 = "ALL";
+            params.category_id_3 = "ALL";
             return params;
         },
         rows : [
