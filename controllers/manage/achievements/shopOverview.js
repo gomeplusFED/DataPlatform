@@ -8,7 +8,7 @@ var api = require("../../../base/main"),
     filter = require("../../../filters/achievements/f_shopOverview"),
     util = require("../../../utils");
 
-let TestDate = new Date("2016-10-26");
+let TestDate = new Date();
 
 
 module.exports = (Router) => {
