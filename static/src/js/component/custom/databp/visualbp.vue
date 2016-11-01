@@ -30,7 +30,7 @@
 									<label>埋点名称</label>
 									<input type='text' class='form-control' placeholder='' value=''>
 								</div>
-								<div><label>URL信息</label>http://www.gomeplus.com/shop</div>
+								<div><label>选择器</label>{{bpConfig.selector}}</div>
 								<div><label>事件类型</label>单击事件</div>
 								<div><label>公共埋点Url</label>/shop/${id}.html</div>
 								<div><label>公共埋点信息</label>name=123&shopid=${id} <button>+</button></div>
@@ -67,8 +67,8 @@
 </template>
 <script>
 	var Vue = require('Vue');
-	Vue.config.debug = true;
 	var $ = require('jQuery');
+	var utils = require('utils');
 
 	var Loading = require('../../common/loading.vue');
 	var DatePicker = require('../../common/datePicker.vue');
@@ -91,7 +91,7 @@
 					noLoaded: 0
 				},
 				bpConfig: {
-
+					selector:''
 				},
 				showConfig: false
 
@@ -105,7 +105,6 @@
 				var _this = this;
 				_this.loading.show = true;
 				this.iframe_url = '/databp/html?m='+this.platform+'&url=' + this.input_url;
-				console.log(this.iframe_url);
 				$('iframe').load(function(){
 					_this.loading.show = false;
 					var $iframe = $(this).contents();
@@ -114,10 +113,11 @@
 					var hovered = [];
 					$head.append('<style> .bphover {outline: 5px solid #0072ff;}</style>');
 					$body.bind('contextmenu', function(e) {
-						// console.log(e.target);
+						var selector = utils.getSelector(e.target);
+
+						_this.bpConfig.selector = selector;
 						_this.showConfig = true;
 						e.preventDefault();
-
 					});
 					$body.mouseover(
 						function(e) {
@@ -129,9 +129,7 @@
 							hovered.push($target);
 						});
 				});
-
 			}
-
 		}
 	});
 	module.exports = databp;
