@@ -214,7 +214,7 @@ module.exports = (Router) => {
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
-        paging : [true],
+        // paging : [true],
         search : {
             show : true,
             title : "请输入店铺名称或ID",

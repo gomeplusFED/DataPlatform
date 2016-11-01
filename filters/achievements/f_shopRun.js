@@ -81,14 +81,19 @@ module.exports = {
             }];
         }
 
-        return util.toTable([source], data.rows, data.cols, [count]);
+        return util.toTable([source], data.rows, data.cols/*, [count]*/);
     },
     shopRunThree(data, query , dates) {
         let source = data.first.data[0];
         let count = data.first.count;
         let i = 1;
+
+        if(!data.first.sum) data.first.sum = [];
+
         for(let item of source){
             item.sort = (query.page - 1)*query.limit + i;
+            if(!data.first.sum[0]) data.first.sum[0] = 1;
+            if(!data.first.sum[1]) data.first.sum[1] = 1;
             item["shop_pv_lv"] = util.toFixed( item.shop_pv / data.first.sum[0] , 0);
             item["shop_uv_lv"] = util.toFixed( item.shop_uv / data.first.sum[1] , 0 );
             i++;

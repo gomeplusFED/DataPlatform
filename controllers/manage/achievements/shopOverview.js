@@ -141,7 +141,7 @@ module.exports = (Router) => {
         level_select: true,
         level_select_url: "/api/categories?level=2",
         level_select_name: "category_id",
-        paging : [true],
+        // paging : [true],
         order : ["-date"],
         params(query , params , sendData){
             if(!query.shop_type){
