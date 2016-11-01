@@ -113,8 +113,11 @@
 					var hovered = [];
 					$head.append('<style> .bphover {outline: 5px solid #0072ff;}</style>');
 					$body.bind('contextmenu', function(e) {
+						for (var i in hovered) {
+							hovered[i].removeClass('bphover');
+						}
 						var selector = utils.getSelector(e.target);
-
+						// TODO add selected class
 						_this.bpConfig.selector = selector;
 						_this.showConfig = true;
 						e.preventDefault();
