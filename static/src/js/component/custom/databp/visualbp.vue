@@ -28,19 +28,29 @@
 							<div class="extendinfo">
 								<div>
 									<label>埋点名称</label>
-									<input type='text' class='form-control' placeholder='' value=''>
+									<input type='text' class='form-control' placeholder='' v-model="bpConfig.name">
 								</div>
 								<div><label>选择器</label>{{bpConfig.selector}}</div>
 								<div><label>事件类型</label>单击事件</div>
 								<div><label>公共埋点Url</label>/shop/${id}.html</div>
-								<div><label>公共埋点信息</label>name=123&shopid=${id} <button>+</button></div>
+								<div><label>公共埋点信息</label>{{publicBpStr}} <button @click="publicBp.push(['', ''])">+</button></div>
 								<div>
-									<label>公共埋点方式</label><label><input type="radio" name="sex" value="male" checked>追加</label> <label><input type="radio" name="sex" value="male" checked>覆盖</label>
-									<div class="pair">key<input type='text' class='form-control' placeholder='' value=''>value<input type='text' class='form-control' placeholder='' value=''><button>+</button></div>
+<!-- 									<label>公共埋点方式</label><label><input type="radio" name="sex" value="male" checked>追加</label> <label><input type="radio" name="sex" value="male" checked>覆盖</label> -->
+									<div v-for="(i,item) in publicBp" class="pair">
+										key
+										<input type='text' class='form-control' placeholder='' v-model="item[0]">
+										value
+										<input type='text' class='form-control' placeholder='' v-model="item[1]">
+										<button @click="publicBp.splice(i,1)">-</button>
+									</div>
 								</div>
 								<div>
-									<label>私有埋点信息</label>rm=ok&flag=true <button>+</button>
-									<div class="pair">key<input type='text' class='form-control' placeholder='' value=''>value<input type='text' class='form-control' placeholder='' value=''><button>+</button></div>
+									<label>私有埋点信息</label>{{privateBpStr}}  <button @click="privateBp.push(['', ''])">+</button>
+									<div v-for="(i,item) in privateBp" class="pair">
+										key<input type='text' class='form-control' placeholder='' v-model="item[0]">
+										value<input type='text' class='form-control' placeholder='' v-model="item[1]">
+										<button  @click="privateBp.splice(i,1)">-</button>
+									</div>
 								</div>
 							</div>
 						</div> 
@@ -51,7 +61,7 @@
 							</div>
 						</div> 
 					</div>
-					<button class="btn btn-success save">SAVE</button>
+					<button class="btn btn-success save">保存埋点</button>
 				</div>
 			</div>
 		</div>
@@ -82,6 +92,22 @@
 			'm-filter-select': FilterSelect,
 			'm-date': DatePicker
 		},
+		computed:  {
+			publicBpStr() {
+				return this.publicBp.filter(function(a) {
+					return (a[0] && a[1]);
+				}).map(function(a) {
+					return a.join('=');
+				}).join('&');
+			},
+			privateBpStr() {
+				return this.privateBp.filter(function(a) {
+					return (a[0] && a[1]);
+				}).map(function(a) {
+					return a.join('=');
+				}).join('&');
+			}
+		},
 		data: function() {
 			return {
 				iframe_url: '',
@@ -91,7 +117,10 @@
 					show: false,
 					noLoaded: 0
 				},
+				publicBp: [['','']],
+				privateBp: [['','']],
 				bpConfig: {
+					name: '',
 					selector:''
 				},
 				showConfig: false
@@ -137,7 +166,7 @@
 							}
 							hovered.length = 0;
 							var $target = $(e.target)
-							if(!$target.hasClass('bphover')) {
+							if(!($target.hasClass('bphover')  || $target.is(selected))) {
 								$target.addClass('bphover');
 								hovered.push($target);
 							}
