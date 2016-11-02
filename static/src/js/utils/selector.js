@@ -193,7 +193,13 @@ UTILS._cssPathStep = function(node, optimized, isTargetNode)
     if (isTargetNode && nodeName.toLowerCase() === "input" && node.getAttribute("type") && !node.getAttribute("id") && !node.getAttribute("class"))
         result += "[type=\"" + node.getAttribute("type") + "\"]";
     if (needsNthChild) {
-        result += ":nth-child(" + (ownIndex + 1) + ")";
+    	// for IE8  replcae nth-child with +
+    	var tmpres = result + ":first-child";
+    	for (var i = 0;i < ownIndex;i++) {
+    		tmpres += '+' + result;
+    	}
+    	result = tmpres;
+        // result += ":nth-child(" + (ownIndex + 1) + ")";
     } else if (needsClassNames) {
         for (var prefixedName in prefixedOwnClassNamesArray)
         // for (var prefixedName in prefixedOwnClassNamesArray.keySet())
