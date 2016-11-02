@@ -144,7 +144,11 @@ module.exports = {
 
         let i = 1;
         for(let item of source){
-            item.sort = (query.page - 1)*query.limit + i;
+            if(query.page){
+                item.sort = (query.page - 1)*query.limit + i;
+            }else{
+                item.sort = i;
+            }
             i++;
         }
 

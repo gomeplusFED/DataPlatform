@@ -246,7 +246,7 @@ module.exports = (Router) => {
             [
                 {
                     caption : '排名',
-                    type : 'number'
+                    type : "number"
                 },
                 {
                     caption : '店铺名称',

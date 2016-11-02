@@ -91,7 +91,11 @@ module.exports = {
         if(!data.first.sum) data.first.sum = [];
 
         for(let item of source){
-            item.sort = (query.page - 1)*query.limit + i;
+            if(query.page){
+                item.sort = (query.page - 1)*query.limit + i;
+            }else{
+                item.sort = i;
+            }
             if(!data.first.sum[0]) data.first.sum[0] = 1;
             if(!data.first.sum[1]) data.first.sum[1] = 1;
             item["shop_pv_lv"] = util.toFixed( item.shop_pv / data.first.sum[0] , 0);
@@ -104,10 +108,17 @@ module.exports = {
     shopRunFour(data, query , dates) {
         let source = data.first.data[0];
         let count = data.first.count;
-
         let i = 1;
+
         for(let item of source){
-            item.sort = (query.page - 1)*query.limit + i;
+            if(query.page){
+                item.sort = (query.page - 1)*query.limit + i;
+            }else{
+                item.sort = i;
+            }
+
+            if(!data.first.sum[0]) data.first.sum = [1];
+
             item["shop_pay_order_lv"] = util.toFixed( item.shop_pay_order / data.first.sum[0] , 0);
             item["Every_price"] = util.numberLeave(item.shop_pay / item.shop_pay_order , 2);
             item["Every_Man_price"] = util.numberLeave(item.shop_pay / item.shop_pay_order , 2);
