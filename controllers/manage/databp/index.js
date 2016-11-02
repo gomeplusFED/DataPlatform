@@ -18,7 +18,6 @@ module.exports = (Router) => {
                 'User-Agent':'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1'
             }
         }
-        console.log(JSON.stringify(options,null,4));
         fetch(url, options)
         .then(function(result) {
             return result.text();
@@ -33,8 +32,10 @@ module.exports = (Router) => {
             res.end(html);
         }).catch(function(e) {
             console.log(e);
-            res.end(e);
+            res.end(e.toString());
+            // next(e);
         });
+        // res.end('error');
 
     });
     
