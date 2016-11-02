@@ -68,7 +68,7 @@
 		<div id='container' class='main'>
 			<div class='tabpanel_content' style='width: 100%; height: 1000px;'>
 				<div class='html_content' style='z-index: 2;'>
-					<iframe frameborder='no' border='0' marginwidth='0' marginheight='0' id='tab_baseQuery'  src='{{iframe_url}}'></iframe>
+					<iframe  frameborder='no' border='0' marginwidth='0' marginheight='0' id='tab_baseQuery'  src='{{iframe_url}}'></iframe>
 				</div>
 			</div>
 		</div>
@@ -134,7 +134,12 @@
 			search() {
 				var _this = this;
 				_this.loading.show = true;
-				this.iframe_url = '/databp/html?m='+this.platform+'&url=' + this.input_url;
+				var newiframe_url = '/databp/html?m='+this.platform+'&url=' + this.input_url;
+				if (newiframe_url === _this.iframe_url) {
+					_this.loading.show = false;
+				}
+				_this.iframe_url = newiframe_url;
+				
 				$('iframe').load(function(){
 					_this.loading.show = false;
 					var $iframe = $(this).contents();
@@ -144,14 +149,12 @@
 					var selected;
 					$head.append('<style> .bphover {outline: 5px solid #0072ff;}</style>');
 					$body.bind('contextmenu', function(e) {
-						for (var i in hovered) {
-							hovered[i].removeClass('bphover');
-						}
-						hovered.length = 0;
+						console.log('hhh');
 						if (selected) {
 							selected.removeClass('bphover');
 						}
 						selected = $(e.target);
+						selected.removeClass('bphover');
 						// 去除css类防止选择器中被加入该类
 						var selector = utils.getSelector(e.target);
 						selected.addClass('bphover');
