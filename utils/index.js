@@ -209,8 +209,10 @@ exports.getDate = function(date){
 exports.numberLeave = function(number , num){
     if(typeof number != "number"){
         console.error("must be a number");
-        return false;
+        return 0;
     }
+    if(!number) return 0;
+
     let a = 1;
     let i = 0;
     while(i<num){

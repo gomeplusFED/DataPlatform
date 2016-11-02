@@ -258,7 +258,7 @@ module.exports = (Router) => {
                 },
                 {
                     caption : '访问量占比',
-                    type : 'number'
+                    type : 'string'
                 },
                 {
                     caption : '店铺访客数',
@@ -266,7 +266,7 @@ module.exports = (Router) => {
                 },
                 {
                     caption : '访客数占比',
-                    type : 'number'
+                    type : 'string'
                 },
                 {
                     caption : '被分享次数',
@@ -344,7 +344,7 @@ module.exports = (Router) => {
                 },
                 {
                     caption : '支付订单占比',
-                    type : 'number'
+                    type : 'string'
                 },
                 //gg
                 {
