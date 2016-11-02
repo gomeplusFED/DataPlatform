@@ -6,10 +6,11 @@
 var ldap = require('ldapjs');
 var config = require('../config');
 var lodash = require('lodash');
+var ldapJson = require("../db/ldap.json");
 
-var username = 'yunyingbaobiao';
-var password = '5P=/d_Xp';
-var ldapurl = 'ldap://10.69.100.1';
+var username = ldapJson.username;
+var password = ldapJson.password;
+var ldapurl = ldapJson.ldapurl;
 var superAdminInfo = {
     username: "superAdmin",
     password: "12345678"
