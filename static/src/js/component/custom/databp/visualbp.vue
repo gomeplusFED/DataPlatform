@@ -51,6 +51,7 @@
 							</div>
 						</div> 
 					</div>
+					<button class="btn btn-success save">SAVE</button>
 				</div>
 			</div>
 		</div>
@@ -111,13 +112,20 @@
 					var $head = $iframe.find('head'); 
 					var $body = $iframe.find('body');
 					var hovered = [];
+					var selected;
 					$head.append('<style> .bphover {outline: 5px solid #0072ff;}</style>');
 					$body.bind('contextmenu', function(e) {
 						for (var i in hovered) {
 							hovered[i].removeClass('bphover');
 						}
+						hovered.length = 0;
+						if (selected) {
+							selected.removeClass('bphover');
+						}
+						selected = $(e.target);
+						// 去除css类防止选择器中被加入该类
 						var selector = utils.getSelector(e.target);
-						// TODO add selected class
+						selected.addClass('bphover');
 						_this.bpConfig.selector = selector;
 						_this.showConfig = true;
 						e.preventDefault();
@@ -127,9 +135,12 @@
 							for (var i in hovered) {
 								hovered[i].removeClass('bphover');
 							}
+							hovered.length = 0;
 							var $target = $(e.target)
-							$target.addClass('bphover');
-							hovered.push($target);
+							if(!$target.hasClass('bphover')) {
+								$target.addClass('bphover');
+								hovered.push($target);
+							}
 						});
 				});
 			}
@@ -285,29 +296,7 @@ iframe {
 	border: 1px solid #ccc;
 	border-top: 0;
 	padding: 20px 0 0 0;
-	height: calc(100% - 40px);
-}
-
-.extendtitle {
-	margin-left: 10px;
-}
-.extendtitle h4 {
-	border-left: 3px solid #d40902;
-	padding-left: 10px;
-	margin-bottom: 0px;
-	margin-top: 0px;
-}
-.extendtitle > em {
-	background: #fd8609;
-	border-radius: 7.5px;
-	position: relative;
-	left: -20px;
-	top: -15px;
-	min-width: 45px;
-	height: 18px;
-	font-size: 12px;
-	line-height: 18px;
-	float: right;
+	height: calc(100% - 90px);
 }
 .extendinfo {
 	max-height: 400px;
@@ -315,34 +304,9 @@ iframe {
 	margin-left: 20px;
 	margin-bottom: 20px;
 }
-.mergedinfo {
-	margin-bottom: 0 !important;
-}
-.reginfo{
-	background-color: #f2f2f2;
-	width: 212px;
-	overflow: hidden;
-	margin-bottom:10px;
-}
-.reginfo div{
-	margin: 18px 10px 18px 20px;
-}
-.reginfo div p{
-	margin-bottom:12px;
-}
-
-.mergedinfo:hover{
-	background:#f8f8f8;
-	border:1px solid #e2e2e2;
-}
-.blueItem{
-	border-left: 3px solid #0072ff;
-	margin-left:-10px;
-	padding-left: 10px;
-}
-.clickItem{
-	color:#0072ff;
-	cursor:pointer;
+button.save {
+	margin: 8px auto;
+    display: block;
 }
 .closed{
    background-color: #ccc !important;
