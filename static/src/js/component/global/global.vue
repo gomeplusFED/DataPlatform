@@ -126,11 +126,11 @@
 			},
 			'argvs.startTime' : function (val, oldVal) {
 				// level_select
-				eventBus.$emit('platformChange',val, this.pageComponentsData.date_picker.name);
+				eventBus.$emit('platformChange',val, this.pageComponentsData.date_picker.name || 'startTime');
 			},
 			'argvs.endTime' : function (val, oldVal) {
 				// level_select
-				eventBus.$emit('platformChange',val, this.pageComponentsData.date_picker.endname);
+				eventBus.$emit('platformChange',val, this.pageComponentsData.date_picker.endname || 'endTime');
 			}
 		}
 	};
