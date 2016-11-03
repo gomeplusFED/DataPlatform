@@ -125,7 +125,7 @@ exports.uniq = function(dates){
     return result;
 };
 
-exports.toTable = function(data, rows, cols, count) {
+exports.toTable = function(data, rows, cols, count , noborder) {
     var newData = [];
     for(var i = 0; i < data.length; i++) {
         var obj = {
@@ -144,6 +144,10 @@ exports.toTable = function(data, rows, cols, count) {
             if(count.config) {
                 obj.config = count.config[i];
             }
+        }
+
+        if(noborder){
+            obj["nobordered"] = true;
         }
         newData.push(obj);
     }
