@@ -79,7 +79,7 @@
 	var Vue = require('Vue');
 	var $ = require('jQuery');
 	var utils = require('utils');
-
+	var api = require('./api');
 	var Loading = require('../../common/loading.vue');
 	
 	var databp = Vue.extend({
@@ -149,7 +149,7 @@
 					var selected;
 					$head.append('<style> .bphover {outline: 5px solid #0072ff;}</style>');
 					$body.bind('contextmenu', function(e) {
-						console.log('hhh');
+
 						if (selected) {
 							selected.removeClass('bphover');
 						}
@@ -158,8 +158,18 @@
 						// 去除css类防止选择器中被加入该类
 						var selector = utils.getSelector(e.target);
 						selected.addClass('bphover');
-						_this.bpConfig.selector = selector;
-						_this.showConfig = true;
+						api.getBp({
+							pageUrl: _this.input_url,
+							selector,
+							platform: _this.platform
+						}).then(function(data) {
+							console.log(data);
+							// TODO
+							_this.bpConfig.selector = selector;
+							_this.showConfig = true;
+							
+						});
+
 						e.preventDefault();
 					});
 					$body.mouseover(
