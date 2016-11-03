@@ -81,15 +81,11 @@
 	var utils = require('utils');
 
 	var Loading = require('../../common/loading.vue');
-	var DatePicker = require('../../common/datePicker.vue');
-	var FilterSelect = require('../../common/filterSelect.vue');
 	
 	var databp = Vue.extend({
 		name: 'databp',
 		components: {
-			'm-loading': Loading,
-			'm-filter-select': FilterSelect,
-			'm-date': DatePicker
+			'm-loading': Loading
 		},
 		computed:  {
 			publicBpStr() {
