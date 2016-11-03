@@ -1,5 +1,5 @@
 <template>
-   <div class='page-content'>
+<div class='page-content' v-on:dragover.stop.prevent="dragover" v-on:drop.prevent="drop">
 	<form class='form-inline'>
 		<div class='form-group'>
 			<label>埋点URL</label>
@@ -15,65 +15,64 @@
 		<button @click='search' type='button' class='btn ent-btn-blue search-btn '>检索页面</button>
 	</form>
 		<!-- nav -->
-		<div class="infobox" v-show="showConfig">
-			<div class="closer" title="关闭" @click="showConfig=false"></div>
-			<div class="sider-nav ">
-				<div class="tabs-container">
-					<ul class="nav nav-tabs">
-						<li role="presentation" class="active"><a href="#tab_baseinfo" data-toggle="tab" aria-expanded="true">基本信息</a></li> 
-						<li role="presentation" class=""><a href="#tab_bpdata" data-toggle="tab" aria-expanded="false">埋点数据</a></li> 
-					</ul> 
-					<div class="tab-content tabs-content zbgxt-content">
-						<div id="tab_baseinfo" class="tab-pane active in">
-							<div class="extendinfo">
-								<div>
-									<label>埋点名称</label>
-									<input type='text' class='form-control' placeholder='' v-model="bpConfig.name">
-								</div>
-								<div><label>选择器</label>{{bpConfig.selector}}</div>
-								<div><label>事件类型</label>单击事件</div>
-								<div><label>公共埋点Url</label>/shop/${id}.html</div>
-								<div><label>公共埋点信息</label>{{publicBpStr}} <button @click="publicBp.push(['', ''])">+</button></div>
-								<div>
-<!-- 									<label>公共埋点方式</label><label><input type="radio" name="sex" value="male" checked>追加</label> <label><input type="radio" name="sex" value="male" checked>覆盖</label> -->
-									<div v-for="(i,item) in publicBp" class="pair">
-										key
-										<input type='text' class='form-control' placeholder='' v-model="item[0]">
-										value
-										<input type='text' class='form-control' placeholder='' v-model="item[1]">
-										<button @click="publicBp.splice(i,1)">-</button>
-									</div>
-								</div>
-								<div>
-									<label>私有埋点信息</label>{{privateBpStr}}  <button @click="privateBp.push(['', ''])">+</button>
-									<div v-for="(i,item) in privateBp" class="pair">
-										key<input type='text' class='form-control' placeholder='' v-model="item[0]">
-										value<input type='text' class='form-control' placeholder='' v-model="item[1]">
-										<button  @click="privateBp.splice(i,1)">-</button>
-									</div>
-								</div>
-							</div>
-						</div> 
-						<div id="tab_bpdata" class="tab-pane fade">
-
-							<div class="extendinfo">
-							TODO
-							</div>
-						</div> 
-					</div>
-					<button class="btn btn-success save">保存埋点</button>
-				</div>
+	<div id='container' class='main'>
+		<div class='tabpanel_content' style='width: 100%; height: 1000px;'>
+			<div class='html_content' style='z-index: 2;'>
+				<iframe  frameborder='no' border='0' marginwidth='0' marginheight='0' id='tab_baseQuery'  src='{{iframe_url}}'></iframe>
 			</div>
 		</div>
-		<div id='container' class='main'>
-			<div class='tabpanel_content' style='width: 100%; height: 1000px;'>
-				<div class='html_content' style='z-index: 2;'>
-					<iframe  frameborder='no' border='0' marginwidth='0' marginheight='0' id='tab_baseQuery'  src='{{iframe_url}}'></iframe>
-				</div>
-			</div>
-		</div>
-		
 	</div>
+	<div class="infobox" v-show="showConfig" draggable="true" v-on:dragstart="dragstart" v-bind:style="infopos">
+		<div class="closer" title="关闭" @click="showConfig=false"></div>
+		<div class="sider-nav ">
+			<div class="tabs-container">
+				<ul class="nav nav-tabs">
+					<li role="presentation" class="active"><a href="#tab_baseinfo" data-toggle="tab" aria-expanded="true">基本信息</a></li> 
+					<li role="presentation" class=""><a href="#tab_bpdata" data-toggle="tab" aria-expanded="false">埋点数据</a></li> 
+				</ul> 
+				<div class="tab-content tabs-content zbgxt-content">
+					<div id="tab_baseinfo" class="tab-pane active in">
+						<div class="extendinfo">
+							<div>
+								<label>埋点名称</label>
+								<input type='text' class='form-control' placeholder='' v-model="bpConfig.name">
+							</div>
+							<div><label>选择器</label>{{bpConfig.selector}}</div>
+							<div><label>事件类型</label>单击事件</div>
+							<div><label>公共埋点Url</label>/shop/${id}.html</div>
+							<div><label>公共埋点信息</label>{{publicBpStr}} <button @click="publicBp.push(['', ''])">+</button></div>
+							<div>
+								<div v-for="(i,item) in publicBp" class="pair">
+									key
+									<input type='text' class='form-control' placeholder='' v-model="item[0]">
+									value
+									<input type='text' class='form-control' placeholder='' v-model="item[1]">
+									<button @click="publicBp.splice(i,1)">-</button>
+								</div>
+							</div>
+							<div>
+								<label>私有埋点信息</label>{{privateBpStr}}  <button @click="privateBp.push(['', ''])">+</button>
+								<div v-for="(i,item) in privateBp" class="pair">
+									key<input type='text' class='form-control' placeholder='' v-model="item[0]">
+									value<input type='text' class='form-control' placeholder='' v-model="item[1]">
+									<button  @click="privateBp.splice(i,1)">-</button>
+								</div>
+							</div>
+						</div>
+					</div> 
+					<div id="tab_bpdata" class="tab-pane fade">
+
+						<div class="extendinfo">
+						TODO
+						</div>
+					</div> 
+				</div>
+				<button class="btn btn-success save">保存埋点</button>
+			</div>
+		</div>
+	</div>
+	<div class="mask" v-show="mask"> </div>
+</div>
 	<m-loading :loading.sync='loading'></m-loading>
 </template>
 <script>
@@ -123,8 +122,13 @@
 					name: '',
 					selector:''
 				},
-				showConfig: false
-
+				showConfig: false,
+				dragpos: {},
+				mask: false,
+				infopos: {
+					top: '80px',
+					left: 'inherit'
+				}
 			}
 		},
 		ready() {
@@ -175,12 +179,36 @@
 							}
 						});
 				});
+			},
+			dragstart(e) {
+				e.dataTransfer.effectAllowed = "move";  //移动效果
+		        e.dataTransfer.setData("text", '');  //附加数据，　没有这一项，firefox中无法移动
+		        this.dragpos.x = e.offsetX || ev.clientX - $(ev.target).offset().left;
+        		this.dragpos.y = e.offsetY || ev.clientY - $(ev.target).offset().top;
+        		this.mask = true;
+			},
+			dragover(e) {
+				e.preventDefault()|| e.stopPropagation();
+			},
+			drop(e) {
+				this.infopos.left = (e.pageX - this.dragpos.x) + 'px';
+		        this.infopos.top = (e.pageY - this.dragpos.y) + 'px';
+		        this.mask = false;
+		        e.preventDefault() || e.stopPropagation(); 
 			}
 		}
 	});
 	module.exports = databp;
 </script>
 <style scoped>
+.mask {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	top: 0;
+    left: 0;
+    z-index: 100;
+}
 .form-inline {
 	border-bottom: 1px solid #eee;
     padding-bottom: 10px;
@@ -229,7 +257,6 @@ iframe {
 	border: 1px solid #ccc;
 	box-shadow: 1px 1px 8px 1px rgba(0,0,0,.2);
 	position: fixed;
-	top: 80px;
 	right: 50px;
 	font-size: 12px;
 	color: rgb(100, 100, 100);
