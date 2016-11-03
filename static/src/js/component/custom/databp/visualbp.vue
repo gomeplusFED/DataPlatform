@@ -187,8 +187,8 @@
 				e.preventDefault()|| e.stopPropagation();
 			},
 			drop(e) {
-				this.infopos.left = (e.pageX - this.dragpos.x) + 'px';
-		        this.infopos.top = (e.pageY - this.dragpos.y) + 'px';
+				this.infopos.left = (e.clientX - this.dragpos.x) + 'px';
+		        this.infopos.top = (e.clientY - this.dragpos.y) + 'px';
 		        this.mask = false;
 		        e.preventDefault() || e.stopPropagation(); 
 			}
