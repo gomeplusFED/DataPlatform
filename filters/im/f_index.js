@@ -65,7 +65,7 @@ module.exports = {
         let map = {
             "single_mess_pv" : "单聊发消息数",
             "single_mess_uv" : "单聊发消息人数",
-            "group_mess_lv" : "群活跃度",
+            "group_mess_lv" : "群活跃度(%)",
             "set_group_shield_pv" : "设置圈子免打扰次数",
             "face_load_pv" : "表情下载次数"
         }
@@ -81,7 +81,7 @@ module.exports = {
 
         for(let item of source){
             item.date = utils.getDate(item.date);
-            item.group_mess_lv = utils.numberLeave( item.group_mess_pv / item.group_member_count , 3);
+            item.group_mess_lv = utils.numberLeave( item.group_mess_pv / item.group_member_count , 3)*100;
             newDate[item.date] = item;
         }
 

@@ -126,6 +126,7 @@ module.exports = (Router) => {
         paging : [true],
         platform : false,
         order : ["-date"],
+        toggle : true,
         filter(data, query, dates) {
             return filter.wap(data, dates);
         },
