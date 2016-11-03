@@ -1,6 +1,27 @@
 var store = require('../../../store/store.js');
 var actions = require('../../../store/actions.js');
 
+function extractResult(res) {
+	return new Promise(function(s, j){
+		if(res.code !== '200' || res.iserror !== '0') {
+			j('获取埋点信息失败：' + res.msg);
+		}
+		var data;
+		if (res && (data = res.data) && (data = data.result)) {
+			s(data);
+		} else {
+            j('获取的埋点信息为空');
+		}
+	});
+}
+function errHandler(err) {
+	actions.alert(store, {
+        show: true,
+        msg: '请求过程中失败：' + err.toString(),
+        type: 'danger'
+    });
+}
+
 var api = {
 	getBp({pageUrl, selector, platform, pointId, matchUrlId}) {
 		return Promise.resolve({
@@ -23,23 +44,7 @@ var api = {
 			        "total": 1
 			    },
 			    "iserror": "0"
-			}).then(function(res) {
-				if(res.code !== '200' || res.iserror !== '0') {
-					return Promise.reject('获取埋点信息失败：' + res.msg);
-				}
-				var data;
-				if (res && (data = res.data) && (data = data.result)) {
-					return data;
-				} else {
-	                return Promise.reject('获取的埋点信息为空');
-				}
-			}).catch(function(err) {
-				actions.alert(store, {
-                    show: true,
-                    msg: '请求过程中失败：' + err.toString(),
-                    type: 'danger'
-                });
-			});
+			}).then(extractResult).catch(errHandler);
 	},
 	updateBp({pageUrl, selector, pointName, platform, pointId, matchUrlId, pattern, publicParam, privateParam}) {
 		return Promise.resolve({
