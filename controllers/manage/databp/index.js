@@ -29,6 +29,18 @@ module.exports = (Router) => {
                     return p1;
                 });
             }
+            // 转化静态标签的src和href，使其可以正常访问
+            var trunk = url.replace(/\/[^\/]*?$/, '');
+            var host = trunk.replace(/([^\/:\s])\/.*$/, '$1');
+            html = html.replace(/(href|src)\s*=\s*"\s*((?!http).+?)\s*"/g, function(m, p1, p2) {
+                if(p2.indexOf('.') === 0) {
+                    return `${p1}="${trunk}/${p2}"`;
+                } else if (p2.indexOf('/') === 0) {
+                    return `${p1}=="${host}${p2}"`;
+                } else {
+                    return `${p1}="${host}/${p2}"`;
+                }
+            });
             res.end(html);
         }).catch(function(e) {
             console.log(e);
