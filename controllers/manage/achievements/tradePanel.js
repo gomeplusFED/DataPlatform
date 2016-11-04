@@ -133,7 +133,7 @@ module.exports = (Router) => {
                 caption: "支付商品件数",
                 type: "number"
             }, {
-                caption: "操作"
+                caption: ""
             }]
         ]
     });
@@ -143,13 +143,13 @@ module.exports = (Router) => {
         router : "/achievements/tradePanelTwo_add",
         modelName : ["SalesPerfProTotal2"],
         platform : false,
-        // date_picker : false,
-        // toggel : true,
+        date_picker : false,
+        paging : [true],
+        toggel : true,
         order : ["-date"],
         params(query , params , sendData){
             if(!query.type) params.type = "ALL";
 
-            console.log(params);
             delete params.order_user;
             return params;
         },
@@ -157,14 +157,14 @@ module.exports = (Router) => {
             return filter.tradePanelTwo_add(data , query , dates);
         },
         rows: [
-            ["date" , "XXX" , "order_user" , "order_num" , "operating"]
+            ["date" ,"access_user" , "order_user" , "order_num"]
         ],
         cols: [
             [{
                 caption: "日期",
                 type   : "date"
             }, {
-                caption: "被访问商品数",
+                caption: "浏览商品数",
                 type: "number"
             }, {
                 caption: "下单商品件数",
@@ -175,6 +175,88 @@ module.exports = (Router) => {
             }]
         ]
     });
+
+
+     //支付方式汇总
+    Router = new api(Router, {
+        router : "/achievements/tradePanelThree",
+        modelName : ["SalesPerfPayModeTotal2"],
+        platform : false,
+        date_picker : false,
+        params(query , params , sendData){
+            if(!query.type) params.type = "ALL";
+            return params;
+        },
+        flexible_btn : [{
+            content: `<a href="#!/achievements/productSale">支付分析</a>`, 
+            preMethods: [], 
+            customMethods: ""
+        }],
+        filter(data, query, dates) {
+            return filter.tradePanelThree(data , query , dates);
+        },
+        rows: [
+            ["all_pay_num" , "aliy_pay" , "weixin_pay" , "other_pay" , "operating"]
+        ],
+        cols: [
+            [{
+                caption: "总支付笔数",
+                type: "number"
+            }, {
+                caption: "支付宝支付笔数",
+                type: "number"
+            }, {
+                caption: "微信支付笔数",
+                type: "number"
+            }, {
+                caption: "其它支付笔数",
+                type: "number"
+            }, {
+                caption: ""
+            }]
+        ]
+    });
+
+    //支付方式汇总---补充
+    Router = new api(Router, {
+        router : "/achievements/tradePanelThree_add",
+        modelName : ["SalesPerfPayModeTotal2"],
+        platform : false,
+        date_picker : false,
+        paging : [true],
+        toggel : true,
+        order : ["-date"],
+        params(query , params , sendData){
+            if(!query.type) params.type = "ALL";
+            delete params.aliy_pay;
+            return params;
+        },
+        filter(data, query, dates) {
+            return filter.tradePanelThree_add(data , query , dates);
+        },
+        rows: [
+            ["date" , "all_pay_num" , "aliy_pay" , "weixin_pay" , "other_pay"]
+        ],
+        cols: [
+            [{
+                caption: "日期",
+                type: "date"
+            }, {
+                caption: "总支付笔数",
+                type: "number"
+            }, {
+                caption: "支付宝支付笔数",
+                type: "number"
+            }, {
+                caption: "微信支付笔数",
+                type: "number"
+            }, {
+                caption: "其它支付笔数"
+            }]
+        ]
+    });
+
+
 
     Router = new api(Router,{
         router : "/achievements/tradeThree",

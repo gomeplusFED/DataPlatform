@@ -22,7 +22,7 @@ module.exports = {
             }
         }
 
-        return util.toTable([[result], [result]], data.rows, data.cols , null , true);
+        return util.toTable([[result], [result]], data.rows, data.cols , null , [true,true]);
     },
 
     //交易商品汇总
@@ -31,7 +31,7 @@ module.exports = {
         let result = {};
         for(let key of data.rows[0]){
             if(key == "operating"){
-                result[key] = `<button class='btn btn-default' url_detail='/achievements/tradePanelTwo_add'>趋势</button>`;
+                result[key] = `<button class='btn btn-info' url_detail='/achievements/tradePanelTwo_add'>趋势</button>`;
             }else{
                 result[key] = 0;
             }
@@ -44,32 +44,124 @@ module.exports = {
             }
         }
 
-        return util.toTable([[result]], data.rows, data.cols , null , true);
+        return util.toTable([[result]], data.rows, data.cols , null , [true]);
     },
     //趋势分析补充
     tradePanelTwo_add(data , query , dates){
-        let source = data.first.data[0];
+        let source = data.first.data[0],
+            count  = data.first.count;
         let result = {};
-        console.log(123,query);
+        let map = {
+            "access_user" : "浏览商品数",
+            "order_user": "下单商品件数",
+            "order_num": "支付商品件数"
+        }
+        for(let date of dates){
+            result[date] = {
+                "access_user" : 0,
+                "order_user"  : 0,
+                "order_num"   : 0
+            }
+        }
 
-        let out = util.toTable([source], data.rows, data.cols);
-        return [out , out]
+        for(let item of source){
+            item.date = util.getDate(item.date);
+            for(let key in result[item.date]){
+                result[item.date][key] += item[key]
+            }
+        }
+
+        if(source.length == 0){
+            //没有数据时让表出来
+            source[0] = {
+                "date" : "查询时间段无数据",
+                "access_user" : 0,
+                "order_user"  : 0,
+                "order_num"   : 0
+            }
+            count = 1;
+        }
+
+        let out = util.toTable([source], data.rows, data.cols , [count]);
+        return [out[0] , {
+            type : "line",
+            map : map,
+            data : result,
+            config: { // 配置信息
+                stack: false  // 图的堆叠
+            }
+        }];
     },
 
 
-    tradeThree(data) {
-        var source = data.first.data[0],
-            count = data.first.count;
-
-        for(var key of source) {
-            key.date = moment(key.date).format("YYYY-MM-DD");
-            key.tran_guest_unit_price = util.division(key.tran_pay_money_amount, key.tran_pay_user_num);
-            key.del_use_coupon_rate = key.del_use_coupon_rate.toFixed(2) + "%";
-            key.tran_order_money_amount = key.tran_order_money_amount.toFixed(2);
-            key.tran_pay_money_amount = key.tran_pay_money_amount.toFixed(2);
+    //支付方式汇总
+    tradePanelThree(data, query, dates) {
+        let source = data.first.data[0];
+        let result = {};
+        for(let key of data.rows[0]){
+            if(key == "operating"){
+                result[key] = `<button class='btn btn-info' url_detail='/achievements/tradePanelThree_add'>趋势</button>`;
+            }else{
+                result[key] = 0;
+            }
         }
 
-        return util.toTable([source], data.rows, data.cols, [count]);
+        for(let item of source){
+            switch(item.order_channel){
+                case "ALL":
+                    result.all_pay_num += item.pay_num;
+                    break;
+                case "微信":
+                    result.aliy_pay += item.pay_num;
+                    break;
+                case "支付宝":
+                    result.weixin_pay += item.pay_num;
+                    break;
+                case "其它":
+                    result.other_pay += item.pay_num;
+                    break;
+            }
+        }
+
+        return util.toTable([[result]], data.rows, data.cols , null , [true]);
+    },
+    //支付方式汇总--补充
+    tradePanelThree_add(data , query , dates){
+        let source = data.first.data[0],
+            count  = data.first.count;
+        let result = {};
+        let map = {
+            "all_pay_num" : "总支付笔数",
+            "aliy_pay": "支付宝支付笔数",
+            "weixin_pay": "微信支付笔数",
+            "other_pay" : "其它支付笔数"
+        }
+        for(let date of dates){
+            result[date] = {
+                "access_user" : 0,
+                "order_user"  : 0,
+                "order_num"   : 0
+            }
+        }
+
+        for(let item of source){
+            item.date = util.getDate(item.date);
+
+
+            for(let key in result[item.date]){
+                result[item.date][key] += item[key]
+            }
+        } 
+
+        let out = util.toTable([source], data.rows, data.cols , [count]);
+        return [out[0] , {
+            type : "line",
+            map : map,
+            data : result,
+            config: { // 配置信息
+                stack: false  // 图的堆叠
+            }
+        }];
     },
     tradeFour(data, params) {
         var source = data.first.data[0],

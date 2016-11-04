@@ -146,7 +146,7 @@ exports.toTable = function(data, rows, cols, count , noborder) {
             }
         }
 
-        if(noborder){
+        if(noborder && noborder[i]){
             obj["nobordered"] = true;
         }
         newData.push(obj);

@@ -238,11 +238,11 @@ module.exports = {
                     title : "交易商品汇总",
                     query_api : "/achievements/tradePanelTwo"
                 },
-                // {
-                //     type : "table",
-                //     title : "支付方式汇总",
-                //     // query_api : "/achievements/tradePanelThree"
-                // },
+                {
+                    type : "table",
+                    title : "支付方式汇总",
+                    query_api : "/achievements/tradePanelThree"
+                },
                 // {
                 //     type : "table",
                 //     title : "国美币汇总",
