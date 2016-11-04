@@ -67,7 +67,7 @@ var api = {
 		        "total": 1
 		    },
 		    "iserror": "0"
-		});
+		}).then(extractResult).catch(errHandler);
 	},
 	saveBp({pageUrl, selector, pointName, platform, pointId, matchUrlId, pattern, publicParam, privateParam}) {
 		return Promise.resolve({
@@ -89,7 +89,41 @@ var api = {
 		        "total": 1
 		    },
 		    "iserror": "0"
-		});
+		}).then(extractResult).catch(errHandler);
+	},
+	// useless: selector
+	listBps({pageUrl, platform, pointName, page, size}){
+		return Promise.resolve({
+		    "data": {
+		        "total": 11,
+		        "result": [{
+		            "id": 50,
+		            "pageUrl": "https://mall.gomeplus.com/item/2016-11042.html",
+		            "selector": "<div/>2",
+		            "pointName": "埋点2",
+		            "pointParam": "uid=1",
+		            "createTime": 1478239758000,
+		            "updateTime": 1478239758000,
+		            "platform": "H5",
+		            "isActive": "1",
+		            "uniquePoint": "1"
+		        }, {
+		            "id": 51,
+		            "pageUrl": "https://mall.gomeplus.com/item/2016-11042.html",
+		            "selector": "<div/>3",
+		            "pointName": "埋点4",
+		            "pointParam": "uid=1&aid=1&cid=2016-11042&bid=2",
+		            "createTime": 1478239778000,
+		            "updateTime": 1478240238000,
+		            "platform": "H5",
+		            "isActive": "1",
+		            "uniquePoint": "0"
+		        }]
+		    },
+		    "code": "200",
+		    "msg": "",
+		    "iserror": "0"
+		}).then(extractResult).catch(errHandler);
 	}
 }
 module.exports = api;

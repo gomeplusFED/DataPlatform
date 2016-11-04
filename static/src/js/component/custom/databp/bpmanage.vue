@@ -15,7 +15,7 @@
                 <input class="form-control inp inpW1" type="text" placeholder="" value="">   
                 <label>起止时间</label>
                 <m-date :index="index" :page-components-data="pageComponentsData" :component-type="'date_picker'" :argvs.sync='argvs'></m-date>
-                <button id="btnSearch" class="btn btn-searchLi-top btn-primary" type="button" data-toggle="popover" data-trigger="focus">查询</button>
+                <button id="btnSearch" class="btn btn-searchLi-top btn-primary" type="button" data-toggle="popover" data-trigger="focus" @click="query">查询</button>
             </li>
         </ul> 
     </div>
@@ -27,13 +27,23 @@
                         <th style="min-width:102px;width:7.97%;">序号</th>
                         <th >埋点名称</th>
                         <th >埋点事件名称</th>
-                        <th >埋点所属URL</th>
+                        <th >选择器</th>
                         <th >埋点参数</th>
                         <th >埋点设置时间</th>
                         <th>操作</th>
                     </tr>
                 </thead>
-                <tbody> </tbody>
+                <tbody> 
+                    <tr v-for="(i, item) in dataList">
+                        <td>{{i}}</td>
+                        <td>{{item.pointName}}</td>
+                        <td>单击</td>
+                        <td>{{item.selector}}</td>
+                        <td>{{item.pointParam}}</td>
+                        <td>{{item.updateTime |Date 'yyyy-MM-dd hh:mm:ss'}}</td>
+                        <td><a>修改</a>&nbsp<a>删除</a></td>
+                    </tr>
+                </tbody>
             </table>
         </div>
         <div class="loading-mask" style="display: none;">
@@ -46,10 +56,8 @@
 	var Vue = require('Vue');
 	var $ = require('jQuery');
     var DatePicker = require('../../common/datePicker.vue');
-	
-
 	var Loading = require('../../common/loading.vue');
-	
+    var api = require('./api');
 	var databp = Vue.extend({
 		name: 'databp',
 		components: {
@@ -71,13 +79,22 @@
                         showDayUnit:true
                     },
                     trigger: true
-                }
+                },
+                dataList: []
 			}
 		},
         ready() {
-            this.pageComponentsData.trigger = !this.pageComponentsData.trigger
+            // triger the date picker
+            this.pageComponentsData.trigger = !this.pageComponentsData.trigger;
         },
 		methods: {
+            query() {
+                var _this = this;
+                api.listBps({}).then(function(res) {
+                    console.log(res);
+                    _this.dataList = res;
+                })
+            }
 		}
 	});
 
@@ -86,6 +103,7 @@
 <style scoped>
 .bp-container {
 	height: 100% !important;
+    min-height: 900px;
 	overflow: hidden;
 	margin: -20px -15px;
 }
@@ -233,4 +251,14 @@
     border-bottom: 1px solid #d6d6d6;
     font-weight: normal;
 }
+.ntable tr th:nth-child(3) {
+    width: 10%
+}
+.ntable tr td {
+    text-align: center;
+}
+.ntable tr a {
+    cursor: pointer;
+}
+
 </style>
