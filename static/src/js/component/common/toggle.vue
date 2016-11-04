@@ -1,5 +1,5 @@
 <template>
-<div class="btn-group" v-if="show || pageComponentsData[componentType].show">
+<div class="btn-group" v-show="show || pageComponentsData[componentType].show">
     <button type="button" class="btn btn-default btn-sm" @click="fun('table')">
         <span class="glyphicon glyphicon-th"></span>表格
     </button>
