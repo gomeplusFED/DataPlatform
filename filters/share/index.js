@@ -154,6 +154,6 @@ module.exports = {
             key.share_channel = config.channel[key.share_channel];
         }
 
-        return util.toTable([source], data.rows, data.cols, [count]);
+        return util.toTable([source], data.rows, data.cols, [count]).concat([{}]);
     }
 };
