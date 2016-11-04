@@ -146,15 +146,22 @@ var ModalTable = Vue.extend({
 		'modalTableData.data': {
 			handler: function(val) {
 				if (val) {
-					if (val.length > 1 && val[0].count ) {
-						if (val[1].type) {
+					if (val.length > 1) {
+						if (val[1].type && val[0].count) {
 							this.type = 'toggle';
 						}
+						if (val[0].count) {
+							this.showType = 'table';
+							this.paginationConf.totalItems = this.modalTableData.data[0].count ? this.modalTableData.data[0].count : 0;
+						} else if (val[1].type) {
+							this.showType = 'chart';
+						}
+					} else if (val.length === 1 && val[0].count) {
 						this.showType = 'table';
-						this.paginationConf.totalItems = this.modalTableData.data[0].count ? this.modalTableData.data[0].count : 0;
+						this.type = '';
 					} else {
 						this.type = '';
-						this.showType = 'chart';
+						this.showType = '';
 					}
 					
 					this.resultArgvs.day_type = 2;
