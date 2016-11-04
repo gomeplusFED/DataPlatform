@@ -63,7 +63,9 @@
 			}
 		},
 		ready() {
-
+			// delete after completed
+			this.input_url = 'https://www.gomeplus.com/others/storeType.html';
+			this.search();
 		},
 		methods: {
 			search() {
