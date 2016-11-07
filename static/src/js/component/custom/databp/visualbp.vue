@@ -1,5 +1,5 @@
 <template>
-<div class='page-content' v-on:dragover.stop.prevent="dragover" v-on:drop.prevent="drop">
+<div class='page-content'>
 	<form class='form-inline'>
 		<div class='form-group'>
 			<label>埋点URL</label>
@@ -22,57 +22,10 @@
 			</div>
 		</div>
 	</div>
-	<div class="infobox" v-show="showConfig" draggable="true" v-on:dragstart="dragstart" v-bind:style="infopos">
-		<div class="closer" title="关闭" @click="showConfig=false"></div>
-		<div class="sider-nav ">
-			<div class="tabs-container">
-				<ul class="nav nav-tabs">
-					<li role="presentation" class="active"><a href="#tab_baseinfo" data-toggle="tab" aria-expanded="true">基本信息</a></li> 
-					<li role="presentation" class=""><a href="#tab_bpdata" data-toggle="tab" aria-expanded="false">埋点数据</a></li> 
-				</ul> 
-				<div class="tab-content tabs-content zbgxt-content">
-					<div id="tab_baseinfo" class="tab-pane active in">
-						<div class="extendinfo">
-							<div>
-								<label>埋点名称</label>
-								<input type='text' class='form-control' placeholder='' v-model="bpConfig.name">
-							</div>
-							<div><label>选择器</label>{{bpConfig.selector}}</div>
-							<div><label>事件类型</label>单击事件</div>
-							<div><label>公共埋点Url</label>/shop/${id}.html</div>
-							<div><label>公共埋点信息</label>{{publicBpStr}} <button @click="publicBp.push(['', ''])">+</button></div>
-							<div>
-								<div v-for="(i,item) in publicBp" class="pair">
-									key
-									<input type='text' class='form-control' placeholder='' v-model="item[0]">
-									value
-									<input type='text' class='form-control' placeholder='' v-model="item[1]">
-									<button @click="publicBp.splice(i,1)">-</button>
-								</div>
-							</div>
-							<div>
-								<label>私有埋点信息</label>{{privateBpStr}}  <button @click="privateBp.push(['', ''])">+</button>
-								<div v-for="(i,item) in privateBp" class="pair">
-									key<input type='text' class='form-control' placeholder='' v-model="item[0]">
-									value<input type='text' class='form-control' placeholder='' v-model="item[1]">
-									<button  @click="privateBp.splice(i,1)">-</button>
-								</div>
-							</div>
-						</div>
-					</div> 
-					<div id="tab_bpdata" class="tab-pane fade">
-
-						<div class="extendinfo">
-						TODO
-						</div>
-					</div> 
-				</div>
-				<button class="btn btn-success save">保存埋点</button>
-			</div>
-		</div>
-	</div>
-	<div class="mask" v-show="mask"> </div>
+	<m-bpinfo :show.sync = "showConfig" :bp-config = "bpConfig"></m-bpinfo>
 </div>
+
+	
 	<m-loading :loading.sync='loading'></m-loading>
 </template>
 <script>
@@ -81,27 +34,13 @@
 	var utils = require('utils');
 	var api = require('./api');
 	var Loading = require('../../common/loading.vue');
+	var bpInfo = require('./bpinfo.vue');
 	
 	var databp = Vue.extend({
 		name: 'databp',
 		components: {
-			'm-loading': Loading
-		},
-		computed:  {
-			publicBpStr() {
-				return this.publicBp.filter(function(a) {
-					return (a[0] && a[1]);
-				}).map(function(a) {
-					return a.join('=');
-				}).join('&');
-			},
-			privateBpStr() {
-				return this.privateBp.filter(function(a) {
-					return (a[0] && a[1]);
-				}).map(function(a) {
-					return a.join('=');
-				}).join('&');
-			}
+			'm-loading': Loading,
+			'm-bpinfo': bpInfo
 		},
 		data: function() {
 			return {
@@ -112,19 +51,13 @@
 					show: false,
 					noLoaded: 0
 				},
-				publicBp: [['','']],
-				privateBp: [['','']],
 				bpConfig: {
 					name: '',
-					selector:''
+					selector:'',
+					publicBp: [['','']],
+					privateBp: [['','']]
 				},
-				showConfig: false,
-				dragpos: {},
-				mask: false,
-				infopos: {
-					top: '80px',
-					left: 'inherit'
-				}
+				showConfig: false
 			}
 		},
 		ready() {
@@ -185,36 +118,12 @@
 							}
 						});
 				});
-			},
-			dragstart(e) {
-				e.dataTransfer.effectAllowed = "move";  //移动效果
-		        e.dataTransfer.setData("text", '');  //附加数据，　没有这一项，firefox中无法移动
-		        this.dragpos.x = e.offsetX || ev.clientX - $(ev.target).offset().left;
-        		this.dragpos.y = e.offsetY || ev.clientY - $(ev.target).offset().top;
-        		this.mask = true;
-			},
-			dragover(e) {
-				e.preventDefault()|| e.stopPropagation();
-			},
-			drop(e) {
-				this.infopos.left = (e.clientX - this.dragpos.x) + 'px';
-		        this.infopos.top = (e.clientY - this.dragpos.y) + 'px';
-		        this.mask = false;
-		        e.preventDefault() || e.stopPropagation(); 
 			}
 		}
 	});
 	module.exports = databp;
 </script>
 <style scoped>
-.mask {
-	position: fixed;
-	width: 100%;
-	height: 100%;
-	top: 0;
-    left: 0;
-    z-index: 100;
-}
 .form-inline {
 	border-bottom: 1px solid #eee;
     padding-bottom: 10px;
@@ -251,167 +160,6 @@ iframe {
 	-o-transform-origin: 0 0;
 	-webkit-transform: scale(0.8);
 	-webkit-transform-origin: 0 0;
-}
-
-/*弹出层*/
-
-.infobox {
-	width: 350px;
-	height: 550px;
-	float: left;
-	background-color: #fff;
-	border: 1px solid #ccc;
-	box-shadow: 1px 1px 8px 1px rgba(0,0,0,.2);
-	position: fixed;
-	right: 50px;
-	font-size: 12px;
-	color: rgb(100, 100, 100);
-	line-height: 1.5;
-	word-break: break-all;
-	z-index: 9999;
-}
-
-.closer {
-	transition: transform .3s;
-	border-radius: 50%;
-	position: absolute;
-	right: 6px;
-	top: 5px;
-	display: block;
-	width: 18px;
-	height: 18px;
-	border: 1px solid transparent;
-	background: url(/dist/img/sprites.png) no-repeat;
-	background-position: -36px 4px;
-	overflow: hidden;
-	cursor: pointer;
-}
-
-#tab_baseinfo input[type='text'] {
-    max-width: 180px;
-    display: inline-block;
-    max-height: 30px;
-}
-#tab_baseinfo .pair {
-	margin-top: 10px;
-}
-#tab_baseinfo .pair input {
-    max-width: 80px;
-    margin-right: 20px;
-    margin-left: 10px;
-}
-#tab_baseinfo div > label{
-	font-weight: normal;
-	margin-right: 10px;
-}
-#tab_baseinfo div > label:first-child {
-	font-weight: bold; 
-	min-width: 80px;
-}
-
-#tab_baseinfo > .extendinfo > div {
-	margin-bottom: 5px;
-}
-
-.sider-nav {
-    width: 100%;
-    height: 100%;
-	background: #fff;
-	padding: 10px;
-}
-
-.nav-tabs {
-	width: 100%;
-}
-
-.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
-	color: #555;
-	cursor: default;
-	background-color: #fff;
-	border-bottom-color: transparent;
-}
-.nav>li>a:focus, .nav>li>a:hover {
-	text-decoration: none;
-	background-color: #eee;
-}
-.nav-tabs>li>a {
-	margin-right: 2px;
-	line-height: 1.42857143;
-	border: 1px solid transparent;
-	border-radius: 4px 4px 0 0;
-	min-width: 80px;
-	text-align: center;
-	color:#555;
-	background:#f2f2f2;
-	border: 1px solid #ddd;
-}
-.nav>li{
-	width: 33.3333%;
-}
-.nav>li>a {
-	position: relative;
-	display: block;
-	padding: 10px 0;
-}
-.tabs-container{
-    width: 100%;
-    height: 100%;
-}
-.tabs-content {
-	border: 1px solid #ccc;
-	border-top: 0;
-	padding: 20px 0 0 0;
-	height: calc(100% - 90px);
-}
-.extendinfo {
-	max-height: 400px;
-	overflow-y: auto;
-	margin-left: 20px;
-	margin-bottom: 20px;
-}
-button.save {
-	margin: 8px auto;
-    display: block;
-}
-.closed{
-   background-color: #ccc !important;
-}
-
-.companyItem > em {
-	background-color: #e80000;
-	border-radius: 3px;
-	width: 45px;
-	height: 25px;
-	font-size: 14px;
-	line-height: 25px;
-	float: right;
-	margin: -3px 0 0 10px;
-}
-.zbgxt-content .content {
-	padding: 10px;
-}
-.zbgxt-content .title2 {
-	font-size: 15px;
-	line-height: 20px;
-	height: 20px;
-	margin-bottom: 10px;
-	margin-left: 10px;
-	border-left: 2px solid #d40902;
-}
-.ul-list04 {
-	font-size: 12px;
-	text-align: left;
-}
-.ul-list04 li {
-	background: #f2f2f2;
-	margin-bottom: 4px;
-	padding: 10px;
-	border-radius: 6px;
-}
-.ul-list04 li p {
-	margin-left: 10px;
-	line-height: 20px;
-	color: #6e6e6e;
 }
 
 
