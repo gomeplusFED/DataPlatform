@@ -12,39 +12,29 @@ let NumberReg = /\D/i;
 
 module.exports = (Router) => {
 
-    //全页面
-    Router.get("/achievements/shopRunZero_json" , (req , res , next) => {
-        res.json({
-            code: 200,
-            modelData: [],
-            components: {
-                filter_select: [{
-                    title: '商家类型',
-                    filter_key : 'shop_type',
-                    groups: [{
-                        key: 'ALL',
-                        value: '全部商家'
-                    }, {
-                        key: '1',
-                        value: 'XPOP商家'
-                    }, {
-                        key: '2',
-                        value: 'O2M商家'
-                    }]
-                }]
-            }
-        });
-    });
-
     //运营--店铺总览
     Router = new api(Router, {
         router : "/achievements/shopRunOne",
         modelName : ["ShopRunOverview" , "ShopRunAnalyze"],     
         platform : false,
+        global_platform: {
+            show: true,
+            key: 'shop_type',
+            name : "商家类型：",
+            list: [{
+                key: 'ALL',
+                name: '全部商家'
+            }, {
+                key: '1',
+                name: 'XPOP商家'
+            }, {
+                key: '2',
+                name: 'O2M商家'
+            }]
+        },
         params(query , params , sendData){
-            if(!query.shop_type){
-                params.shop_type = "ALL";
-            }
+            let shop_type = params.shop_type;
+            params.shop_type = shop_type ? shop_type : "all";
             return params;
         },
         secondParams(query , params , sendData){
@@ -131,7 +121,6 @@ module.exports = (Router) => {
         }
     });
 
-
     //运营--店铺趋势分析
     Router = new api(Router,{
         router : "/achievements/shopRunTwo",
@@ -143,9 +132,8 @@ module.exports = (Router) => {
         paging : [true , true],
         order : ["-date"],
         params(query , params , sendData){
-            if(!query.shop_type){
-                params.shop_type = "ALL";
-            }
+            let shop_type = params.shop_type;
+            params.shop_type = shop_type ? shop_type : "all";
             return params;
         },
         secondParams(query , params , sendData){
@@ -199,17 +187,14 @@ module.exports = (Router) => {
         }
     });
 
-
-
-
-
-
     //运营--店铺流量排行TOP50
     Router = new api(Router,{
         router : "/achievements/shopRunThree",
         modelName : ["ShopRunTopMuil"],
         platform : false,
         excel_export : true,
+        date_picker_data : 1,
+        showDayUnit : true,
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
@@ -223,7 +208,8 @@ module.exports = (Router) => {
         order : ["-shop_pv"],
         sum : ["shop_pv" , "shop_uv"],
         params(query , params , sendData){
-            if(!query.shop_type) params.shop_type = "ALL";
+            let shop_type = params.shop_type;
+            params.shop_type = shop_type ? shop_type : "all";
 
             if(query.search_key && NumberReg.test(query.search_key)){
                 //店铺名
@@ -287,14 +273,14 @@ module.exports = (Router) => {
         }
     });
 
-
-
     //运营--店铺交易排行TOP50
     Router = new api(Router,{
         router : "/achievements/shopRunFour",
         modelName : ["ShopRunTopDeal"],
         platform : false,
         excel_export : true,
+        date_picker_data : 1,
+        showDayUnit : true,
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
@@ -308,7 +294,8 @@ module.exports = (Router) => {
         },
         sum : ["shop_pay_order"],
         params(query , params , sendData){
-            if(!query.shop_type) params.shop_type = "ALL";
+            let shop_type = params.shop_type;
+            params.shop_type = shop_type ? shop_type : "all";
 
             if(query.search_key && NumberReg.test(query.search_key)){
                 //店铺名

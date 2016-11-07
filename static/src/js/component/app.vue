@@ -76,7 +76,7 @@
 
 				if (!window.allPageConfig.page[url]) {
 					this.$route.router.go({
-						path: '/'
+						path: '/error'
 					});
 					return;
 				}
