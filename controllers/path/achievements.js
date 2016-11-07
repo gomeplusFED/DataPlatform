@@ -42,10 +42,6 @@ module.exports = {
             defaultData : [
                 {
                     type : "table",
-                    query_api : "/achievements/shopOverviewZero"
-                },
-                {
-                    type : "table",
                     title : "店铺总览",
                     query_api : "/achievements/shopOverviewOne"
                 },
@@ -55,7 +51,7 @@ module.exports = {
                     query_api : "/achievements/shopOverviewTwo"
                 },
                 {
-                    type : "table",
+                    type : "chart",
                     title : "店铺运营趋势",
                     query_api : "/achievements/shopOverviewThree"
                 },
@@ -72,7 +68,6 @@ module.exports = {
             ]
         }
     },
-
     shopRun(){
         return {
             name : "店铺运营分析",
@@ -81,15 +76,11 @@ module.exports = {
             defaultData : [
                 {
                     type : "table",
-                    query_api : "/achievements/shopRunZero"
-                },
-                {
-                    type : "table",
                     title : "店铺总览",
                     query_api : "/achievements/shopRunOne"
                 },
                 {
-                    type : "table",
+                    type : "chart",
                     title : "店铺趋势分析",
                     query_api : "/achievements/shopRunTwo"
                 },
@@ -106,8 +97,6 @@ module.exports = {
             ]
         }
     },
-
-
     product() {
         return {
             name : "商品运营分析",
@@ -329,5 +318,4 @@ module.exports = {
             ]
         }
     }
-
 };

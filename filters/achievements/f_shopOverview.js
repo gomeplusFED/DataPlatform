@@ -42,27 +42,26 @@ module.exports = {
             for(let key of data.rows[0]){
                 obj[key] += item[key] ? item[key] : 0;
             }
-        }obj
-        return util.toTable([source], data.rows, data.cols);
+        }
+        return util.toTable([[obj]], data.rows, data.cols);
     },
 
     //趋势
     shopOverviewThree(data, query , dates) {
         let source = data.first.data[0],
-            type   = query.main_show_type_filter,
-            count  = data.first.count;
+            type   = query.main_show_type_filter;
 
         for(let item of source){
             item.date = util.getDate(item.date);
         }
 
-        if(type == "chart"){
+        if(type !== "table"){
             let map = {
                 "shop_run" : "新增运营店铺",
                 "shop_rest": "新增休店店铺",
                 "shop_frost":"新增冻结店铺",
                 "shop_stop": "新增关闭店铺"
-            }
+            };
             let newData = {};
             for(let date of dates){
                 newData[date] = {};
@@ -152,6 +151,10 @@ module.exports = {
             i++;
         }
 
+        if(count > 100) {
+            count = 100;
+        }
+
         return util.toTable([source], data.rows, data.cols, [count]);
-    },
+    }
 };

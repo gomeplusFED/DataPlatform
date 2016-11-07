@@ -13,35 +13,26 @@ let TestDate = new Date();
 
 module.exports = (Router) => {
 
-    //全页面
-    Router.get("/achievements/shopOverviewZero_json" , (req , res , next) => {
-        res.json({
-            code: 200,
-            modelData: [],
-            components: {
-                filter_select: [{
-                    title: '商家类型',
-                    filter_key : 'shop_type',
-                    groups: [{
-                        key: 'ALL',
-                        value: '全部商家'
-                    }, {
-                        key: '1',
-                        value: 'XPOP商家'
-                    }, {
-                        key: '2',
-                        value: 'O2M商家'
-                    }]
-                }]
-            }
-        });
-    });
-
     Router = new api(Router,{
         router : "/achievements/shopOverviewOne",
         modelName : ["ShopOverview"],
         platform : false,
         date_picker: false,
+        global_platform: {
+            show: true,
+            key: 'shop_type',
+            name : "商家类型：",
+            list: [{
+                key: 'ALL',
+                name: '全部商家'
+            }, {
+                key: '1',
+                name: 'XPOP商家'
+            }, {
+                key: '2',
+                name: 'O2M商家'
+            }]
+        },
         params(query , params , sendData){
             params.date = util.beforeDate(TestDate , 2)[1];
             if(!query.shop_type){
@@ -92,12 +83,11 @@ module.exports = (Router) => {
         modelName : ["ShopOverviewDay"],
         platform : false,
         params(query , params , sendData){
-            if(!query.shop_type){
-                params.shop_type = "ALL";
-            }
+            params.shop_type = params.shop_type ? params.shop_type : "ALL";
             params.category_id_1 = "ALL";
             params.category_id_2 = "ALL";
             params.category_id_3 = "ALL";
+
             return params;
         },
         rows : [
@@ -269,7 +259,7 @@ module.exports = (Router) => {
             }]
         }],
         rows : [
-            ["sort","shop_name","shop_id","sum_describe", "sum_service" , "sum_express" , "praise_count" , "collect_count"]
+            ["sort","shop_name","shop_id","avg_describe", "avg_service" , "avg_express" , "praise_count" , "collect_count"]
         ],
         cols : [
             [{
@@ -314,7 +304,7 @@ module.exports = (Router) => {
             }else{
                 orderBy = query.filter_key;
                 if(orderBy == "level"){
-                    orderBy = "sum_describe desc,sum_service desc,sum_express";
+                    orderBy = "sum_describe ,sum_service ,sum_express";
                 }
             } 
 
@@ -326,7 +316,7 @@ module.exports = (Router) => {
                     params : arrParam
                 }
             }
-            sql = `SELECT * FROM ads2_redis_shop_scores WHERE DATE = ? AND day_type = 1 ORDER BY `+orderBy+` DESC LIMIT ?,?`;
+            sql = `SELECT * FROM ads2_redis_shop_scores WHERE DATE = ? AND day_type = 1 ORDER BY ${orderBy} ${query.filter_key === "level" ? "" : "DESC"} LIMIT ?,?`;
 
             return {
                 sql : sql,
