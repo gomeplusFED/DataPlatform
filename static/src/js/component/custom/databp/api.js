@@ -1,5 +1,39 @@
 var store = require('../../../store/store.js');
 var actions = require('../../../store/actions.js');
+var $ = require('jQuery');
+const baseurl = 'http://10.69.20.55:8080';
+// const baseurl = 'http://10.69.112.146:38080/bomber-pie'
+
+$.support.cors = true;
+
+
+function filterArgs(data, args) {
+	var newdata = {};
+	for(var key of args) {
+		// 不允许空字符串,0值
+		if(data[key]) {
+			newdata[key] = data[key];
+		}
+	}
+	return newdata;
+}
+
+function buildAjax(url, data, type = 'get') {
+	return new Promise(function(s, j){
+		$.ajax({
+			url: baseurl + url,
+			type,
+			dataType: 'JSON',
+			data,
+			success(data) {
+            	s(data);
+        	},
+			error(xhr, status, error) {
+                j('请求失败：' + status);
+        	}
+		});
+	});
+}
 
 function extractResult(res) {
 	return new Promise(function(s, j){
@@ -15,115 +49,51 @@ function extractResult(res) {
 	});
 }
 function errHandler(err) {
+	var msg = '请求过程中失败：' + err.toString();
 	actions.alert(store, {
         show: true,
-        msg: '请求过程中失败：' + err.toString(),
+        msg,
         type: 'danger'
     });
+    // stop the process
+    return Promise.reject(msg);
 }
 
 var api = {
-	getBp({pageUrl, selector, platform, pointId, matchUrlId}) {
-		return Promise.resolve({
-			    "msg": "SUCCESS",
-			    "code": "200",
-			    "data": {
-			        "result": {
-			            "pointId": 0,
-			            "matchUrlId": 27,
-			            "pointName": "",
-			            "pageUrl": "",
-			            "selector": "",
-			            "privateParam": "",
-			            "pattern": "https://mall.gomeplus.com/shop/",
-			            "publicParam": "sid=1001",
-			            "platform": "",
-			            "createTime": "",
-			            "updateTime": ""
-			        },
-			        "total": 1
-			    },
-			    "iserror": "0"
-			}).then(extractResult).catch(errHandler);
+	// {pageUrl, selector, platform, pointId, matchUrlId}
+	getBp(data) {
+		return buildAjax('/point', filterArgs(data,['pageUrl', 'selector', 'platform', 'pointId'])).then(extractResult, errHandler).catch(errHandler);
 	},
-	updateBp({pageUrl, selector, pointName, platform, pointId, matchUrlId, pattern, publicParam, privateParam}) {
-		return Promise.resolve({
-		    "msg": "SUCCESS",
-		    "code": "200",
-		    "data": {
-		        "result": {
-		            "pointId": 24,
-		            "matchUrlId": 27,
-		            "pointName": "测试埋点1",
-		            "pageUrl": "https://mall.gomeplus.com/shop/10145.html",
-		            "selector": "<div />",
-		            "privateParam": "uid=100201",
-		            "pattern": "https://mall.gomeplus.com/shop/",
-		            "publicParam": "sid=100101",
-		            "platform": "H501",
-		            "createTime": "",
-		            "updateTime": ""
-		        },
-		        "total": 1
-		    },
-		    "iserror": "0"
-		}).then(extractResult).catch(errHandler);
-	},
-	saveBp({pageUrl, selector, pointName, platform, pointId, matchUrlId, pattern, publicParam, privateParam}) {
-		return Promise.resolve({
-		    "msg": "保存成功",
-		    "code": "200",
-		    "data": {
-		        "result": 24,
-		        "total": 1
-		    },
-		    "iserror": "0"
+	// {pageUrl, selector, pointName, platform, pointId, matchUrlId, pattern, publicParam, privateParam}
+	updateBp(data) {
+		return buildAjax('/point', data, 'put').then(extractResult).catch(errHandler).then(function(res) {
+			actions.alert(store, {
+		        show: true,
+		        msg: '更新成功',
+		        type: 'success'
+		    });
 		});
 	},
-	deleteBp({pointId, matchUrlId}) {
-		return Promise.resolve({
-		    "msg": "SUCCESS",
-		    "code": "200",
-		    "data": {
-		        "result": "",
-		        "total": 1
-		    },
-		    "iserror": "0"
-		}).then(extractResult).catch(errHandler);
+	// {pageUrl, selector, pointName, platform, pointId, matchUrlId, pattern, publicParam, privateParam}
+	saveBp(data) {
+		return buildAjax('/point', data, 'post').then(extractResult).catch(errHandler).then(function(res) {
+			console.log('保存成功');
+			console.log(res);
+			actions.alert(store, {
+		        show: true,
+		        msg: '保存成功',
+		        type: 'success'
+		    });
+		});
+	},
+	// {pointId, matchUrlId}
+	deleteBp(data) {
+		return buildAjax('/point', data, 'delete').then(extractResult).catch(errHandler);
 	},
 	// useless: selector
-	listBps({pageUrl, platform, pointName, page, size}){
-		return Promise.resolve({
-		    "data": {
-		        "total": 11,
-		        "result": [{
-		            "id": 50,
-		            "pageUrl": "https://mall.gomeplus.com/item/2016-11042.html",
-		            "selector": "<div/>2",
-		            "pointName": "埋点2",
-		            "pointParam": "uid=1",
-		            "createTime": 1478239758000,
-		            "updateTime": 1478239758000,
-		            "platform": "H5",
-		            "isActive": "1",
-		            "uniquePoint": "1"
-		        }, {
-		            "id": 51,
-		            "pageUrl": "https://mall.gomeplus.com/item/2016-11042.html",
-		            "selector": "<div/>3",
-		            "pointName": "埋点4",
-		            "pointParam": "uid=1&aid=1&cid=2016-11042&bid=2",
-		            "createTime": 1478239778000,
-		            "updateTime": 1478240238000,
-		            "platform": "H5",
-		            "isActive": "1",
-		            "uniquePoint": "0"
-		        }]
-		    },
-		    "code": "200",
-		    "msg": "",
-		    "iserror": "0"
-		}).then(extractResult).catch(errHandler);
+	// {pageUrl, platform, pointName, page, size}
+	listBps(data){
+		return buildAjax('/pointList', data).then(extractResult).catch(errHandler);
 	}
 }
 module.exports = api;
