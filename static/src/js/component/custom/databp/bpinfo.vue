@@ -13,27 +13,27 @@
 						<div class="extendinfo">
 							<div>
 								<label>埋点名称</label>
-								<input type='text' class='form-control' placeholder='' v-model="bpConfig.name">
+								<input type='text' class='form-control' placeholder='' v-model="config.pointName">
 							</div>
-							<div><label>选择器</label>{{bpConfig.selector}}</div>
+							<div><label>选择器</label>{{config.selector}}</div>
 							<div><label>事件类型</label>单击事件</div>
 							<div><label>公共埋点Url</label>/shop/${id}.html</div>
-							<div><label>公共埋点信息</label>{{publicBpStr}} <button @click="bpConfig.publicBp.push(['', ''])">+</button></div>
+							<div><label>公共埋点信息</label>{{publicBpStr}} <button @click="publicBp.push(['', ''])">+</button></div>
 							<div>
-								<div v-for="(i,item) in bpConfig.publicBp" class="pair">
+								<div v-for="(i,item) in publicBp" class="pair">
 									key
 									<input type='text' class='form-control' placeholder='' v-model="item[0]">
 									value
 									<input type='text' class='form-control' placeholder='' v-model="item[1]">
-									<button @click="bpConfig.publicBp.splice(i,1)">-</button>
+									<button @click="publicBp.splice(i,1)">-</button>
 								</div>
 							</div>
 							<div>
-								<label>私有埋点信息</label>{{privateBpStr}}  <button @click="bpConfig.privateBp.push(['', ''])">+</button>
-								<div v-for="(i,item) in bpConfig.privateBp" class="pair">
+								<label>私有埋点信息</label>{{privateBpStr}}  <button @click="privateBp.push(['', ''])">+</button>
+								<div v-for="(i,item) in privateBp" class="pair">
 									key<input type='text' class='form-control' placeholder='' v-model="item[0]">
 									value<input type='text' class='form-control' placeholder='' v-model="item[1]">
-									<button  @click="bpConfig.privateBp.splice(i,1)">-</button>
+									<button  @click="privateBp.splice(i,1)">-</button>
 								</div>
 							</div>
 						</div>
@@ -45,46 +45,115 @@
 						</div>
 					</div> 
 				</div>
-				<button class="btn btn-success save">保存埋点</button>
+				<button class="btn btn-success save" @click="save">保存埋点</button>
 			</div>
 		</div>
 	</div>
 </div>
-
-<!-- <div class="mask"> </div> -->
 </template>
 
 <script>
 var Vue = require('Vue');
-var databp = Vue.extend({
+var api = require('./api');
+var bpinfo = Vue.extend({
 	data: function() {
 		return {
 			dragpos: {},
+			config: {
+				pointName: '',
+				platform: 'PC',
+				pageUrl: '',
+				selector:'',
+				privateParam: '',
+				publicParam: ''
+			},
 			mask: false,
 			infopos: {
 				top: '80px',
 				left: 'inherit'
-			}
+			},
+			publicBp: [['','']],
+			privateBp: [['','']]
 		}
 	},
 	computed:  {
-		publicBpStr() {
-			return this.bpConfig.publicBp.filter(function(a) {
-				return (a[0] && a[1]);
-			}).map(function(a) {
-				return a.join('=');
-			}).join('&');
+		publicBpStr: {
+			get() {
+				return this.publicBp.filter(function(a) {
+					return (a[0] && a[1]);
+				}).map(function(a) {
+					return a.join('=');
+				}).join('&');
+			},
+			set(newValue) {
+				if (!newValue) {
+					this.publicBp = [['','']];
+					return;
+				}
+				var _this = this;
+				_this.publicBp.length = 0;
+				var pairs = newValue.split('&');
+				pairs.forEach(function(p) {
+					var pa = p.split('=');
+					if( pa.length === 2 ){
+						_this.publicBp.push([pa[0], pa[1]]);
+					}
+				});
+			}
 		},
-		privateBpStr() {
-			return this.bpConfig.privateBp.filter(function(a) {
-				return (a[0] && a[1]);
-			}).map(function(a) {
-				return a.join('=');
-			}).join('&');
+		privateBpStr: {
+			get() {
+				return this.privateBp.filter(function(a) {
+					return (a[0] && a[1]);
+				}).map(function(a) {
+					return a.join('=');
+				}).join('&');
+			},
+			set(newValue) {
+				if (!newValue) {
+					this.privateBp = [['','']];
+					return;
+				}
+				var _this = this;
+				_this.privateBp.length = 0;
+				var pairs = newValue.split('&');
+				pairs.forEach(function(p) {
+					var pa = p.split('=');
+					if( pa.length === 2 ){
+						_this.privateBp.push([pa[0], pa[1]]);
+					}
+				});
+			}
 		}
 	},
 	props:['show', 'bpConfig'],
+	ready() {
+		this.$watch('bpConfig.privateParam', function (val) {
+			this.privateBpStr = this.bpConfig.privateParam;
+		});
+		this.$watch('bpConfig.publicParam', function (val) {
+			this.publicBpStr = this.bpConfig.publicParam;
+		});
+		this.$watch('show', function (val) {
+			if (val) {
+				this.init();
+			}
+		});
+	},
 	methods: {
+		init() {
+			var _this = this;
+			Object.assign(this.config,  this.bpConfig)
+			api.getBp(_this.config).then(function(data) {
+				console.log(data);
+				// show the config window
+				_this.config.pointId = data.pointId;
+				_this.config.pointName = data.pointName;
+				_this.bpConfig.publicParam = data.publicParam;
+				_this.bpConfig.privateParam = data.privateParam;
+				
+			});
+		},
 		dragstart(e) {
 			e.dataTransfer.effectAllowed = "move";  //移动效果
 	        e.dataTransfer.setData("text", '');  //附加数据，　没有这一项，firefox中无法移动
@@ -97,24 +166,50 @@ var databp = Vue.extend({
 	        this.infopos.top = (e.clientY - this.dragpos.y) + 'px';
 	        this.mask = false;
 	        e.preventDefault() || e.stopPropagation(); 
+		},
+		save() {
+			var _this = this;
+			_this.config.publicParam = this.publicBpStr;
+			_this.config.privateParam = this.privateBpStr;
+			if (_this.config.pointId) {
+				api.updateBp(_this.config);
+			} else {
+				api.saveBp(_this.config);
+			}
 		}
 	}
 
 });
-module.exports = databp;
+module.exports = bpinfo;
 </script>
 
 
 <style scoped>
+::-webkit-scrollbar {
+    width: 8px;
+    height: 10px;
+    background: #eee;
+}
+::-webkit-scrollbar-thumb {
+    height: 50px;
+    background-color: #ccc !important;
+    -webkit-border-radius: 5px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+}
+::-webkit-scrollbar-track-piece {
+    -webkit-border-radius: 0;
+}
 .mask {
 	position: fixed;
 	width: 100%;
 	height: 100%;
 	top: 0;
     z-index: 100;
+    cursor: not-allowed;
 }
 .infobox {
-	width: 350px;
+	cursor: auto;
+	width: 360px;
 	height: 550px;
 	float: left;
 	background-color: #fff;

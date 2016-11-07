@@ -3,13 +3,13 @@
 	<form class='form-inline'>
 		<div class='form-group'>
 			<label>埋点URL</label>
-			<input type='text' class='form-control' placeholder='' v-model="input_url">
+			<input type='text' class='form-control' placeholder='' v-model="bpConfig.pageUrl" @keyup.enter.stop.prevent="search">
 		</div>
 		<div class='form-group'>
 			<label>平台</label>
-			<select v-model="platform">
-				<option value=0>PC</option>
-				<option value=1>H5</option>
+			<select v-model="bpConfig.platform">
+				<option value='PC'>PC</option>
+				<option value='H5'>H5</option>
 			</select>
 		 </div>
 		<button @click='search' type='button' class='btn ent-btn-blue search-btn '>检索页面</button>
@@ -22,40 +22,45 @@
 			</div>
 		</div>
 	</div>
-	<m-bpinfo :show.sync = "showConfig" :bp-config = "bpConfig"></m-bpinfo>
 </div>
-
-	
+	<m-bpinfo :show.sync = "showConfig" :bp-config = "bpConfig" ></m-bpinfo>
 	<m-loading :loading.sync='loading'></m-loading>
+	<m-alert></m-alert>
 </template>
 <script>
 	var Vue = require('Vue');
+	Vue.config.debug = true;
 	var $ = require('jQuery');
 	var utils = require('utils');
 	var api = require('./api');
 	var Loading = require('../../common/loading.vue');
+	var Alert = require('../../common/alert.vue');
 	var bpInfo = require('./bpinfo.vue');
+	var store = require('../../../store/store.js');
+	var actions = require('../../../store/actions.js');
 	
 	var databp = Vue.extend({
 		name: 'databp',
 		components: {
 			'm-loading': Loading,
+			'm-alert': Alert,
 			'm-bpinfo': bpInfo
 		},
+		store: store,
 		data: function() {
 			return {
 				iframe_url: '',
-				input_url: '',
-				platform: 0,
 				loading: {
 					show: false,
 					noLoaded: 0
 				},
 				bpConfig: {
-					name: '',
+					pointName: '',
+					platform: 'PC',
+					pageUrl: '',
 					selector:'',
-					publicBp: [['','']],
-					privateBp: [['','']]
+					privateParam: '',
+					publicParam: ''
 				},
 				showConfig: false
 			}
@@ -67,7 +72,7 @@
 			search() {
 				var _this = this;
 				_this.loading.show = true;
-				var newiframe_url = '/databp/html?m='+this.platform+'&url=' + this.input_url;
+				var newiframe_url = '/databp/html?m='+this.platform+'&url=' + this.bpConfig.pageUrl;
 				if (newiframe_url === _this.iframe_url) {
 					_this.loading.show = false;
 				}
@@ -91,18 +96,8 @@
 						// 去除css类防止选择器中被加入该类
 						var selector = utils.getSelector(e.target);
 						selected.addClass('bphover');
-						api.getBp({
-							pageUrl: _this.input_url,
-							selector,
-							platform: _this.platform
-						}).then(function(data) {
-							console.log(data);
-							// TODO
-							_this.bpConfig.selector = selector;
-							_this.showConfig = true;
-							
-						});
-
+						_this.bpConfig.selector = selector;
+						_this.showConfig = true;
 						e.preventDefault();
 					});
 					$body.mouseover(

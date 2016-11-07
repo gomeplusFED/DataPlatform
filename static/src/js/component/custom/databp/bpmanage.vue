@@ -41,7 +41,7 @@
                         <td>{{item.selector}}</td>
                         <td>{{item.pointParam}}</td>
                         <td>{{item.updateTime |Date 'yyyy-MM-dd hh:mm:ss'}}</td>
-                        <td><a>修改</a>&nbsp<a>删除</a></td>
+                        <td><a @click="edit(item)">修改</a>&nbsp<a @click="del(item)">删除</a></td>
                     </tr>
                 </tbody>
             </table>
@@ -50,6 +50,10 @@
             <div class="loading-content"><i class="fa fa-spinner fa-pulse loading-img mid-icon"></i></div>
         </div>
     </div>
+    <m-alert></m-alert>
+    <m-bpinfo :show.sync = "showConfig" :bp-config = "bpConfig"  :public-bp-str = "publicBpStr"></m-bpinfo>
+    <m-loading :loading.sync='loading'></m-loading>
+    <m-confirm></m-confirm>
 </div>
 </template>
 <script>
@@ -57,18 +61,28 @@
 	var $ = require('jQuery');
     var DatePicker = require('../../common/datePicker.vue');
 	var Loading = require('../../common/loading.vue');
-    var api = require('./api');
+    var store = require('../../../store/store.js');
+    var actions = require('../../../store/actions.js');
+    var Alert = require('../../common/alert.vue');
+    var Confirm = require('../../common/confirm.vue');
+    var api = require('./api.js');
+    var bpInfo = require('./bpinfo.vue');
+    
 	var databp = Vue.extend({
 		name: 'databp',
+        store: store,
 		components: {
 			'm-loading': Loading,
-            'm-date': DatePicker
+            'm-date': DatePicker,
+            'm-alert': Alert,
+            'm-confirm': Confirm,
+            'm-bpinfo': bpInfo
 		},
 		data: function() {
 			return {
                 index: 1,
 				loading: {
-					show: true,
+					show: false,
 					noLoaded: 0
 				},
                 argvs: {},
@@ -80,7 +94,15 @@
                     },
                     trigger: true
                 },
-                dataList: []
+                dataList: [],
+                bpConfig: {
+                    name: '',
+                    selector:'',
+                    publicBp: [['','']],
+                    privateBp: [['','']]
+                },
+                publicBpStr: '',
+                showConfig: false
 			}
 		},
         ready() {
@@ -94,6 +116,23 @@
                     console.log(res);
                     _this.dataList = res;
                 })
+            },
+            del(item) {
+                actions.confirm(store, {
+                    show: true,
+                    title: '删除确认',
+                    msg: '确定删除吗',
+                    apply: function(){
+                        // TODO
+                    }
+                });
+            },
+            edit(item) {
+                this.bpConfig.name = item.pointName;
+                this.publicBpStr = item.pointParam;
+                this.showConfig = true;
+
+                
             }
 		}
 	});
