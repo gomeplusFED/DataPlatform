@@ -80,7 +80,9 @@ UTILS._cssPathStep = function(node, optimized, isTargetNode)
         if (!classAttribute)
             return [];
 
-        return classAttribute.split(/\s+/g).filter(Boolean).map(function(name) {
+        return classAttribute.split(/\s+/g).filter(Boolean).filter(function(name) {
+            return (name.indexOf('active') === -1);
+        }).map(function(name) {
             // The prefix is required to store "__proto__" in a object-based map.
             return "$" + name;
         });
