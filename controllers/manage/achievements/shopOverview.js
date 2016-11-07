@@ -175,7 +175,9 @@ module.exports = (Router) => {
         },
         rows : [
             [ 'date', 'shop_run', 'shop_rest', 'shop_frost',
-                "shop_stop" , "XPOP" , "APP" , "WEB" , "shop_success" ]
+                "shop_stop" ,
+                //"XPOP" , "APP" , "WEB" ,
+                "shop_success" ]
         ],
         cols : [
             [
