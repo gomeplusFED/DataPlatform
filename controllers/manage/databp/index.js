@@ -36,7 +36,7 @@ module.exports = (Router) => {
                 if(p2.indexOf('.') === 0) {
                     return `${p1}="${trunk}/${p2}"`;
                 } else if (p2.indexOf('/') === 0) {
-                    return `${p1}=="${host}${p2}"`;
+                    return `${p1}="${host}${p2}"`;
                 } else {
                     return `${p1}="${host}/${p2}"`;
                 }
