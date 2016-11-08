@@ -6,6 +6,12 @@
 		<m-date class="global_date" :index="-1" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'date_picker'" :argvs.sync='argvs'></m-date>
 	</div>
 </template>
+<style>
+    #datePicker_-1 {
+        float: right;
+        bottom: 10px;
+    }
+</style>
 <script>
 	var Vue = require('Vue');
 	var FilterTabCheckbox = require('../common/filter-tab-checkbox.vue');

@@ -27,13 +27,12 @@ module.exports = (Router) => {
         router : "/retainedAnalysis/retainedOne",
         platform : false,
         modelName : ["UserKeepResult"],
+        date_picker : false,
         params(query, params) {
             params.type = query.type || "ios";
 
              return params;
         },
-        paging : [true],
-        order : ["-date"],
         global_platform : {
             show: true,
             key: 'type',
@@ -54,47 +53,16 @@ module.exports = (Router) => {
                 name: 'H5'
             }]
         },
-        filter(data) {
-            return filter.retainedOne(data);
+        filter(data, query, dates) {
+            return filter.retainedOne(data, query, dates);
         },
-        excel_export : true,
-        flexible_btn : [{
-            content: '<a href="javascript:void(0)">导出</a>',
-            preMethods: ['excel_export']
-        }],
-        rows: [
-            [ 'date', 'new_users', 'last_1_keep', 'last_7_keep', "last_14_keep", "last_30_keep"]
-        ],
-        cols: [
-            [
-                {
-                    caption : '时间',
-                    type : 'string',
-                    width : 20
-                }, {
-                    caption: '新增用户',
-                    type: 'number'
-                }, {
-                    caption: '次日留存率',
-                    type: 'string'
-                }, {
-                    caption: '7日留存率',
-                    type: 'string'
-                }, {
-                    caption: '14日留存率',
-                    type: 'string'
-                }, {
-                    caption: '30日留存率',
-                    type: 'string'
-                }
-            ]
-        ]
     });
 
     Router = new api(Router,{
         router : "/retainedAnalysis/retainedTwo",
         platform : false,
         modelName : ["UserKeepResult"],
+        date_picker : false,
         params(query, params) {
             params.type = query.type || "ios";
 
@@ -103,7 +71,7 @@ module.exports = (Router) => {
         paging : [true],
         order : ["-date"],
         filter(data) {
-            return filter.retainedOne(data);
+            return filter.retainedTwo(data);
         },
         excel_export : true,
         flexible_btn : [{

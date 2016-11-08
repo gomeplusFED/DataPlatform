@@ -14,7 +14,7 @@ module.exports = {
                 type : "chart",
                 query_api : "/retainedAnalysis/retainedZero"
             },{
-                type: "table",
+                type: "chart",
                 title: "留存用户情况",
                 query_api: "/retainedAnalysis/retainedOne"
             }, {
