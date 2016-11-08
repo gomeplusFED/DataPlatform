@@ -21,7 +21,14 @@ module.exports = {
             newData = {};
 
         for(let date of dates) {
-            map[date] = date;
+            if(query.day_type == 1) {
+                map[date] = date;
+            } else if(query.day_type == 2) {
+                let a = moment(new Date(new Date() - 7 * 24 * 60 * 60 * 1000)).format("MM-DD");
+                map[date] = moment(new Date(date)).format("MM-DD") + "-" + a;
+            } else {
+                map[date] = moment(new Date(date)).format("MM") + "月";
+            }
             obj[date] = {};
         }
         for(let item of source) {
@@ -62,10 +69,22 @@ module.exports = {
                     newData["3月后"][date] = util.percentage(a["4th_week_startup_user_num"], a["1st_week_active_user_num"]);
                 }
                 break;
+            default:break;
         }
+
+        return [{
+            type : type,
+            map : map,
+            data : newData,
+            config: { // 配置信息
+                stack: false  // 图的堆叠
+            }
+        }];
     },
     retainedTwo(data) {
         var source = data.first.data[0],
+            obj = {},
+            newData = [],
             count = data.first.count;
         for(var key of source) {
             key.date = moment(key.date).format("YYYY-MM-DD");
