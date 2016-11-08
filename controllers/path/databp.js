@@ -33,14 +33,5 @@ module.exports = {
 
             ]
         }
-    },
-    task(){
-        return {
-            name : "任务管理",
-            path : "/databp/task",
-            display : true,
-            defaultData : [
-            ]
-        }
     }
 };

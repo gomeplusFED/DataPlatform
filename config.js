@@ -272,8 +272,7 @@ const Config = {
             path: [
                 obj.databp.visualbp(),
                 obj.databp.bpmanage(),
-                obj.databp.spread(),
-                obj.databp.task()
+                obj.databp.spread()
 
             ]
         },
