@@ -38,10 +38,30 @@ module.exports = {
             case 1 :
                 for(let date in obj) {
                     let a = obj[date];
-                    let keep = {
-                        "次日留存率" : 
-                    };
+                    newData["次日留存率"][date] = util.percentage(a["2nd_day_startup_user_num"], a["1st_day_active_user_num"]);
+                    newData["3日留存率"][date] = util.percentage(a["3rd_day_startup_user_num"], a["1st_day_active_user_num"]);
+                    newData["7日留存率"][date] = util.percentage(a["7th_day_startup_user_num"], a["1st_day_active_user_num"]);
+                    newData["14日留存率"][date] = util.percentage(a["14th_day_startup_user_num"], a["1st_day_active_user_num"]);
+                    newData["30日留存率"][date] = util.percentage(a["30th_day_startup_user_num"], a["1st_day_active_user_num"]);
                 }
+                break;
+            case 2 :
+                for(let date in obj) {
+                    let a = obj[date];
+                    newData["1周后"][date] = util.percentage(a["2nd_week_startup_user_num"], a["1st_week_active_user_num"]);
+                    newData["2周后"][date] = util.percentage(a["3rd_week_startup_user_num"], a["1st_week_active_user_num"]);
+                    newData["3周后"][date] = util.percentage(a["4th_week_startup_user_num"], a["1st_week_active_user_num"]);
+                    newData["4周后"][date] = util.percentage(a["5th_week_startup_user_num"], a["1st_week_active_user_num"]);
+                }
+                break;
+            case 3 :
+                for(let date in obj) {
+                    let a = obj[date];
+                    newData["1月后"][date] = util.percentage(a["2nd_week_startup_user_num"], a["1st_week_active_user_num"]);
+                    newData["2月后"][date] = util.percentage(a["3rd_week_startup_user_num"], a["1st_week_active_user_num"]);
+                    newData["3月后"][date] = util.percentage(a["4th_week_startup_user_num"], a["1st_week_active_user_num"]);
+                }
+                break;
         }
     },
     retainedTwo(data) {
