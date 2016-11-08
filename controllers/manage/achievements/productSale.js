@@ -333,6 +333,8 @@ module.exports = (Router) => {
         modelName : ["ItemRunTop" /*, "ItemRunTop"*/],
         platform : false,
         excel_export : true,
+        date_picker_data : 1,
+        showDayUnit : true,
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
