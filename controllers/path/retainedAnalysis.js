@@ -11,9 +11,16 @@ module.exports = {
             path: "/retainedAnalysis",
             display: true,
             defaultData: [{
+                type : "chart",
+                query_api : "/retainedAnalysis/retainedZero"
+            },{
                 type: "table",
                 title: "留存用户情况",
                 query_api: "/retainedAnalysis/retainedOne"
+            }, {
+                type: "table",
+                title: "留存用户情况",
+                query_api: "/retainedAnalysis/retainedTwo"
             }]
         };
     }

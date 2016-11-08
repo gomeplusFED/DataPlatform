@@ -8,6 +8,21 @@ var api = require("../../../base/main"),
 
 module.exports = (Router) => {
 
+    Router = Router.get("/retainedAnalysis/retainedZero_json" , function(req , res , next){
+
+        res.json({
+            code: 200,
+            modelData: [],
+            components: {
+                date_picker: {
+                    show: true,
+                    defaultData: 7,
+                    showDayUnit : true
+                }
+            }
+        });
+    });
+
     Router = new api(Router,{
         router : "/retainedAnalysis/retainedOne",
         platform : false,
@@ -39,6 +54,54 @@ module.exports = (Router) => {
                 name: 'H5'
             }]
         },
+        filter(data) {
+            return filter.retainedOne(data);
+        },
+        excel_export : true,
+        flexible_btn : [{
+            content: '<a href="javascript:void(0)">导出</a>',
+            preMethods: ['excel_export']
+        }],
+        rows: [
+            [ 'date', 'new_users', 'last_1_keep', 'last_7_keep', "last_14_keep", "last_30_keep"]
+        ],
+        cols: [
+            [
+                {
+                    caption : '时间',
+                    type : 'string',
+                    width : 20
+                }, {
+                    caption: '新增用户',
+                    type: 'number'
+                }, {
+                    caption: '次日留存率',
+                    type: 'string'
+                }, {
+                    caption: '7日留存率',
+                    type: 'string'
+                }, {
+                    caption: '14日留存率',
+                    type: 'string'
+                }, {
+                    caption: '30日留存率',
+                    type: 'string'
+                }
+            ]
+        ]
+    });
+
+    Router = new api(Router,{
+        router : "/retainedAnalysis/retainedTwo",
+        platform : false,
+        modelName : ["UserKeepResult"],
+        params(query, params) {
+            params.type = query.type || "ios";
+
+             return params;
+        },
+        paging : [true],
+        order : ["-date"],
         filter(data) {
             return filter.retainedOne(data);
         },
