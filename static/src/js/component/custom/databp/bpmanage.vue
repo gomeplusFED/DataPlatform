@@ -4,15 +4,15 @@
         <ul class="clearfix">
             <li class="clearfix">
                 <label>埋点URL</label>
-                <input class="form-control inp inpW1" type="text" placeholder="" v-model="bpConfig.pageUrl">
+                <input class="form-control inp inpW1" type="text" placeholder="" v-model="searchParam.pageUrl">
                 <label>埋点名称</label>
-                <input class="form-control inp inpW2" type="text" placeholder="" v-model="bpConfig.pointName">
+                <input class="form-control inp inpW2" type="text" placeholder="" v-model="searchParam.pointName">
                 <label>埋点事件名称</label>
                 <input class="form-control inp inpW2" type="text" placeholder="" value="单击" disabled>
             </li>
             <li>
                 <label>平台</label>
-                <select class="form-control inp inpW1" v-model="bpConfig.platform">
+                <select class="form-control inp inpW1" v-model="searchParam.platform">
                     <option value='PC'>PC</option>
                     <option value='H5'>H5</option>
                 </select>  
@@ -37,7 +37,7 @@
             </thead>
             <tbody> 
                 <tr v-for="(i, item) in dataList">
-                    <td>{{i}}</td>
+                    <td>{{i + baseIndex}}</td>
                     <td>{{item.pointName}}</td>
                     <td>单击</td>
                     <td>{{item.selector}}</td>
@@ -81,6 +81,11 @@
             'm-confirm': Confirm,
             'm-bpinfo': bpInfo
 		},
+        computed: {
+            baseIndex: function () {
+                return (this.paginationConf.currentPage - 1) * this.paginationConf.itemsPerPage + 1;
+            }
+        },
 		data: function() {
 			return {
                 index: 1,
@@ -107,15 +112,12 @@
                     trigger: true
                 },
                 dataList: [],
-                bpConfig: {
+                searchParam: {
                     pointName: '',
                     platform: 'PC',
-                    pageUrl: '',
-                    selector:'',
-                    publicBp: [['','']],
-                    privateBp: [['','']]
+                    pageUrl: ''
                 },
-                publicBpStr: '',
+                bpConfig: {},
                 showConfig: false
 			}
 		},
@@ -125,12 +127,14 @@
         },
 		methods: {
             query() {
+                console.log(this.argvs);
                 var _this = this;
                 api.listBps({
-                    pageUrl: _this.bpConfig.pageUrl, 
-                    platform: _this.bpConfig.platform, 
-                    pointName: _this.bpConfig.pointName, 
-                    page: _this.paginationConf.currentPage,
+                    pageUrl: _this.searchParam.pageUrl, 
+                    platform: _this.searchParam.platform, 
+                    pointName: _this.searchParam.pointName, 
+                    // page从0开始
+                    page: _this.paginationConf.currentPage - 1,
                     size: _this.paginationConf.itemsPerPage
                 }).then(function(res) {
                     // console.log(res);
@@ -145,16 +149,16 @@
                     title: '删除确认',
                     msg: '确定删除吗',
                     apply: function(){
-                        // TODO
+                        api.deleteBp(item);
                     }
                 });
             },
             edit(item) {
-                this.bpConfig.name = item.pointName;
-                this.publicBpStr = item.pointParam;
+                this.bpConfig.pointName = item.pointName;
+                this.bpConfig.pageUrl = item.pageUrl;
+                this.bpConfig.selector = item.selector;
+                this.bpConfig.platform = item.platform;
                 this.showConfig = true;
-
-                
             }
 		}
 	});
