@@ -330,7 +330,7 @@ module.exports = (Router) => {
     //商品排行TOP100
     Router = new api(Router,{
         router : "/achievements/productSaleFour",
-        modelName : ["ItemRunTop" , "ItemRunTop"],
+        modelName : ["ItemRunTop" /*, "ItemRunTop"*/],
         platform : false,
         excel_export : true,
         date_picker_data : 1,
@@ -391,7 +391,9 @@ module.exports = (Router) => {
             
             if(isCount){
                 //统计总数
-                let sql = `SELECT COUNT(*) count FROM ads2_itm_run_top WHERE date BETWEEN ? AND ? AND day_type = 1 AND category_id_1 = ? AND category_id_2 = ? AND category_id_3 = ? AND category_id_4 = ? AND type = ?`;
+                let sql = `SELECT COUNT(*) count ,SUM(product_acc_pv) product_acc_pv,
+                SUM(product_acc_uv) product_acc_uv,
+                SUM(shop_pay_price) shop_pay_price FROM ads2_itm_run_top WHERE date BETWEEN ? AND ? AND day_type = 1 AND category_id_1 = ? AND category_id_2 = ? AND category_id_3 = ? AND category_id_4 = ? AND type = ?`;
                 return {
                     sql : sql,
                     params : arrParam
@@ -404,7 +406,7 @@ module.exports = (Router) => {
                 params : arrParam
             }
         },
-        secondSql(query , params , isCount){
+        /*secondSql(query , params , isCount){
             var arrParam = [];
             arrParam[0] = utils.getDate(params.date.from) + " 00:00:00",
             arrParam[1] = utils.getDate(params.date.to) + " 23:59:59",
@@ -423,7 +425,7 @@ module.exports = (Router) => {
                 sql : sql,
                 params : arrParam
             }
-        },
+        },*/
         //set in filter function.
         cols : [
             []
