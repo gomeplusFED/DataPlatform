@@ -76,9 +76,6 @@ router.map({
 			},
 			'/spread': {
 				component: require('./component/custom/databp/spread.vue')
-			},
-			'/task': {
-				component: require('./component/custom/databp/task.vue')
 			}
 		}
 	}
