@@ -159,10 +159,7 @@
                 });
             },
             edit(item) {
-                this.bpConfig.pointName = item.pointName;
-                this.bpConfig.pageUrl = item.pageUrl;
-                this.bpConfig.selector = item.selector;
-                this.bpConfig.platform = item.platform;
+                this.bpConfig = item;
                 this.showConfig = true;
             }
 		}

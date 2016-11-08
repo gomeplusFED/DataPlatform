@@ -129,11 +129,16 @@ var bpinfo = Vue.extend({
 	},
 	props:['show', 'bpConfig'],
 	ready() {
-		this.$watch('bpConfig.privateParam', function (val) {
-			this.privateBpStr = this.bpConfig.privateParam;
+		this.$watch('bpConfig.privateParam', function (val, oldval) {
+			if (val !== oldval) {
+				this.privateBpStr = this.bpConfig.privateParam;
+			}
+			
 		});
-		this.$watch('bpConfig.publicParam', function (val) {
-			this.publicBpStr = this.bpConfig.publicParam;
+		this.$watch('bpConfig.publicParam', function (val, oldval) {
+			if (val !== oldval) {
+				this.publicBpStr = this.bpConfig.publicParam;
+			}
 		});
 		this.$watch('show', function (val) {
 			if (val) {
@@ -179,7 +184,14 @@ var bpinfo = Vue.extend({
 			_this.config.publicParam = this.publicBpStr;
 			_this.config.privateParam = this.privateBpStr;
 			if (_this.config.pointId) {
-				api.updateBp(_this.config);
+				api.updateBp(_this.config).then(function(res) {
+					// 更新成功刷新传入的数据
+					Object.assign(_this.bpConfig, _this.config);
+					if(_this.bpConfig.pointParam) {
+						_this.bpConfig.pointParam = [...new Set(_this.publicBp.concat(_this.privateBp).map(x => x[0] + '=' + x[1]))].join('&');
+					}
+					_this.show = false;
+				});
 			} else {
 				api.saveBp(_this.config).then(function() {
 					_this.show = false;
