@@ -40,10 +40,10 @@
                     <td>{{i + baseIndex}}</td>
                     <td>{{item.pointName}}</td>
                     <td>单击</td>
-                    <td>{{item.selector}}</td>
-                    <td>{{item.pointParam}}</td>
+                    <td title={{item.selector}}>{{item.selector}}</td>
+                    <td  title={{item.pointParam}}>{{item.pointParam}}</td>
                     <td>{{item.updateTime |Date 'yyyy-MM-dd hh:mm:ss'}}</td>
-                    <td><a @click="edit(item)">修改</a>&nbsp<a @click="del(item)">删除</a></td>
+                    <td><a @click="edit(item)">修改</a>&nbsp<a @click="del(item.id)">删除</a></td>
                 </tr>
             </tbody>
         </table>
@@ -127,7 +127,7 @@
         },
 		methods: {
             query() {
-                console.log(this.argvs);
+                // console.log(this.argvs);
                 var _this = this;
                 api.listBps({
                     pageUrl: _this.searchParam.pageUrl, 
@@ -143,13 +143,16 @@
                     
                 });
             },
-            del(item) {
+            del(id) {
                 actions.confirm(store, {
                     show: true,
                     title: '删除确认',
                     msg: '确定删除吗',
-                    apply: function(){
-                        api.deleteBp(item);
+                    apply: () => {
+                        api.deleteBp(id).then(() =>{
+                            this.query()
+                        });
+                        
                     }
                 });
             },
