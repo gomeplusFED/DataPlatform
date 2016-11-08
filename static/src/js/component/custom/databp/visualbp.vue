@@ -12,7 +12,7 @@
 				<option value='H5'>H5</option>
 			</select>
 		 </div>
-		<button @click='search' type='button' class='btn ent-btn-blue search-btn '>检索页面</button>
+		<button id="search" @click='search' type='button' class='btn ent-btn-blue search-btn' data-toggle="popover"   data-content="请输入正确的url">检索页面</button>
 	</form>
 		<!-- nav -->
 	<div id='container' class='main'>
@@ -69,8 +69,15 @@
 
 		},
 		methods: {
-			search() {
+			search(ev) {
 				var _this = this;
+				var url = this.bpConfig.pageUrl;
+				if(!/https?:\/\/([\w-]+\.)+[\w-]+(\/[\w- ./?%&=]*)?/.test(url)) {
+					var $ele =  $('#search');
+					$ele.popover('show');
+					setTimeout(function () { $ele.popover("destroy"); }, 1000);
+					return false;
+				}
 				_this.loading.show = true;
 				var newiframe_url = '/databp/html?m='+this.platform+'&url=' + this.bpConfig.pageUrl;
 				if (newiframe_url === _this.iframe_url) {
