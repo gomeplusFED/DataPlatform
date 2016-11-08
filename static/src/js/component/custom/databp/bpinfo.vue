@@ -45,7 +45,7 @@
 						</div>
 					</div> 
 				</div>
-				<button class="btn btn-success save" @click="save">保存埋点</button>
+				<button class="btn btn-success save" @click="save">{{config.pointId ? '更新埋点' : '保存埋点'}}</button>
 			</div>
 		</div>
 	</div>
@@ -60,6 +60,7 @@ var bpinfo = Vue.extend({
 		return {
 			dragpos: {},
 			config: {
+				pointId: -1,
 				pointName: '',
 				platform: 'PC',
 				pageUrl: '',
@@ -152,6 +153,8 @@ var bpinfo = Vue.extend({
 				_this.bpConfig.publicParam = data.publicParam;
 				_this.bpConfig.privateParam = data.privateParam;
 				
+			}).catch(function() {
+				_this.show = false;
 			});
 		},
 		dragstart(e) {
@@ -174,7 +177,9 @@ var bpinfo = Vue.extend({
 			if (_this.config.pointId) {
 				api.updateBp(_this.config);
 			} else {
-				api.saveBp(_this.config);
+				api.saveBp(_this.config).then(function() {
+					_this.show = false;
+				});
 			}
 		}
 	}
