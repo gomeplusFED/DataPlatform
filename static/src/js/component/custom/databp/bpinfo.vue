@@ -60,7 +60,7 @@ var bpinfo = Vue.extend({
 		return {
 			dragpos: {},
 			config: {
-				pointId: -1,
+				pointId: null,
 				pointName: '',
 				platform: 'PC',
 				pageUrl: '',
@@ -149,10 +149,13 @@ var bpinfo = Vue.extend({
 				console.log(data);
 				// show the config window
 				_this.config.pointId = data.pointId;
+				// 附加传回信息
+				_this.config.matchUrlId = data.matchUrlId;
+				_this.config.pattern = data.pattern;
 				_this.config.pageUrl = data.pageUrl || _this.bpConfig.pageUrl;
 				_this.config.pointName = data.pointName;
-				_this.bpConfig.publicParam = data.publicParam;
-				_this.bpConfig.privateParam = data.privateParam;
+				_this.publicBpStr = data.publicParam;
+				_this.privateBpStr = data.privateParam;
 				
 			}).catch(function() {
 				_this.show = false;
