@@ -225,7 +225,7 @@ module.exports = {
 
         var source = data.first.data,
             num=query.filter_key22 / 1,
-            sourceSum = data.second.data[0];
+            sourceSum = data.first.count[0];
 
         if(num == 2) num = 0;
         var Columns = [
