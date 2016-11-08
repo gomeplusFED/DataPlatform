@@ -1,7 +1,7 @@
 var store = require('../../../store/store.js');
 var actions = require('../../../store/actions.js');
 var $ = require('jQuery');
-const baseurl = 'http://10.69.20.55:8080';
+const baseurl = 'http://10.69.20.55:8080/bomber-pie';
 // const baseurl = 'http://10.69.112.146:38080/bomber-pie'
 
 $.support.cors = true;
@@ -93,7 +93,20 @@ var api = {
 	// useless: selector
 	// {pageUrl, platform, pointName, page, size}
 	listBps(data){
-		return buildAjax('/pointList', data).then(extractResult).catch(errHandler);
+		return buildAjax('/pointList', data).then(function(res) {
+			if(res.code !== '200' || res.iserror !== '0') {
+				return Promise.reject('获取埋点信息失败：' + res.msg);
+			}
+			var data;
+			if (res && (data = res.data) && (data = data.result)) {
+				return {
+					data,
+					total: res.data.total
+				}
+			} else {
+	            return Promise.reject('获取的埋点信息为空');
+			}
+		}).catch(errHandler);
 	}
 }
 module.exports = api;

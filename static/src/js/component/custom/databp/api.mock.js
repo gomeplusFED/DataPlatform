@@ -95,7 +95,7 @@ var api = {
 	listBps({pageUrl, platform, pointName, page, size}){
 		return Promise.resolve({
 		    "data": {
-		        "total": 11,
+		        "total": 20,
 		        "result": [{
 		            "id": 50,
 		            "pageUrl": "https://mall.gomeplus.com/item/2016-11042.html",
@@ -107,7 +107,128 @@ var api = {
 		            "platform": "H5",
 		            "isActive": "1",
 		            "uniquePoint": "1"
-		        }, {
+		        }, 
+		        {
+		            "id": 50,
+		            "pageUrl": "https://mall.gomeplus.com/item/2016-11042.html",
+		            "selector": "<div/>2",
+		            "pointName": "埋点2",
+		            "pointParam": "uid=1",
+		            "createTime": 1478239758000,
+		            "updateTime": 1478239758000,
+		            "platform": "H5",
+		            "isActive": "1",
+		            "uniquePoint": "1"
+		        },
+		        {
+		            "id": 50,
+		            "pageUrl": "https://mall.gomeplus.com/item/2016-11042.html",
+		            "selector": "<div/>2",
+		            "pointName": "埋点2",
+		            "pointParam": "uid=1",
+		            "createTime": 1478239758000,
+		            "updateTime": 1478239758000,
+		            "platform": "H5",
+		            "isActive": "1",
+		            "uniquePoint": "1"
+		        },
+		        {
+		            "id": 50,
+		            "pageUrl": "https://mall.gomeplus.com/item/2016-11042.html",
+		            "selector": "<div/>2",
+		            "pointName": "埋点2",
+		            "pointParam": "uid=1",
+		            "createTime": 1478239758000,
+		            "updateTime": 1478239758000,
+		            "platform": "H5",
+		            "isActive": "1",
+		            "uniquePoint": "1"
+		        },
+		        {
+		            "id": 50,
+		            "pageUrl": "https://mall.gomeplus.com/item/2016-11042.html",
+		            "selector": "<div/>2",
+		            "pointName": "埋点2",
+		            "pointParam": "uid=1",
+		            "createTime": 1478239758000,
+		            "updateTime": 1478239758000,
+		            "platform": "H5",
+		            "isActive": "1",
+		            "uniquePoint": "1"
+		        },
+		        {
+		            "id": 50,
+		            "pageUrl": "https://mall.gomeplus.com/item/2016-11042.html",
+		            "selector": "<div/>2",
+		            "pointName": "埋点2",
+		            "pointParam": "uid=1",
+		            "createTime": 1478239758000,
+		            "updateTime": 1478239758000,
+		            "platform": "H5",
+		            "isActive": "1",
+		            "uniquePoint": "1"
+		        },
+		        {
+		            "id": 50,
+		            "pageUrl": "https://mall.gomeplus.com/item/2016-11042.html",
+		            "selector": "<div/>2",
+		            "pointName": "埋点2",
+		            "pointParam": "uid=1",
+		            "createTime": 1478239758000,
+		            "updateTime": 1478239758000,
+		            "platform": "H5",
+		            "isActive": "1",
+		            "uniquePoint": "1"
+		        },
+		        {
+		            "id": 50,
+		            "pageUrl": "https://mall.gomeplus.com/item/2016-11042.html",
+		            "selector": "<div/>2",
+		            "pointName": "埋点2",
+		            "pointParam": "uid=1",
+		            "createTime": 1478239758000,
+		            "updateTime": 1478239758000,
+		            "platform": "H5",
+		            "isActive": "1",
+		            "uniquePoint": "1"
+		        },
+		        {
+		            "id": 50,
+		            "pageUrl": "https://mall.gomeplus.com/item/2016-11042.html",
+		            "selector": "<div/>2",
+		            "pointName": "埋点2",
+		            "pointParam": "uid=1",
+		            "createTime": 1478239758000,
+		            "updateTime": 1478239758000,
+		            "platform": "H5",
+		            "isActive": "1",
+		            "uniquePoint": "1"
+		        },
+		        {
+		            "id": 50,
+		            "pageUrl": "https://mall.gomeplus.com/item/2016-11042.html",
+		            "selector": "<div/>2",
+		            "pointName": "埋点2",
+		            "pointParam": "uid=1",
+		            "createTime": 1478239758000,
+		            "updateTime": 1478239758000,
+		            "platform": "H5",
+		            "isActive": "1",
+		            "uniquePoint": "1"
+		        },
+		        {
+		            "id": 50,
+		            "pageUrl": "https://mall.gomeplus.com/item/2016-11042.html",
+		            "selector": "<div/>2",
+		            "pointName": "埋点2",
+		            "pointParam": "uid=1",
+		            "createTime": 1478239758000,
+		            "updateTime": 1478239758000,
+		            "platform": "H5",
+		            "isActive": "1",
+		            "uniquePoint": "1"
+		        },
+		        {
 		            "id": 51,
 		            "pageUrl": "https://mall.gomeplus.com/item/2016-11042.html",
 		            "selector": "<div/>3",
@@ -123,7 +244,20 @@ var api = {
 		    "code": "200",
 		    "msg": "",
 		    "iserror": "0"
-		}).then(extractResult).catch(errHandler);
+		}).then(function(res) {
+			if(res.code !== '200' || res.iserror !== '0') {
+				return Promise.reject('获取埋点信息失败：' + res.msg);
+			}
+			var data;
+			if (res && (data = res.data) && (data = data.result)) {
+				return {
+					data,
+					total: res.data.total
+				}
+			} else {
+	            return Promise.reject('获取的埋点信息为空');
+			}
+		}).catch(errHandler);
 	}
 }
 module.exports = api;
