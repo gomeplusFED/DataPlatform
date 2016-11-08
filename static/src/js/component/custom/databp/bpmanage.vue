@@ -1,54 +1,55 @@
 <template>
-<div class="bp-container">
+<div class="bp-container panel-group">
     <div class="nform-box">
         <ul class="clearfix">
             <li class="clearfix">
                 <label>埋点URL</label>
-                <input class="form-control inp inpW1" type="text" placeholder="" value="">
+                <input class="form-control inp inpW1" type="text" placeholder="" v-model="bpConfig.pageUrl">
                 <label>埋点名称</label>
-                <input class="form-control inp inpW2" type="text" placeholder="" value="">
+                <input class="form-control inp inpW2" type="text" placeholder="" v-model="bpConfig.pointName">
                 <label>埋点事件名称</label>
-                <input class="form-control inp inpW2" type="text" placeholder="" value="">
+                <input class="form-control inp inpW2" type="text" placeholder="" value="单击" disabled>
             </li>
             <li>
                 <label>平台</label>
-                <input class="form-control inp inpW1" type="text" placeholder="" value="">   
+                <select class="form-control inp inpW1" v-model="bpConfig.platform">
+                    <option value='PC'>PC</option>
+                    <option value='H5'>H5</option>
+                </select>  
                 <label>起止时间</label>
                 <m-date :index="index" :page-components-data="pageComponentsData" :component-type="'date_picker'" :argvs.sync='argvs'></m-date>
                 <button id="btnSearch" class="btn btn-searchLi-top btn-primary" type="button" data-toggle="popover" data-trigger="focus" @click="query">查询</button>
             </li>
         </ul> 
     </div>
-    <div id="divEntData" class="">
-        <div class="list-cot list-cot-h">
-            <table class="table table-hover ntable">
-                <thead>
-                    <tr>
-                        <th style="min-width:102px;width:7.97%;">序号</th>
-                        <th >埋点名称</th>
-                        <th >埋点事件名称</th>
-                        <th >选择器</th>
-                        <th >埋点参数</th>
-                        <th >埋点设置时间</th>
-                        <th>操作</th>
-                    </tr>
-                </thead>
-                <tbody> 
-                    <tr v-for="(i, item) in dataList">
-                        <td>{{i}}</td>
-                        <td>{{item.pointName}}</td>
-                        <td>单击</td>
-                        <td>{{item.selector}}</td>
-                        <td>{{item.pointParam}}</td>
-                        <td>{{item.updateTime |Date 'yyyy-MM-dd hh:mm:ss'}}</td>
-                        <td><a @click="edit(item)">修改</a>&nbsp<a @click="del(item)">删除</a></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="loading-mask" style="display: none;">
-            <div class="loading-content"><i class="fa fa-spinner fa-pulse loading-img mid-icon"></i></div>
-        </div>
+    <div class="list-cot list-cot-h list-group">
+        <table class="table table-hover ntable">
+            <thead>
+                <tr>
+                    <th style="min-width:102px;width:7.97%;">序号</th>
+                    <th >埋点名称</th>
+                    <th >埋点事件名称</th>
+                    <th >选择器</th>
+                    <th >埋点参数</th>
+                    <th >埋点设置时间</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody> 
+                <tr v-for="(i, item) in dataList">
+                    <td>{{i}}</td>
+                    <td>{{item.pointName}}</td>
+                    <td>单击</td>
+                    <td>{{item.selector}}</td>
+                    <td>{{item.pointParam}}</td>
+                    <td>{{item.updateTime |Date 'yyyy-MM-dd hh:mm:ss'}}</td>
+                    <td><a @click="edit(item)">修改</a>&nbsp<a @click="del(item)">删除</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="panel-footer" v-show="paginationConf.totalItems > paginationConf.itemsPerPage">
+        <m-pagination :pagination-conf="paginationConf"></m-pagination>
     </div>
     <m-alert></m-alert>
     <m-bpinfo :show.sync = "showConfig" :bp-config = "bpConfig"  :public-bp-str = "publicBpStr"></m-bpinfo>
@@ -65,6 +66,7 @@
     var actions = require('../../../store/actions.js');
     var Alert = require('../../common/alert.vue');
     var Confirm = require('../../common/confirm.vue');
+    var Pagination = require('../../common/pagination.vue');
     var api = require('./api.js');
     var bpInfo = require('./bpinfo.vue');
     
@@ -73,6 +75,7 @@
         store: store,
 		components: {
 			'm-loading': Loading,
+            'm-pagination': Pagination,
             'm-date': DatePicker,
             'm-alert': Alert,
             'm-confirm': Confirm,
@@ -86,6 +89,15 @@
 					noLoaded: 0
 				},
                 argvs: {},
+                paginationConf: {
+                    currentPage: 1,     // 当前页
+                    totalItems: 0,     // 总条数
+                    itemsPerPage: 12,    // 每页条数
+                    pagesLength: 5,     // 显示几页( 1,2,3 / 1,2,3,4,5)
+                    onChange: () => {
+                        this.query();
+                    }
+                },
 				pageComponentsData: {
                     date_picker: {
                         show: true,
@@ -96,7 +108,9 @@
                 },
                 dataList: [],
                 bpConfig: {
-                    name: '',
+                    pointName: '',
+                    platform: 'PC',
+                    pageUrl: '',
                     selector:'',
                     publicBp: [['','']],
                     privateBp: [['','']]
@@ -112,10 +126,18 @@
 		methods: {
             query() {
                 var _this = this;
-                api.listBps({}).then(function(res) {
-                    console.log(res);
-                    _this.dataList = res;
-                })
+                api.listBps({
+                    pageUrl: _this.bpConfig.pageUrl, 
+                    platform: _this.bpConfig.platform, 
+                    pointName: _this.bpConfig.pointName, 
+                    page: _this.paginationConf.currentPage,
+                    size: _this.paginationConf.itemsPerPage
+                }).then(function(res) {
+                    // console.log(res);
+                    _this.dataList = res.data;
+                    _this.paginationConf.totalItems = res.total;
+                    
+                });
             },
             del(item) {
                 actions.confirm(store, {
@@ -142,7 +164,7 @@
 <style scoped>
 .bp-container {
 	height: 100% !important;
-    min-height: 900px;
+    min-height: 600px;
 	overflow: hidden;
 	margin: -20px -15px;
 }
@@ -179,12 +201,12 @@
 .nform-box li label, .nform-box li a, .nform-box li input, .nform-box li button, .nform-box li select, .nform-box li .sel-simulation, .nform-box li .sel-simulation span {
     float: left;
 }
-.nform-box ul li input {
+.nform-box ul li input, .nform-box ul li select {
     max-height: 30px;
     margin-right: 50px;
     border-color: #c2c2c2 !important;
 }
-.nform-box ul li input.inpW1 {
+.nform-box ul li .inpW1 {
     max-width: 180px;
 }
 .nform-box ul li input.inpW2 {
