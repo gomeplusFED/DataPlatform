@@ -267,11 +267,6 @@ module.exports = (Router) => {
             if(!query.type) params.type = "ALL";
             return params;
         },
-        flexible_btn : [{
-            content: `<a href="#!/achievements/productSale">支付分析</a>`, 
-            preMethods: [], 
-            customMethods: ""
-        }],
         filter(data, query, dates) {
             return filter.tradePanelFour(data , query , dates);
         },
@@ -305,30 +300,128 @@ module.exports = (Router) => {
         order : ["-date"],
         params(query , params , sendData){
             if(!query.type) params.type = "ALL";
-            delete params.aliy_pay;
+            delete params[sendData.rows[0][2]];
             return params;
         },
         filter(data, query, dates) {
             return filter.tradePanelFour_add(data , query , dates);
         },
         rows: [
-            ["date" , "all_pay_num" , "aliy_pay" , "weixin_pay" , "other_pay"]
+            ["date" , "newadd_guomeibi" , "consume_guomeibi" , "drawcash_guomeibi"]
         ],
         cols: [
             [{
                 caption: "日期",
                 type: "date"
             }, {
-                caption: "总支付笔数",
+                caption: "新增国美币",
                 type: "number"
             }, {
-                caption: "支付宝支付笔数",
+                caption: "消费国美币",
                 type: "number"
             }, {
-                caption: "微信支付笔数",
+                caption: "提现国美币",
+                type: "number"
+            }]
+        ]
+    });
+
+
+    //交易优惠券汇总
+    Router = new api(Router, {
+        router : "/achievements/tradePanelFive",
+        modelName : ["SalesPerfCoupleTotal2"],
+        platform : false,
+        date_picker : false,
+        params(query , params , sendData){
+            if(!query.type) params.type = "ALL";
+            return params;
+        },
+        flexible_btn : [{
+            content: `<a href="#!/coupon">优惠劵分析</a>`, 
+            preMethods: [], 
+            customMethods: ""
+        }],
+        filter(data, query, dates) {
+            return filter.tradePanelFive(data , query , dates);
+        },
+        rows: [
+            ["used_num" , "used_amount" , "lv"],
+            ["used_num" , "used_amount" , "lv" , "operating"],
+        ],
+        cols: [
+            [{
+                caption: "平台优惠券使用张数",
                 type: "number"
             }, {
-                caption: "其它支付笔数"
+                caption: "平台优惠券使用金额",
+                type: "number"
+            }, {
+                caption: "平台优惠券使用占比",
+                type: "number"
+            }, {
+                caption: ""
+            }],
+
+            [{
+                caption: "商家优惠券使用张数",
+                type: "number"
+            }, {
+                caption: "商家优惠券使用金额",
+                type: "number"
+            }, {
+                caption: "商家优惠券使用占比",
+                type: "number"
+            }, {
+                caption: ""
+            }]
+        ]
+    });
+
+    //交易优惠券汇总---补充
+    Router = new api(Router, {
+        router : "/achievements/tradePanelFive_add",
+        modelName : ["SalesPerfCoupleTotal2"],
+        platform : false,
+        date_picker : false,
+        paging : [true],
+        toggel : true,
+        order : ["-date"],
+        params(query , params , sendData){
+            if(!query.type) params.type = "ALL";
+            delete params[sendData.rows[0][2]];            
+            return params;
+        },
+        filter(data, query, dates) {
+            return filter.tradePanelFive_add(data , query , dates);
+        },
+        rows: [
+            ["date" , "used_num" , "used_amount" , "lv" , "used_num_2" , "used_amount_2" , "lv_2"]
+        ],
+        cols: [
+            [{
+                caption : "日期",
+                type : "date"
+            }, {
+                caption: "平台优惠券使用张数",
+                type: "number"
+            }, {
+                caption: "平台优惠券使用金额",
+                type: "number"
+            }, {
+                caption: "平台优惠券使用占比",
+                type: "number"
+            }, {
+                caption: ""
+            }, {
+                caption: "商家优惠券使用张数",
+                type: "number"
+            }, {
+                caption: "商家优惠券使用金额",
+                type: "number"
+            }, {
+                caption: "商家优惠券使用占比",
+                type: "number"
             }]
         ]
     });

@@ -184,33 +184,146 @@ module.exports = {
             }
         }];
     },
-    tradeFour(data, params) {
-        var source = data.first.data[0],
-            count = data.first.count,
-            sourceSum = data.first.sum;
+   
 
-        for(var key of source) {
-            key.pay_money_amount = key.pay_money_amount.toFixed(2);
-            key.pay_money_amount_ratio = util.toFixed(key.pay_money_amount, sourceSum["0"]);
+
+    //国美币汇总
+    tradePanelFour(data, query, dates) {
+
+        let source = data.first.data[0];
+        let result = {};
+        for(let key of data.rows[0]){
+            if(key == "operating"){
+                result[key] = `<button class='btn btn-info' url_detail='/achievements/tradePanelFour_add'>趋势</button>`;
+            }else{
+                result[key] = 0;
+            }
         }
-        return util.toTable([source], data.rows, data.cols, [count]);
+
+        for(let item of source){
+            for(let key of data.rows[0]){
+                if(key == "operating") continue;
+                result[key] += item[key];
+            }
+        }
+
+        return util.toTable([[result]], data.rows, data.cols , null , [true]);
     },
-    tradeFive(data) {
-        var source = data.first.data[0],
-            count = data.first.count,
-            pay_ttl = 0,
-            product_ttl = 0;
-        for (var key of source) {
-            pay_ttl += key.deal_money_amount;
-            product_ttl += key.deal_pro_num;
-        }
-        for (var key of source) {
-            key.cus_unit_price = util.division(key.deal_money_amount, key.order_number);
-            key.deal_money_amount = key.deal_money_amount.toFixed(2);
-            key.deal_money_ratio = util.toFixed(key.deal_money_amount, pay_ttl);
-            key.deal_pro_ratio = util.toFixed(key.deal_pro_num, product_ttl);
-        }
-        return util.toTable([source], data.rows, data.cols, [count]);
+    //国美币汇总--补充
+    tradePanelFour_add(data , query , dates){
+        let source = data.first.data[0],
+            Result = [],
+            count  = data.first.count || 1;
+        let result = {};
 
+        let map = {
+            "newadd_guomeibi" : "新增国美币",
+            "consume_guomeibi": "消费国美币",
+            "drawcash_guomeibi": "提现国美币",
+        }
+        for(let date of dates){
+            result[date] = {
+                "newadd_guomeibi"    : 0,
+                "consume_guomeibi"   : 0,
+                "drawcash_guomeibi"  : 0
+            }
+        }
+
+        for(let item of source){
+            item.date = util.getDate(item.date);
+            for(let key in result[item.date]){
+                result[item.date][key] += item[key];
+            }
+        }
+
+        if(source.length == 0){ source[0] = {"date":"暂无数据"} };
+
+        let out = util.toTable([source], data.rows, data.cols , [count]);
+        return [out[0] , {
+            type : "line",
+            map : map,
+            data : result,
+            config: { // 配置信息
+                stack: false  // 图的堆叠
+            }
+        }];
+    },
+
+
+    //交易优惠券汇总
+    tradePanelFive(data, query, dates) {
+        let source = data.first.data[0],
+            Table1 = {
+                "used_num" : 0, 
+                "used_amount" : 0 ,
+                "pay_num" : 0,
+                "lv" : "0%"
+            },
+            Table2 = {
+                "used_num" : 0, 
+                "used_amount" : 0 ,
+                "pay_num" : 0,
+                "lv" : "0%",
+                "operating" : `<button class='btn btn-info' url_detail='/achievements/tradePanelFive_add'>趋势</button>`
+            };
+
+        for(let item of source){
+            item.date = util.getDate(item.date);
+            if(item.coupon_type == 1){
+                //商家优惠劵
+                Table1.used_num += item.used_num;
+                Table1.used_amount += item.used_amount;
+                Table1.pay_num += item.pay_num;
+            }else{
+                //平台优惠劵
+                Table2.used_num += item.used_num;
+                Table2.used_amount += item.used_amount;
+                Table2.pay_num += item.pay_num;
+            }
+        }
+
+        Table1.lv = util.toFixed(Table1.used_num / Table1.pay_num , 0);
+        Table2.lv = util.toFixed(Table2.used_num / Table2.pay_num , 0);
+
+        return util.toTable([[Table1] , [Table2]], data.rows, data.cols , null , [true , true]);
+    },
+    //交易优惠券汇总--补充
+    tradePanelFive_add(data , query , dates){
+        let source = data.first.data[0],
+            Result = [],
+            count  = data.first.count || 1;
+        let result = {};
+
+        let map = {
+            "newadd_guomeibi" : "新增国美币",
+            "consume_guomeibi": "消费国美币",
+            "drawcash_guomeibi": "提现国美币",
+        }
+        for(let date of dates){
+            result[date] = {
+                "newadd_guomeibi"    : 0,
+                "consume_guomeibi"   : 0,
+                "drawcash_guomeibi"  : 0
+            }
+        }
+
+        for(let item of source){
+            item.date = util.getDate(item.date);
+            for(let key in result[item.date]){
+                result[item.date][key] += item[key];
+            }
+        }
+
+        if(source.length == 0){ source[0] = {"date":"暂无数据"} };
+
+        let out = util.toTable([source], data.rows, data.cols , [count]);
+        return [out[0] , {
+            type : "line",
+            map : map,
+            data : result,
+            config: { // 配置信息
+                stack: false  // 图的堆叠
+            }
+        }];
     }
 };

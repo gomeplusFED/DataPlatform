@@ -243,16 +243,16 @@ module.exports = {
                     title : "支付方式汇总",
                     query_api : "/achievements/tradePanelThree"
                 },
-                // {
-                //     type : "table",
-                //     title : "国美币汇总",
-                //     // query_api : "/achievements/tradePanelFour"
-                // },
-                // {
-                //     type : "table",
-                //     title : "交易优惠劵汇总",
-                //     // query_api : "/achievements/tradePanelFive"
-                // },
+                {
+                    type : "table",
+                    title : "国美币汇总",
+                    query_api : "/achievements/tradePanelFour"
+                },
+                {
+                    type : "table",
+                    title : "交易优惠劵汇总",
+                    query_api : "/achievements/tradePanelFive"
+                },
                 // {
                 //     type : "table",
                 //     title : "转化率",
