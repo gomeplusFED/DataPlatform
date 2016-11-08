@@ -128,19 +128,21 @@
 		methods: {
             query() {
                 // console.log(this.argvs);
-                var _this = this;
+                this.loading.show = true;
                 api.listBps({
-                    pageUrl: _this.searchParam.pageUrl, 
-                    platform: _this.searchParam.platform, 
-                    pointName: _this.searchParam.pointName, 
+                    pageUrl: this.searchParam.pageUrl, 
+                    platform: this.searchParam.platform, 
+                    pointName: this.searchParam.pointName, 
                     // page从0开始
-                    page: _this.paginationConf.currentPage - 1,
-                    size: _this.paginationConf.itemsPerPage
-                }).then(function(res) {
+                    page: this.paginationConf.currentPage - 1,
+                    size: this.paginationConf.itemsPerPage
+                }).then((res) => {
                     // console.log(res);
-                    _this.dataList = res.data;
-                    _this.paginationConf.totalItems = res.total;
-                    
+                    this.dataList = res.data;
+                    this.paginationConf.totalItems = res.total;
+                    this.loading.show = false;
+                }).catch(() => {
+                    this.loading.show = false;
                 });
             },
             del(id) {
