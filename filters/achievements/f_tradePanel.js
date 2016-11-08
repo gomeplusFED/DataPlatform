@@ -128,7 +128,8 @@ module.exports = {
     //支付方式汇总--补充
     tradePanelThree_add(data , query , dates){
         let source = data.first.data[0],
-            count  = data.first.count;
+            Result = [],
+            count  = data.first.count || 1;
         let result = {};
         let map = {
             "all_pay_num" : "总支付笔数",
@@ -138,22 +139,42 @@ module.exports = {
         }
         for(let date of dates){
             result[date] = {
-                "access_user" : 0,
-                "order_user"  : 0,
-                "order_num"   : 0
+                "all_pay_num" : 0,
+                "aliy_pay"    : 0,
+                "weixin_pay"  : 0,
+                "other_pay"   : 0
             }
         }
 
         for(let item of source){
             item.date = util.getDate(item.date);
-
-
-            for(let key in result[item.date]){
-                result[item.date][key] += item[key]
+            switch(item.order_channel){
+                case "ALL":
+                    result[item.date].all_pay_num += item.pay_num;
+                    break;
+                case "微信":
+                    result[item.date].aliy_pay += item.pay_num;
+                    break;
+                case "支付宝":
+                    result[item.date].weixin_pay += item.pay_num;
+                    break;
+                case "其它":
+                    result[item.date].other_pay += item.pay_num;
+                    break;
             }
-        } 
+        }
 
-        let out = util.toTable([source], data.rows, data.cols , [count]);
+        let TableSource = [];
+        for(let key in result){
+            let obj = {};
+            for(let n in result[key]){
+                obj["date"] = key;
+                obj[n] = result[key][n];
+            }
+            TableSource.push(obj);
+        }
+
+        let out = util.toTable([TableSource], data.rows, data.cols , [count]);
         return [out[0] , {
             type : "line",
             map : map,
