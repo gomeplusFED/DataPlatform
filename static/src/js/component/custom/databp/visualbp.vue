@@ -92,7 +92,7 @@
 					var $body = $iframe.find('body');
 					var hovered = [];
 					var selected;
-					$head.append('<style> .bphover {outline: 5px solid #0072ff;}</style>');
+					$head.append('<style> .bphover {outline: 5px solid #0072ff; !important}</style>');
 					$body.bind('contextmenu', function(e) {
 
 						if (selected) {
