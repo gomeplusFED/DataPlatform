@@ -17,7 +17,7 @@
 							</div>
 							<div><label>选择器</label>{{config.selector}}</div>
 							<div><label>事件类型</label>单击事件</div>
-							<div><label>公共埋点Url</label>/shop/${id}.html</div>
+							<div><label>URL</label>{{config.pageUrl}}</div>
 							<div><label>公共埋点信息</label>{{publicBpStr}} <button @click="publicBp.push(['', ''])">+</button></div>
 							<div>
 								<div v-for="(i,item) in publicBp" class="pair">
@@ -149,6 +149,7 @@ var bpinfo = Vue.extend({
 				console.log(data);
 				// show the config window
 				_this.config.pointId = data.pointId;
+				_this.config.pageUrl = data.pageUrl || _this.bpConfig.pageUrl;
 				_this.config.pointName = data.pointName;
 				_this.bpConfig.publicParam = data.publicParam;
 				_this.bpConfig.privateParam = data.privateParam;
@@ -264,7 +265,7 @@ module.exports = bpinfo;
 }
 #tab_baseinfo div > label:first-child {
 	font-weight: bold; 
-	min-width: 80px;
+	min-width: 50px;
 }
 
 #tab_baseinfo > .extendinfo > div {
