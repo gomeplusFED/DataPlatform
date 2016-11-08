@@ -86,7 +86,7 @@ var api = {
 	},
 	// {pointId, matchUrlId}
 	deleteBp(id) {
-		return buildAjax('/point', {pointId: id}, 'delete').then(function(res) {
+		return buildAjax('/point?pointId='+ id, null, 'delete').then(function(res) {
 			if(res.code !== '200' || res.iserror !== '0') {
 				return Promise.reject('删除失败：' + res.msg);
 			}
