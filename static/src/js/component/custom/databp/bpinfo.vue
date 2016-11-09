@@ -1,6 +1,6 @@
 <template>
 <div class="mask" v-show="show"   v-on:dragover.stop.prevent="" v-on:drop="drop">
-	<div class="infobox" draggable="true"  v-on:dragstart="dragstart" v-bind:style="infopos">
+	<div class="infobox" draggable="true"  v-on:dragstart="dragstart" v-on:drag="draging" v-bind:style="infopos">
 		<div class="closer" title="关闭" @click="show=false"></div>
 		<div class="sider-nav ">
 			<div class="tabs-container">
@@ -176,10 +176,12 @@ var bpinfo = Vue.extend({
     		this.dragpos.y = e.offsetY || ev.clientY - $(ev.target).offset().top;
     		this.mask = true;
 		},
-		drop(e) {
+		draging(e) {
 			this.infopos.left = (e.clientX - this.dragpos.x) + 'px';
 	        this.infopos.top = (e.clientY - this.dragpos.y) + 'px';
-	        this.mask = false;
+		},
+		drop(e) {
+	        // this.mask = false;
 	        e.preventDefault() || e.stopPropagation(); 
 		},
 		save(ev) {
