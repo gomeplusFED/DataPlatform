@@ -82,7 +82,7 @@
 			// 			url: "/api/socialAnalysisCategories"
 			// 		},
 			// 		date_picker: {
-			// 			name: 'column_name',
+			// 			name: '',
 			// 			endname: '',
 			// 			defaultData: 7,
 			// 			showDayUnit: true,
