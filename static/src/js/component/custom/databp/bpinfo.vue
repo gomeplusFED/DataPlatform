@@ -45,7 +45,7 @@
 						</div>
 					</div> 
 				</div>
-				<button class="btn btn-success save" @click="save">{{config.pointId ? '更新埋点' : '保存埋点'}}</button>
+				<button class="btn btn-success save" @click="save" data-toggle="popover">{{config.pointId ? '更新埋点' : '保存埋点'}}</button>
 			</div>
 		</div>
 	</div>
@@ -127,7 +127,7 @@ var bpinfo = Vue.extend({
 			}
 		}
 	},
-	props:['show', 'bpConfig'],
+	props:['show', 'bpConfig', 'loading'],
 	ready() {
 		this.$watch('bpConfig.privateParam', function (val, oldval) {
 			if (val !== oldval) {
@@ -148,10 +148,11 @@ var bpinfo = Vue.extend({
 	},
 	methods: {
 		init() {
+			this.loading.show = true;
 			var _this = this;
 			Object.assign(this.config,  this.bpConfig)
 			api.getBp(_this.config).then(function(data) {
-				console.log(data);
+				// console.log(data);
 				// show the config window
 				_this.config.pointId = data.pointId;
 				// 附加传回信息
@@ -160,10 +161,12 @@ var bpinfo = Vue.extend({
 				_this.config.pageUrl = data.pageUrl || _this.bpConfig.pageUrl;
 				_this.config.pointName = data.pointName;
 				_this.publicBpStr = data.publicParam;
-				_this.privateBpStr = data.privateParam;
-				
+				// 从私有埋点中去除公共埋点
+				_this.privateBpStr = data.privateParam.replace(data.publicParam, '');
+				_this.loading.show = false;
 			}).catch(function() {
 				_this.show = false;
+				_this.loading.show = false;
 			});
 		},
 		dragstart(e) {
@@ -179,8 +182,23 @@ var bpinfo = Vue.extend({
 	        this.mask = false;
 	        e.preventDefault() || e.stopPropagation(); 
 		},
-		save() {
+		save(ev) {
 			var _this = this;
+			var existKeys = {};
+			var allbps = [..._this.publicBp, ..._this.privateBp];
+			for(let a of allbps) {
+				if (existKeys[a[0]]) {
+					var $save = $(ev.target);
+					$save.popover({
+						content: '请检查重复key'
+					});
+					$save.popover('show');
+					setTimeout(function () { $save.popover("destroy"); }, 1000);
+					return false;
+				} else {
+					existKeys[a[0]] = 1;
+				}
+			}
 			_this.config.publicParam = this.publicBpStr;
 			_this.config.privateParam = this.privateBpStr;
 			if (_this.config.pointId) {
@@ -188,7 +206,7 @@ var bpinfo = Vue.extend({
 					// 更新成功刷新传入的数据
 					Object.assign(_this.bpConfig, _this.config);
 					if(_this.bpConfig.pointParam) {
-						_this.bpConfig.pointParam = [...new Set(_this.publicBp.concat(_this.privateBp).map(x => x[0] + '=' + x[1]))].join('&');
+						_this.bpConfig.pointParam = allbps.map(x => `${x[0]}=${x[1]}`).join('&');
 					}
 					_this.show = false;
 				});
@@ -242,9 +260,11 @@ module.exports = bpinfo;
 	color: rgb(100, 100, 100);
 	line-height: 1.5;
 	word-break: break-all;
-	z-index: 9999;
+	z-index: 200;
 }
-
+.popover {
+	z-index: 300
+}
 .closer {
 	transition: transform .3s;
 	border-radius: 50%;
