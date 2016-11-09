@@ -188,9 +188,10 @@ var bpinfo = Vue.extend({
 			var _this = this;
 			var existKeys = {};
 			var allbps = [..._this.publicBp, ..._this.privateBp];
+			let illegal = /[=&]/;
+			let $save = $(ev.target);
 			for(let a of allbps) {
 				if (existKeys[a[0]]) {
-					var $save = $(ev.target);
 					$save.popover({
 						content: '请检查重复key'
 					});
@@ -198,6 +199,14 @@ var bpinfo = Vue.extend({
 					setTimeout(function () { $save.popover("destroy"); }, 1000);
 					return false;
 				} else {
+					if(illegal.test(a[0]) || illegal.test(a[1])) {
+						$save.popover({
+							content: '含有非法字符，请检查'
+						});
+						$save.popover('show');
+						setTimeout(function () { $save.popover("destroy"); }, 1000);
+						return false;
+					}
 					existKeys[a[0]] = 1;
 				}
 			}
