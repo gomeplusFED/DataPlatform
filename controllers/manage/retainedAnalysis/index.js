@@ -9,7 +9,6 @@ var api = require("../../../base/main"),
 module.exports = (Router) => {
 
     Router = Router.get("/retainedAnalysis/retainedZero_json" , function(req , res , next){
-
         res.json({
             code: 200,
             modelData: [],
@@ -68,43 +67,39 @@ module.exports = (Router) => {
 
              return params;
         },
+        firstSql(query, params, isCount) {
+            let _sql = 'SELECT date, GROUP_CONCAT(value, ";", `key`) AS `key`, day_type FROM `ads2_user_retention_rate` WHERE date BETWEEN ? AND ? AND type=? AND day_type=? GROUP BY date ORDER BY date DESC';
+            let _params = [query.startTime, query.endTime, params.type, params.day_type];
+            if(isCount) {
+                let sql = `SELECT COUNT(*) count FROM (${_sql}) a`;
+
+                return {
+                    sql : sql,
+                    params : _params
+                };
+            } else {
+                let sql = `SELECT * FROM (${_sql}) a LIMIT ?,?`,
+                    page = query.page - 1 || 0,
+                    offset = query.from || (page * query.limit),
+                    limit = query.to || query.limit || 0;
+
+                return {
+                    sql : sql,
+                    params : _params.concat([+offset, +limit])
+                };
+            }
+        },
         paging : [true],
-        order : ["-date"],
-        filter(data) {
-            return filter.retainedTwo(data);
+        filter(data, query) {
+            return filter.retainedTwo(data, query.day_type);
         },
         excel_export : true,
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
-        rows: [
-            [ 'date', 'new_users', 'last_1_keep', 'last_7_keep', "last_14_keep", "last_30_keep"]
-        ],
-        cols: [
-            [
-                {
-                    caption : '时间',
-                    type : 'string',
-                    width : 20
-                }, {
-                    caption: '新增用户',
-                    type: 'number'
-                }, {
-                    caption: '次日留存率',
-                    type: 'string'
-                }, {
-                    caption: '7日留存率',
-                    type: 'string'
-                }, {
-                    caption: '14日留存率',
-                    type: 'string'
-                }, {
-                    caption: '30日留存率',
-                    type: 'string'
-                }
-            ]
-        ]
+        rows: [],
+        cols: []
     });
 
     return Router;
