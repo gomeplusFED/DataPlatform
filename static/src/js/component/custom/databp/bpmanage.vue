@@ -52,7 +52,7 @@
         <m-pagination :pagination-conf="paginationConf"></m-pagination>
     </div>
     <m-alert></m-alert>
-    <m-bpinfo :show.sync = "showConfig" :bp-config = "bpConfig"  :public-bp-str = "publicBpStr"></m-bpinfo>
+    <m-bpinfo :show.sync = "showConfig" :bp-config = "bpConfig"  :public-bp-str = "publicBpStr" :loading.sync= "loading"></m-bpinfo>
     <m-loading :loading.sync='loading'></m-loading>
     <m-confirm></m-confirm>
 </div>

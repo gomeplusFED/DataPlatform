@@ -23,7 +23,7 @@
 		</div>
 	</div>
 </div>
-	<m-bpinfo :show.sync = "showConfig" :bp-config = "bpConfig" ></m-bpinfo>
+	<m-bpinfo :show.sync = "showConfig" :bp-config = "bpConfig" :loading.sync='loading'></m-bpinfo>
 	<m-loading :loading.sync='loading'></m-loading>
 	<m-alert></m-alert>
 </template>
