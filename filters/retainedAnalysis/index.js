@@ -78,7 +78,7 @@ module.exports = {
                 break;
             default:break;
         }
-        
+
         return [{
             type : type,
             map : map,
