@@ -61,6 +61,9 @@ module.exports = {
     ads2_sales_perf_conversion2 : {
         modelName : "SalesPerfConversion2"
     },
+
+
+
     //订单分析-订单趋势
     ads2_order_trend2 : {
         modelName : "OrderTrend2"
@@ -85,6 +88,10 @@ module.exports = {
     ads2_order_constitute2 : {
         modelName : "OrderConstitue2"
     },
+
+
+
+    
     //交易分析-交易总览、交易趋势
     ads2_sales_overview2 : {
         modelName : "SalesOverview2"

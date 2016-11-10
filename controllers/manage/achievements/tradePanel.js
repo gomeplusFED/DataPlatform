@@ -409,10 +409,8 @@ module.exports = (Router) => {
                 caption: "平台优惠券使用金额",
                 type: "number"
             }, {
-                caption: "平台优惠券使用占比",
+                caption: "平台优惠券使用占比(%)",
                 type: "number"
-            }, {
-                caption: ""
             }, {
                 caption: "商家优惠券使用张数",
                 type: "number"
@@ -420,7 +418,89 @@ module.exports = (Router) => {
                 caption: "商家优惠券使用金额",
                 type: "number"
             }, {
-                caption: "商家优惠券使用占比",
+                caption: "商家优惠券使用占比(%)",
+                type: "number"
+            }]
+        ]
+    });
+
+
+
+
+
+
+
+
+    //转化率
+    Router = new api(Router, {
+        router : "/achievements/tradePanelSix",
+        modelName : ["SalesPerfConversion2"],
+        platform : false,
+        date_picker : false,
+        params(query , params , sendData){
+            if(!query.type) params.type = "ALL";
+            return params;
+        },
+        filter(data, query, dates) {
+            return filter.tradePanelSix(data , query , dates);
+        },
+        rows: [
+            ["scan_order" , "scan_pay" , "order_pay" , "pay_lv" , "operating"],
+        ],
+        cols: [
+            [{
+                caption: "浏览-下单转化率",
+                type: "number"
+            }, {
+                caption: "浏览-支付转化率",
+                type: "number"
+            }, {
+                caption: "下单-支付转化率",
+                type: "number"
+            }, {
+                caption: "支付成功率",
+                type: "number"
+            }, {
+                caption: ""
+            }]
+        ]
+    });
+
+    //转化率---补充
+    Router = new api(Router, {
+        router : "/achievements/tradePanelSix_add",
+        modelName : ["SalesPerfConversion2"],
+        platform : false,
+        date_picker : false,
+        paging : [true],
+        toggel : true,
+        order : ["-date"],
+        params(query , params , sendData){
+            if(!query.type) params.type = "ALL";
+            delete params[sendData.rows[0][2]]; 
+            return params;
+        },
+        filter(data, query, dates) {
+            return filter.tradePanelSix_add(data , query , dates);
+        },
+         rows: [
+            ["date" , "scan_order" , "scan_pay" , "order_pay" , "pay_lv"],
+        ],
+        cols: [
+            [{
+                caption: "日期",
+                type: "number"
+            }, {
+                caption: "浏览-下单转化率(%)",
+                type: "number"
+            }, {
+                caption: "浏览-支付转化率(%)",
+                type: "number"
+            }, {
+                caption: "下单-支付转化率(%)",
+                type: "number"
+            }, {
+                caption: "支付成功率(%)",
                 type: "number"
             }]
         ]

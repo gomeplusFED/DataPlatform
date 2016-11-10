@@ -196,24 +196,19 @@ module.exports = {
                     query_api : "/achievements/tradeOne"
                 },
                 {
-                    type : "chart",
+                    type : "table",
                     title : "交易趋势",
                     query_api : "/achievements/tradeTwo"
                 },
                 {
                     type : "table",
-                    title : "交易明细",
+                    title : "交易用户分布",
                     query_api : "/achievements/tradeThree"
                 },
                 {
                     type : "table",
                     title : "交易类目构成",
                     query_api : "/achievements/tradeFour"
-                },
-                {
-                    type : "table",
-                    title : "交易用户构成",
-                    query_api : "/achievements/tradeFive"
                 }
             ]
         }
@@ -253,11 +248,11 @@ module.exports = {
                     title : "交易优惠劵汇总",
                     query_api : "/achievements/tradePanelFive"
                 },
-                // {
-                //     type : "table",
-                //     title : "转化率",
-                //     // query_api : "/achievements/tradePanelSix"
-                // }
+                {
+                    type : "table",
+                    title : "转化率",
+                    query_api : "/achievements/tradePanelSix"
+                }
             ]
         }
     },

@@ -290,33 +290,114 @@ module.exports = {
     //交易优惠券汇总--补充
     tradePanelFive_add(data , query , dates){
         let source = data.first.data[0],
-            Result = [],
             count  = data.first.count || 1;
-        let result = {};
 
-        let map = {
-            "newadd_guomeibi" : "新增国美币",
-            "consume_guomeibi": "消费国美币",
-            "drawcash_guomeibi": "提现国美币",
+        let result = {},map = {},TableSource = [];
+        let Rows = data.rows[0],Cols = data.cols[0];
+        for(let i=1;i<Rows.length;i++){
+            map[Rows[i]] = Cols[i].caption;
         }
+
         for(let date of dates){
-            result[date] = {
-                "newadd_guomeibi"    : 0,
-                "consume_guomeibi"   : 0,
-                "drawcash_guomeibi"  : 0
+            result[date] = {};
+            for(let key in map){
+                result[date][key] = 0;
             }
         }
 
         for(let item of source){
             item.date = util.getDate(item.date);
-            for(let key in result[item.date]){
-                result[item.date][key] += item[key];
+            let obj = result[item.date];
+            if(item.coupon_type == 1){
+                //商家优惠劵
+                obj.used_num_2 = item.used_num;
+                obj.used_amount_2 = item.used_amount;
+                obj.lv_2 = util.numberLeave(item.used_num / item.pay_num * 100 , 2);
+            }else{
+                //平台优惠劵
+                obj.used_num = item.used_num;
+                obj.used_amount = item.used_amount;
+                obj.lv = util.numberLeave(item.used_num / item.pay_num * 100 , 2);
             }
         }
 
-        if(source.length == 0){ source[0] = {"date":"暂无数据"} };
+        for(let key in result){
+            let obj = result[key];
+            obj.date = key;
+            TableSource.push(obj);
+        }
 
-        let out = util.toTable([source], data.rows, data.cols , [count]);
+        let out = util.toTable([TableSource], data.rows, data.cols , [count]);
+        return [out[0] , {
+            type : "line",
+            map : map,
+            data : result,
+            config: { // 配置信息
+                stack: false  // 图的堆叠
+            }
+        }];
+    },
+
+
+    //转化率
+    tradePanelSix(data, query, dates) {
+        let source = data.first.data[0],
+            obj = {
+                "pay_user" : 0, 
+                "order_user" : 0 ,
+                "access_user" : 0,
+                "pay_num" : 0,
+                "pay_time" : 0
+            };
+
+        for(let item of source){
+            for(let key in obj){
+                obj[key] += item[key];
+            }
+        }
+        let Result = {};
+        Result.scan_order = util.toFixed(util.dealDivision(obj.order_user , obj.access_user) , 0);
+        Result.scan_pay  = util.toFixed(util.dealDivision(obj.pay_user , obj.access_user) , 0);
+        Result.order_pay = util.toFixed(util.dealDivision(obj.pay_user , obj.order_user) , 0);
+        Result.pay_lv = util.toFixed(util.dealDivision(obj.pay_num , obj.pay_time) , 0);
+        Result.operating = `<button class='btn btn-info' url_detail='/achievements/tradePanelSix_add'>趋势</button>`;
+        return util.toTable([[Result]], data.rows, data.cols , null , [true , true]);
+    },
+    //转化率--补充
+    tradePanelSix_add(data , query , dates){
+        let source = data.first.data[0],
+            count  = data.first.count || 1;
+
+        let result = {},map = {},TableSource = [];
+        let Rows = data.rows[0],Cols = data.cols[0];
+        for(let i=1;i<Rows.length;i++){
+            map[Rows[i]] = Cols[i].caption;
+        }
+
+        for(let date of dates){
+            result[date] = {};
+            for(let key in map){
+                result[date][key] = 0;
+            }
+        }
+
+        //"scan_order" , "scan_pay" , "order_pay" , "pay_lv"
+        for(let item of source){
+            item.date = util.getDate(item.date);
+            let obj = result[item.date];
+            obj.scan_order = util.dealDivision(item.order_user , item.access_user , 2);
+            obj.scan_pay  = util.dealDivision(item.pay_user , item.access_user , 2);
+            obj.order_pay = util.dealDivision(item.pay_user , item.order_user , 2);
+            obj.pay_lv = util.dealDivision(item.pay_num , item.pay_time , 2);
+        }
+
+        for(let key in result){
+            let obj = result[key];
+            obj.date = key;
+            TableSource.push(obj);
+        }
+
+        let out = util.toTable([TableSource], data.rows, data.cols , [count]);
         return [out[0] , {
             type : "line",
             map : map,

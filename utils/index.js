@@ -464,7 +464,6 @@ exports.ArraySort = function(arr){
     }
 }
 
-
 /* 商品价目对照表 */
 exports.prizeRange = {
     '0': '0~10元',
@@ -516,4 +515,16 @@ exports.prizeRange = {
     '42': '5000~10000元',
     '43': '10000+元'
 };
+
+/* 处理除数为0的计算 ， a / b  , b == 0 , return 0. */
+exports.dealDivision = function(a , b , num){
+    if(b == 0) return 0;
+    if(num){
+        return exports.numberLeave(a / b , num);
+    }else{
+        return a / b;
+    }
+}
+
+
 
