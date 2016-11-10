@@ -108,11 +108,17 @@ module.exports = (Router) => {
                 if(err) {
                     cb(err);
                 } else {
+                    select.groups.push({
+                        key : "01",
+                        value : "应用市场"
+                    });
                     for(let item of data) {
-                        select.groups.push({
-                            key : item.channel_type_code,
-                            value : item.channel_type
-                        });
+                        if(item.channel_type_code !== "01") {
+                            select.groups.push({
+                                key : item.channel_type_code,
+                                value : item.channel_type
+                            });
+                        }
                     }
                     cb(null, [select].concat(filter_select));
                 }
