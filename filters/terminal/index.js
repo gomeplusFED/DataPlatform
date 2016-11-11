@@ -7,9 +7,10 @@ var _ = require("lodash"),
     util = require("../../utils");
 
 module.exports = {
-    modelOne(data, filter_key) {
+    modelOne(data, query) {
         var source = data.first.data,
-            newData = {},
+            filter_key = query.filter_key,
+            main_show_type_filter = query.main_show_type_filter,
             tArray = [],
             array = util.uniq(_.pluck(source, "key_name")),
             filter_name = {
@@ -20,36 +21,53 @@ module.exports = {
             map = {
                 value : filter_name[filter_key]
             };
-        for(var model of array) {
-            var obj = {
-                model : model,
-                value : 0
-            };
-            for(var key of source) {
-                if(model === key.key_name) {
-                    obj.value += key[filter_key];
+        if(main_show_type_filter === "table") {
+            const rows = [
+                ["key_name", "value", "value3"]
+            ],
+                cols = [
+                    [{
+                        caption : "名称"
+                    }, {
+                        caption : "数据1"
+                    }, {
+                        caption : "数据2"
+                    }]
+                ];
+            return util.toTable([source], rows, cols);
+        } else {
+            let newData = {};
+            for(var model of array) {
+                var obj = {
+                    model : model,
+                    value : 0
+                };
+                for(var key of source) {
+                    if(model === key.key_name) {
+                        obj.value += key[filter_key];
+                    }
                 }
+                tArray.push(obj);
             }
-            tArray.push(obj);
-        }
-        tArray.sort((a, b) => {
-            return b.value - a.value;
-        });
-        var top = tArray.length > 10 ? 10 : tArray.length;
-        for(var i = 0; i < top; i++) {
-            newData[tArray[top - 1 - i].model] = {
-                value : tArray[top - 1 - i].value
-            };
-        }
-        return [{
-            type : type,
-            map : map,
-            data : newData,
-            config: { // 配置信息
-                stack: false, // 图的堆叠
-                categoryY : true //柱状图竖着
+            tArray.sort((a, b) => {
+                return b.value - a.value;
+            });
+            var top = tArray.length > 10 ? 10 : tArray.length;
+            for(var i = 0; i < top; i++) {
+                newData[tArray[top - 1 - i].model] = {
+                    value : tArray[top - 1 - i].value
+                };
             }
-        }]
+            return [{
+                type : type,
+                map : map,
+                data : newData,
+                config: { // 配置信息
+                    stack: false, // 图的堆叠
+                    categoryY : true //柱状图竖着
+                }
+            }]
+        }
     },
     modelTwo(data, filter_key) {
         var source = data.first.data,

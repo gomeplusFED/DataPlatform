@@ -93,7 +93,9 @@ function api(Router, options) {
         //表格字段选择框
         control_table_col : false,
         //全局模块
-        global_platform: {show: false}
+        global_platform: {show: false},
+        //是否支持图转表
+        toggle : false
     }, options);
 
     utils.mixin(this, defaultOption);
@@ -201,7 +203,10 @@ api.prototype = {
                 control_table_col : {
                     show : this.control_table_col
                 },
-                global_plataform : this.global_platform
+                global_plataform : this.global_platform,
+                toggle: {
+                    show: this.toggle
+                }
             }
         });
     },

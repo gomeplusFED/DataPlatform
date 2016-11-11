@@ -7,7 +7,7 @@
 	<m-plataform></m-plataform>
 	<m-tab-checkbox></m-tab-checkbox>
 	<m-global></m-global>
-	<m-main v-ref:main v-for="item in currentPageDefaultData.defaultData" :index="$index" :init-data="initData" :current-data="currentPageDefaultData.defaultData[$index]" :loading.sync="loading"></m-main>
+	<m-main v-ref:main v-for="item in list" :index="$index" :init-data="initData" :current-data="list[$index]" :loading.sync="loading"></m-main>
 </template>
 <script>
 	var Vue = require('Vue');
@@ -61,13 +61,22 @@
 		ready() {
 
 		},
+		computed: {
+			list() {
+				if (this.currentPageDefaultData.defaultData) {
+					let list = this.currentPageDefaultData.defaultData.filter(x => x.query_api.indexOf('Zero') === -1)
+					return list;
+				}
+				return [];
+			}
+		},
 		route: {
 			data: function(transition) {
 				var url = this.$route.path.replace(/(\?.*)/, '');
 
 				if (!window.allPageConfig.page[url]) {
 					this.$route.router.go({
-						path: '/'
+						path: '/error'
 					});
 					return;
 				}
@@ -90,7 +99,7 @@
 							return;
 						}
 					})
-					currentPageDefaultData.defaultData.splice(0, 1);
+					// currentPageDefaultData.defaultData.splice(0, 1);
 				} else {
 					eventBus.$emit('loadGlobal', {});
 				}

@@ -225,7 +225,7 @@ module.exports = {
 
         var source = data.first.data,
             num=query.filter_key22 / 1,
-            sourceSum = data.second.data[0];
+            sourceSum = data.first.count[0];
 
         if(num == 2) num = 0;
         var Columns = [
@@ -314,6 +314,8 @@ module.exports = {
             }
         }
 
-        return util.toTable([source], data.rows, data.cols , [data.first.count[0].count]); 
+        let outCount = data.first.count[0].count > 100 ? 100 : data.first.count[0].count;
+
+        return util.toTable([source], data.rows, data.cols , [ outCount ]); 
     }
 };

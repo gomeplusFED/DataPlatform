@@ -3,7 +3,7 @@
 		<button class="btn btn-default" v-if="pageComponentsData['flexible_btn']" @click="tab_checkbox(pageComponentsData['flexible_btn'])">筛选</button>
 		<m-level-select v-if="pageComponentsData['level_select']" :index="1" :init-data="initData" :page-components-data="pageComponentsData" component-type="level_select" :argvs.sync='argvs'></m-level-select>
 		<m-filter-select v-if="pageComponentsData['filter_select']" :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'filter_select'" :argvs.sync='argvs'></m-filter-select>
-		<m-date class="global_date" v-show="pageComponentsData['date_picker'].show" :index="-1" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'date_picker'" :argvs.sync='argvs'></m-date>
+		<m-date :is-global="true" :index="-1" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'date_picker'" :argvs.sync='argvs'></m-date>
 	</div>
 </template>
 <script>
@@ -82,9 +82,10 @@
 			// 			url: "/api/socialAnalysisCategories"
 			// 		},
 			// 		date_picker: {
-			// 			name: 'column_name',
+			// 			name: '',
 			// 			endname: '',
 			// 			defaultData: 7,
+			// 			showDayUnit: true,
 			// 			show: true
 			// 		}
 			// 	}
@@ -126,21 +127,21 @@
 			},
 			'argvs.startTime' : function (val, oldVal) {
 				// level_select
-				eventBus.$emit('platformChange',val, this.pageComponentsData.date_picker.name);
+				eventBus.$emit('platformChange',val, this.pageComponentsData.date_picker.name || 'startTime');
 			},
 			'argvs.endTime' : function (val, oldVal) {
 				// level_select
-				eventBus.$emit('platformChange',val, this.pageComponentsData.date_picker.endname);
+				eventBus.$emit('platformChange',val, this.pageComponentsData.date_picker.endname || 'endTime');
+			},
+			'argvs.day_type' : function (val, oldVal) {
+				// level_select
+				eventBus.$emit('platformChange',val, 'day_type');
 			}
 		}
 	};
 </script>
 <style scoped>
 	.global {
-		margin: 0 0 10px 0;
-	}
-	.global_date {
-		float: right;
-		margin-right: 20px;
+		/*margin: 0 0 20px 0;*/
 	}
 </style>

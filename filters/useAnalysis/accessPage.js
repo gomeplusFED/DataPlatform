@@ -80,6 +80,6 @@ module.exports = {
             source[i].id = (page - 1) * 10 + i + 1;
             source[i].date = moment(source[i].date).format("YYYY-MM-DD");
         }
-        return util.toTable([source], data.rows, data.cols, [count]);
+        return util.toTable([source], data.rows, data.cols, [count]).concat([{}]);
     }
 };

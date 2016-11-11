@@ -97,6 +97,10 @@ app.use((err, req, res, next) => {
     }
 });
 
+app.use((req, res, next) => {
+    res.redirect("/");
+});
+
 app.listen(7879 , function(){
     console.log("启动成功");
 });

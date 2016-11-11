@@ -51,13 +51,14 @@ module.exports = {
         }
         return util.toTable([newData], data.rows, data.cols, [count]);
     },
-    wap(data) {
+    wap(data, dates) {
         var source = data.first.data[0],
             count = data.first.count;
         for(var i = 0; i < source.length; i++) {
             source[i].date = moment(source[i].date).format("YYYY-MM-DD");
             source[i].avg_stay_time = Math.round(source[i].avg_stay_time);
         }
-        return util.toTable([source], data.rows, data.cols, [count]);
+
+        return util.toTable([source], data.rows, data.cols, [count]).concat([{}]);
     }
 };

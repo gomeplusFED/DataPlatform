@@ -34,6 +34,69 @@ module.exports = {
             ]
         }
     },
+    shopOverview(){
+        return {
+            name : "店铺总览",
+            path : "/achievements/shopOverview",
+            display : true,
+            defaultData : [
+                {
+                    type : "table",
+                    title : "店铺总览",
+                    query_api : "/achievements/shopOverviewOne"
+                },
+                {
+                    type : "table",
+                    title : "店铺申请运营",
+                    query_api : "/achievements/shopOverviewTwo"
+                },
+                {
+                    type : "chart",
+                    title : "店铺运营趋势",
+                    query_api : "/achievements/shopOverviewThree"
+                },
+                {
+                    type : "chart",
+                    title : "店铺评级分布",
+                    query_api : "/achievements/shopOverviewFour"
+                },
+                {
+                    type : "table",
+                    title : "店铺TOP100",
+                    query_api : "/achievements/shopOverviewFive"
+                }
+            ]
+        }
+    },
+    shopRun(){
+        return {
+            name : "店铺运营分析",
+            path : "/achievements/shopRun",
+            display : true,
+            defaultData : [
+                {
+                    type : "table",
+                    title : "店铺总览",
+                    query_api : "/achievements/shopRunOne"
+                },
+                {
+                    type : "chart",
+                    title : "店铺趋势分析",
+                    query_api : "/achievements/shopRunTwo"
+                },
+                {
+                    type : "table",
+                    title : "店铺流量排行TOP50",
+                    query_api : "/achievements/shopRunThree"
+                },
+                {
+                    type : "table",
+                    title : "店铺交易排行TOP50",
+                    query_api : "/achievements/shopRunFour"
+                }
+            ]
+        }
+    },
     product() {
         return {
             name : "商品运营分析",
@@ -144,6 +207,49 @@ module.exports = {
             ]
         }
     },
+    tradePanel(){
+        return {
+            name : "交易面板",
+            path : "/achievements/tradePanel",
+            display : true,
+            defaultData : [
+                {
+                    type : "chart",
+                    query_api : "/achievements/tradePanelZero"
+                },
+                {
+                    type : "table",
+                    title : "交易汇总",
+                    // query_api : "/achievements/tradePanelOne"
+                },
+                {
+                    type : "table",
+                    title : "交易商品汇总",
+                    // query_api : "/achievements/tradePanelTwo"
+                },
+                {
+                    type : "table",
+                    title : "支付方式汇总",
+                    // query_api : "/achievements/tradePanelThree"
+                },
+                {
+                    type : "table",
+                    title : "国美币汇总",
+                    // query_api : "/achievements/tradePanelFour"
+                },
+                {
+                    type : "table",
+                    title : "交易优惠劵汇总",
+                    // query_api : "/achievements/tradePanelFive"
+                },
+                {
+                    type : "table",
+                    title : "转化率",
+                    // query_api : "/achievements/tradePanelSix"
+                }
+            ]
+        }
+    },
     vshop() {
         return {
             name : "美店店铺商品",
@@ -212,5 +318,4 @@ module.exports = {
             ]
         }
     }
-
 };

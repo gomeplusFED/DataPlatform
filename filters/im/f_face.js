@@ -42,24 +42,24 @@ module.exports = {
     FaceTwo(data , query , dates){
         let dataSource = data.first.data[0];
         let Source = [];
-        for(let date of dates){
+        /*for(let date of dates){
             let obj = {
                 "date" : date
             }
             Source.push(obj);
-        }
+        }*/
 
-        console.log(dataSource)
+        // console.log(dataSource)
         for(let item of dataSource){
             item.date = utils.getDate(item.date);
-            let num;
+            /*let num;
             num = dates.indexOf(item.date);
-            console.log(num)
-            Source[num] = item;
+            console.log(num)*/
+            Source.push(item);
         }
 
-        let Source2 = utils.ArraySort(Source);
+        // let Source2 = utils.ArraySort(Source);
 
-        return utils.toTable([Source2], data.rows, data.cols);
+        return utils.toTable([Source], data.rows, data.cols);
     }
 }
