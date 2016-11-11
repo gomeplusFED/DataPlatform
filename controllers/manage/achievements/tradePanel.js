@@ -55,7 +55,7 @@ module.exports = (Router) => {
             preMethods: [], 
             customMethods: ""
         },{
-            content: `<a href="#!/businessRebate/plan">订单分析</a>`, 
+            content: `<a href="#!/achievements/order">订单分析</a>`, 
             preMethods: [], 
             customMethods: ""
         }],

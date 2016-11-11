@@ -323,6 +323,57 @@ module.exports = {
                 }
             ]
         }
-    }
+    },
 
+    //订单分析
+    order(){
+        return {
+            name : "订单分析",
+            path : "/achievements/order",
+            display : true,
+            defaultData : [
+                {
+                    type : "table",
+                    title : "订单趋势",
+                    query_api : "/achievements/orderOne"
+                },
+                {
+                    type : "table",
+                    title : "订单来源类型",
+                    query_api : "/achievements/orderTwo"
+                },
+               /* {
+                    type : "table",
+                    title : "订单评级分布",
+                    query_api : "/achievements/orderThree"
+                }*/
+            ]
+        }
+    },
+
+    //支付分析 
+    pay(){
+        return {
+            name : "支付分析",
+            path : "/achievements/pay",
+            display : true,
+            defaultData : [
+                {
+                    type : "table",
+                    title : "支付趋势",
+                    query_api : "/achievements/payOne"
+                },
+                {
+                    type : "chart",
+                    title : "支付方式",
+                    query_api : "/achievements/payTwo"
+                },
+                {
+                    type : "table",
+                    title : "支付构成",
+                    query_api : "/achievements/payThree"
+                }
+            ]
+        }
+    }
 };

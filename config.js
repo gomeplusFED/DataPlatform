@@ -180,6 +180,10 @@ const Config = {
                 
                 obj.achievements.vshop(),
                 obj.achievements.vtrade()
+            ],
+            routers: [
+                obj.achievements.pay(),
+                obj.achievements.order()
             ]
         },
         "14": {

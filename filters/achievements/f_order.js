@@ -6,8 +6,107 @@ var util = require("../../utils"),
     moment = require("moment");
 
 module.exports = {
-    tradeOne(data) {
+    //订单趋势
+    orderOne(data , query , dates) {
+        let Cols = [
+                "日期",
+                "下单总量",
+                "支付总量",
+                "下单人数",
+                "支付人数",
+                "确认收货",
+                "延迟收货",
+                "取消订单",
+                "申请售后",
+                "评价订单"
+            ],
+            Rows = [
+                "date",
+                "order_num",
+                "pay_num",
+                "order_user",
+                "pay_user",
+                "ensure_get_commodity",
+                "delay_get_commodity",
+                "cancel_order",
+                "apply_aftersale",
+                "evaluate_order"
+            ];
+        data.rows[0] = Rows;
+        data.cols[0] = [];
+        Cols.map((item , index) => {
+            let obj = {
+                caption : item,
+                type : index == 0 ? "date" : "number"
+            }
+            data.cols[0].push(obj);
+        });
+
         let source = data.first.data[0];
+        
+
+        /* chart */
+        let map = {
+            "scan_order" : "浏览-下单",
+            "scan_pay"   : "浏览-支付",
+            "order_pay"  : "下单-支付",
+            "pay_lv"     : "支付成功率"
+        }, result = {};
+
+        dates.map((date) => {
+            result[date] = {
+                "scan_order" : 0,
+                "scan_pay"   : 0,
+                "order_pay"  : 0,
+                "pay_lv"     : 0
+            }
+        });
+
+        for(let item of source){
+            item.date = util.getDate(item.date);
+        }
+
+
+
+        
+
+        if(query.main_show_type_filter == "chart"){
+            return [{
+                type : "line",
+                map : map,
+                data : result,
+                config: { // 配置信息
+                    stack: false,  // 图的堆叠,
+                }
+            }]
+        }else{
+            return util.toTable([source], data.rows, data.cols);
+        }
+
+        
+
+
+/*
+"日期",
+"下单总量",
+"支付总量",
+"下单人数",
+"支付人数",
+"确认收货",
+"延迟收货",
+"取消订单",
+"申请售后",
+"评价订单",
+
+ 
+
+*/
+
+        
+
+
+
+       /* 
         let one = {} , two = {};
         for(let key of data.rows[0]){
             one[key] = 0;
@@ -29,105 +128,23 @@ module.exports = {
             all_pay_user+= item.pay_user;
         }
 
-        two.Man_price = util.dealDivision(all_pay_sum , all_pay_user , 2);
-        return util.toTable([[one], [two]], data.rows, data.cols);
+        two.Man_price = util.dealDivision(all_pay_sum , all_pay_user , 2);*/
+        
     },
 
-    //交易趋势
-    tradeTwo(data, query, dates) {
+    //订单来源类型
+    orderTwo(data, query, dates) {
         let source = data.first.data[0],
-            count  = data.first.count || 1;
-            Cols = [
-                "被访问店铺数",
-                "支付店铺数",
-                "下单商品数",
-                "下单商品件数",
-
-                "支付商品数",
-                "支付商品件数",
-                "下单总量",
-                "支付订单量",
-
-                "下单金额",
-                "支付金额",
-                "下单人数",
-                "支付人数",
-
-                "客单价",
-                "国美币使用额",
-                "平台优惠券使额"
-            ],
-            Rows = [
-                "access_shop",
-                "pay_shop",
-                "order_product",
-                "order_product_num",
-
-                "pay_product",
-                "pay_product_num",
-                "order_num",
-                "pay_num",
-
-                "order_num",
-                "pay_sum",
-                "order_user",
-                "pay_user",
-
-                "Man_price",
-                "consume_guomeibi",
-                "plat_couple_use_sum"
-            ];
-
-        data.rows[0] = Rows.concat();
-        data.cols[0] = [];
-        for(let i=0;i<Cols.length;i++){
-            data.cols[0].push({
-                caption: Cols[i],
-                type : "number"
-            })
-        }
-
-        data.rows[0].unshift("date");
-        data.cols[0].unshift({
-            caption: "日期",
-            type : "date"
-        });
-
+            count  = data.first.count || 1,
+            sum    = data.first.sum;
+        
         for(let item of source){
-            item.date = util.getDate(item.date);
-            item.Man_price = util.dealDivision(item.pay_sum , item.pay_user , 2)
+            item.order_num_lv = util.toFixed( util.dealDivision(item.order_num , sum[0]) , 0 );
+            item.pay_num_lv = util.toFixed( util.dealDivision(item.pay_num , sum[1]) , 0 );
+            item.pay_sum_lv = util.toFixed( util.dealDivision(item.pay_sum , sum[2]) , 0 );
         }
 
-        let out = util.toTable([source], data.rows, data.cols , [count]);
-
-        /* 图表 */
-        if(query.main_show_type_filter == "chart"){
-            let map = {} , result = {};
-            for(let i=0;i<Cols.length;i++){
-                map[Rows[i]] = Cols[i];
-            }
-
-            for(let date of dates){
-                let obj = {};
-                for(let key of Rows){
-                    obj[key] = 0;
-                }
-                result[date] = obj;
-            }
-
-
-            return [{
-                type : "line",
-                map : map,
-                data : result,
-                config: { // 配置信息
-                    stack: false  // 图的堆叠
-                }
-            }]
-        }
-
-        return out;
-
+        return util.toTable([source], data.rows, data.cols , [count]);
     },
     tradeThree(data , query , dates) {
         let source = data.first.data[0],

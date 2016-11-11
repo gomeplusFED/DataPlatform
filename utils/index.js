@@ -518,7 +518,7 @@ exports.prizeRange = {
 
 /* 处理除数为0的计算 ， a / b  , b == 0 , return 0. */
 exports.dealDivision = function(a , b , num){
-    if(b == 0) return 0;
+    if(b == 0 || !b) return 0;
     if(num){
         return exports.numberLeave(a / b , num);
     }else{

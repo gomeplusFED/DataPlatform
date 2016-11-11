@@ -1,23 +1,21 @@
 /**
- * @author Hao Sun
- * @date 20160518
- * @fileoverview 交易分析
- *
- * 二次开发
+ * @fileoverview 订单分析
  * @time 20161109
  * @author Mr.He
  */
 
 var api = require("../../../base/main"),
-    filter = require("../../../filters/achievements/f_trade");
+    filter = require("../../../filters/achievements/f_order");
 
 module.exports = (Router) => {
    
-    //交易总览
+    //订单趋势
     Router = new api(Router, {
-        router : "/achievements/tradeOne",
-        modelName : ["SalesOverview2"],
+        router : "/achievements/orderOne",
+        modelName : ["OrderTrend2" , "SalesPerfConversion2"],
         platform : false,
+        toggle : true,
+        order : ["-date"],
         global_platform: {
             show: true,
             key : "type",
@@ -43,95 +41,44 @@ module.exports = (Router) => {
             return params;
         },
         filter(data, query, dates) {
-            return filter.tradeOne(data , query , dates);
-        },
-        rows: [
-            [
-                "access_product",
-                "order_product",
-                "order_product_num", 
-                "pay_product",
-                "pay_product_num",
-                "refund_product", 
-                "refund_product_num"
-            ],
-            [
-                "order_user", 
-                "order_sum",
-                "order_num",
-                "pay_num",
-                "pay_user",
-                "pay_sum", 
-                "Man_price",
-                "consume_guomeibi", 
-                "plat_couple_use_sum", 
-                "deal_sum"
-            ]
+            return filter.orderOne(data , query , dates);
+        }
+    });
+
+    //订单来源类型
+    Router = new api(Router,{
+        router : "/achievements/orderTwo",
+        modelName : ["OrderSource2"],
+        platform : false,
+        paging: [true],
+        rows : [
+            ["order_source","order_num","order_num_lv","pay_num","pay_num_lv" , "pay_sum" , "pay_sum_lv"]
         ],
-        cols: [
+        sum : ["order_num" , "pay_num" , "pay_sum"],
+        cols : [
             [{
-                caption: "浏览商品数",
-                type: "number"
-            }, {
-                caption: "下单商品数",
-                type: "number"
-            }, {
-                caption: "下单商品件数",
-                type: "number"
-            }, {
-                caption: "支付商品数",
-                type: "number"
-            }, {
-                caption: "支付商品件数",
-                type: "number"
-            }, {
-                caption: "退货商品数",
-                type: "number"
-            }, {
-                caption: "退货商品件数",
-                type: "number"
-            }],
-            [{
-                caption: "下单人数",
-                type: "number"
-            }, {
-                caption: "下单金额",
-                type: "number"
+                caption: "来源",
+                type: "string"
             }, {
                 caption: "下单总量",
+                type: "number"
+            }, {
+                caption: "下单量占比",
                 type: "number"
             }, {
                 caption: "支付总量",
                 type: "number"
             }, {
-                caption: "支付人数",
+                caption: "支付量占比",
                 type: "number"
             }, {
                 caption: "支付金额",
                 type: "number"
             }, {
-                caption: "客单价",
-                type: "number"
-            }, {
-                caption: "国美币使用额",
-                type: "number"
-            }, {
-                caption: "平台优惠券使用金额",
-                type: "number"
-            }, {
-                caption: "成交金额",
+                caption: "支付金额占比",
                 type: "number"
             }]
-        ]
-    });
-
-    //交易趋势
-    Router = new api(Router,{
-        router : "/achievements/tradeTwo",
-        modelName : ["SalesOverview2"],
-        platform : false,
-        toggle: true,
-        paging: [true],
+        ],
         params(query , params , sendData){
             if(!query.type){
                 params.type = "ALL";
@@ -139,7 +86,7 @@ module.exports = (Router) => {
             return params;
         },
         filter(data, query, dates) {
-            return filter.tradeTwo(data, query, dates);
+            return filter.orderTwo(data, query, dates);
         }
     });
 
