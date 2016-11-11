@@ -18,7 +18,7 @@
 				<a href="javascript:void(0)" aria-label="Next" :class="{disabled: paginationConf.currentPage == paginationConf.numberOfPages}" @click="nextPage()">
 					<span aria-hidden="true">&raquo;</span>
 				</a>
-				<input type="text" v-model="page" number class="form-control" style="width: 50px;display: inline;margin-left:4px;">
+				<input type="text" v-model="page" number :placeholder="pageList.length && pageList[pageList.length-1]" class="form-control" style="width: 50px;display: inline;margin-left:4px;">
 				<button class="btn  btn-default" style="margin-bottom: 3px;" @click="gotoPage">
 					Go
 				</button>
