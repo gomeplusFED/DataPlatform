@@ -249,8 +249,6 @@ module.exports = (Router) => {
             if(!query.type){
                 params.type = "ALL";
             }
-
-            console.log("params" , query);
             return params;
         },
         fixedParams(req, query, cb) {
@@ -258,8 +256,6 @@ module.exports = (Router) => {
             query.category_id_2 = "ALL";
             query.category_id_3 = "ALL";
             query.category_id_4 = "ALL";
-
-            console.log("fixedParams")
 
             if(query.category_id && query.category_id != "all"){
                 req.models.ConfCategories.find({
@@ -272,15 +268,19 @@ module.exports = (Router) => {
                         switch(theLevel){
                             case 1:
                                 query.category_id_1 = [query.category_id , "ALL"];
+                                query.filter_key = 1;
                                 break;
                             case 2:
                                 query.category_id_2 = [query.category_id , "ALL"];
+                                query.filter_key = 2;
                                 break;
                             case 3:
                                 query.category_id_3 = [query.category_id , "ALL"];
+                                query.filter_key = 3;
                                 break;
                             case 4:
                                 query.category_id_4 = [query.category_id , "ALL"];
+                                query.filter_key = 4;
                         }
                         delete query.category_id;
                         cb(null , query);
