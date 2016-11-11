@@ -178,9 +178,8 @@ module.exports = {
         console.log(query);
 
         let source = data.first.data[0],
-            count = data.first.count,
-            sourceSum = data.first.sum;
-
+            count = data.first.count;
+            
         for(var key of source) {
             key.pay_money_amount = key.pay_money_amount.toFixed(2);
             key.pay_money_amount_ratio = util.toFixed(key.pay_money_amount, sourceSum["0"]);

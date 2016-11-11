@@ -249,6 +249,8 @@ module.exports = (Router) => {
             if(!query.type){
                 params.type = "ALL";
             }
+
+            console.log("params" , query);
             return params;
         },
         fixedParams(req, query, cb) {
@@ -256,6 +258,8 @@ module.exports = (Router) => {
             query.category_id_2 = "ALL";
             query.category_id_3 = "ALL";
             query.category_id_4 = "ALL";
+
+            console.log("fixedParams")
 
             if(query.category_id && query.category_id != "all"){
                 req.models.ConfCategories.find({
