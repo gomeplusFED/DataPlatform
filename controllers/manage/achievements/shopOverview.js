@@ -297,13 +297,14 @@ module.exports = (Router) => {
         firstSql(query , params , isCount){
             let arrParam = [] , sql , orderBy;
             arrParam[0] = params.date;
+            arrParam[1] = "";
             arrParam[2] = (query.page - 1)*query.limit;
             arrParam[3] = query.limit / 1;
-            if(!query.shop_type){
-                query.shop_type = "ALL";
+            if(query.shop_type == 1 || query.shop_type == 2){
+                arrParam[1] = query.shop_type;
             }
 
-            arrParam[1] = query.shop_type;
+            
 
             if(!query.filter_key){
                 orderBy = "praise_count";
@@ -316,13 +317,25 @@ module.exports = (Router) => {
 
             if(isCount){
                 //统计总数
-                sql = `SELECT COUNT(*) count FROM ads2_redis_shop_scores WHERE date = ? AND day_type = 1 AND platform_type = ?`;
+                if(query.shop_type == 1 || query.shop_type == 2){
+                    sql = `SELECT COUNT(*) count FROM ads2_redis_shop_scores WHERE date = ? AND day_type = 1 AND platform_type = ?`;
+                }else{
+                    sql = `SELECT COUNT(*) count FROM ads2_redis_shop_scores WHERE date = ? AND day_type = 1`;
+                }
+                
                 return {
                     sql : sql,
                     params : arrParam
                 }
             }
-            sql = `SELECT * FROM ads2_redis_shop_scores WHERE DATE = ? AND day_type = 1 AND platform_type = ? ORDER BY ${orderBy} ${query.filter_key === "level" ? "" : "DESC"} LIMIT ?,?`;
+
+            if(query.shop_type == 1 || query.shop_type == 2){
+                sql = `SELECT * FROM ads2_redis_shop_scores WHERE DATE = ? AND day_type = 1 AND platform_type = ? ORDER BY ${orderBy} ${query.filter_key === "level" ? "" : "DESC"} LIMIT ?,?`;
+            }else{
+                sql = `SELECT * FROM ads2_redis_shop_scores WHERE DATE = ? AND day_type = 1 ORDER BY ${orderBy} ${query.filter_key === "level" ? "" : "DESC"} LIMIT ?,?`;
+                arrParam.splice(1, 1);
+            }
+            
 
 
             return {
