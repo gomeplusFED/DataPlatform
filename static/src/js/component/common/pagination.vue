@@ -14,11 +14,16 @@
 			<li v-for="item in pageList" track-by="$index" :class="{active: item == paginationConf.currentPage}" @click="changeCurrentPage(item)">
 				<a href="javascript:void(0)">{{item}}</a>
 			</li>
-			<li :class="{disabled: paginationConf.currentPage == paginationConf.numberOfPages}" @click="nextPage()">
-				<a href="javascript:void(0)" aria-label="Next">
+			<li>
+				<a href="javascript:void(0)" aria-label="Next" :class="{disabled: paginationConf.currentPage == paginationConf.numberOfPages}" @click="nextPage()">
 					<span aria-hidden="true">&raquo;</span>
 				</a>
+				<input type="text" v-model="page" number class="form-control" style="width: 50px;display: inline;margin-left:4px;">
+				<button class="btn  btn-default" style="margin-bottom: 3px;" @click="gotoPage">
+					Go
+				</button>
 			</li>
+			
 			<!-- <li :class="{disabled: paginationConf.currentPage == paginationConf.numberOfPages}" @click="changeCurrentPage(paginationConf.numberOfPages)"><span>末页</span></li> -->
 		</ul>
 	</div>
@@ -27,7 +32,7 @@
 <style>
 .page-list {color: #333;text-align: center;}
 .page-list .pagination {display: inline-block;vertical-align: middle;*display: inline;*zoom: 1;margin: 0 auto;}
-
+a.disabled {cursor: not-allowed;}
 /*.page-list {font-size: 0;color: #333;text-align: center;}
 
 .page-list .pagination li {display: inline-block;vertical-align: middle;font-size: 14px;text-align: center;border: 1px solid #ddd;margin: 0 5px;cursor: pointer;background: #fff;transition: all ease 0.3s;-webkit-transition: all ease 0.3s;-o-transition: all ease 0.3s;-moz-transition: all ease 0.3s;}
@@ -60,11 +65,14 @@ vm.$data.paginationConf = {
 
 
 var Vue = require('Vue');
+var store = require('../../store/store.js');
+var actions = require('../../store/actions.js');
 
 var Pagination = Vue.extend({
 	name: 'Pagination',
 	data: function(){
 		return {
+			page: '',
 			pageList: []
 		}
 	},
@@ -95,6 +103,24 @@ var Pagination = Vue.extend({
 		    if (this.paginationConf.currentPage < this.paginationConf.numberOfPages) {
 		        this.paginationConf.currentPage += 1;
 		    }
+		},
+		gotoPage: function() {
+			if (isNaN(parseInt(this.page))) {
+				actions.alert(store, {
+					show: true,
+					msg: "输入有误",
+					type: 'danger'
+				});
+			} else if (this.page > this.pageList[this.pageList.length-1]) {
+				actions.alert(store, {
+					show: true,
+					msg: "超过最大页数",
+					type: 'danger'
+				});
+			} else {
+				this.changeCurrentPage(this.page)
+				this.page = ''
+			}
 		},
 		getPagination: function(newValue, oldValue) {
 			var _this = this;
