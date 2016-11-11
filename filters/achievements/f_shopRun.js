@@ -131,6 +131,8 @@ module.exports = {
         let count = data.first.count;
         let i = 1;
 
+        count = count > 50 ? 50 : count;
+
         if(!data.first.sum) data.first.sum = [];
 
         for(let item of source){
@@ -152,6 +154,8 @@ module.exports = {
         let source = data.first.data[0];
         let count = data.first.count;
         let i = 1;
+
+        count = count > 50 ? 50 : count;
 
         for(let item of source){
             if(query.page){
