@@ -10,6 +10,14 @@ var util = require("../../utils"),
         "2" : ["1周后", "2周后", "3周后", "4周后"],
         "3" : ["1月后", "2月后", "3月后"]
     },
+    _keys = {
+        "1" : ["1st_day_active_user_num", "2nd_day_startup_user_num", "3rd_day_startup_user_num",
+            "7th_day_startup_user_num", "14th_day_startup_user_num", "30th_day_startup_user_num"],
+        "2" : ["1st_week_active_user_num", "2nd_week_startup_user_num", "3rd_week_startup_user_num",
+            "4th_week_startup_user_num", "5th_week_startup_user_num"],
+        "3" : ["1st_month_active_user_num", "2nd_month_startup_user_num", "3rd_month_startup_user_num",
+            "4th_month_startup_user_num"]
+    },
     rows= {
         "1" : ["date", "new_user", "one", "two", "three", "four", "five"],
         "2" : ["date", "new_user", "one", "two", "three", "four"],
@@ -21,6 +29,7 @@ module.exports = {
         let source = data.first.data[0],
             type = "line",
             obj = {},
+            keys = _keys[query.day_type],
             _retained = retained[query.day_type],
             map = {},
             newData = {};
@@ -39,7 +48,7 @@ module.exports = {
             let date = util.getDate(item.date);
             if(!obj[date]) {
                 obj[date] = {};
-                for(let key of _retained) {
+                for(let key of keys) {
                     obj[date][key] = 0;
                 }
             }
@@ -51,7 +60,6 @@ module.exports = {
                 newData[item][date] = "0.00";
             }
         }
-        console.log(obj);
         switch(query.day_type) {
             case "1" :
                 for(let date in obj) {
