@@ -49,6 +49,7 @@
 
 	.table_con td[rowspan] {
 		vertical-align: middle;
+		padding: 3px;
 	}
 
 	.table-nobordered {
