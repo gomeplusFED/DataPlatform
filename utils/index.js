@@ -177,7 +177,7 @@ exports.toFixed = function(one, two) {
 };
 
 exports.percentage = function(one, two) {
-    return (one ? one : 0 / (two === 0 ? 1 : two) * 100).toFixed(2);
+    return (one / (two === 0 ? 1 : two) * 100).toFixed(2);
 };
 
 exports.toRound = function(one, two) {

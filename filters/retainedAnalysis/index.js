@@ -39,6 +39,9 @@ module.exports = {
             let date = util.getDate(item.date);
             if(!obj[date]) {
                 obj[date] = {};
+                for(let key of _retained) {
+                    obj[date][key] = 0;
+                }
             }
             obj[date][item.key] = item.value;
         }
@@ -48,6 +51,7 @@ module.exports = {
                 newData[item][date] = "0.00";
             }
         }
+        console.log(obj);
         switch(query.day_type) {
             case "1" :
                 for(let date in obj) {
