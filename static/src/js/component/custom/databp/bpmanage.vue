@@ -17,7 +17,10 @@
                     <option value='H5'>H5</option>
                 </select>  
                 <label>起止时间</label>
-                <m-date :index="index" :page-components-data="pageComponentsData" :component-type="'date_picker'" :argvs.sync='argvs'></m-date>
+                <div  class="date_picker">                
+                    <m-date :index="index" :page-components-data="pageComponentsData" :component-type="'date_picker'" :argvs.sync='argvs'></m-date>
+                </div>
+
                 <button id="btnSearch" class="btn btn-searchLi-top btn-primary" type="button" data-toggle="popover" data-trigger="focus" @click="query">查询</button>
             </li>
         </ul> 
@@ -221,7 +224,7 @@
     min-width: 50px;
 }
 .nform-box ul li .date_picker {
-    margin: 0;
+    margin-left: -5px;
     float: left;
 }
 .nform-box li label, .nform-box li a, .nform-box li input, .nform-box li button, .nform-box li select, .nform-box li .sel-simulation, .nform-box li .sel-simulation span {
