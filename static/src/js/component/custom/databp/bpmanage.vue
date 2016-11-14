@@ -134,7 +134,7 @@
         },
 		methods: {
             query() {
-                // console.log(this.argvs);
+                console.log(this.argvs);
                 this.loading.show = true;
                 api.listBps({
                     pageUrl: this.searchParam.pageUrl, 
@@ -142,7 +142,9 @@
                     pointName: this.searchParam.pointName, 
                     // page从0开始
                     page: this.paginationConf.currentPage - 1,
-                    size: this.paginationConf.itemsPerPage
+                    size: this.paginationConf.itemsPerPage,
+                    startTime: this.argvs.startTime + ' 00:00:00',
+                    endTime: this.argvs.endTime + ' 23:59:59'
                 }).then((res) => {
                     // console.log(res);
                     this.dataList = res.data;
