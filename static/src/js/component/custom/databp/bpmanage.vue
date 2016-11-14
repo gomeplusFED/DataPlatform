@@ -52,7 +52,7 @@
         <m-pagination :pagination-conf="paginationConf"></m-pagination>
     </div>
     <m-alert></m-alert>
-    <m-bpinfo :show.sync = "showConfig" :bp-config = "bpConfig"  :public-bp-str = "publicBpStr" :loading.sync= "loading"></m-bpinfo>
+    <m-bpinfo  :loading.sync= "loading"></m-bpinfo>
     <m-loading :loading.sync='loading'></m-loading>
     <m-confirm></m-confirm>
 </div>
@@ -81,6 +81,14 @@
             'm-confirm': Confirm,
             'm-bpinfo': bpInfo
 		},
+        vuex: {
+            getters: {
+                vuexbp: function() {
+                    return store.state.bpConfig;
+                }
+            },
+            actions: actions
+        },
         computed: {
             baseIndex: function () {
                 return (this.paginationConf.currentPage - 1) * this.paginationConf.itemsPerPage + 1;
@@ -117,8 +125,7 @@
                     platform: 'PC',
                     pageUrl: ''
                 },
-                bpConfig: {},
-                showConfig: false
+                bpConfig: {}
 			}
 		},
         ready() {
@@ -127,7 +134,7 @@
         },
 		methods: {
             query() {
-                // console.log(this.argvs);
+                console.log(this.argvs);
                 this.loading.show = true;
                 api.listBps({
                     pageUrl: this.searchParam.pageUrl, 
@@ -135,7 +142,9 @@
                     pointName: this.searchParam.pointName, 
                     // page从0开始
                     page: this.paginationConf.currentPage - 1,
-                    size: this.paginationConf.itemsPerPage
+                    size: this.paginationConf.itemsPerPage,
+                    startTime: this.argvs.startTime + ' 00:00:00',
+                    endTime: this.argvs.endTime + ' 23:59:59'
                 }).then((res) => {
                     // console.log(res);
                     this.dataList = res.data;
@@ -159,10 +168,21 @@
                 });
             },
             edit(item) {
-                this.bpConfig = item;
-                this.showConfig = true;
+                item.show = true;
+                this.$router.go({
+                    path: '/databp/visualbp',
+                    query: item
+                }); 
+
             }
-		}
+		},
+        watch: {
+            'vuexbp.pointParam' : {
+                handler(val) {
+                    this.bpConfig.pointParam = val;
+                }
+            }
+        }
 	});
 
 	module.exports = databp;

@@ -18,12 +18,12 @@
 	<div id='container' class='main'>
 		<div class='tabpanel_content' style='width: 100%; height: 1000px;'>
 			<div class='html_content' style='z-index: 2;'>
-				<iframe  frameborder='no' border='0' marginwidth='0' marginheight='0' id='tab_baseQuery'  src='{{iframe_url}}'></iframe>
+				<iframe :class="{'pc-iframe': bpConfig.platform === 'PC', 'wap-iframe':  bpConfig.platform === 'H5'}" frameborder='no' border='0' marginwidth='0' marginheight='0' id='tab_baseQuery'  src='{{iframe_url}}'></iframe>
 			</div>
 		</div>
 	</div>
 </div>
-	<m-bpinfo :show.sync = "showConfig" :bp-config = "bpConfig" :loading.sync='loading'></m-bpinfo>
+	<m-bpinfo  :loading.sync='loading'></m-bpinfo>
 	<m-loading :loading.sync='loading'></m-loading>
 	<m-alert></m-alert>
 </template>
@@ -55,17 +55,27 @@
 					noLoaded: 0
 				},
 				bpConfig: {
+					show: false,
 					pointName: '',
 					platform: 'PC',
 					pageUrl: '',
 					selector:'',
 					privateParam: '',
 					publicParam: ''
-				},
-				showConfig: false
+				}
 			}
 		},
 		ready() {
+			let pageUrl = this.$route.query.pageUrl;
+			let platform = this.$route.query.platform;
+			if (pageUrl && platform) {
+				this.bpConfig.pageUrl = pageUrl;
+				this.bpConfig.platform = platform;
+				this.search();
+				if (this.$route.query.show) {
+					actions.databp(store, this.$route.query);
+				}
+			}
 
 		},
 		methods: {
@@ -92,7 +102,7 @@
 					var $body = $iframe.find('body');
 					var hovered = [];
 					var selected;
-					$head.append('<style> .bphover {outline: 5px solid #0072ff; !important}</style>');
+					$head.append('<style> .bphover {outline: 2px solid #0072ff !important;background-color: rgba(105, 210, 249, 0.4) !important;} .bphover-position-fix {position: relative !important;}</style>');
 					$body.bind('contextmenu', function(e) {
 
 						if (selected) {
@@ -100,21 +110,32 @@
 						}
 						selected = $(e.target);
 						selected.removeClass('bphover');
+						if (selected.hasClass('bphover-position-fix')) {
+							selected.removeClass('bphover-position-fix');
+						}
 						// 去除css类防止选择器中被加入该类
 						var selector = utils.getSelector(e.target);
+						if (/static|inherit|initial/.test(window.getComputedStyle(e.target).position)) {
+							selected.addClass('bphover-position-fix');
+						}
 						selected.addClass('bphover');
 						_this.bpConfig.selector = selector;
-						_this.showConfig = true;
+						_this.bpConfig.show = true;
+						actions.databp(store, _this.bpConfig);
 						e.preventDefault();
 					});
 					$body.mouseover(
 						function(e) {
 							for (var i in hovered) {
 								hovered[i].removeClass('bphover');
+								hovered[i].removeClass('bphover-position-fix');
 							}
 							hovered.length = 0;
 							var $target = $(e.target)
 							if(!($target.hasClass('bphover')  || $target.is(selected))) {
+								if (/static|inherit|initial/.test(window.getComputedStyle(e.target).position)) {
+									$target.addClass('bphover-position-fix');
+								}
 								$target.addClass('bphover');
 								hovered.push($target);
 							}
@@ -139,7 +160,6 @@
 .tabpanel_content {
 	position: relative;
 	z-index: 2;
-	background-color: #efefef;
 	overflow: hidden;
 }
 .tabpanel_content .html_content {
@@ -149,20 +169,21 @@
 	z-index: 0;
 	width: 100%;
 	height: 100%;
-	background-color: #efefef;
-}
-iframe {
-	width:125%;
-	height:125%;
-	border:none;
-	-ms-zoom: 0.8;
-	-moz-transform: scale(0.8);
-	-moz-transform-origin: 0 0;
-	-o-transform: scale(0.8);
-	-o-transform-origin: 0 0;
-	-webkit-transform: scale(0.8);
-	-webkit-transform-origin: 0 0;
 }
 
+.pc-iframe {
+	width:100%;
+	height:100%;
+	display: block;
+	background-color: #efefef;
+}
+
+.wap-iframe{
+	width: 375px;
+	height: 667px;
+	margin: 10px auto 0;
+	display: block;
+	background-color: #efefef;
+}
 
 </style>
