@@ -52,7 +52,7 @@
         <m-pagination :pagination-conf="paginationConf"></m-pagination>
     </div>
     <m-alert></m-alert>
-    <m-bpinfo :show.sync = "showConfig" :bp-config = "bpConfig"  :public-bp-str = "publicBpStr" :loading.sync= "loading"></m-bpinfo>
+    <m-bpinfo :public-bp-str = "publicBpStr" :loading.sync= "loading"></m-bpinfo>
     <m-loading :loading.sync='loading'></m-loading>
     <m-confirm></m-confirm>
 </div>
@@ -81,6 +81,14 @@
             'm-confirm': Confirm,
             'm-bpinfo': bpInfo
 		},
+        vuex: {
+            getters: {
+                vuexbp: function() {
+                    return store.state.bpConfig;
+                }
+            },
+            actions: actions
+        },
         computed: {
             baseIndex: function () {
                 return (this.paginationConf.currentPage - 1) * this.paginationConf.itemsPerPage + 1;
@@ -117,8 +125,7 @@
                     platform: 'PC',
                     pageUrl: ''
                 },
-                bpConfig: {},
-                showConfig: false
+                bpConfig: {}
 			}
 		},
         ready() {
@@ -160,9 +167,17 @@
             },
             edit(item) {
                 this.bpConfig = item;
-                this.showConfig = true;
+                this.bpConfig.show = true;
+                actions.databp(store, this.bpConfig);
             }
-		}
+		},
+        watch: {
+            'vuexbp.pointParam' : {
+                handler(val) {
+                    this.bpConfig.pointParam = val;
+                }
+            }
+        }
 	});
 
 	module.exports = databp;

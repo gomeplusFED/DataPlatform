@@ -1,8 +1,8 @@
 var store = require('../../../store/store.js');
 var actions = require('../../../store/actions.js');
 var $ = require('jQuery');
-// const baseurl = 'http://10.69.20.55:8080/bomber-pie';
-const baseurl = 'http://10.69.112.146:38080/bomber-pie'
+const baseurl = 'http://10.69.20.59:8090/bomber-pie';
+// const baseurl = 'http://10.69.112.146:38080/bomber-pie'
 
 $.support.cors = true;
 

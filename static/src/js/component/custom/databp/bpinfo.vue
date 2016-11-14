@@ -1,7 +1,7 @@
 <template>
-<div class="mask" v-show="show"   v-on:dragover.stop.prevent="" v-on:drop="drop">
+<div class="mask" v-show="bpConfig.show"   v-on:dragover.stop.prevent="" v-on:drop="drop">
 	<div class="infobox" draggable="true"  v-on:dragstart="dragstart" v-on:drag="draging" v-bind:style="infopos">
-		<div class="closer" title="关闭" @click="show=false"></div>
+		<div class="closer" title="关闭" @click="hide"></div>
 		<div class="sider-nav ">
 			<div class="tabs-container">
 				<ul class="nav nav-tabs">
@@ -55,6 +55,8 @@
 <script>
 var Vue = require('Vue');
 var api = require('./api');
+var store = require('../../../store/store.js');
+var actions = require('../../../store/actions.js');
 var bpinfo = Vue.extend({
 	data: function() {
 		return {
@@ -76,6 +78,14 @@ var bpinfo = Vue.extend({
 			publicBp: [['','']],
 			privateBp: [['','']]
 		}
+	},
+	vuex: {
+	    getters: {
+	        bpConfig: function() {
+	            return store.state.bpConfig;
+	        }
+	    },
+	    actions: actions
 	},
 	computed:  {
 		publicBpStr: {
@@ -127,20 +137,20 @@ var bpinfo = Vue.extend({
 			}
 		}
 	},
-	props:['show', 'bpConfig', 'loading'],
+	props:['loading'],
 	ready() {
-		this.$watch('bpConfig.privateParam', function (val, oldval) {
-			if (val !== oldval) {
-				this.privateBpStr = this.bpConfig.privateParam;
-			}
+		// this.$watch('bpConfig.privateParam', function (val, oldval) {
+		// 	if (val !== oldval) {
+		// 		this.privateBpStr = this.bpConfig.privateParam;
+		// 	}
 			
-		});
-		this.$watch('bpConfig.publicParam', function (val, oldval) {
-			if (val !== oldval) {
-				this.publicBpStr = this.bpConfig.publicParam;
-			}
-		});
-		this.$watch('show', function (val) {
+		// });
+		// this.$watch('bpConfig.publicParam', function (val, oldval) {
+		// 	if (val !== oldval) {
+		// 		this.publicBpStr = this.bpConfig.publicParam;
+		// 	}
+		// });
+		this.$watch('bpConfig.show', function (val) {
 			if (val) {
 				this.init();
 			}
@@ -169,11 +179,17 @@ var bpinfo = Vue.extend({
 				}
 				
 				_this.privateBpStr = tmppri;
+				_this.localshow = true;
 				_this.loading.show = false;
 			}).catch(function() {
-				_this.show = false;
+				_this.localshow = false;
 				_this.loading.show = false;
 			});
+		},
+		hide() {
+			actions.databp(store, {
+		        show: false
+		    });
 		},
 		dragstart(e) {
 			e.dataTransfer.effectAllowed = "move";  //移动效果
@@ -221,15 +237,16 @@ var bpinfo = Vue.extend({
 			if (_this.config.pointId) {
 				api.updateBp(_this.config).then(function(res) {
 					// 更新成功刷新传入的数据
-					Object.assign(_this.bpConfig, _this.config);
-					if(_this.bpConfig.pointParam) {
-						_this.bpConfig.pointParam = allbps.map(x => `${x[0]}=${x[1]}`).join('&');
-					}
-					_this.show = false;
+					// Object.assign(_this.bpConfig, _this.config);
+					_this.config.pointParam = allbps.map(x => `${x[0]}=${x[1]}`).join('&');
+					_this.config.show = false;
+					actions.databp(store, _this.config);
+
 				});
 			} else {
 				api.saveBp(_this.config).then(function() {
-					_this.show = false;
+					_this.config.show = false;
+					actions.databp(store, _this.config);
 				});
 			}
 		}

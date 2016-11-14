@@ -23,7 +23,7 @@
 		</div>
 	</div>
 </div>
-	<m-bpinfo :show.sync = "showConfig" :bp-config = "bpConfig" :loading.sync='loading'></m-bpinfo>
+	<m-bpinfo  :loading.sync='loading'></m-bpinfo>
 	<m-loading :loading.sync='loading'></m-loading>
 	<m-alert></m-alert>
 </template>
@@ -55,14 +55,14 @@
 					noLoaded: 0
 				},
 				bpConfig: {
+					show: false,
 					pointName: '',
 					platform: 'PC',
 					pageUrl: '',
 					selector:'',
 					privateParam: '',
 					publicParam: ''
-				},
-				showConfig: false
+				}
 			}
 		},
 		ready() {
@@ -104,7 +104,8 @@
 						var selector = utils.getSelector(e.target);
 						selected.addClass('bphover');
 						_this.bpConfig.selector = selector;
-						_this.showConfig = true;
+						_this.bpConfig.show = true;
+						actions.databp(store, _this.bpConfig);
 						e.preventDefault();
 					});
 					$body.mouseover(
