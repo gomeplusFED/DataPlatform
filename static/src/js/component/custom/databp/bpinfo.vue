@@ -241,11 +241,18 @@ var bpinfo = Vue.extend({
 	        e.preventDefault() || e.stopPropagation(); 
 		},
 		save(ev) {
+			let $save = $(ev.target);
+			if(this.config.pointName === '') {
+				$save.popover({
+					content: '请输入埋点名称'
+				});
+				$save.popover('show');
+				return false;
+			}
 			var _this = this;
 			var existKeys = {};
 			var allbps = [..._this.publicBp, ..._this.privateBp];
 			let illegal = /[=&]/;
-			let $save = $(ev.target);
 			for(let a of allbps) {
 				if (existKeys[a[0]]) {
 					$save.popover({
