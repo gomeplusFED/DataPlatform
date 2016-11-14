@@ -6,196 +6,187 @@ var util = require("../../utils"),
     moment = require("moment");
 
 module.exports = {
-    tradeOne(data) {
+    //支付趋势
+    payOne(data , query , dates) {
         let source = data.first.data[0];
-        let one = {} , two = {};
-        for(let key of data.rows[0]){
-            one[key] = 0;
-        }
-        for(let key of data.rows[1]){
-            two[key] = 0;
-        }
-
-        let all_pay_sum = 0, all_pay_user = 0;
-        for(let item of source){
-            for(let key in one){
-                one[key] += item[key];
-            }
-            for(let key in two){
-                if(key == "Man_price") continue;
-                two[key] += item[key];
-            }
-            all_pay_sum += item.pay_sum;
-            all_pay_user+= item.pay_user;
-        }
-
-        two.Man_price = util.dealDivision(all_pay_sum , all_pay_user , 2);
-        return util.toTable([[one], [two]], data.rows, data.cols);
-    },
-
-    //交易趋势
-    tradeTwo(data, query, dates) {
-        let source = data.first.data[0],
-            count  = data.first.count || 1;
-            Cols = [
-                "被访问店铺数",
-                "支付店铺数",
-                "下单商品数",
-                "下单商品件数",
-
-                "支付商品数",
-                "支付商品件数",
-                "下单总量",
-                "支付订单量",
-
-                "下单金额",
-                "支付金额",
-                "下单人数",
-                "支付人数",
-
-                "客单价",
-                "国美币使用额",
-                "平台优惠券使额"
-            ],
-            Rows = [
-                "access_shop",
-                "pay_shop",
-                "order_product",
-                "order_product_num",
-
-                "pay_product",
-                "pay_product_num",
-                "order_num",
-                "pay_num",
-
-                "order_num",
-                "pay_sum",
-                "order_user",
-                "pay_user",
-
-                "Man_price",
-                "consume_guomeibi",
-                "plat_couple_use_sum"
-            ];
-
-        data.rows[0] = Rows.concat();
-        data.cols[0] = [];
-        for(let i=0;i<Cols.length;i++){
-            data.cols[0].push({
-                caption: Cols[i],
-                type : "number"
-            })
-        }
-
-        data.rows[0].unshift("date");
-        data.cols[0].unshift({
-            caption: "日期",
-            type : "date"
-        });
-
         for(let item of source){
             item.date = util.getDate(item.date);
-            item.Man_price = util.dealDivision(item.pay_sum , item.pay_user , 2)
+            item.pay_lv = util.dealDivision( item.pay_num , item.order_num , 4);
         }
 
-        let out = util.toTable([source], data.rows, data.cols , [count]);
 
-        /* 图表 */
         if(query.main_show_type_filter == "chart"){
+            /* chart */
             let map = {} , result = {};
-            for(let i=0;i<Cols.length;i++){
-                map[Rows[i]] = Cols[i];
+            for(let i=1;i<data.rows[0].length;i++){
+                map[data.rows[0][i]] = data.cols[0][i].caption;
             }
 
-            for(let date of dates){
+            dates.map((date)=>{
                 let obj = {};
-                for(let key of Rows){
+                for(let key in map){
                     obj[key] = 0;
                 }
                 result[date] = obj;
-            }
+            });
 
+            for(let item of source){
+                let thisobj = result[item.date];
+                for(let key in map){
+                    thisobj[key] = item[key];
+                    if(key == "pay_lv"){
+                        thisobj[key] = util.numberLeave(thisobj[key]*100 , 2);
+                    }
+                }
+            }
 
             return [{
                 type : "line",
                 map : map,
                 data : result,
                 config: { // 配置信息
-                    stack: false  // 图的堆叠
+                    stack: false,  // 图的堆叠,
                 }
             }]
+        }else{
+            for(let item of source){
+                item.pay_lv = util.toFixed( item.pay_lv , 0 );
+            }
+            return util.toTable([source], data.rows, data.cols);
         }
-
-        return out;
-
     },
-    tradeThree(data , query , dates) {
+
+    //支付方式
+    payTwo(data, query, dates) {
         let source = data.first.data[0],
-            count = data.first.count || 1;
+            Resource = [] , result = {};
+
+        dates.map((date)=>{
+            result[date] = {
+                "weixin":0,
+                "alipay":0,
+                "other" :0
+            }
+        });
 
         for(let item of source){
-            item.Every_price = util.dealDivision(item.pay_sum , item.pay_num , 2);
-            item.Man_price   = util.dealDivision( item.pay_sum , item.pay_user , 2);
+            item.date = util.getDate(item.date);
+            switch(item.order_channel){
+                case "微信":
+                    result[item.date].weixin += item.pay_succ_num;
+                    break;
+                case "支付宝":
+                    result[item.date].alipay += item.pay_succ_num;
+                    break;
+                case "其他":
+                    result[item.date].other += item.pay_succ_num;
+                    break;
+            }
+        }
+
+        for(let key in result){
+            let obj = { "date":key };
+            for(let n in result[key]){
+                obj[n] = result[key][n];
+            }
+            Resource.push(obj);
         }
 
         if(query.main_show_type_filter == "chart"){
-            let map = {} , result = {} , 
-                filter = query.filter_key;
-            let i = data.rows[0].indexOf(filter),
-                names=data.cols[0][i].caption;
-
-            map.pv = names;
-            let max = 0;
-            for(let item of source){
-                result[item.sales_province] = {
-                    "pv" : item[filter]
-                }
-                if(item[filter] > max){
-                    max = item[filter];
-                }
+            /* chart */
+            let map = {
+                "weixin" : "微信",
+                "alipay" : "支付宝",
+                "other"  : "其它"
             }
 
             return [{
-                type : "map",
+                type : "bar",
                 map : map,
                 data : result,
                 config: { // 配置信息
-                    stack: false,  // 图的堆叠,
-                    toolBox : {
-                        "dataView" : {
-                            "readOnly" : true
-                        }
-                    },
-                    "mapMaxValue" : max
+                    stack: false,  // 图的堆叠,1
                 }
             }]
+        }else{
+            return util.toTable([Resource], data.rows, data.cols);
         }
-       
-        return util.toTable([source], data.rows, data.cols, [count]);
     },
-    tradeFour(data, query , dates) {
 
+    //支付构成
+    payThree(data , query , dates) {
         let source = data.first.data[0],
-            count = data.first.count || 1;
+            //B 国美币
+            //M 现金
+            //Y 优惠券
+            Rows   = ["B" , "M" , "B_M" , "B_Y" , "Y_M" , "B_M_Y"],
+            Source = [],
+            result = {};
 
-        let num = query.filter_key , All_pay_sum = 1;
+        data.rows[0] = Rows;
 
-        for(let item of source) {
-            if(!num){
-                item.category_name = "ALL";
-                All_pay_sum = item.pay_sum;
-            }else{
-                item.category_name = item["category_name_"+num];
-                if(item["category_id_"+num] == "ALL"){
-                    All_pay_sum = item.pay_sum;
-                }
+        dates.map((date)=>{
+            let obj = {};
+            Rows.map((key)=>{
+                obj[key] = 0;
+            });
+            result[date] = obj;
+        });
+
+        Rows.unshift("date");
+
+        for(let item of source){
+            item.date = util.getDate(item.date);
+            let theObj = result[item.date];
+            switch(item.order_constitute){
+                case "仅国美币":
+                    theObj.B += item.pay_num;
+                    break;
+                case "仅现金":
+                theObj.M += item.pay_num;
+                    break;
+                case "国美币+现金":
+                theObj.B_M += item.pay_num;
+                    break;
+                case "国美币+优惠劵":
+                theObj.B_Y += item.pay_num;
+                    break;
+                case "优惠劵+现金":
+                theObj.Y_M += item.pay_num;
+                    break;
+                case "国美币+优惠券+现金":
+                theObj.B_M_Y += item.pay_num;
+                    break;
             }
         }
 
-        for(let item of source){
-            item.pay_sum_lv = util.toFixed( item.pay_sum / All_pay_sum , 0 );
-        }
+        if(query.main_show_type_filter == "chart"){
+            /* chart */
+            let map = {};
+            for(let i=1;i<Rows.length;i++){
+                map[Rows[i]] = data.cols[0][i].caption;
+            }
 
-        return util.toTable([source], data.rows, data.cols, [count]);
+            return [{
+                type : "pie",
+                map : map,
+                data : result,
+                config: { // 配置信息
+                    stack: false,  // 图的堆叠,1
+                }
+            }]
+        }else{
+            for(let key in result){
+                let obj = {"date" : key};
+                for(let n in result[key]){
+                    obj[n] = result[key][n];
+                }
+
+                Source.push(obj);
+            }
+
+            return util.toTable([Source], data.rows, data.cols);
+        }
     }
 };
+

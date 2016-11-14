@@ -342,11 +342,11 @@ module.exports = {
                     title : "订单来源类型",
                     query_api : "/achievements/orderTwo"
                 },
-               /* {
-                    type : "table",
+                {
+                    type : "chart",
                     title : "订单评级分布",
                     query_api : "/achievements/orderThree"
-                }*/
+                }
             ]
         }
     },
@@ -364,7 +364,7 @@ module.exports = {
                     query_api : "/achievements/payOne"
                 },
                 {
-                    type : "chart",
+                    type : "table",
                     title : "支付方式",
                     query_api : "/achievements/payTwo"
                 },

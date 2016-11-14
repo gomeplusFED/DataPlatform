@@ -16,6 +16,25 @@ module.exports = (Router) => {
         platform : false,
         toggle : true,
         order : ["-date"],
+        filter_select : [{
+            title: '指标选择(图表使用)',
+            filter_key: 'filter_key',
+            groups: [
+                {key: 'order_num', value: '下单总量' },
+                {key: 'pay_num', value: '支付总量' },
+                {key: 'order_user', value: '下单人数' },
+                {key: 'pay_user', value: '支付人数' },
+                {key: 'ensure_get_commodity', value: '确认收货' },
+                {key: 'delay_get_commodity', value: '延迟收货' },
+                {key: 'cancel_order', value: '取消订单' },
+                {key: 'apply_aftersale', value: '申请售后' },
+                {key: 'evaluate_order', value: '评价订单' },
+                {key: 'scan_order', value: '浏览-下单' },
+                {key: 'scan_pay', value: '浏览-支付' },
+                {key: 'order_pay', value: '下单-支付' },
+                {key: 'pay_lv', value: '支付成功率' }
+            ]
+        }],
         global_platform: {
             show: true,
             key : "type",
@@ -90,42 +109,11 @@ module.exports = (Router) => {
         }
     });
 
-    //交易用户分布
+    //订单评级分布
     Router = new api(Router,{
-        router : "/achievements/tradeThree",
-        modelName : ["SalesUserDistribute2"],
+        router : "/achievements/orderThree",
+        modelName : ["OrderComments2"],
         platform : false,
-        showDayUnit : true,
-        date_picker_data: 1,
-        paging : [true],
-        order : ["-date"],
-        toggle : true,
-        filter_select : [{
-            title: '指标选择',
-            filter_key: 'filter_key',
-            groups: [{
-                key: 'pay_num',
-                value: '支付总量'
-            }, {
-                key: 'pay_sum',
-                value: '支付总金额'
-            }, {
-                key: 'pay_product',
-                value: '支付商品数'
-            }, {
-                key: 'pay_product_num',
-                value: '支付商品件数'
-            }, {
-                key: 'pay_user',
-                value: '支付人数'
-            }, {
-                key: 'Every_price',
-                value: '笔单价'
-            }, {
-                key: 'Man_price',
-                value: '客单价'
-            }]
-        }],
         params(query , params , sendData){
             if(!query.type){
                 params.type = "ALL";
@@ -133,147 +121,9 @@ module.exports = (Router) => {
             return params;
         },
         filter(data, query, dates) {
-            return filter.tradeThree(data , query , dates);
-        },
-        rows : [
-            [
-                'sales_province', 
-                'pay_num', 
-                'pay_sum', 
-                'pay_product',
-
-                'pay_product_num', 
-                'pay_user', 
-                'Every_price',
-                'Man_price'
-            ]
-        ],
-        cols : [
-            [{
-                caption: "省市",
-                type: "date"
-            }, {
-                type: 'number',
-                caption: '支付总量'
-            }, {
-                type: 'number',
-                caption: '支付总金额'
-            }, {
-                type: 'number',
-                caption: '支付商品数'
-            }, 
-
-            {
-                type: 'number',
-                caption: '支付商品件数'
-            }, {
-                type: 'number',
-                caption: '支付人数'
-            }, {
-                type: 'number',
-                caption: '笔单价'
-            }, {
-                type: 'number',
-                caption: '客单价'
-            }]
-        ]
+            return filter.orderThree(data , query , dates);
+        }
     });
-
-    //交易类目构成
-    Router = new api(Router,{
-        router : "/achievements/tradeFour",
-        modelName : ["SalesCategoryConstitute2"],
-        showDayUnit : true,
-        date_picker_data: 1,
-        platform : false,
-        paging : [true],
-        /*excel_export : true,
-        flexible_btn : [{
-            content: '<a href="javascript:void(0)">导出</a>',
-            preMethods: ['excel_export']
-        }],*/
-        params(query , params , sendData){
-            if(!query.type){
-                params.type = "ALL";
-            }
-            return params;
-        },
-        fixedParams(req, query, cb) {
-            query.category_id_1 = "ALL";
-            query.category_id_2 = "ALL";
-            query.category_id_3 = "ALL";
-            query.category_id_4 = "ALL";
-
-            if(query.category_id && query.category_id != "all"){
-                req.models.ConfCategories.find({
-                    id : query.category_id
-                } , (err , data) => {
-                    if(err){
-                        cb(err);
-                    }else{
-                        let theLevel = data[0].level + 1;
-                        switch(theLevel){
-                            case 1:                             delete query.category_id_1;   
-                                query.filter_key = 1;
-                                break;
-                            case 2:                             delete query.category_id_2;
-                                query.filter_key = 2;
-                                break;
-                            case 3:                             delete query.category_id_3;
-                                query.filter_key = 3;
-                                break;
-                            case 4:                             delete query.category_id_4; 
-                                query.filter_key = 4;
-                        }
-                        delete query.category_id;
-                        cb(null , query);
-                    }
-                });
-            }else{
-                delete query.category_id;
-                cb(null , query);
-            }
-        },
-        level_select : true,
-        level_select_name : "category_id",
-        level_select_url : "/api/categories",
-        filter(data, query, dates) {
-            return filter.tradeFour(data, query, dates);
-        },
-        rows : [
-            [ 'category_name', 'product_access', 'access_user', 'pay_product_num',
-            'pay_sum', 'pay_sum_lv']
-        ],
-        cols : [
-            [
-                {
-                    caption : '类目名称',
-                    type : 'string'
-                },
-                {
-                    caption : '浏览量',
-                    type : 'number'
-                },
-                {
-                    caption : '访客数',
-                    type : 'number'
-                },
-                {
-                    caption : '支付商品件数',
-                    type : 'number'
-                },
-                {
-                    caption : '支付金额',
-                    type : 'number'
-                },
-                {
-                    caption : '支付金额占比',
-                    type : 'string'
-                }
-            ]
-        ]
-    });
-
 
     return Router;
 };

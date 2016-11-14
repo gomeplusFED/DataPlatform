@@ -188,7 +188,7 @@ module.exports = (Router) => {
             return params;
         },
         flexible_btn : [{
-            content: `<a href="#!/achievements/productSale">支付分析</a>`, 
+            content: `<a href="#!/achievements/pay">支付分析</a>`, 
             preMethods: [], 
             customMethods: ""
         }],
