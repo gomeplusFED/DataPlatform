@@ -52,7 +52,7 @@
         <m-pagination :pagination-conf="paginationConf"></m-pagination>
     </div>
     <m-alert></m-alert>
-    <m-bpinfo :public-bp-str = "publicBpStr" :loading.sync= "loading"></m-bpinfo>
+    <m-bpinfo  :loading.sync= "loading"></m-bpinfo>
     <m-loading :loading.sync='loading'></m-loading>
     <m-confirm></m-confirm>
 </div>
@@ -168,9 +168,12 @@
                 });
             },
             edit(item) {
-                this.bpConfig = item;
-                this.bpConfig.show = true;
-                actions.databp(store, this.bpConfig);
+                item.show = true;
+                this.$router.go({
+                    path: '/databp/visualbp',
+                    query: item
+                }); 
+
             }
 		},
         watch: {

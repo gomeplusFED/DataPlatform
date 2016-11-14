@@ -66,6 +66,16 @@
 			}
 		},
 		ready() {
+			let pageUrl = this.$route.query.pageUrl;
+			let platform = this.$route.query.platform;
+			if (pageUrl && platform) {
+				this.bpConfig.pageUrl = pageUrl;
+				this.bpConfig.platform = platform;
+				this.search();
+				if (this.$route.query.show) {
+					actions.databp(store, this.$route.query);
+				}
+			}
 
 		},
 		methods: {
