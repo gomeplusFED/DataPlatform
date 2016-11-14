@@ -35,12 +35,14 @@ module.exports = (Router) => {
             credentials: 'include',
             // agent,
             headers: {
-                Host,
+                // Host,
                 'Connection': 'keep-alive',
-                'Pragma': 'no-cache'
+                'Pragma': 'no-cache',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36'
             }
         };
         if (mobile) {
+            // url = url.replace('//mall.', '//m.');
             options.headers['User-Agent'] = 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1';
         }
 
@@ -49,7 +51,7 @@ module.exports = (Router) => {
                 origin: trunk,
                 host
             };
-
+        console.log(url);
         fetch(url, options)
         .then(function(result) {
             let rawcookie = result.headers;
@@ -64,6 +66,7 @@ module.exports = (Router) => {
             }
             return result.text();
         }).then(function(body) {
+            // console.log(body);
             let html = body;
             // 移动端移除头部script，防止iframe无法正常渲染
             if (mobile) {
