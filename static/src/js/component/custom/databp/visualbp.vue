@@ -105,7 +105,7 @@
 						}
 						// 去除css类防止选择器中被加入该类
 						var selector = utils.getSelector(e.target);
-						if (window.getComputedStyle(e.target).position.test(/static|inherit|initial/)) {
+						if (/static|inherit|initial/.test(window.getComputedStyle(e.target).position)) {
 							selected.addClass('bphover-position-fix');
 						}
 						selected.addClass('bphover');
@@ -149,7 +149,6 @@
 .tabpanel_content {
 	position: relative;
 	z-index: 2;
-	background-color: #efefef;
 	overflow: hidden;
 }
 .tabpanel_content .html_content {
@@ -159,18 +158,21 @@
 	z-index: 0;
 	width: 100%;
 	height: 100%;
-	background-color: #efefef;
 }
 
 .pc-iframe {
 	width:100%;
 	height:100%;
+	display: block;
+	background-color: #efefef;
 }
 
 .wap-iframe{
 	width: 375px;
 	height: 667px;
-	margin: 0 auto;
+	margin: 10px auto 0;
+	display: block;
+	background-color: #efefef;
 }
 
 </style>
