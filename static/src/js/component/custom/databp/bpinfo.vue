@@ -18,24 +18,31 @@
 							<div><label>选择器</label>{{config.selector}}</div>
 							<div><label>事件类型</label>单击事件</div>
 							<div><label>URL</label>{{config.pageUrl}}</div>
-							<div><label>公共埋点信息</label>{{publicBpStr}} <button @click="publicBp.push(['', ''])">+</button></div>
+							<div><label>全局埋点信息</label>{{publicBpStr}} <button @click="publicBp.push(['', ''])">+</button></div>
 							<div>
 								<div v-for="(i,item) in publicBp" class="pair">
 									key
-									<input type='text' class='form-control' placeholder='' v-model="item[0]">
+									<input type='text' class='form-control' placeholder='' v-model="item[0]" @click="showDropDown">
 									value
-									<input type='text' class='form-control' placeholder='' v-model="item[1]">
+									<input type='text' class='form-control' placeholder='' v-model="item[1]" @click="showDropDown(item, $event)">
 									<button @click="publicBp.splice(i,1)">-</button>
 								</div>
 							</div>
 							<div>
-								<label>私有埋点信息</label>{{privateBpStr}}  <button @click="privateBp.push(['', ''])">+</button>
+								<label>独立埋点信息</label>{{privateBpStr}}  <button @click="privateBp.push(['', ''])">+</button>
 								<div v-for="(i,item) in privateBp" class="pair">
-									key<input type='text' class='form-control' placeholder='' v-model="item[0]">
-									value<input type='text' class='form-control' placeholder='' v-model="item[1]">
+									key<input type='text' class='form-control' placeholder='' v-model="item[0]" >
+									value
+									<input type='text' class='form-control' placeholder='' v-model="item[1]" @click="showDropDown(item, $event)">
+
 									<button  @click="privateBp.splice(i,1)">-</button>
 								</div>
 							</div>
+						</div>
+						<div class="value-list" v-show="selectpos.show" v-bind:style="selectpos">
+						    <ul>
+						        <li @click="selectVal('${id}')">${id}</li>
+						    </ul>
 						</div>
 					</div> 
 					<div id="tab_bpdata" class="tab-pane fade">
@@ -74,6 +81,15 @@ var bpinfo = Vue.extend({
 			infopos: {
 				top: '80px',
 				left: 'inherit'
+			},
+			selectpos: {
+				show: false,
+				top: '0',
+				left: 'inherit'
+			},
+			selected: {
+				input: null,
+				item: null
 			},
 			publicBp: [['','']],
 			privateBp: [['','']]
@@ -139,17 +155,6 @@ var bpinfo = Vue.extend({
 	},
 	props:['loading'],
 	ready() {
-		// this.$watch('bpConfig.privateParam', function (val, oldval) {
-		// 	if (val !== oldval) {
-		// 		this.privateBpStr = this.bpConfig.privateParam;
-		// 	}
-			
-		// });
-		// this.$watch('bpConfig.publicParam', function (val, oldval) {
-		// 	if (val !== oldval) {
-		// 		this.publicBpStr = this.bpConfig.publicParam;
-		// 	}
-		// });
 		this.$watch('bpConfig.show', function (val) {
 			if (val) {
 				this.init();
@@ -191,11 +196,36 @@ var bpinfo = Vue.extend({
 		        show: false
 		    });
 		},
+		showDropDown(item, e) {
+
+			this.selected.item = item;
+			// console.log(e);
+			if (this.selectpos.show === false || this.selected.input !== e.target) {
+				let offset = $(e.target).position();
+				this.selectpos.top = `calc(${offset.top}px + ${this.infopos.top} + 30px)`;
+				if(this.infopos.left === 'inherit') {
+					this.selectpos.right = `123px`;
+				} else {
+					this.selectpos.left = `calc(${offset.left}px + ${this.infopos.left})`;
+					this.selectpos.right = `inherit`;
+				}
+				this.selectpos.show = true;
+				this.selected.input = e.target;
+			} else {
+				this.selectpos.show = false;
+			}
+		},
+		selectVal(val) {
+			this.selected.item.$set(1, val);
+			// this.selected.item[1] = val;
+			this.selectpos.show = false;
+		},
 		dragstart(e) {
+			this.selectpos.show = false;
 			e.dataTransfer.effectAllowed = "move";  //移动效果
 	        e.dataTransfer.setData("text", '');  //附加数据，　没有这一项，firefox中无法移动
-	        this.dragpos.x = e.offsetX || ev.clientX - $(ev.target).offset().left;
-    		this.dragpos.y = e.offsetY || ev.clientY - $(ev.target).offset().top;
+	        this.dragpos.x = e.offsetX || e.clientX - $(e.target).offset().left;
+    		this.dragpos.y = e.offsetY || e.clientY - $(e.target).offset().top;
     		this.mask = true;
 		},
 		draging(e) {
@@ -415,5 +445,23 @@ button.save {
 	margin-bottom: 10px;
 	margin-left: 10px;
 	border-left: 2px solid #d40902;
+}
+.value-list {
+    position: fixed;
+    margin-left: 10px;
+    min-width: 80px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    border-radius: 4px;
+}
+.value-list ul {
+    margin-bottom: 0;
+}
+.value-list li {
+	padding-left: 10px;
+	font-size: 14px;
+}
+.value-list li:hover {
+	background-color: #eee;
 }
 </style>
