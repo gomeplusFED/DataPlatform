@@ -1,6 +1,6 @@
 <template>
-<div class="mask" v-show="bpConfig.show"   v-on:dragover.stop.prevent="" v-on:drop="drop">
-	<div class="infobox" draggable="true"  v-on:dragstart="dragstart" v-on:drag="draging" v-bind:style="infopos">
+<div class="mask" v-show="bpConfig.show"   v-on:dragover.stop.prevent="" v-on:drop.stop.prevent="drop">
+	<div class="infobox" draggable="true"  v-on:dragstart="dragstart" v-on:drag.stop.prevent="draging" v-bind:style="infopos">
 		<div class="closer" title="关闭" @click="hide"></div>
 		<div class="sider-nav ">
 			<div class="tabs-container">
@@ -40,9 +40,9 @@
 							</div>
 						</div>
 						<div class="value-list" v-show="selectpos.show" v-bind:style="selectpos">
-						    <ul>
-						        <li @click="selectVal('${id}')">${id}</li>
-						    </ul>
+							<ul>
+								<li @click="selectVal('${id}')">${id}</li>
+							</ul>
 						</div>
 					</div> 
 					<div id="tab_bpdata" class="tab-pane fade">
@@ -96,12 +96,12 @@ var bpinfo = Vue.extend({
 		}
 	},
 	vuex: {
-	    getters: {
-	        bpConfig: function() {
-	            return store.state.bpConfig;
-	        }
-	    },
-	    actions: actions
+		getters: {
+			bpConfig: function() {
+				return store.state.bpConfig;
+			}
+		},
+		actions: actions
 	},
 	computed:  {
 		publicBpStr: {
@@ -167,7 +167,6 @@ var bpinfo = Vue.extend({
 			var _this = this;
 			Object.assign(this.config,  this.bpConfig)
 			api.getBp(_this.config).then(function(data) {
-				// console.log(data);
 				// show the config window
 				_this.config.pointId = data.pointId;
 				// 附加传回信息
@@ -193,13 +192,12 @@ var bpinfo = Vue.extend({
 		},
 		hide() {
 			actions.databp(store, {
-		        show: false
-		    });
+				show: false
+			});
 		},
 		showDropDown(item, e) {
 
 			this.selected.item = item;
-			// console.log(e);
 			if (this.selectpos.show === false || this.selected.input !== e.target) {
 				let offset = $(e.target).position();
 				this.selectpos.top = `calc(${offset.top}px + ${this.infopos.top} + 30px)`;
@@ -223,22 +221,22 @@ var bpinfo = Vue.extend({
 		dragstart(e) {
 			this.selectpos.show = false;
 			e.dataTransfer.effectAllowed = "move";  //移动效果
-	        e.dataTransfer.setData("text", '');  //附加数据，　没有这一项，firefox中无法移动
-	        this.dragpos.x = e.offsetX || e.clientX - $(e.target).offset().left;
-    		this.dragpos.y = e.offsetY || e.clientY - $(e.target).offset().top;
-    		this.mask = true;
+			e.dataTransfer.setData("text", '');  //附加数据，　没有这一项，firefox中无法移动
+			this.dragpos.x = e.offsetX || e.clientX - $(e.target).offset().left;
+			this.dragpos.y = e.offsetY || e.clientY - $(e.target).offset().top;
+			this.mask = true;
 		},
 		draging(e) {
 			let newx = e.clientX - this.dragpos.x;
 			let newy = e.clientY - this.dragpos.y;
 			if(newx > 0 && newy > 0) {
 				this.infopos.left = newx + 'px';
-		        this.infopos.top = newy + 'px';
+				this.infopos.top = newy + 'px';
 			}
 		},
 		drop(e) {
-	        // this.mask = false;
-	        e.preventDefault() || e.stopPropagation(); 
+			// this.mask = false;
+			e.preventDefault() || e.stopPropagation(); 
 		},
 		save(ev) {
 			let $save = $(ev.target);
@@ -300,26 +298,26 @@ module.exports = bpinfo;
 
 <style scoped>
 ::-webkit-scrollbar {
-    width: 8px;
-    height: 10px;
-    background: #eee;
+	width: 8px;
+	height: 10px;
+	background: #eee;
 }
 ::-webkit-scrollbar-thumb {
-    height: 50px;
-    background-color: #ccc !important;
-    -webkit-border-radius: 5px;
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+	height: 50px;
+	background-color: #ccc !important;
+	-webkit-border-radius: 5px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
 }
 ::-webkit-scrollbar-track-piece {
-    -webkit-border-radius: 0;
+	-webkit-border-radius: 0;
 }
 .mask {
 	position: fixed;
 	width: 100%;
 	height: 100%;
 	top: 0;
-    z-index: 100;
-    cursor: not-allowed;
+	z-index: 100;
+	cursor: auto;
 }
 .infobox {
 	cursor: auto;
@@ -357,17 +355,17 @@ module.exports = bpinfo;
 }
 
 #tab_baseinfo input[type='text'] {
-    max-width: 180px;
-    display: inline-block;
-    max-height: 30px;
+	max-width: 180px;
+	display: inline-block;
+	max-height: 30px;
 }
 #tab_baseinfo .pair {
 	margin-top: 10px;
 }
 #tab_baseinfo .pair input {
-    max-width: 80px;
-    margin-right: 20px;
-    margin-left: 10px;
+	max-width: 80px;
+	margin-right: 20px;
+	margin-left: 10px;
 }
 #tab_baseinfo div > label{
 	font-weight: normal;
@@ -383,8 +381,8 @@ module.exports = bpinfo;
 }
 
 .sider-nav {
-    width: 100%;
-    height: 100%;
+	width: 100%;
+	height: 100%;
 	background: #fff;
 	padding: 10px;
 }
@@ -423,8 +421,8 @@ module.exports = bpinfo;
 	padding: 10px 0;
 }
 .tabs-container{
-    width: 100%;
-    height: 100%;
+	width: 100%;
+	height: 100%;
 }
 .tabs-content {
 	border: 1px solid #ccc;
@@ -440,7 +438,7 @@ module.exports = bpinfo;
 }
 button.save {
 	margin: 8px auto;
-    display: block;
+	display: block;
 }
 .closed{
    background-color: #ccc !important;
@@ -458,15 +456,15 @@ button.save {
 	border-left: 2px solid #d40902;
 }
 .value-list {
-    position: fixed;
-    margin-left: 10px;
-    min-width: 80px;
-    border: 1px solid #ccc;
-    background-color: #fff;
-    border-radius: 4px;
+	position: fixed;
+	margin-left: 10px;
+	min-width: 80px;
+	border: 1px solid #ccc;
+	background-color: #fff;
+	border-radius: 4px;
 }
 .value-list ul {
-    margin-bottom: 0;
+	margin-bottom: 0;
 }
 .value-list li {
 	padding-left: 10px;

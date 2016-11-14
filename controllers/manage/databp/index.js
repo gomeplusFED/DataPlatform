@@ -9,8 +9,6 @@ var fs = require('fs');
 var path = require('path');
 var querystring = require('querystring');
 var https = require('https');
-// var cheerio = require('cheerio'),
-// var xhrProxy = `<script>${fs.readFileSync(path.resolve(__dirname,'./script/xhr-proxy.js'), {encoding: 'utf8'})}</script>`;
 var xhrProxy = fs.readFileSync(path.resolve(__dirname,'./script/xhr-proxy.js'), {encoding: 'utf8'});
 
 
@@ -25,11 +23,7 @@ module.exports = (Router) => {
         let trunk = url.replace(/\/[^\/]*?$/, '');
         let host = trunk.replace(/([^\/:\s])\/.*$/, '$1');
         let mobile = (req.query.m === 'H5'? true:false);
-        // let agent = new https.Agent({
-        //     keepAlive: true,
-        //     keepAliveMsecs: 1500,
-        //     maxSockets: 70
-        // });
+
         let Host = trunk.replace(/https?:\/\//, '').split('/')[0];
         let options = {
             credentials: 'include',
@@ -66,7 +60,6 @@ module.exports = (Router) => {
             }
             return result.text();
         }).then(function(body) {
-            // console.log(body);
             let html = body;
             // 移动端移除头部script，防止iframe无法正常渲染
             if (mobile) {
@@ -77,7 +70,6 @@ module.exports = (Router) => {
             // 转化静态标签的src和href，使其可以正常访问
 
             html = html.replace(/(href|src)\s*=\s*"\s*((?!http|\/\/|javascript).+?)\s*"/g, function(m, p1, p2) {
-                // console.log(m);
                 if(p2.indexOf('.') === 0) {
                     return `${p1}="${trunk}/${p2}"`;
                 } else if (p2.indexOf('/') === 0) {
@@ -86,13 +78,10 @@ module.exports = (Router) => {
                     return `${p1}="${host}/${p2}"`;
                 }
             });
-            // let $ = cheerio.load(html);
             // 添加自定义脚本
             let proxytext = `<script>${xhrProxy}('${querystring.stringify({origin:trunk})}');</script>`;
             html = html.replace('<head>', '<head>' + proxytext);
             req.session.databp = databpSess;
-            // console.log('cookie set by html:' + databpSess.cookie);
-            
             res.end(html);
         }).catch(function(e) {
             console.log(e);
@@ -104,12 +93,9 @@ module.exports = (Router) => {
     });
     Router.all('/databp/ajax/*', (req, res, next) => {
         let sess = req.session.databp;
-        // console.log(sess);
         let {method, url, query, body, headers} = req;
         let host = sess.host;
         let newurl = url.replace('/databp/ajax', host);
-        console.log(newurl);
-        console.log('cookie when launch ajax: ' + sess.cookie);
         let newheaders = {
             'Accept': 'application/json, text/javascript, */*; q=0.01',
             'Accept-Encoding': 'gzip, deflate, sdch, br',
@@ -122,19 +108,15 @@ module.exports = (Router) => {
             'Referer': sess.url,
             'User-Agent': headers['user-agent']
         }
-        // console.log(newurl);
-        // console.log(newheaders);
         fetch(newurl, {
             method,
             headers: newheaders,
             body,
-            // agent: sess.agent,
             credentials: 'include'
         })
         .then(function(result) {
             return result.text();
         }).then(function(json) {
-            // console.log(json);
             res.send(json);
         }).catch(function(err) {
             console.log(err);
