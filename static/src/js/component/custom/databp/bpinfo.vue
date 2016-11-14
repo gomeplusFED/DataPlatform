@@ -162,7 +162,13 @@ var bpinfo = Vue.extend({
 				_this.config.pointName = data.pointName;
 				_this.publicBpStr = data.publicParam;
 				// 从私有埋点中去除公共埋点
-				_this.privateBpStr = data.privateParam.replace(data.publicParam, '');
+				let tmppub = data.publicParam.split('&');
+				let tmppri = data.privateParam;
+				for(let s of tmppub) {
+					tmppri = tmppri.replace(s, '');
+				}
+				
+				_this.privateBpStr = tmppri;
 				_this.loading.show = false;
 			}).catch(function() {
 				_this.show = false;
