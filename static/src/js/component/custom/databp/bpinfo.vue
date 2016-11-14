@@ -229,8 +229,12 @@ var bpinfo = Vue.extend({
     		this.mask = true;
 		},
 		draging(e) {
-			this.infopos.left = (e.clientX - this.dragpos.x) + 'px';
-	        this.infopos.top = (e.clientY - this.dragpos.y) + 'px';
+			let newx = e.clientX - this.dragpos.x;
+			let newy = e.clientY - this.dragpos.y;
+			if(newx > 0 && newy > 0) {
+				this.infopos.left = newx + 'px';
+		        this.infopos.top = newy + 'px';
+			}
 		},
 		drop(e) {
 	        // this.mask = false;
