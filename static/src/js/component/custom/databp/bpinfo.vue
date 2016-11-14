@@ -17,7 +17,7 @@
 							</div>
 							<div><label>选择器</label>{{config.selector}}</div>
 							<div><label>事件类型</label>单击事件</div>
-							<div><label>URL</label>{{config.pageUrl}}</div>
+							<div><label>pattern</label>{{config.pattern}}</div>
 							<div><label>全局埋点信息</label>{{publicBpStr}} <button @click="publicBp.push(['', ''])">+</button></div>
 							<div>
 								<div v-for="(i,item) in publicBp" class="pair">
@@ -71,6 +71,7 @@ var bpinfo = Vue.extend({
 			config: {
 				pointId: null,
 				pointName: '',
+				pattern: '',
 				platform: 'PC',
 				pageUrl: '',
 				selector:'',
@@ -174,6 +175,7 @@ var bpinfo = Vue.extend({
 				_this.config.pattern = data.pattern;
 				_this.config.pageUrl = data.pageUrl || _this.bpConfig.pageUrl;
 				_this.config.pointName = data.pointName;
+				_this.config.pattern = data.pattern;
 				_this.publicBpStr = data.publicParam;
 				// 从私有埋点中去除公共埋点
 				let tmppub = data.publicParam.split('&');
