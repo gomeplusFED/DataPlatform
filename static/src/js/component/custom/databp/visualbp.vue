@@ -130,7 +130,7 @@
 				});
 				$body.click(function(e) {
 					let $target = $(e.target);
-					let href = $target.attr('href') || $target.parent().attr('href');
+					let href = $target.attr('href') || $target.parents('a').attr('href');
 					if (href && href.indexOf('javascript') === -1) {
 						_this.bpConfig.pageUrl = href;
 						_this.search();
