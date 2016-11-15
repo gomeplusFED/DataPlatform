@@ -15,10 +15,11 @@
                 <select class="form-control inp inpW1" v-model="searchParam.platform">
                     <option value='PC'>PC</option>
                     <option value='H5'>H5</option>
-                </select>  
-                <label>起止时间</label>
-                <div  class="date_picker">                
-                    <m-date :index="index" :page-components-data="pageComponentsData" :component-type="'date_picker'" :argvs.sync='argvs'></m-date>
+                </select>
+
+                <label><input type="checkbox" v-model="showDate"></input>起止时间</label>
+                <div class="date_picker">                
+                    <m-date :index="index" :page-components-data="pageComponentsData" :component-type="'date_picker'" :argvs.sync='argvs' diasbled></m-date>
                 </div>
 
                 <button id="btnSearch" class="btn btn-searchLi-top btn-primary" type="button" data-toggle="popover" data-trigger="focus" @click="query">查询</button>
@@ -75,6 +76,7 @@
     var Pagination = require('../../common/pagination.vue');
     var api = require('./api.js');
     var bpInfo = require('./bpinfo.vue');
+    var utils = require('utils');
     
 	var databp = Vue.extend({
 		name: 'databp',
@@ -104,6 +106,7 @@
 			return {
                 index: 1,
                 noData: false,
+                showDate: null,
 				loading: {
 					show: false,
 					noLoaded: 0
@@ -121,7 +124,7 @@
 				pageComponentsData: {
                     date_picker: {
                         show: true,
-                        defaultData: 7,
+                        defaultData: 90,
                         showDayUnit:true
                     },
                     trigger: true
@@ -136,22 +139,27 @@
 			}
 		},
         ready() {
-            // triger the date picker
-            this.pageComponentsData.trigger = !this.pageComponentsData.trigger;
+            this.showDate = false;
         },
 		methods: {
             query() {
                 this.loading.show = true;
-                api.listBps({
+                let options = {
                     pageUrl: this.searchParam.pageUrl, 
                     platform: this.searchParam.platform, 
                     pointName: this.searchParam.pointName, 
                     // page从0开始
                     page: this.paginationConf.currentPage - 1,
-                    size: this.paginationConf.itemsPerPage,
-                    startTime: this.argvs.startTime + ' 00:00:00',
-                    endTime: this.argvs.endTime + ' 23:59:59'
-                }).then((res) => {
+                    size: this.paginationConf.itemsPerPage
+                }
+                if (this.showDate) {
+                    options.startTime = this.argvs.startTime + ' 00:00:00';
+                    options.endTime= this.argvs.endTime + ' 23:59:59';
+                } else {
+                    options.startTime = '2000-01-01 00:00:00';
+                    options.endTime = utils.formatDate(new Date(), 'yyyy-MM-dd hh:mm:ss');
+                }
+                api.listBps(options).then((res) => {
                     this.dataList = res.data;
                     if (this.dataList.length === 0) {
                          this.noData = true;
@@ -193,6 +201,20 @@
                 handler(val) {
                     this.bpConfig.pointParam = val;
                 }
+            },
+            'showDate' :{
+                handler(val) {
+                    let $dateInput = $('.date_picker input');
+                    if(val) {
+                        // triger the date picker
+                        this.pageComponentsData.trigger = !this.pageComponentsData.trigger;
+                        $dateInput.removeAttr("disabled");
+                    } else {
+                        $dateInput.attr('disabled',true);
+                        $dateInput.val('');
+                        
+                    }
+                }   
             }
         }
 	});
@@ -235,6 +257,7 @@
 .nform-box ul li .date_picker {
     margin-left: -5px;
     float: left;
+    min-width: 220px;
 }
 .nform-box li label, .nform-box li a, .nform-box li input, .nform-box li button, .nform-box li select, .nform-box li .sel-simulation, .nform-box li .sel-simulation span {
     float: left;
@@ -252,6 +275,10 @@
 }
 .nform-box ul li input:last-child {
     margin-right: 0px;
+}
+.nform-box ul li input[type="checkbox"] {
+    margin-top: 8px;
+    margin-right: 4px;
 }
 .nform-box li .btn-searchLi-top {
     margin: 0 13px 0 35px;
