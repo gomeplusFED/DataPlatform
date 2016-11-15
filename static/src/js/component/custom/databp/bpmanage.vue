@@ -191,7 +191,7 @@
 				item.show = true;
 				this.$router.go({
 					path: '/databp/visualbp',
-					query: item
+					params: item
 				}); 
 
 			}

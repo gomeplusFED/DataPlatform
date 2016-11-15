@@ -66,20 +66,26 @@
 			}
 		},
 		ready() {
-			let pageUrl = this.$route.query.pageUrl;
-			let platform = this.$route.query.platform;
-			if (pageUrl && platform) {
-				this.bpConfig.pageUrl = pageUrl;
-				this.bpConfig.platform = platform;
-				this.search();
-				if (this.$route.query.show) {
-					actions.databp(store, this.$route.query);
-				}
-			}
-
 		},
+		route: {
+	        activate: function (transition) {
+				let query = this.$route.query;       	
+	        	let pageUrl = query.pageUrl;
+				let platform = query.platform;
+				if (pageUrl && platform) {
+					this.bpConfig.pageUrl = pageUrl;
+					this.bpConfig.platform = platform;
+					this.search();
+					if (query.show) {
+						actions.databp(store, query);
+					}
+				}
+				return Promise.resolve(true);
+	        }
+    	},
 		methods: {
 			iframeload(ev) {
+				console.log('load');
 				let _this = this;
 				if (!_this.bpConfig.pageUrl) {
 					return false;
