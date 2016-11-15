@@ -282,8 +282,8 @@ module.exports = {
             }
         }
 
-        Table1.lv = util.toFixed(Table1.used_num / Table1.pay_num , 0);
-        Table2.lv = util.toFixed(Table2.used_num / Table2.pay_num , 0);
+        Table1.lv = util.toFixed( util.dealDivision(Table1.used_num , Table1.pay_num ) , 0);
+        Table2.lv = util.toFixed( util.dealDivision(Table2.used_num , Table2.pay_num ) , 0);
 
         return util.toTable([[Table1] , [Table2]], data.rows, data.cols , null , [true , true]);
     },
