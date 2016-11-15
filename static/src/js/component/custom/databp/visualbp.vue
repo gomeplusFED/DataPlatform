@@ -18,7 +18,7 @@
 	<div id='container' class='main'>
 		<div class='tabpanel_content' style='width: 100%; height: 1000px;'>
 			<div class='html_content' style='z-index: 2;'>
-				<iframe :class="{'pc-iframe': bpConfig.platform === 'PC', 'wap-iframe':  bpConfig.platform === 'H5'}" frameborder='no' border='0' marginwidth='0' marginheight='0' id='tab_baseQuery'  src='{{iframe_url}}'></iframe>
+				<iframe :class="{'pc-iframe': bpConfig.platform === 'PC', 'wap-iframe':  bpConfig.platform === 'H5'}" frameborder='no' border='0' marginwidth='0' marginheight='0' id='tab_baseQuery'  src='{{iframe_url}}' v-on:load="iframeload"></iframe>
 			</div>
 		</div>
 	</div>
@@ -79,9 +79,69 @@
 
 		},
 		methods: {
+			iframeload(ev) {
+				let _this = this;
+				if (!_this.bpConfig.pageUrl) {
+					return false;
+				}
+				_this.loading.show = false;
+				var $iframe = $(ev.path[0]).contents();
+				var $head = $iframe.find('head'); 
+				var $body = $iframe.find('body');
+				var hovered = [];
+				var selected;
+				$head.append('<style> .bphover {outline: 2px solid #0072ff !important;background-color: rgba(105, 210, 249, 0.4) !important;} .bphover-position-fix {position: relative !important;}</style>');
+				$body.bind('contextmenu', function(e) {
+
+					if (selected) {
+						selected.removeClass('bphover');
+					}
+					selected = $(e.target);
+					selected.removeClass('bphover');
+					if (selected.hasClass('bphover-position-fix')) {
+						selected.removeClass('bphover-position-fix');
+					}
+					// 去除css类防止选择器中被加入该类
+					var selector = utils.getSelector(e.target);
+					if (/static|inherit|initial/.test(window.getComputedStyle(e.target).position)) {
+						selected.addClass('bphover-position-fix');
+					}
+					selected.addClass('bphover');
+					_this.bpConfig.selector = selector;
+					_this.bpConfig.show = true;
+					actions.databp(store, _this.bpConfig);
+					e.preventDefault();
+				});
+				$body.mouseover(
+					function(e) {
+						for (var i in hovered) {
+							hovered[i].removeClass('bphover');
+							hovered[i].removeClass('bphover-position-fix');
+						}
+						hovered.length = 0;
+						var $target = $(e.target)
+						if(!($target.hasClass('bphover')  || $target.is(selected))) {
+							if (/static|inherit|initial/.test(window.getComputedStyle(e.target).position)) {
+								$target.addClass('bphover-position-fix');
+							}
+							$target.addClass('bphover');
+							hovered.push($target);
+						}
+				});
+				$body.click(function(e) {
+					let $target = $(e.target);
+					let href = $target.attr('href') || $target.parent().attr('href');
+					if (href && href.indexOf('javascript') === -1) {
+						_this.bpConfig.pageUrl = href;
+						_this.search();
+					}
+					return false;
+				});
+			},
 			search(ev) {
 				var _this = this;
 				var url = this.bpConfig.pageUrl;
+
 				if(!/https?:\/\/([\w-]+\.)+[\w-]+(\/[\w- ./?%&=]*)?/.test(url)) {
 					var $ele =  $('#search');
 					$ele.popover('show');
@@ -94,63 +154,7 @@
 					_this.loading.show = false;
 				}
 				_this.iframe_url = newiframe_url;
-				
-				$('iframe').load(function(){
-					_this.loading.show = false;
-					var $iframe = $(this).contents();
-					var $head = $iframe.find('head'); 
-					var $body = $iframe.find('body');
-					var hovered = [];
-					var selected;
-					$head.append('<style> .bphover {outline: 2px solid #0072ff !important;background-color: rgba(105, 210, 249, 0.4) !important;} .bphover-position-fix {position: relative !important;}</style>');
-					$body.bind('contextmenu', function(e) {
 
-						if (selected) {
-							selected.removeClass('bphover');
-						}
-						selected = $(e.target);
-						selected.removeClass('bphover');
-						if (selected.hasClass('bphover-position-fix')) {
-							selected.removeClass('bphover-position-fix');
-						}
-						// 去除css类防止选择器中被加入该类
-						var selector = utils.getSelector(e.target);
-						if (/static|inherit|initial/.test(window.getComputedStyle(e.target).position)) {
-							selected.addClass('bphover-position-fix');
-						}
-						selected.addClass('bphover');
-						_this.bpConfig.selector = selector;
-						_this.bpConfig.show = true;
-						actions.databp(store, _this.bpConfig);
-						e.preventDefault();
-					});
-					$body.mouseover(
-						function(e) {
-							for (var i in hovered) {
-								hovered[i].removeClass('bphover');
-								hovered[i].removeClass('bphover-position-fix');
-							}
-							hovered.length = 0;
-							var $target = $(e.target)
-							if(!($target.hasClass('bphover')  || $target.is(selected))) {
-								if (/static|inherit|initial/.test(window.getComputedStyle(e.target).position)) {
-									$target.addClass('bphover-position-fix');
-								}
-								$target.addClass('bphover');
-								hovered.push($target);
-							}
-					});
-					$body.click(function(e) {
-						let $target = $(e.target);
-						let href = $target.attr('href') || $target.parent().attr('href');
-						if (href) {
-							_this.bpConfig.pageUrl = href;
-							_this.search();
-						}
-						return false;
-					});
-
-				});
 			}
 		}
 	});
