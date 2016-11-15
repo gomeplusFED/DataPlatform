@@ -141,7 +141,8 @@
 							}
 					});
 					$body.click(function(e) {
-						let href = $(e.target).attr('href');
+						let $target = $(e.target);
+						let href = $target.attr('href') || $target.parent().attr('href');
 						if (href) {
 							_this.bpConfig.pageUrl = href;
 							_this.search();
