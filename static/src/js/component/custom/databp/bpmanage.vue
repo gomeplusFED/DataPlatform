@@ -48,6 +48,9 @@
                     <td>{{item.updateTime |Date 'yyyy-MM-dd hh:mm:ss'}}</td>
                     <td><a @click="edit(item)">修改</a>&nbsp<a @click="del(item.id)">删除</a></td>
                 </tr>
+                <tr v-show="noData">
+                     <td colspan="7">暂无数据</td>
+                 </tr>
             </tbody>
         </table>
     </div>
@@ -100,6 +103,7 @@
 		data: function() {
 			return {
                 index: 1,
+                noData: false,
 				loading: {
 					show: false,
 					noLoaded: 0
@@ -137,7 +141,6 @@
         },
 		methods: {
             query() {
-                console.log(this.argvs);
                 this.loading.show = true;
                 api.listBps({
                     pageUrl: this.searchParam.pageUrl, 
@@ -149,11 +152,17 @@
                     startTime: this.argvs.startTime + ' 00:00:00',
                     endTime: this.argvs.endTime + ' 23:59:59'
                 }).then((res) => {
-                    // console.log(res);
                     this.dataList = res.data;
+                    if (this.dataList.length === 0) {
+                         this.noData = true;
+                    } else {
+                        this.noData = false;
+                    }
+                   
                     this.paginationConf.totalItems = res.total;
                     this.loading.show = false;
-                }).catch(() => {
+                }).catch((err) => {
+                    console.log(err);
                     this.loading.show = false;
                 });
             },
