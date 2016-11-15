@@ -47,7 +47,7 @@ module.exports = {
                 config: { // 配置信息
                     stack: false,  // 图的堆叠,
                 }
-            }]
+            }];
         }else{
             for(let item of source){
                 item.pay_lv = util.toFixed( item.pay_lv , 0 );
@@ -162,19 +162,24 @@ module.exports = {
 
         if(query.main_show_type_filter == "chart"){
             /* chart */
-            let map = {};
-            for(let i=1;i<Rows.length;i++){
-                map[Rows[i]] = data.cols[0][i].caption;
+            let map = { value : "支付构成" } , Result = {};
+            let Cols = data.cols[0];
+            for(let i=1;i<Cols.length;i++){
+                Result[Cols[i].caption] = { value : 0 };
+            }
+
+            for(let item of source){
+                Result[item.order_constitute] ? Result[item.order_constitute].value += item.pay_num : "";
             }
 
             return [{
                 type : "pie",
                 map : map,
-                data : result,
+                data : Result,
                 config: { // 配置信息
                     stack: false,  // 图的堆叠,1
                 }
-            }]
+            }];
         }else{
             for(let key in result){
                 let obj = {"date" : key};
