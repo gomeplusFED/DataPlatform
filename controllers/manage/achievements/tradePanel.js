@@ -51,7 +51,7 @@ module.exports = (Router) => {
         platform : false,
         date_picker : false,
         flexible_btn : [{
-            content: `<a href="#!/businessRebate/plan">交易分析</a>`, 
+            content: `<a href="#!/achievements/trade">交易分析</a>`, 
             preMethods: [], 
             customMethods: ""
         },{
