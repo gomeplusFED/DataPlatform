@@ -145,10 +145,9 @@
 						if (href) {
 							_this.bpConfig.pageUrl = href;
 							_this.search();
-							// console.log(href);
 						}
 						return false;
-				    });
+					});
 
 				});
 			}
@@ -159,10 +158,10 @@
 <style scoped>
 .form-inline {
 	border-bottom: 1px solid #eee;
-    padding-bottom: 10px;
+	padding-bottom: 10px;
 }
 .form-inline .form-group {
-    margin-right: 40px;
+	margin-right: 40px;
 }
 .form-inline input {
 	width: 350px;
@@ -195,5 +194,4 @@
 	display: block;
 	background-color: #efefef;
 }
-
 </style>
