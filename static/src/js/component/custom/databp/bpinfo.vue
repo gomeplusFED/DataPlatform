@@ -1,5 +1,5 @@
 <template>
-<div class="mask" v-show="bpConfig.show"   v-on:dragover.stop.prevent="" v-on:drop.stop.prevent="drop">
+<div class="mask" v-show="bpConfig.show"   v-on:dragover.stop.prevent="" v-on:drop.stop.prevent="drop" @click="warning">
 	<div class="infobox" draggable="true"  v-on:dragstart="dragstart" v-on:drag.stop.prevent="draging" v-bind:style="infopos">
 		<div class="closer" title="关闭" @click="hide"></div>
 		<div class="sider-nav ">
@@ -22,7 +22,7 @@
 							<div>
 								<div v-for="(i,item) in publicBp" class="pair">
 									key
-									<input type='text' class='form-control' placeholder='' v-model="item[0]" @click="showDropDown">
+									<input type='text' class='form-control' placeholder='' v-model="item[0]">
 									value
 									<input type='text' class='form-control' placeholder='' v-model="item[1]" @click="showDropDown(item, $event)">
 									<button @click="publicBp.splice(i,1)">-</button>
@@ -200,7 +200,7 @@ var bpinfo = Vue.extend({
 		showDropDown(item, e) {
 
 			this.selected.item = item;
-			if (this.selectpos.show === false || this.selected.input !== e.target) {
+			if (this.selectpos.show === false || (e.target && this.selected.input !== e.target)) {
 				let offset = $(e.target).position();
 				this.selectpos.top = `calc(${offset.top}px + ${this.infopos.top} + 30px)`;
 				if(this.infopos.left === 'inherit') {
@@ -239,6 +239,15 @@ var bpinfo = Vue.extend({
 		drop(e) {
 			// this.mask = false;
 			e.preventDefault() || e.stopPropagation(); 
+		},
+		warning(e){
+			if(e.path[0].className === 'mask') {
+				actions.alert(store, {
+					show: true,
+					msg: '请关闭埋点窗口后操作',
+					type: 'warning'
+				});
+			}
 		},
 		save(ev) {
 			let $save = $(ev.target);
