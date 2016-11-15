@@ -86,6 +86,16 @@
 				}
 				_this.loading.show = false;
 				var $iframe = $(ev.path[0]).contents();
+				try {
+					// 当使用历史前进后退时，修正信息
+					let url = $iframe.get(0).location.href;
+					let info = url.match(/.+?html\?m=(.+?)&url=(.+?)$/);
+					_this.bpConfig.pageUrl = info[2];
+					_this.bpConfig.platform = info[1];
+				} catch (err) {
+					console.log(err);
+				}
+
 				var $head = $iframe.find('head'); 
 				var $body = $iframe.find('body');
 				var hovered = [];
