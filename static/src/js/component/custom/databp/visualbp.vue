@@ -139,7 +139,17 @@
 								$target.addClass('bphover');
 								hovered.push($target);
 							}
-						});
+					});
+					$body.click(function(e) {
+						let href = $(e.target).attr('href');
+						if (href) {
+							_this.bpConfig.pageUrl = href;
+							_this.search();
+							// console.log(href);
+						}
+						return false;
+				    });
+
 				});
 			}
 		}
