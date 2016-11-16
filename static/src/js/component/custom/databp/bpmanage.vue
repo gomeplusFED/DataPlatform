@@ -131,8 +131,7 @@
 					pointName: '',
 					platform: 'PC',
 					pageUrl: ''
-				},
-				bpConfig: {}
+				}
 			}
 		},
 		ready() {
@@ -140,8 +139,7 @@
 		},
 		route: {
 	        activate: function (transition) {
-				this.bpConfig.pointParam = this.vuexbp.pointParam;
-				this.bpConfig.pointName = this.vuexbp.pointName;
+	        	this.query();
 				return Promise.resolve(true);
 	        }
     	},
@@ -192,8 +190,6 @@
 				});
 			},
 			edit(item) {
-				// 储存当前修改项的引用
-				this.bpConfig = item;
 				let {pageUrl, pointName, pointParam, selector, platform} = item;
 				this.$router.go({
 					path: '/databp/visualbp',

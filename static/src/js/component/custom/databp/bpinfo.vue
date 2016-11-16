@@ -168,7 +168,14 @@ var bpinfo = Vue.extend({
 			var _this = this;
 			// Object.assign(_this.config,  _this.bpConfig);
 			api.getBp(_this.bpConfig).then(function(data) {
-				_this.config = data;
+				let keys = Object.keys(data);
+				for (let key of keys) {
+					if(data[key] === '') {
+						_this.config[key] = _this.bpConfig[key];
+					} else {
+						_this.config[key] = data[key];
+					}
+				}
 				// show the config window
 				// _this.config.pointId = data.pointId;
 				// _this.config.matchUrlId = data.matchUrlId;
@@ -286,8 +293,6 @@ var bpinfo = Vue.extend({
 			if (_this.config.pointId) {
 				api.updateBp(_this.config).then(function(res) {
 					// 更新成功刷新传入的数据
-					// Object.assign(_this.bpConfig, _this.config);
-					_this.config.pointParam = allbps.map(x => `${x[0]}=${x[1]}`).join('&');
 					_this.config.show = false;
 					actions.databp(store, _this.config);
 
