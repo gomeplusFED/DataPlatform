@@ -52,7 +52,7 @@ module.exports = {
                     obj[date][key] = 0;
                 }
             }
-            obj[date][item.key] = item.value;
+            obj[date][item.rate_key] = item.value;
         }
         for(let item of _retained) {
             newData[item] = {};
