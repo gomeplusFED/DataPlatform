@@ -16,12 +16,17 @@ module.exports = {
         for(let key of rows){
             result[key] = 0;
         }
+
+        let All_pay_sum = 0 , All_pay_user = 0;
         for(let item of source){
             for(let key of rows){
                 result[key] += item[key];
                 result[key] = util.numberLeave(result[key] , 2);
             }
+            All_pay_sum += item.pay_sum;
+            All_pay_user +=item.pay_user;
         }
+        result.Man_price = util.numberLeave(All_pay_sum / All_pay_user , 2);
 
         return util.toTable([[result], [result]], data.rows, data.cols , null , [true,true]);
     },
