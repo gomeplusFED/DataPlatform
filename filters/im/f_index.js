@@ -132,12 +132,13 @@ module.exports = {
     },
 
     indexSix(data , query , dates){
-        let source = data.first.data[0];
+        let source = data.first.data[0],
+            count = data.first.count;
 
         for(let item of source){
             item.group_mess_lv = utils.toFixed( item.group_mess_pv / item.group_member_count , 0);
         }
 
-        return utils.toTable([source], data.rows, data.cols);
+        return utils.toTable([source], data.rows, data.cols , [count]);
     }
 }
