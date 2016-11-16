@@ -155,7 +155,7 @@ var bpinfo = Vue.extend({
 		}
 	},
 	props:['loading'],
-	ready() {
+	created() {
 		this.$watch('bpConfig.show', function (val) {
 			if (val) {
 				this.init();
@@ -166,16 +166,16 @@ var bpinfo = Vue.extend({
 		init() {
 			this.loading.show = true;
 			var _this = this;
-			Object.assign(this.config,  this.bpConfig)
-			api.getBp(_this.config).then(function(data) {
+			// Object.assign(_this.config,  _this.bpConfig);
+			api.getBp(_this.bpConfig).then(function(data) {
+				_this.config = data;
 				// show the config window
-				_this.config.pointId = data.pointId;
-				// 附加传回信息
-				_this.config.matchUrlId = data.matchUrlId;
-				_this.config.pattern = data.pattern;
-				_this.config.pageUrl = data.pageUrl || _this.bpConfig.pageUrl;
-				_this.config.pointName = data.pointName;
-				_this.config.pattern = data.pattern;
+				// _this.config.pointId = data.pointId;
+				// _this.config.matchUrlId = data.matchUrlId;
+				// _this.config.pattern = data.pattern;
+				// _this.config.pageUrl = data.pageUrl || _this.bpConfig.pageUrl;
+				// _this.config.pointName = data.pointName;
+				// _this.config.pattern = data.pattern;
 				_this.publicBpStr = data.publicParam;
 				// 从私有埋点中去除公共埋点
 				let tmppub = data.publicParam.split('&');
@@ -185,10 +185,9 @@ var bpinfo = Vue.extend({
 				}
 				
 				_this.privateBpStr = tmppri;
-				_this.localshow = true;
 				_this.loading.show = false;
-			}).catch(function() {
-				_this.localshow = false;
+			}).catch(function(err) {
+				console.log(err);
 				_this.loading.show = false;
 			});
 		},

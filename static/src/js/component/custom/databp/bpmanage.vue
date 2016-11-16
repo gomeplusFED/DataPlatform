@@ -59,7 +59,6 @@
 		<m-pagination :pagination-conf="paginationConf"></m-pagination>
 	</div>
 	<m-alert></m-alert>
-	<m-bpinfo  :loading.sync= "loading"></m-bpinfo>
 	<m-loading :loading.sync='loading'></m-loading>
 	<m-confirm></m-confirm>
 </div>
@@ -75,19 +74,17 @@
 	var Confirm = require('../../common/confirm.vue');
 	var Pagination = require('../../common/pagination.vue');
 	var api = require('./api.js');
-	var bpInfo = require('./bpinfo.vue');
 	var utils = require('utils');
 	
 	var databp = Vue.extend({
-		name: 'databp',
+		name: 'bpmanage',
 		store: store,
 		components: {
 			'm-loading': Loading,
 			'm-pagination': Pagination,
 			'm-date': DatePicker,
 			'm-alert': Alert,
-			'm-confirm': Confirm,
-			'm-bpinfo': bpInfo
+			'm-confirm': Confirm
 		},
 		vuex: {
 			getters: {
@@ -188,10 +185,10 @@
 				});
 			},
 			edit(item) {
-				item.show = true;
+				let {pageUrl, pointName, pointParam, selector, platform} = item;
 				this.$router.go({
 					path: '/databp/visualbp',
-					params: item
+					query: {pageUrl, pointName, pointParam, selector, platform}
 				}); 
 
 			}

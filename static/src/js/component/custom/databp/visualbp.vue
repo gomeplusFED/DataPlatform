@@ -69,16 +69,15 @@
 		},
 		route: {
 	        activate: function (transition) {
-				let query = this.$route.query;       	
+				let query = this.$route.query;   	
 	        	let pageUrl = query.pageUrl;
 				let platform = query.platform;
 				if (pageUrl && platform) {
 					this.bpConfig.pageUrl = pageUrl;
 					this.bpConfig.platform = platform;
 					this.search();
-					if (query.show) {
-						actions.databp(store, query);
-					}
+					query.show = true;
+					actions.databp(store, query);
 				}
 				return Promise.resolve(true);
 	        }
