@@ -257,10 +257,11 @@ var bpinfo = Vue.extend({
 		},
 		save(ev) {
 			let $save = $(ev.target);
-			if(this.config.pointName === '') {
+			if(this.config.pointName === '' || this.config.pointName == null) {
 				$save.popover({
-					content: '请输入埋点名称'
+					content: '请输入名称'
 				});
+				setTimeout(function () { $save.popover("destroy"); }, 1000);
 				$save.popover('show');
 				return false;
 			}
