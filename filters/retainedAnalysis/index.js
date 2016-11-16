@@ -111,7 +111,7 @@ module.exports = {
                 caption : "新增用户",
                 type : "number"
             }],
-            count = data.first.count;
+            count = data.first.count.count;
         for(let key of retained[day_type]) {
             _cols.push({
                 caption : key,
