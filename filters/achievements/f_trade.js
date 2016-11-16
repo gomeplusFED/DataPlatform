@@ -24,6 +24,7 @@ module.exports = {
             for(let key in two){
                 if(key == "Man_price") continue;
                 two[key] += item[key];
+                two[key] = util.numberLeave(two[key] , 2);
             }
             all_pay_sum += item.pay_sum;
             all_pay_user+= item.pay_user;
@@ -101,20 +102,22 @@ module.exports = {
         let out = util.toTable([source], data.rows, data.cols , [count]);
 
         /* 图表 */
-        if(query.main_show_type_filter == "chart"){
-            let map = {} , result = {};
-            for(let i=0;i<Cols.length;i++){
-                map[Rows[i]] = Cols[i];
-            }
+        if(query.main_show_type_filter == "table"){
+            return out;
+        }else{
+            let map = { "value" : "Test" } , result = {} , filter = query.filter_key;
+            let num = data.rows[0].indexOf(filter);
+            map.value = data.cols[0][num].caption;
 
             for(let date of dates){
-                let obj = {};
-                for(let key of Rows){
-                    obj[key] = 0;
-                }
-                result[date] = obj;
+                result[date] = {
+                    value : 0
+                };
             }
 
+            for(let item of source){
+                result[item.date].value += item[filter];
+            }
 
             return [{
                 type : "line",
@@ -123,11 +126,8 @@ module.exports = {
                 config: { // 配置信息
                     stack: false  // 图的堆叠
                 }
-            }]
+            }];
         }
-
-        return out;
-
     },
     tradeThree(data , query , dates) {
         let source = data.first.data[0],
