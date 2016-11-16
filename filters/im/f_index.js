@@ -133,7 +133,7 @@ module.exports = {
 
     indexSix(data , query , dates){
         let source = data.first.data[0],
-            count = data.first.count;
+            count = data.first.count > 50 ? 50 : data.first.count;
 
         for(let item of source){
             item.group_mess_lv = utils.toFixed( item.group_mess_pv / item.group_member_count , 0);
