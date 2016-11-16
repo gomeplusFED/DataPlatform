@@ -374,8 +374,14 @@
 	border-bottom: 1px solid #d6d6d6;
 	font-weight: normal;
 }
+.ntable tr:nth-child(odd) {
+    background-color: #f2faff;
+}
 .ntable tr th:nth-child(3) {
 	width: 10%
+}
+.ntable tr th:first-child {
+	width: 5%
 }
 .ntable tr td {
 	text-align: center;
