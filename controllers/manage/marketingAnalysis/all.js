@@ -287,15 +287,18 @@ module.exports = (Router) => {
                 if(err) {
                     cb(err);
                 } else {
-                    let activity_types = _.uniq(_.pluck(data, "activity_type"));
+                    let activity_types = _.uniq(_.pluck(data, "activity_id"));
+                    let types = [];
                     for(let key of activity_types) {
+                        let k = key.substr(0, 3);
                         groups.push({
-                            key : [key],
+                            key : [k],
                             value : key
                         });
+                        types.push(k)
                     }
                     filter_select.groups = [{
-                        key : activity_types,
+                        key : types,
                         value : "全部"
                     }].concat(groups);
 
