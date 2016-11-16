@@ -19,6 +19,7 @@ module.exports = {
         for(let item of source){
             for(let key of rows){
                 result[key] += item[key];
+                result[key] = util.numberLeave(result[key] , 2);
             }
         }
 
