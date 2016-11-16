@@ -138,6 +138,13 @@
 		ready() {
 			this.showDate = false;
 		},
+		route: {
+	        activate: function (transition) {
+				this.bpConfig.pointParam = this.vuexbp.pointParam;
+				this.bpConfig.pointName = this.vuexbp.pointName;
+				return Promise.resolve(true);
+	        }
+    	},
 		methods: {
 			query() {
 				this.loading.show = true;
@@ -185,6 +192,8 @@
 				});
 			},
 			edit(item) {
+				// 储存当前修改项的引用
+				this.bpConfig = item;
 				let {pageUrl, pointName, pointParam, selector, platform} = item;
 				this.$router.go({
 					path: '/databp/visualbp',
@@ -194,11 +203,6 @@
 			}
 		},
 		watch: {
-			'vuexbp.pointParam' : {
-				handler(val) {
-					this.bpConfig.pointParam = val;
-				}
-			},
 			'showDate' :{
 				handler(val) {
 					let $dateInput = $('.date_picker input');
