@@ -84,7 +84,7 @@
     	},
 		methods: {
 			iframeload(ev) {
-				console.log('load');
+				// console.log('load');
 				let _this = this;
 				if (!_this.bpConfig.pageUrl) {
 					return false;

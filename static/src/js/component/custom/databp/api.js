@@ -1,8 +1,8 @@
 var store = require('../../../store/store.js');
 var actions = require('../../../store/actions.js');
 var $ = require('jQuery');
-const baseurl = 'http://10.69.20.59:8090/bomber-pie';
-// const baseurl = 'http://10.69.112.146:38080/bomber-pie'
+// const baseurl = 'http://10.69.20.59:8090/bomber-pie';
+const baseurl = 'http://10.69.112.146:38080/bomber-pie'
 
 $.support.cors = true;
 
@@ -101,7 +101,7 @@ var api = {
 	// useless: selector
 	// {pageUrl, platform, pointName, page, size}
 	listBps(data){
-		return buildAjax('/pointList', filterArgs(data, ['pageUrl', 'platform', 'pointName', 'page', 'size', 'starttime', 'endtime'])).then(function(res) {
+		return buildAjax('/pointList', filterArgs(data, ['pageUrl', 'platform', 'pointName', 'page', 'size', 'startTime', 'endTime'])).then(function(res) {
 			if(res.code !== '200' || res.iserror !== '0') {
 				return Promise.reject('获取埋点信息失败：' + res.msg);
 			}
