@@ -201,10 +201,20 @@
 }
 
 .pc-iframe {
-	width:100%;
-	height:100%;
+/*	width:100%;
+	height:100%;*/
 	display: block;
 	background-color: #efefef;
+	width:125%;
+	height:125%;
+	border:none;
+	-ms-zoom: 0.8;
+	-moz-transform: scale(0.8);
+	-moz-transform-origin: 0 0;
+	-o-transform: scale(0.8);
+	-o-transform-origin: 0 0;
+	-webkit-transform: scale(0.8);
+	-webkit-transform-origin: 0 0;
 }
 
 .wap-iframe{
