@@ -144,7 +144,7 @@ module.exports = (Router) => {
         modelName : ["SalesPerfProTotal2"],
         platform : false,
         date_picker : false,
-        paging : [true],
+        // paging : [true],
         toggel : true,
         order : ["-date"],
         params(query , params , sendData){
@@ -194,27 +194,7 @@ module.exports = (Router) => {
         }],
         filter(data, query, dates) {
             return filter.tradePanelThree(data , query , dates);
-        },
-        rows: [
-            ["all_pay_num" , "aliy_pay" , "weixin_pay" , "other_pay" , "operating"]
-        ],
-        cols: [
-            [{
-                caption: "总支付笔数",
-                type: "number"
-            }, {
-                caption: "支付宝支付笔数",
-                type: "number"
-            }, {
-                caption: "微信支付笔数",
-                type: "number"
-            }, {
-                caption: "其它支付笔数",
-                type: "number"
-            }, {
-                caption: ""
-            }]
-        ]
+        }
     });
 
     //支付方式汇总---补充
@@ -223,18 +203,21 @@ module.exports = (Router) => {
         modelName : ["SalesPerfPayModeTotal2"],
         platform : false,
         date_picker : false,
-        paging : [true],
+        // paging : [true],
         toggel : true,
         order : ["-date"],
         params(query , params , sendData){
             if(!query.type) params.type = "ALL";
-            delete params.aliy_pay;
+            delete params.operating;
+            try{
+                delete params.operating
+            }catch(e){}
             return params;
         },
         filter(data, query, dates) {
             return filter.tradePanelThree_add(data , query , dates);
         },
-        rows: [
+        /*rows: [
             ["date" , "all_pay_num" , "aliy_pay" , "weixin_pay" , "other_pay"]
         ],
         cols: [
@@ -253,7 +236,7 @@ module.exports = (Router) => {
             }, {
                 caption: "其它支付笔数"
             }]
-        ]
+        ]*/
     });
 
 
@@ -295,7 +278,7 @@ module.exports = (Router) => {
         modelName : ["SalesPerfGuomeibiTotal2"],
         platform : false,
         date_picker : false,
-        paging : [true],
+        // paging : [true],
         toggel : true,
         order : ["-date"],
         params(query , params , sendData){
@@ -384,7 +367,7 @@ module.exports = (Router) => {
         modelName : ["SalesPerfCoupleTotal2"],
         platform : false,
         date_picker : false,
-        paging : [true],
+        // paging : [true],
         toggel : true,
         order : ["-date"],
         params(query , params , sendData){
@@ -472,7 +455,7 @@ module.exports = (Router) => {
         modelName : ["SalesPerfConversion2"],
         platform : false,
         date_picker : false,
-        paging : [true],
+        // paging : [true],
         toggel : true,
         order : ["-date"],
         params(query , params , sendData){

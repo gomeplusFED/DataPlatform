@@ -162,24 +162,6 @@ module.exports = (Router) => {
         modelName : ["PayWay2"],
         platform : false,
         toggle: true,
-        cols: [
-            [{
-                caption:"日期",
-                type: "date"
-            }, {
-                caption:"微信支付成功次数",
-                type: "number"
-            }, {
-                caption:"支付宝支付成功次数",
-                type: "number"
-            }, {
-                caption:"其他支付成功次数",
-                type: "number"
-            }, ]
-        ],
-        rows: [
-            ["date" , "weixin" , "alipay" , "other"]
-        ],
         params(query , params , sendData){
             if(!query.type){
                 params.type = "ALL";
