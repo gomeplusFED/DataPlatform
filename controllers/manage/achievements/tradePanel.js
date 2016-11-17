@@ -208,10 +208,16 @@ module.exports = (Router) => {
         order : ["-date"],
         params(query , params , sendData){
             if(!query.type) params.type = "ALL";
-            delete params.operating;
             try{
-                delete params.operating
+                //rows依据数据库数据生成，不知道前端会发哪个特殊字段。所以过滤所有没有查询意义的字段
+                let key = ["starttime" , "endtime" , "day_type" , "type" , "limit" , "page" , "date"];
+                for(let n in params){
+                    if(key.indexOf(n.toLowerCase()) < 0){
+                        delete params[n];
+                    }
+                }
             }catch(e){}
+
             return params;
         },
         filter(data, query, dates) {

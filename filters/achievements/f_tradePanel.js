@@ -213,7 +213,9 @@ module.exports = {
             }
         }
 
+        console.log(result);
         for(let item of source){
+            console.log(item.date);
             if(result[item.date][item.order_channel] != undefined){
                 result[item.date][item.order_channel] += item.pay_num;
             }

@@ -282,6 +282,7 @@ api.prototype = {
                     sendData[this.dataName[i]] = {};
                     if(this[this.sql[i]]) {
                         if (this.paging[i]) {
+                            let time = +new Date();
                             /*console.log("go");
                             await(() => {
                                 return new Promise((resolve , reject)=>{
@@ -296,6 +297,8 @@ api.prototype = {
                                 await(this._findDatabaseSql(req, this[this.sql[i]](query, params, false)));
                             sendData[this.dataName[i]].count =
                                 await(this._findDatabaseSql(req, this[this.sql[i]](query, params, true)));
+
+                            console.log("using time: " , +new Date() - time);
                         } else {
                             sendData[this.dataName[i]].data =
                                 await(this._findDatabaseSql(req, this[this.sql[i]](query, params)));
