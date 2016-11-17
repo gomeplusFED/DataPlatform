@@ -107,7 +107,13 @@ module.exports = {
         }else{
             let map = { "value" : "Test" } , result = {} , filter = query.filter_key;
             let num = data.rows[0].indexOf(filter);
-            map.value = data.cols[0][num].caption;
+
+            
+            try{
+                map.value = data.cols[0][num].caption;
+            }catch(e){
+                map.value = "请刷新";
+            }
 
             for(let date of dates){
                 result[date] = {

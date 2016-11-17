@@ -60,27 +60,25 @@ module.exports = {
     payTwo(data, query, dates) {
         let source = data.first.data[0],
             Resource = [] , result = {};
+        let Type = [];
+        for(let item of source){
+            item.date = util.getDate(item.date);
+            if(Type.indexOf(item.order_channel) < 0 && item.order_channel.toUpperCase() != "ALL"){
+                Type.push(item.order_channel);
+            }
+        }
 
         dates.map((date)=>{
-            result[date] = {
-                "weixin":0,
-                "alipay":0,
-                "other" :0
+            result[date] = {};
+            for(let item of Type){
+                result[date][item] = 0;
             }
         });
 
         for(let item of source){
-            item.date = util.getDate(item.date);
-            switch(item.order_channel){
-                case "微信":
-                    result[item.date].weixin += item.pay_succ_num;
-                    break;
-                case "支付宝":
-                    result[item.date].alipay += item.pay_succ_num;
-                    break;
-                case "其他":
-                    result[item.date].other += item.pay_succ_num;
-                    break;
+            if(result[item.date][item.order_channel] != undefined){
+                result[item.date][item.order_channel] += item.pay_succ_num;
+                result[item.date][item.order_channel] = util.numberLeave(result[item.date][item.order_channel] , 2);
             }
         }
 
@@ -94,10 +92,9 @@ module.exports = {
 
         if(query.main_show_type_filter == "chart"){
             /* chart */
-            let map = {
-                "weixin" : "微信",
-                "alipay" : "支付宝",
-                "other"  : "其它"
+            let map = {};
+            for(let key of Type){
+                map[key] = key;
             }
 
             return [{
@@ -109,6 +106,18 @@ module.exports = {
                 }
             }]
         }else{
+
+            data.rows[0] = ["date"].concat(Type);
+            data.cols[0] = [];
+            for(let key of Type){
+                let obj = {
+                    "caption" : key,
+                    "type" : "number"
+                }
+                data.cols[0].push(obj);
+            }
+            data.cols[0].unshift({"caption":"日期","type":"date"});
+
             return util.toTable([Resource], data.rows, data.cols);
         }
     },

@@ -16,12 +16,17 @@ module.exports = {
         for(let key of rows){
             result[key] = 0;
         }
+
+        let All_pay_sum = 0 , All_pay_user = 0;
         for(let item of source){
             for(let key of rows){
                 result[key] += item[key];
                 result[key] = util.numberLeave(result[key] , 2);
             }
+            All_pay_sum += item.pay_sum;
+            All_pay_user +=item.pay_user;
         }
+        result.Man_price = util.numberLeave(All_pay_sum / All_pay_user , 2);
 
         return util.toTable([[result], [result]], data.rows, data.cols , null , [true,true]);
     },
@@ -50,7 +55,7 @@ module.exports = {
     //趋势分析补充
     tradePanelTwo_add(data , query , dates){
         let source = data.first.data[0],
-            count  = data.first.count;
+            count  = 1;
         let result = {};
         let map = {
             "access_user" : "浏览商品数",
@@ -99,7 +104,7 @@ module.exports = {
     tradePanelThree(data, query, dates) {
         let source = data.first.data[0];
         let result = {};
-        for(let key of data.rows[0]){
+        /*for(let key of data.rows[0]){
             if(key == "operating"){
                 result[key] = `<button class='btn btn-info' url_detail='/achievements/tradePanelThree_add'>趋势</button>`;
             }else{
@@ -122,15 +127,41 @@ module.exports = {
                     result.other_pay += item.pay_num;
                     break;
             }
+        }*/
+
+        let Type = [];
+        for(let item of source){
+            if(Type.indexOf(item.order_channel) < 0 && item.order_channel.toUpperCase() != "ALL"){
+                Type.push(item.order_channel);
+                result[item.order_channel] = 0;
+            }
         }
+        result.operating = `<button class='btn btn-info' url_detail='/achievements/tradePanelThree_add'>趋势</button>`;
+
+        for(let item of source){
+            if(result[item.order_channel] != undefined){
+                result[item.order_channel] += item.pay_num;
+            }
+        }
+
+        data.rows[0] = Type;
+        data.cols[0] = [];
+        for(let key of Type){
+            let obj = {caption:key , type:"number"};
+            data.cols[0].push(obj);
+        }
+        // data.cols[0].unshift({caption:"日期" , type:"date"});
+
+        data.rows[0].push("operating");
+        data.cols[0].push({ caption:"" });
 
         return util.toTable([[result]], data.rows, data.cols , null , [true]);
     },
     //支付方式汇总--补充
     tradePanelThree_add(data , query , dates){
-        let source = data.first.data[0],
-            Result = [],
-            count  = data.first.count || 1;
+        let source = data.first.data[0];
+          /*  Result = [],
+            count  = data.first.count > 20 ? 20 : (data.first.count ? data.first.count : 1);
         let result = {};
         let map = {
             "all_pay_num" : "总支付笔数",
@@ -163,6 +194,38 @@ module.exports = {
                     result[item.date].other_pay += item.pay_num;
                     break;
             }
+        }*/
+
+
+        let Type = [];
+        for(let item of source){
+            item.date = util.getDate(item.date);
+            if(Type.indexOf(item.order_channel) < 0 && item.order_channel.toUpperCase() != "ALL"){
+                Type.push(item.order_channel);
+            }
+        }
+
+        let result = {};
+        for(let date of dates){
+            result[date] = {};
+            for(let key of Type){
+                result[date][key] = 0;
+            }
+        }
+
+        for(let item of source){
+            if(result[item.date][item.order_channel] != undefined){
+                result[item.date][item.order_channel] += item.pay_num;
+            }
+        }
+
+        let map = {};
+        data.rows[0] = ["date"].concat(Type);
+        data.cols[0] = [{"caption":"日期",type:"date"}];
+        for(let key of Type){
+            map[key] = key;
+            let obj = {caption:key , type:"number"};
+            data.cols[0].push(obj);
         }
 
         let TableSource = [];
@@ -175,7 +238,8 @@ module.exports = {
             TableSource.push(obj);
         }
 
-        let out = util.toTable([TableSource], data.rows, data.cols , [count]);
+        
+        let out = util.toTable([TableSource], data.rows, data.cols , [1]);
         return [out[0] , {
             type : "line",
             map : map,
@@ -205,6 +269,7 @@ module.exports = {
             for(let key of data.rows[0]){
                 if(key == "operating") continue;
                 result[key] += item[key];
+                result[key] = util.numberLeave(result[key] , 2);
             }
         }
 
@@ -214,7 +279,7 @@ module.exports = {
     tradePanelFour_add(data , query , dates){
         let source = data.first.data[0],
             Result = [],
-            count  = data.first.count || 1;
+            count  = 1;
         let result = {};
 
         let map = {
@@ -270,12 +335,12 @@ module.exports = {
 
         for(let item of source){
             item.date = util.getDate(item.date);
-            if(item.coupon_type == 1){
+            if(item.coupon_type == 2){
                 //商家优惠劵
                 Table1.used_num += item.used_num;
                 Table1.used_amount += item.used_amount;
                 Table1.pay_num += item.pay_num;
-            }else{
+            }else if(item.coupon_type == 1){
                 //平台优惠劵
                 Table2.used_num += item.used_num;
                 Table2.used_amount += item.used_amount;
@@ -291,7 +356,7 @@ module.exports = {
     //交易优惠券汇总--补充
     tradePanelFive_add(data , query , dates){
         let source = data.first.data[0],
-            count  = data.first.count || 1;
+            count  = 1;
 
         let result = {},map = {},TableSource = [];
         let Rows = data.rows[0],Cols = data.cols[0];
@@ -367,7 +432,7 @@ module.exports = {
     //转化率--补充
     tradePanelSix_add(data , query , dates){
         let source = data.first.data[0],
-            count  = data.first.count || 1;
+            count  = 1;
 
         let result = {},map = {},TableSource = [];
         let Rows = data.rows[0],Cols = data.cols[0];
