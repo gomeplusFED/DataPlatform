@@ -13,7 +13,6 @@ var state = {
         show: false,
         privateParam: '',
         publicParam: '',
-        pointParam: '',
         pageUrl: '',
         selector: '',
         platform: ''
@@ -63,7 +62,6 @@ mutations.DATABP = function(state, params) {
     state.bpConfig.show = params.show;
     state.bpConfig.privateParam = params.privateParam;
     state.bpConfig.publicParam = params.publicParam;
-    state.bpConfig.pointParam = params.pointParam;
     state.bpConfig.pageUrl = params.pageUrl;
     state.bpConfig.selector = params.selector;
     state.bpConfig.platform = params.platform;

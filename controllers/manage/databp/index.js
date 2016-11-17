@@ -45,17 +45,17 @@ module.exports = (Router) => {
                 origin: trunk,
                 host
             };
-        console.log(url);
+        
         fetch(url, options)
         .then(function(result) {
             let rawcookie = result.headers;
             if ((rawcookie = rawcookie._headers) && (rawcookie = rawcookie['set-cookie'])) {
                 rawcookie = rawcookie.toString();
-                let cookie = rawcookie.match(/(mx_pc_gomeplusid|content_ctag)=.+?;/g);
+                let cookie = rawcookie.match(/(mx_pc_gomeplusid|content_ctag|mx_pc_code_total)=.+?;/g);
                 if (cookie) {
-                    databpSess.cookie = cookie.join(' ').slice(0 , -1);
+                    databpSess.cookie = cookie;
                 } else {
-                    databpSess.cookie = '';
+                    databpSess.cookie = [];
                 }
             }
             return result.text();
@@ -97,17 +97,28 @@ module.exports = (Router) => {
         let host = sess.host;
         let newurl = url.replace('/databp/ajax', host);
         let newheaders = {
-            'Accept': 'application/json, text/javascript, */*; q=0.01',
-            'Accept-Encoding': 'gzip, deflate, sdch, br',
-            'Accept-Language': 'zh-CN,zh;q=0.8',
-            'Cache-Control': 'no-cache',
-            'Connection': 'keep-alive',
-            'Cookie': sess.cookie,
-            'Host': host.replace(/https?:\/\//, ''),
-            'Pragma': 'no-cache',
-            'Referer': sess.url,
-            'User-Agent': headers['user-agent']
+            'cookie': sess.cookie.join(' ').slice(0 , -1),
+            'host': host.replace(/https?:\/\//, ''),
+            'referer': sess.url,
+            'origin': ''
         }
+        sess.cookie.some((x,i) => {
+            if(x.includes('content_ctag')) {
+                newheaders['content-type-ctag'] = x.split('content_ctag=')[1].slice(0 , -1);
+                return true;
+            }
+            return false;
+        });
+        let keys = Object.keys(headers);
+        for(let key of keys) {
+            if (newheaders[key] == null) {
+                newheaders[key] = headers[key];
+            }
+        }
+        delete newheaders['origin'];
+        // console.log(newheaders);
+        body = JSON.stringify(body);
+        console.log(newurl);
         fetch(newurl, {
             method,
             headers: newheaders,
