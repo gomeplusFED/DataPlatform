@@ -155,11 +155,11 @@
 					size: this.paginationConf.itemsPerPage
 				}
 				if (this.showDate) {
-					options.startTime = this.argvs.startTime + ' 00:00:00';
-					options.endTime= this.argvs.endTime + ' 23:59:59';
+					options.starttime = this.argvs.startTime + ' 00:00:00';
+					options.endtime= this.argvs.endTime + ' 23:59:59';
 				} else {
-					options.startTime = '2000-01-01 00:00:00';
-					options.endTime = utils.formatDate(new Date(), 'yyyy-MM-dd hh:mm:ss');
+					options.starttime = '2000-01-01 00:00:00';
+					options.endtime = utils.formatDate(new Date(), 'yyyy-MM-dd hh:mm:ss');
 				}
 				api.listBps(options).then((res) => {
 					this.dataList = res.data;
