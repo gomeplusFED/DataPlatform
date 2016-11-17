@@ -3,7 +3,7 @@
  * @date 20160414
  * @fileoverview 优惠券信息
  */
-var _ = require("lodash"),
+var moment = require("moment"),
     util = require("../../utils");
 
 module.exports = {
@@ -91,7 +91,7 @@ module.exports = {
             config = {};
 
         for(let item of second) {
-            config[item.activity_id] = {
+            config[item.activity_id.substr(0, 5)] = {
                 name : item.activity_name,
                 start : item.activity_start_time,
                 end : item.activity_end_time
@@ -101,7 +101,7 @@ module.exports = {
         for(let item of source) {
             let obj = config[item.active_no];
             item.name = obj.name;
-            item.date = `${obj.start}到${obj.end}`;
+            item.date = `${moment(obj.start).format("YYYY-MM-DD HH:mm:ss")}到${moment(obj.end).format("YYYY-MM-DD HH:mm:ss")}`;
             item.rate = util.toFixed(item.product_pv, item.active_pv);
             item.operating =
                 `<button class='btn btn-default' url_link='/marketingAnalysis/operating' url_fixed_params='{"active_no": "${item.active_no}"}'>详细>></button>`;

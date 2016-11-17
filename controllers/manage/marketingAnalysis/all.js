@@ -4,6 +4,7 @@
  * @fileoverview 活动总览
  */
 var api = require("../../../base/main"),
+    orm = require("orm"),
     _ = require("lodash"),
     filter = require("../../../filters/marketingAnalysis/all");
 
@@ -123,12 +124,10 @@ module.exports = (Router) => {
             if(isCount) {
                 let config = ["date BETWEEN ? AND ?", "day_type=?"],
                     params = [query.startTime, query.endTime, 1],
-                    active_type = [];
-                for(let item of query.active_type) {
-                    active_type.push("?");
-                    params.push(item);
+                    active_type = query.active_type;
+                if(active_type !== "all") {
+                    config.push(`${active_type}=SUBSTR(active_type, 1, 1)`);
                 }
-                config.push(`active_type IN (${active_type.join(",")})`);
                 if(query.active_no) {
                     config.push("active_no=?");
                     params.push(query.active_no);
@@ -141,14 +140,12 @@ module.exports = (Router) => {
             } else {
                 let config = ["date BETWEEN ? AND ?", "day_type=?"],
                     params = [query.startTime, query.endTime, 1],
-                    active_type = [],
                     page = query.from || query.page || 1,
-                    limit = query.to || query.limit || 20;
-                for(let item of query.active_type) {
-                    active_type.push("?");
-                    params.push(item);
+                    limit = query.to || query.limit || 20,
+                    active_type = query.active_type;
+                if(active_type !== "all") {
+                    config.push(`${active_type}=SUBSTR(active_type, 1, 1)`);
                 }
-                config.push(`active_type IN (${active_type.join(",")})`);
                 if(query.active_no) {
                     config.push("active_no=?");
                     params.push(query.active_no);
@@ -184,10 +181,7 @@ module.exports = (Router) => {
             }
         },
         secondParams(query, params, data) {
-            let ids = _.uniq(_.pluck(data.first.data[0], "active_no"));
-            return {
-                activity_id : ids
-            };
+            return {};
         },
         search : {
             show : true,
@@ -287,15 +281,18 @@ module.exports = (Router) => {
                 if(err) {
                     cb(err);
                 } else {
+                    let activity_ids = _.uniq(_.pluck(data, "activity_id"));
                     let activity_types = _.uniq(_.pluck(data, "activity_type"));
-                    for(let key of activity_types) {
+                    for(let i = 0; i < activity_types.length; i++) {
+                        let k = activity_ids[i].substr(0, 1);
+                        let key = activity_types[i];
                         groups.push({
-                            key : [key],
+                            key : k,
                             value : key
                         });
                     }
                     filter_select.groups = [{
-                        key : activity_types,
+                        key : "all",
                         value : "全部"
                     }].concat(groups);
 

@@ -1,7 +1,7 @@
 <template>
-<div class="mask" v-show="show"   v-on:dragover.stop.prevent="" v-on:drop="drop">
-	<div class="infobox" draggable="true"  v-on:dragstart="dragstart" v-on:drag="draging" v-bind:style="infopos">
-		<div class="closer" title="关闭" @click="show=false"></div>
+<div class="mask" v-show="bpConfig.show"   v-on:dragover.stop.prevent="" v-on:drop.stop.prevent="drop" @click="warning">
+	<div class="infobox" draggable="true"  v-on:dragstart="dragstart" v-on:drag.stop.prevent="draging" v-bind:style="infopos">
+		<div class="closer" title="关闭" @click="hide"></div>
 		<div class="sider-nav ">
 			<div class="tabs-container">
 				<ul class="nav nav-tabs">
@@ -17,25 +17,32 @@
 							</div>
 							<div><label>选择器</label>{{config.selector}}</div>
 							<div><label>事件类型</label>单击事件</div>
-							<div><label>URL</label>{{config.pageUrl}}</div>
-							<div><label>公共埋点信息</label>{{publicBpStr}} <button @click="publicBp.push(['', ''])">+</button></div>
+							<div><label>pattern</label>{{config.pattern}}</div>
+							<div><label>全局埋点信息</label>{{publicBpStr}} <button @click="publicBp.push(['', ''])">+</button></div>
 							<div>
 								<div v-for="(i,item) in publicBp" class="pair">
 									key
 									<input type='text' class='form-control' placeholder='' v-model="item[0]">
 									value
-									<input type='text' class='form-control' placeholder='' v-model="item[1]">
+									<input type='text' class='form-control' placeholder='' v-model="item[1]" @click="showDropDown(item, $event)">
 									<button @click="publicBp.splice(i,1)">-</button>
 								</div>
 							</div>
 							<div>
-								<label>私有埋点信息</label>{{privateBpStr}}  <button @click="privateBp.push(['', ''])">+</button>
+								<label>独立埋点信息</label>{{privateBpStr}}  <button @click="privateBp.push(['', ''])">+</button>
 								<div v-for="(i,item) in privateBp" class="pair">
-									key<input type='text' class='form-control' placeholder='' v-model="item[0]">
-									value<input type='text' class='form-control' placeholder='' v-model="item[1]">
+									key<input type='text' class='form-control' placeholder='' v-model="item[0]" >
+									value
+									<input type='text' class='form-control' placeholder='' v-model="item[1]" @click="showDropDown(item, $event)">
+
 									<button  @click="privateBp.splice(i,1)">-</button>
 								</div>
 							</div>
+						</div>
+						<div class="value-list" v-show="selectpos.show" v-bind:style="selectpos">
+							<ul>
+								<li @click="selectVal('${id}')">${id}</li>
+							</ul>
 						</div>
 					</div> 
 					<div id="tab_bpdata" class="tab-pane fade">
@@ -55,6 +62,8 @@
 <script>
 var Vue = require('Vue');
 var api = require('./api');
+var store = require('../../../store/store.js');
+var actions = require('../../../store/actions.js');
 var bpinfo = Vue.extend({
 	data: function() {
 		return {
@@ -62,6 +71,7 @@ var bpinfo = Vue.extend({
 			config: {
 				pointId: null,
 				pointName: '',
+				pattern: '',
 				platform: 'PC',
 				pageUrl: '',
 				selector:'',
@@ -73,9 +83,26 @@ var bpinfo = Vue.extend({
 				top: '80px',
 				left: 'inherit'
 			},
+			selectpos: {
+				show: false,
+				top: '0',
+				left: 'inherit'
+			},
+			selected: {
+				input: null,
+				item: null
+			},
 			publicBp: [['','']],
 			privateBp: [['','']]
 		}
+	},
+	vuex: {
+		getters: {
+			bpConfig: function() {
+				return store.state.bpConfig;
+			}
+		},
+		actions: actions
 	},
 	computed:  {
 		publicBpStr: {
@@ -127,20 +154,9 @@ var bpinfo = Vue.extend({
 			}
 		}
 	},
-	props:['show', 'bpConfig', 'loading'],
-	ready() {
-		this.$watch('bpConfig.privateParam', function (val, oldval) {
-			if (val !== oldval) {
-				this.privateBpStr = this.bpConfig.privateParam;
-			}
-			
-		});
-		this.$watch('bpConfig.publicParam', function (val, oldval) {
-			if (val !== oldval) {
-				this.publicBpStr = this.bpConfig.publicParam;
-			}
-		});
-		this.$watch('show', function (val) {
+	props:['loading'],
+	created() {
+		this.$watch('bpConfig.show', function (val) {
 			if (val) {
 				this.init();
 			}
@@ -150,46 +166,109 @@ var bpinfo = Vue.extend({
 		init() {
 			this.loading.show = true;
 			var _this = this;
-			Object.assign(this.config,  this.bpConfig)
-			api.getBp(_this.config).then(function(data) {
-				// console.log(data);
+			// Object.assign(_this.config,  _this.bpConfig);
+			api.getBp(_this.bpConfig).then(function(data) {
+				let keys = Object.keys(data);
+				for (let key of keys) {
+					if(data[key] === '') {
+						_this.config[key] = _this.bpConfig[key];
+					} else {
+						_this.config[key] = data[key];
+					}
+				}
 				// show the config window
-				_this.config.pointId = data.pointId;
-				// 附加传回信息
-				_this.config.matchUrlId = data.matchUrlId;
-				_this.config.pattern = data.pattern;
-				_this.config.pageUrl = data.pageUrl || _this.bpConfig.pageUrl;
-				_this.config.pointName = data.pointName;
+				// _this.config.pointId = data.pointId;
+				// _this.config.matchUrlId = data.matchUrlId;
+				// _this.config.pattern = data.pattern;
+				// _this.config.pageUrl = data.pageUrl || _this.bpConfig.pageUrl;
+				// _this.config.pointName = data.pointName;
+				// _this.config.pattern = data.pattern;
 				_this.publicBpStr = data.publicParam;
 				// 从私有埋点中去除公共埋点
-				_this.privateBpStr = data.privateParam.replace(data.publicParam, '');
+				let tmppub = data.publicParam.split('&');
+				let tmppri = data.privateParam;
+				for(let s of tmppub) {
+					tmppri = tmppri.replace(s, '');
+				}
+				
+				_this.privateBpStr = tmppri;
 				_this.loading.show = false;
-			}).catch(function() {
-				_this.show = false;
+			}).catch(function(err) {
+				console.log(err);
 				_this.loading.show = false;
 			});
 		},
+		hide() {
+			actions.databp(store, {
+				show: false
+			});
+		},
+		showDropDown(item, e) {
+
+			this.selected.item = item;
+			if (this.selectpos.show === false || (e.target && this.selected.input !== e.target)) {
+				let offset = $(e.target).position();
+				this.selectpos.top = `calc(${offset.top}px + ${this.infopos.top} + 30px)`;
+				if(this.infopos.left === 'inherit') {
+					this.selectpos.right = `123px`;
+				} else {
+					this.selectpos.left = `calc(${offset.left}px + ${this.infopos.left})`;
+					this.selectpos.right = `inherit`;
+				}
+				this.selectpos.show = true;
+				this.selected.input = e.target;
+			} else {
+				this.selectpos.show = false;
+			}
+		},
+		selectVal(val) {
+			this.selected.item.$set(1, val);
+			// this.selected.item[1] = val;
+			this.selectpos.show = false;
+		},
 		dragstart(e) {
+			this.selectpos.show = false;
 			e.dataTransfer.effectAllowed = "move";  //移动效果
-	        e.dataTransfer.setData("text", '');  //附加数据，　没有这一项，firefox中无法移动
-	        this.dragpos.x = e.offsetX || ev.clientX - $(ev.target).offset().left;
-    		this.dragpos.y = e.offsetY || ev.clientY - $(ev.target).offset().top;
-    		this.mask = true;
+			e.dataTransfer.setData("text", '');  //附加数据，　没有这一项，firefox中无法移动
+			this.dragpos.x = e.offsetX || e.clientX - $(e.target).offset().left;
+			this.dragpos.y = e.offsetY || e.clientY - $(e.target).offset().top;
+			this.mask = true;
 		},
 		draging(e) {
-			this.infopos.left = (e.clientX - this.dragpos.x) + 'px';
-	        this.infopos.top = (e.clientY - this.dragpos.y) + 'px';
+			let newx = e.clientX - this.dragpos.x;
+			let newy = e.clientY - this.dragpos.y;
+			if(newx > 0 && newy > 0) {
+				this.infopos.left = newx + 'px';
+				this.infopos.top = newy + 'px';
+			}
 		},
 		drop(e) {
-	        // this.mask = false;
-	        e.preventDefault() || e.stopPropagation(); 
+			// this.mask = false;
+			e.preventDefault() || e.stopPropagation(); 
+		},
+		warning(e){
+			if(e.path[0].className === 'mask') {
+				actions.alert(store, {
+					show: true,
+					msg: '请关闭埋点窗口后操作',
+					type: 'warning'
+				});
+			}
 		},
 		save(ev) {
+			let $save = $(ev.target);
+			if(this.config.pointName === '' || this.config.pointName == null) {
+				$save.popover({
+					content: '请输入名称'
+				});
+				setTimeout(function () { $save.popover("destroy"); }, 1000);
+				$save.popover('show');
+				return false;
+			}
 			var _this = this;
 			var existKeys = {};
 			var allbps = [..._this.publicBp, ..._this.privateBp];
 			let illegal = /[=&]/;
-			let $save = $(ev.target);
 			for(let a of allbps) {
 				if (existKeys[a[0]]) {
 					$save.popover({
@@ -215,15 +294,14 @@ var bpinfo = Vue.extend({
 			if (_this.config.pointId) {
 				api.updateBp(_this.config).then(function(res) {
 					// 更新成功刷新传入的数据
-					Object.assign(_this.bpConfig, _this.config);
-					if(_this.bpConfig.pointParam) {
-						_this.bpConfig.pointParam = allbps.map(x => `${x[0]}=${x[1]}`).join('&');
-					}
-					_this.show = false;
+					_this.config.show = false;
+					actions.databp(store, _this.config);
+
 				});
 			} else {
 				api.saveBp(_this.config).then(function() {
-					_this.show = false;
+					_this.config.show = false;
+					actions.databp(store, _this.config);
 				});
 			}
 		}
@@ -236,26 +314,26 @@ module.exports = bpinfo;
 
 <style scoped>
 ::-webkit-scrollbar {
-    width: 8px;
-    height: 10px;
-    background: #eee;
+	width: 8px;
+	height: 10px;
+	background: #eee;
 }
 ::-webkit-scrollbar-thumb {
-    height: 50px;
-    background-color: #ccc !important;
-    -webkit-border-radius: 5px;
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+	height: 50px;
+	background-color: #ccc !important;
+	-webkit-border-radius: 5px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
 }
 ::-webkit-scrollbar-track-piece {
-    -webkit-border-radius: 0;
+	-webkit-border-radius: 0;
 }
 .mask {
 	position: fixed;
 	width: 100%;
 	height: 100%;
 	top: 0;
-    z-index: 100;
-    cursor: not-allowed;
+	z-index: 100;
+	cursor: auto;
 }
 .infobox {
 	cursor: auto;
@@ -293,17 +371,17 @@ module.exports = bpinfo;
 }
 
 #tab_baseinfo input[type='text'] {
-    max-width: 180px;
-    display: inline-block;
-    max-height: 30px;
+	max-width: 180px;
+	display: inline-block;
+	max-height: 30px;
 }
 #tab_baseinfo .pair {
 	margin-top: 10px;
 }
 #tab_baseinfo .pair input {
-    max-width: 80px;
-    margin-right: 20px;
-    margin-left: 10px;
+	max-width: 80px;
+	margin-right: 20px;
+	margin-left: 10px;
 }
 #tab_baseinfo div > label{
 	font-weight: normal;
@@ -319,8 +397,8 @@ module.exports = bpinfo;
 }
 
 .sider-nav {
-    width: 100%;
-    height: 100%;
+	width: 100%;
+	height: 100%;
 	background: #fff;
 	padding: 10px;
 }
@@ -359,8 +437,8 @@ module.exports = bpinfo;
 	padding: 10px 0;
 }
 .tabs-container{
-    width: 100%;
-    height: 100%;
+	width: 100%;
+	height: 100%;
 }
 .tabs-content {
 	border: 1px solid #ccc;
@@ -376,7 +454,7 @@ module.exports = bpinfo;
 }
 button.save {
 	margin: 8px auto;
-    display: block;
+	display: block;
 }
 .closed{
    background-color: #ccc !important;
@@ -392,5 +470,23 @@ button.save {
 	margin-bottom: 10px;
 	margin-left: 10px;
 	border-left: 2px solid #d40902;
+}
+.value-list {
+	position: fixed;
+	margin-left: 10px;
+	min-width: 80px;
+	border: 1px solid #ccc;
+	background-color: #fff;
+	border-radius: 4px;
+}
+.value-list ul {
+	margin-bottom: 0;
+}
+.value-list li {
+	padding-left: 10px;
+	font-size: 14px;
+}
+.value-list li:hover {
+	background-color: #eee;
 }
 </style>

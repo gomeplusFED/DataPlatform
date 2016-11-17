@@ -36,7 +36,7 @@ var DateCom = Vue.extend({
     data: function() {
         return {
             // 根据url判断是否判断起止时间大于当前时间
-            validlist: [ '/custom/saveActivity' ]
+            validlist: [ '/custom/saveActivity', '/databp/bpmanage' ]
         }
     },
     props: ['index','pageComponentsData','componentType','argvs','initData', 'cancelDateLimit', 'isGlobal'],
