@@ -181,6 +181,7 @@
 			// 弹层表格详情
 			if (item.indexOf('url_detail') !== -1) {
 				var urlDetail = $(utils.strToDom(item)).attr('url_detail');
+				var bottom = $(utils.strToDom(item)).attr('bottom');
 				var url = tableBody[detailParam];
 				var params = {};
 
@@ -200,13 +201,19 @@
 					success: function(data) {
 						// _this.hasRequestUrl = url;
 						var tableData = data.modelData;
-						actions.modalTable(store, {
-							show: true,
-							title: '详情',
-							data: tableData,
-							query_api: urlDetail + '_json',
-							query_parmas: params
-						});
+						
+						if (!bottom) {
+							_this.tableData.splice(1, 1);
+							actions.modalTable(store, {
+								show: true,
+								title: '详情',
+								data: tableData,
+								query_api: urlDetail + '_json',
+								query_parmas: params
+							});
+						} else {
+							_this.$set('tableData[1]', data.modelData[0])
+						}
 					}
 				});
 			}

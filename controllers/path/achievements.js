@@ -191,18 +191,13 @@ module.exports = {
                 },
                 {
                     type : "table",
-                    title : "交易明细",
+                    title : "交易用户分布",
                     query_api : "/achievements/tradeThree"
                 },
                 {
                     type : "table",
                     title : "交易类目构成",
                     query_api : "/achievements/tradeFour"
-                },
-                {
-                    type : "table",
-                    title : "交易用户构成",
-                    query_api : "/achievements/tradeFive"
                 }
             ]
         }
@@ -220,32 +215,32 @@ module.exports = {
                 {
                     type : "table",
                     title : "交易汇总",
-                    // query_api : "/achievements/tradePanelOne"
+                    query_api : "/achievements/tradePanelOne"
                 },
                 {
                     type : "table",
                     title : "交易商品汇总",
-                    // query_api : "/achievements/tradePanelTwo"
+                    query_api : "/achievements/tradePanelTwo"
                 },
                 {
                     type : "table",
                     title : "支付方式汇总",
-                    // query_api : "/achievements/tradePanelThree"
+                    query_api : "/achievements/tradePanelThree"
                 },
                 {
                     type : "table",
                     title : "国美币汇总",
-                    // query_api : "/achievements/tradePanelFour"
+                    query_api : "/achievements/tradePanelFour"
                 },
                 {
                     type : "table",
                     title : "交易优惠劵汇总",
-                    // query_api : "/achievements/tradePanelFive"
+                    query_api : "/achievements/tradePanelFive"
                 },
                 {
                     type : "table",
                     title : "转化率",
-                    // query_api : "/achievements/tradePanelSix"
+                    query_api : "/achievements/tradePanelSix"
                 }
             ]
         }
@@ -314,6 +309,58 @@ module.exports = {
                     type : "table",
                     title : "交易top100",
                     query_api : "/achievements/vtradeFive"
+                }
+            ]
+        }
+    },
+
+    //订单分析
+    order(){
+        return {
+            name : "订单分析",
+            path : "/achievements/order",
+            display : true,
+            defaultData : [
+                {
+                    type : "table",
+                    title : "订单趋势",
+                    query_api : "/achievements/orderOne"
+                },
+                {
+                    type : "table",
+                    title : "订单来源类型",
+                    query_api : "/achievements/orderTwo"
+                },
+                {
+                    type : "chart",
+                    title : "订单评级分布",
+                    query_api : "/achievements/orderThree"
+                }
+            ]
+        }
+    },
+
+    //支付分析 
+    pay(){
+        return {
+            name : "支付分析",
+            path : "/achievements/pay",
+            display : true,
+            defaultData : [
+                {
+                    type : "table",
+                    title : "支付趋势",
+                    query_api : "/achievements/payOne"
+                },
+                {
+                    type : "table",
+                    title : "支付方式",
+                    query_api : "/achievements/payTwo"
+                },
+                {
+                    type : "table",
+                    title : "支付构成",
+                    query_api : "/achievements/payThree"
                 }
             ]
         }

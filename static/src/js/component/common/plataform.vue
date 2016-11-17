@@ -40,6 +40,10 @@ export default {
 	},
 	methods: {
 		plataformLink(item) {
+			if (item.url) {
+				localtion.href = item.url;
+				return;
+			}
 			this.key = item.key;
 			let key = this.platafromData.key;
 			let curQuery = utils.parseUrlQuery(this.$route.path);

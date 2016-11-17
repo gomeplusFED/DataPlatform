@@ -5,7 +5,8 @@
  */
 
 var api = require("../../../base/main"),
-    filter = require("../../../filters/achievements/trade");
+    filter = require("../../../filters/achievements/f_tradePanel"),
+    util = require("../../../utils");
 
 module.exports = (Router) => {
    
@@ -18,7 +19,9 @@ module.exports = (Router) => {
             components: {
                 date_picker:{
                     show: true, 
-                    defaultData: 7
+                    defaultData: 7,
+                    name : "startTime",
+                    endname: "endTime"
                 },
                 filter_select: [{
                     title: "平台选择",
@@ -33,7 +36,7 @@ module.exports = (Router) => {
                         key: "wap",
                         value: "WAP"
                     }, {
-                        key: "PC",
+                        key: "pc",
                         value: "PC"
                     }]
                 }]
@@ -41,351 +44,468 @@ module.exports = (Router) => {
         });
     });
 
-
+    //交易汇总
     Router = new api(Router, {
-        router : "/achievements/tradeOne",
-        modelName : ["SalesPerfTranKv"],
+        router : "/achievements/tradePanelOne",
+        modelName : ["SalesPerfTotal2"],
         platform : false,
-        filter(data, filter_key, dates) {
-            return filter.tradeOne(data);
+        date_picker : false,
+        flexible_btn : [{
+            content: `<a href="#!/achievements/trade">交易分析</a>`, 
+            preMethods: [], 
+            customMethods: ""
+        },{
+            content: `<a href="#!/achievements/order">订单分析</a>`, 
+            preMethods: [], 
+            customMethods: ""
+        }],
+        params(query , params , sendData){
+            if(!query.type) params.type = "ALL";
+            return params;
+        },
+        filter(data, query, dates) {
+            return filter.tradePanelOne(data , query , dates);
         },
         rows: [
-            ["tran_acc_pro_num",
-                "tran_order_pro_num_spu",
-                "tran_order_pro_num_sku", "tran_pay_pro_num_spu", "tran_pay_pro_num_sku",
-                "tran_refund_pro_num_spu", "tran_refund_pro_num_sku"
-            ],
-            [
-                "tran_order_user_num", "tran_order_money_amount",
-                "tred_order_all_amount","tred_pay_all_amount","tran_pay_user_num",
-                "tran_pay_money_amount", "tran_cus_unit_price",
-                "tran_balance", "tran_plat_coupon_price", "tran_turnover"
-            ]
+            ["access_user" , "order_user" , "order_num" , "order_sum"],
+            ["Man_price" , "pay_user" , "pay_num" , "pay_sum"]
         ],
         cols: [
             [{
-                caption: "浏览商品数",
-                type: "number"
-            //}, {
-            //    caption: "加购商品数",
-            //    type: "number"
-            //}, {
-            //    caption: "加购商品件数",
-            //    type: "number"
-            }, {
-                caption: "下单商品数",
+                caption: "访客数",
                 type: "number"
             }, {
-                caption: "下单商品件数",
-                type: "number"
-            }, {
-                caption: "支付商品数",
-                type: "number"
-            }, {
-                caption: "支付商品件数",
-                type: "number"
-            }, {
-                caption: "退货商品数",
-                type: "number"
-            }, {
-                caption: "退货商品件数",
-                type: "number"
-            }],
-            [{
                 caption: "下单人数",
-                type: "number"
-            }, {
-                caption: "下单金额",
                 type: "number"
             }, {
                 caption: "下单总量",
                 type: "number"
             }, {
-                caption: "付款订单量",
+                caption: "下单金额",
+                type: "number"
+            }],
+
+            [{
+                caption: "客单价",
                 type: "number"
             }, {
                 caption: "支付人数",
                 type: "number"
             }, {
+                caption: "支付总量",
+                type: "number"
+            }, {
                 caption: "支付金额",
                 type: "number"
-            }, {
-                caption: "客单价",
+            }]
+        ]
+    });
+
+    //交易商品汇总
+    Router = new api(Router, {
+        router : "/achievements/tradePanelTwo",
+        modelName : ["SalesPerfProTotal2"],
+        platform : false,
+        date_picker : false,
+        params(query , params , sendData){
+            if(!query.type) params.type = "ALL";
+            return params;
+        },
+        flexible_btn : [{
+            content: `<a href="#!/achievements/productSale">商品分析</a>`, 
+            preMethods: [], 
+            customMethods: ""
+        }],
+        filter(data, query, dates) {
+            return filter.tradePanelTwo(data , query , dates);
+        },
+        rows: [
+            ["access_user" , "order_user" , "order_num" , "operating"]
+        ],
+        cols: [
+            [{
+                caption: "浏览商品数",
                 type: "number"
             }, {
-                caption: "国美币使用额",
+                caption: "下单商品件数",
+                type: "number"
+            }, {
+                caption: "支付商品件数",
+                type: "number"
+            }, {
+                caption: ""
+            }]
+        ]
+    });
+
+    //交易商品汇总---补充
+    Router = new api(Router, {
+        router : "/achievements/tradePanelTwo_add",
+        modelName : ["SalesPerfProTotal2"],
+        platform : false,
+        date_picker : false,
+        paging : [true],
+        toggel : true,
+        order : ["-date"],
+        params(query , params , sendData){
+            if(!query.type) params.type = "ALL";
+
+            delete params.order_user;
+            return params;
+        },
+        filter(data, query, dates) {
+            return filter.tradePanelTwo_add(data , query , dates);
+        },
+        rows: [
+            ["date" ,"access_user" , "order_user" , "order_num"]
+        ],
+        cols: [
+            [{
+                caption: "日期",
+                type   : "date"
+            }, {
+                caption: "浏览商品数",
+                type: "number"
+            }, {
+                caption: "下单商品件数",
+                type: "number"
+            }, {
+                caption: "支付商品件数",
+                type: "number"
+            }]
+        ]
+    });
+
+
+     //支付方式汇总
+    Router = new api(Router, {
+        router : "/achievements/tradePanelThree",
+        modelName : ["SalesPerfPayModeTotal2"],
+        platform : false,
+        date_picker : false,
+        params(query , params , sendData){
+            if(!query.type) params.type = "ALL";
+            return params;
+        },
+        flexible_btn : [{
+            content: `<a href="#!/achievements/pay">支付分析</a>`, 
+            preMethods: [], 
+            customMethods: ""
+        }],
+        filter(data, query, dates) {
+            return filter.tradePanelThree(data , query , dates);
+        },
+        rows: [
+            ["all_pay_num" , "aliy_pay" , "weixin_pay" , "other_pay" , "operating"]
+        ],
+        cols: [
+            [{
+                caption: "总支付笔数",
+                type: "number"
+            }, {
+                caption: "支付宝支付笔数",
+                type: "number"
+            }, {
+                caption: "微信支付笔数",
+                type: "number"
+            }, {
+                caption: "其它支付笔数",
+                type: "number"
+            }, {
+                caption: ""
+            }]
+        ]
+    });
+
+    //支付方式汇总---补充
+    Router = new api(Router, {
+        router : "/achievements/tradePanelThree_add",
+        modelName : ["SalesPerfPayModeTotal2"],
+        platform : false,
+        date_picker : false,
+        paging : [true],
+        toggel : true,
+        order : ["-date"],
+        params(query , params , sendData){
+            if(!query.type) params.type = "ALL";
+            delete params.aliy_pay;
+            return params;
+        },
+        filter(data, query, dates) {
+            return filter.tradePanelThree_add(data , query , dates);
+        },
+        rows: [
+            ["date" , "all_pay_num" , "aliy_pay" , "weixin_pay" , "other_pay"]
+        ],
+        cols: [
+            [{
+                caption: "日期",
+                type: "date"
+            }, {
+                caption: "总支付笔数",
+                type: "number"
+            }, {
+                caption: "支付宝支付笔数",
+                type: "number"
+            }, {
+                caption: "微信支付笔数",
+                type: "number"
+            }, {
+                caption: "其它支付笔数"
+            }]
+        ]
+    });
+
+
+    //国美币汇总
+    Router = new api(Router, {
+        router : "/achievements/tradePanelFour",
+        modelName : ["SalesPerfGuomeibiTotal2"],
+        platform : false,
+        date_picker : false,
+        params(query , params , sendData){
+            if(!query.type) params.type = "ALL";
+            return params;
+        },
+        filter(data, query, dates) {
+            return filter.tradePanelFour(data , query , dates);
+        },
+        rows: [
+            ["newadd_guomeibi" , "consume_guomeibi" , "drawcash_guomeibi" , "operating"]
+        ],
+        cols: [
+            [{
+                caption: "新增国美币",
+                type: "number"
+            }, {
+                caption: "消费国美币",
+                type: "number"
+            }, {
+                caption: "提现国美币",
+                type: "number"
+            }, {
+                caption: ""
+            }]
+        ]
+    });
+
+    //国美币汇总---补充
+    Router = new api(Router, {
+        router : "/achievements/tradePanelFour_add",
+        modelName : ["SalesPerfGuomeibiTotal2"],
+        platform : false,
+        date_picker : false,
+        paging : [true],
+        toggel : true,
+        order : ["-date"],
+        params(query , params , sendData){
+            if(!query.type) params.type = "ALL";
+            delete params[sendData.rows[0][2]];
+            return params;
+        },
+        filter(data, query, dates) {
+            return filter.tradePanelFour_add(data , query , dates);
+        },
+        rows: [
+            ["date" , "newadd_guomeibi" , "consume_guomeibi" , "drawcash_guomeibi"]
+        ],
+        cols: [
+            [{
+                caption: "日期",
+                type: "date"
+            }, {
+                caption: "新增国美币",
+                type: "number"
+            }, {
+                caption: "消费国美币",
+                type: "number"
+            }, {
+                caption: "提现国美币",
+                type: "number"
+            }]
+        ]
+    });
+
+
+    //交易优惠券汇总
+    Router = new api(Router, {
+        router : "/achievements/tradePanelFive",
+        modelName : ["SalesPerfCoupleTotal2"],
+        platform : false,
+        date_picker : false,
+        params(query , params , sendData){
+            if(!query.type) params.type = "ALL";
+            return params;
+        },
+        flexible_btn : [{
+            content: `<a href="#!/coupon">优惠劵分析</a>`, 
+            preMethods: [], 
+            customMethods: ""
+        }],
+        filter(data, query, dates) {
+            return filter.tradePanelFive(data , query , dates);
+        },
+        rows: [
+            ["used_num" , "used_amount" , "lv"],
+            ["used_num" , "used_amount" , "lv" , "operating"],
+        ],
+        cols: [
+            [{
+                caption: "平台优惠券使用张数",
                 type: "number"
             }, {
                 caption: "平台优惠券使用金额",
                 type: "number"
             }, {
-                caption: "成交金额",
+                caption: "平台优惠券使用占比",
+                type: "number"
+            }, {
+                caption: ""
+            }],
+
+            [{
+                caption: "商家优惠券使用张数",
+                type: "number"
+            }, {
+                caption: "商家优惠券使用金额",
+                type: "number"
+            }, {
+                caption: "商家优惠券使用占比",
+                type: "number"
+            }, {
+                caption: ""
+            }]
+        ]
+    });
+
+    //交易优惠券汇总---补充
+    Router = new api(Router, {
+        router : "/achievements/tradePanelFive_add",
+        modelName : ["SalesPerfCoupleTotal2"],
+        platform : false,
+        date_picker : false,
+        paging : [true],
+        toggel : true,
+        order : ["-date"],
+        params(query , params , sendData){
+            if(!query.type) params.type = "ALL";
+            delete params[sendData.rows[0][2]];            
+            return params;
+        },
+        filter(data, query, dates) {
+            return filter.tradePanelFive_add(data , query , dates);
+        },
+        rows: [
+            ["date" , "used_num" , "used_amount" , "lv" , "used_num_2" , "used_amount_2" , "lv_2"]
+        ],
+        cols: [
+            [{
+                caption : "日期",
+                type : "date"
+            }, {
+                caption: "平台优惠券使用张数",
+                type: "number"
+            }, {
+                caption: "平台优惠券使用金额",
+                type: "number"
+            }, {
+                caption: "平台优惠券使用占比(%)",
+                type: "number"
+            }, {
+                caption: "商家优惠券使用张数",
+                type: "number"
+            }, {
+                caption: "商家优惠券使用金额",
+                type: "number"
+            }, {
+                caption: "商家优惠券使用占比(%)",
                 type: "number"
             }]
         ]
     });
 
-    Router = new api(Router,{
-        router : "/achievements/tradeTwo",
-        modelName : ["SalesPerfTranKv"],
+
+
+
+
+
+
+
+    //转化率
+    Router = new api(Router, {
+        router : "/achievements/tradePanelSix",
+        modelName : ["SalesPerfConversion2"],
         platform : false,
-        filter_select: [{
-            title: '指标选择',
-            filter_key: 'filter_key',
-            groups: [{
-                key: 'tred_acc_shop_num',
-                value: '被访问店铺数'
+        date_picker : false,
+        params(query , params , sendData){
+            if(!query.type) params.type = "ALL";
+            return params;
+        },
+        filter(data, query, dates) {
+            return filter.tradePanelSix(data , query , dates);
+        },
+        rows: [
+            ["scan_order" , "scan_pay" , "order_pay" , "pay_lv" , "operating"],
+        ],
+        cols: [
+            [{
+                caption: "浏览-下单转化率",
+                type: "number"
             }, {
-                key: 'tred_deal_shop_num',
-                value: '支付店铺数'
+                caption: "浏览-支付转化率",
+                type: "number"
             }, {
-                key: 'tran_acc_pro_num',
-                value: '浏览商品数'
-            //}, {
-            //    key: 'tran_cart_pro_num',
-            //    value: '加购商品数'
-            //}, {
-            //    key: 'tran_cart_pro_num_j',
-            //    value: '加购商品件数'
+                caption: "下单-支付转化率",
+                type: "number"
             }, {
-                key: 'tran_order_money_amount',
-                value: '下单金额'
+                caption: "支付成功率",
+                type: "number"
             }, {
-                key: 'tred_deal_money_amount',
-                value: '成交金额'
-            }, {
-                key: 'tran_pay_money_amount',
-                value: '支付金额'
-            }, {
-                key: 'tred_order_all_amount',
-                value: '下单总量'
-            }, {
-                key: 'tred_pay_all_amount',
-                value: '支付订单量'
-            }, {
-                key: 'tred_pay_user_num',
-                value: '支付人数'
-            }, {
-                key: 'tran_pay_pro_num_spu',
-                value: '支付商品数'
-            },  {
-                key: 'tran_pay_pro_num_sku',
-                value: '支付商品件数'
-            },  {
-                key: 'tran_order_pro_num_spu',
-                value: '下单商品数'
-            }, {
-                key: 'tran_order_pro_num_sku',
-                value: '下单商品件数'
-            }, {
-                key: 'tran_order_user_num',
-                value: '下单人数'
-            }, {
-                key: "tran_guest_unit_price",
-                value: '客单价'
-            }, {
-                key: "tran_row_unit_price",
-                value: '笔单价'
+                caption: ""
             }]
-        }],
-        filter(data, query, dates) {
-            return filter.tradeTwo(data, query.filter_key, dates);
-        }
+        ]
     });
 
-    Router = new api(Router,{
-        router : "/achievements/tradeThree",
-        modelName : ["SalesPerfTranKv"],
+    //转化率---补充
+    Router = new api(Router, {
+        router : "/achievements/tradePanelSix_add",
+        modelName : ["SalesPerfConversion2"],
         platform : false,
-        excel_export : true,
+        date_picker : false,
         paging : [true],
+        toggel : true,
         order : ["-date"],
-        flexible_btn : [{
-            content: '<a href="javascript:void(0)">导出</a>',
-            preMethods: ['excel_export']
-        }],
-        filter(data, query, dates) {
-            return filter.tradeThree(data, dates);
+        params(query , params , sendData){
+            if(!query.type) params.type = "ALL";
+            delete params[sendData.rows[0][2]]; 
+            return params;
         },
-        rows : [
-            [ 'date', 'tred_order_all_amount', 'tred_pay_all_amount', 'tran_order_money_amount',
-                'tran_pay_money_amount', 'tran_guest_unit_price', 'del_use_coupon_rate',
-                'del_refund_amount','del_refund_num']
+        filter(data, query, dates) {
+            return filter.tradePanelSix_add(data , query , dates);
+        },
+         rows: [
+            ["date" , "scan_order" , "scan_pay" , "order_pay" , "pay_lv"],
         ],
-        cols : [
-            [
-                {
-                    caption : '日期',
-                    type : 'string',
-                    width : 20
-                },
-                {
-                    caption : '下单总量',
-                    type : 'number'
-                },
-                {
-                    caption : '支付订单量',
-                    type : 'number'
-                },
-                {
-                    caption : '下单金额',
-                    type : 'number'
-                },
-                {
-                    caption : '支付金额',
-                    type : 'number'
-                },
-                {
-                    caption : '客单价',
-                    type : 'number'
-                },
-                {
-                    caption : '优惠券使用率',
-                    type : 'string'
-                },
-                {
-                    caption : '退款金额',
-                    type : 'number'
-                },
-                {
-                    caption : '退货件数',
-                    type : 'number'
-                }
-            ]
+        cols: [
+            [{
+                caption: "日期",
+                type: "number"
+            }, {
+                caption: "浏览-下单转化率(%)",
+                type: "number"
+            }, {
+                caption: "浏览-支付转化率(%)",
+                type: "number"
+            }, {
+                caption: "下单-支付转化率(%)",
+                type: "number"
+            }, {
+                caption: "支付成功率(%)",
+                type: "number"
+            }]
         ]
     });
 
-    Router = new api(Router,{
-        router : "/achievements/tradeFour",
-        modelName : ["DealCaty"],
-        platform : false,
-        paging : [true],
-        sum : ["pay_money_amount"],
-        date_picker_data : 1,
-        excel_export : true,
-        flexible_btn : [{
-            content: '<a href="javascript:void(0)">导出</a>',
-            preMethods: ['excel_export']
-        }],
-        //fixedParams(query, filter_key, req, cb) {
-        //    var _ids = [],
-        //        category_id = query.category_id || 0;
-        //    req.models.ConfCategories.find({
-        //        pid : category_id,
-        //        status : 1
-        //    }, (err, data) => {
-        //        if(err) {
-        //            cb(err);
-        //        } else {
-        //            for(var key of data) {
-        //                _ids.push(key.id);
-        //            }
-        //            query.category_id = _ids;
-        //            cb(null, query);
-        //        }
-        //    });
-        //},
-        //level_select : true,
-        //level_select_name : "category_id",
-        //level_select_url : "/api/categories",
-        filter(data, query) {
-            return filter.tradeFour(data, query);
-        },
-        rows : [
-            [ 'category_name', 'access_num', 'access_users', 'sales_pro_num',
-            'pay_money_amount', 'pay_money_amount_ratio']
-        ],
-        cols : [
-            [
-                {
-                    caption : '类目名称',
-                    type : 'string'
-                },
-                {
-                    caption : '类目商品访问量',
-                    type : 'number'
-                },
-                {
-                    caption : '类目商品访客数',
-                    type : 'number'
-                },
-                {
-                    caption : '支付商品件数',
-                    type : 'number'
-                },
-                {
-                    caption : '支付金额',
-                    type : 'number'
-                },
-                {
-                    caption : '支付金额占比',
-                    type : 'string'
-                }
-            ]
-        ]
-    });
-
-    Router = new api(Router,{
-        router : "/achievements/tradeFive",
-        modelName : ["TradeUser"],
-        platform : false,
-        date_picker_data : 1,
-        paging : [true],
-        excel_export : true,
-        flexible_btn : [{
-            content: '<a href="javascript:void(0)">导出</a>',
-            preMethods: ['excel_export']
-        }],
-        filter(data, query, dates) {
-            return filter.tradeFive(data, dates);
-        },
-        rows : [
-            [ 'area', 'deal_money_amount', 'deal_money_ratio', 'deal_pro_num',
-                'deal_pro_ratio', 'cus_unit_price',
-                'buyersum', 'quantitysum', 'payordersum'
-            ]
-        ],
-        cols : [
-            [
-                {
-                    caption : '地区',
-                    type : 'string'
-                },
-                {
-                    caption : '支付金额',
-                    type : 'number'
-                },
-                {
-                    caption : '支付金额占比',
-                    type : 'number'
-                },
-                {
-                    caption : '支付商品数',
-                    type : 'number'
-                },
-                {
-                    caption : '支付商品数占比',
-                    type : 'number'
-                },
-                {
-                    caption: '客单价',
-                    type: 'number'
-                },
-                {
-                    caption: '支付人数',
-                    type: 'number'
-                },
-                {
-                    caption: '支付件数',
-                    type: 'number'
-                },
-                {
-                    caption: '支付订单量',
-                    type: 'number'
-                }
-            ]
-        ]
-    });
 
     return Router;
 };
