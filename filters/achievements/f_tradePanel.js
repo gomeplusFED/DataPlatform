@@ -55,7 +55,7 @@ module.exports = {
     //趋势分析补充
     tradePanelTwo_add(data , query , dates){
         let source = data.first.data[0],
-            count  = data.first.count;
+            count  = data.first.count > 20 ? 20 : data.first.count;
         let result = {};
         let map = {
             "access_user" : "浏览商品数",
@@ -135,7 +135,7 @@ module.exports = {
     tradePanelThree_add(data , query , dates){
         let source = data.first.data[0],
             Result = [],
-            count  = data.first.count || 1;
+            count  = data.first.count > 20 ? 20 : (data.first.count ? data.first.count : 1);
         let result = {};
         let map = {
             "all_pay_num" : "总支付笔数",
@@ -219,7 +219,7 @@ module.exports = {
     tradePanelFour_add(data , query , dates){
         let source = data.first.data[0],
             Result = [],
-            count  = data.first.count || 1;
+            count  = data.first.count > 20 ? 20 : (data.first.count ? data.first.count : 1);
         let result = {};
 
         let map = {
@@ -296,7 +296,7 @@ module.exports = {
     //交易优惠券汇总--补充
     tradePanelFive_add(data , query , dates){
         let source = data.first.data[0],
-            count  = data.first.count || 1;
+            count  = data.first.count > 20 ? 20 : (data.first.count ? data.first.count : 1);
 
         let result = {},map = {},TableSource = [];
         let Rows = data.rows[0],Cols = data.cols[0];
@@ -372,7 +372,7 @@ module.exports = {
     //转化率--补充
     tradePanelSix_add(data , query , dates){
         let source = data.first.data[0],
-            count  = data.first.count || 1;
+            count  = data.first.count > 20 ? 20 : (data.first.count ? data.first.count : 1);
 
         let result = {},map = {},TableSource = [];
         let Rows = data.rows[0],Cols = data.cols[0];

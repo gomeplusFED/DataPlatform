@@ -13,12 +13,39 @@ var api = require("../../../base/main"),
 
 module.exports = (Router) => {
    
+    Router = Router.get("/achievements/payZero_json" , function(req , res , next){
+
+        res.json({
+            code: 200,
+            modelData: [],
+            components: {
+                filter_select: [{
+                    title: "平台选择",
+                    filter_key: "type",
+                    groups: [{
+                        key: "ALL",
+                        value: "全部平台"
+                    }, {
+                        key: "app",
+                        value: "APP"
+                    }, {
+                        key: "wap",
+                        value: "WAP"
+                    }, {
+                        key: "pc",
+                        value: "PC"
+                    }]
+                }]
+            }
+        });
+    });
+
     //支付趋势
     Router = new api(Router, {
         router : "/achievements/payOne",
         modelName : ["PayTrend2"],
         platform : false,
-        global_platform: {
+        /*global_platform: {
             show: true,
             key : "type",
             name : "平台切换（默认全部平台）",
@@ -35,7 +62,7 @@ module.exports = (Router) => {
                 key: 'PC',
                 name: 'PC'
             }]
-        },
+        },*/
         toggle: true,
         paging: [true],
         order : ["-date"],

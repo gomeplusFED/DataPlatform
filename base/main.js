@@ -14,6 +14,8 @@ var utils = require("../utils"),
     orm = require("orm"),
     cacheTime = 1;
 
+let eventproxy = require("eventproxy");
+
 function api(Router, options) {
     var defaultOption = utils.mixin({
         //路由
@@ -280,6 +282,16 @@ api.prototype = {
                     sendData[this.dataName[i]] = {};
                     if(this[this.sql[i]]) {
                         if (this.paging[i]) {
+                            /*console.log("go");
+                            await(() => {
+                                return new Promise((resolve , reject)=>{
+
+                                });
+                                sendData[this.dataName[i]].data = this._findDatabaseSql(req, this[this.sql[i]](query, params, false));
+                                sendData[this.dataName[i]].count = this._findDatabaseSql(req, this[this.sql[i]](query, params, true));
+                            });
+                            console.log("go over");*/
+                            
                             sendData[this.dataName[i]].data =
                                 await(this._findDatabaseSql(req, this[this.sql[i]](query, params, false)));
                             sendData[this.dataName[i]].count =
