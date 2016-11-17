@@ -210,6 +210,7 @@ module.exports = {
             for(let key of data.rows[0]){
                 if(key == "operating") continue;
                 result[key] += item[key];
+                result[key] = util.numberLeave(result[key] , 2);
             }
         }
 
@@ -275,12 +276,12 @@ module.exports = {
 
         for(let item of source){
             item.date = util.getDate(item.date);
-            if(item.coupon_type == 1){
+            if(item.coupon_type == 2){
                 //商家优惠劵
                 Table1.used_num += item.used_num;
                 Table1.used_amount += item.used_amount;
                 Table1.pay_num += item.pay_num;
-            }else{
+            }else if(item.coupon_type == 1){
                 //平台优惠劵
                 Table2.used_num += item.used_num;
                 Table2.used_amount += item.used_amount;
