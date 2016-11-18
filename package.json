@@ -7,6 +7,9 @@
       "email": "fuqiang-ds1@yolo24.com"
     }
   ],
+  "scripts": {
+    "test": "pm2-dev app.js"
+  },
   "description": "DataPlatform web project",
   "engines": {
     "node": ">=4.2.1"
