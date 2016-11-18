@@ -200,7 +200,7 @@ module.exports = (Router) => {
     });
 
     Router = Router.get("/custom/channel", (req, res, next) => {
-        req.models.Channel.find({}, (err, data) => {
+        req.models.Channel.find({}, [ "channel_id", "A" ], (err, data) => {
             if(err) {
                 next(err);
             } else {
