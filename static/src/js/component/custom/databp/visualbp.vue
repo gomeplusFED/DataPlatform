@@ -76,6 +76,7 @@
 					this.bpConfig.pageUrl = pageUrl;
 					this.bpConfig.platform = platform;
 					this.search();
+
 					query.show = true;
 					actions.databp(store, query);
 				}
@@ -106,6 +107,16 @@
 				var hovered = [];
 				var selected;
 				$head.append('<style> .bphover {outline: 2px solid #0072ff !important;background-color: rgba(105, 210, 249, 0.4) !important;} .bphover-position-fix {position: relative !important;}</style>');
+				let queryselected;
+				if ((queryselected = _this.$route.query) && (queryselected = queryselected.selector)) {
+
+					let $target = $iframe.find(queryselected);
+					// console.log($target.get());
+					if (/static|inherit|initial/.test(window.getComputedStyle($target.get(0)).position)) {
+						$target.addClass('bphover-position-fix');
+					}
+					$target.addClass('bphover');
+				}
 				$body.bind('contextmenu', function(e) {
 
 					if (selected) {
