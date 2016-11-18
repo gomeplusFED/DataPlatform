@@ -3,7 +3,7 @@
 	<form class='form-inline'>
 		<div class='form-group'>
 			<label>埋点URL</label>
-			<input type='text' class='form-control' placeholder='' v-model="bpConfig.pageUrl" @keyup.enter.stop.prevent="search">
+			<input type='text' class='form-control' placeholder='' v-model="bpConfig.pageUrl" @keyup.enter.stop.prevent="searchClick">
 		</div>
 		<div class='form-group'>
 			<label>平台</label>
@@ -12,7 +12,7 @@
 				<option value='H5'>H5</option>
 			</select>
 		 </div>
-		<button id="search" @click='search' type='button' class='btn ent-btn-blue search-btn btn-primary' data-toggle="popover"   data-content="请输入正确的url">检索页面</button>
+		<button id="search" @click='searchClick' type='button' class='btn ent-btn-blue search-btn btn-primary' data-toggle="popover"   data-content="请输入正确的url">检索页面</button>
 	</form>
 		<!-- nav -->
 	<div id='container' class='main'>
@@ -76,7 +76,6 @@
 					this.bpConfig.pageUrl = pageUrl;
 					this.bpConfig.platform = platform;
 					this.search();
-
 					query.show = true;
 					actions.databp(store, query);
 				}
@@ -160,21 +159,14 @@
 					let $target = $(e.target);
 					let href = $target.attr('href') || $target.parents('a').attr('href');
 					if (href && href.indexOf('javascript') === -1) {
-						_this.$router.go({
-							path: '/databp/visualbp',
-							query: {pageUrl: href,
-									platform: _this.bpConfig.platform
-							}
-						});
 						_this.bpConfig.pageUrl = href;
-						_this.search();
+						_this.searchClick();
 
 					}
 					return false;
 				});
 			},
-			search(ev) {
-				var _this = this;
+			searchClick() {
 				var url = this.bpConfig.pageUrl;
 
 				if(!/https?:\/\/([\w-]+\.)+[\w-]+(\/[\w- ./?%&=]*)?/.test(url)) {
@@ -183,13 +175,21 @@
 					setTimeout(function () { $ele.popover("destroy"); }, 1000);
 					return false;
 				}
-				_this.loading.show = true;
+				this.$router.go({
+					path: '/databp/visualbp',
+					query: {pageUrl: url,
+							platform: this.bpConfig.platform
+					}
+				});
+				this.search();
+			},
+			search() {
+				this.loading.show = true;
 				var newiframe_url = '/databp/html?m='+this.bpConfig.platform+'&url=' + this.bpConfig.pageUrl;
-				if (newiframe_url === _this.iframe_url) {
-					_this.loading.show = false;
+				if (newiframe_url === this.iframe_url) {
+					this.loading.show = false;
 				}
-				_this.iframe_url = newiframe_url;
-
+				this.iframe_url = newiframe_url;
 			}
 		}
 	});
