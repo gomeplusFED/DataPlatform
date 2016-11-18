@@ -109,13 +109,15 @@
 				$head.append('<style> .bphover {outline: 2px solid #0072ff !important;background-color: rgba(105, 210, 249, 0.4) !important;} .bphover-position-fix {position: relative !important;}</style>');
 				let queryselected;
 				if ((queryselected = _this.$route.query) && (queryselected = queryselected.selector)) {
-
 					let $target = $iframe.find(queryselected);
-					// console.log($target.get());
-					if (/static|inherit|initial/.test(window.getComputedStyle($target.get(0)).position)) {
-						$target.addClass('bphover-position-fix');
+					let $node;
+					if ($node = $target.get(0)) {
+						if (/static|inherit|initial/.test(window.getComputedStyle($node).position)) {
+							$target.addClass('bphover-position-fix');
+						}
+						$target.addClass('bphover');
+						hovered.push($target);
 					}
-					$target.addClass('bphover');
 				}
 				$body.bind('contextmenu', function(e) {
 
@@ -158,14 +160,15 @@
 					let $target = $(e.target);
 					let href = $target.attr('href') || $target.parents('a').attr('href');
 					if (href && href.indexOf('javascript') === -1) {
-						_this.bpConfig.pageUrl = href;
-						_this.search();
 						_this.$router.go({
 							path: '/databp/visualbp',
 							query: {pageUrl: href,
 									platform: _this.bpConfig.platform
 							}
-						}); 
+						});
+						_this.bpConfig.pageUrl = href;
+						_this.search();
+
 					}
 					return false;
 				});
