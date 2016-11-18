@@ -33,7 +33,7 @@
 								<div v-for="(i,item) in privateBp" class="pair">
 									key<input type='text' class='form-control' placeholder='' v-model="item[0]" >
 									value
-									<input type='text' class='form-control' placeholder='' v-model="item[1]" @click="showDropDown(item, $event)">
+									<input type='text' class='form-control' placeholder='' v-model="item[1]">
 
 									<button  @click="privateBp.splice(i,1)">-</button>
 								</div>
@@ -210,7 +210,7 @@ var bpinfo = Vue.extend({
 				let offset = $(e.target).position();
 				this.selectpos.top = `calc(${offset.top}px + ${this.infopos.top} + 30px)`;
 				if(this.infopos.left === 'inherit') {
-					this.selectpos.right = `123px`;
+					this.selectpos.right = `120px`;
 				} else {
 					this.selectpos.left = `calc(${offset.left}px + ${this.infopos.left})`;
 					this.selectpos.right = `inherit`;
