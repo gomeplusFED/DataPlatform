@@ -19,7 +19,11 @@ module.exports = (Router) => {
                 activity_id : orm.like(query.active_no + "%")
             }, (err, data) => {
                 if(err) cb(err);
-                query.channel_no = _.pluck(data, "channel_id");
+                let ids = _.pluck(data, "channel_id");
+                query.channel_no = [];
+                for(let id of ids) {
+                    query.channel_no.push(id.substr(0, 5));
+                }
                 delete query.active_no;
                 cb(null, query);
             });
@@ -75,7 +79,11 @@ module.exports = (Router) => {
                 activity_id : orm.like(query.active_no + "%")
             }, (err, data) => {
                 if(err) cb(err);
-                query.channel_no = _.pluck(data, "channel_id");
+                let ids = _.pluck(data, "channel_id");
+                query.channel_no = [];
+                for(let id of ids) {
+                    query.channel_no.push(id.substr(0, 5));
+                }
                 delete query.active_no;
                 cb(null, query);
             });
