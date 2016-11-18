@@ -158,8 +158,14 @@
 					let $target = $(e.target);
 					let href = $target.attr('href') || $target.parents('a').attr('href');
 					if (href && href.indexOf('javascript') === -1) {
-						_this.bpConfig.pageUrl = href;
-						_this.search();
+						// _this.bpConfig.pageUrl = href;
+						// _this.search();
+						_this.$router.go({
+							path: '/databp/visualbp',
+							query: {pageUrl: href,
+									platform: _this.bpConfig.platform
+							}
+						}); 
 					}
 					return false;
 				});
