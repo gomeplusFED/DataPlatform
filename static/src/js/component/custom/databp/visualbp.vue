@@ -76,8 +76,10 @@
 					this.bpConfig.pageUrl = pageUrl;
 					this.bpConfig.platform = platform;
 					this.search();
-					query.show = true;
-					actions.databp(store, query);
+					if(query.selector) {
+						query.show = true;
+						actions.databp(store, query);
+					}
 				}
 				return Promise.resolve(true);
 	        }
