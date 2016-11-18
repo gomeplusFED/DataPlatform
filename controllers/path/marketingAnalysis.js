@@ -22,6 +22,10 @@ module.exports = {
                 type: "chart",
                 title: "实时流量趋势",
                 query_api: "/marketingAnalysis/overviewTwo"
+            }, {
+                type: "chart",
+                title: "实时订单趋势",
+                query_api: "/marketingAnalysis/overviewThree"
             }]
         };
     },

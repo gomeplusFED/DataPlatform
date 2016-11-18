@@ -87,13 +87,23 @@ module.exports = (Router) => {
                         caption : "分享人数",
                         type : "number"
                     },{
-                        caption : "分享次数",
+                        caption : "下单总量",
+                        type : "number"
+                    },{
+                        caption : "下单总金额",
+                        type : "number"
+                    },{
+                        caption : "支付总量",
+                        type : "number"
+                    },{
+                        caption : "实际支付总金额",
                         type : "number"
                     }
                 ]
             ],
             rows = [
-                ["name", "uv", "pv", "new_user", "share_user", "share_num"]
+                ["name", "uv", "pv", "new_user", "share_user", "share_num", "create_count", "create_amount",
+                    "payment_count", "payment_amount"]
             ];
 
         if(Object(query).length === 0) {
@@ -170,12 +180,36 @@ module.exports = (Router) => {
                                 data.now.share_user.push(
                                     await (_find(`all:market:activity:share:${date + i}:pv`))
                                 );
+                                data.now.create_count.push(
+                                    await (_find(`all:order:create:activity:${date + i}:counts`))
+                                );
+                                data.now.create_amount.push(
+                                    await (_find(`all:order:create:activity:${date + i}:amount`))
+                                );
+                                data.now.payment_count.push(
+                                    await (_find(`all:order:payment:activity:${date + i}:counts`))
+                                );
+                                data.now.payment_amount.push(
+                                    await (_find(`all:order:payment:activity:${date + i}:amount`))
+                                );
                             } else {
                                 data.now.pv.push(
                                     await (_find(`all:market:activity:${date}0${i}:pv`))
                                 );
                                 data.now.share_user.push(
                                     await (_find(`all:market:activity:share:${date}0${i}:pv`))
+                                );
+                                data.now.create_count.push(
+                                    await (_find(`all:order:create:activity:${date}0${i}:counts`))
+                                );
+                                data.now.create_amount.push(
+                                    await (_find(`all:order:create:activity:${date}0${i}:amount`))
+                                );
+                                data.now.payment_count.push(
+                                    await (_find(`all:order:payment:activity:${date}0${i}:counts`))
+                                );
+                                data.now.payment_amount.push(
+                                    await (_find(`all:order:payment:activity:${date}0${i}:amount`))
                                 );
                             }
                         }
@@ -187,12 +221,36 @@ module.exports = (Router) => {
                                 data.old.share_user.push(
                                     await (_find(`all:market:activity:share:${oldDate + i}:pv`))
                                 );
+                                data.old.create_count.push(
+                                    await (_find(`all:order:create:activity:${oldDate + i}:counts`))
+                                );
+                                data.old.create_amount.push(
+                                    await (_find(`all:order:create:activity:${oldDate + i}:amount`))
+                                );
+                                data.old.payment_count.push(
+                                    await (_find(`all:order:payment:activity:${oldDate + i}:counts`))
+                                );
+                                data.old.payment_amount.push(
+                                    await (_find(`all:order:payment:activity:${oldDate + i}:amount`))
+                                );
                             } else {
                                 data.old.pv.push(
                                     await (_find(`all:market:activity:${oldDate}0${i}:pv`))
                                 );
                                 data.old.share_user.push(
                                     await (_find(`all:market:activity:share:${oldDate}0${i}:pv`))
+                                );
+                                data.old.create_count.push(
+                                    await (_find(`all:order:create:activity:${oldDate}0${i}:counts`))
+                                );
+                                data.old.create_amount.push(
+                                    await (_find(`all:order:create:activity:${oldDate}0${i}:amount`))
+                                );
+                                data.old.payment_count.push(
+                                    await (_find(`all:order:payment:activity:${oldDate}0${i}:counts`))
+                                );
+                                data.old.payment_amount.push(
+                                    await (_find(`all:order:payment:activity:${oldDate}0${i}:amount`))
                                 );
                             }
                         }
@@ -291,6 +349,70 @@ module.exports = (Router) => {
         }
     });
 
+    Router = Router.get("/marketingAnalysis/overviewThree_json", (req, res, next) => {
+        let query = req.query,
+            date = new Date(),
+            now = moment(date).format("MMDD"),
+            old = moment(new Date(date - query.day * 24 * 60 * 60 * 1000)).format("MMDD"),
+            hour = moment(date).format("HH"),
+            modules = {
+                filter_select : [{
+                    title: '数据指标',
+                    filter_key: 'filter_key',
+                    groups: [{
+                        key: 'create_count',
+                        value: '下单总量'
+                    }, {
+                        key: 'create_amount',
+                        value: '下单总金额'
+                    }, {
+                        key: 'payment_count',
+                        value: '支付总量'
+                    }, {
+                        key: 'payment_amount',
+                        value: '实际支付总金额'
+                    }]
+                }, {
+                    title: '对比时段',
+                    filter_key: 'day',
+                    groups: [{
+                        key : 1,
+                        value : "前一日"
+                    }, {
+                        key : 7,
+                        value : "上周同期"
+                    }]
+                }]
+            };
+
+        if(Object.keys(query).length === 0) {
+            _render(res, [], modules);
+        } else {
+            async(() => {
+                try {
+                    if(query.channel_id) {
+                        _render(res, filter.overviewTwo(
+                            _findRedis(query.filter_key, {
+                                now : now,
+                                old : old
+                            }, hour, query.channel_id)
+                        ), modules);
+                    } else {
+                        _render(res, filter.overviewTwo(
+                            _findRedis(query.filter_key, {
+                                now : now,
+                                old : old
+                            }, hour, []), query.day
+                        ), modules);
+                    }
+                } catch(err) {
+                    next(err);
+                }
+            })();
+
+        }
+    });
+
     function _render(res, sendData, modules) {
         res.json({
             code: 200,
@@ -330,46 +452,92 @@ module.exports = (Router) => {
             end = "uv";
         }
 
+        if(filter_key === "create_count") {
+            key = "all:order:create:activity:";
+            end = "counts";
+        } else if(filter_key === "create_amount") {
+            key = "all:order:create:activity:";
+            end = "amount";
+        } else if(filter_key === "payment_count") {
+            key = "all:order:payment:activity:";
+            end = "counts";
+        } else if(filter_key === "payment_amount") {
+            key = "all:order:payment:activity:";
+            end = "amount";
+        }
+
         if(channels.length === 0) {
             for(let i = 0; i < +hour + 1; i++) {
-                if(i >= 10) {
-                    data[`${i}:00-${i+1}:00`] = {
-                        now : await (_find(`${key + date.now + i}:${end}`)) || 0,
-                        old : await (_find(`${key + date.old + i}:${end}`)) || 0
-                    };
-                } else {
-                    data[`0${i}:00-0${i+1}:00`] = {
-                        now : await (_find(`${key + date.now}0${i}:${end}`)) || 0,
-                        old : await (_find(`${key + date.old}0${i}:${end}`)) || 0
-                    };
-                }
-            }
-        } else {
-            for(let channel of channels) {
-                for(let i = 0; i < +hour + 1; i++) {
                     if(i >= 10) {
-                        if(data[`${i}:00-${i+1}:00`]) {
-                            data[`${i}:00-${i+1}:00`].now +=
-                                await (_find(`${key}:${date.now + i + channel + end}`)) || 0;
-                            data[`${i}:00-${i+1}:00`].old +=
-                                await (_find(`${key}:${date.old + i + channel + end}`)) || 0;
-                        } else {
-                            data[`${i}:00-${i+1}:00`] = {
-                                now : await (_find(`${key}:${date.now + i + channel + end}`)) || 0,
-                                old : await (_find(`${key}:${date.old + i + channel + end}`)) || 0
-                            };
-                        }
+                        data[`${i}:00-${i+1}:00`] = {
+                            now : await (_find(`${key + date.now + i}:${end}`)) || 0,
+                            old : await (_find(`${key + date.old + i}:${end}`)) || 0
+                        };
                     } else {
-                        if(data[`0${i}:00-0${i+1}:00`]) {
-                            data[`0${i}:00-0${i+1}:00`].now +=
-                                await (_find(`${key}:${date.now}0${i + channel + end}`)) || 0;
-                            data[`0${i}:00-0${i+1}:00`].now +=
-                                await (_find(`${key}:${date.old}0${i + channel + end}`)) || 0;
+                        data[`0${i}:00-0${i+1}:00`] = {
+                            now : await (_find(`${key + date.now}0${i}:${end}`)) || 0,
+                            old : await (_find(`${key + date.old}0${i}:${end}`)) || 0
+                        };
+                    }
+                }
+        } else {
+            if(end === "counts" || end === "amount") {
+                for(let channel of channels) {
+                    for(let i = 0; i < +hour + 1; i++) {
+                        if(i >= 10) {
+                            if(data[`${i}:00-${i+1}:00`]) {
+                                data[`${i}:00-${i+1}:00`].now +=
+                                    await (_find(`${key}${channel + ":" + date.now + i + ":" + end}`)) || 0;
+                                data[`${i}:00-${i+1}:00`].old +=
+                                    await (_find(`${key}${channel + ":" + date.old + i + ":" + end}`)) || 0;
+                            } else {
+                                data[`${i}:00-${i+1}:00`] = {
+                                    now : await (_find(`${key}${channel + ":" + date.now + i + ":" + end}`)) || 0,
+                                    old : await (_find(`${key}${channel + ":" + date.old + i + ":" + end}`)) || 0
+                                };
+                            }
                         } else {
-                            data[`0${i}:00-0${i+1}:00`] = {
-                                now : await (_find(`${key}:${date.now}0${i + channel + end}`)) || 0,
-                                old : await (_find(`${key}:${date.old}0${i + channel + end}`)) || 0
-                            };
+                            if(data[`0${i}:00-0${i+1}:00`]) {
+                                data[`0${i}:00-0${i+1}:00`].now +=
+                                    await (_find(`${key}${channel}:${date.now}0${i + ":" + end}`)) || 0;
+                                data[`0${i}:00-0${i+1}:00`].now +=
+                                    await (_find(`${key}${channel}:${date.old}0${i + ":" + end}`)) || 0;
+                            } else {
+                                data[`0${i}:00-0${i+1}:00`] = {
+                                    now : await (_find(`${key}${channel}:${date.now}0${i + ":" + end}`)) || 0,
+                                    old : await (_find(`${key}${channel}:${date.old}0${i + ":" + end}`)) || 0
+                                };
+                            }
+                        }
+                    }
+                }
+            } else {
+                for(let channel of channels) {
+                    for(let i = 0; i < +hour + 1; i++) {
+                        if(i >= 10) {
+                            if(data[`${i}:00-${i+1}:00`]) {
+                                data[`${i}:00-${i+1}:00`].now +=
+                                    await (_find(`${key}${date.now + i + ":" + channel + ":" + end}`)) || 0;
+                                data[`${i}:00-${i+1}:00`].old +=
+                                    await (_find(`${key}${date.old  + i + ":" + channel + ":" + end}`)) || 0;
+                            } else {
+                                data[`${i}:00-${i+1}:00`] = {
+                                    now : await (_find(`${key}${date.now + i + ":" + channel + ":" + end}`)) || 0,
+                                    old : await (_find(`${key}${date.old  + i + ":" + channel + ":" + end}`)) || 0
+                                };
+                            }
+                        } else {
+                            if(data[`0${i}:00-0${i+1}:00`]) {
+                                data[`0${i}:00-0${i+1}:00`].now +=
+                                    await (_find(`${key}${date.now}0${i + ":" + channel + ":" + end}`)) || 0;
+                                data[`0${i}:00-0${i+1}:00`].now +=
+                                    await (_find(`${key}${date.old}0${i + ":" + channel + ":" + end}`)) || 0;
+                            } else {
+                                data[`0${i}:00-0${i+1}:00`] = {
+                                    now : await (_find(`${key}${date.now}0${i + ":" + channel + ":" + end}`)) || 0,
+                                    old : await (_find(`${key}${date.old}0${i + ":" + channel + ":" + end}`)) || 0
+                                };
+                            }
                         }
                     }
                 }
