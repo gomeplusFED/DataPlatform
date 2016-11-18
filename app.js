@@ -23,7 +23,7 @@ global.cluster = cluster;
 var routers = require('./routers');
 
 orm.settings.set("connection.pool", true);
-// orm.settings.set("connection.debug", true);
+//orm.settings.set("connection.debug", true);
 Object.keys(config).forEach(function(key) {
     app.locals[key] = config[key];
 });
@@ -95,6 +95,10 @@ app.use((err, req, res, next) => {
             iserro: true
         });
     }
+});
+
+app.use((req, res, next) => {
+    res.redirect("/");
 });
 
 app.listen(7879 , function(){

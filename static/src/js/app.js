@@ -64,6 +64,20 @@ router.map({
 				component: require('./component/custom/channel.vue')
 			}
 		}
+	},
+	'/databp': {
+		component: require('./component/custom/index.vue'),
+		subRoutes: {
+			'/visualbp': {
+				component: require('./component/custom/databp/visualbp.vue')
+			},
+			'/bpmanage': {
+				component: require('./component/custom/databp/bpmanage.vue')
+			},
+			'/spread': {
+				component: require('./component/custom/databp/spread.vue')
+			}
+		}
 	}
 });
 

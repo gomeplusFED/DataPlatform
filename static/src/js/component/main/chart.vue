@@ -1,5 +1,5 @@
 <template>
-	<div :id="'chart_'+index" class="chart" v-show="checkIsChart()">
+	<div :id="'chart_'+index" class="chart" v-if="checkIsChart()">
 		<div class="chart_con" v-for="(index, item) in chartData" :style="{'height': chartHeight + 'px', 'width': shouldHalfWidth[index] ? '50%' : '100%'}">
 			<div class="nodata all_center">
 				<img src="/dist/img/nodata.png">
@@ -102,6 +102,21 @@ var mapDefaultSeries = {
 	}
 };
 
+var funnelDefaultSeries = {
+	sort: 'ascending',
+	label: {
+		normal: {
+			show: true,
+			position: 'inside'
+		},
+		emphasis: {
+			textStyle: {
+				fontSize: 20
+			}
+		}
+	}
+};
+
 // echart 主模块，npm安装
 var echarts = require('echarts/lib/echarts');
 require('echarts/lib/component/legend'); // 图例
@@ -136,7 +151,7 @@ var Chart = Vue.extend({
 	created: function() {
 		this.initEd = true;
 	},
-	props: ['index', 'initData', 'resultArgvs', 'loading', 'currentData', 'pageComponentsData'],
+	props: ['index', 'initData', 'resultArgvs', 'loading', 'currentData', 'pageComponentsData', 'defaultData'],
 	methods: {
 		checkIsChart: function() {
 			return this.currentData.type.match(/chart/i) !== null;
@@ -145,6 +160,10 @@ var Chart = Vue.extend({
 			var _this = this;
 			if (_this.resultArgvs.forceChange) {
 				delete _this.resultArgvs.forceChange;
+			}
+			if (this.defaultData) {
+				cb && cb(this.defaultData);
+				return;
 			}
 			$.ajax({
 				url: _this.currentData.query_api + '_json',
@@ -196,6 +215,9 @@ var Chart = Vue.extend({
 				if (chartType === 'map') {
 					_curr = Object.assign(mapDefaultSeries, _currentObj);
 				}
+				if (chartType === 'funnel') {
+					_curr = Object.assign(funnelDefaultSeries, _currentObj);
+				}
 				series.push(_curr);
 			}
 
@@ -246,6 +268,12 @@ var Chart = Vue.extend({
 				delete options.grid;
 				delete options.xAxis;
 				delete options.yAxis;
+			}
+
+			if (chartType === 'funnel') {
+				delete options.xAxis;
+				delete options.yAxis;
+				delete options.grid;
 			}
 
 			if (config.toolBox) {

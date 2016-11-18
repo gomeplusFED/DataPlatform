@@ -78,6 +78,15 @@ mutations.SETCURRENTPAGEDEFAULTDATA = function(state, data) {
     state.currentPageDefaultData = data;
 }
 
+mutations.UPDATECURRENTPAGEDEFAULTDATA = function(state, query_api, type) {
+    let data = state.currentPageDefaultData.defaultData.find(function(item) {
+        return item.query_api === query_api;
+    })
+    if (data) {
+        data.type = type;
+    }
+}
+
 mutations.CONFIRM = function(state, params){
     state.confirmConfig.show = params.show;
     state.confirmConfig.title = params.title || '弹窗';

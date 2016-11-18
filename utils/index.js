@@ -125,7 +125,7 @@ exports.uniq = function(dates){
     return result;
 };
 
-exports.toTable = function(data, rows, cols, count) {
+exports.toTable = function(data, rows, cols, count , noborder) {
     var newData = [];
     for(var i = 0; i < data.length; i++) {
         var obj = {
@@ -144,6 +144,10 @@ exports.toTable = function(data, rows, cols, count) {
             if(count.config) {
                 obj.config = count.config[i];
             }
+        }
+
+        if(noborder && noborder[i]){
+            obj["nobordered"] = true;
         }
         newData.push(obj);
     }
@@ -209,8 +213,10 @@ exports.getDate = function(date){
 exports.numberLeave = function(number , num){
     if(typeof number != "number"){
         console.error("must be a number");
-        return false;
+        return 0;
     }
+    if(!number) return 0;
+
     let a = 1;
     let i = 0;
     while(i<num){
@@ -458,7 +464,6 @@ exports.ArraySort = function(arr){
     }
 }
 
-
 /* 商品价目对照表 */
 exports.prizeRange = {
     '0': '0~10元',
@@ -510,4 +515,16 @@ exports.prizeRange = {
     '42': '5000~10000元',
     '43': '10000+元'
 };
+
+/* 处理除数为0的计算 ， a / b  , b == 0 , return 0. */
+exports.dealDivision = function(a , b , num){
+    if(b == 0 || !b) return 0;
+    if(num){
+        return exports.numberLeave(a / b , num);
+    }else{
+        return a / b;
+    }
+}
+
+
 

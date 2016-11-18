@@ -169,11 +169,21 @@ const Config = {
             href: "#",
             path: [
                 obj.achievements.shop(),
+                obj.achievements.shopOverview(),
+                obj.achievements.shopRun(),
+
                 obj.achievements.product(),
                 obj.achievements.productSale(),
+                
+                obj.achievements.tradePanel(),
                 obj.achievements.trade(),
+                
                 obj.achievements.vshop(),
                 obj.achievements.vtrade()
+            ],
+            routers: [
+                obj.achievements.pay(),
+                obj.achievements.order()
             ]
         },
         "14": {
@@ -262,6 +272,18 @@ const Config = {
             routers: [
                 obj.IM.Event(),
                 obj.IM.FaceDownload()
+            ]
+        },
+        "21": {
+            name: "数据埋点",
+            display: true,
+            className: "fa  fa-laptop fa-fw",
+            href: "#",
+            path: [
+                obj.databp.visualbp(),
+                obj.databp.bpmanage(),
+                obj.databp.spread()
+
             ]
         },
         "29": {
