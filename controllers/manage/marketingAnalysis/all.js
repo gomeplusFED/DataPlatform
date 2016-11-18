@@ -111,6 +111,7 @@ module.exports = (Router) => {
         router : "/marketingAnalysis/allThree",
         modelName : ["CamCamlistActive", "Activity"],
         platform : false,
+        control_table_col : true,
         paging : [true, false],
         filter(data) {
             return filter.allThree(data);
