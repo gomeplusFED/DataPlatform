@@ -34,7 +34,10 @@ module.exports = (Router) => {
                     } else {
                         channel[key.channel_type_code] = {
                             name : key.channel_type,
-                            options : []
+                            options : [{
+                                text : key.channel_name,
+                                value : key.channel_type_code + key.channel_code
+                            }]
                         };
                     }
                 }
@@ -125,12 +128,36 @@ module.exports = (Router) => {
                                     data.now.share_user.push(
                                         await (_find(`all:market:activity:share:${date + i}:${key}:pv`))
                                     );
+                                    data.now.create_count.push(
+                                        await (_find(`all:order:create:activity:${date + i}:${key}:counts`))
+                                    );
+                                    data.now.create_amount.push(
+                                        await (_find(`all:order:create:activity:${date + i}:${key}:amount`))
+                                    );
+                                    data.now.payment_count.push(
+                                        await (_find(`all:order:payment:activity:${date + i}:${key}:counts`))
+                                    );
+                                    data.now.payment_amount.push(
+                                        await (_find(`all:order:payment:activity:${date + i}:${key}:amount`))
+                                    );
                                 } else {
                                     data.now.pv.push(
                                         await (_find(`all:market:activity:${date}0${i}:${key}:pv`))
                                     );
                                     data.now.share_user.push(
                                         await (_find(`all:market:activity:share:${date}0${i}:${key}:pv`))
+                                    );
+                                    data.now.create_count.push(
+                                        await (_find(`all:order:create:activity:${date}0${i}:${key}:counts`))
+                                    );
+                                    data.now.create_amount.push(
+                                        await (_find(`all:order:create:activity:${date}0${i}:${key}:amount`))
+                                    );
+                                    data.now.payment_count.push(
+                                        await (_find(`all:order:payment:activity:${date}0${i}:${key}:counts`))
+                                    );
+                                    data.now.payment_amount.push(
+                                        await (_find(`all:order:payment:activity:${date}0${i}:${key}:amount`))
                                     );
                                 }
                             }
@@ -142,12 +169,36 @@ module.exports = (Router) => {
                                     data.old.share_user.push(
                                         await (_find(`all:market:activity:share:${oldDate + i}:${key}:pv`))
                                     );
+                                    data.old.create_count.push(
+                                        await (_find(`all:order:create:activity:${oldDate + i}:${key}:counts`))
+                                    );
+                                    data.old.create_amount.push(
+                                        await (_find(`all:order:create:activity:${oldDate + i}:${key}:amount`))
+                                    );
+                                    data.old.payment_count.push(
+                                        await (_find(`all:order:payment:activity:${oldDate + i}:${key}:counts`))
+                                    );
+                                    data.old.payment_amount.push(
+                                        await (_find(`all:order:payment:activity:${oldDate + i}:${key}:amount`))
+                                    );
                                 } else {
                                     data.old.pv.push(
                                         await (_find(`all:market:activity:${oldDate}0${i}:${key}:pv`))
                                     );
                                     data.old.share_user.push(
                                         await (_find(`all:market:activity:share:${oldDate}0${i}:${key}:pv`))
+                                    );
+                                    data.old.create_count.push(
+                                        await (_find(`all:order:create:activity:${oldDate}0${i}:${key}:counts`))
+                                    );
+                                    data.old.create_amount.push(
+                                        await (_find(`all:order:create:activity:${oldDate}0${i}:${key}:amount`))
+                                    );
+                                    data.old.payment_count.push(
+                                        await (_find(`all:order:payment:activity:${oldDate}0${i}:${key}:counts`))
+                                    );
+                                    data.old.payment_amount.push(
+                                        await (_find(`all:order:payment:activity:${oldDate}0${i}:${key}:amount`))
                                     );
                                 }
                             }
