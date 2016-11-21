@@ -75,6 +75,7 @@ module.exports = {
             }
         });
 
+
         for(let item of source){
             if(result[item.date][item.order_channel] != undefined){
                 result[item.date][item.order_channel] += item.pay_succ_num;

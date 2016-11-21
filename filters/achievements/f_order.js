@@ -61,7 +61,9 @@ module.exports = {
             item.date = util.getDate(item.date);
         }
 
-        if(query.main_show_type_filter == "chart"){
+        if(query.main_show_type_filter == "table"){
+            return util.toTable([source], data.rows, data.cols);
+        }else{
             /* chart */
             let filter_key = query.filter_key;
             let mapAdd = {
@@ -110,8 +112,6 @@ module.exports = {
                     stack: false,  // 图的堆叠,
                 }
             }]
-        }else{
-            return util.toTable([source], data.rows, data.cols);
         }
     },
 
