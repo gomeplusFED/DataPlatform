@@ -129,16 +129,16 @@ module.exports = (Router) => {
                                         await (_find(`all:market:activity:share:${date + i}:${key}:pv`))
                                     );
                                     data.now.create_count.push(
-                                        await (_find(`all:order:create:activity:${date + i}:${key}:counts`))
+                                        await (_find(`all:order:create:activity:${key}:${date + i}:counts`))
                                     );
                                     data.now.create_amount.push(
-                                        await (_find(`all:order:create:activity:${date + i}:${key}:amount`))
+                                        await (_find(`all:order:create:activity:${key}:${date + i}:amount`))
                                     );
                                     data.now.payment_count.push(
-                                        await (_find(`all:order:payment:activity:${date + i}:${key}:counts`))
+                                        await (_find(`all:order:payment:activity:${key}:${date + i}:counts`))
                                     );
                                     data.now.payment_amount.push(
-                                        await (_find(`all:order:payment:activity:${date + i}:${key}:amount`))
+                                        await (_find(`all:order:payment:activity:${key}:${date + i}:amount`))
                                     );
                                 } else {
                                     data.now.pv.push(
@@ -148,16 +148,16 @@ module.exports = (Router) => {
                                         await (_find(`all:market:activity:share:${date}0${i}:${key}:pv`))
                                     );
                                     data.now.create_count.push(
-                                        await (_find(`all:order:create:activity:${date}0${i}:${key}:counts`))
+                                        await (_find(`all:order:create:activity:${key}:${date}0${i}:counts`))
                                     );
                                     data.now.create_amount.push(
-                                        await (_find(`all:order:create:activity:${date}0${i}:${key}:amount`))
+                                        await (_find(`all:order:create:activity:${key}:${date}0${i}:amount`))
                                     );
                                     data.now.payment_count.push(
-                                        await (_find(`all:order:payment:activity:${date}0${i}:${key}:counts`))
+                                        await (_find(`all:order:payment:activity:${key}:${date}0${i}:counts`))
                                     );
                                     data.now.payment_amount.push(
-                                        await (_find(`all:order:payment:activity:${date}0${i}:${key}:amount`))
+                                        await (_find(`all:order:payment:activity:${key}:${date}0${i}:amount`))
                                     );
                                 }
                             }
@@ -170,16 +170,16 @@ module.exports = (Router) => {
                                         await (_find(`all:market:activity:share:${oldDate + i}:${key}:pv`))
                                     );
                                     data.old.create_count.push(
-                                        await (_find(`all:order:create:activity:${oldDate + i}:${key}:counts`))
+                                        await (_find(`all:order:create:activity:${key}:${oldDate + i}:counts`))
                                     );
                                     data.old.create_amount.push(
-                                        await (_find(`all:order:create:activity:${oldDate + i}:${key}:amount`))
+                                        await (_find(`all:order:create:activity:${key}:${oldDate + i}:amount`))
                                     );
                                     data.old.payment_count.push(
-                                        await (_find(`all:order:payment:activity:${oldDate + i}:${key}:counts`))
+                                        await (_find(`all:order:payment:activity:${key}:${oldDate + i}:counts`))
                                     );
                                     data.old.payment_amount.push(
-                                        await (_find(`all:order:payment:activity:${oldDate + i}:${key}:amount`))
+                                        await (_find(`all:order:payment:activity:${key}:${oldDate + i}:amount`))
                                     );
                                 } else {
                                     data.old.pv.push(
@@ -189,16 +189,16 @@ module.exports = (Router) => {
                                         await (_find(`all:market:activity:share:${oldDate}0${i}:${key}:pv`))
                                     );
                                     data.old.create_count.push(
-                                        await (_find(`all:order:create:activity:${oldDate}0${i}:${key}:counts`))
+                                        await (_find(`all:order:create:activity:${key}:${oldDate}0${i}:counts`))
                                     );
                                     data.old.create_amount.push(
-                                        await (_find(`all:order:create:activity:${oldDate}0${i}:${key}:amount`))
+                                        await (_find(`all:order:create:activity:${key}:${oldDate}0${i}:amount`))
                                     );
                                     data.old.payment_count.push(
-                                        await (_find(`all:order:payment:activity:${oldDate}0${i}:${key}:counts`))
+                                        await (_find(`all:order:payment:activity:${key}:${oldDate}0${i}:counts`))
                                     );
                                     data.old.payment_amount.push(
-                                        await (_find(`all:order:payment:activity:${oldDate}0${i}:${key}:amount`))
+                                        await (_find(`all:order:payment:activity:${key}:${oldDate}0${i}:amount`))
                                     );
                                 }
                             }
