@@ -90,6 +90,9 @@ module.exports = (Router) => {
                         caption : "分享人数",
                         type : "number"
                     },{
+                        caption : "分享次数",
+                        type : "number"
+                    },{
                         caption : "下单总量",
                         type : "number"
                     },{
