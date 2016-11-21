@@ -39,7 +39,7 @@ module.exports = {
         let map = {
             now : "今日"
         };
-        if(day === "1") {
+        if(day.toString() === "1") {
             map.old = "前一日";
         } else {
             map.old = "上周同期"
