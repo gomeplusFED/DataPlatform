@@ -528,7 +528,7 @@ module.exports = (Router) => {
                             old : await (_find(`${key + date.old + i}:${end}`)) || 0
                         };
                     } else {
-                        data[`0${i}:00-0${i+1}:00`] = {
+                        data[`0${i}:00-${i + 1 === 10 ? 10 : "0" + (i + 1)}:00`] = {
                             now : await (_find(`${key + date.now}0${i}:${end}`)) || 0,
                             old : await (_find(`${key + date.old}0${i}:${end}`)) || 0
                         };
