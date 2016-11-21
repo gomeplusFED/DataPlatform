@@ -149,8 +149,10 @@ module.exports = {
         }else{
             let map = {} , result = {} , 
                 filter = query.filter_key;
-            let i = data.rows[0].indexOf(filter),
-                names=data.cols[0][i].caption;
+            let i = data.rows[0].indexOf(filter);
+
+            if(!i) i = 0; //处理前端参数出错的情况
+            let names=data.cols[0][i].caption;
 
             map.pv = names;
             let max = 0;

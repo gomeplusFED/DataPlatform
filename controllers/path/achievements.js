@@ -330,7 +330,7 @@ module.exports = {
                     query_api : "/achievements/orderZero"
                 },
                 {
-                    type : "table",
+                    type : "chart",
                     title : "订单趋势",
                     query_api : "/achievements/orderOne"
                 },
