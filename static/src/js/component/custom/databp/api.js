@@ -61,7 +61,19 @@ function errHandler(err) {
 var api = {
 	// {pageUrl, selector, platform, pointId, matchUrlId}
 	getBp(data) {
-		return buildAjax('/point', filterArgs(data, ['pageUrl', 'selector', 'platform', 'pointId'])).then(extractResult).catch(errHandler);
+		return buildAjax('/point', filterArgs(data, ['pageUrl', 'selector', 'platform', 'pointId'])).then(extractResult).then(function(res){
+			// 从私有埋点中去除公共埋点	
+			let tmppub = res.publicParam.split('&');
+			let tmppri = res.privateParam;
+			for(let s of tmppub) {
+				tmppri = tmppri.replace(s, '');
+			}
+			res.privateParam = tmppri;
+			if(res.uniquePoint === '1') {
+				res.publicParam = '';
+			}
+			return res;
+		}).catch(errHandler);
 	},
 	// {pageUrl, selector, pointName, platform, pointId, matchUrlId, pattern, publicParam, privateParam}
 	updateBp(data) {
