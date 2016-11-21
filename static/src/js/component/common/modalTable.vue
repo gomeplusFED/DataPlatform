@@ -156,6 +156,10 @@ var ModalTable = Vue.extend({
 						} else if (val[1].type) {
 							this.showType = 'chart';
 						}
+						// default
+						if (val[1].default) {
+							this.showType = 'chart';
+						}
 					} else if (val.length === 1 && val[0].count) {
 						this.showType = 'table';
 						this.type = '';
