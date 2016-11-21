@@ -385,7 +385,7 @@ module.exports = (Router) => {
                             _findRedis(query.filter_key, {
                                 now : now,
                                 old : old
-                            }, hour, query.channel_id)
+                            }, hour, query.channel_id), query.day
                         ), modules);
                     } else {
                         _render(res, filter.overviewTwo(
@@ -449,7 +449,7 @@ module.exports = (Router) => {
                             _findRedis(query.filter_key, {
                                 now : now,
                                 old : old
-                            }, hour, query.channel_id)
+                            }, hour, query.channel_id), query.day
                         ), modules);
                     } else {
                         _render(res, filter.overviewTwo(
