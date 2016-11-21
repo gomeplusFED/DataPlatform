@@ -144,7 +144,7 @@ module.exports = (Router) => {
         modelName : ["SalesPerfProTotal2"],
         platform : false,
         date_picker : false,
-        paging : [true],
+        // paging : [true],
         toggel : true,
         order : ["-date"],
         params(query , params , sendData){
@@ -194,27 +194,7 @@ module.exports = (Router) => {
         }],
         filter(data, query, dates) {
             return filter.tradePanelThree(data , query , dates);
-        },
-        rows: [
-            ["all_pay_num" , "aliy_pay" , "weixin_pay" , "other_pay" , "operating"]
-        ],
-        cols: [
-            [{
-                caption: "总支付笔数",
-                type: "number"
-            }, {
-                caption: "支付宝支付笔数",
-                type: "number"
-            }, {
-                caption: "微信支付笔数",
-                type: "number"
-            }, {
-                caption: "其它支付笔数",
-                type: "number"
-            }, {
-                caption: ""
-            }]
-        ]
+        }
     });
 
     //支付方式汇总---补充
@@ -223,18 +203,27 @@ module.exports = (Router) => {
         modelName : ["SalesPerfPayModeTotal2"],
         platform : false,
         date_picker : false,
-        paging : [true],
+        // paging : [true],
         toggel : true,
         order : ["-date"],
         params(query , params , sendData){
             if(!query.type) params.type = "ALL";
-            delete params.aliy_pay;
+            try{
+                //rows依据数据库数据生成，不知道前端会发哪个特殊字段。所以过滤所有没有查询意义的字段
+                let key = ["starttime" , "endtime" , "day_type" , "type" , "limit" , "page" , "date"];
+                for(let n in params){
+                    if(key.indexOf(n.toLowerCase()) < 0){
+                        delete params[n];
+                    }
+                }
+            }catch(e){}
+
             return params;
         },
         filter(data, query, dates) {
             return filter.tradePanelThree_add(data , query , dates);
         },
-        rows: [
+        /*rows: [
             ["date" , "all_pay_num" , "aliy_pay" , "weixin_pay" , "other_pay"]
         ],
         cols: [
@@ -253,7 +242,7 @@ module.exports = (Router) => {
             }, {
                 caption: "其它支付笔数"
             }]
-        ]
+        ]*/
     });
 
 
@@ -295,7 +284,7 @@ module.exports = (Router) => {
         modelName : ["SalesPerfGuomeibiTotal2"],
         platform : false,
         date_picker : false,
-        paging : [true],
+        // paging : [true],
         toggel : true,
         order : ["-date"],
         params(query , params , sendData){
@@ -384,7 +373,7 @@ module.exports = (Router) => {
         modelName : ["SalesPerfCoupleTotal2"],
         platform : false,
         date_picker : false,
-        paging : [true],
+        // paging : [true],
         toggel : true,
         order : ["-date"],
         params(query , params , sendData){
@@ -472,7 +461,7 @@ module.exports = (Router) => {
         modelName : ["SalesPerfConversion2"],
         platform : false,
         date_picker : false,
-        paging : [true],
+        // paging : [true],
         toggel : true,
         order : ["-date"],
         params(query , params , sendData){

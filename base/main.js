@@ -14,6 +14,8 @@ var utils = require("../utils"),
     orm = require("orm"),
     cacheTime = 1;
 
+let eventproxy = require("eventproxy");
+
 function api(Router, options) {
     var defaultOption = utils.mixin({
         //路由
@@ -280,10 +282,30 @@ api.prototype = {
                     sendData[this.dataName[i]] = {};
                     if(this[this.sql[i]]) {
                         if (this.paging[i]) {
-                            sendData[this.dataName[i]].data =
+                            let REsult = await((() => {
+                                return new Promise((resolve , reject)=>{
+                                    let ep = new eventproxy();
+
+                                    this._findDatabaseSql2(req, this[this.sql[i]](query, params, false) , (data)=>{
+                                        ep.emit("hello" , data);
+                                    });
+                                    this._findDatabaseSql2(req, this[this.sql[i]](query, params, true) , (data)=>{
+                                        ep.emit("hello" , data);
+                                    });
+                                    ep.after("hello" , 2 , (result) => {
+                                        resolve(result);
+                                    });
+                                });
+                            })());
+                            sendData[this.dataName[i]].data = REsult[0];
+                            sendData[this.dataName[i]].count = REsult[1];
+                            
+                            
+                            /*sendData[this.dataName[i]].data =
                                 await(this._findDatabaseSql(req, this[this.sql[i]](query, params, false)));
                             sendData[this.dataName[i]].count =
-                                await(this._findDatabaseSql(req, this[this.sql[i]](query, params, true)));
+                                await(this._findDatabaseSql(req, this[this.sql[i]](query, params, true)));*/
+
                         } else {
                             sendData[this.dataName[i]].data =
                                 await(this._findDatabaseSql(req, this[this.sql[i]](query, params)));
@@ -460,6 +482,16 @@ api.prototype = {
             }
         });
     }),
+    _findDatabaseSql2 (req, sqlObject , callback){
+        try{
+            req.models.db1.driver.execQuery(sqlObject.sql, sqlObject.params, (err, data) => {
+                if(err) console.log(err);
+                return callback && callback(data);
+            });
+        }catch(err) {
+            console.log(err);
+        }
+    },
     setRouter(Router) {
         Router.get(this.router + '_json', this._sendData.bind(this, 'json'));
         Router.get(this.router + '_jsonp', this._sendData.bind(this, 'jsonp'));

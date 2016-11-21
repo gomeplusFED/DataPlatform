@@ -45,11 +45,7 @@ module.exports = {
         for(var i = 0; i < source.length; i++) {
             var key = source[i];
             key.id = (page - 1) * 20 + i + 1;
-            if(i < 5) {
-                key.operating = "<button bottom='true' class='btn btn-default' url_detail='/useAnalysis/wap'>详情>></button>";
-            } else{
-                key.operating = "<button class='btn btn-default' url_detail='/useAnalysis/wap'>详情>></button>";
-            }
+            key.operating = "<button class='btn btn-default' url_detail='/useAnalysis/wap'>详情>></button>";
             key.avg_stay_time = Math.round(key.avg_stay_time);
             newData.push(key);
         }

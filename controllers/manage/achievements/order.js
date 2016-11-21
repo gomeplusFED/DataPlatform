@@ -9,6 +9,33 @@ var api = require("../../../base/main"),
 
 module.exports = (Router) => {
    
+    Router = Router.get("/achievements/orderZero_json" , function(req , res , next){
+
+        res.json({
+            code: 200,
+            modelData: [],
+            components: {
+                filter_select: [{
+                    title: "平台选择",
+                    filter_key: "type",
+                    groups: [{
+                        key: "ALL",
+                        value: "全部平台"
+                    }, {
+                        key: "app",
+                        value: "APP"
+                    }, {
+                        key: "wap",
+                        value: "WAP"
+                    }, {
+                        key: "pc",
+                        value: "PC"
+                    }]
+                }]
+            }
+        });
+    });
+
     //订单趋势
     Router = new api(Router, {
         router : "/achievements/orderOne",
@@ -35,7 +62,7 @@ module.exports = (Router) => {
                 {key: 'pay_lv', value: '支付成功率' }
             ]
         }],
-        global_platform: {
+        /*global_platform: {
             show: true,
             key : "type",
             name : "平台切换（默认全部平台）",
@@ -52,7 +79,7 @@ module.exports = (Router) => {
                 key: 'PC',
                 name: 'PC'
             }]
-        },
+        },*/
         params(query , params , sendData){
             if(!query.type){
                 params.type = "ALL";
