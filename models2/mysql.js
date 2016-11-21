@@ -64,6 +64,21 @@ function connect(app){
             }
 
             models.db1 = db;
+
+
+            /*let i = 0;
+            for(let i=30000;i<100000;i++){
+                models.db1.driver.execQuery("INSERT INTO `ads2_itm_run_top` (`id`, `date`, `day_type`, `type`, `name`, `product_acc_pv`, `product_acc_uv`, `product_collect`, `share_commodity_num`, `product_cart`, `products_order`, `order_commodity_num`, `shop_pay_price`, `products_return_num`, `refund_fee`, `category_id_1`, `category_id_2`, `category_id_3`, `category_id_4`) VALUES ("+i+", '2016-09-20', 1, 'ALL', '三星', 3.00, 1.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 'ALL', 'ALL', '5038', 'ALL')", [] , (err , data) => {
+                    console.log(i);
+                    // console.log(data);
+                });
+            }*/
+            
+
+
+
+
+
             next();
         }
     }));

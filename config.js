@@ -174,10 +174,16 @@ const Config = {
 
                 obj.achievements.product(),
                 obj.achievements.productSale(),
-                obj.achievements.trade(),
+                
                 obj.achievements.tradePanel(),
+                obj.achievements.trade(),
+                
                 obj.achievements.vshop(),
                 obj.achievements.vtrade()
+            ],
+            routers: [
+                obj.achievements.pay(),
+                obj.achievements.order()
             ]
         },
         "14": {
