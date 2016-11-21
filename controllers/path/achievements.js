@@ -194,7 +194,7 @@ module.exports = {
                     query_api : "/achievements/tradeTwo"
                 },
                 {
-                    type : "table",
+                    type : "chart",
                     title : "交易用户分布",
                     query_api : "/achievements/tradeThree"
                 },

@@ -95,7 +95,8 @@ module.exports = {
             data : result,
             config: { // 配置信息
                 stack: false  // 图的堆叠
-            }
+            },
+            default : true  //默认展示图表
         }];
     },
 
@@ -246,7 +247,8 @@ module.exports = {
             data : result,
             config: { // 配置信息
                 stack: false  // 图的堆叠
-            }
+            },
+            default: true
         }];
     },
    
@@ -311,7 +313,8 @@ module.exports = {
             data : result,
             config: { // 配置信息
                 stack: false  // 图的堆叠
-            }
+            },
+            default : true
         }];
     },
 
@@ -400,7 +403,8 @@ module.exports = {
             data : result,
             config: { // 配置信息
                 stack: false  // 图的堆叠
-            }
+            },
+            default : true
         }];
     },
 
@@ -470,7 +474,8 @@ module.exports = {
             data : result,
             config: { // 配置信息
                 stack: false  // 图的堆叠
-            }
+            },
+            default : true 
         }];
     }
 };

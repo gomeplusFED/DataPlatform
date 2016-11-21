@@ -144,7 +144,9 @@ module.exports = {
             item.Man_price   = util.dealDivision( item.pay_sum , item.pay_user , 2);
         }
 
-        if(query.main_show_type_filter == "chart"){
+        if(query.main_show_type_filter == "table"){
+            return util.toTable([source], data.rows, data.cols, [count]);
+        }else{
             let map = {} , result = {} , 
                 filter = query.filter_key;
             let i = data.rows[0].indexOf(filter),
@@ -176,8 +178,6 @@ module.exports = {
                 }
             }]
         }
-       
-        return util.toTable([source], data.rows, data.cols, [count]);
     },
     tradeFour(data, query , dates) {
 
