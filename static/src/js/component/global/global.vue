@@ -36,13 +36,14 @@
 					}
 				},
 				argvs: {
-					channel: "",
-					coupon_type: "",
+					type: '',
+					channel: '',
+					ver: '',
+					coupon_type: '',
+					startTime: '',
+					endTime: '',
 					day_type: 1,
-					endTime: "2016-08-29",
-					startTime: "2016-08-23",
-					type: "",
-					ver: ""
+					main_show_type_filter : ''
 				},
 				showConfig: {
 					flexible_btn: false,
@@ -53,7 +54,7 @@
 		ready() {
 			var _this = this;
 			eventBus.$on('loadGlobal', function(data) {
-				data.date_picker = data.date_picker || {show: false};
+				data.date_picker = data.date_picker || {show: false, defaultData: 7};
 				_this.pageComponentsData = data;
 
 				if (data.filter_select && data.filter_select.length) { 
