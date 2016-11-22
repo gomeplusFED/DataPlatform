@@ -16,6 +16,20 @@ var xhrProxy = fs.readFileSync(path.resolve(__dirname,'./script/xhr-proxy.js'), 
 
 module.exports = (Router) => {
     
+    // 用户信息
+    Router.get('/databp/userInfo', (req, res, next) => {
+        try {
+            let {name, username, email, department} = req.session.userInfo;
+            let result = {name, username, email, department};
+            res.json(result);
+        } catch(err) {
+            console.log(err);
+            next(err);
+        }
+
+    });
+
+
     //圈子数据总揽
     Router.get('/databp/html', (req, res, next) => {
         
@@ -51,7 +65,7 @@ module.exports = (Router) => {
             let rawcookie = result.headers;
             if ((rawcookie = rawcookie._headers) && (rawcookie = rawcookie['set-cookie'])) {
                 rawcookie = rawcookie.toString();
-                let cookie = rawcookie.match(/(mx_pc_gomeplusid|content_ctag|mx_pc_code_total)=.+?;/g);
+                let cookie = rawcookie.match(/(mx_pc_gomeplusid|mx_wap_gomeplusid|content_ctag|isnew|ssid|plasttime|mx_pc_code_total)=.+?;/g);
                 if (cookie) {
                     databpSess.cookie = cookie;
                 } else {

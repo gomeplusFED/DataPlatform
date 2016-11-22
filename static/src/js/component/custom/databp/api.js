@@ -1,7 +1,7 @@
 var store = require('../../../store/store.js');
 var actions = require('../../../store/actions.js');
 var $ = require('jQuery');
-// const baseurl = 'http://10.69.20.59:8090/bomber-pie';
+//const baseurl = 'http://10.69.20.59:8090/bomber-pie';
 const baseurl = 'http://10.69.112.146:38080/bomber-pie'
 
 $.support.cors = true;
@@ -15,12 +15,13 @@ function filterArgs(data, args) {
 		}
 	}
 	return newdata;
-}
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
 
 function buildAjax(url, data, type = 'get') {
 	return new Promise(function(s, j){
 		$.ajax({
 			url: baseurl + url,
+			timeout : 3000,
 			type,
 			dataType: 'JSON',
 			data,
@@ -28,7 +29,7 @@ function buildAjax(url, data, type = 'get') {
 				s(data);
 			},
 			error(xhr, status, error) {
-				j('请求失败：' + status);
+				j(`请求${baseurl + url}失败：` + error);
 			}
 		});
 	});
@@ -48,7 +49,7 @@ function extractResult(res) {
 	});
 }
 function errHandler(err) {
-	var msg = '请求过程中失败：' + err.toString();
+	var msg = '请求过程发生错误,' + JSON.stringify(err);
 	actions.alert(store, {
 		show: true,
 		msg,
@@ -60,15 +61,35 @@ function errHandler(err) {
 
 var api = {
 	// {pageUrl, selector, platform, pointId, matchUrlId}
+	getUserInfo() {
+		return new Promise(function(s, j){
+			$.ajax({
+				url: '/databp/userInfo',
+				type: 'get',
+				dataType: 'JSON',
+				timeout : 3000,
+				success(data) {
+					if (data.iserror) {
+						j('请求用户信息失败');
+					} else {
+						s(data);
+					}
+				},
+				error(xhr, status, error) {
+					j('请求用户信息失败：' + status);
+				}
+			})
+		}).catch(errHandler);
+	},
 	getBp(data) {
 		return buildAjax('/point', filterArgs(data, ['pageUrl', 'selector', 'platform', 'pointId'])).then(extractResult).then(function(res){
 			// 从私有埋点中去除公共埋点	
-			let tmppub = res.publicParam.split('&');
-			let tmppri = res.privateParam;
-			for(let s of tmppub) {
-				tmppri = tmppri.replace(s, '');
-			}
-			res.privateParam = tmppri;
+			//let tmppub = res.publicParam.split('&');
+			//let tmppri = res.privateParam;
+			// for(let s of tmppub) {
+			// 	tmppri = tmppri.replace(s, '');
+			// }
+			//res.privateParam = tmppri;
 			if(res.uniquePoint === '1') {
 				res.publicParam = '';
 			}
@@ -77,7 +98,7 @@ var api = {
 	},
 	// {pageUrl, selector, pointName, platform, pointId, matchUrlId, pattern, publicParam, privateParam}
 	updateBp(data) {
-		return buildAjax('/point', filterArgs(data, ['pageUrl', 'selector', 'pointName', 'platform', 'pointId', 'matchUrlId', 'pattern', 'publicParam', 'privateParam']), 'put').then(extractResult).catch(errHandler).then(function(res) {
+		return buildAjax('/point', filterArgs(data, ['pageUrl', 'selector', 'pointName', 'platform', 'pointId', 'matchUrlId', 'pattern', 'publicParam', 'privateParam', 'userInfo']), 'put').then(extractResult).catch(errHandler).then(function(res) {
 			actions.alert(store, {
 				show: true,
 				msg: '更新成功',

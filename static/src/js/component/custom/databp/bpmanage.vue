@@ -35,6 +35,7 @@
 					<th >埋点事件名称</th>
 					<th >选择器</th>
 					<th >埋点参数</th>
+					<th >最后修改人</th>
 					<th >埋点设置时间</th>
 					<th>操作</th>
 				</tr>
@@ -44,8 +45,9 @@
 					<td>{{i + baseIndex}}</td>
 					<td>{{item.pointName}}</td>
 					<td>单击</td>
-					<td title={{item.selector}}>{{item.selector}}</td>
-					<td  title={{item.pointParam}}>{{item.pointParam}}</td>
+					<td title="{{item.selector}}">{{item.selector}}</td>
+					<td title="{{item.pointParam}}">{{item.pointParam}}</td>
+					<td title="{{item.userInfo?(item.userInfo.department + item.userInfo.email) : '--'}}">{{item.userInfo.name || '--'}}</td>
 					<td>{{item.updateTime |Date 'yyyy-MM-dd hh:mm:ss'}}</td>
 					<td><a @click="edit(item)">修改</a>&nbsp<a @click="del(item.id)">删除</a></td>
 				</tr>
