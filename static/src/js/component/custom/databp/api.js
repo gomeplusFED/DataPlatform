@@ -1,7 +1,7 @@
 var store = require('../../../store/store.js');
 var actions = require('../../../store/actions.js');
 var $ = require('jQuery');
-// const baseurl = 'http://10.69.20.59:8090/bomber-pie';
+//const baseurl = 'http://10.69.20.59:8090/bomber-pie';
 const baseurl = 'http://10.69.112.146:38080/bomber-pie'
 
 $.support.cors = true;
@@ -15,7 +15,7 @@ function filterArgs(data, args) {
 		}
 	}
 	return newdata;
-}
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
 
 function buildAjax(url, data, type = 'get') {
 	return new Promise(function(s, j){
@@ -84,12 +84,12 @@ var api = {
 	getBp(data) {
 		return buildAjax('/point', filterArgs(data, ['pageUrl', 'selector', 'platform', 'pointId'])).then(extractResult).then(function(res){
 			// 从私有埋点中去除公共埋点	
-			let tmppub = res.publicParam.split('&');
-			let tmppri = res.privateParam;
-			for(let s of tmppub) {
-				tmppri = tmppri.replace(s, '');
-			}
-			res.privateParam = tmppri;
+			//let tmppub = res.publicParam.split('&');
+			//let tmppri = res.privateParam;
+			// for(let s of tmppub) {
+			// 	tmppri = tmppri.replace(s, '');
+			// }
+			//res.privateParam = tmppri;
 			if(res.uniquePoint === '1') {
 				res.publicParam = '';
 			}
