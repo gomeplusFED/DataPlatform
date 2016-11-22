@@ -224,7 +224,12 @@ module.exports = {
     productSaleFour(data , query , dates){
 
         var source = data.first.data,
-            num=query.filter_key22 / 1,
+            filter = {
+                product_acc_pv : 0,
+                order_commodity_num : 1,
+                share_commodity_num : 2
+            },
+            num=filter[query.filter_key22] / 1,
             sourceSum = data.first.count[0];
 
         if(num == 2) num = 0;
