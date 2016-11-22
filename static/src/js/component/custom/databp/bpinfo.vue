@@ -1,6 +1,6 @@
 <template>
 <div class="mask" v-show="bpConfig.show"   v-on:dragover.stop.prevent="" v-on:drop.stop.prevent="drop" @click="warning">
-	<div class="infobox" draggable="true"  v-on:dragstart="dragstart" v-on:drag.stop.prevent="draging" v-bind:style="infopos">
+	<div class="infobox" :draggable="draggable"  v-on:dragstart="dragstart" v-on:drag.stop.prevent="draging" v-bind:style="infopos">
 		<div class="closer" title="关闭" @click="hide"></div>
 		<div class="sider-nav ">
 			<div class="tabs-container">
@@ -10,7 +10,7 @@
 				</ul> 
 				<div class="tab-content tabs-content zbgxt-content">
 					<div id="tab_baseinfo" class="tab-pane active in">
-						<div class="extendinfo">
+						<div class="extendinfo" @focusin="setDraggable(false)" @focusout="setDraggable(true)">
 							<div>
 								<label>埋点名称</label>
 								<input type='text' class='form-control' placeholder='' v-model="config.pointName">
@@ -68,6 +68,7 @@ var bpinfo = Vue.extend({
 	data: function() {
 		return {
 			dragpos: {},
+			draggable: true,
 			userInfo: null,
 			config: {
 				pointId: null,
@@ -168,6 +169,9 @@ var bpinfo = Vue.extend({
 		});
 	},
 	methods: {
+		setDraggable(val) {
+			this.draggable = val;
+		},
 		init() {
 			this.loading.show = true;
 			var _this = this;
