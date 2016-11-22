@@ -69,17 +69,20 @@
 		},
 		route: {
 	        activate: function (transition) {
+	        	this.loading.show = true;
 				let query = this.$route.query;   	
 	        	let pageUrl = query.pageUrl;
 				let platform = query.platform;
 				if (pageUrl && platform) {
 					this.bpConfig.pageUrl = pageUrl;
 					this.bpConfig.platform = platform;
-					this.search();
+					this.search(true);
 					if(query.selector) {
 						query.show = true;
 						actions.databp(store, query);
 					}
+				} else if (this.iframe_url === '') {
+					this.loading.show = false;
 				}
 				return Promise.resolve(true);
 	        }
@@ -185,10 +188,10 @@
 				});
 				this.search();
 			},
-			search() {
+			search(forceloading = false) {
 				this.loading.show = true;
 				var newiframe_url = '/databp/html?m='+this.bpConfig.platform+'&url=' + this.bpConfig.pageUrl;
-				if (newiframe_url === this.iframe_url) {
+				if (newiframe_url === this.iframe_url && !forceloading) {
 					this.loading.show = false;
 				}
 				this.iframe_url = newiframe_url;
