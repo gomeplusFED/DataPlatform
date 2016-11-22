@@ -68,6 +68,7 @@ var bpinfo = Vue.extend({
 	data: function() {
 		return {
 			dragpos: {},
+			userInfo: null,
 			config: {
 				pointId: null,
 				pointName: '',
@@ -161,6 +162,9 @@ var bpinfo = Vue.extend({
 			if (val) {
 				this.init();
 			}
+		});
+		api.getUserInfo().then((data) =>{
+			this.userInfo = JSON.stringify(data);
 		});
 	},
 	methods: {
@@ -283,8 +287,9 @@ var bpinfo = Vue.extend({
 					existKeys[a[0]] = 1;
 				}
 			}
-			_this.config.publicParam = this.publicBpStr;
-			_this.config.privateParam = this.privateBpStr;
+			_this.config.publicParam = _this.publicBpStr;
+			_this.config.privateParam = _this.privateBpStr;
+			_this.config.userInfo = _this.userInfo;
 			if (_this.config.pointId) {
 				api.updateBp(_this.config).then(function(res) {
 					// 更新成功刷新传入的数据
