@@ -51,7 +51,7 @@ module.exports = (Router) => {
             let rawcookie = result.headers;
             if ((rawcookie = rawcookie._headers) && (rawcookie = rawcookie['set-cookie'])) {
                 rawcookie = rawcookie.toString();
-                let cookie = rawcookie.match(/(mx_pc_gomeplusid|content_ctag|mx_pc_code_total)=.+?;/g);
+                let cookie = rawcookie.match(/(mx_pc_gomeplusid|mx_wap_gomeplusid|content_ctag|isnew|ssid|plasttime|mx_pc_code_total)=.+?;/g);
                 if (cookie) {
                     databpSess.cookie = cookie;
                 } else {
