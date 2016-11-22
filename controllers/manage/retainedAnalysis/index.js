@@ -25,7 +25,7 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/retainedAnalysis/retainedOne",
         platform : false,
-        modelName : ["UserKeepResult"],
+        modelName : ["UserKeepRate"],
         date_picker : false,
         params(query, params) {
             params.type = query.type || "ios";
@@ -60,7 +60,7 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/retainedAnalysis/retainedTwo",
         platform : false,
-        modelName : ["UserKeepResult"],
+        modelName : ["UserKeepRate"],
         date_picker : false,
         params(query, params) {
             params.type = query.type || "ios";
