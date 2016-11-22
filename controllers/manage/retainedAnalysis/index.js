@@ -30,7 +30,7 @@ module.exports = (Router) => {
         params(query, params) {
             params.type = query.type || "ios";
             if(query.type === "all") {
-                params.type = ["android", "app"];
+                params.type = ["android", "ios"];
             }
 
              return params;
@@ -68,18 +68,22 @@ module.exports = (Router) => {
         params(query, params) {
             params.type = query.type || "ios";
             if(query.type === "all") {
-                params.type = ["android", "app"];
+                params.type = ["android", "ios"];
             }
 
              return params;
         },
         firstSql(query, params, isCount) {
-            let _sql = 'SELECT date, GROUP_CONCAT(value, ";", `rate_key`) AS `key`, day_type FROM `ads2_user_retention_rate` WHERE date BETWEEN ? AND ?';
-            let _params = [query.startTime, query.endTime, params.type, params.day_type];
-            if(typeof params.type === "array") {
-                _sql += ` AND type IN (${params.type.join(",")})`
+            let _sql = 'SELECT date, GROUP_CONCAT(value, ";", `rate_key`) AS `key`, day_type FROM `ads2_user_retention_rate` WHERE date BETWEEN ? AND ? ';
+            let _params = [query.startTime, query.endTime, params.day_type];
+            if(params.type instanceof Array) {
+                let typeStr = [];
+                for(let type of params.type) {
+                    typeStr.push(`'${type}'`);
+                }
+                _sql += ` AND type IN (${typeStr.join(",")}) `;
             } else {
-                _sql += `AND type=${params.type}`
+                _sql += `AND type='${params.type}'`;
             }
             _sql += ` AND day_type=? GROUP BY date ORDER BY date DESC`;
             if(isCount) {
