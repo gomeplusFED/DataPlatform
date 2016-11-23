@@ -134,7 +134,7 @@ var api = {
 	// useless: selector
 	// {pageUrl, platform, pointName, page, size}
 	listBps(data){
-		return buildAjax('/pointList', filterArgs(data, ['pageUrl', 'platform', 'pointName', 'page', 'size', 'startTime', 'endTime'])).then(function(res) {
+		return buildAjax('/pointList', filterArgs(data, ['pageUrl', 'platform', 'pointName', 'page', 'size', 'startTime', 'endTime', 'pattern'])).then(function(res) {
 			if(res.code !== '200' || res.iserror !== '0') {
 				return Promise.reject('获取埋点信息失败：' + res.msg);
 			}
