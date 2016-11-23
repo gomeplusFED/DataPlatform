@@ -74,13 +74,13 @@
 	        	let pageUrl = query.pageUrl;
 				let platform = query.platform;
 				if (pageUrl && platform) {
-					this.bpConfig.pageUrl = pageUrl;
-					this.bpConfig.platform = platform;
-					this.search(true);
 					if(query.selector) {
 						query.show = true;
 						actions.databp(store, query);
 					}
+					this.bpConfig.pageUrl = pageUrl;
+					this.bpConfig.platform = platform;
+					this.search(true);
 				} else if (this.iframe_url === '') {
 					this.loading.show = false;
 				}
