@@ -10,7 +10,7 @@
 				</ul> 
 				<div class="tab-content tabs-content zbgxt-content">
 					<div id="tab_baseinfo" class="tab-pane active in">
-						<div class="extendinfo" @focusin="setDraggable(false)" @focusout="setDraggable(true)">
+						<div class="extendinfo" @focusin="setDraggable(false)" @focusout="unfocus">
 							<div>
 								<label>埋点名称</label>
 								<input type='text' class='form-control' placeholder='' v-model="config.pointName">
@@ -172,6 +172,10 @@ var bpinfo = Vue.extend({
 		setDraggable(val) {
 			this.draggable = val;
 		},
+		unfocus() {
+			this.setDraggable(true);
+			this.selectpos.show = false;
+		},
 		init() {
 			this.loading.show = true;
 			var _this = this;
@@ -229,7 +233,7 @@ var bpinfo = Vue.extend({
 			this.selectpos.show = false;
 		},
 		dragstart(e) {
-			this.selectpos.show = false;
+			// this.selectpos.show = false;
 			e.dataTransfer.effectAllowed = "move";  //移动效果
 			e.dataTransfer.setData("text", '');  //附加数据，　没有这一项，firefox中无法移动
 			this.dragpos.x = e.offsetX || e.clientX - $(e.target).offset().left;
