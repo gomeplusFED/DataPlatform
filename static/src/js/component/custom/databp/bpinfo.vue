@@ -17,7 +17,7 @@
 							</div>
 							<div><label>选择器</label>{{config.selector}}</div>
 							<div><label>事件类型</label>单击事件</div>
-							<div><label>pattern</label>{{config.pattern}}</div>
+							<div><label>匹配模式</label>{{config.pattern}}</div>
 							<div><label>全局埋点信息</label>{{publicBpStr}} <button @click="publicBp.push(['', ''])">+</button></div>
 							<div>
 								<div v-for="(i,item) in publicBp" class="pair">
