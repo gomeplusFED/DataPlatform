@@ -1,7 +1,7 @@
 var store = require('../../../store/store.js');
 var actions = require('../../../store/actions.js');
 var $ = require('jQuery');
-//const baseurl = 'http://10.69.20.59:8090/bomber-pie';
+// const baseurl = 'http://10.69.20.59:8090/bomber-pie';
 const baseurl = 'http://10.69.112.146:38080/bomber-pie'
 
 $.support.cors = true;
@@ -29,7 +29,7 @@ function buildAjax(url, data, type = 'get') {
 				s(data);
 			},
 			error(xhr, status, error) {
-				j(`请求${baseurl + url}失败：` + error);
+				j(`请求${baseurl + url}失败, 错误信息: ${error || status}`);
 			}
 		});
 	});
@@ -48,8 +48,8 @@ function extractResult(res) {
 		}
 	});
 }
-function errHandler(err) {
-	var msg = '请求过程发生错误,' + JSON.stringify(err);
+function errHandler(errmsg) {
+	var msg = '请求过程发生错误,' + errmsg;
 	actions.alert(store, {
 		show: true,
 		msg,
