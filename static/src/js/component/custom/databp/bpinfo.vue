@@ -158,9 +158,8 @@ var bpinfo = Vue.extend({
 	},
 	props:['loading'],
 	created() {
-		this.$watch('bpConfig.show', function (val) {
-			this.selectpos.show = false;
-			if (val) {
+		this.$watch('bpConfig.trigger', function (val) {
+			if (this.bpConfig.show) {
 				this.init();
 			}
 		});
