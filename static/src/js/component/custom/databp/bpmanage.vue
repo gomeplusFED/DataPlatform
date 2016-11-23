@@ -11,8 +11,10 @@
 				<input class="form-control inp inpW2" type="text" placeholder="" value="单击" disabled>
 			</li>
 			<li>
+				<label>匹配模式</label>
+				<input class="form-control inp inpW1" type="text" placeholder="" v-model="searchParam.pattern">
 				<label>平台</label>
-				<select class="form-control inp inpW1" v-model="searchParam.platform">
+				<select class="form-control inp inpW2" v-model="searchParam.platform">
 					<option value='PC'>PC</option>
 					<option value='H5'>H5</option>
 				</select>
@@ -30,12 +32,14 @@
 		<table class="table table-hover ntable">
 			<thead>
 				<tr>
-					<th style="min-width:102px;width:7.97%;">序号</th>
+					<th >序号</th>
 					<th >埋点名称</th>
-					<th >埋点事件名称</th>
-					<th >选择器</th>
+					<th >事件</th>
+					<th >页面URL</th>
+					<th >匹配模式</th>
+<!-- 					<th >选择器</th> -->
 					<th >埋点参数</th>
-					<th >最后修改人</th>
+					<th >修改人</th>
 					<th >埋点设置时间</th>
 					<th>操作</th>
 				</tr>
@@ -45,7 +49,9 @@
 					<td>{{i + baseIndex}}</td>
 					<td>{{item.pointName}}</td>
 					<td>单击</td>
-					<td title="{{item.selector}}">{{item.selector}}</td>
+					<td title="{{item.pageUrl}}">{{item.pageUrl}}</td>
+					<td title="{{item.pattern}}">{{item.pattern}}</td>
+<!-- 					<td title="{{item.selector}}">{{item.selector}}</td> -->
 					<td title="{{item.pointParam}}">{{item.pointParam}}</td>
 					<td title="{{item.userInfo?(item.userInfo.department + item.userInfo.email) : '--'}}">{{item.userInfo.name || '--'}}</td>
 					<td>{{item.updateTime |Date 'yyyy-MM-dd hh:mm:ss'}}</td>
@@ -267,9 +273,9 @@
 	border-color: #c2c2c2 !important;
 }
 .nform-box ul li .inpW1 {
-	max-width: 180px;
+	max-width: 200px;
 }
-.nform-box ul li input.inpW2 {
+.nform-box ul li .inpW2 {
 	max-width: 100px;
 }
 .nform-box ul li input:last-child {
@@ -380,10 +386,25 @@
     background-color: #f2faff;
 }
 .ntable tr th:nth-child(3) {
-	width: 10%
+	width: 50px;
+}
+.ntable tr th:first-child {
+	width: 50px;
+}
+.ntable tr th:last-child {
+	width: 80px;
 }
 .ntable tr th:first-child {
 	width: 5%
+}
+.ntable tr th:nth-child(4) {
+	width: 200px;
+}
+.ntable tr th:nth-child(5) {
+	width: 200px;
+}
+.ntable tr th:nth-child(7) {
+	width: 80px;
 }
 .ntable tr td {
 	text-align: center;
