@@ -55,7 +55,7 @@
 					<td title="{{item.pointParam}}">{{item.pointParam}}</td>
 					<td title="{{item.userInfo?(item.userInfo.department + item.userInfo.email) : '--'}}">{{item.userInfo.name || '--'}}</td>
 					<td>{{item.updateTime |Date 'yyyy-MM-dd hh:mm:ss'}}</td>
-					<td><a @click="edit(item)">修改</a>&nbsp<a @click="del(item.id)">删除</a></td>
+					<td><a @click="edit(item)">修改</a>&nbsp<a @click="del(item.pointId)">删除</a></td>
 				</tr>
 				<tr v-show="noData">
 					 <td colspan="7">暂无数据</td>
