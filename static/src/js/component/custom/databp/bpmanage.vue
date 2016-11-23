@@ -138,7 +138,8 @@
 				searchParam: {
 					pointName: '',
 					platform: 'PC',
-					pageUrl: ''
+					pageUrl: '',
+					pattern: ''
 				}
 			}
 		},
@@ -154,14 +155,11 @@
 		methods: {
 			query() {
 				this.loading.show = true;
-				let options = {
-					pageUrl: this.searchParam.pageUrl, 
-					platform: this.searchParam.platform, 
-					pointName: this.searchParam.pointName, 
+				let options = Object.assign({
 					// page从0开始
 					page: this.paginationConf.currentPage - 1,
 					size: this.paginationConf.itemsPerPage
-				}
+				}, this.searchParam);
 				if (this.showDate) {
 					options.startTime = this.argvs.startTime + ' 00:00:00';
 					options.endTime= this.argvs.endTime + ' 23:59:59';
