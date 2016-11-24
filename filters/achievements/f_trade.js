@@ -193,7 +193,7 @@ module.exports = {
                 item.category_name = "ALL";
                 All_pay_sum = item.pay_sum;
             }else{
-                item.category_name = item["category_name_"+num];
+                item.category_name = item["category_name_"+num+1];
                 if(item["category_id_"+num] == "ALL"){
                     All_pay_sum = item.pay_sum;
                 }

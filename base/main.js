@@ -206,9 +206,7 @@ api.prototype = {
                     show : this.control_table_col
                 },
                 global_plataform : this.global_platform,
-                toggle: {
-                    show: this.toggle
-                }
+                toggle: this.toggle
             }
         });
     },

@@ -360,17 +360,17 @@ module.exports = {
                     query_api : "/achievements/payZero"
                 },
                 {
-                    type : "table",
+                    type : "chart",
                     title : "支付趋势",
                     query_api : "/achievements/payOne"
                 },
                 {
-                    type : "table",
+                    type : "chart",
                     title : "支付方式",
                     query_api : "/achievements/payTwo"
                 },
                 {
-                    type : "table",
+                    type : "chart",
                     title : "支付构成",
                     query_api : "/achievements/payThree"
                 }
