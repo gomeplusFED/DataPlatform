@@ -292,7 +292,6 @@ module.exports = (Router) => {
             return filter.tradePanelFive(data , query , dates);
         },
         rows: [
-            ["used_num" , "used_amount" , "lv"],
             ["used_num" , "used_amount" , "lv" , "operating"],
         ]
     });

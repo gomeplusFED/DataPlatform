@@ -15,7 +15,13 @@ module.exports = {
         }
 
 
-        if(query.main_show_type_filter == "chart"){
+        if(query.main_show_type_filter == "table"){
+            for(let item of source){
+                item.pay_lv = util.toFixed( item.pay_lv , 0 );
+            }
+            return util.toTable([source], data.rows, data.cols);
+        }else{
+
             /* chart */
             let map = {} , result = {};
             for(let i=1;i<data.rows[0].length;i++){
@@ -48,11 +54,6 @@ module.exports = {
                     stack: false,  // 图的堆叠,
                 }
             }];
-        }else{
-            for(let item of source){
-                item.pay_lv = util.toFixed( item.pay_lv , 0 );
-            }
-            return util.toTable([source], data.rows, data.cols);
         }
     },
 
@@ -68,6 +69,7 @@ module.exports = {
             }
         }
 
+        dates.reverse();
         dates.map((date)=>{
             result[date] = {};
             for(let item of Type){
@@ -91,7 +93,20 @@ module.exports = {
             Resource.push(obj);
         }
 
-        if(query.main_show_type_filter == "chart"){
+        if(query.main_show_type_filter == "table"){
+            data.rows[0] = ["date"].concat(Type);
+            data.cols[0] = [];
+            for(let key of Type){
+                let obj = {
+                    "caption" : key,
+                    "type" : "number"
+                }
+                data.cols[0].push(obj);
+            }
+            data.cols[0].unshift({"caption":"日期","type":"date"});
+
+            return util.toTable([Resource], data.rows, data.cols);
+        }else{
             /* chart */
             let map = {};
             for(let key of Type){
@@ -106,20 +121,6 @@ module.exports = {
                     stack: false,  // 图的堆叠,1
                 }
             }]
-        }else{
-
-            data.rows[0] = ["date"].concat(Type);
-            data.cols[0] = [];
-            for(let key of Type){
-                let obj = {
-                    "caption" : key,
-                    "type" : "number"
-                }
-                data.cols[0].push(obj);
-            }
-            data.cols[0].unshift({"caption":"日期","type":"date"});
-
-            return util.toTable([Resource], data.rows, data.cols);
         }
     },
 
@@ -135,6 +136,7 @@ module.exports = {
 
         data.rows[0] = Rows;
 
+        dates.reverse();
         dates.map((date)=>{
             let obj = {};
             Rows.map((key)=>{
@@ -170,7 +172,20 @@ module.exports = {
             }
         }
 
-        if(query.main_show_type_filter == "chart"){
+        if(query.main_show_type_filter == "table"){
+            for(let key in result){
+                let obj = {"date" : key};
+                for(let n in result[key]){
+                    obj[n] = result[key][n];
+                }
+
+                Source.push(obj);
+            }
+
+            return util.toTable([Source], data.rows, data.cols);
+        }else{
+            
+
             /* chart */
             let map = { value : "支付构成" } , Result = {};
             let Cols = data.cols[0];
@@ -190,17 +205,6 @@ module.exports = {
                     stack: false,  // 图的堆叠,1
                 }
             }];
-        }else{
-            for(let key in result){
-                let obj = {"date" : key};
-                for(let n in result[key]){
-                    obj[n] = result[key][n];
-                }
-
-                Source.push(obj);
-            }
-
-            return util.toTable([Source], data.rows, data.cols);
         }
     }
 };

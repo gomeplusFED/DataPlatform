@@ -4,8 +4,9 @@
  * @author Mr.He
  */
 
-var api = require("../../../base/main"),
-    filter = require("../../../filters/achievements/f_order");
+let api = require("../../../base/main"),
+    filter = require("../../../filters/achievements/f_order"),
+    orm = require("orm");
 
 module.exports = (Router) => {
    
@@ -129,6 +130,7 @@ module.exports = (Router) => {
             if(!query.type){
                 params.type = "ALL";
             }
+            params.order_source = orm.not_in(["ALL"]);
             return params;
         },
         filter(data, query, dates) {

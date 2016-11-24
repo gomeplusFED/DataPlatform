@@ -342,7 +342,7 @@ module.exports = (Router) => {
         },
         level_select: true,
         level_select_name: "category_id",
-        level_select_url: "/api/categories",
+        level_select_url: "/api/categories?level=2",
         filter(data, query, dates) {
             return filter.tradeFour(data, query, dates);
         },

@@ -119,15 +119,52 @@ module.exports = {
     orderTwo(data, query, dates) {
         let source = data.first.data[0],
             count  = data.first.count || 1,
-            sum    = data.first.sum;
-        
+            sum    = data.first.sum,
+            Result = {};
+
+        let keyValue = {
+            "01" : "社交",
+            "02" : "返利",
+            "03" : "搜索",
+            "04" : "推荐",
+            "05" : "运营位",
+            "06" : "活动",
+            "07" : "分享"
+        };
+
         for(let item of source){
-            item.order_num_lv = util.toFixed( util.dealDivision(item.order_num , sum[0]) , 0 );
-            item.pay_num_lv = util.toFixed( util.dealDivision(item.pay_num , sum[1]) , 0 );
-            item.pay_sum_lv = util.toFixed( util.dealDivision(item.pay_sum , sum[2]) , 0 );
+            if(!keyValue.hasOwnProperty(item.order_source)){
+                keyValue[item.order_source] = item.order_source;
+            }
+                
+            if(!Result[keyValue[item.order_source]]){
+                Result[keyValue[item.order_source]] = {
+                    "order_num" : 0,
+                    "pay_num"   : 0,
+                    "pay_sum"   : 0
+                }
+            }
+
+            Result[keyValue[item.order_source]].order_num += item.order_num;
+            Result[keyValue[item.order_source]].pay_num += item.pay_num;
+            Result[keyValue[item.order_source]].pay_sum += item.pay_sum;
         }
 
-        return util.toTable([source], data.rows, data.cols , [count]);
+        let RESULT = [];
+        for(let key in Result){
+            let obj = {};
+            obj["order_source"] = key;
+            obj["order_num"]    = Result[key].order_num;
+            obj["order_num_lv"] = util.toFixed( util.dealDivision(Result[key].order_num , sum[0]) , 0 );
+            obj["pay_num"]      = Result[key].pay_num;
+            obj["pay_num_lv"]   = util.toFixed( util.dealDivision(Result[key].pay_num , sum[1]) , 0 );
+            obj.pay_sum         = Result[key].pay_sum;
+            obj.pay_sum_lv      = util.toFixed( util.dealDivision(Result[key].pay_sum , sum[2]) , 0 );
+
+            RESULT.push(obj);
+        }
+
+        return util.toTable([RESULT], data.rows, data.cols , [count]);
     },
     orderThree(data , query , dates) {
         let map = {
