@@ -12,6 +12,7 @@ var utils = require("../utils"),
     async = require("asyncawait/async"),
     await = require("asyncawait/await"),
     orm = require("orm"),
+    sqlLogRunTime = require("./sqlLogRunTime"),
     cacheTime = 1;
 
 function api(Router, options) {
@@ -403,7 +404,10 @@ api.prototype = {
             }
         }
         return new Promise((resolve, reject) => {
+            let start = new Date();
             req.models[modelName].find(_params, (err, data) => {
+                let end = new Date();
+                sqlLogRunTime.writeToFile(start, end, modelName);
                 if (err) {
                     reject(err);
                 } else {
@@ -432,6 +436,7 @@ api.prototype = {
             _params[key] = params[key];
         }
         return new Promise((resolve, reject) => {
+            let start = new Date();
             var sql = req.models[modelName].find(_params).offset(offset).limit(limit);
             if(orderArray) {
                 for(var key of orderArray) {
@@ -439,6 +444,8 @@ api.prototype = {
                 }
             }
             sql.run((err, data) => {
+                let end = new Date();
+                sqlLogRunTime.writeToFile(start, end, modelName);
                 if (err) {
                     reject(err);
                 } else {
@@ -461,7 +468,10 @@ api.prototype = {
             }
         }
         return new Promise((resolve, reject) => {
+            let start  = new Date();
             req.models[modelName].count(_params, (err, data) => {
+                let end = new Date();
+                sqlLogRunTime.writeToFile(start, end, modelName);
                 if (err) {
                     reject(err);
                 } else {
@@ -484,6 +494,7 @@ api.prototype = {
             }
         }
         return new Promise((resolve, reject) => {
+            let start = new Date();
             var sql =  req.models[modelName].aggregate(_params);
             if(sumArray) {
                 for(var key of sumArray) {
@@ -491,6 +502,8 @@ api.prototype = {
                 }
             }
             sql.get(function(){
+                let end = new Date();
+                sqlLogRunTime.writeToFile(start, end, modelName);
                 var args = arguments;
                 if (args["0"]) {
                     reject(args["0"]);
