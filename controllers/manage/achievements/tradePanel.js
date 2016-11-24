@@ -163,7 +163,7 @@ module.exports = (Router) => {
         date_picker : false,
         // paging : [true],
         toggel : true,
-        order : ["-date"],
+        order : ["-date","-order_channel"],
         params(query , params , sendData){
             if(!query.type) params.type = "ALL";
             try{

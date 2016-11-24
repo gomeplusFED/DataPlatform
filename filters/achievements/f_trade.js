@@ -151,8 +151,8 @@ module.exports = {
                 filter = query.filter_key;
             let i = data.rows[0].indexOf(filter);
 
-            if(!i) i = 0; //处理前端参数出错的情况
-            let names=data.cols[0][i].caption;
+            if(i < 0) i = 0; //处理前端参数出错的情况
+            let names = data.cols[0][i].caption;
 
             map.pv = names;
             let max = 0;
@@ -193,7 +193,7 @@ module.exports = {
                 item.category_name = "ALL";
                 All_pay_sum = item.pay_sum;
             }else{
-                item.category_name = item["category_name_"+num+1];
+                item.category_name = item["category_name_"+(num+1)];
                 if(item["category_id_"+num] == "ALL"){
                     All_pay_sum = item.pay_sum;
                 }

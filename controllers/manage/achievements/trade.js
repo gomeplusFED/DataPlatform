@@ -159,7 +159,9 @@ module.exports = (Router) => {
         router: "/achievements/tradeTwo",
         modelName: ["SalesOverview2"],
         platform: false,
-        toggle: true,
+        toggle: {
+            show : true
+        },
         paging: [true],
         filter_select: [{
             title: '指标选择(图表使用)',
@@ -200,9 +202,11 @@ module.exports = (Router) => {
         date_picker_data: 1,
         paging: [true],
         order: ["-date"],
-        toggle: true,
+        toggle: {
+            show : true
+        },
         filter_select: [{
-            title: '指标选择',
+            title: '指标选择(图表使用)',
             filter_key: 'filter_key',
             groups: [{
                 key: 'pay_num',

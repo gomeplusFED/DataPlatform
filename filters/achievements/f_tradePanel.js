@@ -237,6 +237,7 @@ module.exports = {
         }
 
         let result = {};
+        dates.reverse();
         for(let date of dates){
             result[date] = {};
             for(let key of Type){
