@@ -8,8 +8,7 @@
     }
   ],
   "scripts": {
-    "test": "pm2-dev app.js",
-    "pretest":"echo I am run test go",
+    "start": "pm2-dev app.js"
   },
   "description": "DataPlatform web project",
   "engines": {
