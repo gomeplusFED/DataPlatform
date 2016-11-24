@@ -6,3 +6,4 @@ npm-debug.log
 .vscode/launch.json
 models2/allModules.json
 pm2/
+sqlLogRunTime.txt

@@ -333,7 +333,7 @@ var Chart = Vue.extend({
 							}
 							var chartOptions = _this.rinseData(item.type, item.data, item.map, item.config);
 							setTimeout(function() {
-								if (chartOptions.series[0].data.length) {
+								if (chartOptions.series.length && chartOptions.series[0].data.length) {
 									var Chart = echarts.init($('#chart_' + _this.index).find('.chart_con').eq(domIndex)[0]);
 									_this.chartHeight = 400;
 									if (item.type === 'map') {

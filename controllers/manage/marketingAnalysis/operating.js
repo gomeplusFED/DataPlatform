@@ -4,6 +4,7 @@
  * @fileoverview 活动详情
  */
 var api = require("../../../base/main"),
+    orm = require("orm"),
     _ = require("lodash"),
     filter = require("../../../filters/marketingAnalysis/operating");
 
@@ -13,6 +14,20 @@ module.exports = (Router) => {
         router : "/marketingAnalysis/operatingOne",
         modelName : ["CamCamlistChannel", "Channel"],
         platform : false,
+        fixedParams(req, query, cb) {
+            req.models.ActivityChannelRelationship.find({
+                activity_id : orm.like(query.active_no + "%")
+            }, (err, data) => {
+                if(err) cb(err);
+                let ids = _.pluck(data, "channel_id");
+                query.channel_no = [];
+                for(let id of ids) {
+                    query.channel_no.push(id.substr(0, 5));
+                }
+                delete query.active_no;
+                cb(null, query);
+            });
+        },
         secondParams(query, params, data) {
             let ids = _.uniq(_.pluck(data.first.data[0], "channel_no"));
             return {
@@ -59,13 +74,27 @@ module.exports = (Router) => {
         platform : false,
         paging : [true, false],
         excel_export : true,
+        fixedParams(req, query, cb) {
+            req.models.ActivityChannelRelationship.find({
+                activity_id : orm.like(query.active_no + "%")
+            }, (err, data) => {
+                if(err) cb(err);
+                let ids = _.pluck(data, "channel_id");
+                query.channel_no = [];
+                for(let id of ids) {
+                    query.channel_no.push(id.substr(0, 5));
+                }
+                delete query.active_no;
+                cb(null, query);
+            });
+        },
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
         firstSql(query, params, isCount) {
             let filter_type = query.filter_type || "date",
-                config = ["date BETWEEN ? AND ?", "active_no=?", "day_type=?"],
+                config = ["date BETWEEN ? AND ?", "channel_no=?", "day_type=?"],
                 obj = [query.startTime, query.endTime, query.active_no, 1];
             if(isCount) {
                 let sql = `SELECT COUNT(*) count FROM ads2_cam_camlist_channel WHERE ${config.join(" AND ")} GROUP BY ${filter_type}`;

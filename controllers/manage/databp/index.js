@@ -7,23 +7,71 @@
 var fetch = require('node-fetch');
 var fs = require('fs');
 var path = require('path');
-// var cheerio = require('cheerio'),
-var xhrProxy = `<script>${fs.readFileSync(path.resolve(__dirname,'./script/xhr-proxy.js'), {encoding: 'utf8'})}</script>`;
+var querystring = require('querystring');
+var https = require('https');
+var xhrProxy = fs.readFileSync(path.resolve(__dirname,'./script/xhr-proxy.js'), {encoding: 'utf8'});
+
+
+
 
 module.exports = (Router) => {
     
-    //圈子数据总揽
-    Router.get("/databp/html", (req, res, next) => {
-        let url = req.query.url;
-        let mobile = (req.query.m === 'H5'? true:false);
-        let options = {};
-        if (mobile) {
-            options.headers = {
-                'User-Agent':'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1'
-            }
+    // 用户信息
+    Router.get('/databp/userInfo', (req, res, next) => {
+        try {
+            let {name, username, email, department} = req.session.userInfo;
+            let result = {name, username, email, department};
+            res.json(result);
+        } catch(err) {
+            console.log(err);
+            next(err);
         }
+
+    });
+
+
+    //圈子数据总揽
+    Router.get('/databp/html', (req, res, next) => {
+        
+        let url = req.query.url;
+        let trunk = url.replace(/\/[^\/]*?$/, '');
+        let host = trunk.replace(/([^\/:\s])\/.*$/, '$1');
+        let mobile = (req.query.m === 'H5'? true:false);
+
+        let Host = trunk.replace(/https?:\/\//, '').split('/')[0];
+        let options = {
+            credentials: 'include',
+            // agent,
+            headers: {
+                // Host,
+                'Connection': 'keep-alive',
+                'Pragma': 'no-cache',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36'
+            }
+        };
+        if (mobile) {
+            // url = url.replace('//mall.', '//m.');
+            options.headers['User-Agent'] = 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1';
+        }
+
+        let databpSess =  {
+                url,
+                origin: trunk,
+                host
+            };
+        
         fetch(url, options)
         .then(function(result) {
+            let rawcookie = result.headers;
+            if ((rawcookie = rawcookie._headers) && (rawcookie = rawcookie['set-cookie'])) {
+                rawcookie = rawcookie.toString();
+                let cookie = rawcookie.match(/(mx_pc_gomeplusid|mx_wap_gomeplusid|content_ctag|isnew|ssid|plasttime|mx_pc_code_total)=.+?;/g);
+                if (cookie) {
+                    databpSess.cookie = cookie;
+                } else {
+                    databpSess.cookie = [];
+                }
+            }
             return result.text();
         }).then(function(body) {
             let html = body;
@@ -34,10 +82,8 @@ module.exports = (Router) => {
                 });
             }
             // 转化静态标签的src和href，使其可以正常访问
-            var trunk = url.replace(/\/[^\/]*?$/, '');
-            var host = trunk.replace(/([^\/:\s])\/.*$/, '$1');
+
             html = html.replace(/(href|src)\s*=\s*"\s*((?!http|\/\/|javascript).+?)\s*"/g, function(m, p1, p2) {
-                console.log(m);
                 if(p2.indexOf('.') === 0) {
                     return `${p1}="${trunk}/${p2}"`;
                 } else if (p2.indexOf('/') === 0) {
@@ -46,9 +92,10 @@ module.exports = (Router) => {
                     return `${p1}="${host}/${p2}"`;
                 }
             });
-            // let $ = cheerio.load(html);
             // 添加自定义脚本
-            html.replace('<head>', '<head>' + xhrProxy);
+            let proxytext = `<script>${xhrProxy}('${querystring.stringify({origin:trunk})}');</script>`;
+            html = html.replace('<head>', '<head>' + proxytext);
+            req.session.databp = databpSess;
             res.end(html);
         }).catch(function(e) {
             console.log(e);
@@ -58,6 +105,48 @@ module.exports = (Router) => {
         // res.end('error');
 
     });
-    
+    Router.all('/databp/ajax/*', (req, res, next) => {
+        let sess = req.session.databp;
+        let {method, url, query, body, headers} = req;
+        let host = sess.host;
+        let newurl = url.replace('/databp/ajax', host);
+        let newheaders = {
+            'cookie': sess.cookie.join(' ').slice(0 , -1),
+            'host': host.replace(/https?:\/\//, ''),
+            'referer': sess.url,
+            'origin': ''
+        }
+        sess.cookie.some((x,i) => {
+            if(x.includes('content_ctag')) {
+                newheaders['content-type-ctag'] = x.split('content_ctag=')[1].slice(0 , -1);
+                return true;
+            }
+            return false;
+        });
+        let keys = Object.keys(headers);
+        for(let key of keys) {
+            if (newheaders[key] == null) {
+                newheaders[key] = headers[key];
+            }
+        }
+        delete newheaders['origin'];
+        // console.log(newheaders);
+        body = JSON.stringify(body);
+        console.log(newurl);
+        fetch(newurl, {
+            method,
+            headers: newheaders,
+            body,
+            credentials: 'include'
+        })
+        .then(function(result) {
+            return result.text();
+        }).then(function(json) {
+            res.send(json);
+        }).catch(function(err) {
+            console.log(err);
+        });
+    })
+
     return Router;
 };

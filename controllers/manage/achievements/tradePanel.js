@@ -69,35 +69,6 @@ module.exports = (Router) => {
         rows: [
             ["access_user" , "order_user" , "order_num" , "order_sum"],
             ["Man_price" , "pay_user" , "pay_num" , "pay_sum"]
-        ],
-        cols: [
-            [{
-                caption: "访客数",
-                type: "number"
-            }, {
-                caption: "下单人数",
-                type: "number"
-            }, {
-                caption: "下单总量",
-                type: "number"
-            }, {
-                caption: "下单金额",
-                type: "number"
-            }],
-
-            [{
-                caption: "客单价",
-                type: "number"
-            }, {
-                caption: "支付人数",
-                type: "number"
-            }, {
-                caption: "支付总量",
-                type: "number"
-            }, {
-                caption: "支付金额",
-                type: "number"
-            }]
         ]
     });
 
@@ -121,20 +92,6 @@ module.exports = (Router) => {
         },
         rows: [
             ["access_user" , "order_user" , "order_num" , "operating"]
-        ],
-        cols: [
-            [{
-                caption: "浏览商品数",
-                type: "number"
-            }, {
-                caption: "下单商品件数",
-                type: "number"
-            }, {
-                caption: "支付商品件数",
-                type: "number"
-            }, {
-                caption: ""
-            }]
         ]
     });
 
@@ -183,6 +140,7 @@ module.exports = (Router) => {
         modelName : ["SalesPerfPayModeTotal2"],
         platform : false,
         date_picker : false,
+        order : ["-order_channel"],
         params(query , params , sendData){
             if(!query.type) params.type = "ALL";
             return params;
@@ -205,7 +163,7 @@ module.exports = (Router) => {
         date_picker : false,
         // paging : [true],
         toggel : true,
-        order : ["-date"],
+        order : ["-date","-order_channel"],
         params(query , params , sendData){
             if(!query.type) params.type = "ALL";
             try{
@@ -335,35 +293,7 @@ module.exports = (Router) => {
             return filter.tradePanelFive(data , query , dates);
         },
         rows: [
-            ["used_num" , "used_amount" , "lv"],
             ["used_num" , "used_amount" , "lv" , "operating"],
-        ],
-        cols: [
-            [{
-                caption: "平台优惠券使用张数",
-                type: "number"
-            }, {
-                caption: "平台优惠券使用金额",
-                type: "number"
-            }, {
-                caption: "平台优惠券使用占比",
-                type: "number"
-            }, {
-                caption: ""
-            }],
-
-            [{
-                caption: "商家优惠券使用张数",
-                type: "number"
-            }, {
-                caption: "商家优惠券使用金额",
-                type: "number"
-            }, {
-                caption: "商家优惠券使用占比",
-                type: "number"
-            }, {
-                caption: ""
-            }]
         ]
     });
 
@@ -412,9 +342,6 @@ module.exports = (Router) => {
             }]
         ]
     });
-
-
-
 
 
 

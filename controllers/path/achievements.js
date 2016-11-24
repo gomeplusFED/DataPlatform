@@ -194,7 +194,7 @@ module.exports = {
                     query_api : "/achievements/tradeTwo"
                 },
                 {
-                    type : "table",
+                    type : "chart",
                     title : "交易用户分布",
                     query_api : "/achievements/tradeThree"
                 },
@@ -330,7 +330,7 @@ module.exports = {
                     query_api : "/achievements/orderZero"
                 },
                 {
-                    type : "table",
+                    type : "chart",
                     title : "订单趋势",
                     query_api : "/achievements/orderOne"
                 },
@@ -360,17 +360,17 @@ module.exports = {
                     query_api : "/achievements/payZero"
                 },
                 {
-                    type : "table",
+                    type : "chart",
                     title : "支付趋势",
                     query_api : "/achievements/payOne"
                 },
                 {
-                    type : "table",
+                    type : "chart",
                     title : "支付方式",
                     query_api : "/achievements/payTwo"
                 },
                 {
-                    type : "table",
+                    type : "chart",
                     title : "支付构成",
                     query_api : "/achievements/payThree"
                 }

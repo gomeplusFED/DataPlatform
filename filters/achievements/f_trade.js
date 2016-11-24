@@ -144,11 +144,15 @@ module.exports = {
             item.Man_price   = util.dealDivision( item.pay_sum , item.pay_user , 2);
         }
 
-        if(query.main_show_type_filter == "chart"){
+        if(query.main_show_type_filter == "table"){
+            return util.toTable([source], data.rows, data.cols, [count]);
+        }else{
             let map = {} , result = {} , 
                 filter = query.filter_key;
-            let i = data.rows[0].indexOf(filter),
-                names=data.cols[0][i].caption;
+            let i = data.rows[0].indexOf(filter);
+
+            if(i < 0) i = 0; //处理前端参数出错的情况
+            let names = data.cols[0][i].caption;
 
             map.pv = names;
             let max = 0;
@@ -176,8 +180,6 @@ module.exports = {
                 }
             }]
         }
-       
-        return util.toTable([source], data.rows, data.cols, [count]);
     },
     tradeFour(data, query , dates) {
 
@@ -191,7 +193,7 @@ module.exports = {
                 item.category_name = "ALL";
                 All_pay_sum = item.pay_sum;
             }else{
-                item.category_name = item["category_name_"+num];
+                item.category_name = item["category_name_"+(num+1)];
                 if(item["category_id_"+num] == "ALL"){
                     All_pay_sum = item.pay_sum;
                 }

@@ -3,7 +3,7 @@
     class="btn-group date_picker" 
     :class="{'global_date': isGlobal}"
     :id="'datePicker_'+index" 
-    :style="pageComponentsData[componentType].defaultData === 1 ? 'width: 120px' : 'width: 210px'"
+    :style="(pageComponentsData[componentType].defaultData === 1 ? 'width: 120px' : 'width: 210px')"
     v-if="pageComponentsData[componentType].show">
         <input type="text" class="form-control" />
         <span class="glyphicon glyphicon-calendar fa fa-calendar"></span>
@@ -36,7 +36,7 @@ var DateCom = Vue.extend({
     data: function() {
         return {
             // 根据url判断是否判断起止时间大于当前时间
-            validlist: [ '/custom/saveActivity' ]
+            validlist: [ '/custom/saveActivity', '/databp/bpmanage' ]
         }
     },
     props: ['index','pageComponentsData','componentType','argvs','initData', 'cancelDateLimit', 'isGlobal'],
@@ -51,9 +51,6 @@ var DateCom = Vue.extend({
             handler: function(val){
                 var _this = this;
                 // 异步请求组件参数，watch到变化之后初始化，其它组件类似
-                if(val === null || !this.pageComponentsData[this.componentType].show){
-                    return;
-                }
                 var today = utils.formatDate (new Date(),'yyyy-MM-dd');
                 var yesterday = utils.formatDate (new Date(Date.now() - 24 * 60 * 60 * 1000),'yyyy-MM-dd');
                 var last7Day = utils.formatDate (new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),'yyyy-MM-dd');
@@ -76,6 +73,10 @@ var DateCom = Vue.extend({
                 this.argvs.startTime = this.pageComponentsData[this.componentType].defaultData === 1 ? yesterday : last7Day;
                 this.argvs.endTime = yesterday;
                 this.argvs.day_type = 1;
+
+                if(val === null || !this.pageComponentsData[this.componentType].show){
+                    return;
+                }
 
                 var options = {
                     "startDate": this.pageComponentsData[this.componentType].defaultData === 1 ? yesterday : last7Day,

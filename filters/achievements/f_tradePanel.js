@@ -10,8 +10,25 @@ var util = require("../../utils"),
 module.exports = {
     //交易汇总
     tradePanelOne(data , query , dates) {
+
         let source = data.first.data[0];
-        let rows   = ["access_user" , "order_user" , "order_num" , "order_sum" ,"Man_price" , "pay_user" , "pay_num" , "pay_sum"]; 
+        let rows   = ["access_user" , "order_user" , "order_num" , "order_sum" ,"Man_price" , "pay_user" , "pay_num" , "pay_sum"];
+        let Cols = [
+            [{
+                caption: "",
+                type: "number"
+            }, {
+                caption: "",
+                type: "number"
+            }, {
+                caption: "",
+                type: "number"
+            }, {
+                caption: "",
+                type: "number"
+            }]
+        ];
+
         let result = {};
         for(let key of rows){
             result[key] = 0;
@@ -26,9 +43,24 @@ module.exports = {
             All_pay_sum += item.pay_sum;
             All_pay_user +=item.pay_user;
         }
+
         result.Man_price = util.numberLeave(All_pay_sum / All_pay_user , 2);
 
-        return util.toTable([[result], [result]], data.rows, data.cols , null , [true,true]);
+        let OneData = {
+            "access_user" : "访客数 : " + result.access_user,
+            "order_user"  : "下单人数 : " + result.order_user,
+            "order_num"   : "下单总量 : " + result.order_num,
+            "order_sum"   : "下单金额 : " + result.order_sum
+        }
+
+        let TwoData = {
+            "access_user" : "客单价 : " + result.Man_price,
+            "order_user"  : "支付人数 : " + result.pay_user,
+            "order_num"   : "支付总量 : " + result.pay_num,
+            "order_sum"   : "支付金额 : " + result.pay_sum
+        }
+
+        return util.toTable([[OneData , TwoData]], data.rows, Cols , null , [true]);
     },
 
     //交易商品汇总
@@ -37,7 +69,7 @@ module.exports = {
         let result = {};
         for(let key of data.rows[0]){
             if(key == "operating"){
-                result[key] = `<button class='btn btn-info' url_detail='/achievements/tradePanelTwo_add'>趋势</button>`;
+                continue;
             }else{
                 result[key] = 0;
             }
@@ -50,7 +82,27 @@ module.exports = {
             }
         }
 
-        return util.toTable([[result]], data.rows, data.cols , null , [true]);
+        let Cols = [{
+                caption: "",
+                type: "number"
+            }, {
+                caption: "",
+                type: "number"
+            }, {
+                caption: "",
+                type: "number"
+            }, {
+                caption: ""
+            }];
+
+        let OneData = {
+            "access_user" : "浏览商品数 : " + result.access_user,
+            "order_user"  : "下单商品件数 : " + result.order_user,
+            "order_num"   : "支付商品件数 : " + result.order_num,
+            "operating"   : `<button class='btn btn-info' url_detail='/achievements/tradePanelTwo_add'>趋势</button>`
+        }
+
+        return util.toTable([[OneData]], data.rows, [Cols] , null , [true]);
     },
     //趋势分析补充
     tradePanelTwo_add(data , query , dates){
@@ -95,7 +147,8 @@ module.exports = {
             data : result,
             config: { // 配置信息
                 stack: false  // 图的堆叠
-            }
+            },
+            default : true  //默认展示图表
         }];
     },
 
@@ -104,30 +157,6 @@ module.exports = {
     tradePanelThree(data, query, dates) {
         let source = data.first.data[0];
         let result = {};
-        /*for(let key of data.rows[0]){
-            if(key == "operating"){
-                result[key] = `<button class='btn btn-info' url_detail='/achievements/tradePanelThree_add'>趋势</button>`;
-            }else{
-                result[key] = 0;
-            }
-        }
-
-        for(let item of source){
-            switch(item.order_channel){
-                case "ALL":
-                    result.all_pay_num += item.pay_num;
-                    break;
-                case "微信":
-                    result.aliy_pay += item.pay_num;
-                    break;
-                case "支付宝":
-                    result.weixin_pay += item.pay_num;
-                    break;
-                case "其它":
-                    result.other_pay += item.pay_num;
-                    break;
-            }
-        }*/
 
         let Type = [];
         for(let item of source){
@@ -144,18 +173,20 @@ module.exports = {
             }
         }
 
-        data.rows[0] = Type;
+        data.rows[0] = [];
         data.cols[0] = [];
-        for(let key of Type){
-            let obj = {caption:key , type:"number"};
-            data.cols[0].push(obj);
+        let oneData = {};
+        for(let key in result){
+            data.cols[0].push({caption:"" , type:"string"});
+            data.rows[0].push(key);
+            if(key == "operating"){
+                oneData[key] = result[key];
+            }else{
+                oneData[key] = key + " : " +result[key];
+            }
         }
-        // data.cols[0].unshift({caption:"日期" , type:"date"});
 
-        data.rows[0].push("operating");
-        data.cols[0].push({ caption:"" });
-
-        return util.toTable([[result]], data.rows, data.cols , null , [true]);
+        return util.toTable([[oneData]], data.rows, data.cols , null , [true]);
     },
     //支付方式汇总--补充
     tradePanelThree_add(data , query , dates){
@@ -206,6 +237,7 @@ module.exports = {
         }
 
         let result = {};
+        dates.reverse();
         for(let date of dates){
             result[date] = {};
             for(let key of Type){
@@ -246,7 +278,8 @@ module.exports = {
             data : result,
             config: { // 配置信息
                 stack: false  // 图的堆叠
-            }
+            },
+            default: true
         }];
     },
    
@@ -273,7 +306,27 @@ module.exports = {
             }
         }
 
-        return util.toTable([[result]], data.rows, data.cols , null , [true]);
+        let Cols = [{
+                caption: "",
+                type: "number"
+            }, {
+                caption: "",
+                type: "number"
+            }, {
+                caption: "",
+                type: "number"
+            }, {
+                caption: ""
+            }];
+
+        let oneData = {
+            "newadd_guomeibi" : "新增国美币 : " + result.newadd_guomeibi,
+            "consume_guomeibi": "消费国美币 : " + result.consume_guomeibi,
+            "drawcash_guomeibi": "提现国美币 : " + result.drawcash_guomeibi,
+            "operating" : result.operating
+        };
+
+        return util.toTable([[oneData]], data.rows, [Cols] , null , [true]);
     },
     //国美币汇总--补充
     tradePanelFour_add(data , query , dates){
@@ -311,7 +364,8 @@ module.exports = {
             data : result,
             config: { // 配置信息
                 stack: false  // 图的堆叠
-            }
+            },
+            default : true
         }];
     },
 
@@ -336,12 +390,12 @@ module.exports = {
         for(let item of source){
             item.date = util.getDate(item.date);
             if(item.coupon_type == 2){
-                //商家优惠劵
+                //平台优惠劵
                 Table1.used_num += item.used_num;
                 Table1.used_amount += item.used_amount;
                 Table1.pay_num += item.pay_num;
             }else if(item.coupon_type == 1){
-                //平台优惠劵
+                //商家优惠劵
                 Table2.used_num += item.used_num;
                 Table2.used_amount += item.used_amount;
                 Table2.pay_num += item.pay_num;
@@ -351,7 +405,39 @@ module.exports = {
         Table1.lv = util.toFixed( util.dealDivision(Table1.used_num , Table1.pay_num ) , 0);
         Table2.lv = util.toFixed( util.dealDivision(Table2.used_num , Table2.pay_num ) , 0);
 
-        return util.toTable([[Table1] , [Table2]], data.rows, data.cols , null , [true , true]);
+
+        let Cols = [
+            [{
+                caption: "",
+                type: "number"
+            }, {
+                caption: "",
+                type: "number"
+            }, {
+                caption: "",
+                type: "number"
+            }, {
+                caption: ""
+            }]
+        ];
+
+        let oneData = {
+            "used_num"    : "平台优惠券使用张数 : " + Table1.used_num,
+            "used_amount" : "平台优惠券使用金额 : " + Table1.used_amount,
+            "lv"          : "平台优惠券使用占比 : " + Table1.lv,
+            "operating"   : Table2.operating
+        }
+
+        let twoData = {
+             "used_num"   : "商家优惠券使用张数 : " + Table2.used_num,
+            "used_amount" : "商家优惠券使用金额 : " + Table2.used_amount,
+            "lv"          : "商家优惠券使用占比 : " + Table2.lv,
+            "operating"   : ""
+        }
+
+        return util.toTable([
+            [oneData , twoData]
+        ], data.rows, Cols , null , [true , true]);
     },
     //交易优惠券汇总--补充
     tradePanelFive_add(data , query , dates){
@@ -400,7 +486,8 @@ module.exports = {
             data : result,
             config: { // 配置信息
                 stack: false  // 图的堆叠
-            }
+            },
+            default : true
         }];
     },
 
@@ -427,7 +514,32 @@ module.exports = {
         Result.order_pay = util.toFixed(util.dealDivision(obj.pay_user , obj.order_user) , 0);
         Result.pay_lv = util.toFixed(util.dealDivision(obj.pay_num , obj.pay_time) , 0);
         Result.operating = `<button class='btn btn-info' url_detail='/achievements/tradePanelSix_add'>趋势</button>`;
-        return util.toTable([[Result]], data.rows, data.cols , null , [true , true]);
+
+        let Cols = [{
+                caption: "",
+                type: "number"
+            }, {
+                caption: "",
+                type: "number"
+            }, {
+                caption: "",
+                type: "number"
+            }, {
+                caption: "",
+                type: "number"
+            }, {
+                caption: ""
+            }];
+
+        let oneData = {
+            "scan_order" : "浏览-下单转化率 : " + Result.scan_order,
+            "scan_pay"   : "浏览-支付转化率 : " + Result.scan_pay,
+            "order_pay"  : "下单-支付转化率 : " + Result.order_pay,
+            "pay_lv"     : "支付成功率 : " + Result.pay_lv,
+            "operating"  : Result.operating
+        } 
+
+        return util.toTable([[oneData]], data.rows, [Cols] , null , [true]);
     },
     //转化率--补充
     tradePanelSix_add(data , query , dates){
@@ -470,7 +582,8 @@ module.exports = {
             data : result,
             config: { // 配置信息
                 stack: false  // 图的堆叠
-            }
+            },
+            default : true 
         }];
     }
 };

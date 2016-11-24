@@ -1,5 +1,14 @@
 #美信数据平台#
 =======================
+
+## 开发文档
+
+[文档](./doc/develop.md)
+
+## 部署文档
+    
+[文档](./doc/production.md)
+
 ##引入核心模板##
 <pre><code>var main = require('../..../main');
 module.exports = function(Router) {
