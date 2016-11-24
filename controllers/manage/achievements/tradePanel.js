@@ -140,6 +140,7 @@ module.exports = (Router) => {
         modelName : ["SalesPerfPayModeTotal2"],
         platform : false,
         date_picker : false,
+        order : ["-order_channel"],
         params(query , params , sendData){
             if(!query.type) params.type = "ALL";
             return params;
