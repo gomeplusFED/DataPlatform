@@ -1,4 +1,10 @@
-(function(origin) {
+(function(pageUrl, platform) {
+    // 处理重定向
+   
+    window.$pageUrl = pageUrl;
+    window.$platform = platform;
+    
+
     var open = XMLHttpRequest.prototype.open;
     XMLHttpRequest.prototype.open = function(method, url, async, user, password) {
         var args = [];
