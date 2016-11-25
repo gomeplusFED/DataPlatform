@@ -414,7 +414,7 @@
 	width: 5%
 }
 .ntable tr th:nth-child(4) {
-	width: 200px;
+	width: 300px;
 }
 .ntable tr th:nth-child(5) {
 	width: 200px;
