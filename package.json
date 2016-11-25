@@ -8,7 +8,7 @@
     }
   ],
   "scripts": {
-    "start": "pm2-dev app.js"
+    "start" : "pm2-dev start pm2/app.json"
   },
   "description": "DataPlatform web project",
   "engines": {

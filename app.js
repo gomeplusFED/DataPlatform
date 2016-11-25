@@ -28,13 +28,11 @@ Object.keys(config).forEach(function(key) {
     app.locals[key] = config[key];
 });
 
-console.log("gg si mi da.");
 // 测试使用 
 // var logger = require("morgan");
 // app.use(logger('dev'));
 
 app.use(function(req, res, next) {
-    console.log(new Date().toLocaleTimeString());
     if (req.headers['user-agent'].indexOf('Chrome') === -1) {
         res.send('请使用谷歌浏览器');
     } else {
