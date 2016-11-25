@@ -189,7 +189,7 @@
 					return false;
 				}
 				this.$router.go({
-					path: this.$route.path,
+					path: this.$route.path.split('?')[0],
 					query: {pageUrl: url,
 							platform: this.bpConfig.platform
 					}
