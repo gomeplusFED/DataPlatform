@@ -27,7 +27,7 @@ module.exports = {
     spread() {
         return {
             name : "热点分布",
-            path : "/databp/spread",
+            path : "/databp/heatmap",
             display : true,
             defaultData : [
 

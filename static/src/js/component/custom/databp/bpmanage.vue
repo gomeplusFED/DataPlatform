@@ -7,6 +7,11 @@
 				<input class="form-control inp inpW1" type="text" placeholder="" v-model="searchParam.pageUrl">
 				<label>埋点名称</label>
 				<input class="form-control inp inpW2" type="text" placeholder="" v-model="searchParam.pointName">
+				<label>状态</label>
+				<select class="form-control inp inpW2" v-model="searchParam.isActive">
+					<option value='1'>正常</option>
+					<option value='0'>已删除</option>
+				</select>
 				<label>埋点事件名称</label>
 				<input class="form-control inp inpW2" type="text" placeholder="" value="单击" disabled>
 			</li>
@@ -55,7 +60,7 @@
 					<td title="{{item.pointParam}}">{{item.pointParam}}</td>
 					<td title="{{item.userInfo?(item.userInfo.department + item.userInfo.email) : '--'}}">{{item.userInfo.name || '--'}}</td>
 					<td>{{item.updateTime |Date 'yyyy-MM-dd hh:mm:ss'}}</td>
-					<td><a @click="edit(item)">修改</a>&nbsp<a @click="del(item.pointId)">删除</a></td>
+					<td><a @click="edit(item)">修改</a>&nbsp<a v-if="item.isActive === '1'" @click="del(item.pointId)">删除</a><a v-else @click="restore(item.pointId)">恢复</a></td>
 				</tr>
 				<tr v-show="noData">
 					 <td colspan="7">暂无数据</td>
@@ -139,7 +144,8 @@
 					pointName: '',
 					platform: 'PC',
 					pageUrl: '',
-					pattern: ''
+					pattern: '',
+					isActive: '1'
 				}
 			}
 		},
@@ -192,6 +198,18 @@
 							this.query()
 						});
 						
+					}
+				});
+			},
+			restore(id) {
+				actions.confirm(store, {
+					show: true,
+					title: '确认恢复',
+					msg: '确认恢复吗',
+					apply: () => {
+						api.restoreBp(id).then(() =>{
+							this.query()
+						});
 					}
 				});
 			},

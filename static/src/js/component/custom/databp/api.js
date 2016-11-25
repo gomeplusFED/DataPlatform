@@ -1,7 +1,7 @@
 var store = require('../../../store/store.js');
 var actions = require('../../../store/actions.js');
 var $ = require('jQuery');
-// const baseurl = 'http://10.69.20.59:8090/bomber-pie';
+// const baseurl = 'http://10.69.20.59:8080/bomber-pie';
 const baseurl = 'http://10.69.112.146:38080/bomber-pie'
 
 $.support.cors = true;
@@ -131,10 +131,19 @@ var api = {
 			});
 		});
 	},
+	restoreBp(id) {
+		return buildAjax('/restore', {pointId: id}, 'put').catch(errHandler).then(function(res) {
+			actions.alert(store, {
+				show: true,
+				msg: '恢复成功',
+				type: 'success'
+			});
+		});
+	},
 	// useless: selector
 	// {pageUrl, platform, pointName, page, size}
 	listBps(data){
-		return buildAjax('/pointList', filterArgs(data, ['pageUrl', 'platform', 'pointName', 'page', 'size', 'startTime', 'endTime', 'pattern'])).then(function(res) {
+		return buildAjax('/pointList', filterArgs(data, ['pageUrl', 'platform', 'pointName', 'page', 'size', 'startTime', 'endTime', 'pattern', 'isActive'])).then(function(res) {
 			if(res.code !== '200' || res.iserror !== '0') {
 				return Promise.reject('获取埋点信息失败：' + res.msg);
 			}
@@ -144,6 +153,19 @@ var api = {
 					data,
 					total: res.data.total
 				}
+			} else {
+				return Promise.reject('获取的埋点信息为空');
+			}
+		}).catch(errHandler);
+	},
+	getHeatData(data){
+		return buildAjax('/heat', filterArgs(data, ['pageUrl'])).then(function(res) {
+			if(res.code !== '200' || res.iserror !== '0') {
+				return Promise.reject('获取埋点信息失败：' + res.msg);
+			}
+			var data;
+			if (res && (data = res.data) && (data = data.result)) {
+				return data;
 			} else {
 				return Promise.reject('获取的埋点信息为空');
 			}
