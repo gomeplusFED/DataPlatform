@@ -173,7 +173,9 @@ var bpinfo = Vue.extend({
 		},
 		unfocus() {
 			this.setDraggable(true);
-			this.selectpos.show = false;
+			setTimeout(() => {
+				this.selectpos.show = false;
+			}, 100);
 		},
 		init() {
 			this.loading.show = true;
