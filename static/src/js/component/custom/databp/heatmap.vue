@@ -3,7 +3,7 @@
 	<div class='form-group data-type'>
 		<label>数据</label>
 		<select v-model="datatype">
-			<option v-for="type of dataTypes" value="{{type}}">{{type}}</option>
+			<option v-for="type of dataTypes" value="{{type.name}}">{{type.name}}</option>
 		</select>
 	 </div>
 	<label><input type="checkbox" v-model="mask"></input>显示热力图</label>
@@ -29,8 +29,18 @@
 		data: function() {
 			return {
 				mask: true,
+				// 防止热力图无限扩大设置的最大值
+				maxVal: 300,
 				maskNodes: [],
-				dataTypes: ['pv', 'uv'],
+				dataTypes: [
+				{
+					name: 'pv',
+					p: 1
+
+				}, {
+					name: 'uv',
+					p: 1
+				}],
 				datatype: 'pv'
 			}
 		},
@@ -62,24 +72,33 @@
 				api.getHeatData(config).then((data) => {
 					var $iframe = $('iframe').contents();
 					var $body = $iframe.find('body');
-					
+					// 找出最大值，得到缩放系数
+					for(let type of this.dataTypes) {
+						let vals = data.map(x => x[type.name]);
+						let max = Math.max(...vals);
+						if (max > this.maxVal) {
+							type.p = this.maxVal/max;
+							// type.$set('p', this.maxVal/max);
+						}
+					}
+
+					console.log(this.dataTypes);
 					for(let t of data) {
 						let $elem = $iframe.find(t.selector);
-						// 当前把值都缩小一半
-						let mask = this.genNodes($elem, t, 0.5);
+						let mask = this.genNodes($elem, t);
 						$body.append(mask);
 					}
 					this.renderNodes();
 				});
 			},
-			genNodes($elem, item, p) {
+			genNodes($elem, item) {
 				let _offset = $elem.offset();
 				let _width = $elem.outerWidth();
 				let _height = $elem.outerHeight();
 				let _product = _width * _height;
 				let _centerX = _offset.left + _width / 2;
 				let _centerY = _offset.top + _height / 2;
-				function calc(value) {
+				function calc(value, p) {
 					value = p * value;
 					// 计算比例k
 					let k = Math.sqrt(value * value / _product);
@@ -95,7 +114,7 @@
 
 				let data = {}
 				for(let type of this.dataTypes) {
-					data[type] = calc(item[type]);
+					data[type.name] = calc(item[type.name], type.p);
 				}
 				let divNode = document.createElement("div");
 				divNode.style = `z-index:900;position:absolute;background: radial-gradient(red, yellow 20%, #1E90FF 30%, rgba(255,255,255,0) 50%);`;
@@ -106,7 +125,7 @@
 				this.maskNodes.push(res);
 				return divNode;
 			},
-			renderNodes(type = this.dataTypes[0]) {
+			renderNodes(type = this.dataTypes[0].name) {
 				for(let node of this.maskNodes) {
 					Object.assign(node.divNode.style, node.data[type]);
 				}
@@ -116,13 +135,13 @@
 			'mask': {
 				handler(val) {
 					if(val) {
-						for(let div of this.maskdivs) {
-							div.style.display = 'block';
+						for(let node of this.maskNodes) {
+							node.divNode.style.display = 'block';
 						}
 
 					} else {
-						for(let div of this.maskdivs) {
-							div.style.display = 'none';
+						for(let node of this.maskNodes) {
+							node.divNode.style.display = 'none';
 						}
 						
 					}
