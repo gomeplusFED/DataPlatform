@@ -67,27 +67,14 @@ module.exports = (Router) => {
 
              return params;
         },
-        firstSql(query, params, isCount) {
+        firstSql(query, params) {
             let _sql = 'SELECT date, GROUP_CONCAT(value, ";", `rate_key`) AS `key`, day_type FROM `ads2_user_retention_rate` WHERE date BETWEEN ? AND ? AND type=? AND day_type=? GROUP BY date ORDER BY date DESC';
             let _params = [query.startTime, query.endTime, params.type, params.day_type];
-            if(isCount) {
-                let sql = `SELECT COUNT(*) count FROM (${_sql}) a`;
 
-                return {
-                    sql : sql,
-                    params : _params
-                };
-            } else {
-                let sql = `SELECT * FROM (${_sql}) a LIMIT ?,?`,
-                    page = query.page - 1 || 0,
-                    offset = query.from || (page * query.limit),
-                    limit = query.to || query.limit || 0;
-
-                return {
-                    sql : sql,
-                    params : _params.concat([+offset, +limit])
-                };
-            }
+            return {
+                sql : _sql,
+                params : _params
+            };
         },
         paging : [true],
         filter(data, query) {

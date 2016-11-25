@@ -110,8 +110,7 @@ module.exports = {
             }, {
                 caption : "新增用户",
                 type : "number"
-            }],
-            count = data.first.count[0].count;
+            }];
         for(let key of retained[day_type]) {
             _cols.push({
                 caption : key,
@@ -208,6 +207,6 @@ module.exports = {
                 break;
             default : break;
         }
-        return util.toTable([newData], [_rows], [_cols], [count]);
+        return util.toTable([newData], [_rows], [_cols]);
     }
 };
