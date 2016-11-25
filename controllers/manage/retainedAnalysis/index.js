@@ -77,7 +77,7 @@ module.exports = (Router) => {
             if(params.type === "all") {
                 _sql += ` AND type IN('android', 'ios')`;
             } else {
-                _sql += ` AND type=${params.type}`
+                _sql += ` AND type='${params.type}'`
             }
 
             _sql += ` AND day_type=? GROUP BY date ORDER BY date DESC`;
