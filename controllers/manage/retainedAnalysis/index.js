@@ -87,7 +87,6 @@ module.exports = (Router) => {
                 params : _params
             };
         },
-        paging : [true],
         filter(data, query) {
             return filter.retainedTwo(data, query.day_type);
         },
