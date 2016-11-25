@@ -74,8 +74,8 @@ router.map({
 			'/bpmanage': {
 				component: require('./component/custom/databp/bpmanage.vue')
 			},
-			'/spread': {
-				component: require('./component/custom/databp/spread.vue')
+			'/heatmap': {
+				component: require('./component/custom/databp/heatmap.vue')
 			}
 		}
 	}
