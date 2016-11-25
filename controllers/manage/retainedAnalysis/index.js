@@ -29,7 +29,7 @@ module.exports = (Router) => {
         date_picker : false,
         params(query, params) {
             params.type = query.type || "ios";
-            if(query.type === "all") {
+            if(params.type === "all") {
                 params.type = ["android", "ios"];
             }
 
@@ -45,7 +45,7 @@ module.exports = (Router) => {
                 key: 'android',
                 name: 'Android'
             }, {
-                key: "all",
+                key: 'all',
                 name: 'APP'
             }, {
                 key: 'pc',
@@ -67,43 +67,25 @@ module.exports = (Router) => {
         date_picker : false,
         params(query, params) {
             params.type = query.type || "ios";
-            if(query.type === "all") {
-                params.type = ["android", "ios"];
-            }
 
              return params;
         },
-        firstSql(query, params, isCount) {
+        firstSql(query, params) {
             let _sql = 'SELECT date, GROUP_CONCAT(value, ";", `rate_key`) AS `key`, day_type FROM `ads2_user_retention_rate` WHERE date BETWEEN ? AND ? ';
             let _params = [query.startTime, query.endTime, params.day_type];
-            if(params.type instanceof Array) {
-                let typeStr = [];
-                for(let type of params.type) {
-                    typeStr.push(`'${type}'`);
-                }
-                _sql += ` AND type IN (${typeStr.join(",")}) `;
+
+            if(params.type === "all") {
+                _sql += ` AND type IN('android', 'ios')`;
             } else {
-                _sql += `AND type='${params.type}'`;
+                _sql += ` AND type=${params.type}`
             }
+
             _sql += ` AND day_type=? GROUP BY date ORDER BY date DESC`;
-            if(isCount) {
-                let sql = `SELECT COUNT(*) count FROM (${_sql}) a`;
 
-                return {
-                    sql : sql,
-                    params : _params
-                };
-            } else {
-                let sql = `SELECT * FROM (${_sql}) a LIMIT ?,?`,
-                    page = query.page - 1 || 0,
-                    offset = query.from || (page * query.limit),
-                    limit = query.to || query.limit || 0;
-
-                return {
-                    sql : sql,
-                    params : _params.concat([+offset, +limit])
-                };
-            }
+            return {
+                sql : _sql,
+                params : _params
+            };
         },
         paging : [true],
         filter(data, query) {

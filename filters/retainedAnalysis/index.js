@@ -52,7 +52,7 @@ module.exports = {
                     obj[date][key] = 0;
                 }
             }
-            obj[date][item.rate_key] += +item.value;
+            obj[date][item.rate_key] = item.value;
         }
         for(let item of _retained) {
             newData[item] = {};
@@ -110,8 +110,7 @@ module.exports = {
             }, {
                 caption : "新增用户",
                 type : "number"
-            }],
-            count = data.first.count.count;
+            }];
         for(let key of retained[day_type]) {
             _cols.push({
                 caption : key,
@@ -129,17 +128,17 @@ module.exports = {
                     for(let key of keys) {
                         let k = key.split(";");
                         if(k[1] === "1st_day_active_user_num") {
-                            obj.new_user += +k[0];
+                            obj.new_user = k[0];
                         } else if(k[1] === "2nd_day_startup_user_num") {
-                            obj.one += +k[0];
+                            obj.one = k[0];
                         } else if(k[1] === "3rd_day_startup_user_num") {
-                            obj.two += +k[0];
+                            obj.two = k[0];
                         } else if(k[1] === "7th_day_startup_user_num") {
-                            obj.three += +k[0]
+                            obj.three = k[0]
                         } else if(k[1] === "14th_day_startup_user_num") {
-                            obj.four += +k[0]
+                            obj.four = k[0]
                         } else if(k[1] === "30th_day_startup_user_num") {
-                            obj.five += +k[0];
+                            obj.five = k[0];
                         }
                     }
                     obj.one = util.toFixed(obj.one, obj.new_user);
@@ -161,15 +160,15 @@ module.exports = {
                     for(let key of keys) {
                         let k = key.split(";");
                         if(k[1] === "1st_week_active_user_num") {
-                            obj.new_user += +k[0];
+                            obj.new_user = k[0];
                         } else if(k[1] === "2nd_week_startup_user_num") {
-                            obj.one += +k[0];
+                            obj.one = k[0];
                         } else if(k[1] === "3rd_week_startup_user_num") {
-                            obj.two += +k[0];
+                            obj.two = k[0];
                         } else if(k[1] === "4th_week_startup_user_num") {
-                            obj.three += +k[0]
+                            obj.three = k[0]
                         } else if(k[1] === "5th_week_startup_user_num") {
-                            obj.four += +k[0]
+                            obj.four = k[0]
                         }
                     }
                     obj.one = util.toFixed(obj.one, obj.new_user);
@@ -190,13 +189,13 @@ module.exports = {
                     for(let key of keys) {
                         let k = key.split(";");
                         if(k[1] === "1st_month_active_user_num") {
-                            obj.new_user += +k[0];
+                            obj.new_user = k[0];
                         } else if(k[1] === "2nd_month_startup_user_num") {
-                            obj.one += +k[0];
+                            obj.one = k[0];
                         } else if(k[1] === "3rd_month_startup_user_num") {
-                            obj.two += +k[0];
+                            obj.two = k[0];
                         } else if(k[1] === "4th_month_startup_user_num") {
-                            obj.three += +k[0]
+                            obj.three = k[0]
                         }
                     }
                     obj.one = util.toFixed(obj.one, obj.new_user);
@@ -208,6 +207,6 @@ module.exports = {
                 break;
             default : break;
         }
-        return util.toTable([newData], [_rows], [_cols], [count]);
+        return util.toTable([newData], [_rows], [_cols]);
     }
 };
