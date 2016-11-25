@@ -41,7 +41,7 @@ var DateCom = Vue.extend({
     },
     props: ['index','pageComponentsData','componentType','argvs','initData', 'cancelDateLimit', 'isGlobal'],
     ready: function() {
-
+       
     },
     methods: {
 
