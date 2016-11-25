@@ -29,7 +29,7 @@ module.exports = (Router) => {
         date_picker : false,
         params(query, params) {
             params.type = query.type || "ios";
-            if(params.type === "all") {
+            if(query.type === "all") {
                 params.type = ["android", "ios"];
             }
 
@@ -71,13 +71,13 @@ module.exports = (Router) => {
              return params;
         },
         firstSql(query, params) {
-            let _sql = 'SELECT date, GROUP_CONCAT(value, ";", `rate_key`) AS `key`, day_type FROM `ads2_user_retention_rate` WHERE date BETWEEN ? AND ? ';
-            let _params = [query.startTime, query.endTime, params.day_type];
+            let _sql = 'SELECT date, GROUP_CONCAT(value, ";", `rate_key`) AS `key`, day_type FROM `ads2_user_retention_rate` WHERE date BETWEEN ? AND ? AND ';
+            let _params = [query.startTime, query.endTime, query.day_type];
 
-            if(params.type === "all") {
-                _sql += ` AND type IN('android', 'ios')`;
+            if(query.type === "all") {
+                _sql += `type IN ('android', 'ios')`
             } else {
-                _sql += ` AND type='${params.type}'`
+                _sql += `type='${query.type}'`
             }
 
             _sql += ` AND day_type=? GROUP BY date ORDER BY date DESC`;
@@ -87,7 +87,6 @@ module.exports = (Router) => {
                 params : _params
             };
         },
-        paging : [true],
         filter(data, query) {
             return filter.retainedTwo(data, query.day_type);
         },
