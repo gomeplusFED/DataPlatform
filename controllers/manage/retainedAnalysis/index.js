@@ -29,7 +29,7 @@ module.exports = (Router) => {
         date_picker : false,
         params(query, params) {
             params.type = query.type || "ios";
-            if(params.type === "all") {
+            if(query.type === "all") {
                 params.type = ["android", "ios"];
             }
 
