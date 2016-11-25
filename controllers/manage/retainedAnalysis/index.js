@@ -72,12 +72,12 @@ module.exports = (Router) => {
         },
         firstSql(query, params) {
             let _sql = 'SELECT date, GROUP_CONCAT(value, ";", `rate_key`) AS `key`, day_type FROM `ads2_user_retention_rate` WHERE date BETWEEN ? AND ? AND ';
-            let _params = [query.startTime, query.endTime, params.day_type];
+            let _params = [query.startTime, query.endTime, query.day_type];
 
-            if(params.type === "all") {
+            if(query.type === "all") {
                 _sql += `type IN ('android', 'ios')`
             } else {
-                _sql += `type='${params.type}'`
+                _sql += `type='${query.type}'`
             }
 
             _sql += ` AND day_type=? GROUP BY date ORDER BY date DESC`;
