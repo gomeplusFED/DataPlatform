@@ -50,6 +50,9 @@ var DateCom = Vue.extend({
         'pageComponentsData': {
             handler: function(val){
                 var _this = this;
+                if(val === null || !this.pageComponentsData[this.componentType].show){
+                    return;
+                }
                 // 异步请求组件参数，watch到变化之后初始化，其它组件类似
                 var today = utils.formatDate (new Date(),'yyyy-MM-dd');
                 var yesterday = utils.formatDate (new Date(Date.now() - 24 * 60 * 60 * 1000),'yyyy-MM-dd');
@@ -73,10 +76,6 @@ var DateCom = Vue.extend({
                 this.argvs.startTime = this.pageComponentsData[this.componentType].defaultData === 1 ? yesterday : last7Day;
                 this.argvs.endTime = yesterday;
                 this.argvs.day_type = 1;
-
-                if(val === null || !this.pageComponentsData[this.componentType].show){
-                    return;
-                }
 
                 var options = {
                     "startDate": this.pageComponentsData[this.componentType].defaultData === 1 ? yesterday : last7Day,
