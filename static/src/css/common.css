@@ -62,3 +62,9 @@
 	0% {opacity: 1;-webkit-transform: translateY(0);}
 	100% {opacity: 0;-webkit-transform: translateY(10px);}
 }
+
+
+/* addModule */
+.addMoudle{
+    padding: 10px;
+}

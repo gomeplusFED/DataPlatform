@@ -33,6 +33,7 @@ var webpackConfig = {
         DataPlatform: './src/js/app.js',
         vendor: [
             pwd + '/src/js/lib/vue.min.js',
+            pwd + '/src/js/lib/vue2.min.js',
             pwd + '/src/js/lib/vuex.min.js',
             pwd + '/src/js/lib/jquery.min.js',
             pwd + '/src/js/lib/bootstrap.min.js',
@@ -47,7 +48,14 @@ var webpackConfig = {
             'echarts/lib/chart/pie',
             'echarts/lib/component/legend',
             'echarts/lib/component/tooltip',
-        ]
+        ],
+        addModule : "./src/js/app2.js",
+        /*vendor2 : [
+            pwd + '/src/js/lib/vue2.min.js',
+            pwd + '/src/js/lib/vuex.min.js',
+            pwd + '/src/js/lib/jquery.min.js',
+            pwd + '/src/js/lib/bootstrap.min.js',
+        ]*/
     },
     output: {
         filename: '[name].min.js'
@@ -68,6 +76,7 @@ var webpackConfig = {
         extensions: ['', '.js', '.json', '.scss'],
         alias: {
             'Vue': pwd + '/src/js/lib/vue.min.js',
+            'Vue2': pwd + '/src/js/lib/vue2.min.js',
             'jQuery': pwd + '/src/js/lib/jquery.min.js',
             '$': pwd + '/src/js/lib/jquery.min.js',
             'utils': pwd + '/src/js/utils/index.js',
@@ -99,7 +108,7 @@ gulp.task('js', function() {
         }));
     }
     return gulp
-        .src('./src/js/app.js')
+        .src(['./src/js/app.js' , './src/js/app2.js'])
         .pipe(gulpWebpack(webpackConfig))
         // .pipe(gulpIf(argv.env == 'pro', header(banner, { config: config })))
         .pipe(gulp.dest('./dist/js/'))
@@ -129,7 +138,7 @@ gulp.task('font', function() {
 
 gulp.task('rev', function() {
     return gulp
-        .src(['../views/include/header.html', '../views/include/footer.html'])
+        .src(['../views/include/header.html', '../views/include/footer.html' , "../views/include/addModule.html"])
         .pipe(gulpIf(argv.env == 'pro', rev({
             assetsDir: path.join(pwd)
         })))

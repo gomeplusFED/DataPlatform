@@ -29,14 +29,14 @@ let content = `/**
 
 module.exports = (Router) => {
 
-    Router.get("/addpage" , (req , res , next) => {
-        res.render("addModule/index" , {
+    Router.get("/addModule" , (req , res , next) => {
+        res.render("include/addModule" , {
             pageTitle : "自动添加模块"
         });
     });
 
     //增加左侧模块
-    Router.get("/addModule" , (req , res , next) => {
+    Router.get("/addModulefile" , (req , res , next) => {
         let foldname = req.query.foldname;
         if(!foldname || !req.query.name){
             res.json({
