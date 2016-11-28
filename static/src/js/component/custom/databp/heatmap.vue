@@ -2,7 +2,7 @@
 <div class="extendNav">
 	<div class='form-group data-type'>
 		<label>数据</label>
-		<select v-model="datatype">
+		<select v-model="datatype" :disabled="!show">
 			<option v-for="type of dataTypes" value="{{type.name}}">{{type.name}}</option>
 		</select>
 	 </div>
@@ -79,26 +79,26 @@
 		},
 		methods: {
 			init(config) {
-				let data =[{
-					"pageUrl": "https://www-pre.gomeplus.com/",
-					"selector": "body > div.gome-about.gome-wrap > div.public-container > main > div.left-menu > ul > li:first-child > a",
-					"pv": 5336,
-					"uv": 824
-				}, {
-					"pageUrl": "https://www-pre.gomeplus.com/",
-					"selector": "body > div.gome-about.gome-wrap > div.public-container > main > div.left-menu > ul > li:first-child + li > a",
-					"pv": 15336,
-					"uv": 1824
-				}, {
-					"pageUrl": "https://www-pre.gomeplus.com/",
-					"selector": "body > div.gome-about.gome-wrap > div.public-container > main > div.left-menu > ul > li:first-child + li +li > a",
-					"pv": 19336,
-					"uv": 1924
-				}];
-				this.generateCanvas(data);
-				// api.getHeatData(config).then((data) => {
-				// 	this.generateCanvas(data);
-				// });
+				// let data =[{
+				// 	"pageUrl": "https://www-pre.gomeplus.com/",
+				// 	"selector": "body > div.gome-about.gome-wrap > div.public-container > main > div.left-menu > ul > li:first-child > a",
+				// 	"pv": 5336,
+				// 	"uv": 824
+				// }, {
+				// 	"pageUrl": "https://www-pre.gomeplus.com/",
+				// 	"selector": "body > div.gome-about.gome-wrap > div.public-container > main > div.left-menu > ul > li:first-child + li > a",
+				// 	"pv": 15336,
+				// 	"uv": 1824
+				// }, {
+				// 	"pageUrl": "https://www-pre.gomeplus.com/",
+				// 	"selector": "body > div.gome-about.gome-wrap > div.public-container > main > div.left-menu > ul > li:first-child + li +li > a",
+				// 	"pv": 19336,
+				// 	"uv": 1924
+				// }];
+				// this.generateCanvas(data);
+				api.getHeatData(config).then((data) => {
+					this.generateCanvas(data);
+				});
 			},
 			generateCanvas(data) {
 				let _this = this;
@@ -174,7 +174,7 @@
 	width: 100%;
 	height: 100%;
 	top: 0;
-	z-index: 100;
+	z-index: 1000;
 	cursor: auto;
 /*	background: rgba(255,255,255,0.1);*/
 }
