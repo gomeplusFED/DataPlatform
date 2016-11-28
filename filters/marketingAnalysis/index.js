@@ -33,9 +33,14 @@ module.exports = {
         now.name = "今日";
         old.name = "昨日";
 
+        now.create_amount = (now.create_amount / 100).toFixed(2);
+        now.payment_count = (now.payment_count / 100).toFixed(2);
+        old.create_amount = (old.create_amount / 100).toFixed(2);
+        old.payment_count = (old.payment_count / 100).toFixed(2);
+
         return util.toTable([[now, old]], rows, cols);
     },
-    overviewTwo(data, day) {
+    overviewTwo(data, day, filter_key) {
         let map = {
             now : "今日"
         };
@@ -44,6 +49,15 @@ module.exports = {
         } else {
             map.old = "上周同期"
         }
+
+        if(filter_key && (filter_key === "create_amount" || filter_key === "payment_amount")) {
+            for(let key in data) {
+                let k = data[key];
+                k.now = (k.now / 100).toFixed(2);
+                k.old = (k.old / 100).toFixed(2);
+            }
+        }
+
         return [{
             type : "line",
             map : map,

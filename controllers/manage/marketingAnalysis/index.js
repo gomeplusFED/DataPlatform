@@ -456,7 +456,7 @@ module.exports = (Router) => {
                             _findRedis(query.filter_key, {
                                 now : now,
                                 old : old
-                            }, hour, []), query.day
+                            }, hour, []), query.day, query.filter_key
                         ), modules);
                     }
                 } catch(err) {
