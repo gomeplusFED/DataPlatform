@@ -8,5 +8,5 @@ const util = require("../../../utils"),
     request = require("request");
 
 module.exports = (Router) => {
-
+    return Router;
 };
