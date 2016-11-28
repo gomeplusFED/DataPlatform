@@ -20,6 +20,7 @@
 	let api = require('./api');
 	let Loading = require('../../common/loading.vue');
 	let visualbp = require('./visualbp.vue');
+	var Heatmap = require('./heatmap.js');
 
 	let heatmap = Vue.extend({
 		name: 'databp',
@@ -30,7 +31,8 @@
 			return {
 				mask: true,
 				// 防止热力图无限扩大设置的最大值
-				maxVal: 300,
+				// 最大不透明度为1
+				maxVal: 1,
 				maskNodes: [],
 				dataTypes: [
 				{
@@ -41,7 +43,23 @@
 					name: 'uv',
 					p: 1
 				}],
-				datatype: 'pv'
+				datatype: 'pv',
+				heatData: {
+					pv: [],
+					uv: []
+				},
+				canvas: {
+					pv: null,
+					uv: null
+				},
+				option: {
+		            type : 'heatmap',
+		            hoverable : false,
+		            minAlpha: 0.2,
+		            valueScale: 1,
+		            opacity: 1
+		        }
+
 			}
 		},
 		route: {
@@ -61,73 +79,69 @@
 		},
 		methods: {
 			init(config) {
-				// var $iframe = $('iframe').contents();
-				// var $body = $iframe.find('body');
-				// let $elem = $iframe.find('body > div.gome-about.gome-wrap > div.public-container > main > div.left-menu > ul > li.active > a');
-	//   			let mask = this.genNodes($elem, {pv: 200, uv:400});
-	//   			this.renderNodes();
-	//   			$body.append(mask);
-
-
+				// let data =[{
+				// 	"pageUrl": "https://www-pre.gomeplus.com/",
+				// 	"selector": "body > div.gome-about.gome-wrap > div.public-container > main > div.left-menu > ul > li:first-child > a",
+				// 	"pv": 5336,
+				// 	"uv": 824
+				// }, {
+				// 	"pageUrl": "https://www-pre.gomeplus.com/",
+				// 	"selector": "body > div.gome-about.gome-wrap > div.public-container > main > div.left-menu > ul > li:first-child + li > a",
+				// 	"pv": 15336,
+				// 	"uv": 1824
+				// }, {
+				// 	"pageUrl": "https://www-pre.gomeplus.com/",
+				// 	"selector": "body > div.gome-about.gome-wrap > div.public-container > main > div.left-menu > ul > li:first-child + li +li > a",
+				// 	"pv": 19336,
+				// 	"uv": 1924
+				// }];
+				// this.generateCanvas(data);
 				api.getHeatData(config).then((data) => {
-					var $iframe = $('iframe').contents();
-					var $body = $iframe.find('body');
-					// 找出最大值，得到缩放系数
-					for(let type of this.dataTypes) {
-						let vals = data.map(x => x[type.name]);
-						let max = Math.max(...vals);
-						if (max > this.maxVal) {
-							type.p = this.maxVal/max;
-							// type.$set('p', this.maxVal/max);
-						}
-					}
-
-					console.log(this.dataTypes);
-					for(let t of data) {
-						let $elem = $iframe.find(t.selector);
-						let mask = this.genNodes($elem, t);
-						$body.append(mask);
-					}
-					this.renderNodes();
+					this.generateCanvas(data);
 				});
 			},
-			genNodes($elem, item) {
-				let _offset = $elem.offset();
-				let _width = $elem.outerWidth();
-				let _height = $elem.outerHeight();
-				let _product = _width * _height;
-				let _centerX = _offset.left + _width / 2;
-				let _centerY = _offset.top + _height / 2;
-				function calc(value, p) {
-					value = p * value;
-					// 计算比例k
-					let k = Math.sqrt(value * value / _product);
-					let width = k * _width;
-					let height = k * _height;
-					return {
-						width: width + 'px',
-						height: height + 'px',
-						left: _centerX-width/2 + 'px',
-						top: _centerY-height/2 + 'px'
-					}
-				}
+			generateCanvas(data) {
+				let _this = this;
+				var $iframe = $('iframe').contents();
+				var $body = $iframe.find('body');
 
-				let data = {}
-				for(let type of this.dataTypes) {
-					data[type.name] = calc(item[type.name], type.p);
+				let heatdiv = document.createElement("div");
+
+				let docheight = $iframe.height();
+				let docwidth = $iframe.width();
+				heatdiv.style = `z-index:900;position:absolute;height:${docheight}px;width:${docwidth}px;top:0;left:0;`;
+				$body.append(heatdiv);
+				for(let type of _this.dataTypes) {
+					let name = type.name;
+					let vals = data.map(x => x[name]);
+					let max = Math.max(...vals);
+					if (max > this.maxVal) {
+						type.p = this.maxVal/max;
+					}
+					// 处理数据
+					this.heatData[name] = data.map((x) => {
+						let $elem = $iframe.find(x.selector);
+						let _offset = $elem.offset();
+						let _width = $elem.outerWidth();
+						let _height = $elem.outerHeight();
+						let _centerX = _offset.left + _width / 2;
+						let _centerY = _offset.top + _height / 2;
+						return [_centerX, _centerY, x[name] * type.p];
+					});
+					_this.canvas[name] = new Heatmap(_this.option).getCanvas(_this.heatData[name],
+                        docwidth, docheight);
+					_this.canvas[name].style.display = 'none';
+					heatdiv.appendChild(_this.canvas[name]);
 				}
-				let divNode = document.createElement("div");
-				divNode.style = `z-index:900;position:absolute;background: radial-gradient(red, yellow 20%, #1E90FF 30%, rgba(255,255,255,0) 50%);`;
-				let res = {
-					divNode,
-					data
-				}
-				this.maskNodes.push(res);
-				return divNode;
+				_this.switchCanvas();
 			},
-			renderNodes(type = this.dataTypes[0].name) {
-				for(let node of this.maskNodes) {
-					Object.assign(node.divNode.style, node.data[type]);
+			switchCanvas(type = this.dataTypes[0].name) {
+				for(let t in this.canvas) {
+					if (t === type) {
+						this.canvas[type].style.display = 'block';
+					} else {
+						this.canvas[t].style.display = 'none';
+					}
 				}
 			}
 		},
@@ -149,7 +163,7 @@
 			},
 			'datatype': {
 				handler(val) {
-					this.renderNodes(val);
+					this.switchCanvas(val);
 				}
 			}
 		}
