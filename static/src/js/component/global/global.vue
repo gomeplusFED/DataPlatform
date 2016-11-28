@@ -54,6 +54,17 @@
 		ready() {
 			var _this = this;
 			eventBus.$on('loadGlobal', function(data) {
+				_this.$set('argvs', {
+					type: '',
+					channel: '',
+					ver: '',
+					coupon_type: '',
+					startTime: '',
+					endTime: '',
+					day_type: 1,
+					main_show_type_filter : ''
+				});
+
 				data.date_picker = data.date_picker || {show: false, defaultData: 7};
 				_this.pageComponentsData = data;
 

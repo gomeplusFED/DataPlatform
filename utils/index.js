@@ -526,5 +526,40 @@ exports.dealDivision = function(a , b , num){
     }
 }
 
+exports.merge = (ws, x1, y1, x2, y2, str, style) => {
+    let w = ws.cell(x1, y1, x2, y2, true);
+    if(typeof str === "string") {
+        w = w.string(str);
+    } else {
+        w = w.number(str);
+    }
+    if(style) {
+        w.style(style);
+    }
+};
 
-
+exports.export = (ws, data) => {
+    for(let i = 0; i < data.length; i++) {
+        let key = data[i];
+        let x = i + 1;
+        for(let j = 0; j < key.length; j++) {
+            let y = j + 1;
+            let k = key[j];
+            if(k instanceof Array) {
+                exports.merge(ws, ...k);
+            } else if(typeof k === "string") {
+                ws.cell(x, y).string(k);
+            } else if(typeof k === "number") {
+                ws.cell(x, y).number(k);
+            } else {
+                let w = ws.cell(x, y);
+                if(typeof k.name === "string") {
+                    w = w.string(k.name);
+                } else {
+                    w = w.number(k.name);
+                }
+                w.style(k.style);
+            }
+        }
+    }
+};
