@@ -34,9 +34,9 @@ module.exports = {
         old.name = "昨日";
 
         now.create_amount = (now.create_amount / 100).toFixed(2);
-        now.payment_count = (now.payment_count / 100).toFixed(2);
+        now.payment_amount = (now.payment_amount / 100).toFixed(2);
         old.create_amount = (old.create_amount / 100).toFixed(2);
-        old.payment_count = (old.payment_count / 100).toFixed(2);
+        old.payment_amount = (old.payment_amount / 100).toFixed(2);
 
         return util.toTable([[now, old]], rows, cols);
     },
