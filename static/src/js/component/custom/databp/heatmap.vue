@@ -84,26 +84,26 @@
 		},
 		methods: {
 			init(config) {
-				let data =[{
-					"pageUrl": "https://www-pre.gomeplus.com/",
-					"selector": "body > div.gome-about.gome-wrap > div.public-container > main > div.left-menu > ul > li:first-child > a",
-					"pv": 5336,
-					"uv": 824
-				}, {
-					"pageUrl": "https://www-pre.gomeplus.com/",
-					"selector": "body > div.gome-about.gome-wrap > div.public-container > main > div.left-menu > ul > li:first-child + li > a",
-					"pv": 15336,
-					"uv": 1824
-				}, {
-					"pageUrl": "https://www-pre.gomeplus.com/",
-					"selector": "body > div.gome-about.gome-wrap > div.public-container > main > div.left-menu > ul > li:first-child + li +li > a",
-					"pv": 19336,
-					"uv": 1924
-				}];
-				this.generateCanvas(data);
-				// api.getHeatData(config).then((data) => {
-				// 	this.generateCanvas(data);
-				// });
+				// let data =[{
+				// 	"pageUrl": "https://www-pre.gomeplus.com/",
+				// 	"selector": "body > div.gome-about.gome-wrap > div.public-container > main > div.left-menu > ul > li:first-child > a",
+				// 	"pv": 5336,
+				// 	"uv": 824
+				// }, {
+				// 	"pageUrl": "https://www-pre.gomeplus.com/",
+				// 	"selector": "body > div.gome-about.gome-wrap > div.public-container > main > div.left-menu > ul > li:first-child + li > a",
+				// 	"pv": 15336,
+				// 	"uv": 1824
+				// }, {
+				// 	"pageUrl": "https://www-pre.gomeplus.com/",
+				// 	"selector": "body > div.gome-about.gome-wrap > div.public-container > main > div.left-menu > ul > li:first-child + li +li > a",
+				// 	"pv": 19336,
+				// 	"uv": 1924
+				// }];
+				// this.generateCanvas(data);
+				api.getHeatData(config).then((data) => {
+					this.generateCanvas(data);
+				});
 			},
 			generateCanvas(data) {
 				let _this = this;
