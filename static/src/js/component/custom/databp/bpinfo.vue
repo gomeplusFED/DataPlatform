@@ -1,6 +1,6 @@
 <template>
 <div class="mask" v-show="bpConfig.show"   v-on:dragover.stop.prevent="" v-on:drop.stop.prevent="drop" @click="warning">
-	<div class="infobox" draggable="true"  v-on:dragstart="dragstart" v-on:drag.stop.prevent="draging" v-bind:style="infopos">
+	<div class="infobox" :draggable="draggable"  v-on:dragstart="dragstart" v-on:drag.stop.prevent="draging" v-bind:style="infopos">
 		<div class="closer" title="关闭" @click="hide"></div>
 		<div class="sider-nav ">
 			<div class="tabs-container">
@@ -10,14 +10,14 @@
 				</ul> 
 				<div class="tab-content tabs-content zbgxt-content">
 					<div id="tab_baseinfo" class="tab-pane active in">
-						<div class="extendinfo">
+						<div class="extendinfo" @focusin="setDraggable(false)" @focusout="unfocus">
 							<div>
 								<label>埋点名称</label>
 								<input type='text' class='form-control' placeholder='' v-model="config.pointName">
 							</div>
 							<div><label>选择器</label>{{config.selector}}</div>
 							<div><label>事件类型</label>单击事件</div>
-							<div><label>pattern</label>{{config.pattern}}</div>
+							<div><label>匹配模式</label>{{config.pattern}}</div>
 							<div><label>全局埋点信息</label>{{publicBpStr}} <button @click="publicBp.push(['', ''])">+</button></div>
 							<div>
 								<div v-for="(i,item) in publicBp" class="pair">
@@ -68,6 +68,7 @@ var bpinfo = Vue.extend({
 	data: function() {
 		return {
 			dragpos: {},
+			draggable: true,
 			userInfo: null,
 			config: {
 				pointId: null,
@@ -157,9 +158,8 @@ var bpinfo = Vue.extend({
 	},
 	props:['loading'],
 	created() {
-		this.$watch('bpConfig.show', function (val) {
-			this.selectpos.show = false;
-			if (val) {
+		this.$watch('bpConfig.trigger', function (val) {
+			if (this.bpConfig.show) {
 				this.init();
 			}
 		});
@@ -168,10 +168,18 @@ var bpinfo = Vue.extend({
 		});
 	},
 	methods: {
+		setDraggable(val) {
+			this.draggable = val;
+		},
+		unfocus() {
+			this.setDraggable(true);
+			setTimeout(() => {
+				this.selectpos.show = false;
+			}, 100);
+		},
 		init() {
 			this.loading.show = true;
 			var _this = this;
-			// Object.assign(_this.config,  _this.bpConfig);
 			api.getBp(_this.bpConfig).then(function(data) {
 				let keys = Object.keys(data);
 				for (let key of keys) {
@@ -182,12 +190,6 @@ var bpinfo = Vue.extend({
 					}
 				}
 				// show the config window
-				// _this.config.pointId = data.pointId;
-				// _this.config.matchUrlId = data.matchUrlId;
-				// _this.config.pattern = data.pattern;
-				// _this.config.pageUrl = data.pageUrl || _this.bpConfig.pageUrl;
-				// _this.config.pointName = data.pointName;
-				// _this.config.pattern = data.pattern;
 				_this.publicBpStr = data.publicParam;			
 				_this.privateBpStr = data.privateParam;
 				_this.loading.show = false;
@@ -221,11 +223,9 @@ var bpinfo = Vue.extend({
 		},
 		selectVal(val) {
 			this.selected.item.$set(1, val);
-			// this.selected.item[1] = val;
 			this.selectpos.show = false;
 		},
 		dragstart(e) {
-			this.selectpos.show = false;
 			e.dataTransfer.effectAllowed = "move";  //移动效果
 			e.dataTransfer.setData("text", '');  //附加数据，　没有这一项，firefox中无法移动
 			this.dragpos.x = e.offsetX || e.clientX - $(e.target).offset().left;
@@ -241,7 +241,6 @@ var bpinfo = Vue.extend({
 			}
 		},
 		drop(e) {
-			// this.mask = false;
 			e.preventDefault() || e.stopPropagation(); 
 		},
 		warning(e){
@@ -295,7 +294,6 @@ var bpinfo = Vue.extend({
 					// 更新成功刷新传入的数据
 					_this.config.show = false;
 					actions.databp(store, _this.config);
-
 				});
 			} else {
 				api.saveBp(_this.config).then(function() {

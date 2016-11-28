@@ -34,74 +34,97 @@ module.exports = (Router) => {
     Router.get('/databp/html', (req, res, next) => {
         
         let url = req.query.url;
-        let trunk = url.replace(/\/[^\/]*?$/, '');
-        let host = trunk.replace(/([^\/:\s])\/.*$/, '$1');
-        let mobile = (req.query.m === 'H5'? true:false);
 
-        let Host = trunk.replace(/https?:\/\//, '').split('/')[0];
         let options = {
             credentials: 'include',
             // agent,
             headers: {
-                // Host,
                 'Connection': 'keep-alive',
                 'Pragma': 'no-cache',
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36'
             }
         };
-        if (mobile) {
+        let platform = req.query.m;
+        let mobile = (platform === 'H5'? true:false);
+        let mobileProc = Promise.resolve(true);
+        let relocation;
+        if (mobile || (/\/\/m\./.test(url) && !mobile)) {
             // url = url.replace('//mall.', '//m.');
-            options.headers['User-Agent'] = 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1';
+            if (mobile) {
+                options.headers['User-Agent'] = 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1';
+            }
+            options.redirect = 'manual';
+            // 先请求一次，探查真实地址
+            mobileProc = fetch(url, options).then(function(result) {
+                // console.log(result.headers);
+                if((relocation = result.headers._headers) && (relocation = relocation.location) && (relocation = relocation[0]) && (relocation !== url)) {
+                    url = relocation;
+                    if(!mobile) {
+                        platform = 'PC';
+                    }
+                }
+                options.redirect = 'follow';
+                return true;
+            });
         }
+        let trunk, host, databpSess;
 
-        let databpSess =  {
+        mobileProc.then(() => {
+            trunk = url.replace(/\/[^\/]*?$/, '');
+            host = trunk.replace(/([^\/:\s])\/.*$/, '$1');
+            databpSess =  {
                 url,
                 origin: trunk,
                 host
             };
-        
-        fetch(url, options)
-        .then(function(result) {
-            let rawcookie = result.headers;
-            if ((rawcookie = rawcookie._headers) && (rawcookie = rawcookie['set-cookie'])) {
-                rawcookie = rawcookie.toString();
-                let cookie = rawcookie.match(/(mx_pc_gomeplusid|mx_wap_gomeplusid|content_ctag|isnew|ssid|plasttime|mx_pc_code_total)=.+?;/g);
-                if (cookie) {
-                    databpSess.cookie = cookie;
-                } else {
-                    databpSess.cookie = [];
+        }).then(() =>{
+            fetch(url, options)
+            .then(function(result) {
+                let rawcookie = result.headers;
+                if ((rawcookie = rawcookie._headers) && (rawcookie = rawcookie['set-cookie'])) {
+                    rawcookie = rawcookie.toString();
+                    let cookie = rawcookie.match(/(mx_pc_gomeplusid|mx_wap_gomeplusid|content_ctag|mx_pc_code_total)=.+?;/g);
+                    if (cookie) {
+                        databpSess.cookie = cookie;
+                    } else {
+                        databpSess.cookie = [];
+                    }
                 }
-            }
-            return result.text();
-        }).then(function(body) {
-            let html = body;
-            // 移动端移除头部script，防止iframe无法正常渲染
-            if (mobile) {
-                html = html.replace(/^[\s\S]+?(<!DOCTYPE)/mi, function(m, p1) {
-                    return p1;
-                });
-            }
-            // 转化静态标签的src和href，使其可以正常访问
 
-            html = html.replace(/(href|src)\s*=\s*"\s*((?!http|\/\/|javascript).+?)\s*"/g, function(m, p1, p2) {
-                if(p2.indexOf('.') === 0) {
-                    return `${p1}="${trunk}/${p2}"`;
-                } else if (p2.indexOf('/') === 0) {
-                    return `${p1}="${host}${p2}"`;
-                } else {
-                    return `${p1}="${host}/${p2}"`;
+                return result.text();
+            }).then(function(body) {
+                let html = body;
+                // 移动端移除头部script，防止iframe无法正常渲染
+                if (mobile) {
+                    html = html.replace(/^[\s\S]+?(<!DOCTYPE)/mi, function(m, p1) {
+                        return p1;
+                    });
                 }
+                // 转化静态标签的src和href，使其可以正常访问
+
+                html = html.replace(/(href|src)\s*=\s*"\s*((?!http|\/\/|javascript).+?)\s*"/g, function(m, p1, p2) {
+                    if(p2.indexOf('.') === 0) {
+                        return `${p1}="${trunk}/${p2}"`;
+                    } else if (p2.indexOf('/') === 0) {
+                        return `${p1}="${host}${p2}"`;
+                    } else {
+                        return `${p1}="${host}/${p2}"`;
+                    }
+                });
+                // 添加自定义脚本
+                let proxytext = `<script>${xhrProxy}('${url}', '${platform}');</script>`;
+                html = html.replace('<head>', '<head>' + proxytext);
+                req.session.databp = databpSess;
+                res.end(html);
+            }).catch(function(e) {
+                console.log(e);
+                res.end(e.toString());
+                // next(e);
             });
-            // 添加自定义脚本
-            let proxytext = `<script>${xhrProxy}('${querystring.stringify({origin:trunk})}');</script>`;
-            html = html.replace('<head>', '<head>' + proxytext);
-            req.session.databp = databpSess;
-            res.end(html);
-        }).catch(function(e) {
-            console.log(e);
-            res.end(e.toString());
-            // next(e);
         });
+
+        
+
         // res.end('error');
 
     });

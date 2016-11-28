@@ -11,6 +11,7 @@ var state = {
     },
     bpConfig: {
         show: false,
+        trigger: false,
         privateParam: '',
         publicParam: '',
         pageUrl: '',
@@ -60,6 +61,7 @@ mutations.ALERT = function(state, params) {
 
 mutations.DATABP = function(state, params) {
     state.bpConfig.show = params.show;
+    state.bpConfig.trigger = !state.bpConfig.trigger;
     state.bpConfig.privateParam = params.privateParam;
     state.bpConfig.publicParam = params.publicParam;
     state.bpConfig.pageUrl = params.pageUrl;

@@ -12,6 +12,7 @@ var utils = require("../utils"),
     async = require("asyncawait/async"),
     await = require("asyncawait/await"),
     orm = require("orm"),
+    sqlLogRunTime = require("./sqlLogRunTime"),
     cacheTime = 1;
 
 let eventproxy = require("eventproxy");
@@ -284,10 +285,10 @@ api.prototype = {
                                 return new Promise((resolve , reject)=>{
                                     let ep = new eventproxy();
 
-                                    this._findDatabaseSql2(req, this[this.sql[i]](query, params, false) , (data)=>{
+                                    this._findDatabaseSql2(req, this[this.sql[i]](query, params, false) , this.modelName[i], (data)=>{
                                         ep.emit("data" , data);
                                     });
-                                    this._findDatabaseSql2(req, this[this.sql[i]](query, params, true) , (data)=>{
+                                    this._findDatabaseSql2(req, this[this.sql[i]](query, params, true) , this.modelName[i], (data)=>{
                                         ep.emit("count" , data);
                                     });
                                     ep.all("data" , "count" , (data , count) => {
@@ -305,7 +306,7 @@ api.prototype = {
 
                         } else {
                             sendData[this.dataName[i]].data =
-                                await(this._findDatabaseSql(req, this[this.sql[i]](query, params)));
+                                await(this._findDatabaseSql(req, this[this.sql[i]](query, params), this.modelName[i]));
                         }
                     } else {
                         if (this.procedure[i]) {
@@ -478,6 +479,7 @@ api.prototype = {
         return new Promise((resolve, reject) => {
             try{
                 var sql = req.models[modelName];
+                let start = new Date();
                 if (length > 1){
                     for (var key in procedure) {
                         if (endFn.indexOf(key) >= 0) {
@@ -485,6 +487,8 @@ api.prototype = {
                                 var args = Array.prototype.slice.call(arguments),
                                     err = args.shift();
 
+                                let end = new Date();
+                                sqlLogRunTime.writeToFile(start, end, modelName);
                                 err ? reject(err) : resolve(args);
                             });
                         } else if (arrayFn.indexOf(key) >= 0) {
@@ -500,6 +504,8 @@ api.prototype = {
                 } else {
                     // console.log(req.url);
                     sql[keys[0]](_obj.params, (err, data) => {
+                        let end = new Date();
+                        sqlLogRunTime.writeToFile(start, end, modelName);
                         err ? reject(modelName + err) : resolve(data);
                     });
                 }
@@ -539,6 +545,7 @@ api.prototype = {
         
         try{
             var sql = req.models[modelName];
+            let start = new Date();
             if (length > 1){
                 for (var key in procedure) {
                     if (endFn.indexOf(key) >= 0) {
@@ -546,6 +553,8 @@ api.prototype = {
                             var args = Array.prototype.slice.call(arguments),
                                 err = args.shift();
 
+                            let end = new Date();
+                            sqlLogRunTime.writeToFile(start, end, modelName);
                             // err ? reject(err) : resolve(args);
                             return err ? callback(err) : callback(null , args);
                         });
@@ -563,6 +572,8 @@ api.prototype = {
                 // console.log(req.url);
                 sql[keys[0]](_obj.params, (err, data) => {
                     // err ? reject(modelName + err) : resolve(data);
+                    let end = new Date();
+                    sqlLogRunTime.writeToFile(start, end, modelName);
                     return err ? callback(err) : callback(null , data);
                 });
             }
@@ -571,10 +582,13 @@ api.prototype = {
         }
 
     },
-    _findDatabaseSql : async((req, sqlObject) => {
+    _findDatabaseSql : async((req, sqlObject, modelName) => {
         return new Promise((resolve, reject) => {
+            let start = new Date();
             try{
                 req.models.db1.driver.execQuery(sqlObject.sql, sqlObject.params, (err, data) => {
+                    let end = new Date();
+                    sqlLogRunTime.writeToFile(start, end, modelName);
                     err ? reject(err) : resolve(data);
                 });
             }catch(err) {
@@ -582,9 +596,12 @@ api.prototype = {
             }
         });
     }),
-    _findDatabaseSql2 (req, sqlObject , callback){
+    _findDatabaseSql2 (req, sqlObject , modelName, callback){
+        let start = new Date();
         try{
             req.models.db1.driver.execQuery(sqlObject.sql, sqlObject.params, (err, data) => {
+                let end = new Date();
+                sqlLogRunTime.writeToFile(start, end, modelName);
                 if(err) console.log(err);
                 return callback && callback(data);
             });

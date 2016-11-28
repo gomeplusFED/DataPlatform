@@ -10,6 +10,7 @@
 
 var api = require("../../../base/main"),
     filter = require("../../../filters/achievements/f_trade");
+let orm = require("orm");
 
 module.exports = (Router) => {
 
@@ -159,8 +160,11 @@ module.exports = (Router) => {
         router: "/achievements/tradeTwo",
         modelName: ["SalesOverview2"],
         platform: false,
-        toggle: true,
+        toggle: {
+            show : true
+        },
         paging: [true],
+        order: ["-date"],
         filter_select: [{
             title: '指标选择(图表使用)',
             filter_key: 'filter_key',
@@ -200,9 +204,11 @@ module.exports = (Router) => {
         date_picker_data: 1,
         paging: [true],
         order: ["-date"],
-        toggle: true,
+        toggle: {
+            show : true
+        },
         filter_select: [{
-            title: '指标选择',
+            title: '指标选择(图表使用)',
             filter_key: 'filter_key',
             groups: [{
                 key: 'pay_num',
@@ -289,6 +295,7 @@ module.exports = (Router) => {
         date_picker_data: 1,
         platform: false,
         paging: [true],
+        sum : ["pay_sum"],
         /*excel_export : true,
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
@@ -332,7 +339,7 @@ module.exports = (Router) => {
                     }
                 });
             } else {
-                query.category_id_1 = "ALL";
+                query.category_id_1 = orm.not_in(["ALL"]);
                 query.category_id_2 = "ALL";
                 query.category_id_3 = "ALL";
                 query.category_id_4 = "ALL";
@@ -342,7 +349,7 @@ module.exports = (Router) => {
         },
         level_select: true,
         level_select_name: "category_id",
-        level_select_url: "/api/categories",
+        level_select_url: "/api/categories?level=2",
         filter(data, query, dates) {
             return filter.tradeFour(data, query, dates);
         },

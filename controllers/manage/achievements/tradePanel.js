@@ -140,6 +140,7 @@ module.exports = (Router) => {
         modelName : ["SalesPerfPayModeTotal2"],
         platform : false,
         date_picker : false,
+        order : ["-order_channel"],
         params(query , params , sendData){
             if(!query.type) params.type = "ALL";
             return params;
@@ -162,7 +163,7 @@ module.exports = (Router) => {
         date_picker : false,
         // paging : [true],
         toggel : true,
-        order : ["-date"],
+        order : ["-date","-order_channel"],
         params(query , params , sendData){
             if(!query.type) params.type = "ALL";
             try{
@@ -292,7 +293,6 @@ module.exports = (Router) => {
             return filter.tradePanelFive(data , query , dates);
         },
         rows: [
-            ["used_num" , "used_amount" , "lv"],
             ["used_num" , "used_amount" , "lv" , "operating"],
         ]
     });

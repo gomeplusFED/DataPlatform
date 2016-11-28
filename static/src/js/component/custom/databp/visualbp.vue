@@ -39,7 +39,7 @@
 	var store = require('../../../store/store.js');
 	var actions = require('../../../store/actions.js');
 	
-	var databp = Vue.extend({
+	var visualbp = Vue.extend({
 		name: 'databp',
 		components: {
 			'm-loading': Loading,
@@ -74,18 +74,25 @@
 	        	let pageUrl = query.pageUrl;
 				let platform = query.platform;
 				if (pageUrl && platform) {
-					this.bpConfig.pageUrl = pageUrl;
-					this.bpConfig.platform = platform;
-					this.search(true);
 					if(query.selector) {
 						query.show = true;
 						actions.databp(store, query);
 					}
+					this.bpConfig.pageUrl = pageUrl;
+					this.bpConfig.platform = platform;
+					this.search(true);
 				} else if (this.iframe_url === '') {
 					this.loading.show = false;
 				}
 				return Promise.resolve(true);
 	        }
+    	},
+    	events: {
+    		'visual_url': function (config) {
+		    	this.bpConfig.pageUrl = config.pageUrl;
+		    	this.bpConfig.platform = config.platform || 'PC';
+		    	this.search(true);
+		    }
     	},
 		methods: {
 			iframeload(ev) {
@@ -95,17 +102,18 @@
 					return false;
 				}
 				_this.loading.show = false;
-				var $iframe = $(ev.path[0]).contents();
-				try {
-					// 当使用历史前进后退时，修正信息
-					let url = $iframe.get(0).location.href;
-					let info = url.match(/.+?html\?m=(.+?)&url=(.+?)$/);
-					_this.bpConfig.pageUrl = info[2];
-					_this.bpConfig.platform = info[1];
-				} catch (err) {
-					console.log(err);
-				}
+				let iframenode = ev.path[0]
+				let $iframe = $(iframenode).contents();
 
+
+
+				// 修正重定向
+				let $iframewin = iframenode.contentWindow;
+				_this.bpConfig.pageUrl = $iframewin.$pageUrl;
+				_this.bpConfig.platform = $iframewin.$platform;
+
+
+				_this.$dispatch('visualbp_loaded', _this.bpConfig);
 				var $head = $iframe.find('head'); 
 				var $body = $iframe.find('body');
 				var hovered = [];
@@ -181,11 +189,12 @@
 					return false;
 				}
 				this.$router.go({
-					path: '/databp/visualbp',
+					path: this.$route.path.split('?')[0],
 					query: {pageUrl: url,
 							platform: this.bpConfig.platform
 					}
 				});
+
 				this.search();
 			},
 			search(forceloading = false) {
@@ -198,7 +207,7 @@
 			}
 		}
 	});
-	module.exports = databp;
+	module.exports = visualbp;
 </script>
 <style scoped>
 .form-inline {

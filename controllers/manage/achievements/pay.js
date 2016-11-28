@@ -63,7 +63,9 @@ module.exports = (Router) => {
                 name: 'PC'
             }]
         },*/
-        toggle: true,
+        toggle: {
+            show : true
+        },
         paging: [true],
         order : ["-date"],
 
@@ -161,7 +163,10 @@ module.exports = (Router) => {
         router : "/achievements/payTwo",
         modelName : ["PayWay2"],
         platform : false,
-        toggle: true,
+        order : ["-date" , "-order_channel"],
+        toggle: {
+            show : true
+        },
         params(query , params , sendData){
             if(!query.type){
                 params.type = "ALL";
@@ -179,7 +184,9 @@ module.exports = (Router) => {
         modelName : ["OrderConstitue2"],
         platform : false,
         order : ["-date"],
-        toggle : true,
+        toggle : {
+            show : true
+        },
         params(query , params , sendData){
             if(!query.type){
                 params.type = "ALL";
