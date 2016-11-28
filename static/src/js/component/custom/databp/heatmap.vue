@@ -6,11 +6,11 @@
 			<option v-for="type of dataTypes" value="{{type.name}}">{{type.name}}</option>
 		</select>
 	 </div>
-	<label><input type="checkbox" v-model="mask"></input>显示热力图</label>
+	<label><input type="checkbox" v-model="show"></input>显示热力图</label>
 
 </div>
 
-<div class="mask" v-show="mask"> </div>
+<div class="mask"> </div>
 <visualbp> </visualbp>
 </template>
 <script>
@@ -30,10 +30,10 @@
 		data: function() {
 			return {
 				mask: true,
+				show: true,
 				// 防止热力图无限扩大设置的最大值
 				// 最大不透明度为1
 				maxVal: 1,
-				maskNodes: [],
 				dataTypes: [
 				{
 					name: 'pv',
@@ -79,26 +79,26 @@
 		},
 		methods: {
 			init(config) {
-				// let data =[{
-				// 	"pageUrl": "https://www-pre.gomeplus.com/",
-				// 	"selector": "body > div.gome-about.gome-wrap > div.public-container > main > div.left-menu > ul > li:first-child > a",
-				// 	"pv": 5336,
-				// 	"uv": 824
-				// }, {
-				// 	"pageUrl": "https://www-pre.gomeplus.com/",
-				// 	"selector": "body > div.gome-about.gome-wrap > div.public-container > main > div.left-menu > ul > li:first-child + li > a",
-				// 	"pv": 15336,
-				// 	"uv": 1824
-				// }, {
-				// 	"pageUrl": "https://www-pre.gomeplus.com/",
-				// 	"selector": "body > div.gome-about.gome-wrap > div.public-container > main > div.left-menu > ul > li:first-child + li +li > a",
-				// 	"pv": 19336,
-				// 	"uv": 1924
-				// }];
-				// this.generateCanvas(data);
-				api.getHeatData(config).then((data) => {
-					this.generateCanvas(data);
-				});
+				let data =[{
+					"pageUrl": "https://www-pre.gomeplus.com/",
+					"selector": "body > div.gome-about.gome-wrap > div.public-container > main > div.left-menu > ul > li:first-child > a",
+					"pv": 5336,
+					"uv": 824
+				}, {
+					"pageUrl": "https://www-pre.gomeplus.com/",
+					"selector": "body > div.gome-about.gome-wrap > div.public-container > main > div.left-menu > ul > li:first-child + li > a",
+					"pv": 15336,
+					"uv": 1824
+				}, {
+					"pageUrl": "https://www-pre.gomeplus.com/",
+					"selector": "body > div.gome-about.gome-wrap > div.public-container > main > div.left-menu > ul > li:first-child + li +li > a",
+					"pv": 19336,
+					"uv": 1924
+				}];
+				this.generateCanvas(data);
+				// api.getHeatData(config).then((data) => {
+				// 	this.generateCanvas(data);
+				// });
 			},
 			generateCanvas(data) {
 				let _this = this;
@@ -146,16 +146,13 @@
 			}
 		},
 		watch: {
-			'mask': {
+			'show': {
 				handler(val) {
 					if(val) {
-						for(let node of this.maskNodes) {
-							node.divNode.style.display = 'block';
-						}
-
+						this.switchCanvas(this.datatype);
 					} else {
-						for(let node of this.maskNodes) {
-							node.divNode.style.display = 'none';
+						for(let t in this.canvas) {
+								this.canvas[t].style.display = 'none';
 						}
 						
 					}
@@ -179,7 +176,7 @@
 	top: 0;
 	z-index: 100;
 	cursor: auto;
-	background: rgba(255,255,255,0.2);
+/*	background: rgba(255,255,255,0.1);*/
 }
 .extendNav {
 	position: absolute;
