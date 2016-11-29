@@ -82,7 +82,6 @@
 							// 延迟一下，使浏览器先render完毕
 							setTimeout(() => {
 								this.generateCanvas(this.data);
-								this.show = true;
 							}, 10);
 						}
 					});
@@ -93,29 +92,29 @@
 		},
 		methods: {
 			init(config) {
-				let data =[{
-					"pageUrl": "https://www-pre.gomeplus.com/",
-					"selector": "body > div.wrap-box > div.circle-index-list.clearfix > div:nth-child(2) > div:nth-child(1) > div > div.list-img > a > img",
-					"pv": 5336,
-					"uv": 824
-				}, {
-					"pageUrl": "https://www-pre.gomeplus.com/",
-					"selector": "body > div.wrap-box > div.circle-index-list.clearfix > div:nth-child(3) > div:nth-child(1) > div > div.list-title > p > a",
-					"pv": 15336,
-					"uv": 1824
-				}, {
-					"pageUrl": "https://www-pre.gomeplus.com/",
-					"selector": "body > div.gome-about.gome-wrap > div.public-container > main > div.left-menu > ul > li:first-child + li +li > a",
-					"pv": 19336,
-					"uv": 1924
-				}];
-				this.data = data;
-				this.generateCanvas(data);
-				return Promise.resolve();
-				//return api.getHeatData(config).then((data) => {
-				//	this.data = data;
-				// 	this.generateCanvas(data);
-				// });
+				// let data =[{
+				// 	"pageUrl": "https://www-pre.gomeplus.com/",
+				// 	"selector": "body > div.wrap-box > div.circle-index-list.clearfix > div:nth-child(2) > div:nth-child(1) > div > div.list-img > a > img",
+				// 	"pv": 5336,
+				// 	"uv": 824
+				// }, {
+				// 	"pageUrl": "https://www-pre.gomeplus.com/",
+				// 	"selector": "body > div.wrap-box > div.circle-index-list.clearfix > div:nth-child(3) > div:nth-child(1) > div > div.list-title > p > a",
+				// 	"pv": 15336,
+				// 	"uv": 1824
+				// }, {
+				// 	"pageUrl": "https://www-pre.gomeplus.com/",
+				// 	"selector": "body > div.gome-about.gome-wrap > div.public-container > main > div.left-menu > ul > li:first-child + li +li > a",
+				// 	"pv": 19336,
+				// 	"uv": 1924
+				// }];
+				// this.data = data;
+				// this.generateCanvas(data);
+				// return Promise.resolve();
+				return api.getHeatData(config).then((data) => {
+					this.data = data;
+					this.generateCanvas(data);
+				});
 			},
 			generateCanvas(data) {
 				let _this = this;
@@ -194,6 +193,7 @@
 					_this.canvas[name] = _canvas;
 				}
 				_this.switchCanvas();
+				_this.show = true;
 			},
 			switchCanvas(type = this.dataTypes[0].name) {
 				for(let t in this.canvas) {
