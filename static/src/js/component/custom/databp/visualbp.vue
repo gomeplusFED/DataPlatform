@@ -85,6 +85,9 @@
 					this.loading.show = false;
 				}
 				return Promise.resolve(true);
+	        },
+	        deactivate: function() {
+	        	actions.databp(store, {show: false});
 	        }
     	},
     	events: {
@@ -114,9 +117,10 @@
 
 
 				_this.$dispatch('visualbp_loaded', _this.bpConfig);
+				var $head = $iframe.find('head'); 
+				var $body = $iframe.find('body');
 				if(/visualbp/.test(this.$route.path)) {
-					var $head = $iframe.find('head'); 
-					var $body = $iframe.find('body');
+
 					var hovered = [];
 					var selected;
 					$head.append('<style> .bphover {outline: 2px solid #0072ff !important;background-color: rgba(105, 210, 249, 0.4) !important;} .bphover-position-fix {position: relative !important;}</style>');
@@ -169,17 +173,18 @@
 								hovered.push($target);
 							}
 					});
-					$body.click(function(e) {
-						let $target = $(e.target);
-						let href = $target.attr('href') || $target.parents('a').attr('href');
-						if (href && href.indexOf('javascript') === -1) {
-							_this.bpConfig.pageUrl = href;
-							_this.searchClick();
-
-						}
-						return false;
-					});
 				}
+
+				$body.click(function(e) {
+					let $target = $(e.target);
+					let href = $target.attr('href') || $target.parents('a').attr('href');
+					if (href && href.indexOf('javascript') === -1) {
+						_this.bpConfig.pageUrl = href;
+						_this.searchClick();
+
+					}
+					return false;
+				});
 
 			},
 			searchClick() {
