@@ -82,7 +82,6 @@
 							// 延迟一下，使浏览器先render完毕
 							setTimeout(() => {
 								this.generateCanvas(this.data);
-								this.show = true;
 							}, 10);
 						}
 					});
@@ -194,6 +193,7 @@
 					_this.canvas[name] = _canvas;
 				}
 				_this.switchCanvas();
+				_this.show = true;
 			},
 			switchCanvas(type = this.dataTypes[0].name) {
 				for(let t in this.canvas) {
