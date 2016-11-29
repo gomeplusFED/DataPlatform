@@ -95,7 +95,14 @@
 						url: query_api + '_json',
 						type: 'get',
 						success: function(data) {
-							eventBus.$emit('loadGlobal', data.components);
+							// 如果没有时间组件延迟加载
+							if (data.components.date_picker && data.components.date_picker.show) {
+								eventBus.$emit('loadGlobal', data.components);
+							} else {
+								setTimeout(() => {
+									eventBus.$emit('loadGlobal', data.components);
+								}, 1000)
+							}
 							return;
 						}
 					})
