@@ -60,6 +60,12 @@
                     <li><a href="#!/dataOverview/app">数据概览</a></li>
                 </ul>
             </li>
+            <li v-for="item in DATA">
+                <a href="#!#"><i class="fa fa-dashboard fa-fw"></i>{{item.name}}<span class="fa arrow"></span></a>
+                <ul v-if="item.path.length" class="nav nav-second-level collapse">
+                    <li v-for="sonItem in DATA.path"><a href="#!/realTime">{{sonItem.name}}</a></li>
+                </ul>
+            </li>
         </ul>
 
     </div>

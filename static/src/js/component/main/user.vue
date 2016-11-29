@@ -587,9 +587,14 @@ var User = Vue.extend({
 			var _cur = Object.assign({}, limit);
 			for (let key1 in _cur) {
 				for (let key2 in _cur[key1]) {
-					if (window.allPageConfig.pageAll[key1].path[key2] === undefined) {
-						_cur[key1].splice(key2, 1);
+					try{
+						if (window.allPageConfig.pageAll[key1].path[key2] === undefined) {
+							_cur[key1].splice(key2, 1);
+						}
+					}catch(e){
+						console.log("数据库中保存了未定义权限，请检查代码:" , key1 , key2);
 					}
+						
 				}
 			}
 			return _cur;
