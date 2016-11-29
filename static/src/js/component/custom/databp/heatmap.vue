@@ -113,10 +113,14 @@
 				// return Promise.resolve();
 				return api.getHeatData(config).then((data) => {
 					this.data = data;
-					this.generateCanvas(data);
+					return this.generateCanvas(data);
 				});
 			},
 			generateCanvas(data) {
+				data = data.map(x => {return {$elem: $iframe.find(x.selector), ...x}}).filter(x => x.$elem.length);
+				if (data.length === 0) {
+					return Promise.reject('没有可用的选择器');
+				}
 				let _this = this;
 				var $iframe = $('iframe').contents();
 				var $body = $iframe.find('body');
@@ -131,10 +135,7 @@
 				let docwidth = $iframe.width();
 				heatdiv.style = `overflow:hidden;z-index:900;position:absolute;height:${docheight}px;width:${docwidth}px;top:0;left:0;`;
 				$body.append(heatdiv);
-				data = data.map(x => {return {$elem: $iframe.find(x.selector), ...x}}).filter(x => x.$elem.length);
-				if (data.length === 0) {
-					return;
-				}
+
 					// inject popover
 				let $tip = $('<p id="heatmaptip" style="text-align: left"></p>');
 				let $popover = $(`<div style="z-index:1200;overflow:hidden;display:none;position:absolute;border:0px solid rgb(51,51,51);transition:left 0.4s,top 0.4s;border-radius:4px;color:rgb(255,255,255);padding:5px;background-color:rgba(0,0,0,0.7);width: 500px">
