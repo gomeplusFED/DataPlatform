@@ -11,7 +11,11 @@ module.exports = {
         let source = data.first.data,
             obj = {};
         for(let i = 0; i < source.length; i++) {
-            obj[data.rows[0][i]] = source[i] || 0;
+            if(obj[data.rows[0][i]]) {
+                obj[data.rows[0][i]] += source[i];
+            } else {
+                obj[data.rows[0][i]] = source[i] || 0;
+            }
         }
 
         return util.toTable([[obj]], data.rows, data.cols);
