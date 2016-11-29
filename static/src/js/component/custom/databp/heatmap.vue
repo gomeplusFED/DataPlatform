@@ -50,8 +50,6 @@
 				},
 				data: [],
 				canvas: {
-					pv: null,
-					uv: null
 				},
 				option: {
 		            type : 'heatmap',
@@ -113,17 +111,12 @@
 				// return Promise.resolve();
 				return api.getHeatData(config).then((data) => {
 					this.data = data;
-					return this.generateCanvas(data);
+					this.generateCanvas(data);
 				});
 			},
 			generateCanvas(data) {
-				
-				var $iframe = $('iframe').contents();
-				data = data.map(x => {return {$elem: $iframe.find(x.selector), ...x}}).filter(x => x.$elem.length);
-				if (data.length === 0) {
-					return Promise.reject('没有可用的选择器');
-				}
 				let _this = this;
+				var $iframe = $('iframe').contents();
 				var $body = $iframe.find('body');
 				let heatdiv = document.createElement("div");
 				heatdiv.id = 'heatdiv';
@@ -131,6 +124,14 @@
 				_this.dom.iframe = $iframe;
 				_this.dom.body = $body;
 				_this.dom.heatdiv = $heatdiv;
+
+				data = data.map(x => {return {$elem: $iframe.find(x.selector), ...x}}).filter(x => x.$elem.length);
+
+				if (data.length === 0) {
+					this.show = false;
+					return;
+				}
+
 
 				let docheight = $iframe.height();
 				let docwidth = $iframe.width();
