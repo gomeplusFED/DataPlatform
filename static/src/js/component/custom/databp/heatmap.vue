@@ -59,13 +59,7 @@
 		            minAlpha: 0.2,
 		            valueScale: 1,
 		            opacity: 1
-		        },
-		        popover: {
-	                show: false,
-	                style: 'tip',
-	                delay: false,
-	                msg: ''
-	            }
+		        }
 			}
 		},
 		route: {
