@@ -1,17 +1,17 @@
 <template>
-<div class="extendNav">
-	<div class='form-group data-type'>
-		<label>数据</label>
-		<select v-model="datatype" :disabled="!show">
-			<option v-for="type of dataTypes" value="{{type.name}}">{{type.name}}</option>
-		</select>
-	 </div>
-	<label><input type="checkbox" v-model="show"></input>显示热力图</label>
-
+<div>
+	<div class="extendNav">
+		<div class='form-group data-type'>
+			<label>数据</label>
+			<select v-model="datatype" :disabled="!show">
+				<option v-for="type of dataTypes" value="{{type.name}}">{{type.name}}</option>
+			</select>
+		 </div>
+		<label><input type="checkbox" v-model="show"></input>显示热力图</label>
+	</div>
+	<!-- <div class="mask" v-show="show"> </div> -->
+	<visualbp> </visualbp>
 </div>
-
-<div class="mask"> </div>
-<visualbp> </visualbp>
 </template>
 <script>
 	let Vue = require('Vue');
@@ -23,7 +23,7 @@
 	var Heatmap = require('./heatmap.js');
 
 	let heatmap = Vue.extend({
-		name: 'databp',
+		name: 'heatmap',
 		components: {
 			'visualbp': visualbp
 		},
@@ -58,8 +58,13 @@
 		            minAlpha: 0.2,
 		            valueScale: 1,
 		            opacity: 1
-		        }
-
+		        },
+		        popover: {
+	                show: false,
+	                style: 'tip',
+	                delay: false,
+	                msg: ''
+	            }
 			}
 		},
 		route: {
@@ -109,7 +114,7 @@
 
 				let docheight = $iframe.height();
 				let docwidth = $iframe.width();
-				heatdiv.style = `z-index:900;position:absolute;height:${docheight}px;width:${docwidth}px;top:0;left:0;`;
+				heatdiv.style = `overflow:hidden;z-index:900;position:absolute;height:${docheight}px;width:${docwidth}px;top:0;left:0;`;
 				$body.append(heatdiv);
 				for(let type of _this.dataTypes) {
 					let name = type.name;
@@ -119,19 +124,55 @@
 						type.p = this.maxVal/max;
 					}
 					// 处理数据
-					this.heatData[name] = data.map((x) => {
+					let canvasData = [];
+					let eventData = [];
+					for (let x of data) {
 						let $elem = $iframe.find(x.selector);
 						let _offset = $elem.offset();
 						let _width = $elem.outerWidth();
 						let _height = $elem.outerHeight();
 						let _centerX = _offset.left + _width / 2;
 						let _centerY = _offset.top + _height / 2;
-						return [_centerX, _centerY, x[name] * type.p];
-					});
-					_this.canvas[name] = new Heatmap(_this.option).getCanvas(_this.heatData[name],
+						canvasData.push([_centerX, _centerY, x[name] * type.p]);
+						eventData.push({_centerX, _centerY, ...x});
+					}
+					let _canvas = new Heatmap(_this.option).getCanvas(canvasData,
                         docwidth, docheight);
-					_this.canvas[name].style.display = 'none';
-					heatdiv.appendChild(_this.canvas[name]);
+					_canvas.style.display = 'none';
+					heatdiv.appendChild(_canvas);
+
+					// inject popover
+					let $tip = $('<p style="text-align: left"></p>');
+					let $popover = $(`<div style="z-index:1200;overflow:hidden;display:none;position:absolute;border:0px solid rgb(51,51,51);transition:left 0.4s,top 0.4s;border-radius:4px;color:rgb(255,255,255);padding:5px;background-color:rgba(0,0,0,0.7);width: 500px">
+					    </div>`);
+					$popover.append($tip);
+					$body.append($popover);
+
+					let lastres;
+					// bind event
+					$(_canvas).mousemove((e) => {
+						// console.log('ff');
+						let _x = e.clientX;
+						let _y = e.clientY;
+						let res = eventData.filter(p => {
+							return Math.abs(p._centerX - _x) <= 26 && Math.abs(p._centerY - _y) <= 26;
+ 						});
+ 						if (res.length > 0) {
+ 							let item = res[0];
+ 							if(lastres !== item) {
+ 								$tip.html(`名称：${item.pointName || '--'}<br>选择器：${item.selector || '--'}<br>${name}：${item[name]}`);
+ 							}
+ 							$popover.css('left', _x);
+ 							$popover.css('top', _y);
+ 							$popover.show();
+ 						} else {
+ 							$popover.hide();
+ 						}
+					    
+					});
+					_this.canvas[name] = _canvas;
+
+
 				}
 				_this.switchCanvas();
 			},
