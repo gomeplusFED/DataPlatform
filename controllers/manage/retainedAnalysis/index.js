@@ -29,9 +29,6 @@ module.exports = (Router) => {
         date_picker : false,
         params(query, params) {
             params.type = query.type || "ios";
-            if(query.type === "all") {
-                params.type = ["android", "ios"];
-            }
 
              return params;
         },
@@ -45,13 +42,13 @@ module.exports = (Router) => {
                 key: 'android',
                 name: 'Android'
             }, {
-                key: 'all',
+                key: 'app',
                 name: 'APP'
             }, {
                 key: 'pc',
                 name: 'PC'
             }, {
-                key: 'h5',
+                key: 'm',
                 name: 'H5'
             }]
         },
@@ -70,23 +67,29 @@ module.exports = (Router) => {
 
              return params;
         },
-        firstSql(query, params) {
-            let _sql = 'SELECT date, GROUP_CONCAT(value, ";", `rate_key`) AS `key`, day_type FROM `ads2_user_retention_rate` WHERE date BETWEEN ? AND ? AND ';
-            let _params = [query.startTime, query.endTime, query.day_type];
+        firstSql(query, params, isCount) {
+            let _sql = 'SELECT date, GROUP_CONCAT(value, ";", `rate_key`) AS `key`, day_type FROM `ads2_user_retention_rate` WHERE date BETWEEN ? AND ? AND type=? AND day_type=? GROUP BY date ORDER BY date DESC';
+            let _params = [query.startTime, query.endTime, params.type || "ios", params.day_type];
+            if(isCount) {
+                let sql = `SELECT COUNT(*) count FROM (${_sql}) a`;
 
-            if(query.type === "all") {
-                _sql += `type IN ('android', 'ios')`
+                return {
+                    sql : sql,
+                    params : _params
+                };
             } else {
-                _sql += `type='${query.type}'`
+                let sql = `SELECT * FROM (${_sql}) a LIMIT ?,?`,
+                    page = query.page - 1 || 0,
+                    offset = query.from || (page * query.limit),
+                    limit = query.to || query.limit || 0;
+
+                return {
+                    sql : sql,
+                    params : _params.concat([+offset, +limit])
+                };
             }
-
-            _sql += ` AND day_type=? GROUP BY date ORDER BY date DESC`;
-
-            return {
-                sql : _sql,
-                params : _params
-            };
         },
+        paging : [true],
         filter(data, query) {
             return filter.retainedTwo(data, query.day_type);
         },

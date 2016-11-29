@@ -29,7 +29,7 @@
 					<m-date :index="index" :page-components-data="pageComponentsData" :component-type="'date_picker'" :argvs.sync='argvs' diasbled></m-date>
 				</div>
 
-				<button id="btnSearch" class="btn btn-searchLi-top btn-primary" type="button" data-toggle="popover" data-trigger="focus" @click="query">查询</button>
+				<button id="btnSearch" class="btn btn-searchLi-top btn-primary" type="button" data-toggle="popover" data-trigger="focus" @click="queryClick">查询</button>
 			</li>
 		</ul> 
 	</div>
@@ -212,6 +212,10 @@
 						});
 					}
 				});
+			},
+			queryClick() {
+				this.paginationConf.currentPage = 1;
+				this.query();
 			},
 			edit(item) {
 				let {pageUrl, pointName, pointParam, selector, platform} = item;

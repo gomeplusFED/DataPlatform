@@ -48,15 +48,19 @@ module.exports = {
         } else {
             let obj = {};
             for(let item of second) {
-                config[item.channel_id] = item.channel_name;
-                obj[item.channel_id] = {};
+                config[`${item.channel_type_code}${item.channel_code}`] = item.channel_name;
+                obj[`${item.channel_type_code}${item.channel_code}`] = {};
                 for(let key of filter_keys) {
-                    obj[item.channel_id][key] = 0;
+                    obj[`${item.channel_type_code}${item.channel_code}`][key] = 0;
                 }
             }
             for(let item of source) {
                 for(let key of filter_keys) {
-                    obj[item.channel_id][key] += item[key];
+                    if(obj[item.channel_no][key]) {
+                        obj[item.channel_no][key] += item[key];
+                    } else {
+                        obj[item.channel_no][key] = item[key];
+                    }
                 }
             }
             for(let key in obj) {
@@ -221,13 +225,13 @@ module.exports = {
                 type : "string"
             }].concat(colsObj[filter_key])];
             for(let key of second) {
-                config[key.channel_id] = key.channel_name;
+                config[`${key.channel_type_code}${key.channel_code}`] = key.channel_name;
             }
         }
 
         for(let item of source) {
             if(item.channel_no) {
-                item.channel_no = config[item.channel_no];
+                item.channel = config[item.channel_no];
             } else {
                 item.date = moment(item.date).format("YYYY-MM-DD");
             }
