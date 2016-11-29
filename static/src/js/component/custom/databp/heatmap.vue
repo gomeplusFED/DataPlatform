@@ -117,12 +117,13 @@
 				});
 			},
 			generateCanvas(data) {
+				
+				var $iframe = $('iframe').contents();
 				data = data.map(x => {return {$elem: $iframe.find(x.selector), ...x}}).filter(x => x.$elem.length);
 				if (data.length === 0) {
 					return Promise.reject('没有可用的选择器');
 				}
 				let _this = this;
-				var $iframe = $('iframe').contents();
 				var $body = $iframe.find('body');
 				let heatdiv = document.createElement("div");
 				heatdiv.id = 'heatdiv';
