@@ -85,6 +85,9 @@
 					this.loading.show = false;
 				}
 				return Promise.resolve(true);
+	        },
+	        deactivate: function() {
+	        	actions.databp(store, {show: false});
 	        }
     	},
     	events: {
