@@ -71,8 +71,6 @@
 	<div class="panel-footer" v-show="paginationConf.totalItems > paginationConf.itemsPerPage">
 		<m-pagination :pagination-conf="paginationConf"></m-pagination>
 	</div>
-	<m-alert></m-alert>
-	<m-confirm></m-confirm>
 </div>
 </template>
 <script>
@@ -81,20 +79,15 @@
 	var DatePicker = require('../../common/datePicker.vue');
 	var store = require('../../../store/store.js');
 	var actions = require('../../../store/actions.js');
-	var Alert = require('../../common/alert.vue');
-	var Confirm = require('../../common/confirm.vue');
 	var Pagination = require('../../common/pagination.vue');
 	var api = require('./api.js');
 	var utils = require('utils');
 	
 	var databp = Vue.extend({
 		name: 'bpmanage',
-		store: store,
 		components: {
 			'm-pagination': Pagination,
-			'm-date': DatePicker,
-			'm-alert': Alert,
-			'm-confirm': Confirm
+			'm-date': DatePicker
 		},
 		props:['loading'],
 		vuex: {

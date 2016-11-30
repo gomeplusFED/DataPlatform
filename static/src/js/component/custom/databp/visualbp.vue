@@ -24,7 +24,6 @@
 	</div>
 </div>
 	<m-bpinfo  :loading.sync='loading'></m-bpinfo>
-	<m-alert></m-alert>
 </template>
 <script>
 	var Vue = require('Vue');
@@ -43,7 +42,6 @@
 			'm-alert': Alert,
 			'm-bpinfo': bpInfo
 		},
-		store: store,
 		props:['loading'],
 		data: function() {
 			return {
