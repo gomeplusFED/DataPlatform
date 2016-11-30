@@ -28,11 +28,6 @@ module.exports = {
                 {
                     type : "table",
                     title : "总体返利情况",
-                    query_api : "/socialAnalysis/rebateZero"
-                },
-                {
-                    type : "table",
-                    title : "总体返利情况",
                     query_api : "/socialAnalysis/rebateOne"
                 }
             ]

@@ -5,29 +5,16 @@
  */
 
 const util = require("../../../utils"),
-    EventProxy = require("eventproxy"),
     request = require("request"),
     main = require("../../../base/main"),
     filter = require("../../../filters/table/rebate");
 
 module.exports = (Router) => {
 
-    Router = Router.get("/socialAnalysis/rebateZero_json", (req, res, next) => {
-        res.json({
-            code: 200,
-            modelData: [],
-            components: {
-                export: {
-                    url : '/socialAnalysis/rebateZero_json'
-                }
-            }
-        });
-    });
-
     Router = new main(Router, {
         router : "/socialAnalysis/rebateOne",
         platform : false,
-        modelName : ["ReportRebatePlanRebateTypeTotalDaily", "ReportRebatePlanRebateTypeTotalSummary"],
+        modelName : ["ReportRebatePlanRebateTypeTotalSummary", "ReportRebatePlanRebateTypeTotalDaily", "TypeFlow"],
         date_picker_data : 1,
         showDayUnit : true,
         global_platform : {
@@ -35,18 +22,35 @@ module.exports = (Router) => {
             key: 'type',
             name : "",
             list: [{
-                key : "",
+                //key : "",
                 name: '返利总览',
-                url : "/socialAnalysis/rebate"
+                url : "#!/socialAnalysis/rebate"
             }, {
-                key : "",
+                //key : "",
                 name: '新增返利',
-                url : "/channelAnalysis"
+                url : "#!/channelAnalysis"
             }]
         },
-        filter(data, query, dates) {
-            return filter.rebateOne(data, query, dates);
+        flexible_btn : [{
+            content: '<a href="javascript:void(0)">导出</a>',
+            preMethods: ['excel_export']
+        }],
+        thirdParams() {
+            return {};
+        },
+        filter(data) {
+            return filter.rebateOne(data);
         }
+    });
+
+    Router.get("/socialAnalysis/rebateOne_excel", (req, res, next) => {
+        const query = req.query;
+        request(`http://localhost:7879/socialAnalysis/rebateOne_json?day_type=${query.day_type}&startTime=${query.startTime}&endTime=${query.endTime}`, (err, res, body) => {
+            if(body.iserro) {
+                next(new Error("/socialAnalysis/rebateOne_excel has error"));
+            }
+
+        })
     });
 
     return Router;
