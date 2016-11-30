@@ -302,7 +302,8 @@ const Config = {
             className: "fa  fa-laptop fa-fw",
             href: "#",
             path: [
-                obj.table.table()
+                obj.table.table(),
+                obj.table.rebate_total(),
             ]
         }
     }

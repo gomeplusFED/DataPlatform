@@ -17,6 +17,25 @@ module.exports = {
                     query_api : "/socialAnalysis/tableOne"
                 }
             ]
-        }
+        };
+    },
+    rebate_total() {
+        return {
+            name : "社交报表",
+            path : "/socialAnalysis/rebate",
+            display : true,
+            defaultData : [
+                {
+                    type : "table",
+                    title : "总体返利情况",
+                    query_api : "/socialAnalysis/rebateZero"
+                },
+                {
+                    type : "table",
+                    title : "总体返利情况",
+                    query_api : "/socialAnalysis/rebateOne"
+                }
+            ]
+        };
     }
 };

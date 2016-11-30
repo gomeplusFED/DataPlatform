@@ -1,7 +1,7 @@
 <template>
 	<div class="global">
 		<button class="btn btn-default" v-if="pageComponentsData['flexible_btn']" @click="tab_checkbox(pageComponentsData['flexible_btn'])">筛选</button>
-		<button class="btn btn-default" v-if="pageComponentsData['export']" @click="location(pageComponentsData['export'])">导出</button>
+		<button class="btn btn-default excel_export" v-if="pageComponentsData['export']" @click="location(pageComponentsData['export'])">导出</button>
 		<m-level-select v-if="pageComponentsData['level_select']" :index="1" :init-data="initData" :page-components-data="pageComponentsData" component-type="level_select" :argvs.sync='argvs'></m-level-select>
 		<m-filter-select v-if="pageComponentsData['filter_select']" :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'filter_select'" :argvs.sync='argvs'></m-filter-select>
 		<m-date :is-global="true" :index="-1" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'date_picker'" :argvs.sync='argvs'></m-date>
@@ -11,6 +11,11 @@
     #datePicker_-1 {
         float: right;
         bottom: 10px;
+    }
+    .excel_export {
+        float : right;
+        margin-right : 20px;
+        margin-bottom : 10px;
     }
 </style>
 <script>
