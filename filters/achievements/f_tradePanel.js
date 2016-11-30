@@ -499,7 +499,7 @@ module.exports = {
                 "pay_user" : 0, 
                 "order_user" : 0 ,
                 "access_user" : 0,
-                "pay_num" : 0,
+                "pay_succ_num" : 0,
                 "pay_time" : 0
             };
 
@@ -512,7 +512,7 @@ module.exports = {
         Result.scan_order = util.toFixed(util.dealDivision(obj.order_user , obj.access_user) , 0);
         Result.scan_pay  = util.toFixed(util.dealDivision(obj.pay_user , obj.access_user) , 0);
         Result.order_pay = util.toFixed(util.dealDivision(obj.pay_user , obj.order_user) , 0);
-        Result.pay_lv = util.toFixed(util.dealDivision(obj.pay_num , obj.pay_time) , 0);
+        Result.pay_lv = util.toFixed(util.dealDivision(obj.pay_succ_num , obj.pay_time) , 0);
         Result.operating = `<button class='btn btn-info' url_detail='/achievements/tradePanelSix_add'>趋势</button>`;
 
         let Cols = [{
@@ -566,7 +566,7 @@ module.exports = {
             obj.scan_order = util.dealDivision(item.order_user , item.access_user , 2);
             obj.scan_pay  = util.dealDivision(item.pay_user , item.access_user , 2);
             obj.order_pay = util.dealDivision(item.pay_user , item.order_user , 2);
-            obj.pay_lv = util.dealDivision(item.pay_num , item.pay_time , 2);
+            obj.pay_lv = util.dealDivision(item.pay_succ_num , item.pay_time , 2);
         }
 
         for(let key in result){
