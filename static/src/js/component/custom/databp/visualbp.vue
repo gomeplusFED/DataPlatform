@@ -24,7 +24,6 @@
 	</div>
 </div>
 	<m-bpinfo  :loading.sync='loading'></m-bpinfo>
-	<m-loading :loading.sync='loading'></m-loading>
 	<m-alert></m-alert>
 </template>
 <script>
@@ -33,7 +32,6 @@
 	var $ = require('jQuery');
 	var utils = require('utils');
 	var api = require('./api');
-	var Loading = require('../../common/loading.vue');
 	var Alert = require('../../common/alert.vue');
 	var bpInfo = require('./bpinfo.vue');
 	var store = require('../../../store/store.js');
@@ -42,18 +40,14 @@
 	var visualbp = Vue.extend({
 		name: 'databp',
 		components: {
-			'm-loading': Loading,
 			'm-alert': Alert,
 			'm-bpinfo': bpInfo
 		},
 		store: store,
+		props:['loading'],
 		data: function() {
 			return {
 				iframe_url: '',
-				loading: {
-					show: false,
-					noLoaded: 0
-				},
 				bpConfig: {
 					show: false,
 					pointName: '',
@@ -69,8 +63,21 @@
 		},
 		route: {
 	        activate: function (transition) {
-	        	this.loading.show = true;
-				let query = this.$route.query;   	
+	        	this.activate(this.$route.query);
+				return Promise.resolve(true);
+	        },
+	        deactivate: function() {
+	        	actions.databp(store, {show: false});
+	        }
+    	},
+    	events: {
+    		'visual_url': function (config) {
+		    	this.activate(config);
+		    }
+    	},
+		methods: {
+			activate(query) {
+	        	this.loading.show = true;	
 	        	let pageUrl = query.pageUrl;
 				let platform = query.platform;
 				if (pageUrl && platform) {
@@ -84,20 +91,7 @@
 				} else if (this.iframe_url === '') {
 					this.loading.show = false;
 				}
-				return Promise.resolve(true);
-	        },
-	        deactivate: function() {
-	        	actions.databp(store, {show: false});
-	        }
-    	},
-    	events: {
-    		'visual_url': function (config) {
-		    	this.bpConfig.pageUrl = config.pageUrl;
-		    	this.bpConfig.platform = config.platform || 'PC';
-		    	this.search(true);
-		    }
-    	},
-		methods: {
+			},
 			iframeload(ev) {
 				// console.log('load');
 				let _this = this;
