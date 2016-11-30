@@ -3,6 +3,8 @@ var actions = require('../../../store/actions.js');
 var $ = require('jQuery');
 // const baseurl = 'http://10.69.20.59:8080/bomber-pie';
 const baseurl = 'http://10.69.112.146:38080/bomber-pie'
+// 请求失败 重试一次
+const RETRY_TIMES = 2;
 
 $.support.cors = true;
 
@@ -18,7 +20,8 @@ function filterArgs(data, args) {
 }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
 
 function buildAjax(url, data, type = 'get') {
-	return new Promise(function(s, j){
+	let t = RETRY_TIMES;
+	let proc = function(s, j){
 		$.ajax({
 			url: baseurl + url,
 			timeout : 3000,
@@ -29,10 +32,16 @@ function buildAjax(url, data, type = 'get') {
 				s(data);
 			},
 			error(xhr, status, error) {
-				j(`请求${baseurl + url}失败, 错误信息: ${error || status}`);
+				t--;
+				if(t > 0) {
+					proc(s, j);
+				} else {
+					j(`请求${baseurl + url}失败, 错误信息: ${error || status}`);
+				}
 			}
 		});
-	});
+	};
+	return new Promise(proc);
 }
 
 function extractResult(res) {
