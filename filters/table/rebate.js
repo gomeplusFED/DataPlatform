@@ -9,7 +9,7 @@ const rows = [
     ["date", "unique_is_rebate_order_num", "unique_is_over_rebate_order_num",
         "expect_rebate_user_num", "expect_rebate_amount", "cancel_rebate_amount",
         "is_over_rebate_order_amount", "unique_is_rebate_merchandise_num"],
-    ["plan_type_name", "plan_type_name", "plan_type", "rebate_type_name", "rebate_type",
+    ["name", "plan_type_name", "plan_type", "rebate_type_name", "rebate_type",
         "total_unique_expect_rebate_user_num", "expect_rebate_user_num",
         "expect_rebate_amount", "cancel_rebate_amount", "is_over_rebate_order_amount",
         "total_unique_is_rebate_merchandise_num", "total_unique_is_rebate_shop_num",
@@ -82,6 +82,11 @@ module.exports = {
         for(let key of second) {
             key.plan_type_name = plan_type[key.plan_type];
             key.rebate_type_name = rebate_type[key.rebate_type];
+            if(rebate_type[key.rebate_type].indexOf("-") === -1) {
+                key.name = rebate_type[key.rebate_type];
+            } else {
+                key.name = rebate_type[key.rebate_type].substr(0, rebate_type[key.rebate_type].indexOf("-"));
+            }
         }
 
         return util.toTable([source, second], rows, cols);
