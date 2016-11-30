@@ -41,7 +41,7 @@ module.exports = (Router) => {
             }, {
                 key : "",
                 name: '新增返利',
-                url : "/socialAnalysis/rebate"
+                url : "/channelAnalysis"
             }]
         },
         filter(data, query, dates) {
