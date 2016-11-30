@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title><%= siteName %> <%= pageTitle %></title>
+    <!-- rev-hash -->
+<link rel="stylesheet" href="/dist/css/DataPlatform.min.css"/>
+<!-- end -->
+    <link rel="shortcut icon" href="/dist/img/favico.ico" type="image/x-icon">
+</head>
+<body>
+<div id="wrapper">
+    <h2>
+        开发人员添加修改模块
+    </h2>
+
+    <style>
+        .nav-second-level,
+        .nav-third-level{
+            margin-left: 40px;
+        }
+    </style>
+
+    <div class="app addMoudle" id="addMoudle">
+        <ul class="nav" id="side-menu" style="width: 200px;">
+            <li>
+                <a href="#!#"><i class="fa fa-user fa-fw"></i>用户管理<span class="fa arrow"></span></a>
+                <ul class="nav collapse">
+                    <li>
+                        <a href="#!/user">帐号列表</a>
+                        <ul class="nav  collapse">
+                            <li>
+                                <a href="#!#"><i class="fa fa-user fa-fw"></i>one<span class="fa arrow"></span></a>
+                            </li>
+                            <li>
+                                <a href="#!#"><i class="fa fa-user fa-fw"></i>two<span class="fa arrow"></span></a>
+                            </li>
+                            <li>
+                                <a href="#!#"><i class="fa fa-user fa-fw"></i>three<span class="fa arrow"></span></a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><a href="#!/role">角色列表</a></li>
+                    <li><a href="#!/log">系统日志</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#!#"><i class="fa fa-bar-chart-o fa-fw fa-fw"></i>实时分析<span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse">
+                    <li><a href="#!/realTime">实时概况</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#!#"><i class="fa fa-dashboard fa-fw"></i>数据概览<span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse">
+                    <li><a href="#!/dataOverview/app">数据概览</a></li>
+                </ul>
+            </li>
+            <li v-for="item in DATA">
+                <a href="#!#"><i class="fa fa-dashboard fa-fw"></i>{{item.name}}<span class="fa arrow"></span></a>
+                <ul v-if="item.path.length" class="nav nav-second-level collapse">
+                    <li v-for="sonItem in item.path">
+                        <a href="#!/realTime">{{sonItem.name}}</a>
+                        <ul v-if="sonItem.defaultData.length" class="nav nav-third-level collapse">
+                            <li v-for="api in sonItem.defaultData">
+                                <a href="#!#"><i class="fa fa-user fa-fw"></i>{{api.title}}<span class="fa arrow"></span></a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+
+    </div>
+
+
+
+    
+
+</div>
+<!-- rev-hash -->
+<script src="/dist/js/vendor.min.js"></script>
+<script src="/dist/js/addModule.min.js"></script>
+<!-- end -->
+</body>
+</html>

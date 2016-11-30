@@ -19,56 +19,21 @@
     </h2>
 
     <style>
-        .nav-second-level,
-        .nav-third-level{
-            margin-left: 40px;
+        .routerView{
+            margin-left: 250px;
         }
     </style>
 
     <div class="app addMoudle" id="addMoudle">
-        <ul class="nav" id="side-menu" style="width: 200px;">
-            <li>
-                <a href="#!#"><i class="fa fa-user fa-fw"></i>用户管理<span class="fa arrow"></span></a>
-                <ul class="nav nav-second-level collapse">
-                    <li>
-                        <a href="#!/user">帐号列表</a>
-                        <ul class="nav nav-third-level collapse">
-                            <li>
-                                <a href="#!#"><i class="fa fa-user fa-fw"></i>one<span class="fa arrow"></span></a>
-                            </li>
-                            <li>
-                                <a href="#!#"><i class="fa fa-user fa-fw"></i>two<span class="fa arrow"></span></a>
-                            </li>
-                            <li>
-                                <a href="#!#"><i class="fa fa-user fa-fw"></i>three<span class="fa arrow"></span></a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li><a href="#!/role">角色列表</a></li>
-                    <li><a href="#!/log">系统日志</a></li>
-                </ul>
-            </li>
-            <li>
-                <a href="#!#"><i class="fa fa-bar-chart-o fa-fw fa-fw"></i>实时分析<span class="fa arrow"></span></a>
-                <ul class="nav nav-second-level collapse">
-                    <li><a href="#!/realTime">实时概况</a></li>
-                </ul>
-            </li>
-            <li>
-                <a href="#!#"><i class="fa fa-dashboard fa-fw"></i>数据概览<span class="fa arrow"></span></a>
-                <ul class="nav nav-second-level collapse">
-                    <li><a href="#!/dataOverview/app">数据概览</a></li>
-                </ul>
-            </li>
-            <li v-for="item in DATA">
-                <a href="#!#"><i class="fa fa-dashboard fa-fw"></i>{{item.name}}<span class="fa arrow"></span></a>
-                <ul v-if="item.path.length" class="nav nav-second-level collapse">
-                    <li v-for="sonItem in DATA.path"><a href="#!/realTime">{{sonItem.name}}</a></li>
-                </ul>
-            </li>
-        </ul>
-
+        <side-bar></side-bar>
+        <section class="routerView">
+            <router-view></router-view>
+        </section>
     </div>
+
+
+
+
 
 </div>
 <!-- rev-hash -->
