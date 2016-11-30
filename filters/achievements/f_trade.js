@@ -190,7 +190,7 @@ module.exports = {
 
         for(let item of source) {
             if(!num){
-                item.category_name = item["category_id_1"];
+                item.category_name = item["category_name_1"];
             }else{
                 item.category_name = item["category_name_"+(num+1)];
                 if(item["category_id_"+(num+1)] == "ALL"){

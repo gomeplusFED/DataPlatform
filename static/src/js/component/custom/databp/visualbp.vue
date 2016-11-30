@@ -3,7 +3,7 @@
 	<form class='form-inline'>
 		<div class='form-group'>
 			<label>埋点URL</label>
-			<input type='text' class='form-control' placeholder='' v-model="bpConfig.pageUrl" @keyup.enter.stop.prevent="searchClick">
+			<input type='text' class='form-control' placeholder='' v-model="bpConfig.pageUrl" @keydown.enter.stop.prevent="searchClick">
 		</div>
 		<div class='form-group'>
 			<label>平台</label>
@@ -24,8 +24,6 @@
 	</div>
 </div>
 	<m-bpinfo  :loading.sync='loading'></m-bpinfo>
-	<m-loading :loading.sync='loading'></m-loading>
-	<m-alert></m-alert>
 </template>
 <script>
 	var Vue = require('Vue');
@@ -33,7 +31,6 @@
 	var $ = require('jQuery');
 	var utils = require('utils');
 	var api = require('./api');
-	var Loading = require('../../common/loading.vue');
 	var Alert = require('../../common/alert.vue');
 	var bpInfo = require('./bpinfo.vue');
 	var store = require('../../../store/store.js');
@@ -42,18 +39,13 @@
 	var visualbp = Vue.extend({
 		name: 'databp',
 		components: {
-			'm-loading': Loading,
 			'm-alert': Alert,
 			'm-bpinfo': bpInfo
 		},
-		store: store,
+		props:['loading'],
 		data: function() {
 			return {
 				iframe_url: '',
-				loading: {
-					show: false,
-					noLoaded: 0
-				},
 				bpConfig: {
 					show: false,
 					pointName: '',
@@ -69,8 +61,21 @@
 		},
 		route: {
 	        activate: function (transition) {
-	        	this.loading.show = true;
-				let query = this.$route.query;   	
+	        	this.activate(this.$route.query);
+				return Promise.resolve(true);
+	        },
+	        deactivate: function() {
+	        	actions.databp(store, {show: false});
+	        }
+    	},
+    	events: {
+    		'visual_url': function (config) {
+		    	this.activate(config);
+		    }
+    	},
+		methods: {
+			activate(query) {
+	        	this.loading.show = true;	
 	        	let pageUrl = query.pageUrl;
 				let platform = query.platform;
 				if (pageUrl && platform) {
@@ -84,17 +89,7 @@
 				} else if (this.iframe_url === '') {
 					this.loading.show = false;
 				}
-				return Promise.resolve(true);
-	        }
-    	},
-    	events: {
-    		'visual_url': function (config) {
-		    	this.bpConfig.pageUrl = config.pageUrl;
-		    	this.bpConfig.platform = config.platform || 'PC';
-		    	this.search(true);
-		    }
-    	},
-		methods: {
+			},
 			iframeload(ev) {
 				// console.log('load');
 				let _this = this;
@@ -114,9 +109,10 @@
 
 
 				_this.$dispatch('visualbp_loaded', _this.bpConfig);
+				var $head = $iframe.find('head'); 
+				var $body = $iframe.find('body');
 				if(/visualbp/.test(this.$route.path)) {
-					var $head = $iframe.find('head'); 
-					var $body = $iframe.find('body');
+
 					var hovered = [];
 					var selected;
 					$head.append('<style> .bphover {outline: 2px solid #0072ff !important;background-color: rgba(105, 210, 249, 0.4) !important;} .bphover-position-fix {position: relative !important;}</style>');
@@ -169,17 +165,18 @@
 								hovered.push($target);
 							}
 					});
-					$body.click(function(e) {
-						let $target = $(e.target);
-						let href = $target.attr('href') || $target.parents('a').attr('href');
-						if (href && href.indexOf('javascript') === -1) {
-							_this.bpConfig.pageUrl = href;
-							_this.searchClick();
-
-						}
-						return false;
-					});
 				}
+
+				$body.click(function(e) {
+					let $target = $(e.target);
+					let href = $target.attr('href') || $target.parents('a').attr('href');
+					if (href && href.indexOf('javascript') === -1) {
+						_this.bpConfig.pageUrl = href;
+						_this.searchClick();
+
+					}
+					return false;
+				});
 
 			},
 			searchClick() {

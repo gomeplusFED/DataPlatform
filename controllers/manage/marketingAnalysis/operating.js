@@ -20,6 +20,7 @@ module.exports = (Router) => {
             }, (err, data) => {
                 if(err) cb(err);
                 let ids = _.pluck(data, "channel_id");
+                query.filter_ids = ids;
                 query.channel_no = [];
                 for(let id of ids) {
                     query.channel_no.push(id.substr(0, 5));
@@ -29,9 +30,8 @@ module.exports = (Router) => {
             });
         },
         secondParams(query, params, data) {
-            let ids = _.uniq(_.pluck(data.first.data[0], "channel_no"));
             return {
-                channel_id : ids
+                channel_id : query.filter_ids
             };
         },
         filter(data, query, dates) {
@@ -81,6 +81,7 @@ module.exports = (Router) => {
                 if(err) cb(err);
                 let ids = _.pluck(data, "channel_id");
                 query.channel_no = [];
+                query.filter_ids = ids;
                 for(let id of ids) {
                     query.channel_no.push(id.substr(0, 5));
                 }
@@ -94,10 +95,14 @@ module.exports = (Router) => {
         }],
         firstSql(query, params, isCount) {
             let filter_type = query.filter_type || "date",
-                config = ["date BETWEEN ? AND ?", "channel_no=?", "day_type=?"],
-                obj = [query.startTime, query.endTime, query.active_no, 1];
+                config = ["date BETWEEN ? AND ?", "day_type=1"],
+                obj = [query.startTime, query.endTime];
+            let str = [];
+            for(let id of query.channel_no) {
+                str.push(`"${id}"`);
+            }
             if(isCount) {
-                let sql = `SELECT COUNT(*) count FROM ads2_cam_camlist_channel WHERE ${config.join(" AND ")} GROUP BY ${filter_type}`;
+                let sql = `SELECT COUNT(*) count FROM ads2_cam_camlist_channel WHERE ${config.join(" AND ")} AND channel_no IN (${str.join(",")}) GROUP BY ${filter_type}`;
                 return {
                     sql : sql,
                     params : obj
@@ -128,7 +133,7 @@ module.exports = (Router) => {
                     SUM(return_user) return_user,
                     SUM(return_num_money) return_num_money
                      FROM ads2_cam_camlist_channel
-                    WHERE ${config.join(" AND ")} GROUP BY ${filter_type} LIMIT ?,?`;
+                    WHERE ${config.join(" AND ")} AND channel_no IN (${str.join(",")}) GROUP BY ${filter_type} LIMIT ?,?`;
                 return {
                     sql : sql,
                     params : obj
@@ -136,9 +141,8 @@ module.exports = (Router) => {
             }
         },
         secondParams(query, params, data) {
-            let ids = _.uniq(_.pluck(data.first.data[0], "channel_no"));
             return {
-                channel_id : ids
+                channel_id : query.filter_ids
             };
         },
         filter(data, query, dates) {
