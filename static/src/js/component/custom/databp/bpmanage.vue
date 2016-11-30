@@ -72,7 +72,6 @@
 		<m-pagination :pagination-conf="paginationConf"></m-pagination>
 	</div>
 	<m-alert></m-alert>
-	<m-loading :loading.sync='loading'></m-loading>
 	<m-confirm></m-confirm>
 </div>
 </template>
@@ -80,7 +79,6 @@
 	var Vue = require('Vue');
 	var $ = require('jQuery');
 	var DatePicker = require('../../common/datePicker.vue');
-	var Loading = require('../../common/loading.vue');
 	var store = require('../../../store/store.js');
 	var actions = require('../../../store/actions.js');
 	var Alert = require('../../common/alert.vue');
@@ -93,12 +91,12 @@
 		name: 'bpmanage',
 		store: store,
 		components: {
-			'm-loading': Loading,
 			'm-pagination': Pagination,
 			'm-date': DatePicker,
 			'm-alert': Alert,
 			'm-confirm': Confirm
 		},
+		props:['loading'],
 		vuex: {
 			getters: {
 				vuexbp: function() {
@@ -117,10 +115,6 @@
 				index: 1,
 				noData: false,
 				showDate: null,
-				loading: {
-					show: false,
-					noLoaded: 0
-				},
 				argvs: {},
 				paginationConf: {
 					currentPage: 1,     // 当前页

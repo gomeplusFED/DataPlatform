@@ -10,23 +10,23 @@
 		<label><input type="checkbox" v-model="show"></input>显示热力图</label>
 	</div>
 	<!-- <div class="mask" v-show="show"> </div> -->
-	<visualbp> </visualbp>
+	<visualbp :loading.sync='loading'> </visualbp>
 </div>
 </template>
 <script>
-	let Vue = require('Vue');
-	let $ = require('jQuery');
-	let utils = require('utils');
-	let api = require('./api');
-	let Loading = require('../../common/loading.vue');
-	let visualbp = require('./visualbp.vue');
-	var Heatmap = require('./heatmap.js');
+	const Vue = require('Vue');
+	const $ = require('jQuery');
+	const utils = require('utils');
+	const api = require('./api');
+	const visualbp = require('./visualbp.vue');
+	const Heatmap = require('./heatmap.js');
 
 	let heatmap = Vue.extend({
 		name: 'heatmap',
 		components: {
 			'visualbp': visualbp
 		},
+		props:['loading'],
 		data: function() {
 			return {
 				show: true,
@@ -62,11 +62,7 @@
 		},
 		route: {
 			activate: function (transition) {
-				let query = this.$route.query;   	
-				let pageUrl = query.pageUrl;
-				if (pageUrl) {
-					this.$broadcast('visual_url', query);
-				}
+				this.$broadcast('visual_url', this.$route.query);
 				return Promise.resolve(true);
 			}
 		},
@@ -175,8 +171,8 @@
 					let lastres;
 					// bind event
 					$(_canvas).mousemove((e) => {
-						let _x = e.pageX;
-						let _y = e.pageY;
+						let _x = e.pageX + 12;
+						let _y = e.pageY + 12;
 						let res = eventData.filter(p => {
 							return Math.abs(p._centerX - _x) <= 26 && Math.abs(p._centerY - _y) <= 26;
  						});
