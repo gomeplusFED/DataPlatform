@@ -3,7 +3,7 @@
 	<form class='form-inline'>
 		<div class='form-group'>
 			<label>埋点URL</label>
-			<input type='text' class='form-control' placeholder='' v-model="bpConfig.pageUrl" @keyup.enter.stop.prevent="searchClick">
+			<input type='text' class='form-control' placeholder='' v-model="bpConfig.pageUrl" @keydown.enter.stop.prevent="searchClick">
 		</div>
 		<div class='form-group'>
 			<label>平台</label>
