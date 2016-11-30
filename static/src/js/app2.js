@@ -38,7 +38,7 @@ router.map({
     "/Module/:id" : {
         component : Module
     },
-    "/sonModule/:id" : {
+    "/sonModule/:id/:sonIndex" : {
         component : SonModule,
         /*subRoutes : {
             "/abc" : {
@@ -48,7 +48,7 @@ router.map({
             }
         }*/
     },
-    "/apiModule" : {
+    "/apiModule/:id/:sonIndex/:index" : {
         component : ApiModule
     },
     "*" : {

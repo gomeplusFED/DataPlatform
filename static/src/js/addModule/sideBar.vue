@@ -2,13 +2,14 @@
     .h-sidebar{
         width: 240px;
         float: left;
+        background: #fff;
     }
     .abc{
         margin-left: 20px;
     }
 </style>
 <template>
-    <section class="h-sidebar">
+    <aside class="h-sidebar">
         <button @click="go">Click Me.</button>
         <strong>Count : {{count}}</strong>
         <hr>
@@ -19,8 +20,8 @@
 
         <p>================</p>
         <ul class="nav" id="side-menu">
-            <li @click="go" v-for="(index , item) in result">
-                <a href="#!/Module/{{index}}">
+            <li v-for="(index , item) in result">
+                <a @click.prevent="urlGo" href="#!/Module/{{index}}">
                     <i class="fa fa-rocket fa-fw"></i>
                     {{item.name}}
                     <span class="fa arrow"></span>
@@ -28,25 +29,44 @@
 
                 <ul v-if="item.path.length" class="nav collapse abc">
                     <li v-for="(sonIndex , sonItem) in item.path">
-                        <a href="#!/sonModule/{{sonIndex}}">
+                        <a @click.prevent="urlGo" href="#!/sonModule/{{index}}/{{sonIndex}}">
                             <i class="fa fa-car fa-fw"></i>
                             {{sonItem.name}}
                             <span class="fa arrow"></span>
                         </a>
                            
                         <ul v-if="sonItem.defaultData.length" class="nav collapse abc">
-                            <li v-for="api in sonItem.defaultData">
-                                <a href="#!/apiModule">
+                            <li v-for="(apiIndex , api) in sonItem.defaultData">
+                                <a @click.prevent="urlGo" href="#!/apiModule/{{index}}/{{sonIndex}}/{{apiIndex}}">
                                     <i class="fa fa-fighter-jet fa-fw"></i>
                                     {{api.title}}
                                 </a>
                             </li>
+
+                            <li>
+                                <a @click.prevent="urlGo" href="#!/apiModule/{{index}}/{{sonIndex}}/add">
+                                    <i class="fa fa-arrows fa-fw"></i>
+                                    添加一个api
+                                </a>
+                            </li>
                         </ul>
+                    </li>
+                    <li>
+                        <a @click.prevent="urlGo" href="#!/sonModule/{{index}}/add">
+                            <i class="fa fa-arrows fa-fw"></i>
+                            添加一个子模块
+                        </a>
                     </li>
                 </ul>
             </li>
+            <li>
+                <a @click.prevent="urlGo" href="#!/Module/add">
+                    <i class="fa fa-arrows fa-fw"></i>
+                    添加一个大模块
+                </a>
+            </li>
         </ul>
-    </section>
+    </aside>
     
 </template>
 
@@ -66,6 +86,9 @@ const SideBar = Vue.extend({
     methods : {
         go(){
             this.count++;
+        },
+        urlGo(event){
+            location.hash = event.target.hash;
         }
     },
     ready() {
@@ -74,13 +97,13 @@ const SideBar = Vue.extend({
             dataType : "json",
             success(data){
                 console.log(data);
-                location.hash = "#!/";
+                // location.hash = "#!/";
                 window.Result = data;
                 Vue.set(Data , "result" , data);
                 Vue.nextTick(()=>{
                     $('#side-menu').metisMenu({
-                        preventDefault: false,
-                        doubleTapToGo: true
+                        preventDefault: true,
+                        // doubleTapToGo: true
                     });
                 })
             }
