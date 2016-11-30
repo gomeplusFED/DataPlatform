@@ -1,9 +1,9 @@
 <template>
 	<div class="global">
 		<button class="btn btn-default" v-if="pageComponentsData['flexible_btn']" @click="tab_checkbox(pageComponentsData['flexible_btn'])">筛选</button>
-		<button class="btn btn-default excel_export" v-if="pageComponentsData['export']" @click="location(pageComponentsData['export'])">导出</button>
-		<m-level-select v-if="pageComponentsData['level_select']" :index="1" :init-data="initData" :page-components-data="pageComponentsData" component-type="level_select" :argvs.sync='argvs'></m-level-select>
-		<m-filter-select v-if="pageComponentsData['filter_select']" :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'filter_select'" :argvs.sync='argvs'></m-filter-select>
+		<button class="btn btn-default" v-if="pageComponentsData['export']" @click="location(pageComponentsData['export'])">导出</button>
+		<m-level-select v-if="pageComponentsData['level_select']" :index="-1" :init-data="initData" :page-components-data="pageComponentsData" component-type="level_select" :argvs.sync='argvs'></m-level-select>
+		<m-filter-select v-if="pageComponentsData['filter_select']" index="-1" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'filter_select'" :argvs.sync='argvs'></m-filter-select>
 		<m-date :is-global="true" :index="-1" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'date_picker'" :argvs.sync='argvs'></m-date>
 	</div>
 </template>
@@ -11,11 +11,6 @@
     #datePicker_-1 {
         float: right;
         bottom: 10px;
-    }
-    .excel_export {
-        float : right;
-        margin-right : 20px;
-        margin-bottom : 10px;
     }
 </style>
 <script>
@@ -67,7 +62,7 @@
 					startTime: '',
 					endTime: '',
 					day_type: 1,
-					main_show_type_filter : ''
+					main_show_type_filter: ''
 				});
 
 				data.date_picker = data.date_picker || {show: false, defaultData: 7};
@@ -134,7 +129,7 @@
 					max: item.max,
 					groups: item.groups,
 					apply: val => {
-						eventBus.$emit('platformChange',val , item.key);
+						eventBus.$emit('platformChange', val, item.key);
 						actions.tabCheckbox(store, {
 							show: false
 						});
@@ -158,14 +153,17 @@
 			},
 			'argvs.startTime' : function (val, oldVal) {
 				// level_select
+				if (this.pageComponentsData['date_picker'].show)
 				eventBus.$emit('platformChange',val, this.pageComponentsData.date_picker.name || 'startTime');
 			},
 			'argvs.endTime' : function (val, oldVal) {
 				// level_select
+				if (this.pageComponentsData['date_picker'].show)
 				eventBus.$emit('platformChange',val, this.pageComponentsData.date_picker.endname || 'endTime');
 			},
 			'argvs.day_type' : function (val, oldVal) {
 				// level_select
+				if (this.pageComponentsData['date_picker'].show)
 				eventBus.$emit('platformChange',val, 'day_type');
 			}
 		}

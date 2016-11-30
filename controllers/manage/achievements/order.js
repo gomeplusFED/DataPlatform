@@ -42,7 +42,9 @@ module.exports = (Router) => {
         router : "/achievements/orderOne",
         modelName : ["OrderTrend2" , "SalesPerfConversion2"],
         platform : false,
-        toggle : true,
+        toggle : {
+            show : true
+        },
         order : ["-date"],
         filter_select : [{
             title: '指标选择(图表使用)',

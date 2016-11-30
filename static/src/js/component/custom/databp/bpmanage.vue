@@ -29,7 +29,7 @@
 					<m-date :index="index" :page-components-data="pageComponentsData" :component-type="'date_picker'" :argvs.sync='argvs' diasbled></m-date>
 				</div>
 
-				<button id="btnSearch" class="btn btn-searchLi-top btn-primary" type="button" data-toggle="popover" data-trigger="focus" @click="query">查询</button>
+				<button id="btnSearch" class="btn btn-searchLi-top btn-primary" type="button" data-toggle="popover" data-trigger="focus" @click="queryClick">查询</button>
 			</li>
 		</ul> 
 	</div>
@@ -71,34 +71,25 @@
 	<div class="panel-footer" v-show="paginationConf.totalItems > paginationConf.itemsPerPage">
 		<m-pagination :pagination-conf="paginationConf"></m-pagination>
 	</div>
-	<m-alert></m-alert>
-	<m-loading :loading.sync='loading'></m-loading>
-	<m-confirm></m-confirm>
 </div>
 </template>
 <script>
 	var Vue = require('Vue');
 	var $ = require('jQuery');
 	var DatePicker = require('../../common/datePicker.vue');
-	var Loading = require('../../common/loading.vue');
 	var store = require('../../../store/store.js');
 	var actions = require('../../../store/actions.js');
-	var Alert = require('../../common/alert.vue');
-	var Confirm = require('../../common/confirm.vue');
 	var Pagination = require('../../common/pagination.vue');
 	var api = require('./api.js');
 	var utils = require('utils');
 	
 	var databp = Vue.extend({
 		name: 'bpmanage',
-		store: store,
 		components: {
-			'm-loading': Loading,
 			'm-pagination': Pagination,
-			'm-date': DatePicker,
-			'm-alert': Alert,
-			'm-confirm': Confirm
+			'm-date': DatePicker
 		},
+		props:['loading'],
 		vuex: {
 			getters: {
 				vuexbp: function() {
@@ -117,10 +108,6 @@
 				index: 1,
 				noData: false,
 				showDate: null,
-				loading: {
-					show: false,
-					noLoaded: 0
-				},
 				argvs: {},
 				paginationConf: {
 					currentPage: 1,     // 当前页
@@ -212,6 +199,10 @@
 						});
 					}
 				});
+			},
+			queryClick() {
+				this.paginationConf.currentPage = 1;
+				this.query();
 			},
 			edit(item) {
 				let {pageUrl, pointName, pointParam, selector, platform} = item;
@@ -414,7 +405,7 @@
 	width: 5%
 }
 .ntable tr th:nth-child(4) {
-	width: 200px;
+	width: 300px;
 }
 .ntable tr th:nth-child(5) {
 	width: 200px;

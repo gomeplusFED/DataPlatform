@@ -50,6 +50,7 @@ var DateCom = Vue.extend({
         'pageComponentsData': {
             handler: function(val){
                 var _this = this;
+
                 // 异步请求组件参数，watch到变化之后初始化，其它组件类似
                 var today = utils.formatDate (new Date(),'yyyy-MM-dd');
                 var yesterday = utils.formatDate (new Date(Date.now() - 24 * 60 * 60 * 1000),'yyyy-MM-dd');
