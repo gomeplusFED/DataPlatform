@@ -66,7 +66,7 @@ router.map({
 		}
 	},
 	'/databp': {
-		component: require('./component/custom/index.vue'),
+		component: require('./component/custom/databp/index.vue'),
 		subRoutes: {
 			'/visualbp': {
 				component: require('./component/custom/databp/visualbp.vue')
