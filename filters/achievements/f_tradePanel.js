@@ -552,6 +552,7 @@ module.exports = {
             map[Rows[i]] = Cols[i].caption;
         }
 
+        dates.reverse();
         for(let date of dates){
             result[date] = {};
             for(let key in map){
