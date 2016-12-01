@@ -3,7 +3,7 @@
         左侧大模块 <strong v-if="add">添加</strong>
     </h3>
     
-    <form>
+    <div>
         <div class="form-group">
             <span>
                 模块名称：
@@ -16,10 +16,13 @@
         </div>
         <div class="form-group">
             <button @click.prevent="save" class="btn-info btn">
-                保存
+                &nbsp;&nbsp;&nbsp;保存&nbsp;&nbsp;&nbsp;
+            </button>
+            <button v-if="id/1" @click="addSon" class="btn-info btn">
+                添加子模块
             </button>
         </div>
-    </form>
+    </div>
 </template>
 
 <script>
@@ -42,20 +45,12 @@ module.exports = Vue.extend({
     methods : {
         save(){
             let id = this.$route.params.id;
-            // let type;
-            // if(id == "add"){
-            //     type = "add";
-            // }else{
-            //     type = "change";
-            // }
-
             if(!this.name){
                 alert("请输入模块名");
                 return;
             }
-
             $.ajax({
-                url : "/addBigModule",
+                url : "/mapi/addBigModule",
                 type: "post",
                 dataType: "json",
                 data : {
@@ -65,12 +60,15 @@ module.exports = Vue.extend({
                 },
                 success(result){
                     if(result.state){
-                        location.href = "/addModule";
+                        location.href = "/mapi/index";
                     }else{
                         alert(result.msg);
                     }
                 }
             });
+        },
+        addSon(){
+            location.hash = "#!/sonModule/" + this.id + "/add";
         }
     },
     route : {
@@ -92,7 +90,6 @@ module.exports = Vue.extend({
                         alert("没有找到这个模块");
                         location.href = "/addModule#!/";
                     }
-                    
                 }else{
                     setTimeout(function(){
                         try{

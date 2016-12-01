@@ -1,51 +1,99 @@
 {
-  "22": {
-    "name": "哇哈哈",
-    "display": true,
-    "className": "fa  fa-laptop fa-fw",
-    "href": "#",
-    "path": [
-      {
-        "name": "第一个子模块",
-        "path": "/test/index",
+    "22": {
+        "name": "哇哈哈",
         "display": true,
-        "defaultData": [
-          {
-            "type": "chart",
-            "title": "店铺趋势分析",
-            "query_api": "/achievements/shopOne"
-          },
-          {
-            "type": "table",
-            "title": "店铺趋势明细",
-            "query_api": "/achievements/shopTwo"
-          },
-          {
-            "type": "table",
-            "title": "店铺流量排行TOP 50",
-            "query_api": "/achievements/shopThree"
-          },
-          {
-            "type": "table",
-            "title": "店铺交易排行TOP 50",
-            "query_api": "/achievements/shopFour"
-          }
-        ]
-      },
-      {
-        "name": "第二个子模块",
-        "path": "/test/one",
+        "className": "fa  fa-laptop fa-fw",
+        "href": "#",
+        "path": [
+            {
+                "name": "第一个子模块",
+                "path": "/test/index",
+                "display": true,
+                "defaultData": [
+                    {
+                        "type": "chart",
+                        "title": "店铺趋势分析",
+                        "query_api": "/achievements/shopOne"
+                    },
+                    {
+                        "type": "table",
+                        "title": "店铺趋势明细",
+                        "query_api": "/achievements/shopTwo"
+                    },
+                    {
+                        "type": "table",
+                        "title": "店铺流量排行TOP 50",
+                        "query_api": "/achievements/shopThree"
+                    },
+                    {
+                        "type": "table",
+                        "title": "店铺交易排行TOP 50",
+                        "query_api": "/achievements/shopFour"
+                    }
+                ]
+            },
+            {
+                "name": "第二个子模块",
+                "path": "/test/one",
+                "display": true,
+                "defaultData": [
+                    {
+                        "type": "chart",
+                        "title": "店铺趋势分析222",
+                        "query_api": "/achievements/shopTwo"
+                    }
+                ]
+            }
+        ],
+        "routers": [
+            {
+                "name": "Routers第一个子模块",
+                "path": "/test/index",
+                "display": true,
+                "defaultData": [
+                    {
+                        "type": "chart",
+                        "title": "店铺趋势分析",
+                        "query_api": "/achievements/shopOne"
+                    },
+                    {
+                        "type": "table",
+                        "title": "店铺趋势明细",
+                        "query_api": "/achievements/shopTwo"
+                    },
+                    {
+                        "type": "table",
+                        "title": "店铺流量排行TOP 50",
+                        "query_api": "/achievements/shopThree"
+                    },
+                    {
+                        "type": "table",
+                        "title": "店铺交易排行TOP 50",
+                        "query_api": "/achievements/shopFour"
+                    }
+                ]
+            },
+            {
+                "name": "Routers第二个子模块",
+                "path": "/test/one",
+                "display": true,
+                "defaultData": [
+                    {
+                        "type": "chart",
+                        "title": "店铺趋势分析222",
+                        "query_api": "/achievements/shopTwo"
+                    }
+                ]
+            }
+        ],
+        "foldname": "test"
+    },
+    "23": {
+        "name": "Test",
         "display": true,
-        "defaultData": [
-          {
-            "type": "chart",
-            "title": "店铺趋势分析222",
-            "query_api": "/achievements/shopTwo"
-          }
-        ]
-      }
-    ],
-    "routers": [],
-    "foldname": "test"
-  }
+        "className": "fa  fa-laptop fa-fw",
+        "href": "#",
+        "path": [],
+        "routers": []
+    }
 }

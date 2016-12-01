@@ -4,74 +4,43 @@
  * @fileoverview 自动添加模块路由配置
  */
 
-let reg = /[^a-z]/i;
-let fs = require("fs");
-let path=require("path");
-// let Config = require("../config/");
-let ConfigAdd = require("../config/config_add");
-let ConfigApi = require("../config/");
-const moment = require("moment");
+const ConfigApi = require("../config/");
 
-//write the config_add.json
-const WriteConfig = (obj , callback) => {
-    let str = JSON.stringify(obj , null , 2);
-    //写入config_add.json文件
-    fs.writeFile(path.join(__dirname, "../config_add.json"), str , (err)=>{
-        if(err) throw err;
-        return callback && callback();
-    });
-}
-
-
-
-let Usersname = [ "hexisen" , "yanglei"];
-let Str = `无权限&nbsp;&nbsp;<a href="/">首页</a>`;
-let Check = (req) => {
-    if(Usersname.includes(req.session.userInfo.username)){
-        return true;
-    }else{
-        return false;
-    }
-}
+/* 有权限修改的用户 */
+let Usersname = [ "hexisen" , "yanglei" ];
 
 module.exports = (Router) => {
 
-    Router.get("/addModule" , (req , res , next) => {
-        if(!Check(req)){
-            res.send(Str);
-            return;
+    /* 权限验证 */
+    Router.get("/mapi/*" , (req , res , next) => {
+        if(Usersname.includes(req.session.userInfo.username)){
+            next();
+        }else{
+            res.send(`无权限&nbsp;&nbsp;<a href="/">首页</a>`);
         }
+    });
 
+    Router.get("/mapi/index" , (req , res , next) => {
         res.render("include/addModule" , {
             pageTitle : "自动添加模块"
         });
     });
 
     //获取配置文件
-    Router.get("/getConfig" , (req , res , next) => {
-        if(!Check(req)){
-            res.send(Str);
-            return;
-        }
-
-        res.json(ConfigAdd);
+    Router.get("/mapi/getConfig" , (req , res , next) => {
+        res.json(ConfigApi.getConfig());
     });
 
     //大模块添加、修改操作
-    Router.post("/addBigModule" , (req , res , next) => {
-        if(!Check(req)){
-            res.send(Str);
-            return;
-        }
-
+    Router.post("/mapi/addBigModule" , (req , res , next) => {
         let data = req.body,
             error= false;
         if(data.type == "change" && data.name && data.id){
             //change module name.
             data.id = data.id / 1;
             if(data.id && typeof data.id == 'number'){
-                ConfigAdd[data.id].name = data.name;
-                ConfigApi.writeIn(ConfigAdd , () => {
+                ConfigApi.getConfig()[data.id].name = data.name;
+                ConfigApi.writeIn(() => {
                     res.json({
                         state : 1,
                         msg   : "change Success"
@@ -82,9 +51,17 @@ module.exports = (Router) => {
             }
         }else if(data.type == "add" && data.name){
             //add module.
-
+            let num = ConfigApi.addOne(data.name);
+            res.json({
+                state : 1,
+                data  : {
+                    id : num
+                },
+                msg   : "add Success"
+            });
+        }else{
+            error = true;
         }
-
 
         if(error){
             res.json({
@@ -92,9 +69,9 @@ module.exports = (Router) => {
                 msg   : "参数错误"
             });
         }
-        
     });
     
+    //
 
     return Router;
 }

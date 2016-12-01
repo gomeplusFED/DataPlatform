@@ -5,6 +5,11 @@
 </template>
 
 <script>
+/**
+ * 子模块界面
+*/
+
+
 let Vue = require("Vue");
 
 
