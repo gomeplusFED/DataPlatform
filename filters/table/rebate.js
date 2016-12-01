@@ -61,6 +61,57 @@ const cols = [
         caption : "最早创建日期"
     },]
 ];
+const newRows = [
+    ["date", "unique_is_rebate_order_num", "unique_is_over_rebate_order_num",
+        "expect_rebate_user_num", "expect_rebate_amount", "cancel_rebate_amount",
+        "is_over_rebate_order_amount", "unique_is_rebate_merchandise_num",
+        "unique_is_rebate_shop_num"],
+    ["name", "plan_type_name", "plan_type", "rebate_type_name", "rebate_type"]
+];
+const newCols = [
+    [{
+        caption : "日期"
+    },{
+        caption : "新增返利订单数"
+    },{
+        caption : "返利到账订单数"
+    },{
+        caption : "参与返利人数（未去重）"
+    },{
+        caption : "预计返利金额"
+    },{
+        caption : "已取消返利金额"
+    },{
+        caption : "返利到账金额"
+    },{
+        caption : "参与商品数（未去重）"
+    },{
+        caption : "参与商家数（未去重）"
+    }],
+    [{
+        caption : "返利功能"
+    },{
+        caption : "使用方"
+    },{
+        caption : "使用方序号"
+    },{
+        caption : "关联流程"
+    },{
+        caption : "关联流程序号"
+    },{
+        caption : "参与返利人数"
+    },{
+        caption : "预计返利金额（元）"
+    },{
+        caption : "已取消返利金额(元）"
+    },{
+        caption : "返利到账金额(元）"
+    },{
+        caption : "参与商品数（SKU）"
+    },{
+        caption : "参与商家数"
+    }]
+];
 
 module.exports = {
     rebateOne(data) {
@@ -90,5 +141,21 @@ module.exports = {
         }
 
         return util.toTable([source, second], rows, cols);
+    },
+    rebateNewOne(data) {
+        let source = data.first.data[0],
+            second = data.second.data[0],
+            third = data.third.data[0],
+            plan_type = {},
+            rebate_type = {};
+
+        for(let key of third) {
+            plan_type[key.type_code] = key.type_name;
+            rebate_type[key.flow_code] = key.flow_name;
+        }
+
+        for(let key of source) {
+            key.date = moment(key.date).format("YYYY-MM-DD");
+        }
     }
 };

@@ -21,7 +21,7 @@ module.exports = {
     },
     rebate_total() {
         return {
-            name : "社交报表",
+            name : "返利报表",
             path : "/socialAnalysis/rebate",
             display : true,
             defaultData : [
@@ -29,6 +29,20 @@ module.exports = {
                     type : "table",
                     title : "总体返利情况",
                     query_api : "/socialAnalysis/rebateOne"
+                }
+            ]
+        };
+    },
+    rebate_total_new() {
+        return {
+            name : "返利报表",
+            path : "/socialAnalysis/rebateNew",
+            display : true,
+            defaultData : [
+                {
+                    type : "table",
+                    title : "新增返利",
+                    query_api : "/socialAnalysis/rebateNewOne"
                 }
             ]
         };
