@@ -8,7 +8,7 @@ var util = require("../../utils");
 module.exports = {
     tableOne(data, filter_key) {
         var source = data.first.data[0],
-            count = data.first.count,
+            //count = data.first.count,
             secondSource = data.second.data[0],
             config = {},
             rows = [],
@@ -65,7 +65,7 @@ module.exports = {
         }
 
         return util.toTable([source], rows, cols, {
-            count : [count],
+            //count : [count],
             config : [merge]
         });
     }

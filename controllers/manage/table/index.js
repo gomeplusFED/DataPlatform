@@ -12,22 +12,18 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/socialAnalysis/tableOne",
         modelName : ["GroupReport", "SocialCategory"],
-        paging : [true, false],
+        //paging : [true, false],
         platform : false,
         date_picker_data: 1,
         showDayUnit : true,
         excel_export : true,
-        procedure : [[
+        procedure : [
             {
                 find : "params",
-                offset : "offset",
-                limit : "limit",
                 order : ["category_id_1"],
                 run : ""
-            },{
-                count : ""
             }
-        ]],
+        ],
         secondParams(query, params, data) {
             return {};
         },
