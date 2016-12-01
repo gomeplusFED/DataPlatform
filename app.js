@@ -34,14 +34,10 @@ Object.keys(config).forEach(function(key) {
 // app.use(logger('dev'));
 
 app.use(function(req, res, next) {
-    if(req.headers.host === "localhost:7879") {
-        next();
+    if (req.headers['user-agent'].indexOf('Chrome') === -1) {
+        res.send('请使用谷歌浏览器');
     } else {
-        if (req.headers['user-agent'].indexOf('Chrome') === -1) {
-            res.send('请使用谷歌浏览器');
-        } else {
-            next();
-        }
+        next();
     }
 });
 

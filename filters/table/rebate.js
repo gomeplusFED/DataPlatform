@@ -63,10 +63,13 @@ const cols = [
 ];
 const newRows = [
     ["date", "unique_is_rebate_order_num", "unique_is_over_rebate_order_num",
-        "expect_rebate_user_num", "expect_rebate_amount", "cancel_rebate_amount",
+        "unique_expect_rebate_user_num", "expect_rebate_amount", "cancel_rebate_amount",
         "is_over_rebate_order_amount", "unique_is_rebate_merchandise_num",
         "unique_is_rebate_shop_num"],
-    ["name", "plan_type_name", "plan_type", "rebate_type_name", "rebate_type"]
+    ["name", "plan_type_name", "plan_type", "rebate_type_name", "rebate_type",
+        "unique_expect_rebate_user_num", "expect_rebate_amount", "cancel_rebate_amount",
+        "is_over_rebate_order_amount", "unique_is_rebate_merchandise_num",
+        "unique_is_rebate_shop_num"]
 ];
 const newCols = [
     [{
@@ -157,5 +160,17 @@ module.exports = {
         for(let key of source) {
             key.date = moment(key.date).format("YYYY-MM-DD");
         }
+
+        for(let key of second) {
+            key.plan_type_name = plan_type[key.plan_type];
+            key.rebate_type_name = rebate_type[key.rebate_type];
+            if(rebate_type[key.rebate_type].indexOf("-") === -1) {
+                key.name = rebate_type[key.rebate_type];
+            } else {
+                key.name = rebate_type[key.rebate_type].substr(0, rebate_type[key.rebate_type].indexOf("-"));
+            }
+        }
+
+        return util.toTable([source, second], newRows, newCols);
     }
 };

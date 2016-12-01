@@ -304,6 +304,9 @@ const Config = {
             path: [
                 obj.table.table(),
                 obj.table.rebate_total(),
+            ],
+            routers : [
+                obj.table.rebate_total_new()
             ]
         }
     }

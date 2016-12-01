@@ -4,8 +4,7 @@
  * @fileoverview 数据报表
  */
 const util = require("../../../utils"),
-    EventProxy = require("eventproxy"),
-    request = require("request");
+    EventProxy = require("eventproxy");
 
 module.exports = (Router) => {
     return Router;
