@@ -140,6 +140,7 @@ var Main = Vue.extend({
 					}
 				} else if (!_this.index) {
 					eventBus.$emit('globalPlataform', {});
+					eventBus.$emit('globalPlataform1', {});
 				}
 			}
 		});
