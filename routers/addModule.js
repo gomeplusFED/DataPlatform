@@ -71,7 +71,28 @@ module.exports = (Router) => {
         }
     });
     
-    //
+    //子模块添加、修改操作
+    Router.post("/mapi/addSonModule" , (req , res , next) => {
+        let data = req.body,  
+            error = false;
+
+        if(data.id && data.P_R && data.type == "add" && data.sonName && data.path){
+            ConfigApi.sonChange(data);
+        }else if(data.id && data.P_R && data.type == "change" && data.sonName && data.path && data.index){
+            ConfigApi.sonChange(data);
+        }else{
+            res.json({
+                state : 0,
+                msg   : "参数错误"
+            });
+            return;
+        }
+
+        res.json({
+            state : 1,
+            msg   : "子模块修改成功"
+        });
+    });
 
     return Router;
 }

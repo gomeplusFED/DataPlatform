@@ -34,7 +34,6 @@ let PopOut = (arr) => {
     while(arr.includes(num.toString())){
         num++;
     }
-
     return num;
 }
 
@@ -52,9 +51,34 @@ Config.addOne = ( name ) => {
         "routers":[]
     }
 
-    Config.writeIn(ConfigAdd);
+    Config.writeIn();
     return num;
 }
+
+/* 子模块修改 */
+Config.sonChange = (option) => {
+    let Obj = ConfigAdd[option.id],
+        Arr = Obj[option.P_R];
+
+    if(option.type == "add"){
+        let tempData = {
+            "name" : option.sonName,
+            "path" : option.path,
+            "display": true,
+            "defaultData" : []
+        }
+        Arr.push(tempData);
+    }else{
+        let tempData = Arr[option.index];
+        tempData.name = option.sonName;
+        tempData.path = option.path;
+    }
+
+    Config.writeIn();
+}
+
+
+
 
 
 module.exports = Config;

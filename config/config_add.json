@@ -7,7 +7,7 @@
         "path": [
             {
                 "name": "第一个子模块",
-                "path": "/test/index",
+                "path": "/test/index123",
                 "display": true,
                 "defaultData": [
                     {
@@ -84,6 +84,12 @@
                         "query_api": "/achievements/shopTwo"
                     }
                 ]
+            },
+            {
+                "name": "hello",
+                "path": "/go/what",
+                "display": true,
+                "defaultData": []
             }
         ],
         "foldname": "test"
@@ -93,7 +99,20 @@
         "display": true,
         "className": "fa  fa-laptop fa-fw",
         "href": "#",
-        "path": [],
+        "path": [
+            {
+                "name": "Test_Son_one",
+                "path": "test/index",
+                "display": true,
+                "defaultData": []
+            },
+            {
+                "name": "Test_Son_two",
+                "path": "/test/two",
+                "display": true,
+                "defaultData": []
+            }
+        ],
         "routers": []
     }
 }

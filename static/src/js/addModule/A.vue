@@ -33,6 +33,7 @@
 
 let Vue = require("Vue");
 let $   = require("jQuery");
+let utils=require("utils");
 
 module.exports = Vue.extend({
     data(){
@@ -83,23 +84,14 @@ module.exports = Vue.extend({
                 this.add = false;
                 this.id  = id;
                 
-                if(window.Result){
+                utils.wait( "window.Result" , ()=>{
                     try{
                         this.name = window.Result[id].name;
                     }catch(e){
                         alert("没有找到这个模块");
-                        location.href = "/addModule#!/";
+                        location.href = "/mapi/index";
                     }
-                }else{
-                    setTimeout(function(){
-                        try{
-                            _this.name = window.Result[id].name;
-                        }catch(e){
-                            alert("没有找到这个模块");
-                            location.href = "/addModule#!/";
-                        }
-                    } , 500);
-                }
+                });
             }
         }
     }
