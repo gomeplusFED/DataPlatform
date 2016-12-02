@@ -34,7 +34,13 @@ export default {
 		eventBus.$on('globalPlataform', (data) => {
 			this.platafromData = data;
 			if (this.platafromData.list && this.platafromData.list.length) {
-				this.key = this.platafromData.list[0].key;
+				let curQuery = utils.parseUrlQuery(this.$route.path);
+				let check = curQuery[this.platafromData.key]
+				if (check) {
+					this.key = check
+				} else {
+					this.key = this.platafromData.list[0].key;
+				}
 			}
 		});
 	},
