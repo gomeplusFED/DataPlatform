@@ -69,7 +69,7 @@ module.exports = {
                 "order_num",
                 "pay_num",
 
-                "order_num",
+                "order_sum",
                 "pay_sum",
                 "order_user",
                 "pay_user",
@@ -205,10 +205,10 @@ module.exports = {
             Result.push(item);
         }
 
-        for(let item of source){
+        for(let item of Result){
             item.pay_sum_lv = util.toFixed( item.pay_sum / All_pay_sum , 0 );
         }
 
-        return util.toTable([source], data.rows, data.cols, [count]);
+        return util.toTable([Result], data.rows, data.cols, [count]);
     }
 };
