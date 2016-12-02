@@ -24,6 +24,12 @@ import eventBus from '../support/event-bus.vue';
 import utils from 'utils';
 export default {
 	name: 'plataform',
+	props: {
+		index: {
+			type: String,
+			default: ''
+		}
+	},
 	data() {
 		return {
 			platafromData: {},
@@ -31,7 +37,7 @@ export default {
 		};
 	},
 	ready() {
-		eventBus.$on('globalPlataform', (data) => {
+		eventBus.$on('globalPlataform' + this.index, (data) => {
 			this.platafromData = data;
 			if (this.platafromData.list && this.platafromData.list.length) {
 				let curQuery = utils.parseUrlQuery(this.$route.path);

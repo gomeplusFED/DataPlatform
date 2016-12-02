@@ -131,7 +131,13 @@ var Main = Vue.extend({
 					_this.count = 0;
 				}
 				if (/.*(\/.*One)/.test(_this.currentData.query_api)) {
-					eventBus.$emit('globalPlataform', data.components.global_plataform || {});
+					data.components.global_plataform = data.components.global_plataform || {}
+					if (data.components.global_plataform instanceof Array) {
+						eventBus.$emit('globalPlataform', data.components.global_plataform[0]);
+						eventBus.$emit('globalPlataform1', data.components.global_plataform[1]);
+					} else if (data.components.global_plataform instanceof Object) {
+						eventBus.$emit('globalPlataform', data.components.global_plataform);
+					}
 				} else if (!_this.index) {
 					eventBus.$emit('globalPlataform', {});
 				}

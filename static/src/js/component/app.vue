@@ -5,6 +5,7 @@
 	<m-confirm></m-confirm>
 	<m-export-confirm></m-export-confirm>
 	<m-plataform></m-plataform>
+	<m-plataform index="1"></m-plataform>
 	<m-tab-checkbox></m-tab-checkbox>
 	<m-global></m-global>
 	<m-main v-ref:main v-for="item in list" :index="$index" :init-data="initData" :current-data="list[$index]" :loading.sync="loading"></m-main>
