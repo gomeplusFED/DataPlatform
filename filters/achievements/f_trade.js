@@ -185,17 +185,24 @@ module.exports = {
     tradeFour(data, query , dates) {
 
         let source = data.first.data[0],
+            Result = [],
             count = data.first.count || 1;
         let num = query.filter_key , All_pay_sum = data.first.sum[0] || 1;
 
-        for(let item of source) {
+
+        for(let i=0;i<source.length;i++){
+            let item = source[i];
             if(!num){
                 item.category_name = item["category_name_1"];
             }else{
                 item.category_name = item["category_name_"+(num+1)];
                 if(item["category_id_"+(num+1)] == "ALL"){
+                    All_pay_sum -= item.pay_sum;
+                    continue;
                 }
             }
+
+            Result.push(item);
         }
 
         for(let item of source){
