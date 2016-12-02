@@ -564,6 +564,27 @@ exports.export = (ws, data) => {
     }
 };
 
-exports.arrayToArray = () => {
-    
+exports.arrayToArray = (modelData) => {
+    const newData = [];
+    for(let item of modelData) {
+        const cols = item.cols;
+        const data = item.data;
+        const rows = item.rows;
+        const arr = [];
+        for(let col of cols) {
+            arr.push(col.caption);
+        }
+        newData.push(arr);
+        for(let key of data) {
+            let a = [];
+            for(let row of rows) {
+                a.push(key[row]);
+            }
+            newData.push(a);
+        }
+        newData.push([]);
+        newData.push([]);
+    }
+
+    return newData;
 }
