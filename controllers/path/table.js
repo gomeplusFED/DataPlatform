@@ -46,5 +46,19 @@ module.exports = {
                 }
             ]
         };
+    },
+    data_table_day() {
+        return {
+            name : "返利报表",
+            path : "/socialAnalysis/dataTableDay",
+            display : true,
+            defaultData : [
+                {
+                    type : "table",
+                    title : "总体数据情况",
+                    query_api : "/socialAnalysis/dataTableDayOne"
+                }
+            ]
+        };
     }
 };
