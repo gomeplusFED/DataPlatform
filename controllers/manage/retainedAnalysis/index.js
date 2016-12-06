@@ -75,9 +75,9 @@ module.exports = (Router) => {
             let _params = [query.startTime, query.endTime, query.day_type];
 
             if(query.type === "all") {
-                _sql += `type IN ('android', 'ios')`
+                _sql += ` type IN ('android', 'ios')`
             } else {
-                _sql += `type='${query.type}'`
+                _sql += ` type='${params.type}'`
             }
 
             _sql += ` AND day_type=? GROUP BY date ORDER BY date DESC`;
