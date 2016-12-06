@@ -122,21 +122,7 @@ module.exports = {
             ]
         };
     },
-    data_table_week_order() {
-        return {
-            name : "数据报表",
-            path : "/socialAnalysis/dataTableWeekOrder",
-            display : true,
-            defaultData : [
-                {
-                    type : "table",
-                    title : "订单数据",
-                    query_api : "/socialAnalysis/dataTableWeekOrderOne"
-                }
-            ]
-        };
-    },
-    data_table_Month_order() {
+    data_table_month_order() {
         return {
             name : "数据报表",
             path : "/socialAnalysis/dataTableMonthOrder",
@@ -146,6 +132,20 @@ module.exports = {
                     type : "table",
                     title : "订单数据",
                     query_api : "/socialAnalysis/dataTableMonthOrderOne"
+                }
+            ]
+        };
+    },
+    data_table_day_user() {
+        return {
+            name : "数据报表",
+            path : "/socialAnalysis/dataTableDayUser",
+            display : true,
+            defaultData : [
+                {
+                    type : "table",
+                    title : "用户数据",
+                    query_api : "/socialAnalysis/dataTableDayUserOne"
                 }
             ]
         };

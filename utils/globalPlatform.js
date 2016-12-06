@@ -29,7 +29,7 @@ module.exports = {
                 url : "#!/socialAnalysis/dataTableDay"
             }, {
                 name: '用户数据',
-                url : "#!/socialAnalysis/rebateNew"
+                url : "#!/socialAnalysis/dataTableDayUserOne"
             }, {
                 name: '订单数据',
                 url : "#!/socialAnalysis/dataTableDayOrder"

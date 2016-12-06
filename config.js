@@ -312,7 +312,7 @@ const Config = {
                 obj.table.data_table_month(),
                 obj.table.data_table_day_order(),
                 obj.table.data_table_week_order(),
-                obj.table.data_table_Month_order(),
+                obj.table.data_table_month_order(),
             ]
         }
     }
