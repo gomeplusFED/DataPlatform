@@ -3,10 +3,13 @@
 		<table v-for="(outerTableIndex, tableItem) in tableData" class="table table-bordered table-condensed table-hover" :class="{'table-nobordered': tableData[outerTableIndex].nobordered}" role="grid" aria-describedby="dataTables_info">
 			<thead>
 				<tr v-if="outerTableIndex === 0">
-					<th v-for="(captionIndex, captionItem) in tableItem.cols" v-show="tableColControl[captionIndex]">{{captionItem.caption}} <i v-show="captionItem.caption !== ' ' && captionItem.help" style="opacity: 0.8;cursor: pointer;" class="fa fa-question-circle-o" v-tips="{direction: 'top', msg: captionItem.help}"></i></th>
+					<th v-for="(captionIndex, captionItem) in tableItem.cols"
+					 v-show="tableColControl[captionIndex]"
+					 :colspan="captionItem.colspan"
+					 >{{captionItem.caption}} <i v-show="captionItem.caption !== ' ' && captionItem.help" style="opacity: 0.8;cursor: pointer;" class="fa fa-question-circle-o" v-tips="{direction: 'top', msg: captionItem.help}"></i></th>
 				</tr>
 				<tr v-else>
-					<th v-for="(captionIndex, captionItem) in tableItem.cols">{{captionItem.caption}} <i v-show="captionItem.caption !== ' ' && captionItem.help" style="opacity: 0.8;cursor: pointer;" class="fa fa-question-circle-o" v-tips="{direction: 'top', msg: captionItem.help}"></i></th>
+					<th v-for="(captionIndex, captionItem) in tableItem.cols" :colspan="captionItem.colspan">{{captionItem.caption}} <i v-show="captionItem.caption !== ' ' && captionItem.help" style="opacity: 0.8;cursor: pointer;" class="fa fa-question-circle-o" v-tips="{direction: 'top', msg: captionItem.help}"></i></th>
 				</tr>
 			</thead>
 			<tbody v-if="tableItem.data.length !== 0">
