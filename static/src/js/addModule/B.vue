@@ -12,6 +12,16 @@
             <input type="text" class="form-control" v-model="sonName">
         </div>
         <div class="form-group">
+            <span>已有文件:</span>
+            <br>
+            <button class="btn btn-default disabled">
+                {{filename + '.js'}}
+            </button>
+            <button class="btn btn-default disabled">
+                {{filename + '.json'}}                
+            </button>
+        </div>
+        <div class="form-group">
             <span>前端访问路由:</span>(eg: /IM/index)
             <input type="text" class="form-control" v-model="path" placeholder="eg: /IM/index">
         </div>
@@ -56,6 +66,7 @@ module.exports = Vue.extend({
             type  : "",         //add  , change
             typeChoice:"",      //path , routeres
             index : "",         //数组中第几个
+            filename: ""
         }
     },
     methods : {
@@ -110,6 +121,7 @@ module.exports = Vue.extend({
             utils.wait("window.Result" , () => {
                 try{
                     this.fatherName = window.Result[id].name;
+                    this.filename = window.Result[id].filename;
                     if(sonIndex == "add"){
                         this.add = true;
                         this.sonName = "";

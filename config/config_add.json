@@ -1,53 +1,13 @@
 {
     "22": {
-        "name": "哇哈哈",
+        "name": "测试test",
         "display": true,
         "className": "fa  fa-laptop fa-fw",
+        "filename": "test",
         "href": "#",
         "path": [
             {
                 "name": "第一个子模块",
-                "path": "/test/index123",
-                "display": true,
-                "defaultData": [
-                    {
-                        "type": "chart",
-                        "title": "店铺趋势分析",
-                        "query_api": "/achievements/shopOne"
-                    },
-                    {
-                        "type": "table",
-                        "title": "店铺趋势明细",
-                        "query_api": "/achievements/shopTwo"
-                    },
-                    {
-                        "type": "table",
-                        "title": "店铺流量排行TOP 50",
-                        "query_api": "/achievements/shopThree"
-                    },
-                    {
-                        "type": "table",
-                        "title": "店铺交易排行TOP 50",
-                        "query_api": "/achievements/shopFour"
-                    }
-                ]
-            },
-            {
-                "name": "第二个子模块",
-                "path": "/test/one",
-                "display": true,
-                "defaultData": [
-                    {
-                        "type": "chart",
-                        "title": "店铺趋势分析222",
-                        "query_api": "/achievements/shopTwo"
-                    }
-                ]
-            }
-        ],
-        "routers": [
-            {
-                "name": "Routers第一个子模块",
                 "path": "/test/index",
                 "display": true,
                 "defaultData": [
@@ -74,45 +34,43 @@
                 ]
             },
             {
-                "name": "Routers第二个子模块",
-                "path": "/test/one",
-                "display": true,
-                "defaultData": [
-                    {
-                        "type": "chart",
-                        "title": "店铺趋势分析222",
-                        "query_api": "/achievements/shopTwo"
-                    }
-                ]
-            },
-            {
-                "name": "hello",
-                "path": "/go/what",
-                "display": true,
-                "defaultData": []
-            }
-        ],
-        "foldname": "test"
-    },
-    "23": {
-        "name": "Test",
-        "display": true,
-        "className": "fa  fa-laptop fa-fw",
-        "href": "#",
-        "path": [
-            {
-                "name": "Test_Son_one",
-                "path": "test/index",
+                "name": "第二个子模块",
+                "path": "/test/second",
                 "display": true,
                 "defaultData": []
             },
             {
-                "name": "Test_Son_two",
-                "path": "/test/two",
+                "name": "第三个子模块",
+                "path": "/test/third",
                 "display": true,
                 "defaultData": []
             }
         ],
         "routers": []
+    },
+    "23": {
+        "name": "哇哈哈",
+        "display": true,
+        "className": "fa  fa-laptop fa-fw",
+        "filename": "index",
+        "href": "#",
+        "path": [],
+        "routers": []
+    },
+    "24": {
+        "name": "再看看",
+        "display": true,
+        "className": "fa  fa-laptop fa-fw",
+        "filename": "hello",
+        "href": "#",
+        "path": [],
+        "routers": [
+            {
+                "name": "Router测试",
+                "path": "/look/index",
+                "display": true,
+                "defaultData": []
+            }
+        ]
     }
 }

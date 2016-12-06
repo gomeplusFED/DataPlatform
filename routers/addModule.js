@@ -7,7 +7,7 @@
 const ConfigApi = require("../config/");
 
 /* 有权限修改的用户 */
-let Usersname = [ "hexisen" , "yanglei" , "wangzhibo" ];
+let Usersname = [ "hexisen" , "yanglei" ];
 
 module.exports = (Router) => {
 
@@ -49,16 +49,21 @@ module.exports = (Router) => {
             }else{
                 error = true;
             }
-        }else if(data.type == "add" && data.name){
+        }else if(data.type == "add" && data.name && data.filename){
             //add module.
-            let num = ConfigApi.addOne(data.name);
-            res.json({
-                state : 1,
-                data  : {
-                    id : num
-                },
-                msg   : "add Success"
-            });
+            let num = ConfigApi.addOne(data.name , data.filename);
+            if(num){
+                res.json({
+                    state : 1,
+                    data  : {
+                        id : num
+                    },
+                    msg   : "add Success"
+                });
+            }else{
+                error = true;
+            }
+            
         }else{
             error = true;
         }

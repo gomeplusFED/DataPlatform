@@ -68,3 +68,9 @@
 .addMoudle{
     padding: 10px;
 }
+.h-input{
+    display: inline-block;
+    width: 200px;   
+}
+
+

@@ -1,6 +1,6 @@
 var express = require('express'),
     router = express.Router(),
-    config = require('../config'),
+    config = require('../config/config.js'),
     fs = require("fs"),
     files = "./controllers/manage",
     renderApi = require("./renderApi");

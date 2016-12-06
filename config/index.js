@@ -10,6 +10,7 @@ const filePath = "./config_add.json";
 const ConfigAdd = require("./config_add");
 
 
+
 let Config = {};
 
 Config.getConfig = () => {
@@ -37,15 +38,47 @@ let PopOut = (arr) => {
     return num;
 }
 
+/* createFile */
+let CreateFile = (filename , name , type)=>{
+    let str = type == "json" ? "{}" : `
+/**
+ * ${name} 模块功能函数文件
+*/
+
+
+module.exports = {
+
+}
+`;
+    let fold = type == "json" ? "apiConfig" : "apiFunction";
+    let source = fs.createWriteStream(path.join(__dirname , fold , filename + "." + type));
+    source.write(str);
+    source.end();
+}
+
+
 
 /* 增加一个大模块 */
-Config.addOne = ( name ) => {
+Config.addOne = ( name , file ) => {
     let AllConfig = require("./config");
     let num = PopOut(Object.keys(AllConfig.limit));
+
+    let has_config = fs.existsSync(path.join(__dirname , "apiConfig" , file + ".json"));
+    let has_api = fs.existsSync(path.join(__dirname , "apiFunction" , file + ".js"));
+
+    if(!has_api && !has_config){
+        //创建两个文件
+        CreateFile(file , name , "js");
+        CreateFile(file , name , "json");
+    }else{
+        return false;
+    }
+
     ConfigAdd[num] = {
         "name" : name,
         "display": true,
         "className": "fa  fa-laptop fa-fw",
+        "filename" : file,
         "href": "#",
         "path": [],
         "routers":[]

@@ -34,14 +34,14 @@
                            
                         <ul v-if="sonItem.defaultData.length" class="nav collapse abc">
                             <li v-for="(apiIndex , api) in sonItem.defaultData">
-                                <a @click.prevent="urlGo" href="#!/apiModule/{{index}}/{{sonIndex}}/{{apiIndex}}">
+                                <a @click.prevent="urlGo" href="#!/apiModule/{{index}}/{{sonIndex}}_p/{{apiIndex}}">
                                     <i class="fa fa-fighter-jet fa-fw"></i>
                                     {{api.title}}
                                 </a>
                             </li>
 
                             <li>
-                                <a @click.prevent="urlGo" href="#!/apiModule/{{index}}/{{sonIndex}}/add">
+                                <a @click.prevent="urlGo" href="#!/apiModule/{{index}}/{{sonIndex}}_p/add">
                                     <i class="fa fa-arrows fa-fw"></i>
                                     添加一个api
                                 </a>
@@ -70,14 +70,14 @@
                            
                         <ul v-if="sonItem.defaultData.length" class="nav collapse abc">
                             <li v-for="(apiIndex , api) in sonItem.defaultData">
-                                <a @click.prevent="urlGo" href="#!/apiModule/{{index}}/{{sonIndex}}/{{apiIndex}}">
+                                <a @click.prevent="urlGo" href="#!/apiModule/{{index}}/{{sonIndex}}_r/{{apiIndex}}">
                                     <i class="fa fa-fighter-jet fa-fw"></i>
                                     {{api.title}}
                                 </a>
                             </li>
 
                             <li>
-                                <a @click.prevent="urlGo" href="#!/apiModule/{{index}}/{{sonIndex}}/add">
+                                <a @click.prevent="urlGo" href="#!/apiModule/{{index}}/{{sonIndex}}_r/add">
                                     <i class="fa fa-arrows fa-fw"></i>
                                     添加一个api
                                 </a>

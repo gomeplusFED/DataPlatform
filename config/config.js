@@ -15,7 +15,7 @@ for (var key of files) {
     }
 }
 
-const ConfigAdd = require("./config_add");
+const ConfigAdd = require("./config_add.json");
 const Config = {
     siteName: '美信数据平台',
     pageTitle: '',
