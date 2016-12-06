@@ -225,7 +225,7 @@ exports.numberLeave = function(number , num){
     }
     number = parseInt(number*a);
     return number/a;
-}
+};
 
 exports.times = function(startTime, endTime, day_type) {
     var start = new Date(startTime).getTime(),
@@ -387,7 +387,7 @@ exports.mergeCell = function(data, rows) {
 exports.isEmptyObject = function(obj){
     for(var n in obj){ return false }
     return true;
-}
+};
 
 
 /*
@@ -447,7 +447,7 @@ exports.beforeDate = function( date , num , type ){
     }
 
     return arr;
-}
+};
 
 /* 调换数组顺序 */
 exports.ArraySort = function(arr){
@@ -462,7 +462,7 @@ exports.ArraySort = function(arr){
     }else{
         return arr;
     }
-}
+};
 
 /* 商品价目对照表 */
 exports.prizeRange = {
@@ -524,7 +524,7 @@ exports.dealDivision = function(a , b , num){
     }else{
         return a / b;
     }
-}
+};
 
 exports.merge = (ws, x1, y1, x2, y2, str, style) => {
     let w = ws.cell(x1, y1, x2, y2, true);
@@ -587,4 +587,4 @@ exports.arrayToArray = (modelData) => {
     }
 
     return newData;
-}
+};

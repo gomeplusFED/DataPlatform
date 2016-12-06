@@ -49,7 +49,7 @@ module.exports = {
     },
     data_table_day() {
         return {
-            name : "返利报表",
+            name : "数据报表",
             path : "/socialAnalysis/dataTableDay",
             display : true,
             defaultData : [
@@ -57,6 +57,95 @@ module.exports = {
                     type : "table",
                     title : "总体数据情况",
                     query_api : "/socialAnalysis/dataTableDayOne"
+                },
+                {
+                    type : "table",
+                    title : "新增数据情况",
+                    query_api : "/socialAnalysis/dataTableDayTwo"
+                }
+            ]
+        };
+    },
+    data_table_week() {
+        return {
+            name : "数据报表",
+            path : "/socialAnalysis/dataTableWeek",
+            display : true,
+            defaultData : [
+                {
+                    type : "table",
+                    title : "总体数据情况",
+                    query_api : "/socialAnalysis/dataTableWeekOne"
+                }
+            ]
+        };
+    },
+    data_table_month() {
+        return {
+            name : "数据报表",
+            path : "/socialAnalysis/dataTableMonth",
+            display : true,
+            defaultData : [
+                {
+                    type : "table",
+                    title : "总体数据情况",
+                    query_api : "/socialAnalysis/dataTableMonthOne"
+                }
+            ]
+        };
+    },
+    data_table_day_order() {
+        return {
+            name : "数据报表",
+            path : "/socialAnalysis/dataTableDayOrder",
+            display : true,
+            defaultData : [
+                {
+                    type : "table",
+                    title : "订单数据",
+                    query_api : "/socialAnalysis/dataTableDayOrderOne"
+                }
+            ]
+        };
+    },
+    data_table_week_order() {
+        return {
+            name : "数据报表",
+            path : "/socialAnalysis/dataTableWeekOrder",
+            display : true,
+            defaultData : [
+                {
+                    type : "table",
+                    title : "订单数据",
+                    query_api : "/socialAnalysis/dataTableWeekOrderOne"
+                }
+            ]
+        };
+    },
+    data_table_week_order() {
+        return {
+            name : "数据报表",
+            path : "/socialAnalysis/dataTableWeekOrder",
+            display : true,
+            defaultData : [
+                {
+                    type : "table",
+                    title : "订单数据",
+                    query_api : "/socialAnalysis/dataTableWeekOrderOne"
+                }
+            ]
+        };
+    },
+    data_table_Month_order() {
+        return {
+            name : "数据报表",
+            path : "/socialAnalysis/dataTableMonthOrder",
+            display : true,
+            defaultData : [
+                {
+                    type : "table",
+                    title : "订单数据",
+                    query_api : "/socialAnalysis/dataTableMonthOrderOne"
                 }
             ]
         };

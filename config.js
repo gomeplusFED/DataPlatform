@@ -303,10 +303,16 @@ const Config = {
             href: "#",
             path: [
                 obj.table.table(),
-                obj.table.rebate_total(),
+                obj.table.data_table_day(),
+                obj.table.rebate_total()
             ],
             routers : [
-                obj.table.rebate_total_new()
+                obj.table.rebate_total_new(),
+                obj.table.data_table_week(),
+                obj.table.data_table_month(),
+                obj.table.data_table_day_order(),
+                obj.table.data_table_week_order(),
+                obj.table.data_table_Month_order(),
             ]
         }
     }
