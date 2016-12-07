@@ -199,11 +199,16 @@
 			},
 			search(forceloading = false) {
 				this.loading.show = true;
+				this.iframe_url = '';
 				var newiframe_url = '/databp/html?m='+this.bpConfig.platform+'&url=' + this.bpConfig.pageUrl;
 				if (newiframe_url === this.iframe_url && !forceloading) {
 					this.loading.show = false;
 				}
-				this.iframe_url = newiframe_url;
+				if(this.iframe_url === newiframe_url) {
+					this.$dispatch('search_clicked', this.bpConfig);
+				} else {
+					this.iframe_url = newiframe_url;
+				}
 			}
 		}
 	});

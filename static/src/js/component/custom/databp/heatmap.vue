@@ -100,6 +100,10 @@
 						}
 					});
 				});
+			},
+			'search_clicked':  function (config) {
+				let heatconfig = {...config, dateTime: this.argvs.endTime};
+				this.init(heatconfig);
 			}
 		},
 		methods: {
