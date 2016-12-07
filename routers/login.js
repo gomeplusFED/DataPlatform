@@ -140,7 +140,7 @@ module.exports = function(Router) {
                                             if (err) {
                                                 unbind(client, next);
                                             } else {
-                                                if (ret.length && ret.length === 1) {
+                                                if (ret.length) {
                                                     if(ret[0].status) {
                                                         if(ret[0].name === name
                                                             && ret[0].username === un
