@@ -7,12 +7,12 @@ var ldap = require('ldapjs');
 var config = require('../config');
 var lodash = require('lodash');
 
-var username = 'yunyingbaobiao';
-var password = '5P=/d_Xp';
-var ldapurl = 'ldap://10.69.100.1';
+var username = 'LDAP_SysDevDept';
+var password = '3m4>9kj9+@-du!p3';
+var ldapurl = 'ldap://10.69.100.4';
 var superAdminInfo = {
     username: "superAdmin",
-    password: "12345678"
+    password: "gome123456"
 };
 
 module.exports = function(Router) {
@@ -110,9 +110,9 @@ module.exports = function(Router) {
                     unbind(client, next);
                 } else {
                     if (email.indexOf("@") < 0) {
-                        email += '@gomeplus.com';
+                        email += '@ds.gome.com.cn';
                     }
-                    client.search('ou=美信,dc=meixin,dc=com', {
+                    client.search('dc=ds,dc=gome,dc=com,dc=cn', {
                         filter: '(userprincipalname=' + email + ')',
                         scope: 'sub'
                     }, function(err, resp) {
@@ -124,24 +124,46 @@ module.exports = function(Router) {
                         resp.on('end', function() {
                             if (entrys.length === 1) {
                                 var entry = entrys[0];
-                                client.bind(entry.object.dn, pwd, function(err) {
+                                client.bind(entry.objectName, pwd, function(err) {
                                     //验证成功
                                     if (err) {
                                         unbind(client, next);
                                         req.flash('密码和账户不正确');
                                         res.redirect('back');
                                     } else {
+                                        const un = entry.objectName.match(/CN=(.*?)[(]/)[1];
+                                        const name = entry.objectName.match(/[(](.*?)[\.]/)[1];
+                                        const department = entry.objectName.match(/[\.]+(.*?)[)]+/)[1];
                                         req.models.User2.find({
-                                            email: email
+                                            username: un
                                         }, function(err, ret) {
                                             if (err) {
                                                 unbind(client, next);
                                             } else {
                                                 if (ret.length) {
                                                     if(ret[0].status) {
-                                                        saveLogin(req, res, remember, email, ret[0]);
-                                                        unbind(client, next);
-                                                        res.redirect(from + hash || '/');
+                                                        if(ret[0].name === name
+                                                            && ret[0].username === un
+                                                            && ret[0].department === department
+                                                            && ret[0].email === email) {
+                                                            saveLogin(req, res, remember, email, ret[0]);
+                                                            unbind(client, next);
+                                                            res.redirect(from + hash || '/');
+                                                        } else {
+                                                            ret[0].name = name;
+                                                            ret[0].username = un;
+                                                            ret[0].department = department;
+                                                            ret[0].email = email;
+                                                            ret[0].save((err) => {
+                                                                if(err) {
+                                                                    unbind(client, next);
+                                                                } else {
+                                                                    saveLogin(req, res, remember, email, ret[0]);
+                                                                    unbind(client, next);
+                                                                    res.redirect(from + hash || '/');
+                                                                }
+                                                            });
+                                                        }
                                                     } else {
                                                         unbind(client, next);
                                                         req.flash('该用户已被禁用');
@@ -149,14 +171,13 @@ module.exports = function(Router) {
                                                     }
                                                 } else {
                                                     //不存在本地用户,写入本地用户
-                                                    var name = entry.object.dn.match(/CN=(.*?)($|-)/)[1];
                                                     req.models.User2.create({
                                                         name: name,
-                                                        username : entry.object.sAMAccountName,
+                                                        username : un,
                                                         email : email,
                                                         limited : "{}",
                                                         export : "{}",
-                                                        department : entry.object.dn.match(/OU=(.*?),/)[1],
+                                                        department : department,
                                                         status : 1,
                                                         date : new Date().getTime(),
                                                         is_admin : 0

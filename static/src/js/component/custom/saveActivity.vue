@@ -197,7 +197,7 @@
 								// _this.dateConifg.argvs.endTime = _this.model.activity_end_time;
 								$('.date_picker>input').val(`${_this.model.activity_start_time}-${_this.model.activity_end_time}`);
 							}
-							$('.date_picker>input').attr('disabled', 'disabled');
+							// $('.date_picker>input').attr('disabled', 'disabled');
 						}
 					})
 				}
