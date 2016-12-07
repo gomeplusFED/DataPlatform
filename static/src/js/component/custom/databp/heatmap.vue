@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="heatmap">
 	<div class="extendNav">
 		<div class='form-group data-type'>
 			<label>数据</label>
@@ -7,7 +7,12 @@
 				<option v-for="type of dataTypes" value="{{type.name}}">{{type.name}}</option>
 			</select>
 		 </div>
-		<label><input type="checkbox" v-model="show"></input>显示热力图</label>
+
+		<div class="form-group date_picker">
+			<label>截止日期</label>             
+			<m-date :index="index" :page-components-data="pageComponentsData" :component-type="'date_picker'" :argvs.sync='argvs' diasbled></m-date>
+		</div>
+		<label class="showmap"><input type="checkbox" v-model="show"></input>显示热力图</label>
 	</div>
 	<!-- <div class="mask" v-show="show"> </div> -->
 	<visualbp :loading.sync='loading'> </visualbp>
@@ -18,13 +23,15 @@
 	const $ = require('jQuery');
 	const utils = require('utils');
 	const api = require('./api');
+	var DatePicker = require('../../common/datePicker.vue');
 	const visualbp = require('./visualbp.vue');
 	const Heatmap = require('./heatmap.js');
 
 	let heatmap = Vue.extend({
 		name: 'heatmap',
 		components: {
-			'visualbp': visualbp
+			'visualbp': visualbp,
+			'm-date': DatePicker
 		},
 		props:['loading'],
 		data: function() {
@@ -49,6 +56,15 @@
 					heatdiv: null
 				},
 				data: [],
+				argvs: {},
+				pageComponentsData: {
+					date_picker: {
+						show: true,
+						defaultData: 1,
+						showDayUnit:true
+					},
+					trigger: true
+				},
 				canvas: {
 				},
 				option: {
@@ -66,9 +82,13 @@
 				return Promise.resolve(true);
 			}
 		},
+		ready() {
+			this.pageComponentsData.trigger = !this.pageComponentsData.trigger;
+		},
 		events: {
 			'visualbp_loaded': function (config) {
-				this.init(config).then(() => {
+				let heatconfig = {...config, dateTime: this.argvs.endTime};
+				this.init(heatconfig).then(() => {
 					let body = this.dom.body[0];
 					utils.observeDOMInserted(body, (mutations) => {
 						if(mutations[0].target !== body && mutations[0].target.id !== 'heatmaptip') {
@@ -80,8 +100,6 @@
 						}
 					});
 				});
-
-
 			}
 		},
 		methods: {
@@ -224,8 +242,8 @@
 	});
 	module.exports = heatmap;
 </script>
-<style scoped>
-.mask {
+<style>
+.heatmap .mask {
 	position: absolute;
 	margin-top: 60px;
 	width: 100%;
@@ -235,13 +253,15 @@
 	cursor: auto;
 /*	background: rgba(255,255,255,0.1);*/
 }
-.extendNav {
-	position: absolute;
-	right: 50px;
+.heatmap #search {
+	float: right;
 }
-.data-type {
+.heatmap .extendNav {
+	position: absolute;
+	left: 570px;
+}
+.heatmap .extendNav > * {
 	display: inline-block;
 	margin-right: 20px;
 }
-
 </style>
