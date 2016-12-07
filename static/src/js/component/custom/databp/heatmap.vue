@@ -102,8 +102,11 @@
 				});
 			},
 			'search_clicked':  function (config) {
+				loading.show = true;
 				let heatconfig = {...config, dateTime: this.argvs.endTime};
-				this.init(heatconfig);
+				this.init(heatconfig).then(function() {
+					loading.show = false;
+				});
 			}
 		},
 		methods: {
