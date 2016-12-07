@@ -29,7 +29,7 @@ module.exports = {
                 url : "#!/socialAnalysis/dataTableDay"
             }, {
                 name: '用户数据',
-                url : "#!/socialAnalysis/dataTableDayUserOne"
+                url : "#!/socialAnalysis/dataTableDayUser"
             }, {
                 name: '订单数据',
                 url : "#!/socialAnalysis/dataTableDayOrder"
@@ -69,7 +69,7 @@ module.exports = {
             url: "#!/socialAnalysis/dataTableWeek"
         }, {
             name: '用户数据',
-            url: "#!/socialAnalysis/rebateNewWeek"
+            url: "#!/socialAnalysis/dataTableWeekUser"
         }, {
             name: '订单数据',
             url: "#!/socialAnalysis/dataTableWeekOrder"
@@ -108,7 +108,7 @@ module.exports = {
                 url: "#!/socialAnalysis/dataTableMonth"
             }, {
                 name: '用户数据',
-                url: "#!/socialAnalysis/rebateNewMonth"
+                url: "#!/socialAnalysis/dataTableMonthUser"
             }, {
                 name: '订单数据',
                 url: "#!/socialAnalysis/dataTableMonthOrder"

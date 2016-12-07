@@ -313,6 +313,9 @@ const Config = {
                 obj.table.data_table_day_order(),
                 obj.table.data_table_week_order(),
                 obj.table.data_table_month_order(),
+                obj.table.data_table_day_user(),
+                obj.table.data_table_week_user(),
+                obj.table.data_table_month_user(),
             ]
         }
     }

@@ -149,5 +149,33 @@ module.exports = {
                 }
             ]
         };
+    },
+    data_table_week_user() {
+        return {
+            name : "数据报表",
+            path : "/socialAnalysis/dataTableWeekUser",
+            display : true,
+            defaultData : [
+                {
+                    type : "table",
+                    title : "用户数据",
+                    query_api : "/socialAnalysis/dataTableWeekUserOne"
+                }
+            ]
+        };
+    },
+    data_table_month_user() {
+        return {
+            name : "数据报表",
+            path : "/socialAnalysis/dataTableMonthUser",
+            display : true,
+            defaultData : [
+                {
+                    type : "table",
+                    title : "用户数据",
+                    query_api : "/socialAnalysis/dataTableMonthUserOne"
+                }
+            ]
+        };
     }
 };
