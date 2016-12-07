@@ -102,10 +102,10 @@
 				});
 			},
 			'search_clicked':  function (config) {
-				loading.show = true;
+				this.loading.show = true;
 				let heatconfig = {...config, dateTime: this.argvs.endTime};
-				this.init(heatconfig).then(function() {
-					loading.show = false;
+				this.init(heatconfig).then(() => {
+					this.loading.show = false;
 				});
 			}
 		},
