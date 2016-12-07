@@ -136,9 +136,9 @@ module.exports = {
         for(let row of rows[0]) {
             if(row !== "date" && row !== "three" && row !== "four" && row !== "five") {
                 if(!zData[row] && !qData[row]) {
-                    obj[row] = "0.00";
+                    obj[row] = "0.00%";
                 } else {
-                    obj[row] = ((zData[row] - qData[row]) / (Math.ceil(qData[row]) === 0 ? 1 : qData[row])).toFixed(2);
+                    obj[row] = util.toFixed(zData[row] - qData[row], qData[row]);
                 }
             }
         }

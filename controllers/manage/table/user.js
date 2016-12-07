@@ -106,12 +106,12 @@ module.exports = (Router) => {
                 } else {
                     one.push(d);
                 }
-                if(+dt.replace("%", "") >= 0 && d !== "--") {
+                if(+dt.replace("%", "") >= 0 && dt !== "--") {
                     two.push({
                         name : "↑" + dt,
                         style : up
                     });
-                } else if(+dt.replace("%", "") < 0 && d !== "--") {
+                } else if(+dt.replace("%", "") < 0 && dt !== "--") {
                     two.push({
                         name : "↓" + dt,
                         style : down
