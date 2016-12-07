@@ -9,8 +9,7 @@ function help(Router, options) {
     this.modelData = utils.toTable(
         [options.data, []],
         options.rows,
-        options.cols,
-        [options.data.length, 0]
+        options.cols
     );
     this.router = options.router;
     this.setRouter(Router);
