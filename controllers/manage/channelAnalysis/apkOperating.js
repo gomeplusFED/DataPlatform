@@ -91,9 +91,17 @@ module.exports = (Router) => {
 
             return params;
         },
-        thirdParams(query) {
+        thirdParams(query, params) {
+            let channel_no = params.channel_id;
+            let channel_type_code = [];
+            let channel_code = [];
+            for(let id of channel_no) {
+                channel_type_code.push(id.substr(0, 2));
+                channel_code.push(id.substr(2, 3));
+            }
             return {
-                channel_id : query.channel_id.split(",")
+                channel_type_code : channel_type_code,
+                channel_code : channel_code
             };
         },
         selectFilter(req, cb) {

@@ -111,7 +111,7 @@ var Btns = Vue.extend({
                 type: 'get',
                 success: function(data){
                     _this.hasRequestUrl = helpUrl;
-                    var tableData = data.modelData[0];
+                    var tableData = data.modelData;
                     actions.modalTable(store, {
                         show: true,
                         title: '帮助信息',

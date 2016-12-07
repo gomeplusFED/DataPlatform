@@ -4,7 +4,9 @@
  * @fileoverview
  */
 let main = require("../../../base/main.js"),
+    orm = require("orm"),
     util = require("../../../utils"),
+    moment = require("moment"),
     filter = require("../../../filters/channelAnalysis/apk");
 
 module.exports = (Router) => {
@@ -13,18 +15,28 @@ module.exports = (Router) => {
         modelName : ["ChaChalistApkChannel", "ChaApkKeepChannel", "Channel"],
         platform : false,
         date_picker : false,
+        params(query, params) {
+            let start = util.getDate(new Date(new Date() - 7 * 24 * 60 * 60 * 1000)),
+                end = util.getDate(new Date(new Date() - 24 * 60 * 60 * 1000));
+            params.date = orm.between(start, end);
+
+            return params;
+        },
         secondParams(query, params) {
+            let start = util.getDate(new Date(new Date() - 7 * 24 * 60 * 60 * 1000)),
+                end = util.getDate(new Date(new Date() - 24 * 60 * 60 * 1000));
+            params.date = orm.between(start, end);
             params.keep_type = "k1";
 
             return params;
         },
         thirdParams(query, params) {
-            return {
-                channel_id : params.channel_id
-            }
+            return {};
         },
         fixedParams(req, query, cb) {
             let sql;
+            let start = util.getDate(new Date(new Date() - 7 * 24 * 60 * 60 * 1000)),
+                end = util.getDate(new Date(new Date() - 24 * 60 * 60 * 1000));
             if(query.filter_key === "rate") {
                 sql = `SELECT * FROM
                 (SELECT
@@ -33,7 +45,7 @@ module.exports = (Router) => {
                 FROM
                     ads2_cha_apk_keep_channel
                 WHERE
-                    date='${util.getDate(new Date(new Date() - 24 * 60 * 60 * 1000))}'
+                    date BETWEEN '${start}' AND '${end}'
                 AND
                     '${query.filter_type}'=SUBSTR(channel_id, 1, 2)
                 AND
@@ -48,17 +60,12 @@ module.exports = (Router) => {
                 FROM
                     ads2_cha_chalist_apk_channel
                 WHERE
-                    date='${util.getDate(new Date(new Date() - 24 * 60 * 60 * 1000))}'
+                    date BETWEEN '${start}' AND '${end}'
                 AND
                     '${query.filter_type}'=SUBSTR(channel_id, 1, 2)
                 GROUP BY channel_id) a
                 ORDER BY a.${query.filter_key} DESC LIMIT 0,10`
             }
-
-            let start = util.getDate(new Date(new Date() - 7 * 24 * 60 * 60 * 1000)),
-                end = util.getDate(new Date(new Date() - 24 * 60 * 60 * 1000));
-            query.startTime = start;
-            query.endTime = end;
             let ids = [];
             req.models.db1.driver.execQuery(sql, (err, data) => {
                 if(err) {
@@ -102,17 +109,26 @@ module.exports = (Router) => {
                 if(err) {
                     cb(err);
                 } else {
+                    select.groups.push({
+                        key : "01",
+                        value : "应用市场"
+                    });
                     for(let item of data) {
-                        select.groups.push({
-                            key : item.channel_type_code,
-                            value : item.channel_type
-                        });
+                        if(item.channel_type_code !== "01") {
+                            select.groups.push({
+                                key : item.channel_type_code,
+                                value : item.channel_type
+                            });
+                        }
                     }
                     cb(null, [select].concat(filter_select));
                 }
             });
         },
         filter(data, query, dates, type) {
+            let start = moment(new Date(new Date() - 7 * 24 * 60 * 60 * 1000)).format("YYYY-MM-DD"),
+                end = moment(new Date(new Date() - 24 * 60 * 60 * 1000)).format("YYYY-MM-DD");
+            dates = util.times(start, end, "1");
             return filter.apkOne(data, query, dates);
         }
     });
