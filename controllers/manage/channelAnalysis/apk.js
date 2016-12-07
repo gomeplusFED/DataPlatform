@@ -6,6 +6,7 @@
 let main = require("../../../base/main.js"),
     orm = require("orm"),
     util = require("../../../utils"),
+    moment = require("moment"),
     filter = require("../../../filters/channelAnalysis/apk");
 
 module.exports = (Router) => {
@@ -125,8 +126,8 @@ module.exports = (Router) => {
             });
         },
         filter(data, query, dates, type) {
-            let start = util.getDate(new Date(new Date() - 7 * 24 * 60 * 60 * 1000)),
-                end = util.getDate(new Date(new Date() - 24 * 60 * 60 * 1000));
+            let start = moment(new Date(new Date() - 7 * 24 * 60 * 60 * 1000)).format("YYYY-MM-DD"),
+                end = moment(new Date(new Date() - 24 * 60 * 60 * 1000)).format("YYYY-MM-DD");
             dates = util.times(start, end, "1");
             return filter.apkOne(data, query, dates);
         }
