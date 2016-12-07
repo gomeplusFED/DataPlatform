@@ -199,8 +199,10 @@
 			},
 			search(forceloading = false) {
 				this.loading.show = true;
+				this.iframe_url = '';
 				var newiframe_url = '/databp/html?m='+this.bpConfig.platform+'&url=' + this.bpConfig.pageUrl;
 				if (newiframe_url === this.iframe_url && !forceloading) {
+					this.$dispatch('search_clicked', this.bpConfig);
 					this.loading.show = false;
 				}
 				this.iframe_url = newiframe_url;
