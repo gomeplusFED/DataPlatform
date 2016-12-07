@@ -4,6 +4,8 @@
  * @fileoverview 自动添加模块路由配置
  */
 
+const fs = require("fs");
+const path=require("path");
 const ConfigApi = require("../config/");
 
 /* 有权限修改的用户 */
@@ -98,6 +100,33 @@ module.exports = (Router) => {
             msg   : "子模块修改成功"
         });
     });
+
+    //获取apiConfig配置信息
+    Router.get("/mapi/apiConfig" , (req , res , next) => {
+        if(!req.query.filename || !req.query.query_api){
+            res.json({
+                state : 0,
+                msg   : "参数错误"
+            });
+            return;
+        }
+
+        let Json = require(path.join(__dirname , "../config/apiConfig" , req.query.filename));
+        let Data = Json[req.query.query_api];
+        if(Data){
+            res.json({
+                "state" : 1,
+                "msg"   : "ok",
+                "result": Data
+            });
+        }else{
+            res.json({
+                "state" : 0,
+                "msg"   : "数据没有找到"
+            })
+        }            
+    });
+
 
     return Router;
 }

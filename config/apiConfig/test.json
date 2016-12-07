@@ -1,1 +1,24 @@
-{}
+{
+    "/achievements/shopOne" : {
+        "router"    : "/achievements/shopOne",
+        "modelName" : ["ShopRunOverview" , "ShopRunAnalyze"],
+        "date_picker" : true,
+        "paging"     : [false],
+        "order"     : [],
+        "global_platform": {
+            "show": true,
+            "key": "shop_type",
+            "name" : "商家类型：",
+            "list": [{
+                "key": "ALL",
+                "name": "全部商家"
+            }, {
+                "key": "1",
+                "name": "XPOP商家"
+            }, {
+                "key": "2",
+                "name": "O2M商家"
+            }]
+        }
+    }
+}
