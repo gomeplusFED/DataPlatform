@@ -49,12 +49,12 @@ module.exports = {
             type = "line",
             map = {};
         for(let item of third) {
-            map[`${item.channel_type_code}${item.channel_code}`] = item.channel_name;
+            map[item.channel_id] = item.channel_name;
         }
         for(let date of dates) {
             newData[date] = {};
             for(let item of third) {
-                newData[date][`${item.channel_type_code}${item.channel_code}`] = 0;
+                newData[date][item.channel_id] = 0;
             }
         }
         if(filter_key === "rate") {

@@ -18,16 +18,9 @@ module.exports = (Router) => {
             return params;
         },
         secondParams(query) {
-            let channel_no = query.channel_no.split(",");
-            let channel_type_code = [];
-            let channel_code = [];
-            for(let id of channel_no) {
-                channel_type_code.push(id.substr(0, 2));
-                channel_code.push(id.substr(2, 3));
-            }
+            let channel_id = query.channel_no.split(",");
             return {
-                channel_type_code : channel_type_code,
-                channel_code : channel_code
+                channel_id
             };
         },
         selectFilter(req, cb) {
@@ -41,7 +34,7 @@ module.exports = (Router) => {
                         if(_obj[item.channel_type_code]) {
                             _obj[item.channel_type_code].options.push({
                                 text : item.channel_name,
-                                value : `${item.channel_type_code}${item.channel_code}`
+                                value : item.channel_id
                             });
                         } else {
                             _obj[item.channel_type_code] = {
@@ -49,7 +42,7 @@ module.exports = (Router) => {
                                 value : item.channel_type_code,
                                 options : [{
                                     text : item.channel_name,
-                                    value : `${item.channel_type_code}${item.channel_code}`
+                                    value : item.channel_id
                                 }]
                             };
                         }
