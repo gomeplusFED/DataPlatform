@@ -199,9 +199,6 @@
                         docwidth, docheight);
 					_canvas.style.display = 'none';
 					heatdiv.appendChild(_canvas);
-
-
-
 					let lastres;
 					// bind event
 					$(_canvas).mousemove((e) => {
