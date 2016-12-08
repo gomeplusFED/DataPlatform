@@ -7,14 +7,14 @@
         "href": "#",
         "path": [
             {
-                "name": "性能-页面",
-                "path": "/test/page",
+                "name": "错误分析",
+                "path": "/performance/error",
                 "display": true,
                 "defaultData": [
                     {
-                        "type": "table",
-                        "title": "页面一",
-                        "query_api": "/test/one",
+                        "type": "chart",
+                        "title": "网站异常",
+                        "query_api": "/performance/weberror",
                         "mark": 1481096918837
                     }
                 ]

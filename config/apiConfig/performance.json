@@ -1,11 +1,13 @@
 {
     "1481096918837": {
         "modelName": [
-            "SalesPerfTotal2"
+            "PerformanceAnalysis"
         ],
         "platform": false,
-        "date_picker": false,
-        "order": [],
+        "date_picker": true,
+        "order": [
+            "-date"
+        ],
         "rows": [
             [
                 "access_user",
@@ -22,6 +24,6 @@
         ],
         "filter": "f_one",
         "params": "one",
-        "router": "/test/one"
+        "router": "/performance/weberror"
     }
 }
