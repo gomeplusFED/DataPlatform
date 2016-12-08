@@ -102,8 +102,14 @@
 				});
 			},
 			'search_clicked':  function (config) {
+				this.loading.show = true;
 				let heatconfig = {...config, dateTime: this.argvs.endTime};
-				this.init(heatconfig);
+				this.destroyCanvas();
+				this.init(heatconfig).then(() => {
+					this.loading.show = false;
+				}).catch(() => {
+					this.loading.show = false;
+				});
 			}
 		},
 		methods: {
@@ -131,6 +137,12 @@
 					this.data = data;
 					this.generateCanvas(data);
 				});
+			},
+			destroyCanvas() {
+				if (this.dom.heatdiv) {
+					this.dom.heatdiv.remove();
+					this.dom.heatdiv = null;
+				}
 			},
 			generateCanvas(data) {
 				let _this = this;
@@ -216,7 +228,7 @@
 				_this.switchCanvas();
 				_this.show = true;
 			},
-			switchCanvas(type = this.dataTypes[0].name) {
+			switchCanvas(type = this.datatype) {
 				for(let t in this.canvas) {
 					if (t === type) {
 						this.canvas[type].style.display = 'block';
