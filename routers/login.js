@@ -131,6 +131,7 @@ module.exports = function(Router) {
                                         req.flash('密码和账户不正确');
                                         res.redirect('back');
                                     } else {
+                                        const _email = entry.attributes[35].vals[0];
                                         const un = entry.objectName.match(/CN=(.*?)[(]/)[1];
                                         const name = entry.objectName.match(/[(](.*?)[\.]/)[1];
                                         const department = entry.objectName.match(/[\.]+(.*?)[)]+/)[1];
@@ -145,7 +146,7 @@ module.exports = function(Router) {
                                                         if(ret[0].name === name
                                                             && ret[0].username === un
                                                             && ret[0].department === department
-                                                            && ret[0].email === email) {
+                                                            && ret[0].email === _email) {
                                                             saveLogin(req, res, remember, email, ret[0]);
                                                             unbind(client, next);
                                                             res.redirect(from + hash || '/');
@@ -153,7 +154,7 @@ module.exports = function(Router) {
                                                             ret[0].name = name;
                                                             ret[0].username = un;
                                                             ret[0].department = department;
-                                                            ret[0].email = email;
+                                                            ret[0].email = _email;
                                                             ret[0].save((err) => {
                                                                 if(err) {
                                                                     unbind(client, next);
