@@ -10,6 +10,7 @@
 
 var api = require("../../../base/main"),
     filter = require("../../../filters/achievements/f_trade");
+let orm = require("orm");
 
 module.exports = (Router) => {
 
@@ -163,6 +164,7 @@ module.exports = (Router) => {
             show : true
         },
         paging: [true],
+        order: ["-date"],
         filter_select: [{
             title: '指标选择(图表使用)',
             filter_key: 'filter_key',
@@ -172,7 +174,7 @@ module.exports = (Router) => {
                 { key: 'order_product_num', value: '下单商品件数' },
                 { key: 'pay_product', value: '支付商品数' },
                 { key: 'pay_product_num', value: '支付商品件数' },
-                { key: 'order_num', value: '下单金额' },
+                { key: 'order_num', value: '下单总量' },
                 { key: 'pay_num', value: '支付订单量' },
                 { key: 'pay_sum', value: '支付金额' },
                 { key: 'order_user', value: '下单人数' },
@@ -293,6 +295,7 @@ module.exports = (Router) => {
         date_picker_data: 1,
         platform: false,
         paging: [true],
+        sum : ["pay_sum"],
         /*excel_export : true,
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
@@ -336,7 +339,7 @@ module.exports = (Router) => {
                     }
                 });
             } else {
-                query.category_id_1 = "ALL";
+                query.category_id_1 = orm.not_in(["ALL"]);
                 query.category_id_2 = "ALL";
                 query.category_id_3 = "ALL";
                 query.category_id_4 = "ALL";

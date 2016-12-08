@@ -23,6 +23,7 @@ module.exports = (Router) => {
         }],
         params(query, params) {
             delete params.day_type;
+            delete params.date;
             return params;
         },
         filter(data, query) {

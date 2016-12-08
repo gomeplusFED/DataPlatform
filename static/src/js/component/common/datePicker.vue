@@ -36,7 +36,7 @@ var DateCom = Vue.extend({
     data: function() {
         return {
             // 根据url判断是否判断起止时间大于当前时间
-            validlist: [ '/custom/saveActivity', '/databp/bpmanage' ]
+            validlist: [ '/custom/saveActivity', '/databp/bpmanage', '/databp/heatmap' ]
         }
     },
     props: ['index','pageComponentsData','componentType','argvs','initData', 'cancelDateLimit', 'isGlobal'],
@@ -50,6 +50,7 @@ var DateCom = Vue.extend({
         'pageComponentsData': {
             handler: function(val){
                 var _this = this;
+
                 // 异步请求组件参数，watch到变化之后初始化，其它组件类似
                 var today = utils.formatDate (new Date(),'yyyy-MM-dd');
                 var yesterday = utils.formatDate (new Date(Date.now() - 24 * 60 * 60 * 1000),'yyyy-MM-dd');

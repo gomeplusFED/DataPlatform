@@ -73,6 +73,7 @@ module.exports = {
                 "pay_lv"     : "支付成功率(%)"
             }, result = {} , map = { value : "" };
             
+            dates.reverse();
             dates.map((date) => {
                 result[date] = {
                     "value" : 0

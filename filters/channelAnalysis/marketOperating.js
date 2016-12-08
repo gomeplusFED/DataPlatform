@@ -14,7 +14,7 @@ module.exports = {
             map = {};
 
         for(let item of second) {
-            map[item.channel_id] = item.channel_name;
+            map[`${item.channel_type_code}${item.channel_code}`] = item.channel_name;
         }
 
         for(let date of dates) {

@@ -5,6 +5,7 @@
 	<m-confirm></m-confirm>
 	<m-export-confirm></m-export-confirm>
 	<m-plataform></m-plataform>
+	<m-plataform index="1"></m-plataform>
 	<m-tab-checkbox></m-tab-checkbox>
 	<m-global></m-global>
 	<m-main v-ref:main v-for="item in list" :index="$index" :init-data="initData" :current-data="list[$index]" :loading.sync="loading"></m-main>
@@ -95,7 +96,14 @@
 						url: query_api + '_json',
 						type: 'get',
 						success: function(data) {
-							eventBus.$emit('loadGlobal', data.components);
+							// 如果没有时间组件延迟加载
+							if (data.components.date_picker && data.components.date_picker.show) {
+								eventBus.$emit('loadGlobal', data.components);
+							} else {
+								setTimeout(() => {
+									eventBus.$emit('loadGlobal', data.components);
+								}, 1000)
+							}
 							return;
 						}
 					})

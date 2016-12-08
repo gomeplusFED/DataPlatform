@@ -16,8 +16,9 @@ module.exports = (Router) => {
         platform : false,
         procedure : [{
             aggregate : "params",
-            sum : ["active_uv", "active_pv", "register", "coupon_get_num",
-                "coupon_use_num", "order_num", "order_num_money",
+            sum : ["active_uv", "active_pv", "register",
+                //"coupon_get_num", "coupon_use_num",
+                "order_num", "order_num_money",
                 "pay_num", "pay_num_money", "return_num", "return_num_money"],
             get : ""
         }],

@@ -1,8 +1,10 @@
 var store = require('../../../store/store.js');
 var actions = require('../../../store/actions.js');
 var $ = require('jQuery');
-// const baseurl = 'http://10.69.20.59:8080/bomber-pie';
+// const baseurl = 'http://10.69.10.127:8080/bomber-pie';
 const baseurl = 'http://10.69.112.146:38080/bomber-pie'
+// 请求失败 重试一次
+const RETRY_TIMES = 2;
 
 $.support.cors = true;
 
@@ -18,7 +20,8 @@ function filterArgs(data, args) {
 }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
 
 function buildAjax(url, data, type = 'get') {
-	return new Promise(function(s, j){
+	let t = RETRY_TIMES;
+	let proc = function(s, j){
 		$.ajax({
 			url: baseurl + url,
 			timeout : 3000,
@@ -29,10 +32,16 @@ function buildAjax(url, data, type = 'get') {
 				s(data);
 			},
 			error(xhr, status, error) {
-				j(`请求${baseurl + url}失败, 错误信息: ${error || status}`);
+				t--;
+				if(t > 0) {
+					proc(s, j);
+				} else {
+					j(`请求${baseurl + url}失败, 错误信息: ${error || status}`);
+				}
 			}
 		});
-	});
+	};
+	return new Promise(proc);
 }
 
 function extractResult(res) {
@@ -49,7 +58,7 @@ function extractResult(res) {
 	});
 }
 function errHandler(errmsg) {
-	var msg = '请求过程发生错误,' + errmsg;
+	var msg = '警告,' + errmsg;
 	actions.alert(store, {
 		show: true,
 		msg,
@@ -61,6 +70,9 @@ function errHandler(errmsg) {
 
 var api = {
 	// {pageUrl, selector, platform, pointId, matchUrlId}
+	alert(opt) {
+		actions.alert(store, opt);
+	},
 	getUserInfo() {
 		return new Promise(function(s, j){
 			$.ajax({
@@ -159,15 +171,15 @@ var api = {
 		}).catch(errHandler);
 	},
 	getHeatData(data){
-		return buildAjax('/heat', filterArgs(data, ['pageUrl'])).then(function(res) {
+		return buildAjax('/heat', filterArgs(data, ['pageUrl', 'dateTime'])).then(function(res) {
 			if(res.code !== '200' || res.iserror !== '0') {
 				return Promise.reject('获取埋点信息失败：' + res.msg);
 			}
 			var data;
-			if (res && (data = res.data) && (data = data.result)) {
+			if (res && (data = res.data) && (data = data.result) && data.length) {
 				return data;
 			} else {
-				return Promise.reject('获取的埋点信息为空');
+				return Promise.reject('获取的热点信息为空');
 			}
 		}).catch(errHandler);
 	}

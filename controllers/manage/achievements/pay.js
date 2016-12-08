@@ -163,7 +163,7 @@ module.exports = (Router) => {
         router : "/achievements/payTwo",
         modelName : ["PayWay2"],
         platform : false,
-        order : ["-date" , "order_channel"],
+        order : ["-date" , "-order_channel"],
         toggle: {
             show : true
         },
