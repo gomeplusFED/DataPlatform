@@ -1,7 +1,7 @@
 /**
  * @author Mr.He
  * @date 20161130
- * @fileoverview config操作
+ * @fileoverview config_add操作
  */
 
 const path = require("path");
@@ -110,7 +110,18 @@ Config.sonChange = (option) => {
     Config.writeIn();
 }
 
+/* api 单个修改 */
+Config.apiChange = (obj) => {
+    let arr = ConfigAdd[obj.Position.id][obj.Position.P_R][obj.Position.index].defaultData;
+    if(obj.Position.index_default){
+        arr[obj.Position.index_default] = obj.Api3;
+    }else{
+        arr.push(obj.Api3);
+    }
+    
 
+    Config.writeIn();
+}
 
 
 

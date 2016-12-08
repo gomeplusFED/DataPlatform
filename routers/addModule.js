@@ -103,7 +103,7 @@ module.exports = (Router) => {
 
     //获取apiConfig配置信息
     Router.get("/mapi/apiConfig" , (req , res , next) => {
-        if(!req.query.filename || !req.query.query_api){
+        if(!req.query.filename || !req.query.mark){
             res.json({
                 state : 0,
                 msg   : "参数错误"
@@ -112,7 +112,7 @@ module.exports = (Router) => {
         }
 
         let Json = require(path.join(__dirname , "../config/apiConfig" , req.query.filename));
-        let Data = Json[req.query.query_api];
+        let Data = Json[req.query.mark];
         if(Data){
             res.json({
                 "state" : 1,
@@ -123,8 +123,33 @@ module.exports = (Router) => {
             res.json({
                 "state" : 0,
                 "msg"   : "数据没有找到"
-            })
+            });
         }            
+    });
+
+    //修改apiConfig配置信息
+    Router.post("/mapi/setApi" , (req , res  , next) => {
+        let data = JSON.parse(req.body.data);
+
+        //change config_add.json
+        ConfigApi.apiChange(data);
+        //change api config
+        let Json = require(path.join(__dirname , "../config/apiConfig" , data.Position.filename));
+        data.ApiConfig.router = data.Api3.query_api;
+        Json[data.Api3.mark] = data.ApiConfig;
+
+        let source = fs.createWriteStream(path.join(__dirname , "../config/apiConfig" , data.Position.filename + ".json"));
+        source.write(JSON.stringify(Json , null , 4));
+        source.end((err)=>{
+            if(err){
+                next(err);
+            }else{
+                res.json({
+                    state : 1,
+                    msg   : "ok"
+                });
+            }
+        });
     });
 
 

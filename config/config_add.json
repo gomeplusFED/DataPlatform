@@ -1,76 +1,25 @@
 {
     "22": {
-        "name": "测试test",
+        "name": "性能分析",
         "display": true,
         "className": "fa  fa-laptop fa-fw",
-        "filename": "test",
+        "filename": "performance",
         "href": "#",
         "path": [
             {
-                "name": "第一个子模块",
-                "path": "/test/index",
+                "name": "性能-页面",
+                "path": "/test/page",
                 "display": true,
                 "defaultData": [
                     {
-                        "type": "chart",
-                        "title": "店铺趋势分析",
-                        "query_api": "/achievements/shopOne"
-                    },
-                    {
                         "type": "table",
-                        "title": "店铺趋势明细",
-                        "query_api": "/achievements/shopTwo"
-                    },
-                    {
-                        "type": "table",
-                        "title": "店铺流量排行TOP 50",
-                        "query_api": "/achievements/shopThree"
-                    },
-                    {
-                        "type": "table",
-                        "title": "店铺交易排行TOP 50",
-                        "query_api": "/achievements/shopFour"
+                        "title": "页面一",
+                        "query_api": "/test/one",
+                        "mark": 1481096918837
                     }
                 ]
-            },
-            {
-                "name": "第二个子模块",
-                "path": "/test/second",
-                "display": true,
-                "defaultData": []
-            },
-            {
-                "name": "第三个子模块",
-                "path": "/test/third",
-                "display": true,
-                "defaultData": []
             }
         ],
         "routers": []
-    },
-    "23": {
-        "name": "哇哈哈",
-        "display": true,
-        "className": "fa  fa-laptop fa-fw",
-        "filename": "index",
-        "href": "#",
-        "path": [],
-        "routers": []
-    },
-    "24": {
-        "name": "再看看",
-        "display": true,
-        "className": "fa  fa-laptop fa-fw",
-        "filename": "hello",
-        "href": "#",
-        "path": [],
-        "routers": [
-            {
-                "name": "Router测试",
-                "path": "/look/index",
-                "display": true,
-                "defaultData": []
-            }
-        ]
     }
 }

@@ -13,7 +13,7 @@ var minimist = require('minimist');
 var gutil = require("gulp-util");
 var rev = require('gulp-rev-hash');
 var path = require('path');
-
+var plumber = require("gulp-plumber");
 
 var pwd = __dirname;
 
@@ -109,6 +109,7 @@ gulp.task('js', function() {
     }
     return gulp
         .src(['./src/js/app.js' , './src/js/app2.js'])
+        .pipe(plumber())
         .pipe(gulpWebpack(webpackConfig))
         // .pipe(gulpIf(argv.env == 'pro', header(banner, { config: config })))
         .pipe(gulp.dest('./dist/js/'))

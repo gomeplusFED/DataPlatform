@@ -38,7 +38,7 @@
                 &nbsp;&nbsp;&nbsp;保存&nbsp;&nbsp;&nbsp;
             </button>
             <button @click="addSon" v-if="!add" @click="addSon" class="btn-info btn">
-                添加子模块
+                添加API
             </button>
         </div>
     </div>
