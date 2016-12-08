@@ -29,14 +29,14 @@ module.exports = (Router) => {
                     if(channel[key.channel_type_code]) {
                         channel[key.channel_type_code].options.push({
                             text : key.channel_name,
-                            value : key.channel_type_code + key.channel_code
+                            value : key.channel_id
                         });
                     } else {
                         channel[key.channel_type_code] = {
                             name : key.channel_type,
                             options : [{
                                 text : key.channel_name,
-                                value : key.channel_type_code + key.channel_code
+                                value : key.channel_id
                             }]
                         };
                     }
