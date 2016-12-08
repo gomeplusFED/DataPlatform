@@ -4,8 +4,6 @@
             "SalesPerfTotal2"
         ],
         "platform": false,
-        "filter"  : "f_one",
-        "params"  : "one",
         "date_picker": false,
         "order": [],
         "rows": [
@@ -22,6 +20,8 @@
                 "pay_sum"
             ]
         ],
+        "filter": "f_one",
+        "params": "one",
         "router": "/test/one"
     }
 }

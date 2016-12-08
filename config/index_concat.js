@@ -7,6 +7,7 @@
 const path = require("path");
 const fs   = require("fs");
 const api  = require("../base/main");
+const util = require("util");
 const Result=[];
 
 
@@ -38,8 +39,7 @@ for(let item of Jsons){
     let config = require(path.join(__dirname , "./apiConfig/" , item));
     for(let key in config){
         //单个api的配置文件
-
-        let obj = config[key];
+        let obj = util._extend({} , config[key]);
         //替换为真实函数
         for(let api_key in obj){
             if(FnProperty.includes(api_key)){

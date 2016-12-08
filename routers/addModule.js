@@ -113,6 +113,7 @@ module.exports = (Router) => {
 
         let Json = require(path.join(__dirname , "../config/apiConfig" , req.query.filename));
         let Data = Json[req.query.mark];
+        console.log(123 , typeof Data.filter);
         if(Data){
             res.json({
                 "state" : 1,
