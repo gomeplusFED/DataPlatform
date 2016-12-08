@@ -257,5 +257,40 @@ module.exports = (Router) => {
         }
     });
 
+    Router = Router.get("/custom/deleteChannel", (req, res, next) => {
+        const channel_id = req.query.channel_id;
+        req.models.Channel.find({
+            channel_id
+        }, (err, data) => {
+            if(err) {
+                res.json({
+                    code : 400,
+                    msg : "删除失败"
+                });
+            } else {
+                if(data.length === 0) {
+                    res.json({
+                        code : 400,
+                        msg : "删除信息不存在"
+                    });
+                } else {
+                    data[0].remove((err) => {
+                        if(err) {
+                            res.json({
+                                code : 400,
+                                msg : "删除失败"
+                            });
+                        } else {
+                            res.json({
+                                code : 200,
+                                msg : "删除成功"
+                            });
+                        }
+                    })
+                }
+            }
+        });
+    });
+
     return Router;
 };

@@ -54,7 +54,7 @@
 					<td>{{i + baseIndex}}</td>
 					<td>{{item.pointName}}</td>
 					<td>单击</td>
-					<td title="{{item.pageUrl}}">{{item.pageUrl}}</td>
+					<td title="{{item.pageUrl}}"><a @click="heatmap(item)">{{item.pageUrl}}</a></td>
 					<td title="{{item.pattern}}">{{item.pattern}}</td>
 <!-- 					<td title="{{item.selector}}">{{item.selector}}</td> -->
 					<td title="{{item.pointParam}}">{{item.pointParam}}</td>
@@ -210,7 +210,13 @@
 					path: '/databp/visualbp',
 					query: {pageUrl, pointName, pointParam, selector, platform}
 				}); 
-
+			},
+			heatmap(item) {
+				let {pageUrl, platform} = item;
+				this.$router.go({
+					path: '/databp/heatmap',
+					query: {pageUrl, platform}
+				}); 
 			}
 		},
 		watch: {
