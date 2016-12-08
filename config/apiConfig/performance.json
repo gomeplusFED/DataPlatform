@@ -1,29 +1,74 @@
 {
-    "1481096918837": {
+    "1481187080040": {
         "modelName": [
             "PerformanceAnalysis"
         ],
-        "platform": false,
         "date_picker": true,
         "order": [
             "-date"
         ],
-        "rows": [
-            [
-                "access_user",
-                "order_user",
-                "order_num",
-                "order_sum"
-            ],
-            [
-                "Man_price",
-                "pay_user",
-                "pay_num",
-                "pay_sum"
-            ]
+        "platform" : false,
+        "router": "/performance/website",
+        "global_platform": {
+            "show": true,
+            "key": "type",
+            "name": "平台切换",
+            "list": [{
+                "key": "ALL",
+                "name": "PC",
+                "url" : "/performance/pc"
+            }, {
+                "key": "IOS",
+                "name": "IOS",
+                "url" : "/performance/other?type=IOS"
+            }, {
+                "key": "Android",
+                "name": "Android",
+                "url" : "/performance/other?type=Android"
+            }, {
+                "key": "WAP",
+                "name": "WAP",
+                "url" : "/performance/other?type=WAP"
+            }, {
+                "key": "H5",
+                "name": "H5",
+                "url" : "/performance/other?type=h5"
+            }]
+        },
+        "params" : "performance_01",
+        "filter" : "performance_01_f",
+        "filter_select" : [{
+            "title" : ""
+        }]
+    },
+    "1481187278831": {
+        "modelName": [
+            "PerformanceAnalysis"
         ],
-        "filter": "f_one",
-        "params": "one",
-        "router": "/performance/weberror"
+        "date_picker": true,
+        "order": [
+            "-date"
+        ],
+        "router": "/performance/website_two"
+    },
+    "1481187416752": {
+        "modelName": [
+            "PerformanceAnalysis"
+        ],
+        "date_picker": true,
+        "order": [
+            "-date"
+        ],
+        "router": "/performance/other_one"
+    },
+    "1481187468263": {
+        "modelName": [
+            "PerformanceAnalysis"
+        ],
+        "date_picker": true,
+        "order": [
+            "-date"
+        ],
+        "router": "/performance/other_Two"
     }
 }

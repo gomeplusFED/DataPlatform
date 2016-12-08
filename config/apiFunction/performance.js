@@ -2,67 +2,54 @@
 /**
  * 性能分析 模块功能函数文件
 */
-
 var util = require("../../utils"),
     moment = require("moment");
 
 module.exports = {
-    one(query , params , sendData){
-        if(!query.type) params.type = "ALL";
+    performance_01(query , params , sendData){
+        // delete params.type;
         return params;
     },
-    f_one(data, query, dates){
+
+    
+    performance_01_f(data, query, dates){
+        console.log(data);
         let source = data.first.data[0];
-        let rows   = ["access_user" , "order_user" , "order_num" , "order_sum" ,"Man_price" , "pay_user" , "pay_num" , "pay_sum"];
-        let Cols = [
-            [{
-                caption: "",
-                type: "number"
-            }, {
-                caption: "",
-                type: "number"
-            }, {
-                caption: "",
-                type: "number"
-            }, {
-                caption: "",
-                type: "number"
-            }]
-        ];
+        let map    = {};
+        let Code = {
+            "400" : "请求格式错误",
+            "401" : "未授权",
+            "403" : "禁止访问",
+            "404" : "资源不存在",
+            "405" : "不允许该操作",
+            "406" : "不可接受",
+            "409" : "资源冲突",
+            "410" : "资源已失效",
+            "411" : "需要有效长度",
+            "412" : "未满足前提条件",
+            "413" : "请求实体过大",
+            "414" : "请求的 URI 过长",
+            "415" : "不支持的媒体类型",
+            "416" : "请求范围不符合要求",
+            "417" : "未满足期望值",
+            "422" : "无法处理的实体",
+            "423" : "锁定的错误",
+            "499" : "客户端主动断开了连接",
+            "500" : "服务端内部错误",
+            "501" : "尚未实施",
+            "502" : "错误网关",
+            "503" : "服务不可用",
+            "504" : "网关超时",
+            "505" : "HTTP版本不受支持"
+        };
 
-        let result = {};
-        for(let key of rows){
-            result[key] = 0;
-        }
-
-        let All_pay_sum = 0 , All_pay_user = 0;
-        for(let item of source){
-            for(let key of rows){
-                result[key] += item[key];
-                result[key] = util.numberLeave(result[key] , 2);
+        return [{
+            type : "line",
+            map : map,
+            data : obj,
+            config: { // 配置信息
+                stack: false  // 图的堆叠
             }
-            All_pay_sum += item.pay_sum;
-            All_pay_user +=item.pay_user;
-        }
-
-        result.Man_price = util.numberLeave(All_pay_sum / All_pay_user , 2);
-
-        let OneData = {
-            "access_user" : "访客数 : " + result.access_user,
-            "order_user"  : "下单人数 : " + result.order_user,
-            "order_num"   : "下单总量 : " + result.order_num,
-            "order_sum"   : "下单金额 : " + result.order_sum
-        }
-
-        let TwoData = {
-            "access_user" : "客单价 : " + result.Man_price,
-            "order_user"  : "支付人数 : " + result.pay_user,
-            "order_num"   : "支付总量 : " + result.pay_num,
-            "order_sum"   : "支付金额 : " + result.pay_sum
-        }
-
-
-        console.log("fileter")
-        return util.toTable([[OneData , TwoData]], data.rows, Cols);
+        }];
     }
 }
