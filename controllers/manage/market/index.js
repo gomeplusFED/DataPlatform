@@ -292,5 +292,43 @@ module.exports = (Router) => {
         });
     });
 
+    Router = Router.post("/custom/updateChannel", (req, res, next) => {
+        const body = req.body;
+        req.models.Channel.find({
+            channel_id : body.channel_id
+        }, (err, data) => {
+            if(err) {
+                res.json({
+                    code : 400,
+                    msg : "修改失败"
+                });
+            } else {
+                if(data.length === 0) {
+                    res.json({
+                        code : 400,
+                        msg : "修改信息不存在"
+                    });
+                } else {
+                    for(let key in body) {
+                        data[0][key] = body[key];
+                    }
+                    data[0].save((err) => {
+                        if(err) {
+                            res.json({
+                                code : 400,
+                                msg : "修改失败"
+                            });
+                        } else {
+                            res.json({
+                                code : 200,
+                                msg : "修改成功"
+                            });
+                        }
+                    })
+                }
+            }
+        });
+    });
+
     return Router;
 };
