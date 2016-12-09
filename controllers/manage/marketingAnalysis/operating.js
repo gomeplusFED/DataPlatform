@@ -23,7 +23,7 @@ module.exports = (Router) => {
                 query.filter_ids = ids;
                 query.channel_no = [];
                 for(let id of ids) {
-                    query.channel_no.push(id.substr(0, 5));
+                    query.channel_no.push(id);
                 }
                 delete query.active_no;
                 cb(null, query);
@@ -83,7 +83,7 @@ module.exports = (Router) => {
                 query.channel_no = [];
                 query.filter_ids = ids;
                 for(let id of ids) {
-                    query.channel_no.push(id.substr(0, 5));
+                    query.channel_no.push(id);
                 }
                 delete query.active_no;
                 cb(null, query);

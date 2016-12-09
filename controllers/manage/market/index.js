@@ -201,7 +201,7 @@ module.exports = (Router) => {
     });
 
     Router = Router.get("/custom/channel", (req, res, next) => {
-        req.models.Channel.find({}, (err, data) => {
+        req.models.Channel.find({}).order("channel_id").run((err, data) => {
             if(err) {
                 next(err);
             } else {
@@ -216,7 +216,7 @@ module.exports = (Router) => {
     Router = Router.post("/custom/channel", (req, res, next) => {
         let body = JSON.parse(req.body.data);
 
-        if(Object.keys(body).length !== 5) {
+        if(Object.keys(body).length !== 6) {
             res.json({
                 code : 400,
                 msg : "所有项为必填项"
@@ -284,6 +284,45 @@ module.exports = (Router) => {
                             res.json({
                                 code : 200,
                                 msg : "删除成功"
+                            });
+                        }
+                    })
+                }
+            }
+        });
+    });
+
+    Router = Router.post("/custom/updateChannel", (req, res, next) => {
+        const body = JSON.parse(req.body.data);
+        req.models.Channel.find({
+            channel_id : body.channel_id
+        }, (err, data) => {
+            if(err) {
+                res.json({
+                    code : 400,
+                    msg : "修改失败"
+                });
+            } else {
+                if(data.length === 0) {
+                    res.json({
+                        code : 400,
+                        msg : "修改信息不存在"
+                    });
+                } else {
+                    for(let key in body) {
+                        data[0][key] = body[key];
+                    }
+                    data[0].channel_id = [body.channel_type_code, body.channel_code, body.channel_ex].join("");
+                    data[0].save((err) => {
+                        if(err) {
+                            res.json({
+                                code : 400,
+                                msg : "修改失败"
+                            });
+                        } else {
+                            res.json({
+                                code : 200,
+                                msg : "修改成功"
                             });
                         }
                     })

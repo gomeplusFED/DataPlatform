@@ -52,14 +52,52 @@
 					</tr>
 					<tr v-for="(index,item) in list">
 						<td>{{index+1}}</td>
-						<td>{{item.channel_type}}</td>
-						<td>{{item.channel_type_code}}</td>
-						<td>{{item.channel_name}}</td>
-						<td>{{item.channel_code}}</td>
-						<td>{{item.channel_ex_name}}</td>
-						<td>{{item.channel_ex}}</td>
-						<td>{{item.channel_id}}</td>
+						<template v-if="index !== updateIndex">
+							<td>
+								{{item.channel_type}}
+							</td>
+							<td>
+								{{item.channel_type_code}}
+							</td>
+							<td>
+								{{item.channel_name}}
+							</td>
+							<td>
+								{{item.channel_code}}
+							</td>
+							<td>
+								{{item.channel_ex_name}}
+							</td>
+							<td>
+								{{item.channel_ex}}
+							</td>
+						</template>
+						<template v-else>
+							<td>
+								<input type="text" class="form-control" v-model="item.channel_type">
+							</td>
+							<td>
+								<input type="text" class="form-control" v-model="item.channel_type_code">
+							</td>
+							<td>
+								<input type="text" class="form-control" v-model="item.channel_name">
+							</td>
+							<td>
+								<input type="text" class="form-control" v-model="item.channel_code">
+							</td>
+							<td>
+								<input type="text" class="form-control" v-model="item.channel_ex_name">
+							</td>
+							<td>
+								<input type="text" class="form-control" v-model="item.channel_ex">
+							</td>
+						</template>
 						<td>
+							{{item.channel_id}}
+						</td>
+						<td>
+							<button class="btn btn-primary" v-if="updateIndex === -1" @click="updateIndex = index">修改</button>
+							<button class="btn btn-success" v-else @click="save(index, item)">保存</button>
 							<button class="btn btn-danger" @click="delete(index, item.channel_id)">删除</button>
 						</td>
 					</tr>
@@ -72,7 +110,7 @@
 <script>
 	var Vue = require('Vue');
 	var $ = require('jQuery');
-
+	
 	var Loading = require('../common/loading.vue');
 	
 	var channel = Vue.extend({
@@ -94,7 +132,8 @@
 					channel_ex_name: '',
 					channel_ex: ''
 				},
-				list: []
+				list: [],
+				updateIndex: -1
 			}
 		},
 		methods: {
@@ -102,14 +141,14 @@
 				let _this = this;
 				for(let key in this.model) {
 					if(!this.model[key]) {
-						alert('所有字段都为必填选项!');
+						alert('所有字段都为必填选项');
 						return false;
 					}
 				}
 				$.post('/custom/channel', {data: JSON.stringify(this.model)}, function(res) {
 					if(res.code===200) {
 						_this.list.push(res.data);
-					}else {
+					} else {
 						alert(res.msg);
 					}
 				})
@@ -118,11 +157,24 @@
 				if (!channel_id) {
 					return;
 				}
+				if (confirm('是否确认删除')) {
+					var _this = this;
+					$.get('/custom/deleteChannel?channel_id=' + channel_id, function(res) {
+						if(res.code===200) {
+							_this.list.splice(index, 1);
+						}else {
+							alert(res.msg);
+						}
+					})
+				}
+			},
+			save: function(index, item) {
 				var _this = this;
-				$.get('/custom/deleteChannel?channel_id=' + channel_id, function(res) {
-					if(res.code===200) {
-						_this.list.splice(index, 1);
-					}else {
+				$.post('/custom/updateChannel', {data: JSON.stringify(item)}, function(res) {
+					if(res.code === 200) {
+						_this.updateIndex = -1;
+						alert('保存成功');
+					} else {
 						alert(res.msg);
 					}
 				})

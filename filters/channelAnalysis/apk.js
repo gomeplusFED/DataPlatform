@@ -22,7 +22,7 @@ module.exports = {
             channel_ids = _.uniq(_.pluck(second, "channel_id"));
         }
         for(let item of third) {
-            config[`${item.channel_type_code}${item.channel_code}`] = item.channel_name;
+            config[item.channel_id] = item.channel_name;
         }
 
         for(let id of channel_ids) {
@@ -64,7 +64,7 @@ module.exports = {
             config = {};
 
         for(let item of second) {
-            config[`${item.channel_type_code}${item.channel_code}`] = item.channel_name;
+            config[item.channel_id] = item.channel_name;
         }
 
         for(let i = 0; i < source.length; i++) {

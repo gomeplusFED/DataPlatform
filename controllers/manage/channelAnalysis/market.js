@@ -12,16 +12,9 @@ module.exports = (Router) => {
         modelName : ["ChaChalistChannel","Channel"],
         platform : false,
         secondParams(query, params) {
-            let channel_no = params.channel_no;
-            let channel_type_code = [];
-            let channel_code = [];
-            for(let id of channel_no) {
-                channel_type_code.push(id.substr(0, 2));
-                channel_code.push(id.substr(2, 3));
-            }
+            let channel_id = params.channel_no;
             return {
-                channel_type_code : channel_type_code,
-                channel_code : channel_code
+                channel_id
             };
         },
         fixedParams(req, query, cb) {
