@@ -322,6 +322,7 @@ module.exports = (Router) => {
                         } else {
                             res.json({
                                 code : 200,
+                                result : data[0],
                                 msg : "修改成功"
                             });
                         }
