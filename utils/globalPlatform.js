@@ -38,7 +38,7 @@ module.exports = {
                 url : "#!/socialAnalysis/dataTableDayShop"
             }, {
                 name: '美店数据',
-                url : "#!/socialAnalysis/rebateNew"
+                url : "#!/socialAnalysis/dataTableDayVshop"
             }, {
                 name: '返利数据',
                 url : "#!/socialAnalysis/rebateNew"

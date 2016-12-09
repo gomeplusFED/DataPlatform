@@ -219,5 +219,19 @@ module.exports = {
                 }
             ]
         };
+    },
+    data_table_day_vshop() {
+        return {
+            name : "数据报表",
+            path : "/socialAnalysis/dataTableDayVshop",
+            display : true,
+            defaultData : [
+                {
+                    type : "table",
+                    title : "商铺数据",
+                    query_api : "/socialAnalysis/dataTableDayVshopOne"
+                }
+            ]
+        };
     }
 };
