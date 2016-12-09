@@ -293,7 +293,7 @@ module.exports = (Router) => {
     });
 
     Router = Router.post("/custom/updateChannel", (req, res, next) => {
-        const body = req.body;
+        const body = req.body.data;
         req.models.Channel.find({
             channel_id : body.channel_id
         }, (err, data) => {
@@ -303,6 +303,7 @@ module.exports = (Router) => {
                     msg : "修改失败"
                 });
             } else {
+                console.log(err, data);
                 if(data.length === 0) {
                     res.json({
                         code : 400,
