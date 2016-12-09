@@ -7,15 +7,21 @@
         "href": "#",
         "path": [
             {
-                "name": "性能-页面",
-                "path": "/test/page",
+                "name": "错误分析",
+                "path": "/performance/error",
                 "display": true,
                 "defaultData": [
                     {
+                        "type": "chart",
+                        "title": "错误趋势",
+                        "query_api": "/performance/error_One",
+                        "mark": 1481187080040
+                    },
+                    {
                         "type": "table",
-                        "title": "页面一",
-                        "query_api": "/test/one",
-                        "mark": 1481096918837
+                        "title": "错误列表",
+                        "query_api": "/performance/error_Two",
+                        "mark": 1481265531352
                     }
                 ]
             }

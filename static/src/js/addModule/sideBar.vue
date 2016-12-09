@@ -41,7 +41,7 @@
                             </li>
 
                             <li>
-                                <a @click.prevent="urlGo" href="#!/apiModule/{{index}}/{{sonIndex}}_p/add">
+                                <a class="btn-success" @click.prevent="urlGo" href="#!/apiModule/{{index}}/{{sonIndex}}_p/add">
                                     <i class="fa fa-arrows fa-fw"></i>
                                     添加一个api
                                 </a>
@@ -49,7 +49,7 @@
                         </ul>
                     </li>
                     <li>
-                        <a @click.prevent="urlGo" href="#!/sonModule/{{index}}/add">
+                        <a class="btn-info" @click.prevent="urlGo" href="#!/sonModule/{{index}}/add">
                             <i class="fa fa-arrows fa-fw"></i>
                             添加一个子模块
                         </a>
@@ -85,7 +85,7 @@
                         </ul>
                     </li>
                     <li>
-                        <a @click.prevent="urlGo" href="#!/sonModule/{{index}}/add">
+                        <a class="btn-info" @click.prevent="urlGo" href="#!/sonModule/{{index}}/add">
                             <i class="fa fa-arrows fa-fw"></i>
                             添加一个子模块
                         </a>

@@ -8,7 +8,7 @@ const path = require("path");
 const fs   = require("fs");
 const filePath = "./config_add.json";
 const ConfigAdd = require("./config_add");
-
+const All_ID = Object.keys(require("./config").limit);
 
 
 let Config = {};
@@ -30,11 +30,13 @@ Config.writeIn = (callback)=>{
 }
 
 /* 弹出一个紧挨着的数字 */
-let PopOut = (arr) => {
+let PopOut = () => {
     let num = 0;
-    while(arr.includes(num.toString())){
+    while(All_ID.includes(num.toString())){
         num++;
     }
+
+    All_ID.push(num.toString());
     return num;
 }
 
@@ -60,8 +62,7 @@ module.exports = {
 
 /* 增加一个大模块 */
 Config.addOne = ( name , file ) => {
-    let AllConfig = require("./config");
-    let num = PopOut(Object.keys(AllConfig.limit));
+    let num = PopOut();
 
     let has_config = fs.existsSync(path.join(__dirname , "apiConfig" , file + ".json"));
     let has_api = fs.existsSync(path.join(__dirname , "apiFunction" , file + ".js"));
@@ -118,7 +119,6 @@ Config.apiChange = (obj) => {
     }else{
         arr.push(obj.Api3);
     }
-    
 
     Config.writeIn();
 }

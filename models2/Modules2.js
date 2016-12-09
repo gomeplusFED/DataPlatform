@@ -103,7 +103,14 @@ module.exports = {
     //交易分析-交易类目构成
     ads2_sales_category_constitute2 : {
         modelName : "SalesCategoryConstitute2"
+    },
+
+
+    //性能分析
+    ads2_performance_analysis : {
+        modelName : "PerformanceAnalysis"
     }
+
 
 };
 
