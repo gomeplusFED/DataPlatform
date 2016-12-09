@@ -216,7 +216,7 @@ module.exports = (Router) => {
     Router = Router.post("/custom/channel", (req, res, next) => {
         let body = JSON.parse(req.body.data);
 
-        if(Object.keys(body).length !== 5) {
+        if(Object.keys(body).length !== 6) {
             res.json({
                 code : 400,
                 msg : "所有项为必填项"
