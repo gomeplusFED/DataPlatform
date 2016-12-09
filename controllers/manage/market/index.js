@@ -312,6 +312,7 @@ module.exports = (Router) => {
                     for(let key in body) {
                         data[0][key] = body[key];
                     }
+                    data[0].channel_id = [body.channel_type_code, body.channel_code, body.channel_ex].join("");
                     data[0].save((err) => {
                         if(err) {
                             res.json({
