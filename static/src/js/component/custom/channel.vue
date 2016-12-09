@@ -173,7 +173,7 @@
 				$.post('/custom/updateChannel', {data: JSON.stringify(item)}, function(res) {
 					if(res.code === 200) {
 						_this.updateIndex = -1;
-						alert('保存成功');
+						item.channel_id = res.result.channel_id;
 					} else {
 						alert(res.msg);
 					}
