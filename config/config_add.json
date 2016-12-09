@@ -8,44 +8,24 @@
         "path": [
             {
                 "name": "错误分析",
-                "path": "/performance/pc",
-                "display": true,
-                "defaultData": [
-                    {
-                        "type": "chart",
-                        "title": "网站异常",
-                        "query_api": "/performance/website",
-                        "mark": 1481187080040
-                    },
-                    {
-                        "type": "table",
-                        "title": "错误详情",
-                        "query_api": "/performance/website_two",
-                        "mark": 1481187278831
-                    }
-                ]
-            }
-        ],
-        "routers": [
-            {
-                "name": "错误分析其它",
-                "path": "/performance/other",
+                "path": "/performance/error",
                 "display": true,
                 "defaultData": [
                     {
                         "type": "chart",
                         "title": "错误趋势",
-                        "query_api": "/performance/other_one",
-                        "mark": 1481187416752
+                        "query_api": "/performance/error_One",
+                        "mark": 1481187080040
                     },
                     {
                         "type": "table",
                         "title": "错误列表",
-                        "query_api": "/performance/other_Two",
-                        "mark": 1481187468263
+                        "query_api": "/performance/error_Two",
+                        "mark": 1481265531352
                     }
                 ]
             }
-        ]
+        ],
+        "routers": []
     }
 }

@@ -72,6 +72,15 @@
             <input v-for="(index , item) in ApiConfig.order" v-model="item" type="text" class="form-control h-input mr10" placeholder="请输入查询排序字段">
             <button @click="addInArr('order')" class="btn btn-default">+</button>
         </div>
+        <div class="form-group">
+            <p>
+                <strong>4.系统默认平台选择</strong>
+            </p>
+            <label>
+                <input v-model="ApiConfig.platform" type="checkbox">
+                一般关闭
+            </label>
+        </div>
         
 
         <div class="form-group">
@@ -117,7 +126,8 @@ module.exports = Vue.extend({
             ApiConfig   : {
                 "modelName" : [""],
                 "date_picker":true,
-                "order"     : [""]
+                "order"     : [""],
+                "platform"  : false
             }
         }
     },

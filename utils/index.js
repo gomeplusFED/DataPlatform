@@ -205,7 +205,8 @@ exports.ceil = function(one, two) {
 };
 
 exports.getDate = function(date){
-    return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+    let theDate = typeof date == "string" ? new Date(date) : date;
+    return theDate.getFullYear() + '-' + (theDate.getMonth() + 1) + '-' + theDate.getDate();
 };
 
 
