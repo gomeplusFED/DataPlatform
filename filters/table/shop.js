@@ -10,23 +10,32 @@ const rows = [
 const cols = [
     [
         {
-            caption : "日期"
+            caption : "日期",
+            type : "string"
         },{
-            caption : "新增注册店铺数"
+            caption : "新增注册店铺数",
+            type : "number"
         },{
-            caption : "成功入驻店铺数"
+            caption : "成功入驻店铺数",
+            type : "number"
         },{
-            caption : "当前运营店铺数"
+            caption : "当前运营店铺数",
+            type : "number"
         },{
-            caption : "被访问店铺数"
+            caption : "被访问店铺数",
+            type : "number"
         },{
-            caption : "下单店铺数"
+            caption : "下单店铺数",
+            type : "number"
         },{
-            caption : "支付店铺数"
+            caption : "支付店铺数",
+            type : "number"
         },{
-            caption : "退货店铺数"
+            caption : "退货店铺数",
+            type : "number"
         },{
-            caption : "被分享店铺数"
+            caption : "被分享店铺数",
+            type : "number"
         }
     ]
 ];

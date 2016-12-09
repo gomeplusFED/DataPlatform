@@ -32,8 +32,8 @@ module.exports = (Router) => {
 
             return params;
         },
-        filter(data) {
-            return filter.dayOne(data, new Date());
+        filter(data, query) {
+            return filter.dayOne(data, new Date(), query);
         }
     });
 
