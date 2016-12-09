@@ -35,7 +35,7 @@ module.exports = {
                 url : "#!/socialAnalysis/dataTableDayOrder"
             }, {
                 name: '商铺数据',
-                url : "#!/socialAnalysis/rebateNew"
+                url : "#!/socialAnalysis/dataTableDayShop"
             }, {
                 name: '美店数据',
                 url : "#!/socialAnalysis/rebateNew"
@@ -75,7 +75,7 @@ module.exports = {
             url: "#!/socialAnalysis/dataTableWeekOrder"
         }, {
             name: '商铺数据',
-            url: "#!/socialAnalysis/rebateNewWeek"
+            url: "#!/socialAnalysis/dataTableWeekShop"
         }, {
             name: '美店数据',
             url: "#!/socialAnalysis/rebateNewWeek"
@@ -114,7 +114,7 @@ module.exports = {
                 url: "#!/socialAnalysis/dataTableMonthOrder"
             }, {
                 name: '商铺数据',
-                url: "#!/socialAnalysis/rebateNewMonth"
+                url: "#!/socialAnalysis/dataTableMonthShop"
             }, {
                 name: '美店数据',
                 url: "#!/socialAnalysis/rebateNewMonth"

@@ -82,14 +82,14 @@ module.exports = {
         };
         const newData = [];
         for(let row of data.rows[1]) {
-            obj.app[row] = 0.00;
-            obj.pc[row] = 0.00;
-            obj.h5[row] = 0.00;
+            obj.app[row] = "0.00%";
+            obj.pc[row] = "0.00%";
+            obj.h5[row] = "0.00%";
         }
         for(let key of second) {
-            obj[key.keep_type].one = key["1st_keep_rate"];
-            obj[key.keep_type].two = key["7th_keep_rate"];
-            obj[key.keep_type].three = key["14th_keep_rate"];
+            obj[key.keep_type].one = util.toFixed(key["1st_keep"], key.active_users);
+            obj[key.keep_type].two = util.toFixed(key["7th_keep"], key.active_users);
+            obj[key.keep_type].three = util.toFixed(key["14th_keep"], key.active_users);
         }
         if(source[0]) {
             source[0].date = "本月";
@@ -100,21 +100,21 @@ module.exports = {
 
         newData.push({
             name : "次日留存",
-            one : obj.app.one.toFixed(2) + "%",
-            two : obj.pc.one.toFixed(2) + "%",
-            three : obj.h5.one.toFixed(2) + "%",
+            one : obj.app.one,
+            two : obj.pc.one,
+            three : obj.h5.one
         });
         newData.push({
             name : "七日留存",
-            one : obj.app.two.toFixed(2) + "%",
-            two : obj.pc.two.toFixed(2) + "%",
-            three : obj.h5.two.toFixed(2) + "%",
+            one : obj.app.two,
+            two : obj.pc.two,
+            three : obj.h5.two
         });
         newData.push({
             name : "14日留存",
-            one : obj.app.three.toFixed(2) + "%",
-            two : obj.pc.three.toFixed(2) + "%",
-            three : obj.h5.three.toFixed(2) + "%",
+            one : obj.app.three,
+            two : obj.pc.three,
+            three : obj.h5.three
         });
 
         return util.toTable([source, newData], data.rows, data.cols);

@@ -177,5 +177,47 @@ module.exports = {
                 }
             ]
         };
+    },
+    data_table_day_shop() {
+        return {
+            name : "数据报表",
+            path : "/socialAnalysis/dataTableDayShop",
+            display : true,
+            defaultData : [
+                {
+                    type : "table",
+                    title : "商铺数据",
+                    query_api : "/socialAnalysis/dataTableDayShopOne"
+                }
+            ]
+        };
+    },
+    data_table_week_shop() {
+        return {
+            name : "数据报表",
+            path : "/socialAnalysis/dataTableWeekShop",
+            display : true,
+            defaultData : [
+                {
+                    type : "table",
+                    title : "商铺数据",
+                    query_api : "/socialAnalysis/dataTableWeekShopOne"
+                }
+            ]
+        };
+    },
+    data_table_month_shop() {
+        return {
+            name : "数据报表",
+            path : "/socialAnalysis/dataTableMonthShop",
+            display : true,
+            defaultData : [
+                {
+                    type : "table",
+                    title : "商铺数据",
+                    query_api : "/socialAnalysis/dataTableMonthShopOne"
+                }
+            ]
+        };
     }
 };

@@ -316,6 +316,9 @@ const Config = {
                 obj.table.data_table_day_user(),
                 obj.table.data_table_week_user(),
                 obj.table.data_table_month_user(),
+                obj.table.data_table_day_shop(),
+                obj.table.data_table_week_shop(),
+                obj.table.data_table_month_shop(),
             ]
         }
     }
