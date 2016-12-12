@@ -55,7 +55,10 @@ module.exports = {
         } , result = {};
 
         for(let date of dates){
-            let obj = {};
+            let obj = {
+                "start_num" : 0,
+                "active_user_num" : 0
+            };
             for(let key in map){
                 obj[key] = 0;
             }
@@ -64,20 +67,26 @@ module.exports = {
 
         for(let item of source){
             item.date = util.getDate(item.date);
-            let Robj = result[item.date];
             if(result[item.date]){
-                result[item.date] = item;
-                result[item.date].error_num_lv = util.dealDivision( item.error_num , item.start_num , 4 );
-                result[item.date].effect_user_num_lv = util.dealDivision( item.effect_user_num , item.active_user_num , 4 );
+                result[item.date].error_num += item.error_num;
+                result[item.date].effect_user_num += item.effect_user_num;
+                result[item.date].start_num += item.start_num;
+                result[item.date].active_user_num += item.active_user_num;
             }
         }
 
+        for(let date in result){
+            result[date].error_num_lv = util.dealDivision( result[date].error_num , result[date].start_num , 4 );
+            result[date].effect_user_num_lv = util.dealDivision( result[date].effect_user_num , result[date].active_user_num , 4 );
+        }
+
         if(query.main_show_type_filter == "table"){
-            for(let item of source){
-                item.error_num_lv = util.toFixed(item.error_num_lv , 0);
-                item.effect_user_num_lv = util.toFixed( item.effect_user_num_lv , 0 );
+            let Result = [];
+            for(let date in result){
+                result[date].date = date;
+                Result.unshift(result[date]);
             }
-            return util.toTable([source], data.rows, data.cols);
+            return util.toTable([Result], data.rows, data.cols);
         }else{
             return [{
                 type : "line",
@@ -100,17 +109,31 @@ module.exports = {
     performance_02_f(data, query, dates){
 
         let source = data.first.data[0];
+        let Resource = {} , theResource = [];
         for(let item of source){
-            if(CodeTranslate[item.error_status]){
-                item.error_name = CodeTranslate[item.error_status];
+            if(Resource[item.error_status]){
+                Resource[item.error_status].error_num += item.error_num;
+                Resource[item.error_status].effect_user_num += item.effect_user_num;
+                Resource[item.error_status].active_user_num += item.active_user_num;
+                Resource[item.error_status].start_num += item.start_num;
             }else{
-                item.error_name = "未收录";
+                Resource[item.error_status] = {
+                    "error_status": item.error_status,
+                    "error_name" : CodeTranslate[item.error_status] || "未收录",
+                    "error_num"  : item.error_num,
+                    "effect_user_num" : item.effect_user_num,
+                    "active_user_num" : item.active_user_num,
+                    "start_num"       : item.start_num
+                };
             }
-
-            item.error_num_lv = util.toFixed( item.error_num , item.start_num );
-            item.effect_user_num_lv = util.toFixed( item.effect_user_num , item.active_user_num );
         }
 
-        return util.toTable([source], data.rows, data.cols);
+        for(let key in Resource){
+            Resource[key].error_num_lv = util.toFixed( Resource[key].error_num , Resource[key].start_num );
+            Resource[key].effect_user_num_lv = util.toFixed( Resource[key].effect_user_num , Resource[key].active_user_num );
+            theResource.push(Resource[key]);
+        }
+
+        return util.toTable([theResource], data.rows, data.cols);
     },
 }
