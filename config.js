@@ -319,6 +319,10 @@ const Config = {
                 obj.table.data_table_day_shop(),
                 obj.table.data_table_week_shop(),
                 obj.table.data_table_month_shop(),
+                obj.table.data_table_day_vshop(),
+                obj.table.data_table_week_vshop(),
+                obj.table.data_table_month_vshop(),
+                obj.table.data_table_day_dataRebate(),
             ]
         }
     }

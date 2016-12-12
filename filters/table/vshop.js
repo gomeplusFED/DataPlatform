@@ -127,5 +127,25 @@ module.exports = {
                 );
             }
         }
+        obj.date = "昨日对比";
+        newData.push(obj);
+
+        return util.toTable([newData], rows, cols);
+    },
+    weekOne(data) {
+        const source = data.first.data[0];
+        for(let key of source) {
+            key.date = `${moment(key.date - 6 * 24 * 60 * 60 * 1000).format("MM-DD")}-${moment(key.date).format("MM-DD")}`;
+        }
+
+        return util.toTable([source], rows, cols);
+    },
+    monthOne(data) {
+        const source = data.first.data[0];
+        for(let key of source) {
+            key.date = `${moment(key.date).format("MM")}月`;
+        }
+
+        return util.toTable([source], rows, cols);
     }
 };
