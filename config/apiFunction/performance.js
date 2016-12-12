@@ -129,8 +129,8 @@ module.exports = {
         }
 
         for(let key in Resource){
-            Resource[key].error_num_lv = util.toFixed( Resource[key].error_num , Resource[key].start_num );
-            Resource[key].effect_user_num_lv = util.toFixed( Resource[key].effect_user_num , Resource[key].active_user_num );
+            Resource[key].error_num_lv = util.toFixed( util.dealDivision( Resource[key].error_num , Resource[key].start_num ) , 0 );
+            Resource[key].effect_user_num_lv = util.toFixed( util.dealDivision( Resource[key].effect_user_num , Resource[key].active_user_num ) , 0 );
             theResource.push(Resource[key]);
         }
 
