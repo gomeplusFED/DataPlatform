@@ -131,7 +131,16 @@ module.exports = function(Router) {
                                         req.flash('密码和账户不正确');
                                         res.redirect('back');
                                     } else {
-                                        const _email = entry.attributes[35].vals[0];
+                                        let _email = "";
+                                        for(let key of entry.attributes) {
+                                            if(key.vals[0].indexOf("@") !== -1) {
+                                                _email = key.vals[0];
+                                            }
+                                        }
+                                        if(_email.indexOf("SMTP:") !== -1) {
+                                            _email = _email.substr(5);
+                                        }
+                                        //const _email = entry.attributes[35].vals[0];
                                         const un = entry.objectName.match(/CN=(.*?)[(]/)[1];
                                         const name = entry.objectName.match(/[(](.*?)[\.]/)[1];
                                         const department = entry.objectName.match(/[\.]+(.*?)[)]+/)[1];
