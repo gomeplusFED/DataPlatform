@@ -82,6 +82,9 @@
 </template>
 
 <style>
+.user_table ul>li{
+	display: inline-block;
+}
 .add_role{
 	position: absolute;
 	right: 10px;
