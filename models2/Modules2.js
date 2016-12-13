@@ -109,9 +109,46 @@ module.exports = {
     //性能分析
     ads2_performance_analysis : {
         modelName : "PerformanceAnalysis"
+    },
+
+    //返利部分 ----------------
+    ads2_new_rebate_invite_overview : {
+        modelName : "ads2_new_rebate_invite_overview"
+    },
+    ads2_new_rebate_invite_plan_info : {
+        modelName : "ads2_new_rebate_invite_plan_info"
+    },
+
+    ads2_new_rebate_invite_trend : {
+        modelName : "ads2_new_rebate_invite_trend"
+    },
+    ads2_new_rebate_order_level_sum : {
+        modelName : "ads2_new_rebate_order_level_sum"
+    },
+    ads2_new_rebate_order_muiltiple_trend : {
+        modelName : "ads2_new_rebate_order_muiltiple_trend"
+    },
+    ads2_new_rebate_order_overview : {
+        modelName : "ads2_new_rebate_order_overview"
+    },
+    ads2_new_rebate_order_plan_info : {
+        modelName : "ads2_new_rebate_order_plan_info"
+    },
+    ads2_new_rebate_order_plantype_level_sum : {
+        modelName : "ads2_new_rebate_order_plantype_level_sum"
+    },
+
+    ads2_new_rebate_order_shop_info : {
+        modelName : "ads2_new_rebate_order_shop_info"
+    },
+    ads2_new_rebate_order_trend : {
+        modelName : "ads2_new_rebate_order_trend"
+    },
+    ads2_new_rebate_order_type_sum : {
+        modelName : "ads2_new_rebate_order_type_sum"
     }
 
-
+    //返利   END --------------
 };
 
 

@@ -1,4 +1,20 @@
 {
+    "15": {
+        "name": "返利分析",
+        "display": true,
+        "className": "fa  fa-laptop fa-fw",
+        "filename": "rebate",
+        "href": "#",
+        "path": [
+            {
+                "name": "返利汇总",
+                "path": "/rebate/all",
+                "display": true,
+                "defaultData": []
+            }
+        ],
+        "routers": []
+    },
     "22": {
         "name": "性能分析",
         "display": true,
