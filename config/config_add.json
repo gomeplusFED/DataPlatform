@@ -10,7 +10,38 @@
                 "name": "返利汇总",
                 "path": "/rebate/all",
                 "display": true,
-                "defaultData": []
+                "defaultData": [
+                    {
+                        "type": "table",
+                        "title": "返利统计",
+                        "query_api": "/rebate/total_One",
+                        "mark": 1481596804809
+                    },
+                    {
+                        "type": "table",
+                        "title": "返利总览",
+                        "query_api": "/rebate/total_two",
+                        "mark": 1481600577337
+                    },
+                    {
+                        "type": "chart",
+                        "title": "返利订单趋势",
+                        "query_api": "/rebate/total_Three",
+                        "mark": 1481609368254
+                    },
+                    {
+                        "type": "chart",
+                        "title": "返利占比",
+                        "query_api": "/rebate/total_Four",
+                        "mark": 1481614501111
+                    },
+                    {
+                        "type": "table",
+                        "title": "返利功能详情",
+                        "query_api": "/rebate/total_Five",
+                        "mark": 1481617501820
+                    }
+                ]
             }
         ],
         "routers": []
