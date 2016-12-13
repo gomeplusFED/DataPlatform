@@ -49,9 +49,9 @@ module.exports = {
         let source = data.first.data[0];
         let map = {
             "error_num" : "总错误数",
-            "error_num_lv" : "错误率",
+            "error_num_lv" : "错误率%",
             "effect_user_num" : "影响用户数",
-            "effect_user_num_lv" : "影响用户率"
+            "effect_user_num_lv" : "影响用户率%"
         } , result = {};
 
         for(let date of dates){
@@ -76,14 +76,16 @@ module.exports = {
         }
 
         for(let date in result){
-            result[date].error_num_lv = util.dealDivision( result[date].error_num , result[date].start_num , 4 );
-            result[date].effect_user_num_lv = util.dealDivision( result[date].effect_user_num , result[date].active_user_num , 4 );
+            result[date].error_num_lv = util.dealDivision( result[date].error_num , result[date].start_num , 2 );
+            result[date].effect_user_num_lv = util.dealDivision( result[date].effect_user_num , result[date].active_user_num , 2 );
         }
 
         if(query.main_show_type_filter == "table"){
             let Result = [];
             for(let date in result){
                 result[date].date = date;
+                result[date].error_num_lv = util.toFixed( result[date].error_num_lv , 0 );
+                result[date].effect_user_num_lv = util.toFixed( result[date].effect_user_num_lv , 0 );
                 Result.unshift(result[date]);
             }
             return util.toTable([Result], data.rows, data.cols);
