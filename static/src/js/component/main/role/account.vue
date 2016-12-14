@@ -327,6 +327,7 @@ var Account = Vue.extend({
 	        	if(ismodified) {
 	        		let modifyLimited = JSON.stringify(userlimited);
 	        		console.log(`更新${useritem.name}权限为modifyLimited`);
+	        		_this.loading.show = true;
 		        	$.ajax({
 						url: '/users/update',
 						type: 'post',
@@ -353,6 +354,7 @@ var Account = Vue.extend({
 										text: `${useritem.name}你好，\n    您的数据平台权限已修改，请查看${window.location.host}。`
 									},
 									success: function(data){
+										_this.loading.show = false;
 										if(!data.success){
 											actions.alert(store, {
 												show: true,
@@ -369,6 +371,7 @@ var Account = Vue.extend({
 									}
 								});
 							} else {
+								_this.loading.show = false;
 								actions.alert(store, {
 									show: true,
 									msg: '修改成功',
