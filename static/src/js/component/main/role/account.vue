@@ -68,12 +68,13 @@
 				                                    class    = "btn btn-success"
 				                                    style    = "margin-left: 10px;"
 				                                    type     = "button"
+				                                    @click = "updateLimited(true)"
 				                                    disabled = "{{ opBtnStatus }}">更新权限&amp;邮件</button>
 				                                <button
 				                                    class    = "btn btn-success"
 				                                    style    = "margin-left: 15px;"
 				                                    type     = "button"
-				                                    @click = "updateLimited"
+				                                    @click = "updateLimited()"
 				                                    disabled = "{{ opBtnStatus }}">更新权限</button>
 				                            </td>
 				                        </tfoot>
@@ -302,8 +303,9 @@ var Account = Vue.extend({
             }
 
         },
-        updateLimited() {
-        	var _this = this;
+        updateLimited(email = false) {
+        	let _this = this;
+        	let noneedupdate = true;
         	//比较权限
         	let rolelimited = _this.modal.limited ? Object.entries(JSON.parse(_this.modal.limited)) : [];
 
@@ -341,167 +343,55 @@ var Account = Vue.extend({
 								})
 								return;
 							}
-							actions.alert(store, {
-								show: true,
-								msg: '修改成功',
-								type: 'success'
-							})
+							if (email) {
+								$.ajax({
+									url: '/email/send',
+									type: 'post',
+									data: {
+										to: window.location.host.includes('gomeplus.com') ? useritem.email : 'lizhongning@gomeplus.com',
+										subject: '权限修改通知',
+										text: `${useritem.name}你好，\n    您的数据平台权限已修改，请查看${window.location.host}。`
+									},
+									success: function(data){
+										if(!data.success){
+											actions.alert(store, {
+												show: true,
+												msg: data.msg,
+												type: 'danger'
+											})
+											return;
+										}
+										actions.alert(store, {
+											show: true,
+											msg: '修改成功并已邮件通知',
+											type: 'success'
+										});
+									}
+								});
+							} else {
+								actions.alert(store, {
+									show: true,
+									msg: '修改成功',
+									type: 'success'
+								});
+							}
+
 							// _this.createTableBySearchStr();
 							// _this.modal.show = false;
 						}
-					})
-	        	} else {
-    				actions.alert(store, {
-						show: true,
-						msg: '无需更新',
-						type: 'success'
 					});
+					noneedupdate = false;
 	        	}
         	}
-        },
-		apply: function(){
-			var _this = this;
-			if(_this.modifyName === '' || _this.modifyRemark === ''){
+
+        	if(noneedupdate) {
 				actions.alert(store, {
 					show: true,
-					msg: '角色名或备注不能为空',
-					type: 'danger'
-				})
-				return;
-			}
-			if(this.modifyType === 'modify'){
-				for(var item in _this.modifyLimited){
-					if(_this.modifyLimited[item].length === 0){
-						Vue.delete(_this.modifyLimited, item);
-					}
-				}
-				for(var item in _this.modifyExportLimited){
-					if(_this.modifyExportLimited[item].length === 0){
-						Vue.delete(_this.modifyExportLimited, item);
-					}
-				}
-				$.ajax({
-					url: '/role/update',
-					type: 'post',
-					data: {
-						id: _this.id,
-						name: _this.modifyName,
-						remark: _this.modifyRemark,
-						limited: JSON.stringify(_this.modifyLimited),
-						export: JSON.stringify(_this.modifyExportLimited)
-					},
-					success: function(data){
-						if(!data.success){
-							actions.alert(store, {
-								show: true,
-								msg: data.msg,
-								type: 'danger'
-							})
-							return;
-						}
-						actions.alert(store, {
-							show: true,
-							msg: '修改成功',
-							type: 'success'
-						})
-						_this.createTableBySearchStr();
-						_this.modal.show = false;
-					}
-				})
-			}else if(this.modifyType === 'add'){
-				$.ajax({
-					url: '/role/add',
-					type: 'post',
-					data: {
-						name: _this.modifyName,
-						remark: _this.modifyRemark,
-						limited: JSON.stringify(_this.modifyLimited),
-						export: JSON.stringify(_this.modifyExportLimited)
-					},
-					success: function(data){
-						if(!data.success){
-							actions.alert(store, {
-								show: true,
-								msg: data.msg,
-								type: 'danger'
-							})
-							return;
-						}
-						actions.alert(store, {
-							show: true,
-							msg: '新增成功',
-							type: 'success'
-						})
-						_this.createTableBySearchStr();
-						_this.modal.show = false;
-					}
-				})
-			}
-		},
-		forbidden: function(id, name){
-			var _this = this;
-			actions.confirm(store, {
-				show: true,
-				msg: '是否禁用角色 ' + name + '？',
-				apply: function(){
-					$.ajax({
-						url: '/role/update',
-						type: 'post',
-						data: {
-							id: id,
-							status: 0
-						},
-						success: function(data){
-							actions.alert(store, {
-								show: true,
-								msg: '禁用成功',
-								type: 'success'
-							})
-							_this.createTableBySearchStr();
-							_this.modal.show = false;
-						}
-					})
-				}
-			})
-		},
-		startUsing: function(id, name){
-			var _this = this;
-			actions.confirm(store, {
-				show: true,
-				msg: '是否启用角色 ' + name + '？',
-				apply: function(){
-					$.ajax({
-						url: '/role/update',
-						type: 'post',
-						data: {
-							id: id,
-							status: 1
-						},
-						success: function(data){
-							actions.alert(store, {
-								show: true,
-								msg: '启用成功',
-								type: 'success'
-							})
-							_this.createTableBySearchStr();
-							_this.modal.show = false;
-						}
-					})
-				}
-			})
-		},
-		hideModal: function(){
-			// 隐藏弹窗，初始化数据
-			this.modal.show = false;
-			this.id = null;
-			this.limited = {};
-			this.exportLimit = {};
-			this.modifyName = '';
-			this.modifyRemark = '';
-			this.modifyType = null;
-			this.modifyLimited = {};
-			this.modifyExportLimited = {};
-		}
+					msg: '无需更新',
+					type: 'success'
+				});
+        	}
+        }
 	}
 })
 
