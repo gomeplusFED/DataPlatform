@@ -8,6 +8,8 @@
             "-date"
         ],
         "platform": false,
+        "sum" : ["error_num"],
+        "paging":["true"],
         "router": "/performance/error_One",
         "toggle": {
             "show": true
@@ -59,7 +61,7 @@
                     "type": "number"
                 },
                 {
-                    "caption": "错误率",
+                    "caption": "错误占比",
                     "type": "string"
                 },
                 {
@@ -85,6 +87,8 @@
         "order": [
             "-date"
         ],
+        "sum" : ["error_num"],
+        "paging":[true],
         "platform": false,
         "router": "/performance/error_Two",
         "rows": [
@@ -112,7 +116,7 @@
                     "type": "number"
                 },
                 {
-                    "caption": "错误率",
+                    "caption": "错误占比",
                     "type": "string"
                 },
                 {

@@ -45,8 +45,8 @@ module.exports = {
     },
     
     performance_01_f(data, query, dates){
-
-        let source = data.first.data[0];
+        let source = data.first.data[0],
+            sum    = data.first.sum[0] || 1;
         let map = {
             "error_num" : "总错误数",
             "error_num_lv" : "错误率%",
@@ -76,7 +76,7 @@ module.exports = {
         }
 
         for(let date in result){
-            result[date].error_num_lv = util.dealDivision( result[date].error_num , result[date].start_num , 2 );
+            result[date].error_num_lv = util.dealDivision( result[date].error_num , sum , 2 );
             result[date].effect_user_num_lv = util.dealDivision( result[date].effect_user_num , result[date].active_user_num , 2 );
         }
 
@@ -110,7 +110,8 @@ module.exports = {
 
     performance_02_f(data, query, dates){
 
-        let source = data.first.data[0];
+        let source = data.first.data[0],
+            sum    = data.first.sum[0] || 1;
         let Resource = {} , theResource = [];
         for(let item of source){
             if(Resource[item.error_status]){
@@ -131,7 +132,7 @@ module.exports = {
         }
 
         for(let key in Resource){
-            Resource[key].error_num_lv = util.toFixed( util.dealDivision( Resource[key].error_num , Resource[key].start_num ) , 0 );
+            Resource[key].error_num_lv = util.toFixed( util.dealDivision( Resource[key].error_num , sum ) , 0 );
             Resource[key].effect_user_num_lv = util.toFixed( util.dealDivision( Resource[key].effect_user_num , Resource[key].active_user_num ) , 0 );
             theResource.push(Resource[key]);
         }
