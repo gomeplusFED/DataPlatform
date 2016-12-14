@@ -49,7 +49,7 @@ module.exports = {
             sum    = data.first.sum[0] || 1;
         let map = {
             "error_num" : "总错误数",
-            "error_num_lv" : "错误率%",
+            "error_num_lv" : "错误占比%",
             "effect_user_num" : "影响用户数",
             "effect_user_num_lv" : "影响用户率%"
         } , result = {};
