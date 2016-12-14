@@ -60,21 +60,29 @@ module.exports = (Router) => {
             [{
                 caption : "日期"
             },{
-                caption : "APP累计激活用户"
+                caption : "APP累计激活用户",
+                help : "截止到统计日期安装并打开国美plus APP 累计设备数(对设备id去重)"
             },{
-                caption : "平台累计注册用户"
+                caption : "平台累计注册用户",
+                help : "截止到统计日期国美plus累计注册用户数（累计账号）"
             },{
-                caption : "当前运营店铺数"
+                caption : "当前运营店铺数",
+                help : "当前日期，平台入驻并处于营运状态的店铺数"
             },{
-                caption : "累计美店数"
+                caption : "累计美店数",
+                help : "截止到统计日期平台累计开通的美店数"
             },{
-                caption : "累计参与返利人数"
+                caption : "累计参与返利人数",
+                help : "截止到统计日期平台累计获得预计返利的人数"
             },{
-                caption : "累计参与返利订单数"
+                caption : "累计参与返利订单数",
+                help : "截止到统计日期平台累计带有返利的订单数（订单状态：下单）"
             },{
-                caption : "本月累计支付订单数"
+                caption : "本月累计支付订单数",
+                help : "截止到统计日期本月累计支付的订单数量"
             },{
-                caption : "本月累计支付金额"
+                caption : "本月累计支付金额",
+                help : "截止到统计日期本月累计支付的订单金额"
             },{
                 caption : "美店累计妥投商品件数"
             },{
@@ -200,39 +208,56 @@ module.exports = (Router) => {
             [{
                 caption : "日期"
             },{
-                caption : "APP新增激活"
+                caption : "APP新增激活",
+                help : "统计日期内第一次安装并打开APP设备数"
             },{
-                caption : "pc端新增访问人数"
+                caption : "pc端新增访问人数",
+                help : "统计日期内第一次访问国美+PC站的cookie数"
             },{
-                caption : "H5手机站新增访问人数"
+                caption : "H5手机站新增访问人数",
+                help : "统计日期内第一次访问国美+H5手机站的cookie数"
             },{
-                caption : "新增注册（全平台）"
+                caption : "新增注册（全平台）",
+                help : "统计日期内国美plus新增注册用户数"
             },{
-                caption : "APP活跃用户"
+                caption : "APP活跃用户",
+                 help : "统计日期内打开国美plus APP设备数"
             },{
-                caption : "PC站访问用户数"
+                caption : "PC站访问用户数",
+                help : "统计日期内访问国美+PC站的cookie数"
             },{
-                caption : "H5手机站访问用户数"
+                caption : "H5手机站访问用户数",
+                help : "统计日期内第访问国美+H5手机站的cookie数"
             },{
-                caption : "新增订单"
+                caption : "新增订单",
+                help : "统计日期内创建订单量"
             },{
-                caption : "支付订单量"
+                caption : "支付订单量",
+                help : "统计日期内支付订单量"
             },{
-                caption : "支付转化率"
+                caption : "支付转化率",
+                help : "统计日期内，支付订单数/新增订单数x100%"
             },{
-                caption : "支付金额"
+                caption : "支付金额",
+                help : "统计日期内实际支付订单金额"
             },{
-                caption : "客单价"
+                caption : "客单价",
+                help : "统计日期内支付金额/支付人数x100%"
             },{
-                caption : "笔单价"
+                caption : "笔单价",
+                help : "统计日期内支付金额/支付订单数x100%"
             },{
-                caption : "新增返利订单金额"
+                caption : "新增返利订单金额",
+                help : "统计日期内新增返利订单的原始金额（订单状态为下单，金额为原始金额，非实际支付金额）"
             },{
-                caption : "新增返利订单量"
+                caption : "新增返利订单量",
+                help : "统计日期内新增返利订单的数（订单状态为下单）"
             },{
-                caption : "返利订单占比"
+                caption : "返利订单占比",
+                help : "统计日期内新增返利订单量/当日新增订单数x100%"
             },{
-                caption : "新增参与返利人数"
+                caption : "新增参与返利人数",
+                help : "统计日期内获得预计返利的人数"
             }]
         ]
     });

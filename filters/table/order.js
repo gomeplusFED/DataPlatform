@@ -16,70 +16,92 @@ const cols = [
         type : "string"
     },{
         caption : "下单订单量",
-        type : "number"
+        type : "number",
+        help : "统计日期内，新创建的订单数（去重）"
     },{
         caption : "支付订单量",
-        type : "number"
+        type : "number",
+        help : "统计日期内，新支付的订单数（去重）"
     },{
         caption : "下单金额",
-        type : "number"
+        type : "number",
+        help : "统计日期内，新创建订单的金额"
     },{
         caption : "支付金额",
-        type : "number"
+        type : "number",
+        help : "统计日期内，支付订单的金额"
     },{
         caption : "客单价",
-        type : "number"
+        type : "number",
+        help : "统计日期内，支付金额/支付人数x100%"
     },{
         caption : "笔单价",
-        type : "number"
+        type : "number",
+        help : "统计日期内，支付金额/支付订单数x100%"
     },{
         caption : "访问商品数",
-        type : "number"
+        type : "number",
+        help : "统计日期内，被访问的商品数（商品详情页被访问）"
     },{
         caption : "下单商品数",
-        type : "number"
+        type : "number",
+        help : "统计日期内，创建订单中的商品数"
     },{
         caption : "支付商品数",
-        type : "number"
+        type : "number",
+        help : "统计日期内，支付订单中的商品数"
     },{
         caption : "下单件数",
-        type : "number"
+        type : "number",
+        help : "统计日期内，创建订单中的商品件数"
     },{
         caption : "支付件数",
-        type : "number"
+        type : "number",
+        help : "统计日期内，创建订单中的商品件数"
     },{
         caption : "启动/访问用户数",
-        type : "number"
+        type : "number",
+        help : "统计日期内，pc端访问人数+APP活跃用户量+H5站访问人数"
     },{
         caption : "IPV_UV",
-        type : "number"
+        type : "number",
+        help : "统计日期内，浏览商品详情页的人数"
     },{
         caption : "下单人数",
-        type : "number"
+        type : "number",
+        help : "统计日期内，创建订单的人数（去重）"
     },{
         caption : "下单转化率",
-        type : "string"
+        type : "string",
+        help : "下单人数/IPV_UVx100%"
     },{
         caption : "支付人数",
-        type : "number"
+        type : "number",
+        help : "统计日期内，支付订单的人数（去重）"
     },{
         caption : "支付转化率",
-        type : "string"
+        type : "string",
+        help : "支付人数/下单人数x100%"
     },{
         caption : "复购率",
-        type : "string"
+        type : "string",
+        help : "最近30天内支付订单数超过2单的人数/最近30天支付订单的人数"
     },{
         caption : "退货商品件数",
-        type : "number"
+        type : "number",
+        help : "统计日期内，拒收入库和退货订单入库的商品件数"
     },{
         caption : "退货金额",
-        type : "number"
+        type : "number",
+        help : "统计日期内，拒收入库和退货订单入库的退款金额"
     },{
         caption : "妥投商品件数",
-        type : "number"
+        type : "number",
+        help : "统计日期内，收货成功的订单中商品件数"
     },{
         caption : "妥投金额",
-        type : "number"
+        type : "number",
+        help : "统计日期内，收货成功订单的金额"
     }]
 ];
 const util  = require("../../utils");
