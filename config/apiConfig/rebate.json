@@ -177,26 +177,25 @@
     },
     "1481617501820": {
         "modelName": [
-            "ads2_report_rebate_plan_rebate_type_daily" , "TypeFlow"
+            "ads2_report_rebate_plan_rebate_type_daily",
+            "TypeFlow"
         ],
         "date_picker": true,
-        "showDayUnit":true,
-        "date_picker_data":1,
-        "order": [
-            "-date"
-        ],
+        "showDayUnit": true,
+        "date_picker_data": 1,
+        "order": [],
         "platform": false,
         "router": "/rebate/total_Five",
         "filter": "rebate_total_05_f",
         "params": "rebate_total_05",
-        "secondParams" : "rebate_total_05_second",
+        "secondParams": "rebate_total_05_second",
         "rows": [
             [
-                "?",
-                "????",
+                "flow_name_prefix",
+                "type_name",
+                "flow_name",
                 "rebate_type",
-                "??",
-                "???",
+                "unique_expect_rebate_user_num",
                 "expect_rebate_amount",
                 "cancel_rebate_amount",
                 "is_over_rebate_order_amount",
@@ -244,6 +243,154 @@
                 },
                 {
                     "caption": "参与商家数",
+                    "type": "number"
+                }
+            ]
+        ]
+    },
+    "1481684524556": {
+        "modelName": [
+            "ads2_new_rebate_order_overview"
+        ],
+        "date_picker": true,
+        "order": [],
+        "platform": false,
+        "router": "/rebate/platformAll_One",
+        "filter": "rebate_platformAll_01_f",
+        "params": "rebate_platformAll_01",
+        "fixedParams" : "rebate_platformAll_01_fixed",
+        "level_select": true,
+        "level_select_url": "/api/categories",
+        "level_select_name": "category_id",
+        "global_platform": {
+            "show": true,
+            "key": "type",
+            "name": "平台切换",
+            "list": [
+                {
+                    "key": "PC",
+                    "name": "汇总",
+                    "url" : "http://www.baidu.com"
+                },
+                {
+                    "key": "IOS",
+                    "name": "平台基础返利",
+                    "url" : "http://www.baidu.com"
+                },
+                {
+                    "key": "Android",
+                    "name": "平台促销返利",
+                    "url" : "http://www.baidu.com"
+                },
+                {
+                    "key": "WAP",
+                    "name": "单项单级返利",
+                    "url" : "http://www.baidu.com"
+                },
+                {
+                    "key": "H5",
+                    "name": "邀请商户分析返利",
+                    "url" : "http://www.baidu.com"
+                }
+            ]
+        },
+        "rows": [
+            [
+                "Blank",
+                "unique_is_rebate_order_num",
+                "is_rebate_fee",
+                "unique_is_rebate_shop_num",
+                "unique_is_rebate_user_num",
+                "is_rebate_merchandise_num",
+                "cancel_is_rebate_order_num"
+            ],
+            [
+                "expect_rebate_amount",
+                "expect_rebate_user_num",
+                "cancel_rebate_amount",
+                "unique_is_over_rebate_order_num",
+                "is_over_rebate_order_amount"
+            ],
+            [
+                "Blank",
+                "unique_is_rebate_back_merchandise_num",
+                "is_rebate_back_merchandise_num",
+                "unique_is_rebate_back_user_num",
+                "is_rebate_back_merchandise_amount"
+            ]
+        ],
+        "cols": [
+            [
+                {
+                    "caption": "",
+                    "type": "string"
+                },
+                {
+                    "caption": "订单数",
+                    "type": "number"
+                },
+                {
+                    "caption": "订单总金额",
+                    "type": "number"
+                },
+                {
+                    "caption": "商家数",
+                    "type": "number"
+                },
+                {
+                    "caption": "下单用户数",
+                    "type": "number"
+                },
+                {
+                    "caption": "商品件数",
+                    "type": "number"
+                },
+                {
+                    "caption": "取消订单数",
+                    "type": "number"
+                }
+            ],
+            [
+                {
+                    "caption": "预计返利金额",
+                    "type": "string"
+                },
+                {
+                    "caption": "预计获利人次",
+                    "type": "number"
+                },
+                {
+                    "caption": "已取消返利金额",
+                    "type": "number"
+                },
+                {
+                    "caption": "返利到账订单数",
+                    "type": "number"
+                },
+                {
+                    "caption": "返利到账金额",
+                    "type": "number"
+                }
+            ],
+            [
+                {
+                    "caption": "",
+                    "type": "string"
+                },
+                {
+                    "caption": "退货商品数",
+                    "type": "number"
+                },
+                {
+                    "caption": "退货商品件数",
+                    "type": "number"
+                },
+                {
+                    "caption": "退货用户数",
+                    "type": "number"
+                },
+                {
+                    "caption": "退货商品总金额",
                     "type": "number"
                 }
             ]

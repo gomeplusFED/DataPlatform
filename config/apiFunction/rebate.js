@@ -4,7 +4,8 @@
 */
 
 let util = require("../../utils"),
-    moment = require("moment");
+    moment = require("moment"),
+    orm  = require("orm");
 
 module.exports = {
     //返利统计
@@ -143,24 +144,114 @@ module.exports = {
         return params;
     },
     rebate_total_05_second(query , params , sendData){
-        // return {"status" : 1};
-        params.gg = "he";
-        return params;
+        return {};
     },
     rebate_total_05_f(data, query, dates){
-        let source = data.first.data[0];
-        // let Result = {"expect_rebate_amount":0};
-
-        // for(let item of source){
-        //     for(let key of data.rows[0]){
-        //         if(Result[key]){
-        //             Result[key] += item[key];
-        //         }else{
-        //             Result[key] = item[key];
-        //         }
-        //     }
-        // }
-
+        let source = data.first.data[0],
+            secondSource = data.second.data[0];
+        for(let item of source){
+            for(let value of secondSource){
+                if(item.plan_type == value.type_code && item.rebate_type == value.flow_code){
+                    item.type_name = value.type_name;
+                    item.flow_name = value.flow_name;
+                    item.flow_name_prefix = value.flow_name.split("-")[0];
+                }
+            }
+        }
         return util.toTable([source], data.rows, data.cols);
     },
+
+    //返利订单总览
+    rebate_platformAll_01(query , params , sendData){
+        return params;
+    },
+    rebate_platformAll_01_f(data, query, dates){
+        let source = data.first.data[0];
+        let Rows  = util.megerArray([] , data.rows);
+        let ThisOne = {} , AllOne = {};
+
+        //整理数据
+        for(let item of source){
+            let Obj;
+            if(item.category_id_1 == "ALL" && item.category_id_2 == "ALL" && item.category_id_3 == "ALL" && item.category_id_4 == "ALL"){
+                //总数
+                Obj = AllOne;
+            }else{
+                //单个
+                Obj = ThisOne;
+            }
+            for(let key of Rows){
+                if(key == "Blank"){
+                    continue;
+                }
+                if(Obj[key]){
+                    Obj[key] += item[key];
+                }else{
+                    Obj[key] = item[key];
+                }
+            }
+        }
+
+        if(Object.keys(ThisOne).length == 0){
+            //all
+            ThisOne = AllOne;
+        }
+
+        //拼装数据
+        //表一
+        let Table_1_row1 = {},Table_1_row2 = {};
+        for(let key of data.rows[0]){
+            if(key == "Blank") continue;
+            Table_1_row1[key] = ThisOne[key];
+            Table_1_row2[key] = util.toFixed( ThisOne[key] , AllOne[key]);
+        }
+        Table_1_row1["Blank"] = "返利订单";
+        Table_1_row2["Blank"] = "总占比";
+
+        //表三
+        let Table_3_row1 = {},Table_3_row2 = {};
+        for(let key of data.rows[2]){
+            if(key == "Blank") continue;
+            Table_3_row1[key] = ThisOne[key];
+            Table_3_row2[key] = util.toFixed( ThisOne[key] , AllOne[key]);
+        }
+        Table_3_row1["Blank"] = "返利订单";
+        Table_3_row2["Blank"] = "返利退货订单占比";
+
+           
+        return util.toTable([[Table_1_row1 , Table_1_row2] , [ThisOne] , [Table_3_row1 , Table_3_row2]], data.rows, data.cols);
+    },
+    rebate_platformAll_01_fixed(req , query , cb){
+        query.category_id_1 = "ALL";
+        query.category_id_2 = "ALL";
+        query.category_id_3 = "ALL";
+        query.category_id_4 = "ALL";
+        let category_id = query.category_id;
+        delete query.category_id;
+        if(!category_id){
+            cb(null , query);
+        }else{
+            req.models.ConfCategories.find({
+                id : category_id
+            } , 1 , (err , data)=>{
+                if(err) cb(err);
+                data = data[0];
+                switch(data.level + 1){
+                    case 1:
+                    query.category_id_1 = [category_id , "ALL"];
+                    break;
+                    case 2:
+                    query.category_id_2 = [category_id , "ALL"];
+                        break;
+                    case 3:
+                    query.category_id_3 = [category_id , "ALL"];
+                        break;
+                    case 4:
+                    query.category_id_4 = [category_id , "ALL"];
+                        break;
+                }
+                cb(null , query);
+            });
+        }
+    }
 }

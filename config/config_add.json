@@ -42,6 +42,19 @@
                         "mark": 1481617501820
                     }
                 ]
+            },
+            {
+                "name": "平台订单返利汇总",
+                "path": "/rebate/platformAll",
+                "display": true,
+                "defaultData": [
+                    {
+                        "type": "table",
+                        "title": "返利订单总览",
+                        "query_api": "/rebate/platformAll_One",
+                        "mark": 1481684524556
+                    }
+                ]
             }
         ],
         "routers": []
