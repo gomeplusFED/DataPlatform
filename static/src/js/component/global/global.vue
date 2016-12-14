@@ -1,6 +1,6 @@
 <template>
 	<div class="global">
-		<button class="btn btn-default" v-if="pageComponentsData['flexible_btn']" @click="tab_checkbox(pageComponentsData['flexible_btn'])">筛选</button>
+		<button class="btn btn-default" v-if="pageComponentsData['flexible_btn']" @click="tab_checkbox(pageComponentsData['flexible_btn'])">{{pageComponentsData['flexible_btn'].content || 筛选}}</button>
 		<button class="btn btn-default" v-if="pageComponentsData['export']" @click="location(pageComponentsData['export'])">导出</button>
 		<m-level-select v-if="pageComponentsData['level_select']" :index="-1" :init-data="initData" :page-components-data="pageComponentsData" component-type="level_select" :argvs.sync='argvs'></m-level-select>
 		<m-filter-select v-if="pageComponentsData['filter_select']" index="-1" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'filter_select'" :argvs.sync='argvs'></m-filter-select>
@@ -125,7 +125,7 @@
 				var _this = this;
 				actions.tabCheckbox(store, {
 					show: true,
-					title: '筛选',
+					title: item.content || '筛选',
 					max: item.max,
 					groups: item.groups,
 					apply: val => {
