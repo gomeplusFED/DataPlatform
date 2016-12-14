@@ -94,6 +94,11 @@ module.exports = (Router) => {
             },
             alignment : {
                 horizontal : "center"
+            },
+            fill : {
+                type: 'pattern',
+                patternType: 'solid',
+                fgColor: '#FFFF33'
             }
         };
         const totalOne = `http://localhost:7879/socialAnalysis/dataTableDayOne_json?startTime=${time}&endTime=${time}&day_type=1`;
@@ -119,6 +124,11 @@ module.exports = (Router) => {
                     font : {
                         bold : true,
                         size : 15
+                    },
+                    fill : {
+                        type: 'pattern',
+                        patternType: 'solid',
+                        fgColor: '#FFFF33'
                     }
                 }
             }]];
@@ -128,6 +138,11 @@ module.exports = (Router) => {
                     font : {
                         bold : true,
                         size : 15
+                    },
+                    fill : {
+                        type: 'pattern',
+                        patternType: 'solid',
+                        fgColor: '#FFFF33'
                     }
                 }
             }]];
@@ -294,6 +309,11 @@ module.exports = (Router) => {
             },
             alignment : {
                 horizontal : "center"
+            },
+            fill : {
+                type: 'pattern',
+                patternType: 'solid',
+                fgColor: '#FFFF33'
             }
         };
         const total = `http://localhost:7879/socialAnalysis/dataTableWeekOne_json?startTime=${startTime}&endTime=${endTime}&day_type=1`;
@@ -428,6 +448,11 @@ module.exports = (Router) => {
             },
             alignment : {
                 horizontal : "center"
+            },
+            fill : {
+                type: 'pattern',
+                patternType: 'solid',
+                fgColor: '#FFFF33'
             }
         };
         const total = `http://localhost:7879/socialAnalysis/dataTableMonthOne_json?startTime=${time}&endTime=${time}&day_type=1`;

@@ -25,8 +25,8 @@ const style = {
 const header = {
     fill : {
         type: 'pattern',
-        patternType: 'light',
-        bgColor: 'Yellow'
+        patternType: 'solid',
+        fgColor: '#FFFF33'
     }
 };
 
