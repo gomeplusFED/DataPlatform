@@ -1,0 +1,510 @@
+<template>
+	<div class="modal" id="modal_table" v-show="modal.show" transtion="fade">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" @click="modal.show=false">
+						&times;
+					</button>
+					<h4 class="modal-title">{{modal.title}}</h4>
+				</div>
+				<div class="modal-body">
+					<div class="col-lg-12">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<strong>帐号列表</strong>
+							</div>
+							<div class="panel-body">
+								<div class="user_table_con">
+									<table class="table table-bordered table-hover user_table">
+										<thead>
+											<tr>
+                                    			<th style="text-align: center;">选择</th>
+                                    			<th>序号</th>
+												<th>ID</th>
+												<th>姓名</th>
+												<th>帐号名</th>
+												<th>邮箱</th>
+												<th>部门</th>
+												<th>角色</th>
+												<th>备注</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr v-for="(i,item) in userListData" :class="{active: !item.status}">
+				                                <td>
+				                                    <input
+				                                        type    = "checkbox"
+				                                        name    = "checkedRecords"
+				                                        class   = "ckbox"
+				                                        value   = "{{item.id}}"
+				                                        v-model = "checkedRecords"
+				                                        @change = "checkedRecords_listener">
+				                                </td>
+				                                <td>{{i + baseIndex}}</td>
+												<td>{{item.id}}</td>
+												<td>{{item.name}}</td>
+												<td>{{item.username}}</td>
+												<td>{{item.email}}</td>
+												<td>{{item.department}}</td>
+												<td>
+													{{item.role ? item.role : '无'}}
+												</td>
+												<td>
+													{{item.remark ? item.remark : '无'}}
+												</td>
+											</tr>
+										</tbody>
+
+				                        <tfoot>
+				                            <td colspan="20">
+				                                <input
+				                                    type        = "checkbox"
+				                                    id          = "checkedall"
+				                                    style       = "width: auto;margin-left: 15px;"
+				                                    :checked    = "checkedAllRecords_status"
+				                                    v-on:change = "checkedAllRecords_listener"> 全选/全不选
+				                                <button
+				                                    class    = "btn btn-success"
+				                                    style    = "margin-left: 10px;"
+				                                    type     = "button"
+				                                    disabled = "{{ opBtnStatus }}">更新权限&amp;邮件</button>
+				                                <button
+				                                    class    = "btn btn-success"
+				                                    style    = "margin-left: 15px;"
+				                                    type     = "button"
+				                                    @click = "updateLimited"
+				                                    disabled = "{{ opBtnStatus }}">更新权限</button>
+				                            </td>
+				                        </tfoot>
+									</table>
+								</div>
+							</div>
+							<div class="panel-footer">
+								<m-pagination :pagination-conf="paginationConf"></m-pagination>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</template>
+<style scoped>
+.search {
+	position: absolute;
+	right: 20px;
+	top: 50%;
+	transform: translateY(-50%);
+	-webkit-transform: translateY(-50%);
+	-moz-transform: translateY(-50%);
+	-ms-transform: translateY(-50%);
+	width: 250px;
+}
+
+.search span {
+	position: absolute;
+	position: absolute;
+	right: 5px;
+	top: 50%;
+	transform: translateY(-50%);
+	-webkit-transform: translateY(-50%);
+	-moz-transform: translateY(-50%);
+	-ms-transform: translateY(-50%);
+	z-index: 7;
+}
+
+.fa {
+	margin-left: 3px;
+}
+
+.user_table_con {
+	width: 100%;
+	overflow-x: auto;
+}
+
+.user_table {
+	border-collapse: inherit;
+	border: 1px solid #ddd;
+}
+
+.user_table>thead>tr>td, .user_table>thead>tr>th {
+	border-bottom-width: 1px;
+}
+
+.user_table tfoot td{
+	border-collapse: collapse;
+	border: 0;
+    border-top: 1px solid #ddd;
+}
+
+
+.user_table td, .user_table th {
+	min-width: 50px;
+}
+
+.user_table td:nth-child(2),.user_table th:nth-child(2) {
+	max-width: 40px;
+}
+
+.user_table td:nth-child(8),.user_table th:nth-child(8) {
+	max-width: 150px;
+}
+
+.user_table thead th {
+	text-align: center;
+}
+
+.user_table tbody td {
+    position: relative;
+    vertical-align: middle;
+    padding: 5px;
+    text-align: center;
+}
+
+.user_table td .btn {}
+
+.user_table .ckbox {
+    display: block;
+    margin: 10px auto;
+}
+
+.user_table td ul {
+	font-size: 0;
+	text-align: center;
+	width: 300px;
+	margin: 0 auto;
+}
+
+.user_table td ul li {
+	display: inline-block;
+	vertical-align: middle;
+	margin: 0 4px;
+	font-size: 14px;
+}
+
+.user_table td .remark {
+	display: inline-block;
+	vertical-align: middle;
+	position: absolute;
+	right: 8px;
+	top: 50%;
+	transform: translateY(-50%);
+	-webkit-transform: translateY(-50%);
+	-moz-transform: translateY(-50%);
+	-ms-transform: translateY(-50%);
+}
+
+.user_table td .remark input {
+	display: none;
+	margin-right: 5px;
+}
+
+.user_table td i {
+	display: inline-block;
+	vertical-align: middle;
+	width: 22px;
+}
+</style>
+<script>
+var Vue = require('Vue');
+
+var $ = require('jQuery');
+
+var Pagination = require('../../common/pagination.vue');
+
+
+var store = require('../../../store/store.js');
+var actions = require('../../../store/actions.js');
+
+var Account = Vue.extend({
+	name: 'Account',
+	data: function(){
+		return {
+			paginationConf: {
+				currentPage: 1,     // 当前页
+				totalItems: 30,     // 总条数
+				itemsPerPage: 10,    // 每页条数
+				pagesLength: 5,     // 显示几页( 1,2,3 / 1,2,3,4,5)
+				onChange: () => {
+					this.createTableBySearchStr();
+				}
+			},
+			userListData: [],
+            checkedRecords: [],
+            checkedAllRecords_status : false,
+            opBtnStatus: true,
+			id: null,
+			limited: {},
+			exportLimit: {},
+			modifyName: '',
+			modifyRemark: '',
+			modifyType: null,
+			modifyLimited: {},
+			modifyExportLimited: {}
+		}
+	},
+	props: ['modal', 'loading'],
+	components: {
+		'm-pagination': Pagination
+	},
+	computed: {
+		baseIndex: function () {
+			return (this.paginationConf.currentPage - 1) * this.paginationConf.itemsPerPage + 1;
+		}
+	},
+	watch: {
+		'modal.show': {
+			handler(val, oldval) {
+				if (val) {
+					this.createTableBySearchStr();
+					this.checkedAllRecords_status = false;
+					this.opBtnStatus = false;
+					this.checkedRecords = [];
+					
+				}
+			}
+		}
+	},
+	methods: {
+		createTableBySearchStr: function(){
+			var _this = this;
+			_this.loading.show = true;
+			$.ajax({
+				url: '/users/find',
+				type: 'get',
+				data: {
+					limit: 10,
+					page: _this.paginationConf.currentPage,
+					username: _this.modal.rolename
+				},
+				success: function(data){
+					_this.paginationConf.totalItems = data.count;
+					_this.userListData = data.data;
+					_this.loading.show = false;
+				}
+			})
+		},
+        checkedRecords_listener () {
+            this.opBtnStatus          = this.checkedRecords.length > 0 ? false : true;
+            this.checkedAllRecords_status = this.checkedRecords.length === this.userListData.length ? true : false;
+        },
+        checkedAllRecords_listener () {
+            this.opBtnStatus          = this.checkedAllRecords_status;
+            this.checkedAllRecords_status = !this.checkedAllRecords_status;
+            $('.ckbox').prop('checked', this.checkedAllRecords_status);
+            if(this.checkedAllRecords_status) {
+                this.checkedRecords = this.userListData.map(function(item){
+                    return item.id.toString();
+                });
+            } else {
+                this.checkedRecords = [];
+            }
+
+        },
+        updateLimited() {
+        	var _this = this;
+        	//比较权限
+        	let rolelimited = _this.modal.limited ? Object.entries(JSON.parse(_this.modal.limited)) : [];
+
+        	for(let userid of _this.checkedRecords) {
+        		let useritem = _this.userListData.find(x => x.id.toString() === userid);
+
+        		let userlimited = (useritem && useritem.limited) ? JSON.parse(useritem.limited) : {};
+        		let ismodified = false;
+	        	for (let limit of rolelimited) {
+	        		let key = limit[0];
+	        		let ul = userlimited[key] || [];
+	        		let rl = limit[1];
+	        		if ((ul.length === 0) || (ul && rl.some(x => !ul.includes(x)))) {
+	        			// 合并&去重
+	        			userlimited[key] = Array.from(new Set([...ul,...rl]));
+	        			ismodified = true;
+	        		}
+	        	}
+	        	if(ismodified) {
+	        		let modifyLimited = JSON.stringify(userlimited);
+	        		console.log(`更新${useritem.name}权限为modifyLimited`);
+		        	$.ajax({
+						url: '/users/update',
+						type: 'post',
+						data: {
+							id: useritem.id,
+							limited: modifyLimited
+						},
+						success: function(data){
+							if(!data.success){
+								actions.alert(store, {
+									show: true,
+									msg: data.msg,
+									type: 'danger'
+								})
+								return;
+							}
+							actions.alert(store, {
+								show: true,
+								msg: '修改成功',
+								type: 'success'
+							})
+							// _this.createTableBySearchStr();
+							// _this.modal.show = false;
+						}
+					})
+	        	} else {
+    				actions.alert(store, {
+						show: true,
+						msg: '无需更新',
+						type: 'success'
+					});
+	        	}
+        	}
+        },
+		apply: function(){
+			var _this = this;
+			if(_this.modifyName === '' || _this.modifyRemark === ''){
+				actions.alert(store, {
+					show: true,
+					msg: '角色名或备注不能为空',
+					type: 'danger'
+				})
+				return;
+			}
+			if(this.modifyType === 'modify'){
+				for(var item in _this.modifyLimited){
+					if(_this.modifyLimited[item].length === 0){
+						Vue.delete(_this.modifyLimited, item);
+					}
+				}
+				for(var item in _this.modifyExportLimited){
+					if(_this.modifyExportLimited[item].length === 0){
+						Vue.delete(_this.modifyExportLimited, item);
+					}
+				}
+				$.ajax({
+					url: '/role/update',
+					type: 'post',
+					data: {
+						id: _this.id,
+						name: _this.modifyName,
+						remark: _this.modifyRemark,
+						limited: JSON.stringify(_this.modifyLimited),
+						export: JSON.stringify(_this.modifyExportLimited)
+					},
+					success: function(data){
+						if(!data.success){
+							actions.alert(store, {
+								show: true,
+								msg: data.msg,
+								type: 'danger'
+							})
+							return;
+						}
+						actions.alert(store, {
+							show: true,
+							msg: '修改成功',
+							type: 'success'
+						})
+						_this.createTableBySearchStr();
+						_this.modal.show = false;
+					}
+				})
+			}else if(this.modifyType === 'add'){
+				$.ajax({
+					url: '/role/add',
+					type: 'post',
+					data: {
+						name: _this.modifyName,
+						remark: _this.modifyRemark,
+						limited: JSON.stringify(_this.modifyLimited),
+						export: JSON.stringify(_this.modifyExportLimited)
+					},
+					success: function(data){
+						if(!data.success){
+							actions.alert(store, {
+								show: true,
+								msg: data.msg,
+								type: 'danger'
+							})
+							return;
+						}
+						actions.alert(store, {
+							show: true,
+							msg: '新增成功',
+							type: 'success'
+						})
+						_this.createTableBySearchStr();
+						_this.modal.show = false;
+					}
+				})
+			}
+		},
+		forbidden: function(id, name){
+			var _this = this;
+			actions.confirm(store, {
+				show: true,
+				msg: '是否禁用角色 ' + name + '？',
+				apply: function(){
+					$.ajax({
+						url: '/role/update',
+						type: 'post',
+						data: {
+							id: id,
+							status: 0
+						},
+						success: function(data){
+							actions.alert(store, {
+								show: true,
+								msg: '禁用成功',
+								type: 'success'
+							})
+							_this.createTableBySearchStr();
+							_this.modal.show = false;
+						}
+					})
+				}
+			})
+		},
+		startUsing: function(id, name){
+			var _this = this;
+			actions.confirm(store, {
+				show: true,
+				msg: '是否启用角色 ' + name + '？',
+				apply: function(){
+					$.ajax({
+						url: '/role/update',
+						type: 'post',
+						data: {
+							id: id,
+							status: 1
+						},
+						success: function(data){
+							actions.alert(store, {
+								show: true,
+								msg: '启用成功',
+								type: 'success'
+							})
+							_this.createTableBySearchStr();
+							_this.modal.show = false;
+						}
+					})
+				}
+			})
+		},
+		hideModal: function(){
+			// 隐藏弹窗，初始化数据
+			this.modal.show = false;
+			this.id = null;
+			this.limited = {};
+			this.exportLimit = {};
+			this.modifyName = '';
+			this.modifyRemark = '';
+			this.modifyType = null;
+			this.modifyLimited = {};
+			this.modifyExportLimited = {};
+		}
+	}
+})
+
+module.exports = Account;
+
+</script>
