@@ -87,6 +87,12 @@
 .user_table ul>li{
 	display: inline-block;
 }
+.user_table td, .user_table th {
+	min-width: 120px;
+}
+.user_table td:nth-child(1),.user_table th:nth-child(1) {
+	max-width: 40px;
+}
 .add_role{
 	position: absolute;
 	right: 10px;

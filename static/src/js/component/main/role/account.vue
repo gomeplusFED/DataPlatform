@@ -326,7 +326,7 @@ var Account = Vue.extend({
 	        	}
 	        	if(ismodified) {
 	        		let modifyLimited = JSON.stringify(userlimited);
-	        		console.log(`更新${useritem.name}权限为modifyLimited`);
+	        		// console.log(`更新${useritem.name}权限为${modifyLimited}`);
 	        		_this.loading.show = true;
 		        	$.ajax({
 						url: '/users/update',
