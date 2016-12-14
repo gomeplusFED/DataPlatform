@@ -5,11 +5,12 @@
  */
 var email = require("emailjs");
 var emailcfg = require('../../../db/email.json');
-var server = email.server.connect(emailcfg);
+
 
 module.exports = (Router) => {
 
     Router.post("/email/send", (req, res, next) => {
+        var server = email.server.connect(emailcfg);
         let {subject, text, to} = req.body;
         server.send({
             text,
