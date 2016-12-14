@@ -69,13 +69,13 @@
 				                                    style    = "margin-left: 10px;"
 				                                    type     = "button"
 				                                    @click = "updateLimited(true)"
-				                                    disabled = "{{ opBtnStatus }}">更新权限&amp;邮件</button>
+				                                    disabled = "{{ opBtnDisable }}">更新权限&amp;邮件</button>
 				                                <button
 				                                    class    = "btn btn-success"
 				                                    style    = "margin-left: 15px;"
 				                                    type     = "button"
 				                                    @click = "updateLimited()"
-				                                    disabled = "{{ opBtnStatus }}">更新权限</button>
+				                                    disabled = "{{ opBtnDisable }}">更新权限</button>
 				                            </td>
 				                        </tfoot>
 									</table>
@@ -234,7 +234,7 @@ var Account = Vue.extend({
 			userListData: [],
             checkedRecords: [],
             checkedAllRecords_status : false,
-            opBtnStatus: true,
+            opBtnDisable: true,
 			id: null,
 			limited: {},
 			exportLimit: {},
@@ -260,7 +260,7 @@ var Account = Vue.extend({
 				if (val) {
 					this.createTableBySearchStr();
 					this.checkedAllRecords_status = false;
-					this.opBtnStatus = false;
+					this.opBtnDisable = true;
 					this.checkedRecords = [];
 					
 				}
@@ -287,11 +287,11 @@ var Account = Vue.extend({
 			})
 		},
         checkedRecords_listener () {
-            this.opBtnStatus          = this.checkedRecords.length > 0 ? false : true;
+            this.opBtnDisable          = this.checkedRecords.length > 0 ? false : true;
             this.checkedAllRecords_status = this.checkedRecords.length === this.userListData.length ? true : false;
         },
         checkedAllRecords_listener () {
-            this.opBtnStatus          = this.checkedAllRecords_status;
+            this.opBtnDisable          = this.checkedAllRecords_status;
             this.checkedAllRecords_status = !this.checkedAllRecords_status;
             $('.ckbox').prop('checked', this.checkedAllRecords_status);
             if(this.checkedAllRecords_status) {
