@@ -81,7 +81,7 @@ module.exports = {
             url: "#!/socialAnalysis/dataTableWeekVshop"
         }, {
             name: '返利数据',
-            url: "#!/socialAnalysis/rebateNewWeek"
+            url: "#!/socialAnalysis/dataTableWeekDataRebate"
         }]
     }],
     month : [
@@ -120,7 +120,7 @@ module.exports = {
                 url: "#!/socialAnalysis/dataTableMonthVshop"
             }, {
                 name: '返利数据',
-                url: "#!/socialAnalysis/rebateNewMonth"
+                url: "#!/socialAnalysis/dataTableMonthDataRebate"
             }]
         }]
 };

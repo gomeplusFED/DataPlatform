@@ -132,8 +132,8 @@ module.exports = {
             }
         }
         last_30.date = "近30天平均";
-        newData.push(last_30);
         for(let row of rows[0]) {
+            last_30[row] = last_30[row] || 0;
             if(row !== "date" && row !== "three" && row !== "four" && row !== "five") {
                 if(!zData[row] && !qData[row]) {
                     obj[row] = "0.00%";
@@ -146,6 +146,7 @@ module.exports = {
         obj.three = "--";
         obj.four = "--";
         obj.five = "--";
+        newData.push(last_30);
         newData.push(obj);
 
         return util.toTable([newData], rows, cols);

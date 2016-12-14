@@ -56,6 +56,11 @@ module.exports = {
                 {
                     type : "table",
                     title : "总体数据情况",
+                    query_api : "/socialAnalysis/dataTableDayZero"
+                },
+                {
+                    type : "table",
+                    title : "总体数据情况",
                     query_api : "/socialAnalysis/dataTableDayOne"
                 },
                 {
@@ -75,6 +80,10 @@ module.exports = {
                 {
                     type : "table",
                     title : "总体数据情况",
+                    query_api : "/socialAnalysis/dataTableWeekZero"
+                },{
+                    type : "table",
+                    title : "总体数据情况",
                     query_api : "/socialAnalysis/dataTableWeekOne"
                 }
             ]
@@ -87,6 +96,10 @@ module.exports = {
             display : true,
             defaultData : [
                 {
+                    type : "table",
+                    title : "总体数据情况",
+                    query_api : "/socialAnalysis/dataTableMonthZero"
+                },{
                     type : "table",
                     title : "总体数据情况",
                     query_api : "/socialAnalysis/dataTableMonthOne"
@@ -272,6 +285,34 @@ module.exports = {
                     type : "table",
                     title : "返利数据",
                     query_api : "/socialAnalysis/dataTableDayDataRebateOne"
+                }
+            ]
+        };
+    },
+    data_table_week_dataRebate() {
+        return {
+            name : "数据报表",
+            path : "/socialAnalysis/dataTableWeekDataRebate",
+            display : true,
+            defaultData : [
+                {
+                    type : "table",
+                    title : "返利数据",
+                    query_api : "/socialAnalysis/dataTableWeekDataRebateOne"
+                }
+            ]
+        };
+    },
+    data_table_month_dataRebate() {
+        return {
+            name : "数据报表",
+            path : "/socialAnalysis/dataTableMonthDataRebate",
+            display : true,
+            defaultData : [
+                {
+                    type : "table",
+                    title : "返利数据",
+                    query_api : "/socialAnalysis/dataTableMonthDataRebateOne"
                 }
             ]
         };

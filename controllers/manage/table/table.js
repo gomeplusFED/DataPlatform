@@ -9,9 +9,22 @@ const util = require("../../../utils"),
     global_paltform = require("./../../../utils/globalPlatform"),
     moment = require("moment"),
     orm = require("orm"),
+    request = require("request"),
     EventProxy = require("eventproxy");
 
 module.exports = (Router) => {
+
+    Router.get("/socialAnalysis/dataTableDayZero_json", (req, res) => {
+        res.json({
+            code: 200,
+            modelData: [],
+            components: {
+                export: {
+                    url: '/socialAnalysis/dataTableDayOne_excel'
+                }
+            }
+        });
+    });
 
     Router = new main(Router, {
         router : "/socialAnalysis/dataTableDayOne",
@@ -20,10 +33,10 @@ module.exports = (Router) => {
         order : ["-date"],
         global_platform : global_paltform.day,
         date_picker : false,
-        flexible_btn : [{
-            content: '<a href="javascript:void(0)">全部数据导出</a>',
-            preMethods: ['excel_export']
-        }],
+        //flexible_btn : [{
+        //    content: '<a href="javascript:void(0)">全部数据导出</a>',
+        //    preMethods: ['excel_export']
+        //}],
         params(query, params) {
             delete params.day_type;
             const now = new Date();
@@ -68,6 +81,78 @@ module.exports = (Router) => {
                 caption : "美店累计妥投金额（实际支付金额）"
             }]
         ]
+    });
+
+    Router.get("/socialAnalysis/dataTableDayOne_excel", (req, res, next) => {
+        const xl = require("excel4node");
+        const wb = new xl.Workbook();
+        const now = new Date() - 24 * 60 * 60 * 1000;
+        const time = moment(now).format("YYYY-MM-DD");
+        const style = {
+            font : {
+                bold : true
+            },
+            alignment : {
+                horizontal : "center"
+            }
+        };
+        const totalOne = `http://localhost:7879/socialAnalysis/dataTableDayOne_json?startTime=${time}&endTime=${time}&day_type=1`;
+        const totalTwo = `http://localhost:7879/socialAnalysis/dataTableDayTwo_json?startTime=${time}&endTime=${time}&day_type=1`;
+        const user = `http://localhost:7879/socialAnalysis/dataTableDayUserOne_json?startTime=${time}&endTime=${time}&day_type=1`;
+        const order = `http://localhost:7879/socialAnalysis/dataTableDayOrderOne_json?startTime=${time}&endTime=${time}&day_type=1`;
+        const shop = `http://localhost:7879/socialAnalysis/dataTableDayShopOne_json?startTime=${time}&endTime=${time}&day_type=1`;
+        const vShop = `http://localhost:7879/socialAnalysis/dataTableDayVshopOne_json?startTime=${time}&endTime=${time}&day_type=1`;
+        const rebate = `http://localhost:7879/socialAnalysis/dataTableDayDataRebateOne_json?startTime=${time}&endTime=${time}&day_type=1`;
+        const ep = EventProxy.create("totalOne", "totalTwo", "user", "order", "shop", "vShop", "rebate",
+            (totalOne, totalTwo, user, order, shop, vShop, rebate) => {
+            const wsTotal = wb.addWorksheet("总览");
+            const wsUser = wb.addWorksheet("用户数据");
+            const wsOrder = wb.addWorksheet("订单数据");
+            const wsShop = wb.addWorksheet("商铺数据");
+            const wsVShop = wb.addWorksheet("美店数据");
+            const wsRebate = wb.addWorksheet("返利数据");
+            let data = util.excelReport(totalOne);
+            let dataTwo = util.excelReport(totalTwo);
+            let header = [[{
+                name : "总体数据情况",
+                style : {
+                    font : {
+                        bold : true,
+                        size : 15
+                    }
+                }
+            }]];
+            let headerTwo = [[{
+                name : "新增数据情况",
+                style : {
+                    font : {
+                        bold : true,
+                        size : 15
+                    }
+                }
+            }]];
+            util.export(wsTotal, header.concat(data).concat(headerTwo).concat(dataTwo));
+            util.export(wsUser, [["",
+                [1, 2, 1, 5, "全部平台", style],
+                [1, 6, 1, 13, "APP", style],
+                [1, 14, 1, 20, "PC", style],
+                [1, 21, 1, 27, "WAP站", style]]].concat(util.excelReport(user, false)));
+            util.export(wsOrder, util.excelReport(order));
+            util.export(wsShop, util.excelReport(shop));
+            util.export(wsVShop, util.excelReport(vShop));
+            util.export(wsRebate, util.excelReport(rebate));
+            wb.write("Report.xlsx", res);
+        });
+        ep.once("error", (err) => {
+            next(err);
+        });
+        util.request(req, totalOne, ep, "totalOne");
+        util.request(req, totalTwo, ep, "totalTwo");
+        util.request(req, user, ep, "user");
+        util.request(req, order, ep, "order");
+        util.request(req, shop, ep, "shop");
+        util.request(req, vShop, ep, "vShop");
+        util.request(req, rebate, ep, "rebate");
     });
 
     Router = new main(Router, {
@@ -137,6 +222,18 @@ module.exports = (Router) => {
         ]
     });
 
+    Router.get("/socialAnalysis/dataTableWeekZero_json", (req, res) => {
+        res.json({
+            code: 200,
+            modelData: [],
+            components: {
+                export: {
+                    url: '/socialAnalysis/dataTableWeekOne_excel'
+                }
+            }
+        });
+    });
+
     Router = new main(Router, {
         router : "/socialAnalysis/dataTableWeekOne",
         platform : false,
@@ -144,10 +241,10 @@ module.exports = (Router) => {
         order : ["-date"],
         global_platform : global_paltform.week,
         date_picker : false,
-        flexible_btn : [{
-            content: '<a href="javascript:void(0)">全部数据导出</a>',
-            preMethods: ['excel_export']
-        }],
+        //flexible_btn : [{
+        //    content: '<a href="javascript:void(0)">全部数据导出</a>',
+        //    preMethods: ['excel_export']
+        //}],
         params(query, params) {
             const now = new Date();
             params.date = orm.between(
@@ -186,6 +283,68 @@ module.exports = (Router) => {
         ]
     });
 
+    Router.get("/socialAnalysis/dataTableWeekOne_excel", (req, res, next) => {
+        const xl = require("excel4node");
+        const wb = new xl.Workbook();
+        const startTime = moment(new Date() - 24 * 60 * 60 * 1000).format("YYYY-MM-DD");
+        const endTime = moment(new Date() - 6 * 24 * 60 * 60 * 1000).format("YYYY-MM-DD");
+        const style = {
+            font : {
+                bold : true
+            },
+            alignment : {
+                horizontal : "center"
+            }
+        };
+        const total = `http://localhost:7879/socialAnalysis/dataTableWeekOne_json?startTime=${startTime}&endTime=${endTime}&day_type=1`;
+        const user = `http://localhost:7879/socialAnalysis/dataTableWeekUserOne_json?startTime=${startTime}&endTime=${endTime}&day_type=1`;
+        const order = `http://localhost:7879/socialAnalysis/dataTableWeekOrderOne_json?startTime=${startTime}&endTime=${endTime}&day_type=1`;
+        const shop = `http://localhost:7879/socialAnalysis/dataTableWeekShopOne_json?startTime=${startTime}&endTime=${endTime}&day_type=1`;
+        const vShop = `http://localhost:7879/socialAnalysis/dataTableWeekVshopOne_json?startTime=${startTime}&endTime=${endTime}&day_type=1`;
+        const rebate = `http://localhost:7879/socialAnalysis/dataTableWeekDataRebateOne_json?startTime=${startTime}&endTime=${endTime}&day_type=1`;
+        const ep = EventProxy.create("total", "user", "order", "shop", "vShop", "rebate",
+            (total, user, order, shop, vShop, rebate) => {
+                const wsTotal = wb.addWorksheet("总览");
+                const wsUser = wb.addWorksheet("用户数据");
+                const wsOrder = wb.addWorksheet("订单数据");
+                const wsShop = wb.addWorksheet("商铺数据");
+                const wsVShop = wb.addWorksheet("美店数据");
+                const wsRebate = wb.addWorksheet("返利数据");
+                util.export(wsTotal, util.arrayToArray(total));
+                util.export(wsUser, [["",
+                    [1, 2, 1, 5, "全部平台", style],
+                    [1, 6, 1, 13, "APP", style],
+                    [1, 14, 1, 20, "PC", style],
+                    [1, 21, 1, 27, "WAP站", style]]].concat(util.arrayToArray(user, false)));
+                util.export(wsOrder, util.arrayToArray(order));
+                util.export(wsShop, util.arrayToArray(shop));
+                util.export(wsVShop, util.arrayToArray(vShop));
+                util.export(wsRebate, util.arrayToArray(rebate));
+                wb.write("Report.xlsx", res);
+            });
+        ep.once("error", (err) => {
+            next(err);
+        });
+        util.request(req, total, ep, "total");
+        util.request(req, user, ep, "user");
+        util.request(req, order, ep, "order");
+        util.request(req, shop, ep, "shop");
+        util.request(req, vShop, ep, "vShop");
+        util.request(req, rebate, ep, "rebate");
+    });
+
+    Router.get("/socialAnalysis/dataTableMonthZero_json", (req, res) => {
+        res.json({
+            code: 200,
+            modelData: [],
+            components: {
+                export: {
+                    url: '/socialAnalysis/dataTableMonthOne_excel'
+                }
+            }
+        });
+    });
+
     Router = new main(Router, {
         router : "/socialAnalysis/dataTableMonthOne",
         platform : false,
@@ -193,10 +352,10 @@ module.exports = (Router) => {
         order : ["-date"],
         global_platform : global_paltform.month,
         date_picker : false,
-        flexible_btn : [{
-            content: '<a href="javascript:void(0)">全部数据导出</a>',
-            preMethods: ['excel_export']
-        }],
+        //flexible_btn : [{
+        //    content: '<a href="javascript:void(0)">全部数据导出</a>',
+        //    preMethods: ['excel_export']
+        //}],
         params(query, params) {
             const now = new Date();
             const year = moment(now).format("YYYY");
@@ -247,6 +406,65 @@ module.exports = (Router) => {
                 caption : "WAP端"
             }]
         ]
+    });
+
+    Router.get("/socialAnalysis/dataTableMonthOne_excel", (req, res, next) => {
+        const xl = require("excel4node");
+        const wb = new xl.Workbook();
+        const now = new Date() - 24 * 60 * 60 * 1000;
+        const day = moment(now).format("DD");
+        const month = moment(now).format("MM");
+        const year = moment(now).format("YYYY");
+        const _day = moment(new Date(year, month, 1) - 24 * 60 * 60 * 1000).format("DD");
+        let time = "";
+        if(day === _day) {
+            time = moment(now).format("YYYY-MM-DD");
+        } else {
+            time = moment(new Date(year, month - 1, 1) - 24 * 60 * 60 * 1000).format("YYYY-MM-DD");
+        }
+        const style = {
+            font : {
+                bold : true
+            },
+            alignment : {
+                horizontal : "center"
+            }
+        };
+        const total = `http://localhost:7879/socialAnalysis/dataTableMonthOne_json?startTime=${time}&endTime=${time}&day_type=1`;
+        const user = `http://localhost:7879/socialAnalysis/dataTableMonthUserOne_json?startTime=${time}&endTime=${time}&day_type=1`;
+        const order = `http://localhost:7879/socialAnalysis/dataTableMonthOrderOne_json?startTime=${time}&endTime=${time}&day_type=1`;
+        const shop = `http://localhost:7879/socialAnalysis/dataTableMonthShopOne_json?startTime=${time}&endTime=${time}&day_type=1`;
+        const vShop = `http://localhost:7879/socialAnalysis/dataTableMonthVshopOne_json?startTime=${time}&endTime=${time}&day_type=1`;
+        const rebate = `http://localhost:7879/socialAnalysis/dataTableMonthDataRebateOne_json?startTime=${time}&endTime=${time}&day_type=1`;
+        const ep = EventProxy.create("total", "user", "order", "shop", "vShop", "rebate",
+            (total, user, order, shop, vShop, rebate) => {
+                const wsTotal = wb.addWorksheet("总览");
+                const wsUser = wb.addWorksheet("用户数据");
+                const wsOrder = wb.addWorksheet("订单数据");
+                const wsShop = wb.addWorksheet("商铺数据");
+                const wsVShop = wb.addWorksheet("美店数据");
+                const wsRebate = wb.addWorksheet("返利数据");
+                util.export(wsTotal, util.arrayToArray(total));
+                util.export(wsUser, [["",
+                    [1, 2, 1, 5, "全部平台", style],
+                    [1, 6, 1, 13, "APP", style],
+                    [1, 14, 1, 20, "PC", style],
+                    [1, 21, 1, 27, "WAP站", style]]].concat(util.arrayToArray(user, false)));
+                util.export(wsOrder, util.arrayToArray(order));
+                util.export(wsShop, util.arrayToArray(shop));
+                util.export(wsVShop, util.arrayToArray(vShop));
+                util.export(wsRebate, util.arrayToArray(rebate));
+                wb.write("Report.xlsx", res);
+            });
+        ep.once("error", (err) => {
+            next(err);
+        });
+        util.request(req, total, ep, "total");
+        util.request(req, user, ep, "user");
+        util.request(req, order, ep, "order");
+        util.request(req, shop, ep, "shop");
+        util.request(req, vShop, ep, "vShop");
+        util.request(req, rebate, ep, "rebate");
     });
 
     return Router;

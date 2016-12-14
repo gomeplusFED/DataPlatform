@@ -77,6 +77,20 @@ module.exports = (Router) => {
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
+        global_platform : {
+            show: true,
+            key: 'type',
+            name : "",
+            list: [{
+                //key : "",
+                name: '返利总览',
+                url : "#!/socialAnalysis/rebate"
+            }, {
+                //key : "",
+                name: '新增返利',
+                url : "#!/socialAnalysis/rebateNew"
+            }]
+        },
         thirdParams() {
             return {};
         },
