@@ -1,7 +1,7 @@
 <template>
 <div class="mask" v-show="bpConfig.show"   v-on:dragover.stop.prevent="" v-on:drop.stop.prevent="drop" @click="warning">
 	<div class="infobox" :draggable="draggable"  v-on:dragstart="dragstart" v-on:drag.stop.prevent="draging" v-bind:style="infopos">
-		<div class="closer" title="关闭" @click="hide"></div>
+		<div class="closer" title="关闭" @click="hide">&times;</div>
 		<div class="sider-nav ">
 			<div class="tabs-container">
 				<ul class="nav nav-tabs">
@@ -352,19 +352,10 @@ module.exports = bpinfo;
 	z-index: 300
 }
 .closer {
-	transition: transform .3s;
-	border-radius: 50%;
-	position: absolute;
-	right: 6px;
-	top: 5px;
-	display: block;
-	width: 18px;
-	height: 18px;
-	border: 1px solid transparent;
-	background: url(/dist/img/sprites.png) no-repeat;
-	background-position: -36px 4px;
-	overflow: hidden;
-	cursor: pointer;
+    position: absolute;
+    right: 8px;
+    cursor: pointer;
+    font-size: 17px;
 }
 
 #tab_baseinfo input[type='text'] {
