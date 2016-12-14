@@ -27,11 +27,12 @@
 									<td>{{item.name}}</td>
 									<td>{{item.date | Date 'yyyy-MM-dd hh:mm:ss'}}</td>
 									<td>{{item.remark}}</td>
-									<td>
+									<td style="width: 270px">
 										<ul>
 											<li v-show="item.status"><a @click="modifyRole(item.id, item.limited, item.export, item.name, item.remark)" class="btn btn-default" href="javascript:void(0)">修改<i class="fa fa-pencil-square-o"></i></a></li>
 											<li v-show="item.status"><a @click="forbidden(item.id, item.name)" class="btn btn-default" href="javascript:void(0)">禁用<i class="fa fa-remove"></i></a></li>
 											<li v-show="!item.status"><a @click="startUsing(item.id, item.name)" class="btn btn-default" href="javascript:void(0)">启用<i class="fa fa-check-square-o"></i></a></li>
+											<li v-show="item.status"><a @click="modifyUser(item.name, item.limited)" class="btn btn-default" href="javascript:void(0)">更新账户<i class="fa fa-pencil-square-o"></i></a></li>
 										</ul>
 									</td>
 								</tr>
@@ -78,10 +79,14 @@
 	        </div>
 	    </div>
 	</div>
+	<m-account :modal.sync="account" :loading.sync="loading"></m-account>
 	<m-confirm></m-confirm>
 </template>
 
 <style>
+.user_table ul>li{
+	display: inline-block;
+}
 .add_role{
 	position: absolute;
 	right: 10px;
@@ -113,19 +118,22 @@ var Vue = require('Vue');
 
 var $ = require('jQuery');
 
-var Pagination = require('../common/pagination.vue');
+var Pagination = require('../../common/pagination.vue');
 
 var UserVm = null;
 
-var store = require('../../store/store.js');
-var actions = require('../../store/actions.js');
+var store = require('../../../store/store.js');
+var actions = require('../../../store/actions.js');
 
-var Loading = require('../common/loading.vue');
-var Alert = require('../common/alert.vue');
+var Loading = require('../../common/loading.vue');
+var Alert = require('../../common/alert.vue');
 
-var LimitList = require('../common/limitList.vue');
+var LimitList = require('../../common/limitList.vue');
 
-var Confirm = require('../common/confirm.vue');
+var Confirm = require('../../common/confirm.vue');
+
+var Account = require('./account.vue');
+
 
 var Role = Vue.extend({
 	name: 'Role',
@@ -142,6 +150,12 @@ var Role = Vue.extend({
 				}
 			},
 			roleListData: null,
+			account: {
+				show: false,
+				title: '更新账户',
+				rolename: null,
+				limited: null
+			},
 			loading: {
 				show: true,
                 noLoaded: 0
@@ -174,7 +188,8 @@ var Role = Vue.extend({
 		'm-loading': Loading,
 		'm-alert': Alert,
 		'm-limit-list': LimitList,
-		'm-confirm': Confirm
+		'm-confirm': Confirm,
+		'm-account': Account
 	},
 	created: function(){
 		this.createTableBySearchStr();
@@ -214,6 +229,11 @@ var Role = Vue.extend({
 			this.modifyRemark = remark;
 			this.modifyName = name;
 			this.modifyType = 'modify';
+		},
+		modifyUser(name, limited) {
+			this.account.rolename = name;
+			this.account.limited = limited;
+			this.account.show = true;
 		},
 		apply: function(){
 			var _this = this;
