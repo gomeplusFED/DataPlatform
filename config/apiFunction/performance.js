@@ -49,7 +49,6 @@ module.exports = {
             sum    = data.first.sum[0] || 1;
         let map = {
             "error_num" : "总错误数",
-            "error_num_lv" : "错误占比%",
             "effect_user_num" : "影响用户数",
             "effect_user_num_lv" : "影响用户率%"
         } , result = {};
@@ -76,7 +75,7 @@ module.exports = {
         }
 
         for(let date in result){
-            result[date].error_num_lv = util.dealDivision( result[date].error_num , sum , 2 );
+            // result[date].error_num_lv = util.dealDivision( result[date].error_num , sum , 2 );
             result[date].effect_user_num_lv = util.dealDivision( result[date].effect_user_num , result[date].active_user_num , 2 );
         }
 
@@ -84,7 +83,7 @@ module.exports = {
             let Result = [];
             for(let date in result){
                 result[date].date = date;
-                result[date].error_num_lv = util.toFixed( result[date].error_num_lv , 0 );
+                // result[date].error_num_lv = util.toFixed( result[date].error_num_lv , 0 );
                 result[date].effect_user_num_lv = util.toFixed( result[date].effect_user_num_lv , 0 );
                 Result.unshift(result[date]);
             }

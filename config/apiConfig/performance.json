@@ -45,7 +45,6 @@
             [
                 "date",
                 "error_num",
-                "error_num_lv",
                 "effect_user_num",
                 "effect_user_num_lv"
             ]
@@ -59,10 +58,6 @@
                 {
                     "caption": "总错误数",
                     "type": "number"
-                },
-                {
-                    "caption": "错误占比",
-                    "type": "string"
                 },
                 {
                     "caption": "影响用户数",
