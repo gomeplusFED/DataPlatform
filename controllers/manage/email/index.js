@@ -29,7 +29,6 @@ module.exports = (Router) => {
                     subject
                 }, function (err, message) {
                     if (err) {
-                        console.log(err);
                         reject(err.message);
                     } else {
                         resolve(to);
@@ -47,7 +46,7 @@ module.exports = (Router) => {
             res.json({
                 code : 400,
                 success : false,
-                msg: JSON.stringify(e)
+                msg: e
             });
         })
 
