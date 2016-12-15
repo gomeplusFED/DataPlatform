@@ -135,6 +135,17 @@ module.exports = {
                 categoryY : false, //柱状图竖着
                 noline : true
             }
+        },{
+            type : "pie",
+            map : {
+                value : "返利到账金额"
+            },
+            data : newData2,
+            config: { // 配置信息
+                stack: false, // 图的堆叠
+                categoryY : false, //柱状图竖着
+                noline : true
+            }
         }];
     },
 
@@ -253,5 +264,122 @@ module.exports = {
                 cb(null , query);
             });
         }
-    }
+    },
+    rebate_platformAll_02_fixed(req , query , cb){
+        query.category_id_1 = "ALL";
+        query.category_id_2 = "ALL";
+        query.category_id_3 = "ALL";
+        query.category_id_4 = "ALL";
+        let category_id = query.category_id;
+        delete query.category_id;
+        if(!category_id){
+            cb(null , query);
+        }else{
+            req.models.ConfCategories.find({
+                id : category_id
+            } , 1 , (err , data)=>{
+                if(err) cb(err);
+                data = data[0];
+                switch(data.level + 1){
+                    case 1:
+                    query.category_id_1 = category_id;
+                    break;
+                    case 2:
+                    query.category_id_2 = category_id;
+                        break;
+                    case 3:
+                    query.category_id_3 = category_id;
+                        break;
+                    case 4:
+                    query.category_id_4 = category_id;
+                        break;
+                }
+                cb(null , query);
+            });
+        }
+    },
+
+    //返利订单趋势
+    rebate_platformAll_02(query , params , sendData){
+        return params;
+    },
+    rebate_platformAll_02_f(data, query, dates){
+        let source = data.first.data[0],
+            map = {
+                "6" : "单项单级返利",
+                "1" : "平台基础",
+                "2" : "平台促销返利",
+                "5" : "邀请商户入住返利"
+            }, Result = {};
+        // 计划类型:1.平台基础 2.平台促销 3.商家 4.所有 5.邀请商户入住返利 6.单项单级返利
+        for(let date of dates){
+            Result[date] = {
+                "6" : 0,
+                "1" : 0,
+                "2" : 0,
+                "5" : 0
+            };
+        }
+
+        let colum = query.filter_key;
+        for(let item of source){
+            item.date = util.getDate(item.date);
+            if(Result[item.date][item.plan_type] != undefined){
+                Result[item.date][item.plan_type] += item[colum];
+            }else{
+                continue;
+            }
+        }
+           
+        return [{
+            type : "line",
+            map : map,
+            data : Result,
+            config: { // 配置信息
+                stack: false  // 图的堆叠
+            }
+        }];
+    },
+
+    //返利层级分布
+    rebate_platformAll_03(query , params , sendData){
+        return params;
+    },
+    rebate_platformAll_03_f(data, query, dates){
+        let source = data.first.data[0],
+            map = {
+                "6" : "单项单级返利",
+                "1" : "平台基础",
+                "2" : "平台促销返利",
+                "5" : "邀请商户入住返利"
+            }, Result = {};
+        // 计划类型:1.平台基础 2.平台促销 3.商家 4.所有 5.邀请商户入住返利 6.单项单级返利
+        for(let date of dates){
+            Result[date] = {
+                "6" : 0,
+                "1" : 0,
+                "2" : 0,
+                "5" : 0
+            };
+        }
+
+        let colum = query.filter_key;
+        for(let item of source){
+            item.date = util.getDate(item.date);
+            if(Result[item.date][item.plan_type] != undefined){
+                Result[item.date][item.plan_type] += item[colum];
+            }else{
+                continue;
+            }
+        }
+           
+        return [{
+            type : "line",
+            map : map,
+            data : Result,
+            config: { // 配置信息
+                stack: false  // 图的堆叠
+            }
+        }];
+    },
 }

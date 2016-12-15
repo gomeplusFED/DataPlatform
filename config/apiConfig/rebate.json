@@ -258,7 +258,7 @@
         "router": "/rebate/platformAll_One",
         "filter": "rebate_platformAll_01_f",
         "params": "rebate_platformAll_01",
-        "fixedParams" : "rebate_platformAll_01_fixed",
+        "fixedParams": "rebate_platformAll_01_fixed",
         "level_select": true,
         "level_select_url": "/api/categories",
         "level_select_name": "category_id",
@@ -270,27 +270,27 @@
                 {
                     "key": "PC",
                     "name": "汇总",
-                    "url" : "http://www.baidu.com"
+                    "url": "http://www.baidu.com"
                 },
                 {
                     "key": "IOS",
                     "name": "平台基础返利",
-                    "url" : "http://www.baidu.com"
+                    "url": "http://www.baidu.com"
                 },
                 {
                     "key": "Android",
                     "name": "平台促销返利",
-                    "url" : "http://www.baidu.com"
+                    "url": "http://www.baidu.com"
                 },
                 {
                     "key": "WAP",
                     "name": "单项单级返利",
-                    "url" : "http://www.baidu.com"
+                    "url": "http://www.baidu.com"
                 },
                 {
                     "key": "H5",
                     "name": "邀请商户分析返利",
-                    "url" : "http://www.baidu.com"
+                    "url": "http://www.baidu.com"
                 }
             ]
         },
@@ -394,6 +394,86 @@
                     "type": "number"
                 }
             ]
+        ]
+    },
+    "1481706584277": {
+        "modelName": [
+            "ads2_new_rebate_order_trend"
+        ],
+        "date_picker": true,
+        "order": [
+            "-date"
+        ],
+        "platform": false,
+        "router": "/rebate/platformAll_Two",
+        "filter": "rebate_platformAll_02_f",
+        "params": "rebate_platformAll_02",
+        "fixedParams": "rebate_platformAll_02_fixed",
+        "level_select": true,
+        "level_select_url": "/api/categories",
+        "level_select_name": "category_id",
+        "filter_select": [
+            {
+                "title": "指标选择",
+                "filter_key": "filter_key",
+                "groups": [
+                    {
+                        "key": "unique_is_over_rebate_order_num",
+                        "value": "订单数"
+                    },
+                    {
+                        "key": "is_rebate_fee",
+                        "value": "订单总金额"
+                    },
+                    {
+                        "key": "is_rebate_merchandise_num",
+                        "value": "商品件数"
+                    },
+                    {
+                        "key": "cancel_is_rebate_order_num",
+                        "value": "取消订单数"
+                    }
+                ]
+            }
+        ]
+    },
+    "1481767267123": {
+        "modelName": [
+            "ads2_new_rebate_order_level_sum"
+        ],
+        "date_picker": true,
+        "order": [],
+        "platform": false,
+        "router": "/rebate/platformAll_Three",
+        "filter": "rebate_platformAll_03_f",
+        "params": "rebate_platformAll_03",
+        "fixedParams": "rebate_platformAll_02_fixed",
+        "level_select": true,
+        "level_select_url": "/api/categories",
+        "level_select_name": "category_id",
+        "filter_select": [
+            {
+                "title": "指标选择",
+                "filter_key": "filter_key",
+                "groups": [
+                    {
+                        "key": "unique_is_over_rebate_order_num",
+                        "value": "商品件数"
+                    },
+                    {
+                        "key": "is_rebate_fee",
+                        "value": "商品总金额"
+                    },
+                    {
+                        "key": "is_rebate_merchandise_num",
+                        "value": "返利订单数"
+                    },
+                    {
+                        "key": "cancel_is_rebate_order_num",
+                        "value": "返利到账金额"
+                    }
+                ]
+            }
         ]
     }
 }

@@ -53,6 +53,18 @@
                         "title": "返利订单总览",
                         "query_api": "/rebate/platformAll_One",
                         "mark": 1481684524556
+                    },
+                    {
+                        "type": "chart",
+                        "title": "返利订单趋势",
+                        "query_api": "/rebate/platformAll_Two",
+                        "mark": 1481706584277
+                    },
+                    {
+                        "type": "chart",
+                        "title": "返利层级分布",
+                        "query_api": "/rebate/platformAll_Three",
+                        "mark": 1481767267123
                     }
                 ]
             }
