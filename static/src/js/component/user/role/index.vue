@@ -83,7 +83,7 @@
 	<m-confirm></m-confirm>
 </template>
 
-<style>
+<style scoped>
 .user_table ul>li{
 	display: inline-block;
 }
@@ -128,17 +128,17 @@ var Pagination = require('../../common/pagination.vue');
 
 var UserVm = null;
 
-var store = require('../../../store/store.js');
-var actions = require('../../../store/actions.js');
+var store = require('store');
+var actions = require('actions');
 
-var Loading = require('../../common/loading.vue');
-var Alert = require('../../common/alert.vue');
+var Loading = require('common/loading.vue');
+var Alert = require('common/alert.vue');
 
-var LimitList = require('../../common/limitList.vue');
+var LimitList = require('common/limitList.vue');
 
-var Confirm = require('../../common/confirm.vue');
+var Confirm = require('common/confirm.vue');
 
-var Account = require('./account.vue');
+var Account = require('./updateAccount.vue');
 
 
 var Role = Vue.extend({
@@ -238,6 +238,8 @@ var Role = Vue.extend({
 		},
 		modifyUser(name, limited) {
 			this.account.rolename = name;
+			console.log('index limited');
+			console.log(limited);
 			this.account.limited = limited;
 			this.account.show = true;
 		},
