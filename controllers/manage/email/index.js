@@ -4,34 +4,53 @@
  * @fileoverview 发送邮件
  */
 var email = require("emailjs");
-var emailcfg = require('../../../db/email.json');
 
 
 module.exports = (Router) => {
 
     Router.post("/email/send", (req, res, next) => {
-        var server = email.server.connect(emailcfg);
-        let {subject, text, to} = req.body;
-        server.send({
-            text,
-            from: emailcfg.from,
-            to,
-            subject
-        }, function (err, message) {
-            if (err) {
-                res.json({
-                    code : 400,
-                    success : false,
-                    msg: err.message
-                });
-            } else {
-                res.json({
-                    code : 200,
-                    success : true,
-                    msg: message
-                });
-            }
+        let body = req.body;
+        console.log(body);
+        let mails = JSON.parse(body.mails);
+        var server = email.server.connect({
+            user: body.username,
+            password: body.password,
+            host: "10.58.46.25",
+            ssl: false
         });
+        let tasks = [];
+        for(let mail of mails) {
+            let {subject, text, to} = mail;
+            tasks.push(new Promise((resolve, reject) => {
+                server.send({
+                    text,
+                    from: body.email,
+                    to,
+                    subject
+                }, function (err, message) {
+                    if (err) {
+                        console.log(err);
+                        reject(err.message);
+                    } else {
+                        resolve(to);
+                    }
+                });
+            }));
+        }
+        Promise.all(tasks).then(() => {
+            res.json({
+                code : 200,
+                success : true,
+                msg: 'ok'
+            });
+        }).catch((e) => {
+            res.json({
+                code : 400,
+                success : false,
+                msg: JSON.stringify(e)
+            });
+        })
+
     });
     return Router;
 };

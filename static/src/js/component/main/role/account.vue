@@ -68,7 +68,7 @@
 				                                    class    = "btn btn-success"
 				                                    style    = "margin-left: 10px;"
 				                                    type     = "button"
-				                                    @click = "updateLimited(true)"
+				                                    @click = "confirmConfig.show = true"
 				                                    disabled = "{{ opBtnDisable }}">更新权限&amp;邮件</button>
 				                                <button
 				                                    class    = "btn btn-success"
@@ -89,9 +89,79 @@
 				</div>
 			</div>
 		</div>
+		<div class="confirm transition" transition="fade" v-show="confirmConfig.show">
+			<div class="title">邮箱设置</div>
+			<form class="form-horizontal">
+						<div class="form-group">
+							<label class="col-sm-3 control-label">邮箱名称</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" 
+								placeholder="请输入邮箱名称" 
+								v-model="confirmConfig.emailname">
+							</div>
+						</div>
+						<div class="form-group">
+							<label  class="col-sm-3 control-label">邮箱用户名</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" maxlength="128" 
+								placeholder="请输入邮箱用户名"
+								v-model="confirmConfig.username">
+							</div>
+						</div>
+						<div class="form-group">
+							<label  class="col-sm-3 control-label">邮箱密码</label>
+							<div class="col-sm-9">
+								<input type="password" class="form-control"  maxlength="128" 
+								placeholder="请输入邮箱密码"
+								v-model="confirmConfig.password">
+							</div>
+						</div>
+			</form>
+			<div class="btn_con">
+				<a href="javascript:void(0)" class="btn btn-default" @click="emailapply()">确认</a>
+				<a href="javascript:void(0)" class="btn btn-default" @click="emailhide()">取消</a>
+			</div>
+		</div>
 	</div>
 </template>
 <style scoped>
+.confirm{
+	width: 500px;
+	background-color: rgba(255,255,255,1);
+	position: fixed;
+	left: 50%;
+	top: 200px;
+	border-radius: 4px;
+	transform: translate(-50%,-50%);-webkit-transform: translate(-50%,-50%);z-index: 999999;box-shadow: 1px 1px 10px rgba(0,0,0,0.4);
+
+}
+.emalinput {
+	width: 150px;
+	display: inline-block;
+}
+
+.confirm .title {
+	   text-align: center;
+    font-size: 20px;
+    margin-top: 10px;
+}
+.confirm form{
+    margin-top: 20px;
+    width: 90%;
+}
+
+.confirm .btn_con{
+	font-size: 0;
+	text-align: right;
+	box-sizing: border-box;
+	border-top: 2px solid #fff;
+	padding: 10px 15px;
+}
+.confirm .btn_con a{
+	display: inline-block;
+	vertical-align: middle;
+	margin: 0 5px;
+}
 .search {
 	position: absolute;
 	right: 20px;
@@ -235,6 +305,12 @@ var Account = Vue.extend({
             checkedRecords: [],
             checkedAllRecords_status : false,
             opBtnDisable: true,
+            confirmConfig: {
+            	show: false,
+            	emailname: allPageConfig.userInfo.email,
+            	username: allPageConfig.userInfo.username,
+            	password: ''
+            },
 			id: null,
 			limited: {},
 			exportLimit: {},
@@ -305,10 +381,9 @@ var Account = Vue.extend({
         },
         updateLimited(email = false) {
         	let _this = this;
-        	let noneedupdate = true;
         	//比较权限
         	let rolelimited = _this.modal.limited ? Object.entries(JSON.parse(_this.modal.limited)) : [];
-
+        	let updateTasks = [];
         	for(let userid of _this.checkedRecords) {
         		let useritem = _this.userListData.find(x => x.id.toString() === userid);
 
@@ -328,72 +403,104 @@ var Account = Vue.extend({
 	        		let modifyLimited = JSON.stringify(userlimited);
 	        		// console.log(`更新${useritem.name}权限为${modifyLimited}`);
 	        		_this.loading.show = true;
-		        	$.ajax({
-						url: '/users/update',
-						type: 'post',
-						data: {
-							id: useritem.id,
-							limited: modifyLimited
-						},
-						success: function(data){
-							if(!data.success){
-								actions.alert(store, {
-									show: true,
-									msg: data.msg,
-									type: 'danger'
-								})
-								return;
+	        		
+	        		updateTasks.push(new Promise((resolve, reject) => {
+			        	$.ajax({
+							url: '/users/update',
+							type: 'post',
+							data: {
+								id: useritem.id,
+								limited: modifyLimited
+							},
+							success: function(data){
+								if(!data.success){
+									reject({
+										name: useritem.name,
+										msg: data.msg});
+								}
+								resolve(useritem);
 							}
-							if (email) {
-								$.ajax({
-									url: '/email/send',
-									type: 'post',
-									data: {
-										to: window.location.host.includes('gomeplus.com') ? useritem.email : 'lizhongning@gomeplus.com',
-										subject: '权限修改通知',
-										text: `${useritem.name}你好，\n    您的数据平台权限已修改，请查看${window.location.host}。`
-									},
-									success: function(data){
-										_this.loading.show = false;
-										if(!data.success){
-											actions.alert(store, {
-												show: true,
-												msg: data.msg,
-												type: 'danger'
-											})
-											return;
-										}
-										actions.alert(store, {
-											show: true,
-											msg: '修改成功并已邮件通知',
-											type: 'success'
-										});
-									}
-								});
-							} else {
+						});
+	        		}));
+	        	}
+        	}
+        	if (updateTasks.length > 0) {
+        		Promise.all(updateTasks).then((items) => {
+        			if (email) {
+        				let host = window.location.host;
+	        			let maildata = items.map((item) => {
+	        				console.log(item);
+	        				return {
+								to: host.includes('gomeplus.com') ? item.email : 'lizhongning@gomeplus.com',
+								subject: '权限修改通知',
+								text: `${item.name}你好，\n    您的数据平台权限已修改，请查看${host}。`
+	        				}
+						});
+						$.ajax({
+							url: '/email/send',
+							type: 'post',
+							data: {
+								mails: JSON.stringify(maildata),
+								username: _this.confirmConfig.username,
+								email: _this.confirmConfig.emailname,
+								password: _this.confirmConfig.password
+							},
+							success: function(data){
 								_this.loading.show = false;
+								if(!data.success){
+									actions.alert(store, {
+										show: true,
+										msg: data.msg,
+										type: 'danger'
+									})
+									return;
+								}
 								actions.alert(store, {
 									show: true,
-									msg: '修改成功',
+									msg: '修改成功并已邮件通知',
 									type: 'success'
 								});
 							}
-
-							// _this.createTableBySearchStr();
-							// _this.modal.show = false;
-						}
+						});
+					} else {
+						_this.loading.show = false;
+						actions.alert(store, {
+							show: true,
+							msg: '修改成功',
+							type: 'success'
+						});
+					}
+					return true;
+        		}).catch((errs) => {
+        			let msg = '更新失败:' + errs.map(x => `${x.name}---${x.msg}`).join(';');
+					actions.alert(store, {
+						show: true,
+						msg,
+						type: 'danger'
 					});
-					noneedupdate = false;
-	        	}
-        	}
-
-        	if(noneedupdate) {
+        		});
+        	} else {
 				actions.alert(store, {
 					show: true,
 					msg: '无需更新',
 					type: 'success'
 				});
         	}
+        },
+        emailapply() {
+        	if (/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.confirmConfig.emailname) && this.confirmConfig.username !== '' && this.confirmConfig.password !=='') {
+        		this.updateLimited(true);
+        		this.confirmConfig.show = false;
+        	} else {
+				actions.alert(store, {
+					show: true,
+					msg: '输入有误, 请核对邮箱信息',
+					type: 'danger'
+				});
+        	}
+        },
+        emailhide() {
+        	this.confirmConfig.show = false;
         }
 	}
 })
