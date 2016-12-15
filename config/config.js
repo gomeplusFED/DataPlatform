@@ -36,7 +36,7 @@ const Config = {
                 display: true
             }, {
                 name: "系统日志",
-                path: "/log",
+                path: "/user/log",
                 display: true
             }]
         },

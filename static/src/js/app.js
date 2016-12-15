@@ -21,7 +21,6 @@ var blankApp = Vue.extend({});
 
 var App = require('./component/app.vue');
 var Index = require('./component/index.vue');
-var Log = require('./component/main/log.vue');
 
 var Erro = require('./component/common/404.vue');
 
@@ -48,11 +47,11 @@ router.map({
 			},
 			'/role': {
 				component: require('./component/user/role/index.vue')
+			},
+			'/log': {
+				component: require('./component/user/log.vue')
 			}
 		}
-	},
-	'/log': {
-		component: Log
 	},
 	'/error': {
 		component: Erro
