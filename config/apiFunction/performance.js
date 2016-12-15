@@ -45,13 +45,12 @@ module.exports = {
     },
     
     performance_01_f(data, query, dates){
-
-        let source = data.first.data[0];
+        let source = data.first.data[0],
+            sum    = data.first.sum[0] || 1;
         let map = {
             "error_num" : "总错误数",
-            "error_num_lv" : "错误率",
             "effect_user_num" : "影响用户数",
-            "effect_user_num_lv" : "影响用户率"
+            "effect_user_num_lv" : "影响用户率%"
         } , result = {};
 
         for(let date of dates){
@@ -76,14 +75,16 @@ module.exports = {
         }
 
         for(let date in result){
-            result[date].error_num_lv = util.dealDivision( result[date].error_num , result[date].start_num , 4 );
-            result[date].effect_user_num_lv = util.dealDivision( result[date].effect_user_num , result[date].active_user_num , 4 );
+            // result[date].error_num_lv = util.dealDivision( result[date].error_num , sum , 2 );
+            result[date].effect_user_num_lv = util.dealDivision( result[date].effect_user_num , result[date].active_user_num , 2 );
         }
 
         if(query.main_show_type_filter == "table"){
             let Result = [];
             for(let date in result){
                 result[date].date = date;
+                // result[date].error_num_lv = util.toFixed( result[date].error_num_lv , 0 );
+                result[date].effect_user_num_lv = util.toFixed( result[date].effect_user_num_lv , 0 );
                 Result.unshift(result[date]);
             }
             return util.toTable([Result], data.rows, data.cols);
@@ -108,7 +109,8 @@ module.exports = {
 
     performance_02_f(data, query, dates){
 
-        let source = data.first.data[0];
+        let source = data.first.data[0],
+            sum    = data.first.sum[0] || 1;
         let Resource = {} , theResource = [];
         for(let item of source){
             if(Resource[item.error_status]){
@@ -129,7 +131,7 @@ module.exports = {
         }
 
         for(let key in Resource){
-            Resource[key].error_num_lv = util.toFixed( util.dealDivision( Resource[key].error_num , Resource[key].start_num ) , 0 );
+            Resource[key].error_num_lv = util.toFixed( util.dealDivision( Resource[key].error_num , sum ) , 0 );
             Resource[key].effect_user_num_lv = util.toFixed( util.dealDivision( Resource[key].effect_user_num , Resource[key].active_user_num ) , 0 );
             theResource.push(Resource[key]);
         }

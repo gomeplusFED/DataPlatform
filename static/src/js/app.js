@@ -1,5 +1,6 @@
 'use strict';
 var Vue = require('Vue');
+Vue.config.debug = true;
 var $ = require('jQuery');
 var VueRouter = require('vue-router');
 Vue.use(VueRouter);
@@ -22,7 +23,7 @@ var App = require('./component/app.vue');
 var Index = require('./component/index.vue');
 
 var User = require('./component/main/user.vue');
-var Role = require('./component/main/role.vue');
+var Role = require('./component/main/role/index.vue');
 var Log = require('./component/main/log.vue');
 
 var Erro = require('./component/common/404.vue');
