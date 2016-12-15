@@ -11,7 +11,7 @@ const rows = [
         "cancel_rebate_amount", "unique_is_rebate_merchandise_num", "unique_is_rebate_shop_num",
         "unique_is_over_rebate_order_num", "is_over_rebate_order_amount", "history_is_rebate_order_num",
         "history_is_over_rebate_order_num", "history_expect_rebate_user_num", "history_expect_rebate_amount",
-        "history_cancel_rebate_amount", "history_is_over_rebate_order_amount", "history_is_rebate_merchandise_dis"]
+        "history_cancel_rebate_amount", "history_is_over_rebate_order_amount"]
 ];
 const cols = [
     [
@@ -20,67 +20,84 @@ const cols = [
             type : "string"
         },{
             caption : "平台新增下单",
-            type : "number"
+            type : "number",
+            help : "统计日期内，新创建的订单数"
         },{
             caption : "新增返利订单数",
-            type : "number"
+            type : "number",
+            help : "统计日期内，新增返利订单的数（订单状态为下单）"
         },{
             caption : "新增返利订单数占比",
-            type : "string"
+            type : "string",
+            help : "统计日期内，新增返利订单量/平台新增订单数x100%"
         },{
             caption : "活跃用户量",
-            type : "number"
+            type : "number",
+            help : "统计日期内，pc端访问人数+APP活跃用户量+H5站访问人数"
         },{
             caption : "参与返利人数",
-            type : "number"
+            type : "number",
+            help : "统计日期内获得预计返利的人数"
         },{
             caption : "返利参与人数占比",
-            type : "string"
+            type : "string",
+            help : "参与返利人数/活跃用户量x100%"
         },{
             caption : "返利订单总金额",
-            type : "number"
+            type : "number",
+            help : "统计日期内，创建返利订单的总金额(订单状态为下单)"
         },{
             caption : "已取消返利订单总金额",
-            type : "number"
+            type : "number",
+            help : "统计日期内，创建返利订单中被取消的订单的金额"
         },{
             caption : "预计返利金额",
-            type : "number"
+            type : "number",
+            help : "统计日期内，创建返利订单中返利的金额"
         },{
             caption : "已取消返利金额",
-            type : "number"
+            type : "number",
+            help : "统计日期内，创建返利订单中被取消的订单涉及的返利金额"
         },{
             caption : "参与返利商品数",
-            type : "number"
+            type : "number",
+            help : "统计日期内，创建的返利订单中涉及的商品数（sku）"
         },{
             caption : "参与商家数",
-            type : "number"
+            type : "number",
+            help : "统计日期内，创建的返利订单中涉及的商家数"
         },{
             caption : "返利到账订单数",
-            type : "number"
+            type : "number",
+            help : "统计日期内，创建的返利订单中妥投+7的订单数"
         },{
             caption : "返利到账金额",
-            type : "number"
+            type : "number",
+            help : "统计日期内，创建的返利订单中妥投+7的返利金额"
         },{
             caption : "累计返利订单数",
-            type : "number"
+            type : "number",
+            help : "截止到目前，平台创建的累计返利订单数（订单状态下单）"
         },{
             caption : "累计到账订单数",
-            type : "number"
+            type : "number",
+            help : "截止到目前，平台创建的累计返利订单中妥投+7的订单数"
         },{
-            caption : "累计返利参与人数（未去重）",
-            type : "number"
+            caption : "累计返利参与人数",
+            type : "number",
+            help : "截止到目前，累积获得预计返利的人数（去重）"
         },{
             caption : "累计预计返利金额",
-            type : "number"
+            type : "number",
+            help : "截止到目前，平台创建的返利订单数累计的返利金额"
         },{
             caption : "累计取消返利金额",
-            type : "number"
+            type : "number",
+            help : "截止到目前，平台创建的返利订单中累计取消的返利金额"
         },{
             caption : "累计返利到账金额",
-            type : "number"
-        },{
-            caption : "累计参与商品数（SKU）",
-            type : "number"
+            type : "number",
+            help : "截止到目前，平台创建的返利订单中妥投+7的订单中的返利金额"
         }
     ]
 ];

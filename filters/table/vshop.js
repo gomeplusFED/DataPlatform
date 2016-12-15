@@ -19,61 +19,80 @@ const cols = [
             type : "string"
         },{
             caption : "累计美店数",
-            type : "number"
+            type : "number",
+            help : "截止到统计日期平台累计开通的美店数"
         },{
             caption : "新增美店",
-            type : "number"
+            type : "number",
+            help : "统计日期内，新开通的美店数"
         },{
             caption : "被访问美店数",
-            type : "number"
+            type : "number",
+            help : "统计日期内，被访问的美店数（美店店铺详情页和美店分销的商品详情页）"
         },{
             caption : "下单美店数",
-            type : "number"
+            type : "number",
+            help : "统计日期内，创建订单的美店数"
         },{
             caption : "支付美店数",
-            type : "number"
+            type : "number",
+            help : "统计日期内，支付订单的美店数"
         },{
             caption : "美店下单人数",
-            type : "number"
+            type : "number",
+            help : "统计日期内，在美店创建订单的人数"
         },{
             caption : "美店支付人数",
-            type : "number"
+            type : "number",
+            help : "统计日期内，在美店支付订单的人数"
         },{
             caption : "美店下单金额",
-            type : "number"
+            type : "number",
+            help : "统计日期内，在美店新创建订单的金额"
         },{
             caption : "美店支付金额",
-            type : "number"
+            type : "number",
+            help : "统计日期内，在美店支付订单的金额"
         },{
             caption : "美店下单商品数",
-            type : "number"
+            type : "number",
+            help : "统计日期内，在美店创建订单中的商品数"
         },{
             caption : "美店支付商品数",
-            type : "number"
+            type : "number",
+            help : "统计日期内，在美店支付订单中的商品数"
         },{
             caption : "美店下单商品件数",
-            type : "number"
+            type : "number",
+            help : "统计日期内，在美店下单的商品件数"
         },{
             caption : "美店支付商品件数",
-            type : "number"
+            type : "number",
+            help : "统计日期内，在美店支付的商品件数"
         },{
             caption : "美店妥投金额",
-            type : "number"
+            type : "number",
+            help : "统计日期内，美店订单中收货成功的商品件数"
         },{
             caption : "美店妥投商品件数",
-            type : "number"
+            type : "number",
+            help : "统计日期内，美店订单中收货成功订单的金额"
         },{
-            caption : "美店累计分销商品",
-            type : "number"
+            caption : "美店累计分销商品件数",
+            type : "number",
+            help : "截止到当前日期，美店累计创建订单中的商品件数"
         },{
             caption : "美店累计分销金额",
-            type : "number"
+            type : "number",
+            help : "截止到当前日期，美店累计创建订单中的订单金额"
         },{
             caption : "美店累计妥投商品件数",
-            type : "number"
+            type : "number",
+            help : "截止到当前日期，美店累计收货成功订单中的商品件数"
         },{
             caption : "美店累计妥投金额",
-            type : "number"
+            type : "number",
+            help : "截止到当前日期，美店累计收货成功订单中的金额"
         }
     ]
 ];

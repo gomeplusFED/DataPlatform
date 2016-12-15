@@ -14,28 +14,36 @@ const cols = [
             type : "string"
         },{
             caption : "新增注册店铺数",
-            type : "number"
+            type : "number",
+            help : "统计日期内，新提交审核的店铺数"
         },{
             caption : "成功入驻店铺数",
-            type : "number"
+            type : "number",
+            help : "统计日期内，待审核店铺被审核通过的数量"
         },{
             caption : "当前运营店铺数",
-            type : "number"
+            type : "number",
+            help : "当前平台入驻并处于营运状态的店铺数"
         },{
             caption : "被访问店铺数",
-            type : "number"
+            type : "number",
+            help : "统计日期内，店铺的店铺详情页、商品详情页被访问的店铺数（去重）"
         },{
             caption : "下单店铺数",
-            type : "number"
+            type : "number",
+            help : "统计日期内，创建订单的店铺数"
         },{
             caption : "支付店铺数",
-            type : "number"
+            type : "number",
+            help : "统计日期内，支付订单的店铺数"
         },{
             caption : "退货店铺数",
-            type : "number"
+            type : "number",
+            help : "统计日期内，拒收入库和退货订单入库的所涉及的店铺数"
         },{
             caption : "被分享店铺数",
-            type : "number"
+            type : "number",
+            help : "统计时间内，店铺详情页被分享的店铺数"
         }
     ]
 ];

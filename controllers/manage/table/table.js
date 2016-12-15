@@ -358,9 +358,9 @@ module.exports = (Router) => {
                 util.export(wsTotal, util.arrayToArray(total));
                 util.export(wsUser, [["",
                     [1, 2, 1, 5, "全部平台", style],
-                    [1, 6, 1, 13, "APP", style],
-                    [1, 14, 1, 20, "PC", style],
-                    [1, 21, 1, 27, "WAP站", style]]].concat(util.arrayToArray(user, false)));
+                    [1, 6, 1, 15, "APP", style],
+                    [1, 16, 1, 23, "PC", style],
+                    [1, 24, 1, 31, "WAP站", style]]].concat(util.arrayToArray(user, false)));
                 util.export(wsOrder, util.arrayToArray(order));
                 util.export(wsShop, util.arrayToArray(shop));
                 util.export(wsVShop, util.arrayToArray(vShop));
@@ -393,7 +393,7 @@ module.exports = (Router) => {
     Router = new main(Router, {
         router : "/socialAnalysis/dataTableMonthOne",
         platform : false,
-        modelName : ["ReportOverviewM", "ReportOverviewKeepM"],
+        modelName : ["ReportOverviewM", "UserAnalysisUsersReport"],
         order : ["-date"],
         global_platform : global_paltform.month,
         date_picker : false,
@@ -419,6 +419,11 @@ module.exports = (Router) => {
             }
             params.date = orm.between(start, end);
             delete params.day_type;
+
+            return params;
+        },
+        secondParams(query, params) {
+            params.day_type = 3;
 
             return params;
         },
@@ -497,9 +502,9 @@ module.exports = (Router) => {
                 util.export(wsTotal, util.arrayToArray(total));
                 util.export(wsUser, [["",
                     [1, 2, 1, 5, "全部平台", style],
-                    [1, 6, 1, 13, "APP", style],
-                    [1, 14, 1, 20, "PC", style],
-                    [1, 21, 1, 27, "WAP站", style]]].concat(util.arrayToArray(user, false)));
+                    [1, 6, 1, 16, "APP", style],
+                    [1, 17, 1, 26, "PC", style],
+                    [1, 27, 1, 36, "WAP站", style]]].concat(util.arrayToArray(user, false)));
                 util.export(wsOrder, util.arrayToArray(order));
                 util.export(wsShop, util.arrayToArray(shop));
                 util.export(wsVShop, util.arrayToArray(vShop));

@@ -137,6 +137,7 @@ var Main = Vue.extend({
 						eventBus.$emit('globalPlataform1', data.components.global_plataform[1]);
 					} else if (data.components.global_plataform instanceof Object) {
 						eventBus.$emit('globalPlataform', data.components.global_plataform);
+						eventBus.$emit('globalPlataform1', {});
 					}
 				} else if (!_this.index) {
 					eventBus.$emit('globalPlataform', {});

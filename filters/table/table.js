@@ -87,9 +87,15 @@ module.exports = {
             obj.h5[row] = "0.00%";
         }
         for(let key of second) {
-            obj[key.keep_type].one = util.toFixed(key["1st_keep"], key.active_users);
-            obj[key.keep_type].two = util.toFixed(key["7th_keep"], key.active_users);
-            obj[key.keep_type].three = util.toFixed(key["14th_keep"], key.active_users);
+            obj.app.one = util.toFixed(key.mon_day_app,key.mon_day_app_new);
+            obj.pc.one = util.toFixed(key.mon_day_pc,key.mon_day_pc_new);
+            obj.h5.one = util.toFixed(key.mon_day_wap,key.mon_day_wap_new);
+            obj.app.two = util.toFixed(key.mon_7day_app,key.mon_7day_app_new);
+            obj.pc.two = util.toFixed(key.mon_7day_pc,key.mon_7day_pc_new);
+            obj.h5.two = util.toFixed(key.mon_7day_wap,key.mon_7day_wap_new);
+            obj.app.three = util.toFixed(key.mon_14day_app,key.mon_14day_app_new);
+            obj.pc.three = util.toFixed(key.mon_14day_pc,key.mon_14day_pc_new);
+            obj.h5.three = util.toFixed(key.mon_14day_wap,key.mon_14day_wap_new);
         }
         if(source[0]) {
             source[0].date = "本月";
