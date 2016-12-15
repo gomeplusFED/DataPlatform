@@ -6,6 +6,7 @@
 				<span>选择</span>
 				<span>一级目录</span>
 				<span>二级目录／页面</span>
+				<span>三级目录／页面</span>
 				<span>导出权限</span>
 			</li>
 			<li v-for="(key,item1) in pageAll">
@@ -13,6 +14,7 @@
 					<span><input @click="checkAll('limit', key)" type="checkbox" v-model="limitAll[key]"></input></span>
 					<span>{{item1.name}}</span>
 					<span>&nbsp;</span>
+					<span>三级</span>
 					<span><label><input @click="checkAll('exportLimit', key)" type="checkbox" v-model="exportLimitAll[key]"/>数据导出</label></span>
 				</div>
 				<ul v-show="levelShow[$index]">
@@ -20,6 +22,7 @@
 						<span><input type="checkbox" v-model="limitedObj[key][$index]"></input></span>
 						<span>&nbsp;</span>
 						<span>{{item2.name}}</span>
+						<span>三级</span>
 						<span><label><input type="checkbox" v-model="exportLimitObj[key][$index]"/>数据导出</label></span>
 					</li>
 				</ul>
@@ -63,15 +66,18 @@ label input {
 }
 
 .con>li span:nth-child(2) {
-	width: 30%;
+	width: 20%;
 }
 
 .con>li span:nth-child(3) {
-	width: 30%;
+	width: 24%;
+}
+.con>li span:nth-child(4) {
+	width: 24%;
 }
 
-.con>li span:nth-child(4) {
-	width: 30%;
+.con>li span:nth-child(5) {
+	width: 22%;
 	border-right: none;
 }
 
