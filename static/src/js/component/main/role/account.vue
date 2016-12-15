@@ -215,7 +215,7 @@
 }
 
 .user_table td:nth-child(2),.user_table th:nth-child(2) {
-	max-width: 40px;
+	min-width: 45px;
 }
 
 .user_table td:nth-child(8),.user_table th:nth-child(8) {
@@ -488,7 +488,7 @@ var Account = Vue.extend({
         	}
         },
         emailapply() {
-        	if (/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.confirmConfig.emailname) && this.confirmConfig.username !== '' && this.confirmConfig.password !=='') {
+        	if (/^(.+)@gomeplus\.com$/.test(this.confirmConfig.emailname) && this.confirmConfig.username !== '' && this.confirmConfig.password !=='') {
         		this.updateLimited(true);
         		this.confirmConfig.show = false;
         	} else {
