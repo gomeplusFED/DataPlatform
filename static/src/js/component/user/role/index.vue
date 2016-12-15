@@ -238,8 +238,6 @@ var Role = Vue.extend({
 		},
 		modifyUser(name, limited) {
 			this.account.rolename = name;
-			console.log('index limited');
-			console.log(limited);
 			this.account.limited = limited;
 			this.account.show = true;
 		},

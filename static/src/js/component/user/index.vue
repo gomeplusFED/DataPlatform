@@ -22,7 +22,6 @@
 		route: {
 			data: function(transition) {
 				var url = this.$route.path.replace(/(\?.*)/, '');
-
 				// $('[href="#!' + url + '"]').parent().parent().parent().addClass('active');
 				$('[href="#!' + url + '"]').focus();
 				$('#side-menu a').removeClass('active');

@@ -308,7 +308,7 @@ var Account = Vue.extend({
             confirmConfig: {
             	show: false,
             	emailname: allPageConfig.userInfo.email,
-            	username: allPageConfig.userInfo.username,
+            	username: allPageConfig.userInfo.username === 'superAdmin' ? '' : allPageConfig.userInfo.username,
             	password: ''
             },
 			id: null,
