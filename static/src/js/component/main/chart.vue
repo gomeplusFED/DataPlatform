@@ -262,6 +262,16 @@ var Chart = Vue.extend({
 	            }
 			}
 
+			if (chartType === 'bar' && config.stack) {
+				options.series.forEach(x => {
+					x.label = {
+						normal: {
+							show: true
+						}
+					}
+				})
+			}
+
 			if (chartType === 'map') {
 				options.visualMap = visualMap;
 				options.visualMap.max = config.mapMaxValue;
