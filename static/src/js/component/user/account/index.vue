@@ -205,24 +205,24 @@ var Vue = require('Vue');
 
 var $ = require('jQuery');
 
-var Pagination = require('../common/pagination.vue');
+var Pagination = require('common/pagination.vue');
 
 var UserVm = null;
 
-var store = require('../../store/store.js');
-var actions = require('../../store/actions.js');
+var store = require('store');
+var actions = require('actions');
 
-var Loading = require('../common/loading.vue');
-var Alert = require('../common/alert.vue');
-var ModalTable = require('../common/modalTable.vue');
-var Confirm = require('../common/confirm.vue');
+var Loading = require('common/loading.vue');
+var Alert = require('common/alert.vue');
+var ModalTable = require('common/modalTable.vue');
+var Confirm = require('common/confirm.vue');
 
-var LimitList = require('../common/limitList.vue');
+var LimitList = require('common/limitList.vue');
 
 var utils = require('utils');
 
 // fileter
-require('../../filter/index.js');
+require('filter');
 
 var User = Vue.extend({
 	name: 'User',

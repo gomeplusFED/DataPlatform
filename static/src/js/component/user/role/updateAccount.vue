@@ -282,11 +282,11 @@ var Vue = require('Vue');
 
 var $ = require('jQuery');
 
-var Pagination = require('../../common/pagination.vue');
+var Pagination = require('common/pagination.vue');
 
 
-var store = require('../../../store/store.js');
-var actions = require('../../../store/actions.js');
+var store = require('store');
+var actions = require('actions');
 
 var Account = Vue.extend({
 	name: 'Account',
@@ -382,6 +382,7 @@ var Account = Vue.extend({
         updateLimited(email = false) {
         	let _this = this;
         	//比较权限
+        	console.log(_this.modal.limited);
         	let rolelimited = _this.modal.limited ? Object.entries(JSON.parse(_this.modal.limited)) : [];
         	let updateTasks = [];
         	for(let userid of _this.checkedRecords) {

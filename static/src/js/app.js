@@ -21,9 +21,6 @@ var blankApp = Vue.extend({});
 
 var App = require('./component/app.vue');
 var Index = require('./component/index.vue');
-
-var User = require('./component/main/user.vue');
-var Role = require('./component/main/role/index.vue');
 var Log = require('./component/main/log.vue');
 
 var Erro = require('./component/common/404.vue');
@@ -44,10 +41,15 @@ router.map({
 		component: Index
 	},
 	'/user': {
-		component: User
-	},
-	'/role': {
-		component: Role
+		component: require('./component/user/index.vue'),
+		subRoutes: {
+			'/account': {
+				component: require('./component/user/account/index.vue')
+			},
+			'/role': {
+				component: require('./component/user/role/index.vue')
+			}
+		}
 	},
 	'/log': {
 		component: Log
