@@ -135,17 +135,6 @@ module.exports = {
                 categoryY : false, //柱状图竖着
                 noline : true
             }
-        },{
-            type : "pie",
-            map : {
-                value : "返利到账金额"
-            },
-            data : newData2,
-            config: { // 配置信息
-                stack: false, // 图的堆叠
-                categoryY : false, //柱状图竖着
-                noline : true
-            }
         }];
     },
 
@@ -307,9 +296,9 @@ module.exports = {
         let source = data.first.data[0],
             map = {
                 "6" : "单项单级返利",
-                "1" : "平台基础",
+                "1" : "平台基础返利",
                 "2" : "平台促销返利",
-                "5" : "邀请商户入住返利"
+                "5" : "邀请商户入驻返利"
             }, Result = {};
         // 计划类型:1.平台基础 2.平台促销 3.商家 4.所有 5.邀请商户入住返利 6.单项单级返利
         for(let date of dates){
@@ -346,37 +335,70 @@ module.exports = {
         return params;
     },
     rebate_platformAll_03_f(data, query, dates){
-        let source = data.first.data[0],
-            map = {
-                "6" : "单项单级返利",
-                "1" : "平台基础",
-                "2" : "平台促销返利",
-                "5" : "邀请商户入住返利"
-            }, Result = {};
-        // 计划类型:1.平台基础 2.平台促销 3.商家 4.所有 5.邀请商户入住返利 6.单项单级返利
-        for(let date of dates){
-            Result[date] = {
-                "6" : 0,
-                "1" : 0,
-                "2" : 0,
-                "5" : 0
-            };
+
+        let firstSource = data.first.data[0],
+            secondSource = data.second.data[0],
+            filter_key  = query.filter_key,
+            Result1 = {} , Result2 = {} , Result3 = {};
+
+        let param1 = {
+            "6" : "单项单级返利",
+            "1" : "平台基础返利",
+            "2" : "平台促销返利",
+            "5" : "邀请商户入驻返利"
+        },  param2 = {
+            "1" : "1级计划",
+            "2" : "2级计划",
+            "3" : "3级计划",
+            "4" : "4级计划",
+            "5" : "5级计划",
+            "6" : "6级计划",
+        },  param3 = {
+            "1" : "返利层级一",
+            "2" : "返利层级二",
+            "3" : "返利层级三",
+            "4" : "返利层级四",
+            "5" : "返利层级五",
+            "6" : "返利层级六",
+        };
+
+        //init data1.
+        for(let key in param1){
+            Result1[param1[key]] = {value:0};
         }
 
-        let colum = query.filter_key;
-        for(let item of source){
-            item.date = util.getDate(item.date);
-            if(Result[item.date][item.plan_type] != undefined){
-                Result[item.date][item.plan_type] += item[colum];
-            }else{
-                continue;
+        for(let item of firstSource){
+            if(param1[item.plan_type]){
+                 Result1[param1[item.plan_type]].value += item[filter_key];
             }
         }
+
+        //init data2.
+        for(let key in param2){
+            Result2[param2[key]] = {value:0};
+        }
+
+        for(let item of secondSource){
+            if(param2[item.rebate_level]){
+                Result2[param2[item.rebate_level]].value += item[filter_key];
+            }
+        }
+
+        //init data3.
+        
+           
            
         return [{
-            type : "line",
-            map : map,
-            data : Result,
+            type : "pie",
+            map : {value:"0"},
+            data : Result1,
+            config: { // 配置信息
+                stack: false  // 图的堆叠
+            }
+        }, {
+            type : "pie",
+            map : {value:"0"},
+            data : Result2,
             config: { // 配置信息
                 stack: false  // 图的堆叠
             }

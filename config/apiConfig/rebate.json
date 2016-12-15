@@ -439,7 +439,7 @@
     },
     "1481767267123": {
         "modelName": [
-            "ads2_new_rebate_order_level_sum"
+            "ads2_new_rebate_order_trend" , "ads2_new_rebate_order_level_sum"
         ],
         "date_picker": true,
         "order": [],
@@ -457,19 +457,19 @@
                 "filter_key": "filter_key",
                 "groups": [
                     {
-                        "key": "unique_is_over_rebate_order_num",
+                        "key": "is_rebate_merchandise_num",
                         "value": "商品件数"
                     },
                     {
-                        "key": "is_rebate_fee",
+                        "key": "is_rebate_item_fee",
                         "value": "商品总金额"
                     },
                     {
-                        "key": "is_rebate_merchandise_num",
+                        "key": "unique_is_rebate_order_num",
                         "value": "返利订单数"
                     },
                     {
-                        "key": "cancel_is_rebate_order_num",
+                        "key": "is_over_rebate_order_amount",
                         "value": "返利到账金额"
                     }
                 ]
