@@ -95,7 +95,6 @@ const Config = {
                 obj.channelAnalysis.market()
             ],
             routers: [
-                obj.channelAnalysis.channelOperating(),
                 obj.channelAnalysis.marketOperating(),
                 obj.channelAnalysis.apkOperating()
             ]

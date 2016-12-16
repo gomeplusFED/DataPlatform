@@ -345,6 +345,7 @@ module.exports = {
     //订单分析
     order(){
         return {
+            id : 1,
             name : "订单分析",
             path : "/achievements/order",
             display : true,
@@ -375,6 +376,7 @@ module.exports = {
     //支付分析 
     pay(){
         return {
+            id : 0,
             name : "支付分析",
             path : "/achievements/pay",
             display : true,

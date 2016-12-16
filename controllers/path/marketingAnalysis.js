@@ -53,6 +53,7 @@ module.exports = {
     },
     operating() {
         return {
+            id : 0,
             name: "活动流量",
             path: "/marketingAnalysis/operating",
             display: true,

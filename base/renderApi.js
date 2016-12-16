@@ -118,7 +118,6 @@ renderApi.prototype = {
                     name : limit.name,
                     path : limit.path
                 };
-                console.log(pageAll[key]);
             }
         };
         res.render(this.view, {
