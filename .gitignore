@@ -4,3 +4,4 @@ db/
 static/dist/
 npm-debug.log
 .vscode/launch.json
+sqlLogRunTime.txt
