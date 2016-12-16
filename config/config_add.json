@@ -65,11 +65,61 @@
                         "title": "返利层级分布",
                         "query_api": "/rebate/platformAll_Three",
                         "mark": 1481767267123
+                    },
+                    {
+                        "type": "table",
+                        "title": "返利计划汇总",
+                        "query_api": "/rebate/platformAll_Four",
+                        "mark": 1481784389540
                     }
                 ]
             }
         ],
-        "routers": []
+        "routers": [
+            {
+                "name": "平台基础返利",
+                "path": "/rebate/platformBase",
+                "display": true,
+                "defaultData": [
+                    {
+                        "type": "table",
+                        "title": "平台基础返利总览",
+                        "query_api": "/rebate/platformBase_One",
+                        "mark": 1481856183500
+                    },
+                    {
+                        "type": "chart",
+                        "title": "返利订单趋势",
+                        "query_api": "/rebate/platformBase_Two",
+                        "mark": 1481858831227
+                    },
+                    {
+                        "type": "chart",
+                        "title": "返利层级分布",
+                        "query_api": "/rebate/platformBase_Three",
+                        "mark": 1481868861749
+                    }
+                ]
+            },
+            {
+                "name": "平台促销返利",
+                "path": "/rebate/promotion",
+                "display": true,
+                "defaultData": []
+            },
+            {
+                "name": "单项单级返利",
+                "path": "/rebate/singleStage",
+                "display": true,
+                "defaultData": []
+            },
+            {
+                "name": "邀请商户分享返利",
+                "path": "/rebate/invitation",
+                "display": true,
+                "defaultData": []
+            }
+        ]
     },
     "22": {
         "name": "性能分析",

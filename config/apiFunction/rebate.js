@@ -5,7 +5,8 @@
 
 let util = require("../../utils"),
     moment = require("moment"),
-    orm  = require("orm");
+    orm  = require("orm"),
+    _ = require("lodash");
 
 module.exports = {
     //返利统计
@@ -385,8 +386,19 @@ module.exports = {
         }
 
         //init data3.
-        
-           
+        for(let key in param2){
+            let obj = {};
+            for(let one in param3){
+                obj[one] = 0;
+            }
+            Result3[param2[key]] = obj;
+        }
+
+        for(let item of secondSource){
+            if(param2[item.rebate_level]){
+                Result3[param2[item.rebate_level]][item.level] += item[filter_key];
+            }
+        }
            
         return [{
             type : "pie",
@@ -401,6 +413,251 @@ module.exports = {
             data : Result2,
             config: { // 配置信息
                 stack: false  // 图的堆叠
+            }
+        }, {
+            type : "bar",
+            map : param3,
+            data : Result3,
+            config: { // 配置信息
+                stack: true  // 图的堆叠
+            }
+        }];
+    },
+
+
+    //返利计划汇总
+    rebate_platformAll_04(query , params , sendData){
+        return params;
+    },
+    rebate_platformAll_04_second(query , params , sendData){
+        return {};
+    },
+    rebate_platformAll_04_f(data, query, dates){
+        let source = data.first.data[0],
+            second = data.second.data[0];
+
+        let TypeName = {} , FlowName = {};
+        for(let item of second){
+            if(!TypeName[item.type_code]){
+                TypeName[item.type_code] = item.type_name;
+            }
+            if(!FlowName[item.flow_code]){
+                FlowName[item.flow_code] = item.flow_name;
+            }
+        }
+
+        source.map((item , index) => {
+            item.Number = (query.page - 1)*20 + index + 1;
+            item.plan_type_Translate = TypeName[item.plan_type];
+            item.rebate_type_Translate = FlowName[item.rebate_type];
+        });
+        
+        return util.toTable([source] , data.rows, data.cols);
+    },
+    rebate_platformAll_04_selectFilter(req , cb){
+        req.models.TypeFlow.find({
+            type : 1,
+            status : 1
+        }, (err, data) => {
+            if(err) {
+                cb(err);
+            } else {
+                var filter_select = [],
+                    obj = {},
+                    user_party = _.uniq(_.pluck(data, "type_code"));
+                filter_select.push({
+                    title: '使用方',
+                    filter_key: 'plan_type',
+                    groups : [
+                        {
+                            key: user_party,
+                            value: '全部使用方',
+                            cell: {
+                                title: '关联流程',
+                                filter_key : 'rebate_type',
+                                groups : [{
+                                    key: '',
+                                    value: '全部相关流程'
+                                }]
+                            }
+                        }
+                    ]
+                });
+                for(var key of user_party) {
+                    obj[key] = {
+                        value: '',
+                        cell: {
+                            title: '关联流程',
+                            filter_key : 'rebate_type',
+                            groups : [{
+                                key: '',
+                                value: '全部相关流程'
+                            }]
+                        }
+                    };
+                }
+                for(key of data) {
+                    obj[key.type_code].value = key.type_name;
+                    obj[key.type_code].key = key.type_code;
+                    obj[key.type_code].cell.groups.push({
+                        key : key.flow_code,
+                        value : key.flow_name
+                    });
+                }
+                for(key in obj) {
+                    filter_select[0].groups.push(obj[key]);
+                }
+                cb(null, filter_select);
+            }
+        });
+    },
+
+    //平台基础返利 ---- 平台基础返利总览
+    rebate_platformBase_01(query , params , sendData){
+        params.plan_type = 1;
+        return params;
+    },
+    rebate_platformBase_01_f(data, query, dates){
+        let source = data.first.data[0];
+        let Row = {};
+        let Keys = [...data.rows[0] , ...data.rows[1]];
+
+        for(let key of Keys){
+            Row[key] = 0;
+        }
+
+        for(let item of source){
+            for(let key of Keys){
+                Row[key] += item[key];
+            }
+        }
+
+        return util.toTable([[Row] , [Row]], data.rows, data.cols);
+    },
+
+    //平台基础返利 ---- 返利订单趋势
+    rebate_platformBase_02(query , params , sendData){
+        params.plan_type = 1;
+        params.rebate_type = [1,2];
+        return params;
+    },
+    rebate_platformBase_02_f(data, query, dates){
+        let source = data.first.data[0],
+            filter_key = query.filter_key,
+            Result = {};
+
+        for(let date of dates){
+            Result[date] = {"1":0 , "2":0}
+        }
+
+        for(let item of source){
+            item.date = util.getDate(item.date);
+            if(item.rebate_type == "1"){
+                Result[item.date]["1"] = item[filter_key];
+            }else{
+                Result[item.date]["2"] = item[filter_key];
+            }
+        }
+
+        
+        return [{
+            type : "line",
+            map : {
+                "1" : "分享购买",
+                "2" : "邀请好友-购买返利"
+            },
+            data : Result,
+            config: { // 配置信息
+                stack: false  // 图的堆叠
+            }
+        }];
+    },
+
+
+    //平台基础返利 ---- 返利层级分布
+    rebate_platformBase_03(query , params , sendData){
+        params.plan_type = 1;
+        return params;
+    },
+    rebate_platformBase_03_f(data, query, dates){
+        let source = data.first.data[0],
+            filter_key  = query.filter_key,
+            Result1 = {} , Result2 = {} , Result3 = {};
+
+        let param1 = {
+            "1" : "分享购买",
+            "2" : "邀请好友-购买返利"
+        },  param2 = {
+            "1" : "1级计划",
+            "2" : "2级计划",
+            "3" : "3级计划",
+            "4" : "4级计划",
+            "5" : "5级计划",
+            "6" : "6级计划",
+        },  param3 = {
+            "1" : "返利层级一",
+            "2" : "返利层级二",
+            "3" : "返利层级三",
+            "4" : "返利层级四",
+            "5" : "返利层级五",
+            "6" : "返利层级六",
+        };
+
+        //init data1.
+        for(let key in param1){
+            Result1[param1[key]] = {value:0};
+        }
+
+        for(let item of source){
+             Result1[param1[item.plan_type]].value += item[filter_key];
+        }
+
+        //init data2.
+        for(let key in param2){
+            Result2[param2[key]] = {value:0};
+        }
+
+        for(let item of source){
+            if(param2[item.rebate_level]){
+                Result2[param2[item.rebate_level]].value += item[filter_key];
+            }
+        }
+
+        //init data3.
+        for(let key in param2){
+            let obj = {};
+            for(let one in param3){
+                obj[one] = 0;
+            }
+            Result3[param2[key]] = obj;
+        }
+
+        for(let item of source){
+            if(param2[item.rebate_level]){
+                Result3[param2[item.rebate_level]][item.level] += item[filter_key];
+            }
+        }
+           
+        return [{
+            type : "pie",
+            map : {value:"0"},
+            data : Result1,
+            config: { // 配置信息
+                stack: false  // 图的堆叠
+            }
+        }, {
+            type : "pie",
+            map : {value:"0"},
+            data : Result2,
+            config: { // 配置信息
+                stack: false  // 图的堆叠
+            }
+        }, {
+            type : "bar",
+            map : param3,
+            data : Result3,
+            config: { // 配置信息
+                stack: true  // 图的堆叠
             }
         }];
     },
