@@ -80,7 +80,11 @@ var webpackConfig = {
             'jQuery': pwd + '/src/js/lib/jquery.min.js',
             '$': pwd + '/src/js/lib/jquery.min.js',
             'utils': pwd + '/src/js/utils/index.js',
-            'Vuex': pwd + '/src/js/lib/vuex.min.js'
+            'Vuex': pwd + '/src/js/lib/vuex.min.js',
+            'common': pwd + '/src/js/component/common',
+            'store': pwd + '/src/js/store/store.js',
+            'actions': pwd + '/src/js/store/actions.js',
+            'filter': pwd + '/src/js/filter/index.js'
         }
     },
 };

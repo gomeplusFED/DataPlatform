@@ -32,7 +32,7 @@
 											<li v-show="item.status"><a @click="modifyRole(item.id, item.limited, item.export, item.name, item.remark)" class="btn btn-default" href="javascript:void(0)">修改<i class="fa fa-pencil-square-o"></i></a></li>
 											<li v-show="item.status"><a @click="forbidden(item.id, item.name)" class="btn btn-default" href="javascript:void(0)">禁用<i class="fa fa-remove"></i></a></li>
 											<li v-show="!item.status"><a @click="startUsing(item.id, item.name)" class="btn btn-default" href="javascript:void(0)">启用<i class="fa fa-check-square-o"></i></a></li>
-											<li v-show="item.status"><a @click="modifyUser(item.name, item.limited)" class="btn btn-default" href="javascript:void(0)">更新账户<i class="fa fa-pencil-square-o"></i></a></li>
+											<li v-show="false"><a @click="modifyUser(item.name, item.limited)" class="btn btn-default" href="javascript:void(0)">更新账户<i class="fa fa-pencil-square-o"></i></a></li>
 										</ul>
 									</td>
 								</tr>
@@ -83,7 +83,7 @@
 	<m-confirm></m-confirm>
 </template>
 
-<style>
+<style scoped>
 .user_table ul>li{
 	display: inline-block;
 }
@@ -128,17 +128,17 @@ var Pagination = require('../../common/pagination.vue');
 
 var UserVm = null;
 
-var store = require('../../../store/store.js');
-var actions = require('../../../store/actions.js');
+var store = require('store');
+var actions = require('actions');
 
-var Loading = require('../../common/loading.vue');
-var Alert = require('../../common/alert.vue');
+var Loading = require('common/loading.vue');
+var Alert = require('common/alert.vue');
 
-var LimitList = require('../../common/limitList.vue');
+var LimitList = require('common/limitList.vue');
 
-var Confirm = require('../../common/confirm.vue');
+var Confirm = require('common/confirm.vue');
 
-var Account = require('./account.vue');
+var Account = require('./updateAccount.vue');
 
 
 var Role = Vue.extend({

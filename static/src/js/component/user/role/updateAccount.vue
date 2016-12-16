@@ -215,7 +215,7 @@
 }
 
 .user_table td:nth-child(2),.user_table th:nth-child(2) {
-	max-width: 40px;
+	min-width: 45px;
 }
 
 .user_table td:nth-child(8),.user_table th:nth-child(8) {
@@ -282,11 +282,11 @@ var Vue = require('Vue');
 
 var $ = require('jQuery');
 
-var Pagination = require('../../common/pagination.vue');
+var Pagination = require('common/pagination.vue');
 
 
-var store = require('../../../store/store.js');
-var actions = require('../../../store/actions.js');
+var store = require('store');
+var actions = require('actions');
 
 var Account = Vue.extend({
 	name: 'Account',
@@ -308,7 +308,7 @@ var Account = Vue.extend({
             confirmConfig: {
             	show: false,
             	emailname: allPageConfig.userInfo.email,
-            	username: allPageConfig.userInfo.username,
+            	username: allPageConfig.userInfo.username === 'superAdmin' ? '' : allPageConfig.userInfo.username,
             	password: ''
             },
 			id: null,
@@ -382,6 +382,7 @@ var Account = Vue.extend({
         updateLimited(email = false) {
         	let _this = this;
         	//比较权限
+        	console.log(_this.modal.limited);
         	let rolelimited = _this.modal.limited ? Object.entries(JSON.parse(_this.modal.limited)) : [];
         	let updateTasks = [];
         	for(let userid of _this.checkedRecords) {
@@ -426,10 +427,10 @@ var Account = Vue.extend({
         	}
         	if (updateTasks.length > 0) {
         		Promise.all(updateTasks).then((items) => {
+        			let namelist = items.map(item => item.name).join(',');
         			if (email) {
         				let host = window.location.host;
 	        			let maildata = items.map((item) => {
-	        				console.log(item);
 	        				return {
 								to: host.includes('gomeplus.com') ? item.email : 'lizhongning@gomeplus.com',
 								subject: '权限修改通知',
@@ -450,14 +451,14 @@ var Account = Vue.extend({
 								if(!data.success){
 									actions.alert(store, {
 										show: true,
-										msg: data.msg,
+										msg: `更新成功但发送邮件失败，失败信息：${data.msg}`,
 										type: 'danger'
 									})
 									return;
 								}
 								actions.alert(store, {
 									show: true,
-									msg: '修改成功并已邮件通知',
+									msg: `更新成功并已邮件通知:${namelist}`,
 									type: 'success'
 								});
 							}
@@ -466,13 +467,13 @@ var Account = Vue.extend({
 						_this.loading.show = false;
 						actions.alert(store, {
 							show: true,
-							msg: '修改成功',
+							msg: `已成功更新权限:${namelist}`,
 							type: 'success'
 						});
 					}
 					return true;
-        		}).catch((errs) => {
-        			let msg = '更新失败:' + errs.map(x => `${x.name}---${x.msg}`).join(';');
+        		}).catch((err) => {
+        			let msg = '更新失败:' + `${err.name}---${err.msg}`;
 					actions.alert(store, {
 						show: true,
 						msg,
@@ -488,7 +489,7 @@ var Account = Vue.extend({
         	}
         },
         emailapply() {
-        	if (/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.confirmConfig.emailname) && this.confirmConfig.username !== '' && this.confirmConfig.password !=='') {
+        	if (/^(.+)@gomeplus\.com$/.test(this.confirmConfig.emailname) && this.confirmConfig.username !== '' && this.confirmConfig.password !=='') {
         		this.updateLimited(true);
         		this.confirmConfig.show = false;
         	} else {

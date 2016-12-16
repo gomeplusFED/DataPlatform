@@ -28,15 +28,15 @@ const Config = {
             href: "#",
             path: [{
                 name: "帐号列表",
-                path: "/user",
+                path: "/user/account",
                 display: true
             }, {
                 name: "角色列表",
-                path: "/role",
+                path: "/user/role",
                 display: true
             }, {
                 name: "系统日志",
-                path: "/log",
+                path: "/user/log",
                 display: true
             }]
         },
