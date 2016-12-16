@@ -54,7 +54,6 @@ export default {
 		plataformLink(item) {
 			if (item.url) {
 				location.href = item.url;
-				this.key = item.key;
 				return;
 			}
 			this.key = item.key;
