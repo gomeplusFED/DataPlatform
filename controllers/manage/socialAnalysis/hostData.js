@@ -22,7 +22,7 @@ module.exports = (Router) => {
                         new Date(start + " 00:00:00"),
                         new Date(start + " 23:59:59")
                     ),
-                    key : ["group_leader_num"]
+                    key : ["group_leader_num", "person_funs_num", "person_friends_num"]
                 };
             return _params;
         },
@@ -40,7 +40,9 @@ module.exports = (Router) => {
             return filter.hostOne(data);
         },
         rows: [
-            ["group_leader_num", "two", "three", "four", "five"]
+            ["group_leader_num", "rate", "person_friends_num"
+                //, "four", "five"
+            ]
         ],
         cols: [
             [{
@@ -48,24 +50,36 @@ module.exports = (Router) => {
                 type: "number"
             }, {
                 caption: "圈主人均粉丝数",
-                type: "number"
+                type: "number",
+                help : "总圈主粉丝数/总圈主数"
             }, {
-                caption: "累计邀请好友数",
+                caption: "累计好友数",
                 type: "number"
-            }, {
-                caption: "累计关注次数",
-                type: "number"
-            }, {
-                caption: "累计取关次数",
-                type: "number"
+            //}, {
+            //    caption: "累计关注次数",
+            //    type: "number"
+            //}, {
+            //    caption: "累计取关次数",
+            //    type: "number"
             }]
         ]
     });
 
     Router = new api(Router,{
         router : "/socialAnalysis/hostTwo",
-        modelName : ["GroupownerStatistics"],
+        modelName : ["GroupownerStatistics", "Statistics"],
         platform : false,
+        params(query, params) {
+            params.category_id = "ALL";
+
+            return params;
+        },
+        secondParams() {
+            return {
+                date : util.getDate(new Date(new Date() - 24 * 60 * 60 * 1000)),
+                key : "group_leader_num"
+            }
+        },
         procedure : [{
             aggregate : {
                 value : ["type"]
@@ -74,7 +88,7 @@ module.exports = (Router) => {
                 "attention_groupOwner_num", "cancel_attention_groupOwner_num"],
             groupBy : ["type"],
             get : ""
-        }],
+        },false],
         filter(data) {
             return filter.hostTwo(data);
         },
@@ -114,6 +128,14 @@ module.exports = (Router) => {
         level_select : true,
         level_select_name : "category_id",
         level_select_url : "/api/socialAnalysisCategories",
+        params(query, params) {
+            params.category_id = query.category_id || "ALL";
+            if(params.category_id === "all") {
+                params.category_id = "ALL";
+            }
+
+            return params;
+        },
         procedure : [{
             aggregate : {
                 value : ["date"]
@@ -124,22 +146,22 @@ module.exports = (Router) => {
             get : ""
         }],
         filter_select : [{
-            title: '指标',
-            filter_key : 'type',
-            groups: [{
-                key: ['APP', "WAP", "PC"],
-                value: '全部'
-            },{
-                key: 'APP',
-                value: 'APP'
-            },{
-                key: 'WAP',
-                value: 'WAP'
-            },{
-                key: 'PC',
-                value: 'PC'
-            }]
-        }, {
+        //    title: '指标',
+        //    filter_key : 'type',
+        //    groups: [{
+        //        key: ['APP', "WAP", "PC"],
+        //        value: '全部'
+        //    },{
+        //        key: 'APP',
+        //        value: 'APP'
+        //    },{
+        //        key: 'WAP',
+        //        value: 'WAP'
+        //    },{
+        //        key: 'PC',
+        //        value: 'PC'
+        //    }]
+        //}, {
             title: '指标',
             filter_key : 'filter_key',
             groups: [{
@@ -277,19 +299,16 @@ module.exports = (Router) => {
         secondParams(query, params, data) {
             var group_ids = _.uniq(_.pluck(data.first.data[0], "groupOwner_id")),
                 _params = {
-                    date : params.date,
+                    date : util.getDate(new Date(new Date() - 24 * 60 * 60 * 1000)),
                     group_leader_id : group_ids,
                     key : ["person_topic_num", "person_friends_num", "person_funs_num", "person_funs_num"]
                 };
+
             return _params;
         },
         procedure : [false, {
-            aggregate : {
-                value : ["group_leader_id", "key"]
-            },
-            sum : ["value"],
-            groupBy : ["group_leader_id", "key"],
-            get : ""
+            find : "params",
+            run : ""
         }],
         showDayUnit : true,
         date_picker_data: 1,
@@ -313,7 +332,8 @@ module.exports = (Router) => {
                 "new_group_num",
                 //"weiding",
                 "new_attention_num",
-                "person_funs_num", "new_cancel_attention_num"]
+                //"person_funs_num",
+                "new_cancel_attention_num"]
         ],
         cols: [
             [{
@@ -324,26 +344,26 @@ module.exports = (Router) => {
                 type: "string"
             }, {
                 caption: "圈主ID",
-                type: ""
+                type: "string"
             }, {
                 caption: "是否达人",
-                type: ""
+                type: "string"
             }, {
                 caption: "累计发布话题数",
-                type: ""
+                type: "number"
             }, {
                 caption: "新增邀请好友数",
-                type: ""
+                type: "number"
             }, {
-                caption: "累计邀请好友数",
-                type: ""
+                caption: "累计好友数",
+                type: "number"
             }, {
                 caption: "新增粉丝数",
                 type: "number",
                 help : "圈主本时间区间新关注粉丝数（第一次关注时间不在此时间区，不+1）"
             },{
                 caption: "当前粉丝数",
-                type: "",
+                type: "number",
                 help : "当前累计的关注粉丝数"
             }, {
                 caption: "新增圈子数",
@@ -355,13 +375,13 @@ module.exports = (Router) => {
             //    help : "此圈主下圈子数"
             }, {
                 caption: "新增关注次数",
-                type: ""
-            }, {
-                caption: "累计关注次数",
-                type: ""
+                type: "number"
+            //}, {
+            //    caption: "累计关注次数",
+            //    type: ""
             }, {
                 caption: "新增取关次数",
-                type: ""
+                type: "number"
             }]
         ]
     });

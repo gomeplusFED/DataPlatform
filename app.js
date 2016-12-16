@@ -7,24 +7,29 @@ var ejs = require('ejs');
 var express = require('express');
 var session = require('cookie-session');
 var lactate = require('lactate');
-var config = require('./config');
-var routers = require('./routers');
+var config = require('./config/config');
 var bodyParser = require('body-parser');
 var flash = require('flashify');
-var mysql = require('./models/mysql');
+var mysql = require('./models2/mysql');
 var app = express();
 var async = require("asyncawait/async");
 var await = require("asyncawait/await");
 var orm = require('orm');
+var redis = require("ioredis");
+var redisInfo = require("./db/redis.json");
+var redisConfig = require("./db/config.json").redis;
+var cluster = new redis.Cluster(redisInfo[redisConfig]);
+global.cluster = cluster;
+var routers = require('./routers');
 
 orm.settings.set("connection.pool", true);
-//orm.settings.set("connection.debug", true);
+// orm.settings.set("connection.debug", true);
 Object.keys(config).forEach(function(key) {
     app.locals[key] = config[key];
 });
 
-//var logger = require("morgan");
-/* 测试使用 */
+// 测试使用 
+// var logger = require("morgan");
 // app.use(logger('dev'));
 
 app.use(function(req, res, next) {
@@ -91,4 +96,11 @@ app.use((err, req, res, next) => {
     }
 });
 
-app.listen(7879);
+app.use((req, res, next) => {
+    res.redirect("/");
+});
+
+app.listen(7879 , function(){
+    console.log("启动成功" , new Date().toLocaleTimeString());
+});
+

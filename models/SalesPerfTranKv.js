@@ -1,11 +1,10 @@
 /**
- * @author yanglei
- * @date 20160628
- * @fileoverview
+ * @author hexisen
+ * @date 2016-09-28
+ * @fileoverview 
  */
-
 module.exports = {
-    id : {type: 'number', key: true},
+    id : String,
     date : Date,
     day_type : Number,
     tran_acc_pro_num : Number,
@@ -30,5 +29,8 @@ module.exports = {
     tran_refund_pro_num_spu : Number,
     tran_plat_coupon_price : Number,
     tran_balance : Number,
-    tran_turnover : Number
+    tran_turnover : Number,
+    coupon_num : Number,
+    use_coupon_num : Number,
+    type : String,
 };

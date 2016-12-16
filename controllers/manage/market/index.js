@@ -23,6 +23,7 @@ module.exports = (Router) => {
         }],
         params(query, params) {
             delete params.day_type;
+            delete params.date;
             return params;
         },
         filter(data, query) {
@@ -114,6 +115,10 @@ module.exports = (Router) => {
                                 item.channel_name = obj[item.channel_id];
                             }
                             data[0].activity_channel_relationship = ships;
+                            data[0].activity_start_time =
+                                moment(data[0].activity_start_time).format("YYYY-MM-DD");
+                            data[0].activity_end_time =
+                                moment(data[0].activity_end_time).format("YYYY-MM-DD");
 
                             res.json({
                                 code : 200,
@@ -196,7 +201,7 @@ module.exports = (Router) => {
     });
 
     Router = Router.get("/custom/channel", (req, res, next) => {
-        req.models.Channel.find({}, (err, data) => {
+        req.models.Channel.find({}).order("channel_id").run((err, data) => {
             if(err) {
                 next(err);
             } else {
@@ -210,35 +215,119 @@ module.exports = (Router) => {
 
     Router = Router.post("/custom/channel", (req, res, next) => {
         let body = JSON.parse(req.body.data);
-        body.channel_id = [body.channel_type_code, body.channel_code, body.channel_ex].join("");
-        body.create_time = new Date();
-        body.update_time = new Date();
 
-        req.models.Channel.find(body, (err, items) => {
+        if(Object.keys(body).length !== 6) {
+            res.json({
+                code : 400,
+                msg : "所有项为必填项"
+            });
+        } else {
+            body.channel_id = [body.channel_type_code, body.channel_code, body.channel_ex].join("");
+            body.create_time = new Date();
+            body.update_time = new Date();
+            req.models.Channel.find({
+                channel_id : body.channel_id
+            }, (err, items) => {
+                if(err) {
+                    res.json({
+                        code : 400,
+                        msg : "创建失败"
+                    });
+                } else if(items.length > 0) {
+                    res.json({
+                        code : 400,
+                        msg : "已经存在"
+                    });
+                } else {
+                    req.models.Channel.create(body, (err,data) => {
+                        if(err) {
+                            res.json({
+                                code : 400,
+                                msg : "创建失败"
+                            });
+                        } else {
+                            res.json({
+                                code : 200,
+                                data : data
+                            });
+                        }
+                    });
+                }
+            });
+        }
+    });
+
+    Router = Router.get("/custom/deleteChannel", (req, res, next) => {
+        const channel_id = req.query.channel_id;
+        req.models.Channel.find({
+            channel_id
+        }, (err, data) => {
             if(err) {
                 res.json({
                     code : 400,
-                    msg : "创建失败"
-                });
-            } else if(items.length > 0) {
-                res.json({
-                    code : 400,
-                    msg : "已经存在"
+                    msg : "删除失败"
                 });
             } else {
-                req.models.Channel.create(body, (err,data) => {
-                    if(err) {
-                        res.json({
-                            code : 400,
-                            msg : "创建失败"
-                        });
-                    } else {
-                        res.json({
-                            code : 200,
-                            data : data
-                        });
-                    }
+                if(data.length === 0) {
+                    res.json({
+                        code : 400,
+                        msg : "删除信息不存在"
+                    });
+                } else {
+                    data[0].remove((err) => {
+                        if(err) {
+                            res.json({
+                                code : 400,
+                                msg : "删除失败"
+                            });
+                        } else {
+                            res.json({
+                                code : 200,
+                                msg : "删除成功"
+                            });
+                        }
+                    })
+                }
+            }
+        });
+    });
+
+    Router = Router.post("/custom/updateChannel", (req, res, next) => {
+        const body = JSON.parse(req.body.data);
+        req.models.Channel.find({
+            channel_id : body.channel_id
+        }, (err, data) => {
+            if(err) {
+                res.json({
+                    code : 400,
+                    msg : "修改失败"
                 });
+            } else {
+                if(data.length === 0) {
+                    res.json({
+                        code : 400,
+                        msg : "修改信息不存在"
+                    });
+                } else {
+                    for(let key in body) {
+                        data[0][key] = body[key];
+                    }
+                    data[0].channel_id = [body.channel_type_code, body.channel_code, body.channel_ex].join("");
+                    data[0].save((err) => {
+                        if(err) {
+                            res.json({
+                                code : 400,
+                                msg : "修改失败"
+                            });
+                        } else {
+                            res.json({
+                                code : 200,
+                                result : data[0],
+                                msg : "修改成功"
+                            });
+                        }
+                    })
+                }
             }
         });
     });

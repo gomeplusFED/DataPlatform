@@ -3,129 +3,263 @@
  * @date 20160415
  * @fileoverview 商品分析
  */
+
 var util = require("../../utils"),
     moment = require("moment");
 
+/* 环比计算 , 昨天－前天  ／  前天 */
+function Chain(lastObj , bObj , columns){
+    var obj = {};
+    for(let key of columns){
+        if(key == "names"){
+            obj[key] = "日环比";
+            continue;
+        }
+        if(!lastObj[key] || !bObj[key]){
+            obj[key] = "0%";
+        }else{
+            obj[key] = (lastObj[key] - bObj[key]) / bObj[key];
+            obj[key] = util.toFixed(obj[key] , 0);
+        }        
+    }
+    return obj;
+}
+
+/* 7日环比, 传入7天的数据 */
+function Chain7(thisObj , allObj , columns){
+    var result={};
+
+    for(let item of columns){
+        if(item == "names") continue;
+        result[item] = 0;
+    }
+    var n = 0;
+    for(let key in allObj){
+        n++;
+        for(let item of columns){
+            if(item == "names") continue;
+            result[item] += allObj[key][item];
+        }
+    }
+
+    for(let item of columns){
+        if(item == "names") continue;
+        if(result[item] == 0){
+            result[item] = "0%";
+            continue;
+        }
+        var averg = result[item] / n;
+
+        result[item] = thisObj[item] / averg;
+        result[item] = util.toFixed( result[item] , 0 );
+
+    }
+
+    result.names = "7日平均环比";
+    return result;
+}
+
+
 module.exports = {
     productOne(data, filter_key) {
-        var source = data.data,
-            newData = {
-                one : 0,
-                two : 0,
-                three : 0,
-                four : 0,
-                five : 0,
-                six : 0,
-                seven : 0
-            };
-        for(var key of source) {
-            newData.one += key.product_acc_uv;
-            newData.two += key.product_acc_pv;
-            newData.three += Math.round(key.product_acc_avg_time);
-            newData.four += key.product_scan;
-            newData.five += key.products_cars;
-            newData.six += key.products_order;
-            newData.seven += key.products_pay;
-        }
-        if(filter_key === "2") {
-            data.cols[0][4].caption = "加购商品件数";
-            data.cols[0][5].caption = "下单商品件数";
-            data.cols[0][6].caption = "支付商品件数";
-        }
-        if(filter_key === "1") {
-            data.cols[0][4].caption = "加购商品数";
-            data.cols[0][5].caption = "下单商品数";
-            data.cols[0][6].caption = "支付商品数";
-        }
-        return util.toTable([[newData]], data.rows, data.cols);
+
+        var source = data.first.data[0];
+        return util.toTable([source], data.rows, data.cols);
     },
-    productTwo(data, filter_key, dates) {
-        var source = data.data,
-            type = "line",
-            filter_name = {
-                product_scan : "浏览商品数",
-                products_cars : "加购商品数",
-                products_pay : "支付商品",
-                products_order : "下单商品"
+    productTwo(data, query) {
+        var source = data.first.data[0],
+            rows   = ["昨日" , "前日" , "环比" , "7日平均环比"],
+            result = [],
+            configRow = data.rows[0],
+            dates = query.date;
+
+        //给默认值0.
+        var sourceObj = {};
+        for(let date of dates){
+            var obj = {};
+            for(let item of configRow){
+                obj[item] = 0;
+            }
+            sourceObj[date] = obj;
+        }
+        //整理数据
+        for(let item of source){
+            item.date = util.getDate(item.date);
+            sourceObj[item.date] = item;
+        }
+
+        //昨日
+        result[0] = sourceObj[dates[0]];
+        result[0].names = "昨日";
+
+        //前日
+        result[1] = sourceObj[dates[1]];
+        result[1].names = "前日";
+
+        //环比
+        result[2] = Chain(sourceObj[dates[0]] ,sourceObj[dates[1]] , data.rows[0]);
+
+        //7日平均环比
+        result[3] = Chain7(sourceObj[dates[0]] ,sourceObj , data.rows[0]);
+
+       return util.toTable([result], data.rows, data.cols);
+    },
+    productThree(data, query) {
+        var source = data.first.data[0],
+            source2= data.second.data[0],
+            newData = {};
+            newData2= {};
+
+        if(query.category_id_1 == "ALL" && query.category_id_2 == "ALL" && query.category_id_3 == "ALL" && query.category_id_4 == "ALL"){
+
+            //未选择类目默认情况
+
+            //初值为0
+            for(let key in util.prizeRange){
+                if(key >= 33 && key <= 43){
+                    newData[util.prizeRange[key]] = { value : 0 };
+                    newData2[util.prizeRange[key]] = { value : 0 };
+                }
+            }
+
+            for(let item of source){
+                if(newData[util.prizeRange[item.tag]]){
+                    newData[util.prizeRange[item.tag]].value = util.numberLeave(item.items_count / 10000 , 5);
+                }
+            }
+
+            for(let item of source2){
+                if(newData2[util.prizeRange[item.tag]]){
+                    newData2[util.prizeRange[item.tag]].value = util.numberLeave(item.items_count / 10000 , 5);
+                }
+            }
+
+
+        }else{
+            for(let item of source){
+                newData[util.prizeRange[item.tag]] = {
+                    value : util.numberLeave(item.items_count / 10000 , 5)
+                }
+            }
+
+            for(let item of source2){
+                if(!newData2[util.prizeRange[item.tag]]){
+                    newData2[util.prizeRange[item.tag]] = {
+                        value : 0
+                    }
+                }
+                newData2[util.prizeRange[item.tag]] = {
+                    value : util.numberLeave(item.items_count / 10000  + newData2[util.prizeRange[item.tag]].value / 1 , 5)
+                }
+            }
+        }
+
+            
+
+
+        return [{
+            type : "pie",
+            map : {
+                value : "总商品数(万)"
             },
-            map = {
-                value : filter_name[filter_key]
+            data : newData,
+            config: { // 配置信息
+                stack: false, // 图的堆叠
+                categoryY : false, //柱状图竖着
+                noline : true
+            }
+        },{
+            type : "pie",
+            map : {
+                value : "新增商品数(万)"
+            },
+            data : newData2,
+            config: { // 配置信息
+                stack: false, // 图的堆叠
+                categoryY : false, //柱状图竖着
+                noline : true
+            }
+        }];
+    },
+    productFour(data, page , dates) {
+        var source = data.first.data[0],
+            type   = "pie",
+            map    = {
+                value : "新增商品数"
             },
             newData = {};
-        for(var date of dates) {
-            newData[date] = {
-                value : 0
-            };
+
+        var n = 0;
+        for(let item of source){
+            if(item.isnew == 0) continue;
+            if(!newData[util.prizeRange[item.tag]]){
+                newData[util.prizeRange[item.tag]] = {
+                    value : 0
+                }
+            }
+            newData[util.prizeRange[item.tag]] = {
+                value : util.numberLeave(item.items_count / 10000 + newData[util.prizeRange[item.tag]].value / 1 , 5)
+            }
         }
-        for(var key of source) {
-            newData[util.getDate(key.date)].value += key[filter_key];
-        }
+
         return [{
-            map : map,
             type : type,
+            map : map,
             data : newData,
             config: { // 配置信息
                 stack: false, // 图的堆叠
                 categoryY : false //柱状图竖着
             }
-        }]
+        }];
     },
-    productThree(data, filter_key) {
-        var source = data.data,
-            count = data.dataCount;
+    productFive(data, query, dates) {
+        var source = data.first.data[0],
+            type   = "line",
+            map    = {
+                "items_add"   : "新增商品数",
+                "items_put"   : "上架商品数",
+                "items_down"  : "下架商品数",
+                "items_frost" : "冻结商品数",
+                "items_delete": "删除商品数"
+            },
+            newData = {};
 
-        for(var key of source) {
-            key.date = moment(key.date).format("YYYY-MM-DD");
-            key.pay_fee = key.pay_fee.toFixed(2);
-            key.refund_fee = key.refund_fee.toFixed(2);
+        //初始化数据为0.
+        for(let date of dates){
+            newData[date] = { 
+                "items_add" : 0,
+                "items_put" : 0,
+                "items_down": 0,
+                "items_frost": 0,
+                "items_delete":0
+            };
         }
 
-        if(filter_key === "2") {
-            data.cols[0][1].caption = "商品访问量";
-            data.cols[0][2].caption = "下单商品件数";
-            data.cols[0][3].caption = "支付商品件数";
-            data.cols[0][4].caption = "退货商品件数";
+        for(let item of source){
+            item.date = util.getDate(item.date);
+            for(var key in newData[item.date]){
+                newData[item.date][key] += item[key];
+            }
         }
 
-        if(filter_key === "1") {
-            data.cols[0][1].caption = "被访问商品数";
-            data.cols[0][2].caption = "下单商品数";
-            data.cols[0][3].caption = "支付商品数";
-            data.cols[0][4].caption = "退货商品数";
-        }
-
-        return util.toTable([source], data.rows, data.cols, [count]);
+        return [{
+            type : type,
+            map : map,
+            data : newData,
+            config: { // 配置信息
+                stack: false, // 图的堆叠
+                categoryY : false //柱状图竖着
+            }
+        }];
     },
-    productFour(data, page) {
-        var source = data.data,
-            page = page || 1,
-            count = data.dataCount > 100 ? 100 : data.dataCount,
-            sum = data.dataSum;
+    productSix(data , query ,dates){
+        var source = data.first.data[0],
+            result = [];
 
-        for(var i = 0; i < source.length; i++) {
-            var key = source[i];
-            key.top = (page - 1) * 20 + i + 1;
-            key.access_num_rate = util.toFixed(key.access_num, sum[1]);
-            key.access_users_rate = util.toFixed(key.access_users, sum[2]);
-            source[i] = key;
+        for(let item of source){
+            item.date = util.getDate(item.date);
         }
 
-        return util.toTable([source], data.rows, data.cols, [count]);
-    },
-    productFive(data, page) {
-        var source = data.data,
-            page = page || 1,
-            count = data.dataCount > 100 ? 100 : data.dataCount,
-            sum = data.dataSum;
-
-        for(var i = 0; i < source.length; i++) {
-            var key = source[i];
-            key.top = (page - 1) * 20 + i + 1;
-            key.order_price = key.order_price.toFixed(2);
-            key.pay_price = key.pay_price.toFixed(2);
-            key.pay_price_rate = util.toFixed(key.pay_price, sum[1]);
-        }
-
-        return util.toTable([source], data.rows, data.cols, [count]);
+        return util.toTable([source], data.rows, data.cols); 
     }
 };

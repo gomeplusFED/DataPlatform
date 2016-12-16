@@ -16,16 +16,16 @@ module.exports = {
                     title : "播放统计",
                     query_api : "/videoStatis/videoOne"
                 },
-                // {
-                //     type : "chart",
-                //     title : "播放趋势",
-                //     // query_api : "/videoStatis/videoTwo"
-                // },
-                // {
-                //     type : "table",
-                //     title : "播放明细",
-                //     // query_api : "/videoStatis/videoThree"
-                // },
+                {
+                    type : "chart",
+                    title : "播放趋势",
+                    query_api : "/videoStatis/videoTwo"
+                },
+                {
+                    type : "table",
+                    title : "播放明细",
+                    query_api : "/videoStatis/videoThree"
+                },
             ]
         }
     },
@@ -37,7 +37,8 @@ module.exports = {
             defaultData : [
                 {
                     type : "table",
-                    title: "多端统计"
+                    title: "多端统计",
+                    query_api : "/videoStatis/videoFour"
                 }
             ]
         }

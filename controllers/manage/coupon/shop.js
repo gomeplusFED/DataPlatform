@@ -34,8 +34,10 @@ module.exports = (Router) => {
             return filter.shopCouponOne(data, dates, params);
         },
         rows: [
-            ["name", "create_num", "create_amount", "give_num", "receive_num", "receive_rate",
-                "used_num", "used_amount", "used_rate", "invalid_num"]
+            ["name", "published_num", "published_amount", "give_num", "receive_num", "receive_rate",
+                "used_num", "used_amount",
+                //"used_rate",
+                "invalid_num"]
         ],
         cols: [
             [
@@ -43,10 +45,10 @@ module.exports = (Router) => {
                     caption : "",
                     type : "string"
                 },{
-                caption : "创建数量",
+                caption : "发行数量",
                 type : "number"
             },{
-                caption : "创建总金额",
+                caption : "发行总金额",
                 type : "number"
             },{
                 caption : "发送数量",
@@ -63,9 +65,9 @@ module.exports = (Router) => {
             },{
                 caption : "使用总金额",
                 type : "number"
-            },{
-                caption : "使用率",
-                type : "string"
+            //},{
+            //    caption : "使用率",
+            //    type : "string"
             },{
                 caption : "过期数量",
                 type : "number"
@@ -119,9 +121,10 @@ module.exports = (Router) => {
             return filter.shopCouponFour(data);
         },
         rows : [
-            ["date", "create_num", "create_amount",
+            ["date", "published_num", "published_amount",
                 "receive_num", "receive_amount", "used_num", "used_amount",
-                "used_rate", "invalid_num", "expired_num" ]
+                //"used_rate",
+                "invalid_num", "expired_num" ]
         ],
         cols : [
             [
@@ -129,10 +132,10 @@ module.exports = (Router) => {
                     caption : "日期",
                     type : "string"
                 },{
-                    caption : "创建数量",
+                    caption : "发行数量",
                     type : "number"
                 },{
-                    caption : "创建总金额",
+                    caption : "发行总金额",
                     type : "number"
                 },{
                     caption : "领取数量",
@@ -146,9 +149,9 @@ module.exports = (Router) => {
                 },{
                     caption : "使用总金额",
                     type : "number"
-                },{
-                    caption : "使用率",
-                    type : "string"
+                //},{
+                //    caption : "使用率",
+                //    type : "string"
                 },{
                     caption : "过期数量",
                     type : "number"
@@ -174,12 +177,13 @@ module.exports = (Router) => {
             preMethods: ['excel_export']
         }],
         filter(data, filter_key, dates) {
-            return filter.shopCouponFour(data);
+            return filter.shopCouponFive(data);
         },
         rows : [
-            ["shop_name", "create_num", "create_amount",
+            ["shop_name", "published_num", "published_amount",
                 "receive_num", "receive_amount", "used_num", "used_amount",
-                "used_rate", "invalid_num", "expired_num" ]
+                //"used_rate",
+                "invalid_num", "expired_num" ]
         ],
         cols : [
             [
@@ -187,10 +191,10 @@ module.exports = (Router) => {
                     caption : "店铺名称",
                     type : "string"
                 },{
-                    caption : "创建数量",
+                    caption : "发行数量",
                     type : "number"
                 },{
-                    caption : "创建总金额",
+                    caption : "发行总金额",
                     type : "number"
                 },{
                     caption : "领取数量",
@@ -204,9 +208,9 @@ module.exports = (Router) => {
                 },{
                     caption : "使用总金额",
                     type : "number"
-                },{
-                    caption : "使用率",
-                    type : "string"
+                //},{
+                //    caption : "使用率",
+                //    type : "string"
                 },{
                     caption : "过期数量",
                     type : "number"
@@ -224,12 +228,12 @@ module.exports = (Router) => {
         cols : config.help.cols,
         data : [
             {
-                name : "创建数量",
-                help : "时间段内所有商家新建优惠券总数量"
+                name : "发行数量",
+                help : "时间段内平台优惠券发行总数量"
             },
             {
-                name : "创建总金额",
-                help : "时间段内所有商家新建平台优惠券总金额"
+                name : "发行总金额",
+                help : "时间段内平台优惠券发行总金额"
             },
             {
                 name : "领取数量",
@@ -252,6 +256,10 @@ module.exports = (Router) => {
                 help : "时间段内，商家优惠券领取且被使用数量/商家优惠券领取数量"
             },
             {
+                name : "领取率",
+                help : "（当日/当周/当月）领取数量/（当日/当周/当月）发行数量"
+            },
+            {
                 name : "领取面值占比分布",
                 help : "商家优惠券被领取的面值分布占比"
             },
@@ -270,6 +278,10 @@ module.exports = (Router) => {
             {
                 name : "作废率",
                 help : "优惠券创建后未被领取的数量/创建数量"
+            },
+            {
+                name : "发送面值占比分布",
+                help : "平台优惠券各发送的面值分布占比"
             }
         ]
     });

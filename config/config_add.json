@@ -1,0 +1,31 @@
+{
+    "22": {
+        "name": "性能分析",
+        "display": true,
+        "className": "fa  fa-laptop fa-fw",
+        "filename": "performance",
+        "href": "#",
+        "path": [
+            {
+                "name": "错误分析",
+                "path": "/performance/error",
+                "display": true,
+                "defaultData": [
+                    {
+                        "type": "chart",
+                        "title": "错误趋势",
+                        "query_api": "/performance/error_One",
+                        "mark": 1481187080040
+                    },
+                    {
+                        "type": "table",
+                        "title": "错误列表",
+                        "query_api": "/performance/error_Two",
+                        "mark": 1481265531352
+                    }
+                ]
+            }
+        ],
+        "routers": []
+    }
+}

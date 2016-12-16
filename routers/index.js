@@ -1,9 +1,7 @@
 var express = require('express'),
     router = express.Router(),
-    config = require('../config'),
+    config = require('../config/config.js'),
     fs = require("fs"),
-    async = require("asyncawait/async"),
-    await = require("asyncawait/await"),
     files = "./controllers/manage",
     renderApi = require("./renderApi");
 
@@ -18,43 +16,35 @@ var express = require('express'),
 module.exports = [];
 
 function addRouter(path) {
+    if(typeof require(path) == "object"){
+        console.warn("路由加载警告,",path);
+        return;
+    } 
+
     module.exports.push(require(path)(router));
 }
-
-var filePath = async((path) => {
-    return new Promise((resolve, reject) => {
-        fs.readdir(path, (err, data) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(data);
-            }
-        })
-    });
-});
 
 // addRouter('./combine');
 addRouter('./login');
 addRouter('./count');
 addRouter('./categories');
+addRouter('./addModule');
 
-async(() => {
-    try {
-        var data = await (filePath(files));
-        for (var file of data) {
-            if (file.indexOf(".js") < 0 && file.indexOf('.') !== 0) {
-                var f = await (filePath(files + "/" + file));
-                for (var key of f) {
-                    if (key.indexOf("js") >= 0) {
-                        addRouter("." + files + "/" + file + "/" + key);
-                    }
+var data = fs.readdirSync(files);
+for (var file of data) {
+    if (file.indexOf(".js") < 0 && file.indexOf('.') !== 0) {
+        var f = fs.readdirSync(files + "/" + file);
+        for (var key of f) {
+            if (key.indexOf("js") >= 0) {
+                try {
+                    addRouter("." + files + "/" + file + "/" + key);
+                } catch (err) {
+                    console.log(err, ",ERROR in router/index,", "file in "+"." + files + "/" + file + "/" + key);
                 }
             }
         }
-    } catch (err) {
-        console.log(err, ",ERROR in router/index");
     }
-})();
+}
 
 
 Object.keys(config.limit).forEach((key) => {
@@ -71,3 +61,11 @@ Object.keys(config.limit).forEach((key) => {
         }
     }
 });
+
+//new
+const autoApi = require("../config/index_concat");
+
+for(let item of autoApi){
+    module.exports.push(item(router));
+}
+

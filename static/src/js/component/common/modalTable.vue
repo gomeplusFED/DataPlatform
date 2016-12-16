@@ -6,24 +6,27 @@
 					<h4 class="modal-title">{{modalTableData.title}}</h4>
 				</div>
 				<div class="modal-body">
-					<table class="table table-bordered table-hover" role="grid" aria-describedby="dataTables_info">
+					<m-toggle style="margin-bottom: 10px;" :show="type === 'toggle'" :page-components-data="pageComponentsData" component-type="toggle" :fun="toggle"></m-toggle>
+					<table v-if="showType === 'table'" class="table table-bordered table-hover" role="grid" aria-describedby="dataTables_info">
 						<thead>
 							<tr>
-								<th v-for="captionItem in modalTableData.data.cols">{{captionItem.caption}}</th>
+								<th v-for="captionItem in modalTableData.data[0].cols">{{captionItem.caption}}</th>
 							</tr>
 						</thead>
-						<tbody v-if="modalTableData.data.data.length !== 0">
-							<tr v-for="tableBody in modalTableData.data.data">
-								<td v-for="(tableKey, tableCell) in modalTableData.data.rows"><span @click="tableOperation(tableBody[tableCell], tableBody, modalTableData.data.rows[1])">{{{tableBody[tableCell]}}}</span></td>
+						<tbody v-if="modalTableData.data[0].data.length !== 0">
+							<tr v-for="tableBody in modalTableData.data[0].data">
+								<td v-for="(tableKey, tableCell) in modalTableData.data[0].rows"><span @click="tableOperation(tableBody[tableCell], tableBody, modalTableData.data.rows[1])">{{{tableBody[tableCell]}}}</span></td>
 							</tr>
 						</tbody>
 						<tbody v-else>
 							<tr>
-								<td :colspan="modalTableData.data.cols.length">暂无数据</td>
+								<td :colspan="modalTableData.data[0].cols.length">暂无数据</td>
 							</tr>
 						</tbody>
 					</table>
-					<m-pagination :pagination-conf="paginationConf"></m-pagination>
+
+					<m-pagination v-if="showType === 'table'" :pagination-conf="paginationConf"></m-pagination>
+					<m-chart v-show="showType === 'chart'" :default-data="{modelData: [modalTableData.data[1]]}" :index="-1" :result-argvs="resultArgvs" :init-data="initData" :page-components-data="pageComponentsData" :current-data="currentData" :loading.sync="loading"></m-chart>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn default" data-dismiss="modal" @click="hideModal()">确定</button>
@@ -40,6 +43,8 @@ var store = require('../../store/store.js');
 var actions = require('../../store/actions.js');
 
 var Pagination = require('../common/pagination.vue');
+var Chart = require('../main/chart.vue');
+var Toggle = require('./toggle.vue');
 
 var utils = require('utils');
 
@@ -47,6 +52,25 @@ var ModalTable = Vue.extend({
 	name: 'ModalTable',
 	data: function() {
 		return {
+			resultArgvs: {
+				day_type: 1,
+				endTime: "2016-10-27",
+				filter_key: "value",
+				key_type: "terminal_model",
+				startTime: "2016-10-21"
+			},
+			initData: {},
+			pageComponentsData: {},
+			currentData: {
+				query_api: "/terminal/modelOne",
+				title: "TOP 10",
+				type: ""
+			},
+			loading: {
+				show: false
+			},
+			showType: 'table',
+			type: '',
 			paginationConf: {
 				currentPage: 1, // 当前页
 				totalItems: 0, // 总条数
@@ -70,6 +94,9 @@ var ModalTable = Vue.extend({
 		hideModal: function() {
 			actions.hideModalTable(store);
 			this.paginationConf.currentPage = 1;
+		},
+		toggle: function(val) {
+			this.showType = val;
 		}
 	},
 	ready: function() {
@@ -102,7 +129,9 @@ var ModalTable = Vue.extend({
 		};
 	},
 	components: {
-		'm-pagination': Pagination
+		'm-pagination': Pagination,
+		'm-chart': Chart,
+		'm-toggle': Toggle
 	},
 	watch: {
 		'modalTableData.show': {
@@ -117,7 +146,37 @@ var ModalTable = Vue.extend({
 		'modalTableData.data': {
 			handler: function(val) {
 				if (val) {
-					this.paginationConf.totalItems = this.modalTableData.data.count ? this.modalTableData.data.count : 0;
+					if (val.length > 1) {
+						if (val[1].type && val[0].count) {
+							this.type = 'toggle';
+						}
+						if (val[0].count) {
+							this.showType = 'table';
+							this.paginationConf.totalItems = this.modalTableData.data[0].count ? this.modalTableData.data[0].count : 0;
+						} else if (val[1].type) {
+							this.showType = 'chart';
+						}
+
+						if (val[1].default) {
+							this.showType = 'chart';
+						}
+					} else if (val.length === 1 && val[0].count) {
+						this.showType = 'table';
+						this.type = '';
+					} else {
+						this.type = '';
+						this.showType = '';
+					}
+					
+					this.resultArgvs.day_type = 2;
+				}
+			}
+		},
+		'showType': {
+			handler: function(val) {
+				this.currentData.type = val;
+				if (val === 'chart') {
+					this.resultArgvs.day_type++;
 				}
 			}
 		}

@@ -3,9 +3,7 @@
  * @date 20160413
  * @fileoverview 访问页面-wap
  */
-var api = require("../../../base/api"),
-    help = require("../../../base/help"),
-    config = require("../../../utils/config.json"),
+var api = require("../../../base/main"),
     filter = require("../../../filters/useAnalysis/accessWap");
 
 module.exports = (Router) => {
@@ -13,9 +11,30 @@ module.exports = (Router) => {
         router : "/useAnalysis/accessWapOne",
         modelName : ["UrlAccessWap"],
         platform : false,
-        fixedParams : {
-            type : "H5",
-            url_type : 1
+        global_platform : {
+            show: true,
+            key: 'type',
+            list: [{
+                key: 'pc',
+                name: 'PC'
+            }, {
+                key: 'm',
+                name: 'H5'
+            }]
+        },
+        procedure : [{
+            aggregate : {
+                params : "params",
+                value : ["date"]
+            },
+            sum : ["page_view", "access_num", "ip_num"],
+            groupBy : ["date"],
+            get : ""
+        }],
+        params(query, params) {
+            params.type = query.type || 'pc';
+            params.url_type = 1;
+            return params;
         },
         flexible_btn: [{
             content: '<a href="javascript:void(0)" help_url="/useAnalysis/accessWap/help_json">帮助</a>',
@@ -26,18 +45,18 @@ module.exports = (Router) => {
             title: '',
             filter_key : 'filter_key',
             groups: [{
-                key: 'page_view',
+                key: 'sum_page_view',
                 value: '浏览量'
             }, {
-                key: 'access_num',
+                key: 'sum_access_num',
                 value: '访客数'
             }, {
-                key: 'ip_num',
+                key: 'sum_ip_num',
                 value: 'ip数'
             }]
         }],
-        filter(data, filter_key, dates) {
-            return filter.accessWapOne(data, filter_key, dates);
+        filter(data, query, dates) {
+            return filter.accessWapOne(data, query.filter_key, dates);
         }
     });
 
@@ -46,10 +65,11 @@ module.exports = (Router) => {
         modelName : ["UrlAccessWap"],
         excel_export : true,
         platform : false,
-        paging : true,
+        paging : [true],
         order : ["-date"],
-        fixedParams : {
-            type : "H5"
+        params(query, params) {
+            params.type = query.type || "pc";
+            return params;
         },
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
@@ -66,8 +86,8 @@ module.exports = (Router) => {
                 value: '出口页面'
             }]
         }],
-        filter(data, filter_key, dates, filter_key2, page) {
-            return filter.accessWapTwo(data, page);
+        filter(data, query, dates) {
+            return filter.accessWapTwo(data, query.page);
         },
         rows : [
             [ 'id', 'url', 'page_view', 'access_num','down_browse', 'avg_stay_time',
@@ -88,10 +108,12 @@ module.exports = (Router) => {
                 type: 'number'
             }, {
                 caption: '贡献下游流量',
-                type: 'string'
+                type: 'string',
+                help : "访客数-访问一个页面即跳走的人数"
             }, {
                 caption: '平均停留时长(s)',
-                type: 'number'
+                type: 'number',
+                help : "总时长/访问次数"
             }, {
                 caption: '趋势'
             }]
@@ -101,10 +123,12 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/useAnalysis/wap",
         modelName : ["UrlAccessWap"],
-        paging : true,
+        paging : [true],
+        platform : false,
         order : ["-date"],
-        filter(data, filter_key, dates) {
-            return filter.wap(data);
+        toggle : true,
+        filter(data, query, dates) {
+            return filter.wap(data, dates);
         },
         rows : [
             [ "date", "url", "page_view", "access_num", "down_browse", "avg_stay_time" ]
@@ -124,39 +148,13 @@ module.exports = (Router) => {
                 type : "number"
             },{
                 caption : "贡献下游浏览",
-                type : "number"
+                type : "number",
+                help : "访客数-访问一个页面即跳走的人数"
             },{
                 caption : "平均停留时间(s)",
-                type : "number"
-            } ]
-        ]
-    });
-
-    Router = new help(Router, {
-        router : "/useAnalysis/accessWap/help",
-        rows : config.help.rows,
-        cols : config.help.cols,
-        data : [
-            {
-                name : "访问次数",
-                help : "统计时间内，访问次数"
-            },
-            {
-                name : "平均停留时长",
+                type : "number",
                 help : "总时长/访问次数"
-            },
-            {
-                name : "访问次数占比",
-                help : "页面访问次数/总访问次数"
-            },
-            {
-                name : "停留时间占比",
-                help : "页面访问时长/总时长"
-            },
-            {
-                name : "贡献下游流量",
-                help : "访客数-访问一个页面即跳走的人数"
-            }
+            } ]
         ]
     });
 

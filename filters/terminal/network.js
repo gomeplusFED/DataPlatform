@@ -8,7 +8,7 @@ var _ = require("lodash"),
 
 module.exports = {
     networkOne(data, filter_key) {
-        var source = data.data,
+        var source = data.first.data,
             newData = {},
             tArray = [],
             array = util.uniq(_.pluck(source, "key_name")),
@@ -52,9 +52,11 @@ module.exports = {
         }]
     },
     networkTwo(data, filter_key) {
-        var source = data.data,
-            count = data.dataCount,
-            sum = data.dataSum,
+        var source = data.first.data,
+            second = data.first.count,
+            count = second.length,
+            total_value = 0,
+            total_value3 = 0,
             cols_name = "";
         if(filter_key === "terminal_network") {
             cols_name = "联网方式";
@@ -62,9 +64,13 @@ module.exports = {
             cols_name = "运营商";
         }
         data.cols[0][0].caption = cols_name;
+        for(let key of second) {
+            total_value += key.value;
+            total_value3 += key.value3;
+        }
         for(var key of source) {
-            key.new_users_rate = util.toFixed(key.value, sum[1]);
-            key.start_up_rate = util.toFixed(key.value3, sum[2]);
+            key.new_users_rate = util.toFixed(key.value, total_value);
+            key.start_up_rate = util.toFixed(key.value3, total_value3);
         }
         return util.toTable([source], data.rows, data.cols, [count]);
     }

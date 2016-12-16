@@ -56,7 +56,7 @@ var DropDown = Vue.extend({
 		'pageComponentsData': {
 			handler: function(val){
 				// 异步请求组件参数，watch到变化之后初始化，其它组件类似
-				if(val === null || !this.pageComponentsData['drop_down'][this.componentType]){
+				if(val === null || !this.pageComponentsData['drop_down'] || !this.pageComponentsData['drop_down'][this.componentType]){
 					return;
 				}
 				$('#dropDown_'+this.componentType+'_'+this.index).find('ul li').eq(0).trigger('click');

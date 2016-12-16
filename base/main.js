@@ -12,7 +12,10 @@ var utils = require("../utils"),
     async = require("asyncawait/async"),
     await = require("asyncawait/await"),
     orm = require("orm"),
+    sqlLogRunTime = require("./sqlLogRunTime"),
     cacheTime = 1;
+
+let eventproxy = require("eventproxy");
 
 function api(Router, options) {
     var defaultOption = utils.mixin({
@@ -93,7 +96,9 @@ function api(Router, options) {
         //表格字段选择框
         control_table_col : false,
         //全局模块
-        global_platform: {show: false}
+        global_platform: {show: false},
+        //是否支持图转表
+        toggle : false
     }, options);
 
     utils.mixin(this, defaultOption);
@@ -109,37 +114,34 @@ api.prototype = {
             params = {},
             dates = [];
 
-        //不带任何参数时，给一个空的数据
+        //无参数时，返回组件信息
         if(Object.keys(query).length === 0) {
 
-            //如果有该参数，说明前端某一部分参数需要sql查询获取
-            //注意这里仅仅在接口初始化，没有任何参数时走。
+            //用于查库添加组件信息
             if(this.selectFilter) {
                 this.selectFilter(req, (err, data) => {
                     if(!err) {
 
-                        //将查询的结果写入该参数，返回给前端
-
-                        // console.log(data);
+                        //将查询结果返回组件中
                         this.filter_select = data;
 
-                        //拼接固定的数据结构，并返回请求结果
+                        //返回组件信息
                         this._render(res, [], type);
                     } else {
                         next(err);
                     }
                 });
             } else {
-            //前端不需要额外的参数直接走
+                //如无查库添加组件，直接返回组件信息
                 this._render(res, [], type);
             }
         } else {
-        //包含参数时针对传递的参数做处理
+            //有参数时，返回数据以及组件信息
 
-            //检查时间字段是否符合标准。如果不符合，_checkDate方法直接返回错误
+            //校验时间，正确返回true，否则返回false
             if(this._checkDate(query, next)) {
                 if(query.startTime && query.endTime) {
-                    //设置查询时间区间
+                    //添加查询条件，时间
                     params.date = orm.between(
                         new Date(query.startTime + " 00:00:00"),
                         new Date(query.endTime + " 23:59:59")
@@ -148,19 +150,18 @@ api.prototype = {
 
 
                 if(typeof this.fixedParams === "function") {
-                    //fixedParams方法，将结果挂载到了query上
+                    //需查库添加查询条件
                     this.fixedParams(req, query, (err, data) => {
                         if(err) {
                             next(err);
                         } else {
-
                             query = data;
                             dates = utils.times(query.startTime, query.endTime, query.day_type);
                             this._getCache(type, req, res, next, query, params, dates);
                         }
                     });
                 } else {
-                    //得到时间区间内包含每一天的时间数组
+                    //根据时间单位分割时间
                     dates = utils.times(query.startTime, query.endTime, query.day_type);
                     this._getCache(type, req, res, next, query, params, dates);
                 }
@@ -205,7 +206,8 @@ api.prototype = {
                 control_table_col : {
                     show : this.control_table_col
                 },
-                global_plataform : this.global_platform
+                global_plataform : this.global_platform,
+                toggle: this.toggle
             }
         });
     },
@@ -269,7 +271,7 @@ api.prototype = {
                 for(var i = 0; i < this.modelName.length; i++) {
                     if(this[this.paramsName[i]]) {
                         if (typeof this[this.paramsName[i]] === "function") {
-                            params = this[this.paramsName[i]](query, params, sendData);
+                            params = this[this.paramsName[i]](query, params, sendData, dates);
                         } else {
                             for (var key in this[this.paramsName[i]]) {
                                 params[key] = this[this.paramsName[i]][key];
@@ -279,13 +281,32 @@ api.prototype = {
                     sendData[this.dataName[i]] = {};
                     if(this[this.sql[i]]) {
                         if (this.paging[i]) {
-                            sendData[this.dataName[i]].data =
+                            let REsult = await((() => {
+                                return new Promise((resolve , reject)=>{
+                                    let ep = new eventproxy();
+
+                                    this._findDatabaseSql2(req, this[this.sql[i]](query, params, false) , this.modelName[i], (data)=>{
+                                        ep.emit("data" , data);
+                                    });
+                                    this._findDatabaseSql2(req, this[this.sql[i]](query, params, true) , this.modelName[i], (data)=>{
+                                        ep.emit("count" , data);
+                                    });
+                                    ep.all("data" , "count" , (data , count) => {
+                                        resolve([data , count]);
+                                    });
+                                });
+                            })());
+                            sendData[this.dataName[i]].data = REsult[0];
+                            sendData[this.dataName[i]].count = REsult[1];
+                            
+                            /*sendData[this.dataName[i]].data =
                                 await(this._findDatabaseSql(req, this[this.sql[i]](query, params, false)));
                             sendData[this.dataName[i]].count =
-                                await(this._findDatabaseSql(req, this[this.sql[i]](query, params, true)));
+                                await(this._findDatabaseSql(req, this[this.sql[i]](query, params, true)));*/
+
                         } else {
                             sendData[this.dataName[i]].data =
-                                await(this._findDatabaseSql(req, this[this.sql[i]](query, params)));
+                                await(this._findDatabaseSql(req, this[this.sql[i]](query, params), this.modelName[i]));
                         }
                     } else {
                         if (this.procedure[i]) {
@@ -339,14 +360,54 @@ api.prototype = {
         })();
     },
     _returnFind(req, params, modelName, procedure, sendData, dataName){
+        let RESULT = await((() => {
+            return new Promise((resolve , reject)=>{
+                let ep = new eventproxy();
+                if(procedure.length === 2){
+                    this._findDatabase2(req, params, modelName, procedure[0] , (err , data)=>{
+                        ep.emit("data" , data);
+                    });
+                    this._findDatabase2(req, params, modelName, procedure[1] , (err , data)=>{
+                        ep.emit("count" , data);
+                    });
+
+                    ep.all("data" , "count" , (data , count) => {
+                        resolve([data , count]);
+                    });
+                }else{
+                    this._findDatabase2(req, params, modelName, procedure[0] , (err , data)=>{
+                        ep.emit("data" , data);
+                    });
+                    this._findDatabase2(req, params, modelName, procedure[1] , (err , data)=>{
+                        ep.emit("sum" , data);
+                    });
+                    this._findDatabase2(req, params, modelName, procedure[2] , (err , data)=>{
+                        ep.emit("count" , data);
+                    });
+                    ep.all("data" , "sum" , "count" , (data , sum , count) => {
+                        resolve([data , sum , count]);
+                    });
+                }
+            });
+        })());
+
         if(procedure.length === 2) {
+            sendData[dataName].data = RESULT[0]
+            sendData[dataName].count = RESULT[1]
+        } else {
+            sendData[dataName].data = RESULT[0]
+            sendData[dataName].sum = RESULT[1]
+            sendData[dataName].count = RESULT[2]
+        }
+
+        /*if(procedure.length === 2) {
             sendData[dataName].data = await (this._findDatabase(req, params, modelName, procedure[0]));
             sendData[dataName].count = await (this._findDatabase(req, params, modelName, procedure[1]));
         } else {
             sendData[dataName].data = await (this._findDatabase(req, params, modelName, procedure[0]));
             sendData[dataName].sum = await (this._findDatabase(req, params, modelName, procedure[1]));
             sendData[dataName].count = await (this._findDatabase(req, params, modelName, procedure[2]));
-        }
+        }*/
         return sendData;
     },
     _getCache(type, req, res, next, query, params, dates) {
@@ -415,24 +476,87 @@ api.prototype = {
             }
         }
 
-        /*console.log("===============sql params=============");
-        console.log(req.url , modelName);
-        console.log(params);
-        console.log(keys);
-        console.log("================== END =====================");*/
         return new Promise((resolve, reject) => {
+            try{
+                var sql = req.models[modelName];
+                let start = new Date();
+                if (length > 1){
+                    for (var key in procedure) {
+                        if (endFn.indexOf(key) >= 0) {
+                            sql[key](function () {
+                                var args = Array.prototype.slice.call(arguments),
+                                    err = args.shift();
+
+                                let end = new Date();
+                                sqlLogRunTime.writeToFile(start, end, modelName);
+                                err ? reject(err) : resolve(args);
+                            });
+                        } else if (arrayFn.indexOf(key) >= 0) {
+                            for (var k of procedure[key]) {
+                                sql[key](k);
+                            }
+                        } else if (objectFn.indexOf(key) >= 0) {
+                            sql = sql[key](procedure[key].value || [], _obj.params);
+                        } else {
+                            sql = sql[key](_obj[procedure[key]]);
+                        }
+                    }
+                } else {
+                    // console.log(req.url);
+                    sql[keys[0]](_obj.params, (err, data) => {
+                        let end = new Date();
+                        sqlLogRunTime.writeToFile(start, end, modelName);
+                        err ? reject(modelName + err) : resolve(data);
+                    });
+                }
+            }catch(err) {
+                reject(modelName + "\r" + err);
+            }
+        });
+    }),
+    _findDatabase2(req, params, modelName, procedure , callback){
+        var limit = this.page || +params.limit || 20,
+            page = params.page || 1,
+            offset = limit * (page - 1),
+            keys = Object.keys(procedure),
+            endFn = "get run",
+            arrayFn = "sum groupBy order",
+            objectFn = "aggregate",
+            length = keys.length,
+            _obj = {
+                limit : limit,
+                offset : offset,
+                params : {}
+            };
+
+        if(params.from) {
+            _obj.offset = params.from - 1;
+        }
+        if(params.to) {
+            _obj.limit = +params.to;
+        }
+
+        for(var key in params) {
+            if("page limit from to".indexOf(key) < 0) {
+                _obj.params[key] = params[key];
+            }
+        }
+
+        
+        try{
             var sql = req.models[modelName];
+            let start = new Date();
             if (length > 1){
                 for (var key in procedure) {
                     if (endFn.indexOf(key) >= 0) {
                         sql[key](function () {
                             var args = Array.prototype.slice.call(arguments),
                                 err = args.shift();
-                                /*console.log("==== result ===");
-                                console.log(key);
-                                console.log(args);
-                                console.log("======= END ======")*/
-                            err ? reject(err) : resolve(args);
+
+                            let end = new Date();
+                            sqlLogRunTime.writeToFile(start, end, modelName);
+                            // err ? reject(err) : resolve(args);
+                            return err ? callback(err) : callback(null , args);
                         });
                     } else if (arrayFn.indexOf(key) >= 0) {
                         for (var k of procedure[key]) {
@@ -447,22 +571,44 @@ api.prototype = {
             } else {
                 // console.log(req.url);
                 sql[keys[0]](_obj.params, (err, data) => {
-                    /*console.log("==== result ===");
-                    console.log(keys);
-                    console.log(data);
-                    console.log("======= END222 ======")*/
+                    // err ? reject(modelName + err) : resolve(data);
+                    let end = new Date();
+                    sqlLogRunTime.writeToFile(start, end, modelName);
+                    return err ? callback(err) : callback(null , data);
+                });
+            }
+        }catch(err) {
+            return callback(modelName + "\r" + err);
+        }
+
+    },
+    _findDatabaseSql : async((req, sqlObject, modelName) => {
+        return new Promise((resolve, reject) => {
+            let start = new Date();
+            try{
+                req.models.db1.driver.execQuery(sqlObject.sql, sqlObject.params, (err, data) => {
+                    let end = new Date();
+                    sqlLogRunTime.writeToFile(start, end, modelName);
                     err ? reject(err) : resolve(data);
                 });
+            }catch(err) {
+                reject(sqlObject + err);
             }
         });
     }),
-    _findDatabaseSql : async((req, sqlObject) => {
-        return new Promise((resolve, reject) => {
+    _findDatabaseSql2 (req, sqlObject , modelName, callback){
+        let start = new Date();
+        try{
             req.models.db1.driver.execQuery(sqlObject.sql, sqlObject.params, (err, data) => {
-                err ? reject(err) : resolve(data);
+                let end = new Date();
+                sqlLogRunTime.writeToFile(start, end, modelName);
+                if(err) console.log(err);
+                return callback && callback(data);
             });
-        });
-    }),
+        }catch(err) {
+            console.log(err);
+        }
+    },
     setRouter(Router) {
         Router.get(this.router + '_json', this._sendData.bind(this, 'json'));
         Router.get(this.router + '_jsonp', this._sendData.bind(this, 'jsonp'));

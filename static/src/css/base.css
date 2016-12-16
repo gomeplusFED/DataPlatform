@@ -288,3 +288,6 @@ table.dataTable thead .sorting:after {
 .panel-yellow a:hover {
     color: #df8a13;
 }
+.table {
+    margin-bottom: 0 !important;
+}

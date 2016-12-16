@@ -34,8 +34,10 @@ module.exports = (Router) => {
             return filter.platformCouponOne(data, dates, params);
         },
         rows: [
-            ["name", "create_num", "create_amount", "give_num", "receive_num", "receive_rate",
-                "used_num", "used_amount", "used_rate", "invalid_num"]
+            ["name", "published_num", "published_amount", "give_num", "receive_num", "receive_rate",
+                "used_num", "used_amount",
+                //"used_rate",
+                "invalid_num"]
         ],
         cols: [
             [
@@ -43,10 +45,10 @@ module.exports = (Router) => {
                     caption : "",
                     type : "string"
                 },{
-                caption : "创建数量",
+                caption : "发行数量",
                 type : "number"
             },{
-                caption : "创建总金额",
+                caption : "发行总金额",
                 type : "number"
             },{
                 caption : "发送数量",
@@ -63,9 +65,9 @@ module.exports = (Router) => {
             },{
                 caption : "使用总金额",
                 type : "number"
-            },{
-                caption : "使用率",
-                type : "string"
+            //},{
+            //    caption : "使用率",
+            //    type : "string"
             },{
                 caption : "过期数量",
                 type : "number"
@@ -119,9 +121,10 @@ module.exports = (Router) => {
             return filter.platformCouponFour(data);
         },
         rows : [
-            ["date", "create_num", "create_amount", "give_num", "give_amount",
+            ["date", "published_num", "published_amount", "give_num", "give_amount",
                 "receive_num", "receive_amount", "used_num", "used_amount",
-                "used_rate", "invalid_num", "expired_num" ]
+                //"used_rate",
+                "invalid_num", "expired_num" ]
         ],
         cols : [
             [
@@ -129,10 +132,10 @@ module.exports = (Router) => {
                     caption : "日期",
                     type : "string"
                 },{
-                    caption : "创建数量",
+                    caption : "发行数量",
                     type : "number"
                 },{
-                    caption : "创建总金额",
+                    caption : "发行总金额",
                     type : "number"
                 },{
                     caption : "发送数量",
@@ -152,9 +155,9 @@ module.exports = (Router) => {
                 },{
                     caption : "使用总金额",
                     type : "number"
-                },{
-                    caption : "使用率",
-                    type : "string"
+                //},{
+                //    caption : "使用率",
+                //    type : "string"
                 },{
                     caption : "过期数量",
                     type : "number"
@@ -207,7 +210,7 @@ module.exports = (Router) => {
             return filter.platformCouponFive(data);
         },
         rows : [
-            ["coupon_id", "coupon_name", "discount", "end_at", "create_num",
+            ["coupon_id", "coupon_name", "discount", "end_at", "published_num",
                 "give_num", "receive_num", "receive_rate", "used_num",
                 "used_rate", "expired_rate", "invalid_rate" ]
         ],
@@ -223,10 +226,10 @@ module.exports = (Router) => {
                     caption : "面值",
                     type : "string"
                 },{
-                    caption : "有效期",
+                    caption : "截止有效期",
                     type : "string"
                 },{
-                    caption : "创建数量",
+                    caption : "发行数量",
                     type : "number"
                 },{
                     caption : "已发送数量",
@@ -260,12 +263,12 @@ module.exports = (Router) => {
         cols : config.help.cols,
         data : [
             {
-                name : "创建数量",
-                help : "时间段内新建平台优惠券总数量"
+                name : "发行数量",
+                help : "时间段内平台优惠券发行总数量"
             },
             {
-                name : "创建总金额",
-                help : "时间段内新建平台优惠券总金额"
+                name : "发行总金额",
+                help : "时间段内平台优惠券发行总金额"
             },
             {
                 name : "发送数量",
@@ -277,7 +280,7 @@ module.exports = (Router) => {
             },
             {
                 name : "领取率",
-                help : "平台优惠券被领取总数量/平台优惠券创建总数量"
+                help : "（当日/当周/当月）领取数量/（当日/当周/当月）发行数量"
             },
             {
                 name : "领取数量",
@@ -346,6 +349,10 @@ module.exports = (Router) => {
             {
                 name : "列表-作废率",
                 help : "优惠券作废数量/创建数量"
+            },
+            {
+                name : "发送面值占比分布",
+                help : "平台优惠券各发送的面值分布占比"
             }
         ]
     });

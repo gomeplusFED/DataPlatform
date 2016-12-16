@@ -22,16 +22,21 @@ module.exports = {
                 "group_topic_num" : 0,
                 "topic_praise_num" : 0,
                 "topic_collect_num" : 0,   //累计话题收藏数
-                "topic_reply_num" : 0 
+                "topic_reply_num" : 0,
+                "topic_subreply_num" : 0
             };
 
         for(let item of source){
-            newData.group_person_num += DealNumber(item.group_person_num);
-            newData.group_topic_num +=  DealNumber(item.group_topic_num);
-            newData.topic_praise_num += DealNumber(item.topic_praise_num);
-            newData.topic_reply_num  += DealNumber(item.topic_reply_num);
-            newData.topic_collect_num  += DealNumber(item.topic_collect_num);
+            newData[item.key] += DealNumber(item.sum_value);
+            //newData.group_person_num += DealNumber(item.group_person_num);
+            //newData.group_topic_num +=  DealNumber(item.group_topic_num);
+            //newData.topic_praise_num += DealNumber(item.topic_praise_num);
+            //newData.topic_reply_num  += DealNumber(item.topic_reply_num);
+            //newData.topic_subreply_num  += DealNumber(item.topic_subreply_num);
+            //newData.topic_collect_num  += DealNumber(item.topic_collect_num);
         }
+
+        newData.reply_num = newData.topic_reply_num + newData.topic_subreply_num;
 
         return util.toTable([[newData]], data.rows, data.cols);
     },
@@ -74,14 +79,11 @@ module.exports = {
             }
             for(var key in item){
                 if(key == "type") continue;
-                newData[num][key] += item[key];
+                if(newData[num] && newData[num][key]) {
+                    newData[num][key] += item[key];
+                }
+                newData[3][key] += item[key];
             }
-        }
-
-        /* 对APP , WAP , PC 求和 得出总计 */
-        for(var key in newData[3]){
-            if(key == "type") continue;
-            newData[3][key] = newData[0][key] + newData[1][key] + newData[2][key];
         }
 
         return util.toTable([newData], data.rows, data.cols);
@@ -121,7 +123,13 @@ module.exports = {
             data : newData,
             config: { // 配置信息
                 stack: false, // 图的堆叠
-                categoryY : false //柱状图竖着
+                categoryY : false, //柱状图竖着
+                toolBox : {
+                    magicType : {
+                        type: ['line', 'bar']
+                    },
+                    dataView: {readOnly: true}
+                }
             }
         }];
     },
@@ -130,29 +138,41 @@ module.exports = {
         var source = data.first.data[0],
             source2 = data.second.data[0],
             count = data.first.count > 100 ? 100 : data.first.count,
+            ids = [];
             newData = [];
 
         /* 整理 Statistics 取得的数据 */
-        var obj = {};
-        for(let item of source2){
-            if(!obj[item.topic_id]){
-                obj[item.topic_id] = {};
-            }
-            obj[item.topic_id][item.key] = item.value;
-        }
+        var config = {};
 
-        var columnArr = ["topic_reply_user_num","all_topic_reply_num","topic_praise_num","topic_collect_num"];
         for(let item of source){
-            for(let key of columnArr){
-                if(!obj[item.topic_id]){
-                    item[key] = 0;
-                }else{
-                    item[key] = DealNumber(obj[item.topic_id][key]);
-                }
-            }
-            item.topic_create_time = util.getDate(item.topic_create_time);
+            ids.push(item.topic_id);
             newData.push(item);
         }
+
+         for(let id of ids) {
+             config[id] = {
+                 topic_reply_user_num : 0,
+                 topic_subreply_user_num : 0,
+                 topic_reply_num : 0,
+                 topic_subreply_num : 0,
+                 topic_praise_num : 0,
+                 topic_collect_num : 0
+             };
+         }
+
+         for(let item of source2) {
+             config[item.topic_id][item.key] = item.sum_value;
+         }
+
+         for(let item of newData) {
+             let _obj = config[item.topic_id] || {};
+             item.reply_user_num = (_obj.topic_reply_user_num || 0) +
+                 (_obj.topic_subreply_user_num || 0);
+             item.topic_reply_num = _obj.topic_reply_num || 0 +
+                 _obj.topic_subreply_num || 0;
+             item.topic_praise_num = _obj.topic_praise_num || 0;
+             item.topic_collect_num = _obj.topic_collect_num || 0;
+         }
 
         return util.toTable([newData], data.rows, data.cols, [count]);
     }

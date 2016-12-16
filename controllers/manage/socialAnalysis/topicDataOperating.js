@@ -23,7 +23,7 @@ module.exports = (Router) => {
             return {
                 date : date,
                 topic_id : query.topic_id,
-                key : ["topic_subreply_num", "topic_praise_num"]
+                key : ["topic_subreply_num", "topic_reply_num", "topic_praise_num"]
             };
         },
         procedure : [{
@@ -38,7 +38,7 @@ module.exports = (Router) => {
             return filter.topicDetailOne(data);
         },
         rows: [
-            ["topic_subreply_num", "topic_praise_num"]
+            ["num", "topic_praise_num"]
         ],
         cols: [
             [{
@@ -118,22 +118,22 @@ module.exports = (Router) => {
         modelName : [ "SocialTopicDetailStatistics" ],
         platform : false,
         filter_select : [{
-            title: "平台选择",
-            filter_key : 'type',
-            groups: [{
-                key: ['APP','WAP','PC'],
-                value: '全部平台'
-            },{
-                key: 'APP',
-                value: 'APP'
-            },{
-                key: 'WAP',
-                value: 'WAP'
-            },{
-                key: 'PC',
-                value: 'PC'
-            }]
-        },{
+        //    title: "平台选择",
+        //    filter_key : 'type',
+        //    groups: [{
+        //        key: ['APP','WAP','PC'],
+        //        value: '全部平台'
+        //    },{
+        //        key: 'APP',
+        //        value: 'APP'
+        //    },{
+        //        key: 'WAP',
+        //        value: 'WAP'
+        //    },{
+        //        key: 'PC',
+        //        value: 'PC'
+        //    }]
+        //},{
             title: '指标',
             filter_key : 'filter_key',
             groups: [{

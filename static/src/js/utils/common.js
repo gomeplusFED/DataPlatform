@@ -69,4 +69,16 @@ utils.parseUrlQuery = function(fullUrl) {
 	return _cur;
 }
 
+utils.wait = (str , callback , time) => {
+	let times = time || 300;
+	let value = eval(str);
+	if(value){
+		return callback && callback();
+	}else{
+		setTimeout(()=>{
+			return utils.wait(str , callback , time);
+		} , times);
+	}
+}
+
 module.exports = utils;

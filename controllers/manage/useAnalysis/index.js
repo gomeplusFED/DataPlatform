@@ -25,14 +25,37 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/useAnalysis/useTimeOne",
         modelName : ["UserCompose"],
+        platform : false,
+        global_platform : {
+            show: true,
+            key: 'type',
+            list: [{
+                key: 'ios',
+                name: 'IOS'
+            }, {
+                key: 'android',
+                name: 'Android'
+            }, {
+                key: 'app',
+                name: 'APP'
+            }, {
+                key: 'pc',
+                name: 'PC'
+            }, {
+                key: 'm',
+                name: 'H5'
+            }]
+        },
         flexible_btn: [{
             content: '<a href="javascript:void(0)" help_url="/useAnalysis/useTime/help_json">帮助</a>',
             preMethods: ["show_help"],
             customMethods: ''
         }],
         procedure : procedure,
-        params : {
-            use_type : 1
+        params(query, params) {
+            params.use_type = 1;
+            params.type = query.type || 'ios';
+            return params;
         },
         filter(data, filter_key, dates) {
             return filter.useTimeOne(data, times, "单次使用时长");
@@ -42,8 +65,11 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/useAnalysis/useTimeTwo",
         modelName : ["UserCompose"],
-        params : {
-            use_type : 1
+        platform : false,
+        params(query, params) {
+            params.use_type = 1;
+            params.type = query.type || 'ios';
+            return params;
         },
         excel_export : true,
         flexible_btn : [{
@@ -77,8 +103,11 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/useAnalysis/useTimeThree",
         modelName : ["UserCompose"],
-        params : {
-            use_type : 4
+        platform : false,
+        params(query, params) {
+            params.use_type = 4;
+            params.type = query.type || 'ios';
+            return params;
         },
         procedure : procedure,
         filter(data, filter_key, dates) {
@@ -93,8 +122,11 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/useAnalysis/useTimeFour",
         modelName : ["UserCompose"],
-        params : {
-            use_type : 4
+        platform : false,
+        params(query, params) {
+            params.use_type = 4;
+            params.type = query.type || 'ios';
+            return params;
         },
         excel_export : true,
         flexible_btn : [{

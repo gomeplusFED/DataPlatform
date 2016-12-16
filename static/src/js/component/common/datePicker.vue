@@ -1,13 +1,20 @@
 <template>
-    <div class="btn-group date_picker" :id="'datePicker_'+index" :style="pageComponentsData[componentType].defaultData === 1 ? 'width: 120px;' : 'width: 210px'" v-show="pageComponentsData[componentType].show">
-        <input type="text" class="form-control">
+    <div 
+    class="btn-group date_picker" 
+    :class="{'global_date': isGlobal}"
+    :id="'datePicker_'+index" 
+    :style="(pageComponentsData[componentType].defaultData === 1 ? 'width: 120px' : 'width: 210px')"
+    v-if="pageComponentsData[componentType].show">
+        <input type="text" class="form-control" />
         <span class="glyphicon glyphicon-calendar fa fa-calendar"></span>
     </div>
 </template>
 <style>
 .date_picker{}
 .date_picker input{display: inline-block;vertical-align: middle;}
-.date_picker span{font-size: 12px;margin-left: -20px;position: absolute;top: 50%;transform: translateY(-50%);-webkit-transform: translateY(-50%);}
+.date_picker span{font-size: 12px;margin-left: -20px;position: absolute;right: 5px;top: 50%;transform: translateY(-50%);-webkit-transform: translateY(-50%);}
+.global_date {float: right;margin: 0 20px 10px 0;}
+.global_date::after {content:'';clear:both;}
 </style>
 <script>
 
@@ -29,12 +36,12 @@ var DateCom = Vue.extend({
     data: function() {
         return {
             // 根据url判断是否判断起止时间大于当前时间
-            validlist: [ '/custom/saveActivity' ]
+            validlist: [ '/custom/saveActivity', '/databp/bpmanage', '/databp/heatmap' ]
         }
     },
-    props: ['index','pageComponentsData','componentType','argvs','initData'],
+    props: ['index','pageComponentsData','componentType','argvs','initData', 'cancelDateLimit', 'isGlobal'],
     ready: function() {
-
+       
     },
     methods: {
 
@@ -43,10 +50,8 @@ var DateCom = Vue.extend({
         'pageComponentsData': {
             handler: function(val){
                 var _this = this;
+
                 // 异步请求组件参数，watch到变化之后初始化，其它组件类似
-                if(val === null || !this.pageComponentsData[this.componentType].show){
-                    return;
-                }
                 var today = utils.formatDate (new Date(),'yyyy-MM-dd');
                 var yesterday = utils.formatDate (new Date(Date.now() - 24 * 60 * 60 * 1000),'yyyy-MM-dd');
                 var last7Day = utils.formatDate (new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),'yyyy-MM-dd');
@@ -68,6 +73,11 @@ var DateCom = Vue.extend({
                 // 初始化需要发送参数
                 this.argvs.startTime = this.pageComponentsData[this.componentType].defaultData === 1 ? yesterday : last7Day;
                 this.argvs.endTime = yesterday;
+                this.argvs.day_type = 1;
+
+                if(val === null || !this.pageComponentsData[this.componentType].show){
+                    return;
+                }
 
                 var options = {
                     "startDate": this.pageComponentsData[this.componentType].defaultData === 1 ? yesterday : last7Day,
@@ -90,6 +100,10 @@ var DateCom = Vue.extend({
                     },
                     "ranges": this.pageComponentsData[this.componentType].defaultData === 7 ? range : {"昨天": [yesterday, yesterday]},
                     "showDayUnit": this.pageComponentsData[this.componentType].showDayUnit ? true : false
+                }
+                // 取消日期限制
+                if(this.cancelDateLimit) {
+                    options.dateLimit = null;
                 }
                 $('#datePicker_' + this.index).find('input').daterangepicker(options);
                 $('#datePicker_' + this.index).find('input').on('cancel.daterangepicker',function(ev, picker){

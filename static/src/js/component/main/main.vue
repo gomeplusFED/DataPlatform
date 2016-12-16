@@ -11,6 +11,7 @@
 						<m-drop-down :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'coupon'" :argvs.sync='argvs'></m-drop-down>
 						<m-date :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'date_picker'" :argvs.sync='argvs'></m-date>
 						<m-btns :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'btn_group'" :result-argvs="resultArgvs"></m-btns>
+						<m-toggle :page-components-data="pageComponentsData" component-type="toggle" :fun="toggle"></m-toggle>
 					</div>
 				</div>
 				<div class="panel-body">
@@ -57,6 +58,9 @@
 var Vue = require('Vue');
 var $ = require('jQuery');
 
+var store = require('../../store/store.js');
+var actions = require('../../store/actions.js');
+
 var DatePicker = require('../common/datePicker.vue');
 var DropDown = require('../common/dropDown.vue');
 var FilterSelect = require('../common/filterSelect.vue');
@@ -66,6 +70,7 @@ var Btns = require('../common/btnGroup.vue');
 var LevelSelect = require('../common/levelSelect.vue');
 var Search = require('../common/search.vue');
 var ControlTableCol = require('../common/control-table-col.vue');
+var Toggle = require('../common/toggle.vue');
 
 var utils = require('utils');
 
@@ -82,7 +87,8 @@ var Main = Vue.extend({
 				coupon_type: '',
 				startTime: '',
 				endTime: '',
-				day_type: 1
+				day_type: 1,
+				main_show_type_filter : ''
 			},
 			pageComponentsData: null,
 			resultArgvs: {},
@@ -100,11 +106,12 @@ var Main = Vue.extend({
 		'm-btns': Btns,
 		'm-level-select': LevelSelect,
 		'm-search': Search,
-		'm-control-table-col': ControlTableCol
+		'm-control-table-col': ControlTableCol,
+		'm-toggle': Toggle
 	},
 	route: {
 		data: function() {
-
+			
 		}
 	},
 	ready: function() {
@@ -114,7 +121,7 @@ var Main = Vue.extend({
 			type: 'get',
 			success: function(data) {
 				_this.pageComponentsData = data.components;
-
+				
 				if (_this.isnoComponent(data.components)) {
 					Vue.set(_this.argvs, 'forceChange', true);
 					_this.count = 0;
@@ -124,7 +131,17 @@ var Main = Vue.extend({
 					_this.count = 0;
 				}
 				if (/.*(\/.*One)/.test(_this.currentData.query_api)) {
-					eventBus.$emit('globalPlataform', data.components.global_plataform || {});
+					data.components.global_plataform = data.components.global_plataform || {}
+					if (data.components.global_plataform instanceof Array) {
+						eventBus.$emit('globalPlataform', data.components.global_plataform[0]);
+						eventBus.$emit('globalPlataform1', data.components.global_plataform[1]);
+					} else if (data.components.global_plataform instanceof Object) {
+						eventBus.$emit('globalPlataform', data.components.global_plataform);
+						eventBus.$emit('globalPlataform1', {});
+					}
+				} else if (!_this.index) {
+					eventBus.$emit('globalPlataform', {});
+					eventBus.$emit('globalPlataform1', {});
 				}
 			}
 		});
@@ -135,10 +152,19 @@ var Main = Vue.extend({
 	methods: {
 		isnoComponent: function(componentData) {
 			// 如果没有组件，强制更新argvs
+			if (!componentData) {
+				return false;
+			}
 			if (!componentData.date_picker.show && !componentData.drop_down.channel && !componentData.drop_down.coupon && !componentData.drop_down.platform && !componentData.drop_down.version && !componentData.filter_select.length) {
 				return true;
 			}
 			return false;
+		},	
+		toggle: function(val) {
+			// 修改全局配置
+			actions.updateCurrentPageDefaultData(store, this.currentData.query_api, val)
+			// 传给后台的参数
+			this.argvs.main_show_type_filter  = val;
 		}
 	},
 	watch: {

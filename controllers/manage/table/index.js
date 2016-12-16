@@ -17,6 +17,17 @@ module.exports = (Router) => {
         date_picker_data: 1,
         showDayUnit : true,
         excel_export : true,
+        procedure : [[
+            {
+                find : "params",
+                offset : "offset",
+                limit : "limit",
+                order : ["category_id_1"],
+                run : ""
+            },{
+                count : ""
+            }
+        ]],
         secondParams(query, params, data) {
             return {};
         },

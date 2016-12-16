@@ -87,7 +87,10 @@ var Btns = Vue.extend({
                         resultQuery.push('from=' + from);
                         resultQuery.push('to=' + to);
                     }
-                    window.open(window.allPageConfig.page[key].defaultData[this.index].query_api + '_excel?' +  resultQuery.join('&'));
+                    // 如果有全局组件,index + 1
+                    var defaultData = window.allPageConfig.page[key].defaultData;
+                    var query_api = defaultData[defaultData[0].query_api.indexOf('Zero') > -1 ? (this.index+1) : this.index].query_api;
+                    window.open(query_api + '_excel?' +  resultQuery.join('&'));
                 }
             })
         },
@@ -108,7 +111,7 @@ var Btns = Vue.extend({
                 type: 'get',
                 success: function(data){
                     _this.hasRequestUrl = helpUrl;
-                    var tableData = data.modelData[0];
+                    var tableData = data.modelData;
                     actions.modalTable(store, {
                         show: true,
                         title: '帮助信息',

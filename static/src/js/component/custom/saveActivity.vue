@@ -33,8 +33,9 @@
 						</div>
 						<div class="form-group">
 							<label for=""  class="col-sm-1 control-label">活动起止时间:</label>
+							<div class="col-sm-1"></div>
 							<div class="col-sm-6">
-								<m-date :index="dateConifg.index" :init-data="dateConifg.initData" :page-components-data="dateConifg.pageComponentsData" :component-type="'date_picker'" :argvs.sync='dateConifg.argvs'></m-date>
+								<m-date :index="dateConifg.index" :init-data="dateConifg.initData" :page-components-data="dateConifg.pageComponentsData" :component-type="'date_picker'" :argvs.sync='dateConifg.argvs' :cancel-date-limit='true'></m-date>
 							</div>
 						</div>
 					</form>
@@ -64,7 +65,13 @@
 								<input type="text" v-model="channel.channel_id" class="form-control" placeholder="">
 							</div>
 						</div>
-						<button class='btn btn-primary' @click="addChannel">添加</button>
+						<div class="form-group">
+							<label for="channel_id"  class="col-sm-1 control-label"></label>
+							<div class="col-sm-4">
+								<button class='btn btn-primary' @click="addChannel">添加</button>
+							</div>
+						</div>
+						
 					</div>
 				</div>
 				<div class="remark">
@@ -186,10 +193,11 @@
 						if(res.code === 200){
 							_this.model = res.data;
 							if (_this.model.activity_start_time && _this.model.activity_end_time) {
-								_this.dateConifg.argvs.startTime = _this.model.activity_start_time;
-								_this.dateConifg.argvs.endTime = _this.model.activity_end_time;
+								// _this.dateConifg.argvs.startTime = _this.model.activity_start_time;
+								// _this.dateConifg.argvs.endTime = _this.model.activity_end_time;
+								$('.date_picker>input').val(`${_this.model.activity_start_time}-${_this.model.activity_end_time}`);
 							}
-							$('.date_picker>input').attr('disabled', 'disabled');
+							// $('.date_picker>input').attr('disabled', 'disabled');
 						}
 					})
 				}
@@ -211,5 +219,9 @@
 	.panel-body>div {
 		margin: 10px 0;
 		border-bottom: 1px solid #eee;
+	}
+
+	.form-group label {
+		min-width: 140px;
 	}
 </style>

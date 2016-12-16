@@ -7,6 +7,10 @@ actions.alert = function(store, params) {
     }, 2500);
 }
 
+actions.databp = function(store, params) {
+    store.dispatch('DATABP', params);
+}
+
 actions.modalTable = function(store, params) {
     store.dispatch('MODALTABLE', params);
 }
@@ -17,6 +21,10 @@ actions.hideModalTable = function(store) {
 
 actions.setCurrentPageDefaultData = function(store, data) {
     store.dispatch('SETCURRENTPAGEDEFAULTDATA', data);
+}
+
+actions.updateCurrentPageDefaultData = function(store, query_api, type) {
+    store.dispatch('UPDATECURRENTPAGEDEFAULTDATA', query_api, type);
 }
 
 actions.confirm = function(store, params) {

@@ -9,6 +9,15 @@ var state = {
         msg: '提示信息',
         type: 'info'
     },
+    bpConfig: {
+        show: false,
+        trigger: false,
+        privateParam: '',
+        publicParam: '',
+        pageUrl: '',
+        selector: '',
+        platform: ''
+    },
     modalTableData: {
         show: false,
         title: '弹窗表格',
@@ -50,6 +59,16 @@ mutations.ALERT = function(state, params) {
     state.alertConfig.type = params.type || 'info';  // info/warning/success/danger
 }
 
+mutations.DATABP = function(state, params) {
+    state.bpConfig.show = params.show;
+    state.bpConfig.trigger = !state.bpConfig.trigger;
+    state.bpConfig.privateParam = params.privateParam;
+    state.bpConfig.publicParam = params.publicParam;
+    state.bpConfig.pageUrl = params.pageUrl;
+    state.bpConfig.selector = params.selector;
+    state.bpConfig.platform = params.platform;
+}
+
 mutations.HIDEALERT = function(state) {
     state.alertConfig.show = false;
 }
@@ -76,6 +95,15 @@ mutations.HIDEMODALTABLE = function(state) {
 
 mutations.SETCURRENTPAGEDEFAULTDATA = function(state, data) {
     state.currentPageDefaultData = data;
+}
+
+mutations.UPDATECURRENTPAGEDEFAULTDATA = function(state, query_api, type) {
+    let data = state.currentPageDefaultData.defaultData.find(function(item) {
+        return item.query_api === query_api;
+    })
+    if (data) {
+        data.type = type;
+    }
 }
 
 mutations.CONFIRM = function(state, params){

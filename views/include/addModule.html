@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title><%= siteName %> <%= pageTitle %></title>
+    <!-- rev-hash -->
+<link rel="stylesheet" href="/dist/css/DataPlatform.min.css?v=f405471da9a8909037bc11ebd2d1b3ce"/>
+<!-- end -->
+    <link rel="shortcut icon" href="/dist/img/favico.ico" type="image/x-icon">
+</head>
+<body>
+<div id="wrapper">
+    <h2>
+        开发人员添加修改模块
+    </h2>
+
+    <style>
+        .routerView{
+            margin-left: 250px;
+            background: #fff;
+            padding: 20px;
+
+        }
+    </style>
+
+    <div class="app addMoudle" id="addMoudle">
+        <side-bar></side-bar>
+        <section class="routerView">
+            <router-view></router-view>
+        </section>
+    </div>
+
+
+
+
+
+</div>
+<!-- rev-hash -->
+<script src="/dist/js/vendor.min.js?v=fb425c45bc547d9b6b581b7484175cd7"></script>
+<script src="/dist/js/addModule.min.js?v=f3cf5539a79a9a290e819b2919d19fd9"></script>
+<!-- end -->
+</body>
+</html>

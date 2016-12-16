@@ -1,5 +1,34 @@
 var path = require('path');
 var config = require('./config.json');
+const validator = require('validator');
+const request = require("request");
+const style = {
+    border : {
+        left : {
+            style : "thin",
+            color : "#000000"
+        },
+        right : {
+            style : "thin",
+            color : "#000000"
+        },
+        top : {
+            style : "thin",
+            color : "#000000"
+        },
+        bottom : {
+            style : "thin",
+            color : "#000000"
+        }
+    }
+};
+const header = {
+    fill : {
+        type: 'pattern',
+        patternType: 'solid',
+        fgColor: '#FFFF33'
+    }
+};
 
 exports.unique = function(data) {
     data = data || [];
@@ -125,7 +154,7 @@ exports.uniq = function(dates){
     return result;
 };
 
-exports.toTable = function(data, rows, cols, count) {
+exports.toTable = function(data, rows, cols, count , noborder) {
     var newData = [];
     for(var i = 0; i < data.length; i++) {
         var obj = {
@@ -144,6 +173,10 @@ exports.toTable = function(data, rows, cols, count) {
             if(count.config) {
                 obj.config = count.config[i];
             }
+        }
+
+        if(noborder && noborder[i]){
+            obj["nobordered"] = true;
         }
         newData.push(obj);
     }
@@ -173,7 +206,7 @@ exports.sort = function(array, first, second) {
 };
 
 exports.toFixed = function(one, two) {
-    return (one / (two === 0 ? 1 : two) * 100).toFixed(2) + "%";
+    return (one / (Math.ceil(two) === 0 ? 1 : two) * 100).toFixed(2) + "%";
 };
 
 exports.percentage = function(one, two) {
@@ -185,7 +218,7 @@ exports.toRound = function(one, two) {
 };
 
 exports.division = function(one, two) {
-    return (one / (two === 0 ? 1 : two)).toFixed(2);
+    return (one / (Math.ceil(two) === 0 ? 1 : two)).toFixed(2);
 };
 
 exports.round = function(one, two) {
@@ -201,7 +234,27 @@ exports.ceil = function(one, two) {
 };
 
 exports.getDate = function(date){
-    return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+    let theDate = typeof date == "string" ? new Date(date) : date;
+    return theDate.getFullYear() + '-' + (theDate.getMonth() + 1) + '-' + theDate.getDate();
+};
+
+
+/*numberLeave("234.567789" , 3) // 234.567*/
+exports.numberLeave = function(number , num){
+    if(typeof number != "number"){
+        console.error("must be a number");
+        return 0;
+    }
+    if(!number) return 0;
+
+    let a = 1;
+    let i = 0;
+    while(i<num){
+        a *= 10;
+        i++;
+    }
+    number = parseInt(number*a);
+    return number/a;
 };
 
 exports.times = function(startTime, endTime, day_type) {
@@ -306,27 +359,54 @@ exports.mergeCell = function(data, rows) {
                     });
                 }
             } else {
-                if(j !== 0 && (
-                        (data[j][rows[i]] === data[j -1][rows[i]] &&
-                        data[j][rows[i - 1]] !== data[j -1][rows[i - 1]]) || (
-                            data[j][rows[i]] !== data[j -1][rows[i]] &&
-                            data[j][rows[i - 1]] !== data[j -1][rows[i - 1]]
-                        )) ) {
+                if(j !== 0) {
+                    if(data[j][rows[i - 1]] === data[j - 1][rows[i - 1]]) {
+                        if(data[j][rows[i]] !== data[j - 1][rows[i]]) {
+                            _array.push({
+                                col : i,
+                                row : col,
+                                end : {
+                                    col : i,
+                                    row : j  - col
+                                }
+                            });
+                            col = j;
+                        } else if(j === data.length - 1) {
+                            _array.push({
+                                col : i,
+                                row : col,
+                                end : {
+                                    col : i,
+                                    row : j - col + 1
+                                }
+                            });
+                        }
+                    } else {
+                        _array.push({
+                            col : i,
+                            row : col,
+                            end : {
+                                col : i,
+                                row : j - col
+                            }
+                        });
+                        col = j;
+                    }
+                } else if(j === data.length - 1){
                     _array.push({
                         col : i,
                         row : col,
                         end : {
                             col : i,
-                            row : j - 1
+                            row : j - col + 1
                         }
                     });
-                    col = j;
                 }
             }
         }
     }
     for(var key of _array) {
-        if(key.row !== key.end.row || key.col !== key.end.col) {
+        if(key.end.row !== 1 || 1 !== key.end.col) {
             merge.push(key);
         }
     }
@@ -335,6 +415,288 @@ exports.mergeCell = function(data, rows) {
 
 
 exports.isEmptyObject = function(obj){
-    for(var n in obj){ return false };
+    for(var n in obj){ return false }
     return true;
-}
+};
+
+
+/*
+ * 功能描述：给定一个日期，获取前几日／前几周／前几月的日期
+ * 参数 ：date , 给定的日期
+ *       num  , 要获取几个，包含date ,默认只包含1天
+ *       type , 日 1，周 2， 月 3，  默认1  
+ * 备注：月份只会返回获得月的最后一天 
+ * beforeDate("2016-2-2" , 5 , 3)
+ [  '2016-2-29',
+    '2016-1-31',
+    '2015-12-31',
+    '2015-11-30',
+    '2015-10-31' 
+]
+*/
+
+exports.beforeDate = function( date , num , type ){
+    var type = type/1 || 1,
+        num  = num || 1,
+        thisDate = new Date(date),
+        arr = [];    //返回的数组
+    //date是必须的
+    if(!date) return false;
+
+    var Units;
+
+    switch(type){
+        case 1:
+            Units = 1000*60*60*24;
+            break;
+        case 2:
+            Units = 1000*60*60*24*7;
+            break;
+        case 3:
+            break;
+    }
+
+    for(var i=0;i<num;i++){
+        var aDate;
+        if(Units){
+            //日，周
+            aDate = new Date(thisDate.getTime() - i*Units);
+            aDate = aDate.getFullYear() + "-" + (aDate.getMonth()+1) + "-" + aDate.getDate();
+        }else{
+            //月
+            var year = thisDate.getFullYear();
+            var month = thisDate.getMonth() + 1 - i;
+            if(month <= 0){
+                month += 12;
+                year--;
+            }
+            var mDate = new Date(year , month , 0);
+            aDate = year + "-" + month + "-" + mDate.getDate();
+        }
+        arr.push(aDate);
+    }
+
+    return arr;
+};
+
+/* 调换数组顺序 */
+exports.ArraySort = function(arr){
+    if(arr instanceof Array && arr.length > 1){
+        let len = arr.length,
+            arr2= [];
+
+        for(let i=0;i<len;i++){
+            arr2.unshift(arr[i]);
+        }
+        return arr2;
+    }else{
+        return arr;
+    }
+};
+
+/* 商品价目对照表 */
+exports.prizeRange = {
+    '0': '0~10元',
+    '1': '10~20元',
+    '2': '20~30元',
+    '3': '30~40元',
+    '4': '40~50元',
+    '5': '50~60元',
+    '6': '60~70元',
+    '7': '70~80元',
+    '8': '80~90元',
+    '9': '90~100元',
+    '10': '100+元',
+
+    '11': '0~10元',
+    '12': '10~20元',
+    '13': '20~30元',
+    '14': '30~50元',
+    '15': '50~100元',
+    '16': '100~200元',
+    '17': '200~300元',
+    '18': '300~500元',
+    '19': '500~800元',
+    '20': '800~1000元',
+    '21': '1000+元',
+
+    '22': '0~100元',
+    '23': '100~200元',
+    '24': '200~300元',
+    '25': '300~500元',
+    '26': '500~1000元',
+    '27': '1000~2000元',
+    '28': '2000~3000元',
+    '29': '3000~5000元',
+    '30': '5000~7000元',
+    '31': '7000~10000元',
+    '32': '10000+元',
+
+
+    '33': '0~20元',
+    '34': '20~50元',
+    '35': '50~100元',
+    '36': '100~300元',
+    '37': '300~500元',
+    '38': '500~1000元',
+    '39': '1000~2000元',
+    '40': '2000~3000元',
+    '41': '3000~5000元',
+    '42': '5000~10000元',
+    '43': '10000+元'
+};
+
+/* 处理除数为0的计算 ， a / b  , b == 0 , return 0. */
+exports.dealDivision = function(a , b , num){
+    if(b == 0 || !b) return 0;
+    if(num){
+        return exports.numberLeave(a / b , num);
+    }else{
+        return a / b;
+    }
+};
+
+exports.merge = (ws, x1, y1, x2, y2, str, _style) => {
+    let w = ws.cell(x1, y1, x2, y2, true);
+    if(typeof str === "string") {
+        w = w.string(str);
+    } else {
+        w = w.number(str);
+    }
+    if(_style) {
+        w.style(_style);
+    }
+    w.style(style);
+};
+
+exports.export = (ws, data) => {
+    for(let i = 0; i < data.length; i++) {
+        let key = data[i];
+        let x = i + 1;
+        for(let j = 0; j < key.length; j++) {
+            let y = j + 1;
+            let k = key[j];
+            if(k instanceof Array) {
+                exports.merge(ws, ...k);
+            } else if(typeof k === "string") {
+                ws.cell(x, y).string(k).style(style);
+            } else if(typeof k === "number") {
+                ws.cell(x, y).number(k).style(style);
+            } else {
+                let w = ws.cell(x, y);
+                if(typeof k.name === "string") {
+                    w = w.string(k.name);
+                } else {
+                    w = w.number(k.name);
+                }
+                w.style(k.style).style(style);
+            }
+        }
+    }
+};
+//下载无任何style
+exports.arrayToArray = (modelData, useCol = true) => {
+    const newData = [];
+    for(let item of modelData) {
+        const cols = item.cols;
+        const data = item.data;
+        const rows = item.rows;
+        if(useCol) {
+            const arr = [];
+            for(let col of cols) {
+                arr.push({
+                    name : col.caption,
+                    style : header
+                });
+            }
+            newData.push(arr);
+        }
+        for(let key of data) {
+            let a = [];
+            for(let row of rows) {
+                a.push(key[row]);
+            }
+            newData.push(a);
+        }
+        newData.push([]);
+        newData.push([]);
+    }
+
+    return newData;
+};
+
+exports.request = (req, url, ep, emitName) => {
+    request({
+        url : url,
+        headers : req.headers
+    }, (err, response, body) => {
+        body = JSON.parse(body);
+        if(body.iserro) {
+            return ep.emit("error", `${emitName} has error!!!`);
+        }
+        ep.emit(emitName, body.modelData);
+    });
+};
+
+exports.excelReport = (modelData, useCol=true) => {
+    const newData = [];
+    for(let item of modelData) {
+        const cols = item.cols;
+        const data = item.data;
+        const rows = item.rows;
+        const up = {
+            font : {
+                color : "#FF0000"
+            }
+        };
+        const down = {
+            font : {
+                color : "#00FF00"
+            }
+        };
+        const arr = [];
+        if(useCol) {
+            for(let col of cols) {
+                arr.push({
+                    name : col.caption,
+                    style : header
+                });
+            }
+            newData.push(arr);
+        }
+        for(let key of data) {
+            let a = [];
+            if(validator.isDate(key.date) || key.date === "近30天平均") {
+                for(let row of rows) {
+                    a.push(key[row]);
+                }
+            } else {
+                for(let row of rows) {
+                    const d = key[row];
+                    if(typeof d === "string") {
+                        if(+d.replace("%", "") >= 0 && d !== "--") {
+                            a.push({
+                                name : "↑" +d,
+                                style : up
+                            });
+                        } else if(+d.replace("%", "") <= 0 && d !== "--") {
+                            a.push({
+                                name : "↓" + d,
+                                style : down
+                            });
+                        } else {
+                            a.push(d);
+                        }
+                    } else {
+                        a.push(d);
+                    }
+                }
+            }
+            newData.push(a);
+        }
+        newData.push([]);
+        newData.push([]);
+    }
+
+    return newData;
+};

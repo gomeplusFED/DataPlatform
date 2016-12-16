@@ -3,7 +3,7 @@
  * @date 20160418
  * @fileoverview 设备终端
  */
-var api = require("../../../base/api"),
+var api = require("../../../base/main"),
     filter = require("../../../filters/terminal");
 
 module.exports = (Router) => {
@@ -12,6 +12,16 @@ module.exports = (Router) => {
         router : "/terminal/modelOne",
         modelName : ["KeyValue"],
         platform : false,
+        toggle : true,
+        firstSql(query, params) {
+            let sql = `SELECT SUM(value) value, SUM(value3) value3, key_name FROM ads2_terminal_key_value WHERE date <= ? AND date >= ? AND key_type=? GROUP BY key_name ORDER BY ${query.filter_key} DESC LIMIT 0,10`,
+                _params = [query.endTime, query.startTime, query.key_type];
+
+            return {
+                sql : sql,
+                params : _params
+            }
+        },
         filter_select: [{
             title: '',
             filter_key : 'key_type',
@@ -59,8 +69,8 @@ module.exports = (Router) => {
                 }
             }]
         }],
-        filter(data, filter_key, dates) {
-            return filter.modelOne(data, filter_key);
+        filter(data, query, dates) {
+            return filter.modelOne(data, query);
         }
     });
 
@@ -68,9 +78,29 @@ module.exports = (Router) => {
         router : "/terminal/modelTwo",
         modelName : ["KeyValue"],
         platform : false,
-        paging : true,
-        order : ["-date"],
-        sum : ["value", "value3"],
+        paging : [true],
+        firstSql(query, params, isCount) {
+            if(isCount) {
+                let sql = `SELECT COUNT(key_name) count, SUM(value) value, SUM(value3) value3  FROM ads2_terminal_key_value WHERE date <= ? AND date >= ? AND key_type=? GROUP BY key_name`,
+                    _params = [query.endTime, query.startTime, query.key_type];
+
+                return {
+                    sql : sql,
+                    params : _params
+                };
+            } else {
+                let sql = `SELECT SUM(value) value, SUM(value3) value3, key_name FROM ads2_terminal_key_value WHERE date <= ? AND date >= ? AND key_type=? GROUP BY key_name ORDER BY value DESC LIMIT ?,?`,
+                    page = query.page - 1 || 0,
+                    offset = query.from || (page * query.limit),
+                    limit = query.to || query.limit || 0,
+                    _params = [query.endTime, query.startTime, query.key_type, +offset, +limit];
+
+                return {
+                    sql : sql,
+                    params : _params
+                };
+            }
+        },
         filter_select: [{
             title: '',
             filter_key : 'key_type',
@@ -90,8 +120,8 @@ module.exports = (Router) => {
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
-        filter(data, filter_key, dates) {
-            return filter.modelTwo(data, filter_key);
+        filter(data, query, dates) {
+            return filter.modelTwo(data, query.filter_key);
         },
         rows : [
             [ 'key_name', 'value', 'new_users_rate', 'value3', 'start_up_rate' ]
