@@ -211,6 +211,22 @@ module.exports = {
             name : "交易面板",
             path : "/achievements/tradePanel",
             display : true,
+            subPage : [{
+                url : "/achievements/trade",
+                name : "交易分析"
+            }, {
+                url : "/achievements/order",
+                name : "订单分析"
+            }, {
+                url : "/achievements/productSale",
+                name : "商品分析"
+            }, {
+                url : "/achievements/pay",
+                name : "支付分析"
+            }, {
+                url : "/coupon",
+                name : "优惠劵分析"
+            }],
             defaultData : [
                 {
                     type : "chart",

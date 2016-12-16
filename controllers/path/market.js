@@ -19,6 +19,10 @@ module.exports = {
             name: "活动管理",
             path: "/activity/list",
             display: true,
+            subPages : [{
+                url : "/custom/saveActivity",
+                name : "新建活动"
+            }],
             defaultData: [{
                 type: "table",
                 title: "活动列表",

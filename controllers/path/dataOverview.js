@@ -10,6 +10,13 @@ module.exports = {
             name: "数据概览",
             path: "/dataOverview/app",
             display: true,
+            subPages : [{
+                url : "/terminal/provinces",
+                name : "地域"
+            }, {
+                url : "/useAnalysis/accessPage",
+                name : "访问页面"
+            }],
             defaultData: [{
                 type: "table",
                 title: "数据概览",
