@@ -21,6 +21,7 @@ module.exports = {
     },
     rebate_total() {
         return {
+            id : 4,
             name : "返利报表",
             path : "/socialAnalysis/rebate",
             display : true,
@@ -49,7 +50,8 @@ module.exports = {
     },
     data_table_day() {
         return {
-            name : "数据报表",
+            id : 1,
+            name : "数据日报",
             path : "/socialAnalysis/dataTableDay",
             display : true,
             defaultData : [
@@ -73,7 +75,8 @@ module.exports = {
     },
     data_table_week() {
         return {
-            name : "数据报表",
+            id : 2,
+            name : "数据周报",
             path : "/socialAnalysis/dataTableWeek",
             display : true,
             defaultData : [
@@ -91,7 +94,8 @@ module.exports = {
     },
     data_table_month() {
         return {
-            name : "数据报表",
+            id : 3,
+            name : "数据月报",
             path : "/socialAnalysis/dataTableMonth",
             display : true,
             defaultData : [
