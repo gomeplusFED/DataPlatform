@@ -304,12 +304,12 @@ const Config = {
             path: [
                 obj.table.table(),
                 obj.table.data_table_day(),
+                obj.table.data_table_week(),
+                obj.table.data_table_month(),
                 obj.table.rebate_total()
             ],
             routers : [
                 obj.table.rebate_total_new(),
-                obj.table.data_table_week(),
-                obj.table.data_table_month(),
                 obj.table.data_table_day_order(),
                 obj.table.data_table_week_order(),
                 obj.table.data_table_month_order(),
