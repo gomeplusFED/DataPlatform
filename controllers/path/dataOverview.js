@@ -7,6 +7,7 @@
 module.exports = {
     all() {
         return {
+            id : 0,
             name: "数据概览",
             path: "/dataOverview/app",
             display: true,

@@ -7,6 +7,7 @@
 module.exports = {
     model() {
         return {
+            id : 0,
             name : "设备终端",
             path : "/terminal/model",
             display : true,
@@ -26,6 +27,7 @@ module.exports = {
     },
     network() {
         return {
+            id : 1,
             name : "网络及运营商",
             path : "/terminal/network",
             display : true,
@@ -45,6 +47,7 @@ module.exports = {
     },
     provinces() {
         return {
+            id : 2,
             name : "地域",
             router : "/terminal/provinces",
             path : "/terminal/provinces",

@@ -43,6 +43,7 @@ module.exports = {
     },
     market() {
         return {
+            id : 1,
             name: "营销渠道分析",
             path: "/channelAnalysis/market",
             display: true,
@@ -75,6 +76,7 @@ module.exports = {
     },
     apk() {
         return {
+            id : 0,
             name: "APK渠道列表",
             path: "/channelAnalysis/apk",
             display: true,

@@ -36,6 +36,7 @@ module.exports = {
     },
     shopOverview(){
         return {
+            id : 0,
             name : "店铺总览",
             path : "/achievements/shopOverview",
             display : true,
@@ -70,6 +71,7 @@ module.exports = {
     },
     shopRun(){
         return {
+            id : 1,
             name : "店铺运营分析",
             path : "/achievements/shopRun",
             display : true,
@@ -99,6 +101,7 @@ module.exports = {
     },
     product() {
         return {
+            id : 2,
             name : "商品运营分析",
             path : "/achievements/product",
             display : true,
@@ -142,6 +145,7 @@ module.exports = {
     },
     productSale() {
         return {
+            id : 3,
             name : "商品销售分析",
             path : "/achievements/productSale",
             display : true,
@@ -175,6 +179,7 @@ module.exports = {
     },
     trade() {
         return {
+            id : 5,
             name : "交易分析",
             path : "/achievements/trade",
             display : true,
@@ -208,6 +213,7 @@ module.exports = {
     },
     tradePanel(){
         return {
+            id : 4,
             name : "交易面板",
             path : "/achievements/tradePanel",
             display : true,
@@ -267,6 +273,7 @@ module.exports = {
     },
     vshop() {
         return {
+            id : 6,
             name : "美店店铺商品",
             path : "/achievements/vshop",
             display : true,
@@ -301,6 +308,7 @@ module.exports = {
     },
     vtrade() {
         return {
+            id : 7,
             name : "美店交易",
             path : "/achievements/vtrade",
             display : true,

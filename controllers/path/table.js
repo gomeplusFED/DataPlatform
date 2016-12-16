@@ -7,6 +7,7 @@
 module.exports = {
     table() {
         return {
+            id : 0,
             name : "社交报表",
             path : "/socialAnalysis/table",
             display : true,

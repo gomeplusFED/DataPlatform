@@ -7,6 +7,7 @@
 module.exports = {
     video() {
         return {
+            id : 0,
             name : "视频统计",
             path : "/videoStatis/video",
             display : true,
@@ -31,6 +32,7 @@ module.exports = {
     },
     videoEdition() {
         return {
+            id : 1,
             name : "视频版本统计",
             path : "/videoStatis/edition",
             display : true,

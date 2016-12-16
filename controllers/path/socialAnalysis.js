@@ -7,6 +7,7 @@
 module.exports = {
     group() {
         return {
+            id : 0,
             name : "圈子数据",
             path : "/socialAnalysis/group",
             display : true,
@@ -75,6 +76,7 @@ module.exports = {
     },
     topics() {
         return {
+            id : 1,
             name : "话题数据",
             path : "/socialAnalysis/topics",
             display : true,
@@ -138,6 +140,7 @@ module.exports = {
     },
     groupHost() {
         return {
+            id : 2,
             name : "圈主数据",
             path : "/socialAnalysis/host",
             display : true,

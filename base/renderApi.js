@@ -96,7 +96,7 @@ renderApi.prototype = {
                     var path = limit.path[value];
                     if(path) {
                         page[path.path] = {
-                            id: key,
+                            id: path.id,
                             pageTitle : path.name,
                             defaultData : path.defaultData
                         };
@@ -114,9 +114,11 @@ renderApi.prototype = {
             }
             if(limit.display) {
                 pageAll[key] = {
+                    id : limit.id,
                     name : limit.name,
                     path : limit.path
                 };
+                console.log(pageAll[key]);
             }
         };
         res.render(this.view, {
