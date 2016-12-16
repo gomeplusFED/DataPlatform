@@ -1,5 +1,34 @@
 var path = require('path');
 var config = require('./config.json');
+const validator = require('validator');
+const request = require("request");
+const style = {
+    border : {
+        left : {
+            style : "thin",
+            color : "#000000"
+        },
+        right : {
+            style : "thin",
+            color : "#000000"
+        },
+        top : {
+            style : "thin",
+            color : "#000000"
+        },
+        bottom : {
+            style : "thin",
+            color : "#000000"
+        }
+    }
+};
+const header = {
+    fill : {
+        type: 'pattern',
+        patternType: 'solid',
+        fgColor: '#FFFF33'
+    }
+};
 
 exports.unique = function(data) {
     data = data || [];
@@ -226,7 +255,7 @@ exports.numberLeave = function(number , num){
     }
     number = parseInt(number*a);
     return number/a;
-}
+};
 
 exports.times = function(startTime, endTime, day_type) {
     var start = new Date(startTime).getTime(),
@@ -388,7 +417,7 @@ exports.mergeCell = function(data, rows) {
 exports.isEmptyObject = function(obj){
     for(var n in obj){ return false }
     return true;
-}
+};
 
 
 /*
@@ -448,7 +477,7 @@ exports.beforeDate = function( date , num , type ){
     }
 
     return arr;
-}
+};
 
 /* 调换数组顺序 */
 exports.ArraySort = function(arr){
@@ -463,7 +492,7 @@ exports.ArraySort = function(arr){
     }else{
         return arr;
     }
-}
+};
 
 /* 商品价目对照表 */
 exports.prizeRange = {
@@ -525,18 +554,19 @@ exports.dealDivision = function(a , b , num){
     }else{
         return a / b;
     }
-}
+};
 
-exports.merge = (ws, x1, y1, x2, y2, str, style) => {
+exports.merge = (ws, x1, y1, x2, y2, str, _style) => {
     let w = ws.cell(x1, y1, x2, y2, true);
     if(typeof str === "string") {
         w = w.string(str);
     } else {
         w = w.number(str);
     }
-    if(style) {
-        w.style(style);
+    if(_style) {
+        w.style(_style);
     }
+    w.style(style);
 };
 
 exports.export = (ws, data) => {
@@ -549,9 +579,9 @@ exports.export = (ws, data) => {
             if(k instanceof Array) {
                 exports.merge(ws, ...k);
             } else if(typeof k === "string") {
-                ws.cell(x, y).string(k);
+                ws.cell(x, y).string(k).style(style);
             } else if(typeof k === "number") {
-                ws.cell(x, y).number(k);
+                ws.cell(x, y).number(k).style(style);
             } else {
                 let w = ws.cell(x, y);
                 if(typeof k.name === "string") {
@@ -559,8 +589,114 @@ exports.export = (ws, data) => {
                 } else {
                     w = w.number(k.name);
                 }
-                w.style(k.style);
+                w.style(k.style).style(style);
             }
         }
     }
+};
+//下载无任何style
+exports.arrayToArray = (modelData, useCol = true) => {
+    const newData = [];
+    for(let item of modelData) {
+        const cols = item.cols;
+        const data = item.data;
+        const rows = item.rows;
+        if(useCol) {
+            const arr = [];
+            for(let col of cols) {
+                arr.push({
+                    name : col.caption,
+                    style : header
+                });
+            }
+            newData.push(arr);
+        }
+        for(let key of data) {
+            let a = [];
+            for(let row of rows) {
+                a.push(key[row]);
+            }
+            newData.push(a);
+        }
+        newData.push([]);
+        newData.push([]);
+    }
+
+    return newData;
+};
+
+exports.request = (req, url, ep, emitName) => {
+    request({
+        url : url,
+        headers : req.headers
+    }, (err, response, body) => {
+        body = JSON.parse(body);
+        if(body.iserro) {
+            return ep.emit("error", `${emitName} has error!!!`);
+        }
+        ep.emit(emitName, body.modelData);
+    });
+};
+
+exports.excelReport = (modelData, useCol=true) => {
+    const newData = [];
+    for(let item of modelData) {
+        const cols = item.cols;
+        const data = item.data;
+        const rows = item.rows;
+        const up = {
+            font : {
+                color : "#FF0000"
+            }
+        };
+        const down = {
+            font : {
+                color : "#00FF00"
+            }
+        };
+        const arr = [];
+        if(useCol) {
+            for(let col of cols) {
+                arr.push({
+                    name : col.caption,
+                    style : header
+                });
+            }
+            newData.push(arr);
+        }
+        for(let key of data) {
+            let a = [];
+            if(validator.isDate(key.date) || key.date === "近30天平均") {
+                for(let row of rows) {
+                    a.push(key[row]);
+                }
+            } else {
+                for(let row of rows) {
+                    const d = key[row];
+                    if(typeof d === "string") {
+                        if(+d.replace("%", "") >= 0 && d !== "--") {
+                            a.push({
+                                name : "↑" +d,
+                                style : up
+                            });
+                        } else if(+d.replace("%", "") <= 0 && d !== "--") {
+                            a.push({
+                                name : "↓" + d,
+                                style : down
+                            });
+                        } else {
+                            a.push(d);
+                        }
+                    } else {
+                        a.push(d);
+                    }
+                }
+            }
+            newData.push(a);
+        }
+        newData.push([]);
+        newData.push([]);
+    }
+
+    return newData;
 };

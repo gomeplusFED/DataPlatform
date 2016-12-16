@@ -53,6 +53,7 @@ export default {
 	methods: {
 		plataformLink(item) {
 			if (item.url) {
+                console.log()
 				location.href = item.url;
 				return;
 			}
