@@ -9,22 +9,34 @@
 				<span>三级目录／页面</span>
 				<span>导出权限</span>
 			</li>
-			<li v-for="(key,item1) in pageAll">
-				<div @click.stop="showLevel($event, $index)">
-					<span><input @click="checkAll('limit', key)" type="checkbox" v-model="limitAll[key]"></input></span>
+			<li v-for="(k1,item1) in pageAll">
+				<div @click.stop="showLevel($event, k1)">
+					<span><input @click="checkFirst('limit', k1)" type="checkbox" v-model="limitAll[k1]"></input></span>
 					<span>{{item1.name}}</span>
 					<span>&nbsp;</span>
-					<span>三级</span>
-					<span><label><input @click="checkAll('exportLimit', key)" type="checkbox" v-model="exportLimitAll[key]"/>数据导出</label></span>
+					<span>&nbsp;</span>
+					<span><label><input @click="checkFirst('exportLimit', k1)" type="checkbox" v-model="exportLimitAll[k1]"/>数据导出</label></span>
 				</div>
-				<ul v-show="levelShow[$index]">
-					<li v-for="item2 in item1.path">
-						<span><input type="checkbox" v-model="limitedObj[key][$index]"></input></span>
-						<span>&nbsp;</span>
-						<span>{{item2.name}}</span>
-						<span>三级</span>
-						<span><label><input type="checkbox" v-model="exportLimitObj[key][$index]"/>数据导出</label></span>
+				<ul v-show="levelShow[k1].show">
+					<li v-for="item2 of item1.path" >
+						<div @click.stop="showSubLevel($event, levelShow[k1], item2.id)" class="second-level">
+							<span><input @click="checkSecond(k1, item2.id, limitedObj[k1][item2.id])" type="checkbox" v-model="limitedObj[k1][item2.id]"></input></span>
+							<span>&nbsp;</span>
+							<span>{{item2.name}}</span>
+							<span>&nbsp;</span>
+							<span><label><input type="checkbox" v-model="exportLimitObj[k1][item2.id]"/>数据导出</label></span>
+						</div>
+						<ul v-show="levelShow[k1].subs[item2.id]">
+							<li v-for="item3 in item2.subPages">
+								<span><input @click="checkThird(k1, item2.id, item3.id, subPagesObj[k1][item2.id][item3.id])" type="checkbox" v-model="subPagesObj[k1][item2.id][item3.id]"></input></span>
+								<span>&nbsp;</span>
+								<span>&nbsp;</span>
+								<span>{{item3.name}}</span>
+								<span>&nbsp;</span>
+							</li>
+						</ul>
 					</li>
+
 				</ul>
 			</li>
 		</ul>
@@ -87,6 +99,11 @@ label input {
 	cursor: pointer;
 }
 
+.second-level {
+	background: rgba(204,204,255,0.2);
+	cursor: pointer;
+}
+
 .con>li:last-child span {
 	border-bottom: none;
 }
@@ -111,22 +128,49 @@ var LimitList = Vue.extend({
 	data: function() {
 		return {
 			pageAll: window.allPageConfig.pageAll,
+			// 记录所有二级页面列表
+			secondAll: {},
+			thirdAll: {},
 			levelShow: {},
 			limitedObj: {},
 			exportLimitObj: {},
+			subPagesObj: {},
 			limitAll: {},
 			exportLimitAll: {}
 		};
 	},
-	props: ['id', 'limited', 'exportLimit'],
+	props: ['id', 'limited', 'exportLimit', 'subPages'],
 	created: function() {
 		var count = 0;
-		for (let item in this.pageAll) {
+		for (let key in this.pageAll) {
 			if (count === 0) {
-				Vue.set(this.levelShow, count, true);
+				Vue.set(this.levelShow, key, {show: true, subs: {}});
 			} else {
-				Vue.set(this.levelShow, count, false);
+				Vue.set(this.levelShow, key, {show: false, subs: {}});
 			}
+			let subs = this.pageAll[key].path || [];
+			this.thirdAll[key] = {};
+			let secIds = [];
+			// mock subPages and ID 
+			// delete after API finished
+			// for(let index in subs) {
+				// let id = index.toString();
+				// Vue.set(subs[index], 'id', id);
+				// Vue.set(subs[index], 'subPages', [{id: "test1",name: 'mock1', url: 'mock1url'}, {id: "test2",name: 'mock2', url: 'mock2url'}]);
+			// }
+			for(let item of subs) {
+				let id = item.id;
+				// 默认都打开三级目录折叠
+				Vue.set(this.levelShow[key].subs, id, true);
+				secIds.push(item.id);
+				let thirds = item.subPages || [];
+				let thirdIds = [];
+				for(let third of thirds){
+					thirdIds.push(third.id);
+				}
+				this.thirdAll[key][id] = thirdIds;
+			}
+			this.secondAll[key] = secIds;
 			count += 1;
 		}
 	},
@@ -135,9 +179,16 @@ var LimitList = Vue.extend({
 			if (ev.target.tagName === 'INPUT' || ev.target.tagName === 'LABEL') {
 				return;
 			}
-			this.levelShow[index] = !this.levelShow[index];
+			this.levelShow[index].show = !this.levelShow[index].show;
+		},
+		showSubLevel(ev, config, index) {
+			if (ev.target.tagName === 'INPUT' || ev.target.tagName === 'LABEL') {
+				return;
+			}
+			config.subs[index] = !config.subs[index];
 		},
 		parseLimitAll: function(type) {
+			// 判断是否已全部选中
 			if (type === 'limit') {
 				for (let item in this.limitedObj) {
 					let _count1 = 0;
@@ -188,22 +239,46 @@ var LimitList = Vue.extend({
 			}
 			return result;
 		},
-		checkAll: function(type, key, ev) {
+		parseObjectToSubPagesObj(obj) {
+			let result = {};
+			// 遍历第一层
+			for (let f in obj) {
+				let secs = obj[f];
+				result[f] = {};
+				// 遍历第二层
+				for (let s in secs) {
+					let thirds = secs[s];
+					// 遍历第三层 
+					let _current = [];
+					for (let t in thirds) {
+						if (thirds[t]) {
+							_current.push(t);
+						}
+					}
+					result[f][s] = _current;
+				}
+			}
+			return result;
+		},
+		checkFirst: function(type, key, ev) {
 			if (type === 'limit') {
 				Vue.set(this.limitedObj, key, {});
+				let secPages = this.secondAll[key];
 				if (!this.limitAll[key]) {
-					for (let item in this.pageAll[key]['path']) {
+					for (let secid of secPages) {
 						if (this.limitedObj[key] === undefined) {
 							Vue.set(this.limitedObj, key, {});
 						}
-						Vue.set(this.limitedObj[key], item, true);
+						Vue.set(this.limitedObj[key], secid, true);
+						this.checkSecond(key, secid, false);
 					}
 				} else {
-					for (let item in this.pageAll[key]['path']) {
+					for (let secid of secPages) {
 						if (this.limitedObj[key] === undefined) {
 							Vue.set(this.limitedObj, key, {});
 						}
-						Vue.set(this.limitedObj[key], item, false);
+						Vue.set(this.limitedObj[key], secid, false);
+						this.checkSecond(key, secid, true);
 					}
 				}
 			} else if (type === 'exportLimit') {
@@ -224,6 +299,27 @@ var LimitList = Vue.extend({
 					}
 				}
 			}
+		},
+		checkSecond(firstid, secondid, val) {
+			let subPagesCheckObj = this.subPagesObj[firstid][secondid];
+			// 保证subPagesCheckObj已包含全部三级页面的id
+			if(!val) {
+				for (let id in subPagesCheckObj) {
+					Vue.set(subPagesCheckObj, id, true);
+				}
+			} else {
+				for (let id in subPagesCheckObj) {
+					Vue.set(subPagesCheckObj, id, false);
+				}
+			}
+		},
+		checkThird(firstid, secondid, thirdid, val) {
+			// 检查三级页面是否有构成全选和全不选
+			let valafter = !val;
+			// 仅在选中时判断 三级页面有选中的 二级页面一定需要被选中
+			if (valafter) {
+				Vue.set(this.limitedObj[firstid], secondid, true);
+			}
 		}
 	},
 	watch: {
@@ -237,6 +333,31 @@ var LimitList = Vue.extend({
 						Vue.set(this.limitedObj, item, _curretnObj);
 					}
 				}
+			},
+			deep: true
+		},
+		subPages: {
+			handler: function(val) {
+				this.subPagesObj = {};
+				// 筛选掉limit中不能存在
+				for (let f in this.pageAll) {
+					// this.subPagesObj
+					Vue.set(this.subPagesObj, f, {});
+					let secs = this.subPages[f];
+					let secAll = this.secondAll[f];
+					for (let s of secAll) {
+						Vue.set(this.subPagesObj[f], s, {});
+						let secIncluded = secs ? Object.keys(secs).includes(s) : false;
+						let thirdsAll = this.thirdAll[f][s];
+						let thirds = secIncluded ? secs[s] : [];
+						for(let tid of thirdsAll) {
+							let ischecked = secIncluded && thirds.includes(tid);
+							Vue.set(this.subPagesObj[f][s], tid, ischecked);
+						}
+					}
+				}
+				// console.log('subPagesObj handler');
+				// console.log(this.subPagesObj);
 			},
 			deep: true
 		},
@@ -258,6 +379,13 @@ var LimitList = Vue.extend({
 				this.parseLimitAll('limit');
 				var realLimit = this.parseObjectToLimitObj(this.limitedObj);
 				this.$dispatch('borcastLimit', realLimit);
+			},
+			deep: true
+		},
+		subPagesObj: {
+			handler: function() {
+				var realSubPages = this.parseObjectToSubPagesObj(this.subPagesObj);
+				this.$dispatch('borcastSubPages', realSubPages);
 			},
 			deep: true
 		},
