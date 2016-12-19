@@ -76,7 +76,7 @@
 			hrefCheck(ev) {
 				let $target = $(ev.target);
 				let href = $target.attr('href') || $target.parents('a').attr('href');
-				if (href && !this.subPages.some(x => href.includes(x.url))) {
+				if (/^#!(\/[^\/]+?)+$/.test(href) && !this.subPages.some(x => href.includes(x.url))) {
 					console.log(href +' has been stoped');
 					ev.preventDefault();
 				}
