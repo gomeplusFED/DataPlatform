@@ -4,6 +4,7 @@
  * @fileoverview 用户管理
  */
 var orm = require("orm"),
+    config = require("../../../config/config"),
     util = require("../../../utils");
 
 module.exports = (Router) => {
