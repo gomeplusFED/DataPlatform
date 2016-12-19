@@ -245,7 +245,7 @@ module.exports = {
             defaultData : [
                 {
                     type : "table",
-                    title : "商铺数据",
+                    title : "美店数据",
                     query_api : "/socialAnalysis/dataTableDayVshopOne"
                 }
             ]
@@ -259,7 +259,7 @@ module.exports = {
             defaultData : [
                 {
                     type : "table",
-                    title : "商铺数据",
+                    title : "美店数据",
                     query_api : "/socialAnalysis/dataTableWeekVshopOne"
                 }
             ]
@@ -273,7 +273,7 @@ module.exports = {
             defaultData : [
                 {
                     type : "table",
-                    title : "商铺数据",
+                    title : "美店数据",
                     query_api : "/socialAnalysis/dataTableMonthVshopOne"
                 }
             ]
