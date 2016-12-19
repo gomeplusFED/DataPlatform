@@ -46,31 +46,55 @@ module.exports = (Router) => {
         }, (err, data) => {
             if(!err) {
                 if(data.length) {
+                    var username = data[0].username;
+                    if(data[0].status === 1) {
+                        if(params.status === "0") {
+                            content.push(username + "被禁用");
+                        }
+                    } else {
+                        if(params.status === "1") {
+                            content.push(username + "被启用");
+                        }
+                    }
+                    if(params.role) {
+                        if(params.role !== data[0].role) {
+                            if(params.role) {
+                                content.push("修改" + username + "角色为" + params.role);
+                            } else {
+                                content.push(username + "角色被清空了");
+                            }
+                        }
+                    }
+
+                    if(params.limited) {
+                        if(params.limited !== data[0].limited) {
+                            content.push(username + "权限被修改");
+                        }
+                    }
+                    if(params.export) {
+                        if(params.export !== data[0].export) {
+                            content.push(username + "下载权限被修改");
+                        }
+                    }
+                    if(data[0].remark) {
+                        if(params.remark !== data[0].remark) {
+                            if(params.remark) {
+                                content.push(username + "被修改备注");
+                            } else {
+                                content.push(username + "备注被清空了");
+                            }
+                        }
+                    } else {
+                        if(params.remark) {
+                            content.push(username + "被修改备注");
+                        }
+                    }
+
                     data[0].status = params.status || data[0].status;
                     data[0].role = params.role !== undefined ? params.role : data[0].role;
                     data[0].remark = params.remark !== undefined ? params.remark : data[0].remark;
                     data[0].limited = params.limited || data[0].limited;
                     data[0].export = params.export || data[0].export;
-                    var username = data[0].username;
-                    if(params.status === "1") {
-                        content.push(username + "被启用");
-                    } else if(params.status === "0") {
-                        content.push(username + "被禁用");
-                    }
-                    if(params.role) {
-                        content.push("修改" + username + "角色为" + params.role);
-                    }
-                    if(params.limited) {
-                        content.push(username + "被授予权限");
-                    }
-                    if(params.export) {
-                        content.push(username + "被给予下载权限");
-                    }
-                    if(params.remark === "") {
-                        content.push(username + "的备注被清空");
-                    } else if(params.remark !== "" && params.remark) {
-                        content.push(username + "被修改备注");
-                    }
                     _save();
                 } else {
                     res.json({
