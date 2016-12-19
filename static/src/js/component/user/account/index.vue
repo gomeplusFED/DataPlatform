@@ -45,7 +45,7 @@
 									</td>
 									<td>
 										<ul>
-											<li v-show="item.status"><a @click="showLimitList(item.id, item.limited, item.export)" class="btn btn-default" href="javascript:void(0)">权限修改<i class="fa fa-pencil-square-o"></i></a></li>
+											<li v-show="item.status"><a @click="showLimitList(item.id, item.limited, item.export, item.sub_pages)" class="btn btn-default" href="javascript:void(0)">权限修改<i class="fa fa-pencil-square-o"></i></a></li>
 											<li v-show="item.status"><a @click="forbidden(item.id, item.email)" class="btn btn-default" href="javascript:void(0)">禁用<i class="fa fa-remove"></i></a></li>
 											<li v-show="!item.status"><a @click="startUsing(item.id, item.email)" class="btn btn-default" href="javascript:void(0)">启用<i class="fa fa-check-square-o"></i></a></li>
 										</ul>
@@ -90,7 +90,7 @@
 							</tr>
 						</tbody>
 					</table>
-					<m-limit-list v-show="modal.type === 'limitList'" :id="id" :limited="limited" :export-limit="exportLimit"></m-limit-list>
+					<m-limit-list v-show="modal.type === 'limitList'" :id="id" :limited="limited" :sub-pages="subPages" :export-limit="exportLimit"></m-limit-list>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn default" data-dismiss="modal" @click="apply()">确定</button>
@@ -251,6 +251,7 @@ var User = Vue.extend({
 			},
 			id: null,
 			limited: {},
+			subPages: {},
 			exportLimit: {},
 			roleList: [],
 			currentID: null,
@@ -259,6 +260,7 @@ var User = Vue.extend({
 			// curretnLimited: null,
 			// currentExportLimited: null,
 			modifyLimited: {},
+			modifySubPages: {},
 			modifyExportLimited: {},
 			showRemarkLen: false
 		};
@@ -344,6 +346,11 @@ var User = Vue.extend({
 					page: _this.paginationConf.currentPage
 				},
 				success: function(data) {
+					// mock data 
+					// for (let p of data.data) {
+					// 	p.sub_pages = JSON.stringify({"0": {"1": ["test1","test2"]}, "3": {"1": ["test1"]}});
+					// }
+					// console.log(JSON.stringify(data,null,4));
 					_this.paginationConf.totalItems = data.count;
 					_this.userListData = data.data;
 					_this.loading.show = false;
@@ -377,11 +384,12 @@ var User = Vue.extend({
 						}
 					}
 					_this.limited = JSON.parse(_this.userListData[index].limited);
+					_this.subPages = JSON.parse(_this.userListData[index].sub_pages);
 					_this.exportLimit = JSON.parse(_this.userListData[index].export);
 				}
 			});
 		},
-		showLimitList: function(id, limited, exportLimit) {
+		showLimitList: function(id, limited, exportLimit, subPages) {
 			var _this = this;
 			_this.currentID = id;
 			_this.modal.show = true;
@@ -390,6 +398,7 @@ var User = Vue.extend({
 			_this.id = id;
 			_this.exportLimit = this.fixLimit(JSON.parse(exportLimit), 'exportLimit');
 			_this.limited = this.fixLimit(JSON.parse(limited), 'limit');
+			_this.subPages = this.fixLimit(JSON.parse(subPages), 'subPages');
 		},
 		apply: function() {
 			var _this = this;
@@ -492,6 +501,7 @@ var User = Vue.extend({
 					data: {
 						id: _this.currentID,
 						limited: JSON.stringify(_this.modifyLimited),
+						sub_pages: JSON.stringify(_this.modifySubPages),
 						export: JSON.stringify(_this.modifyExportLimited)
 					},
 					success: function(data) {
@@ -610,6 +620,9 @@ var User = Vue.extend({
 	events: {
 		borcastLimit: function(limit) {
 			this.modifyLimited = limit;
+		},
+		borcastSubPages: function(subPages) {
+			this.modifySubPages = subPages;
 		},
 		borcastExportLimit: function(limit) {
 			this.modifyExportLimited = limit;
