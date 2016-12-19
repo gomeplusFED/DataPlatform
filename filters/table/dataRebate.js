@@ -154,8 +154,6 @@ module.exports = {
             }
         }
         obj.date = "近30天平均";
-        obj.one = "--";
-        obj.two = "--";
         const one = {};
         for(let row of rows[0]) {
             if(row !== "date" && row !== "one" && row !== "two") {
