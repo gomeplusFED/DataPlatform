@@ -8,7 +8,7 @@
 	<m-plataform index="1"></m-plataform>
 	<m-tab-checkbox></m-tab-checkbox>
 	<m-global></m-global>
-	<m-main v-ref:main v-for="item in list" :index="$index" :init-data="initData" :current-data="list[$index]" :loading.sync="loading"></m-main>
+	<m-main v-ref:main v-for="item in list" :index="$index" :init-data="initData" :current-data="list[$index]" :loading.sync="loading" @click.stop="hrefCheck"></m-main>
 </template>
 <script>
 	var Vue = require('Vue');
@@ -37,7 +37,8 @@
 					show: true,
 					noLoaded: 0
 				},
-				initData: window.allPageConfig
+				initData: window.allPageConfig,
+				subPages: []
 			};
 		},
 		vuex: {
@@ -71,6 +72,16 @@
 				return [];
 			}
 		},
+		methods: {
+			hrefCheck(ev) {
+				let $target = $(ev.target);
+				let href = $target.attr('href') || $target.parents('a').attr('href');
+				if (href && !this.subPages.some(x => href.includes(x.url))) {
+					console.log(href +' has been stoped');
+					ev.preventDefault();
+				}
+			}
+		},
 		route: {
 			data: function(transition) {
 				var url = this.$route.path.replace(/(\?.*)/, '');
@@ -89,6 +100,8 @@
 				$('[href="#!' + url + '"]').addClass('active');
 
 				var currentPageDefaultData = window.allPageConfig.page[url];
+				this.subPages = currentPageDefaultData.subPages;
+
 				var query_api = currentPageDefaultData.defaultData[0].query_api;
 
 				if(query_api.lastIndexOf('Zero') === query_api.length-4) {
