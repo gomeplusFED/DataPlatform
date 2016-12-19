@@ -257,7 +257,7 @@ module.exports = {
                 if(!zData[row] && !qData[row]) {
                     obj[row] = "0.00%";
                 } else {
-                    obj[row] = util.toFixed(zData[row] - qData[row], +qData[row]);
+                    obj[row] = util.toFixed((zData[row] || 0) - (qData[row] || 0), +qData[row] || 0);
                 }
             }
         }
