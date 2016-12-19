@@ -514,7 +514,7 @@ module.exports = {
 
     //平台基础返利 ---- 平台基础返利总览
     rebate_platformBase_01(query , params , sendData){
-        params.plan_type = 1;
+        // params.plan_type = 1;
         return params;
     },
     rebate_platformBase_01_f(data, query, dates){
@@ -537,7 +537,7 @@ module.exports = {
 
     //平台基础返利 ---- 返利订单趋势
     rebate_platformBase_02(query , params , sendData){
-        params.plan_type = 1;
+        // params.plan_type = 1;
         params.rebate_type = [1,2];
         return params;
     },
@@ -576,7 +576,7 @@ module.exports = {
 
     //平台基础返利 ---- 返利层级分布
     rebate_platformBase_03(query , params , sendData){
-        params.plan_type = 1;
+        // params.plan_type = 1;
         return params;
     },
     rebate_platformBase_03_f(data, query, dates){
@@ -609,7 +609,9 @@ module.exports = {
         }
 
         for(let item of source){
+            if(param1[item.plan_type]){
              Result1[param1[item.plan_type]].value += item[filter_key];
+            }
         }
 
         //init data2.
@@ -658,6 +660,245 @@ module.exports = {
             data : Result3,
             config: { // 配置信息
                 stack: true  // 图的堆叠
+            }
+        }];
+    },
+
+    //单项单级 -- 返利类型分布
+    rebate_single_03(query , params , sendData){
+        return params;
+    },
+    rebate_single_03_f(data, query, dates){
+        let source = data.first.data[0],
+            filter_key  = query.filter_key,
+            Result1 = {} , Result2 = {} , Result3 = {};
+
+        let param1 = {
+            "12" : "比例返利",
+            "11" : "固定返利"
+        };
+
+        //init data1.
+        for(let key in param1){
+            Result1[param1[key]] = {value:0};
+        }
+
+        for(let item of source){
+            if(param1[item.plan_type]){
+                Result1[param1[item.plan_type]].value += item[filter_key];
+            }
+        }
+
+        //init data3.
+        Result3 = {
+            "比例返利" : { value:0 },
+            "固定返利" : { value:0 }
+        }
+
+        for(let item of source){
+            if(param1[item.rebate_level]){
+                Result3[param1[item.rebate_level]].value += item[filter_key];
+            }
+        }
+           
+        return [{
+            type : "pie",
+            map : {value:"0"},
+            data : Result1,
+            config: { // 配置信息
+                stack: false  // 图的堆叠
+            }
+        }, {
+            type : "bar",
+            map : {value:"返利类型"},
+            data : Result3,
+            config: { // 配置信息
+                stack: false  // 图的堆叠
+            }
+        }];
+    },
+
+    //邀请商户分享返利--返利订单趋势
+    rebate_invitation_01(query , params , sendData){
+        params.rebate_type = 9;
+        return params;
+    },
+    rebate_invitation_01_f(data, query, dates){
+        let source = data.first.data[0],
+            filter_key = query.filter_key,
+            Result = {};
+
+        for(let date of dates){
+            Result[date] = {"1":0}
+        }
+
+        for(let item of source){
+            item.date = util.getDate(item.date);
+            Result[item.date]["1"] = item[filter_key];
+        }
+
+        
+        return [{
+            type : "line",
+            map : {
+                "1" : "分享返利"
+            },
+            data : Result,
+            config: { // 配置信息
+                stack: false  // 图的堆叠
+            }
+        }];
+    },
+
+    //邀请商户分享返利 -- 返利层级分布
+    rebate_invitation_02(query , params , sendData){
+        // params.plan_type = 1;
+        return params;
+    },
+    rebate_invitation_02_f(data, query, dates){
+        let source = data.first.data[0],
+            filter_key  = query.filter_key,
+            Result1 = {} , Result2 = {} , Result3 = {};
+
+        let param2 = {
+            "1" : "1级计划",
+            "2" : "2级计划",
+            "3" : "3级计划",
+            "4" : "4级计划",
+            "5" : "5级计划",
+            "6" : "6级计划",
+        },  param3 = {
+            "1" : "返利层级一",
+            "2" : "返利层级二",
+            "3" : "返利层级三",
+            "4" : "返利层级四",
+            "5" : "返利层级五",
+            "6" : "返利层级六",
+        };
+        //init data2.
+        for(let key in param2){
+            Result2[param2[key]] = {value:0};
+        }
+
+        for(let item of source){
+            if(param2[item.rebate_level]){
+                Result2[param2[item.rebate_level]].value += item[filter_key];
+            }
+        }
+
+        //init data3.
+        for(let key in param2){
+            let obj = {};
+            for(let one in param3){
+                obj[one] = 0;
+            }
+            Result3[param2[key]] = obj;
+        }
+
+        for(let item of source){
+            if(param2[item.rebate_level]){
+                Result3[param2[item.rebate_level]][item.level] += item[filter_key];
+            }
+        }
+           
+        return [{
+            type : "pie",
+            map : {value:"0"},
+            data : Result2,
+            config: { // 配置信息
+                stack: false  // 图的堆叠
+            }
+        }, {
+            type : "bar",
+            map : param3,
+            data : Result3,
+            config: { // 配置信息
+                stack: true  // 图的堆叠
+            }
+        }];
+    },
+
+
+    //邀请注册／入驻 ---- 邀请好友注册总览
+    rebate_regist_01(query , params , sendData){
+        return params;
+    },
+    rebate_regist_01_f(data, query, dates){
+        let source = data.first.data[0],
+            sum    = data.first.sum;
+        let obj    = {
+            "unique_rebate_invite_friend_planid_num" : sum[0] || 0,
+            "unique_rebate_invite_friend_user_num" : sum[1] || 0,
+            "unique_rebate_invite_friend_success_user_num" : sum[2] || 0,
+            "is_over_rebate_invite_friend_amount" : sum[3] || 0
+        }
+        obj.regist_lv = util.toFixed(sum[2] , sum[4] || 0);
+        return util.toTable([[obj]], data.rows, data.cols);
+    },
+
+
+    //邀请注册／入驻 ---- 邀请商户入驻总览
+    rebate_regist_02(query , params , sendData){
+        return params;
+    },
+    rebate_regist_02_f(data, query, dates){
+        let source = data.first.data[0],
+            sum    = data.first.sum;
+        let obj    = {
+            "unique_rebate_invite_shop_planid_num" : sum[0] || 0,
+            "unique_rebate_invite_shop_num" : sum[1] || 0,
+            "unique_rebate_invite_shop_success_num" : sum[2] || 0,
+            "is_over_rebate_invite_shop_amount" : sum[3] || 0
+        }
+        obj.regist_lv = util.toFixed(sum[2] , sum[4] || 0);
+        return util.toTable([[obj]], data.rows, data.cols);
+    },
+
+
+    //邀请注册／入驻 ---- 邀请趋势
+    rebate_regist_03(query , params , sendData){
+        return params;
+    },
+    rebate_regist_03_f(data, query, dates){
+        let source = data.first.data[0],
+            filter_key = query.filter_key,
+            Result = {};
+
+        for(let date of dates){
+            Result[date] = {
+                "one":0,
+                "two":0,
+                "three":0
+            }
+        }
+
+        for(let item of source){
+            item.date = util.getDate(item.date);
+            switch(item.plan_type){
+                case "1":
+                Result[item.date]["one"] = item[filter_key];
+                break;
+
+                case "2":
+                Result[item.date]["two"] = item[filter_key];
+                break;
+
+                case "5":
+                Result[item.date]["three"] = item[filter_key];
+                break;
+            }
+        }
+
+        return [{
+            type : "line",
+            map : {
+                "one" : "邀请好友-平台基础返利",
+                "two" : "邀请好友-平台促销返利",
+                "three":"邀请商户入驻返利"
+            },
+            data : Result,
+            config: { // 配置信息
+                stack: false  // 图的堆叠
             }
         }];
     },
