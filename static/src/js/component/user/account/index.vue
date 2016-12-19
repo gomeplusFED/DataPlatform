@@ -384,7 +384,7 @@ var User = Vue.extend({
 						}
 					}
 					_this.limited = JSON.parse(_this.userListData[index].limited);
-					_this.subPages = JSON.parse(_this.userListData[index].sub_pages);
+					_this.subPages = JSON.parse(_this.userListData[index].sub_pages || '{}');
 					_this.exportLimit = JSON.parse(_this.userListData[index].export);
 				}
 			});
@@ -487,6 +487,7 @@ var User = Vue.extend({
 				for (let item in _this.modifyLimited) {
 					if (_this.modifyLimited[item] === undefined || _this.modifyLimited[item].length === 0) {
 						delete _this.modifyLimited[item];
+						delete _this.modifySubPages[item];
 					}
 				}
 
@@ -495,6 +496,7 @@ var User = Vue.extend({
 						delete _this.modifyExportLimited[item];
 					}
 				}
+
 				$.ajax({
 					url: '/users/update',
 					type: 'post',
