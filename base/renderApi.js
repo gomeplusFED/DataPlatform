@@ -105,7 +105,7 @@ renderApi.prototype = {
                 if(limit.routers) {
                     for(var k of limit.routers) {
                         page[k.path] = {
-                            id: key,
+                            id: k.id,
                             pageTitle : k.name,
                             defaultData : k.defaultData
                         };

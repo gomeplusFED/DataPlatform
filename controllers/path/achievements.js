@@ -217,19 +217,24 @@ module.exports = {
             name : "交易面板",
             path : "/achievements/tradePanel",
             display : true,
-            subPage : [{
+            subPages : [{
+                id : 0,
                 url : "/achievements/trade",
                 name : "交易分析"
             }, {
+                id : 1,
                 url : "/achievements/order",
                 name : "订单分析"
             }, {
+                id : 2,
                 url : "/achievements/productSale",
                 name : "商品分析"
             }, {
+                id : 3,
                 url : "/achievements/pay",
                 name : "支付分析"
             }, {
+                id : 4,
                 url : "/coupon",
                 name : "优惠劵分析"
             }],

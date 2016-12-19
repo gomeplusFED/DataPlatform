@@ -22,6 +22,7 @@ module.exports = {
             path: "/activity/list",
             display: true,
             subPages : [{
+                id : 0,
                 url : "/custom/saveActivity",
                 name : "新建活动"
             }],
