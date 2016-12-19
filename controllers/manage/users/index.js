@@ -149,5 +149,13 @@ module.exports = (Router) => {
         });
     });
 
+    Router.get("/users/download", (req, res, next) => {
+        req.models.User2.find({
+            is_admin : orm.lt(99)
+        }, (err, data) => {
+            
+        });
+    });
+
      return Router;
 };
