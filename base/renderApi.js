@@ -116,7 +116,6 @@ renderApi.prototype = {
             if(limit.display) {
                 pageAll[key] = {
                     id : limit.id,
-                    subPages : limit.subPages || [],
                     name : limit.name,
                     path : limit.path
                 };
