@@ -133,7 +133,7 @@ module.exports = {
             key.history_cancel_rebate_amount = key.history_cancel_rebate_amount.toFixed(2);
             key.history_is_over_rebate_order_amount = key.history_is_over_rebate_order_amount.toFixed(2);
             key.date = moment(key.date).format("YYYY-MM-DD");
-            if(key.day_type === 1) {
+            if(key.day_type == 1) {
                 if(key.date === z) {
                     zObj = key;
                     if(zb) {
