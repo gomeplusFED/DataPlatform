@@ -60,7 +60,6 @@
 			'm-global': Global
 		},
 		ready() {
-
 		},
 		computed: {
 			list() {

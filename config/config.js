@@ -28,15 +28,15 @@ const Config = {
             href: "#",
             path: [{
                 name: "帐号列表",
-                path: "/user",
+                path: "/user/account",
                 display: true
             }, {
                 name: "角色列表",
-                path: "/role",
+                path: "/user/role",
                 display: true
             }, {
                 name: "系统日志",
-                path: "/log",
+                path: "/user/log",
                 display: true
             }]
         },
@@ -303,7 +303,29 @@ const Config = {
             className: "fa  fa-laptop fa-fw",
             href: "#",
             path: [
-                obj.table.table()
+                obj.table.table(),
+                obj.table.data_table_day(),
+                obj.table.data_table_week(),
+                obj.table.data_table_month(),
+                obj.table.rebate_total()
+            ],
+            routers : [
+                obj.table.rebate_total_new(),
+                obj.table.data_table_day_order(),
+                obj.table.data_table_week_order(),
+                obj.table.data_table_month_order(),
+                obj.table.data_table_day_user(),
+                obj.table.data_table_week_user(),
+                obj.table.data_table_month_user(),
+                obj.table.data_table_day_shop(),
+                obj.table.data_table_week_shop(),
+                obj.table.data_table_month_shop(),
+                obj.table.data_table_day_vshop(),
+                obj.table.data_table_week_vshop(),
+                obj.table.data_table_month_vshop(),
+                obj.table.data_table_day_dataRebate(),
+                obj.table.data_table_week_dataRebate(),
+                obj.table.data_table_month_dataRebate()
             ]
         }
     }
