@@ -8,6 +8,8 @@
             "-date"
         ],
         "platform": false,
+        "sum" : ["error_num"],
+        "paging":["true"],
         "router": "/performance/error_One",
         "toggle": {
             "show": true
@@ -43,7 +45,6 @@
             [
                 "date",
                 "error_num",
-                "error_num_lv",
                 "effect_user_num",
                 "effect_user_num_lv"
             ]
@@ -57,10 +58,6 @@
                 {
                     "caption": "总错误数",
                     "type": "number"
-                },
-                {
-                    "caption": "错误率",
-                    "type": "string"
                 },
                 {
                     "caption": "影响用户数",
@@ -85,6 +82,8 @@
         "order": [
             "-date"
         ],
+        "sum" : ["error_num"],
+        "paging":[true],
         "platform": false,
         "router": "/performance/error_Two",
         "rows": [
@@ -112,7 +111,7 @@
                     "type": "number"
                 },
                 {
-                    "caption": "错误率",
+                    "caption": "错误占比",
                     "type": "string"
                 },
                 {

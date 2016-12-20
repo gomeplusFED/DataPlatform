@@ -14,7 +14,7 @@ const Result=[];
 const Jsons = fs.readdirSync(path.join(__dirname , "./apiConfig"));
 const Functions = fs.readdirSync(path.join(__dirname , "./apiFunction"));
 let AllFn = {};
-let FnProperty = ["filter" , "params" , "secondParams" , "thirdParams" , "fourthParams" , "fixedParams"];
+let FnProperty = ["filter" , "params" , "secondParams" , "thirdParams" , "fourthParams" , "fixedParams" , "selectFilter"];
 
 
 //获取所有函数

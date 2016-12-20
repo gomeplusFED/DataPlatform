@@ -154,7 +154,14 @@ module.exports = (Router) => {
         req.models.User2.find({
             is_admin : orm.lt(99)
         }, (err, data) => {
-            
+            if(err) {
+                return next(err);
+            }
+            let newData = [];
+            for(let key of data) {
+                let arr = [];
+                
+            }
         });
     });
 

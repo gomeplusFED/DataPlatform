@@ -7,6 +7,7 @@
 var api = require("../../../base/main"),
     util = require("../../../utils"),
     orm = require("orm"),
+    moment = require("moment");
     dataOverview = require("../../../filters/dataOverview");
 
 module.exports = (Router) => {
@@ -37,10 +38,10 @@ module.exports = (Router) => {
         },
         params(query) {
             var now = new Date(),
-                ydate = util.getDate(new Date(now.getTime() - 24 * 60 * 60 * 1000)),
-                qdate = util.getDate(new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000)),
+                ydate = moment(now.getTime() - 24 * 60 * 60 * 1000).format("YYYY-MM-DD"),
+                qdate = moment(now.getTime() - 2 * 24 * 60 * 60 * 1000).format("YYYY-MM-DD"),
                 params = {
-                    date : orm.between(new Date(qdate + " 00:00:00"), new Date(ydate + " 23:59:59")),
+                    date : [ydate, qdate],
                     region : "ALL",
                     day_type : 1,
                     type : query.type || "ios"
@@ -49,10 +50,10 @@ module.exports = (Router) => {
         },
         secondParams(query, params) {
             var now = new Date(),
-                ydate = util.getDate(new Date(now.getTime() - 24 * 60 * 60 * 1000)),
-                qdate = util.getDate(new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000));
+                ydate = moment(now.getTime() - 24 * 60 * 60 * 1000).format("YYYY-MM-DD"),
+                qdate = moment(now.getTime() - 2 * 24 * 60 * 60 * 1000).format("YYYY-MM-DD");
             return {
-                date : orm.between(new Date(qdate + " 00:00:00"), new Date(ydate + " 23:59:59")),
+                date : [ydate, qdate],
                 day_type : 1
             }
         },

@@ -81,7 +81,7 @@ module.exports = {
 
         for(let item of source){
             item.date = utils.getDate(item.date);
-            item.group_mess_lv = utils.numberLeave( item.group_mess_pv / item.group_member_count , 3)*100;
+            item.group_mess_lv = utils.numberLeave( item.group_mess_pv / item.group_member_count * 100 , 3);
             newDate[item.date] = item;
         }
 
