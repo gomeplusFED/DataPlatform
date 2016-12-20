@@ -1,6 +1,7 @@
 <template>
 	<div class="limit_list">
 		<h2>权限列表</h2>
+		<a class="btn btn-default clear-all" href="javascript:void(0)" @click="clearAll">全部清空</a>
 		<ul class="con">
 			<li>
 				<span>选择</span>
@@ -190,6 +191,24 @@ var LimitList = Vue.extend({
 				}
 			}
 			return result;
+		},
+		clear(obj){
+			if (typeof obj === 'object') {
+				for (let key in obj) {
+					if(obj[key] === true) {
+						obj[key] = false;
+					} else {
+						this.clear(obj[key]);
+					}
+				}
+			}
+		},
+		clearAll(){
+			this.clear(this.limitAll);
+			this.clear(this.exportLimitAll);
+			this.clear(this.limitedObj);
+			this.clear(this.exportLimitObj);
+			this.clear(this.subPagesObj);
 		},
 		checkFirst(firstid, val) {
 			let valafter = !val;
@@ -461,6 +480,12 @@ label {
 
 label input {
 	margin: 0 5px 0 0;
+}
+
+.clear-all {
+	position: absolute;
+    right: 20px;
+    top: 40px;
 }
 
 .con {
