@@ -200,21 +200,21 @@ const Config = {
                 obj.marketingAnalysis.operating()
             ]
         },
-        "15": {
-            name: "平台返利汇总",
-            display: true,
-            className: "fa fa-bar-chart-o fa-fw fa-fw",
-            href: "#",
-            path: [
-                obj.platformRebate.platformOrder(),
-                obj.platformRebate.individualEvent(),
-                obj.platformRebate.platformPromotions(),
-                obj.platformRebate.platformBasis(),
-                obj.platformRebate.inviteBusiness(),
-                obj.platformRebate.inviteRegisterAndEnter()
-            ],
-            routers: []
-        },
+        // "15": {
+        //     name: "平台返利汇总",
+        //     display: true,
+        //     className: "fa fa-bar-chart-o fa-fw fa-fw",
+        //     href: "#",
+        //     path: [
+        //         obj.platformRebate.platformOrder(),
+        //         obj.platformRebate.individualEvent(),
+        //         obj.platformRebate.platformPromotions(),
+        //         obj.platformRebate.platformBasis(),
+        //         obj.platformRebate.inviteBusiness(),
+        //         obj.platformRebate.inviteRegisterAndEnter()
+        //     ],
+        //     routers: []
+        // },
         "16": {
             name: "商家返利汇总",
             display: true,
@@ -303,7 +303,29 @@ const Config = {
             className: "fa  fa-laptop fa-fw",
             href: "#",
             path: [
-                obj.table.table()
+                obj.table.table(),
+                obj.table.data_table_day(),
+                obj.table.data_table_week(),
+                obj.table.data_table_month(),
+                obj.table.rebate_total()
+            ],
+            routers : [
+                obj.table.rebate_total_new(),
+                obj.table.data_table_day_order(),
+                obj.table.data_table_week_order(),
+                obj.table.data_table_month_order(),
+                obj.table.data_table_day_user(),
+                obj.table.data_table_week_user(),
+                obj.table.data_table_month_user(),
+                obj.table.data_table_day_shop(),
+                obj.table.data_table_week_shop(),
+                obj.table.data_table_month_shop(),
+                obj.table.data_table_day_vshop(),
+                obj.table.data_table_week_vshop(),
+                obj.table.data_table_month_vshop(),
+                obj.table.data_table_day_dataRebate(),
+                obj.table.data_table_week_dataRebate(),
+                obj.table.data_table_month_dataRebate()
             ]
         }
     }

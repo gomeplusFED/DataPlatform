@@ -33,7 +33,6 @@ var webpackConfig = {
         DataPlatform: './src/js/app.js',
         vendor: [
             pwd + '/src/js/lib/vue.min.js',
-            pwd + '/src/js/lib/vue2.min.js',
             pwd + '/src/js/lib/vuex.min.js',
             pwd + '/src/js/lib/jquery.min.js',
             pwd + '/src/js/lib/bootstrap.min.js',
@@ -50,12 +49,6 @@ var webpackConfig = {
             'echarts/lib/component/tooltip',
         ],
         addModule : "./src/js/app2.js",
-        /*vendor2 : [
-            pwd + '/src/js/lib/vue2.min.js',
-            pwd + '/src/js/lib/vuex.min.js',
-            pwd + '/src/js/lib/jquery.min.js',
-            pwd + '/src/js/lib/bootstrap.min.js',
-        ]*/
     },
     output: {
         filename: '[name].min.js'
@@ -76,7 +69,6 @@ var webpackConfig = {
         extensions: ['', '.js', '.json', '.scss'],
         alias: {
             'Vue': pwd + '/src/js/lib/vue.min.js',
-            'Vue2': pwd + '/src/js/lib/vue2.min.js',
             'jQuery': pwd + '/src/js/lib/jquery.min.js',
             '$': pwd + '/src/js/lib/jquery.min.js',
             'utils': pwd + '/src/js/utils/index.js',

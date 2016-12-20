@@ -142,7 +142,7 @@ module.exports = {
             };
 
         for(let date of dates) {
-            var zObj = {
+            let zObj = {
                 name : "",
                 open_total : 0,
                 open_user_total : 0,
@@ -164,15 +164,15 @@ module.exports = {
                 create : 0
             };
             for(let key of orderData) {
-                var _date = util.getDate(key.date);
+                let _date = util.getDate(key.date);
                 if(date === _date) {
-                    if(key.kpi_type === 1) {
+                    if(key.kpi_type == 1) {
                         zObj.pv1 += key.kpi_value;
                     }
-                    if(key.kpi_type === 2) {
+                    if(key.kpi_type == 2) {
                         zObj.create += key.kpi_value;
                     }
-                    if(key.kpi_type === 3) {
+                    if(key.kpi_type == 3) {
                         zObj.pv2 += key.kpi_value;
                     }
                 }
