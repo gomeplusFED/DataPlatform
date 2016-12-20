@@ -166,10 +166,12 @@ module.exports = {
         for(let key of second) {
             key.plan_type_name = plan_type[key.plan_type];
             key.rebate_type_name = rebate_type[key.rebate_type];
-            if(rebate_type[key.rebate_type].indexOf("-") === -1) {
-                key.name = rebate_type[key.rebate_type];
-            } else {
-                key.name = rebate_type[key.rebate_type].substr(0, rebate_type[key.rebate_type].indexOf("-"));
+            if(rebate_type[key.rebate_type]) {
+                if(rebate_type[key.rebate_type].indexOf("-") === -1) {
+                    key.name = rebate_type[key.rebate_type];
+                } else {
+                    key.name = rebate_type[key.rebate_type].substr(0, rebate_type[key.rebate_type].indexOf("-"));
+                }
             }
         }
 
