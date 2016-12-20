@@ -344,8 +344,8 @@ module.exports = {
         }
         for(let key of source) {
             key.one = util.toFixed(
-                key.new_reg_num,
-                key.app_new_act + key.pc_new_visit + key.wap_new_visit
+                +key.new_reg_num,
+                +key.app_new_act + +key.pc_new_visit + +key.wap_new_visit
             );
             key.two = util.toFixed(key.app_new_reg, key.app_new_act);
             key.three = util.toFixed(key.app_new_act, key.app_auser);
