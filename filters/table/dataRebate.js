@@ -132,8 +132,8 @@ module.exports = {
             key.history_expect_rebate_amount = key.history_expect_rebate_amount.toFixed(2);
             key.history_cancel_rebate_amount = key.history_cancel_rebate_amount.toFixed(2);
             key.history_is_over_rebate_order_amount = key.history_is_over_rebate_order_amount.toFixed(2);
-            key.date = moment(key.data).format("YYYY-MM-DD");
-            if(key.day_type === 1) {
+            key.date = moment(key.date).format("YYYY-MM-DD");
+            if(key.day_type == 1) {
                 if(key.date === z) {
                     zObj = key;
                     if(zb) {
@@ -154,8 +154,6 @@ module.exports = {
             }
         }
         obj.date = "近30天平均";
-        obj.one = "--";
-        obj.two = "--";
         const one = {};
         for(let row of rows[0]) {
             if(row !== "date" && row !== "one" && row !== "two") {

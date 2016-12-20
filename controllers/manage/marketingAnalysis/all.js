@@ -192,9 +192,10 @@ module.exports = (Router) => {
         },
         rows : [
             ["name", "active_no", "date", "active_pv", "active_uv",
-                "register", "share_button_pv", "share_button_uv",
-                "coupon_get_num", "rate",
-                //"order_num",
+                "register", "share_button_uv", "share_button_pv",
+                //"coupon_get_num",
+                "rate",
+                "order_num",
                 "order_num_money", "pay_num",
                 "pay_user", "pay_num_money", "return_num",
                 "return_user", "return_num_money",

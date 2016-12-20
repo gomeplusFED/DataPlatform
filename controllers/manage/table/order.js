@@ -53,6 +53,8 @@ module.exports = (Router) => {
             const ws = wb.addWorksheet("订单数据");
             const data = body.modelData[0].data;
             const rows = body.modelData[0].rows;
+            const cols = body.modelData[0].cols;
+            const obj = [];
             const newData = [];
             const up = {
                 font : {
@@ -64,6 +66,11 @@ module.exports = (Router) => {
                     color : "#00FF00"
                 }
             };
+            for(let col of cols) {
+                obj.push(col.caption);
+            }
+            newData.push(obj);
+
             for(let i = 0; i < data.length - 1; i ++) {
                 let key = data[i];
                 let arr = [];
