@@ -363,7 +363,7 @@ module.exports = {
             key.pc7 = util.toFixed(key.mon_7day_pc, key.mon_7day_pc_new);
             key.pc14 = util.toFixed(key.mon_14day_pc, key.mon_14day_pc_new);
             key.wap7 = util.toFixed(key.mon_7day_wap, key.mon_7day_wap_new);
-            key.wap4 = util.toFixed(key.mon_14day_wap, key.mon_14day_wap_new);
+            key.wap14 = util.toFixed(key.mon_14day_wap, key.mon_14day_wap_new);
             key.date = `${moment(key.date).format("MM")}月`;
         }
 
