@@ -482,10 +482,13 @@ label input {
 	margin: 0 5px 0 0;
 }
 
-.clear-all {
-	position: absolute;
-    right: 20px;
-    top: 40px;
+.limit_list .clear-all {
+    float: right;
+    margin-top: 25px;
+}
+
+.limit_list h2 {
+	display: inline-block;
 }
 
 .con {
