@@ -700,3 +700,15 @@ exports.excelReport = (modelData, useCol=true) => {
 
     return newData;
 };
+
+/* mege array */
+exports.megerArray = (result = [] , arr) => {
+    for(let item of arr){
+        if(item instanceof Array){
+            exports.megerArray(result , item);
+        }else{
+            result.push(item);
+        }
+    }
+    return result;
+};

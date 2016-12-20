@@ -200,21 +200,21 @@ const Config = {
                 obj.marketingAnalysis.operating()
             ]
         },
-        "15": {
-            name: "平台返利汇总",
-            display: true,
-            className: "fa fa-bar-chart-o fa-fw fa-fw",
-            href: "#",
-            path: [
-                obj.platformRebate.platformOrder(),
-                obj.platformRebate.individualEvent(),
-                obj.platformRebate.platformPromotions(),
-                obj.platformRebate.platformBasis(),
-                obj.platformRebate.inviteBusiness(),
-                obj.platformRebate.inviteRegisterAndEnter()
-            ],
-            routers: []
-        },
+        // "15": {
+        //     name: "平台返利汇总",
+        //     display: true,
+        //     className: "fa fa-bar-chart-o fa-fw fa-fw",
+        //     href: "#",
+        //     path: [
+        //         obj.platformRebate.platformOrder(),
+        //         obj.platformRebate.individualEvent(),
+        //         obj.platformRebate.platformPromotions(),
+        //         obj.platformRebate.platformBasis(),
+        //         obj.platformRebate.inviteBusiness(),
+        //         obj.platformRebate.inviteRegisterAndEnter()
+        //     ],
+        //     routers: []
+        // },
         "16": {
             name: "商家返利汇总",
             display: true,

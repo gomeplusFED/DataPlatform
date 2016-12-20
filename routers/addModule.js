@@ -136,6 +136,7 @@ module.exports = (Router) => {
         //change api config
         let Json = require(path.join(__dirname , "../config/apiConfig" , data.Position.filename));
         data.ApiConfig.router = data.Api3.query_api;
+        data.ApiConfig.names = data.Api3.title;
         Json[data.Api3.mark] = data.ApiConfig;
 
         let source = fs.createWriteStream(path.join(__dirname , "../config/apiConfig" , data.Position.filename + ".json"));

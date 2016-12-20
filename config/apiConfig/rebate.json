@@ -264,33 +264,33 @@
         "level_select_name": "category_id",
         "global_platform": {
             "show": true,
-            "key": "type",
+            "key": "plan_type",
             "name": "平台切换",
             "list": [
                 {
-                    "key": "PC",
+                    "key": "all",
                     "name": "汇总",
                     "url": "/#!/rebate/platformAll"
                 },
                 {
-                    "key": "IOS",
+                    "key": "1",
                     "name": "平台基础返利",
-                    "url": "/#!/rebate/platformBase"
+                    "url": "/#!/rebate/platformBase?plan_type=1"
                 },
                 {
-                    "key": "Android",
+                    "key": "2",
                     "name": "平台促销返利",
-                    "url": "/#!/rebate/promotion"
+                    "url": "/#!/rebate/promotion?plan_type=2"
                 },
                 {
-                    "key": "WAP",
+                    "key": "6",
                     "name": "单项单级返利",
-                    "url": "/#!/rebate/singleStage"
+                    "url": "/#!/rebate/singleStage?plan_type=6"
                 },
                 {
-                    "key": "H5",
+                    "key": "5",
                     "name": "邀请商户分析返利",
-                    "url": "/#!/rebate/invitation"
+                    "url": "/#!/rebate/invitation?plan_type=5"
                 }
             ]
         },
@@ -579,33 +579,33 @@
         "params": "rebate_platformBase_01",
         "global_platform": {
             "show": true,
-            "key": "type",
+            "key": "plan_type",
             "name": "平台切换",
             "list": [
                 {
-                    "key": "PC",
+                    "key": "all",
                     "name": "汇总",
                     "url": "/#!/rebate/platformAll"
                 },
                 {
-                    "key": "IOS",
+                    "key": "1",
                     "name": "平台基础返利",
-                    "url": "/#!/rebate/platformBase"
+                    "url": "/#!/rebate/platformBase?plan_type=1"
                 },
                 {
-                    "key": "Android",
+                    "key": "2",
                     "name": "平台促销返利",
-                    "url": "/#!/rebate/promotion"
+                    "url": "/#!/rebate/promotion?plan_type=2"
                 },
                 {
-                    "key": "WAP",
+                    "key": "6",
                     "name": "单项单级返利",
-                    "url": "/#!/rebate/singleStage"
+                    "url": "/#!/rebate/singleStage?plan_type=6"
                 },
                 {
-                    "key": "H5",
+                    "key": "5",
                     "name": "邀请商户分析返利",
-                    "url": "/#!/rebate/invitation"
+                    "url": "/#!/rebate/invitation?plan_type=5"
                 }
             ]
         },
@@ -778,6 +778,340 @@
                     }
                 ]
             }
+        ]
+    },
+    "1482113885605": {
+        "modelName": [
+            "ads2_new_rebate_order_muiltiple_trend"
+        ],
+        "date_picker": true,
+        "order": [],
+        "platform": false,
+        "router": "/rebate/single_Three",
+        "names": "返利类型分布",
+        "filter": "rebate_single_03_f",
+        "params": "rebate_single_03",
+        "fixedParams": "rebate_platformAll_02_fixed",
+        "level_select": true,
+        "level_select_url": "/api/categories",
+        "level_select_name": "category_id",
+        "filter_select": [
+            {
+                "title": "指标选择",
+                "filter_key": "filter_key",
+                "groups": [
+                    {
+                        "key": "is_rebate_merchandise_num",
+                        "value": "商品件数"
+                    },
+                    {
+                        "key": "is_rebate_item_fee",
+                        "value": "商品总金额"
+                    },
+                    {
+                        "key": "unique_is_over_rebate_order_num",
+                        "value": "返利订单数"
+                    },
+                    {
+                        "key": "is_over_rebate_order_amount",
+                        "value": "返利到账金额"
+                    }
+                ]
+            }
+        ]
+    },
+    "1482117244953": {
+        "modelName": [
+            "ads2_new_rebate_order_muiltiple_trend"
+        ],
+        "date_picker": true,
+        "order": [],
+        "platform": false,
+        "router": "/rebate/invitation_Two",
+        "names": "返利订单趋势",
+        "filter": "rebate_invitation_01_f",
+        "params": "rebate_invitation_01",
+        "fixedParams": "rebate_platformAll_02_fixed",
+        "level_select": true,
+        "level_select_url": "/api/categories",
+        "level_select_name": "category_id",
+        "filter_select": [
+            {
+                "title": "指标选择",
+                "filter_key": "filter_key",
+                "groups": [
+                    {
+                        "key": "unique_is_rebate_order_num",
+                        "value": "订单数"
+                    },
+                    {
+                        "key": "is_over_rebate_order_amount",
+                        "value": "订单总金额"
+                    },
+                    {
+                        "key": "is_rebate_merchandise_num",
+                        "value": "商品件数"
+                    },
+                    {
+                        "key": "cancel_is_rebate_order_num",
+                        "value": "取消订单数"
+                    }
+                ]
+            }
+        ]
+    },
+    "1482118634978": {
+        "modelName": [
+            "ads2_new_rebate_order_muiltiple_trend"
+        ],
+        "date_picker": true,
+        "order": [],
+        "platform": false,
+        "router": "/rebate/invitation_Three",
+        "names": "返利层级分布",
+        "filter": "rebate_invitation_02_f",
+        "params": "rebate_invitation_02",
+        "fixedParams": "rebate_platformAll_02_fixed",
+        "level_select": true,
+        "level_select_url": "/api/categories",
+        "level_select_name": "category_id",
+        "filter_select": [
+            {
+                "title": "指标选择",
+                "filter_key": "filter_key",
+                "groups": [
+                    {
+                        "key": "is_rebate_merchandise_num",
+                        "value": "商品件数"
+                    },
+                    {
+                        "key": "is_rebate_item_fee",
+                        "value": "商品总金额"
+                    },
+                    {
+                        "key": "unique_is_over_rebate_order_num",
+                        "value": "返利订单数"
+                    },
+                    {
+                        "key": "is_over_rebate_order_amount",
+                        "value": "返利到账金额"
+                    }
+                ]
+            }
+        ]
+    },
+    "1482126654650": {
+        "modelName": [
+            "ads2_new_rebate_invite_overview"
+        ],
+        "date_picker": true,
+        "order": [],
+        "platform": false,
+        "router": "/rebate/regist_One",
+        "names": "邀请好友注册总览",
+        "filter": "rebate_regist_01_f",
+        "params": "rebate_regist_01",
+        "sum": [
+            "unique_rebate_invite_friend_planid_num",
+            "unique_rebate_invite_friend_user_num",
+            "unique_rebate_invite_friend_success_user_num",
+            "is_over_rebate_invite_friend_amount",
+            "all_register_user_num"
+        ],
+        "paging": [
+            true
+        ],
+        "rows": [
+            [
+                "unique_rebate_invite_friend_planid_num",
+                "unique_rebate_invite_friend_user_num",
+                "unique_rebate_invite_friend_success_user_num",
+                "regist_lv",
+                "is_over_rebate_invite_friend_amount"
+            ]
+        ],
+        "cols": [
+            [
+                {
+                    "caption": "返利计划数",
+                    "type": "number"
+                },
+                {
+                    "caption": "参与用户数",
+                    "type": "number"
+                },
+                {
+                    "caption": "注册成功数",
+                    "type": "number"
+                },
+                {
+                    "caption": "注册成功占比",
+                    "type": "number"
+                },
+                {
+                    "caption": "返利到账金额",
+                    "type": "number"
+                }
+            ]
+        ]
+    },
+    "1482127890980": {
+        "modelName": [
+            "ads2_new_rebate_invite_overview"
+        ],
+        "date_picker": true,
+        "order": [],
+        "platform": false,
+        "router": "/rebate/regist_Two",
+        "names": "邀请商户入驻总览",
+        "filter": "rebate_regist_02_f",
+        "params": "rebate_regist_02",
+        "sum": [
+            "unique_rebate_invite_shop_planid_num",
+            "unique_rebate_invite_shop_num",
+            "unique_rebate_invite_shop_success_num",
+            "is_over_rebate_invite_shop_amount",
+            "all_enter_shop_num"
+        ],
+        "paging": [
+            true
+        ],
+        "rows": [
+            [
+                "unique_rebate_invite_shop_planid_num",
+                "unique_rebate_invite_shop_num",
+                "unique_rebate_invite_shop_success_num",
+                "regist_lv",
+                "is_over_rebate_invite_shop_amount"
+            ]
+        ],
+        "cols": [
+            [
+                {
+                    "caption": "返利计划数",
+                    "type": "number"
+                },
+                {
+                    "caption": "参与用户数",
+                    "type": "number"
+                },
+                {
+                    "caption": "入驻成功数",
+                    "type": "number"
+                },
+                {
+                    "caption": "入驻成功占比",
+                    "type": "number"
+                },
+                {
+                    "caption": "返利到账金额",
+                    "type": "number"
+                }
+            ]
+        ]
+    },
+    "1482128543717": {
+        "modelName": [
+            "ads2_new_rebate_invite_trend"
+        ],
+        "date_picker": true,
+        "order": [],
+        "platform": false,
+        "router": "/rebate/regist_Three",
+        "names": "邀请趋势",
+        "filter": "rebate_regist_03_f",
+        "params": "rebate_regist_03",
+        "filter_select": [
+            {
+                "title": "指标选择",
+                "filter_key": "filter_key",
+                "groups": [
+                    {
+                        "key": "unique_rebate_invite_num",
+                        "value": "邀请成功数"
+                    },
+                    {
+                        "key": "is_over_rebate_invite_amount",
+                        "value": "返利到账金额"
+                    }
+                ]
+            }
+        ]
+    },
+    "1482135694948": {
+        "modelName": [
+            "ads2_new_rebate_invite_plan_info",
+            "TypeFlow"
+        ],
+        "date_picker": true,
+        "order": [],
+        "platform": false,
+        "router": "/rebate/regist_Four",
+        "names": "邀请返利汇总",
+        "excel_export": true,
+        "flexible_btn": [
+            {
+                "content": "<a href='javascript:void(0)'>导出</a>",
+                "preMethods": [
+                    "excel_export"
+                ]
+            }
+        ],
+        "paging": [
+            true
+        ],
+        "filter": "rebate_platformAll_04_f",
+        "params": "rebate_platformAll_04",
+        "secondParams": "rebate_platformAll_04_second",
+        "selectFilter": "rebate_platformAll_04_selectFilter",
+        "rows": [
+            [
+                "Number",
+                "plan_name",
+                "plan_type_Translate",
+                "validscope_time",
+                "rebate_type_Translate",
+                "unique_rebate_benefit_user_num",
+                "unique_rebate_invite_success_user_num",
+                "is_over_rebate_invite_amount"
+            ]
+        ],
+        "cols": [
+            [
+                {
+                    "caption": "序号",
+                    "type": "number"
+                },
+                {
+                    "caption": "返利计划名称",
+                    "type": "string"
+                },
+                {
+                    "caption": "使用方",
+                    "type": "string"
+                },
+                {
+                    "caption": "有效期",
+                    "type": "string"
+                },
+                {
+                    "caption": "关联流程",
+                    "type": "string"
+                },
+                {
+                    "caption": "参与用户数",
+                    "type": "number"
+                },
+                {
+                    "caption": "用户注册成功数",
+                    "type": "number",
+                    "help": "(商户入驻成功数)"
+                },
+                {
+                    "caption": "返利到账金额",
+                    "type": "number"
+                }
+            ]
         ]
     }
 }
