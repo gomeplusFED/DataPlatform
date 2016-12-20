@@ -15,6 +15,14 @@
 					<span>{{item1.name}}</span>
 					<span>&nbsp;</span>
 					<span>&nbsp;</span>
+					<span>
+						<checkbox-list 
+						:list="platformType" 
+						level="1" 
+						:obj="{k1: k1}" 
+						:val.sync="platfromPermission1[k1]">
+						</checkbox-list>
+					</span>
 					<span><label><input @click="checkFirstExport(k1, exportLimitAll[k1])" type="checkbox" v-model="exportLimitAll[k1]"/>数据导出</label></span>
 				</div>
 				<ul v-show="levelShow[k1].show">
@@ -24,6 +32,14 @@
 							<span>&nbsp;</span>
 							<span>{{item2.name}}</span>
 							<span>&nbsp;</span>
+							<span>
+								<checkbox-list 
+								:list="platformType" 
+								level="2" 
+								:obj="{k1: k1, id2: item2.id}" 
+								:val.sync="platfromPermission2[k1][item2.id]">
+								</checkbox-list>
+							</span>
 							<span><label><input @click="checkSecondExport(k1, item2.id, exportLimitObj[k1][item2.id])" type="checkbox" v-model="exportLimitObj[k1][item2.id]"/>数据导出</label></span>
 						</div>
 						<ul v-show="levelShow[k1].subs[item2.id]">
@@ -32,6 +48,14 @@
 								<span>&nbsp;</span>
 								<span>&nbsp;</span>
 								<span>{{item3.name}}</span>
+								<span>
+									<checkbox-list 
+									:list="platformType" 
+									level="3" 
+									:obj="{k1: k1, id2: item2.id, id3: item3.id}" 
+									:val.sync="platfromPermission3[k1][item2.id][item3.id]">
+									</checkbox-list>
+								</span>
 								<span>&nbsp;</span>
 							</li>
 						</ul>
@@ -42,89 +66,16 @@
 		</ul>
 	</div>
 </template>
-<style scoped>
-label {
-	margin: 0;
-}
-
-label input {
-	margin: 0 5px 0 0;
-}
-
-.con {
-	width: 100%;
-	border: 1px solid #333;
-	box-sizing: border-box;
-}
-
-.con>li {
-	width: 100%;
-	font-size: 0;
-}
-
-.con>li span {
-	display: inline-block;
-	vertical-align: middle;
-	text-align: center;
-	font-size: 14px;
-	line-height: 32px;
-	border-right: 1px solid #333;
-	border-bottom: 1px solid #333;
-	box-sizing: border-box;
-}
-
-.con>li span:nth-child(1) {
-	width: 10%;
-}
-
-.con>li span:nth-child(2) {
-	width: 20%;
-}
-
-.con>li span:nth-child(3) {
-	width: 24%;
-}
-.con>li span:nth-child(4) {
-	width: 24%;
-}
-
-.con>li span:nth-child(5) {
-	width: 22%;
-	border-right: none;
-}
-
-.con>li>div {
-	font-size: 0;
-	background-color: rgb(204, 204, 255);
-	cursor: pointer;
-}
-
-.second-level {
-	background: rgba(204,204,255,0.2);
-	cursor: pointer;
-}
-
-.con>li:last-child span {
-	border-bottom: none;
-}
-
-.con>li>ul {
-	font-size: 0;
-	width: 100%;
-}
-
-.con>li>ul>li {
-	font-size: 0px;
-}
-</style>
 <script>
 var Vue = require('Vue');
 var $ = require('jQuery');
 
 var utils = require('utils');
+import checkboxList from './checkboxList.vue'
 
 var LimitList = Vue.extend({
 	name: 'LimitList',
+	components: {checkboxList},
 	data: function() {
 		return {
 			pageAll: window.allPageConfig.pageAll,
@@ -136,7 +87,11 @@ var LimitList = Vue.extend({
 			exportLimitObj: {},
 			subPagesObj: {},
 			limitAll: {},
-			exportLimitAll: {}
+			exportLimitAll: {},
+			platfromPermission1: {},
+			platfromPermission2: {},
+			platfromPermission3: {},
+			platformType: ['IOS', 'AND', 'APP', 'PC', 'WAP站']
 		};
 	},
 	props: ['id', 'limited', 'exportLimit', 'subPages'],
@@ -430,8 +385,148 @@ var LimitList = Vue.extend({
 			},
 			deep: true
 		}
+	},
+	events: {
+		checkboxChange1(obj, val) {
+			// 更改2级目录
+			let k1 = obj.k1;
+			let permission2 = this.platfromPermission2[k1];
+			if (permission2) {
+				for (let item in permission2) {
+					permission2[item] = val
+				}
+			}
+		},
+		checkboxChange2(obj, val) {
+			// 更改3级目录
+			let permission3 = this.platfromPermission3[obj.k1];
+			if (permission3) {
+				permission3 = permission3[obj.id2]
+				if (permission3) {
+					for (let item in permission3) {
+						permission3[item] = val
+					}
+				}
+			}
+			// 判断2级目录
+			let permission2 = this.platfromPermission2[obj.k1];
+			if (permission2) {
+				let all = ['1', '1', '1', '1', '1']
+				for (let key in Object.keys(permission2)) {
+					if (permission2[key]) {
+						permission2[key].split('').forEach((x, index) => {
+							if (x !== '1') {
+								all[index] = '0'
+							}
+						})
+					} else {
+						all = ['0', '0', '0', '0', '0']
+					}
+				}
+				// 赋值1级目录
+				this.platfromPermission1[obj.k1] = all.join('');
+			}
+		},
+		checkboxChange3(obj, val) {
+			// 判断3级目录
+			let permission3 = this.platfromPermission3[obj.k1][obj.id2];
+			if (permission3) {
+				let all = ['1', '1', '1', '1', '1']
+				for (let key in Object.keys(permission3)) {
+					permission3[key].split('').forEach((x, index) => {
+						if (x !== '1') {
+							all[index] = '0'
+						}
+					})
+				}
+				// 赋值2级目录
+				this.platfromPermission2[obj.k1][obj.id2] = all.join('');
+			}
+		}
 	}
 });
 
 module.exports = LimitList;
 </script>
+
+
+<style scoped>
+label {
+	margin: 0;
+}
+
+label input {
+	margin: 0 5px 0 0;
+}
+
+.con {
+	width: 100%;
+	border: 1px solid #333;
+	box-sizing: border-box;
+}
+
+.con>li {
+	width: 100%;
+	font-size: 0;
+}
+
+.con>li span {
+	display: inline-block;
+	vertical-align: middle;
+	text-align: center;
+	font-size: 14px;
+	line-height: 32px;
+	border-right: 1px solid #333;
+	border-bottom: 1px solid #333;
+	box-sizing: border-box;
+}
+
+
+.con>li span:nth-child(1) {
+	width: 8%;
+}
+
+.con>li span:nth-child(2) {
+	width: 16%;
+}
+
+.con>li span:nth-child(3) {
+	width: 12%;
+}
+.con>li span:nth-child(4) {
+	width: 12%;
+}
+
+.con>li span:nth-child(5) {
+	width: 34%;
+}
+
+.con>li span:nth-child(6) {
+	width: 18%;
+	border-right: none;
+}
+
+.con>li>div {
+	font-size: 0;
+	background-color: rgb(204, 204, 255);
+	cursor: pointer;
+}
+
+.second-level {
+	background: rgba(204,204,255,0.2);
+	cursor: pointer;
+}
+
+.con>li:last-child span {
+	border-bottom: none;
+}
+
+.con>li>ul {
+	font-size: 0;
+	width: 100%;
+}
+
+.con>li>ul>li {
+	font-size: 0px;
+}
+</style>
