@@ -7,6 +7,7 @@
 				<span>一级目录</span>
 				<span>二级目录／页面</span>
 				<span>三级目录／页面</span>
+				<span>平台权限</span>
 				<span>导出权限</span>
 			</li>
 			<li v-for="(k1,item1) in pageAll">
