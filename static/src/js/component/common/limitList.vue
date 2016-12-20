@@ -1,6 +1,7 @@
 <template>
 	<div class="limit_list">
 		<h2>权限列表</h2>
+		<a class="btn btn-default clear-all" href="javascript:void(0)" @click="clearAll">全部清空</a>
 		<ul class="con">
 			<li>
 				<span>选择</span>
@@ -191,11 +192,31 @@ var LimitList = Vue.extend({
 			}
 			return result;
 		},
+		clear(obj){
+			if (typeof obj === 'object') {
+				for (let key in obj) {
+					if(obj[key] === true) {
+						obj[key] = false;
+					} else {
+						this.clear(obj[key]);
+					}
+				}
+			}
+		},
+		clearAll(){
+			this.clear(this.limitAll);
+			this.clear(this.exportLimitAll);
+			this.clear(this.limitedObj);
+			this.clear(this.exportLimitObj);
+			this.clear(this.subPagesObj);
+		},
 		checkFirst(firstid, val) {
 			let valafter = !val;
-			Vue.set(this.exportLimitAll, firstid, valafter);
+			
 			this.parseSubSecond(firstid, valafter);
-			this.parseSubSecondExport(firstid, valafter);
+			// 默认不勾选“数据导出”
+			// this.parseSubSecondExport(firstid, valafter);
+			// Vue.set(this.exportLimitAll, firstid, valafter);
 		},
 		checkFirstExport(firstid, val) {
 			if (val) {
@@ -214,12 +235,11 @@ var LimitList = Vue.extend({
 			// 检查一级页面是否全选的状态
 			this.parseFirst(firstid, secondid, valafter);
 			
-			// 由 true变为false，取消其导出权限
-			// 由 false变为true，默认赋予其导出权限
-			Vue.set(this.exportLimitObj[firstid], secondid, valafter);
-			// 一级页面的导出全选状态
-			this.parseFirstExport(firstid, secondid, valafter);
 			
+			// 一级页面的导出全选状态
+			// 默认不勾选“数据导出”
+			// this.parseFirstExport(firstid, secondid, valafter);
+			// Vue.set(this.exportLimitObj[firstid], secondid, valafter);
 			// 下属三级页面全部选中/不选
 			this.parseSubThird(firstid, secondid, valafter);
 		},
@@ -247,9 +267,11 @@ var LimitList = Vue.extend({
 			// 仅在选中时判断 三级页面有选中的 二级页面一定需要被选中
 			if (valafter) {
 				Vue.set(this.limitedObj[firstid], secondid, true);
-				Vue.set(this.exportLimitObj[firstid], secondid, true);
+				// 默认不勾选“数据导出”
+				// Vue.set(this.exportLimitObj[firstid], secondid, true);
 				this.parseFirst(firstid, secondid, true);
-				this.parseFirstExport(firstid, secondid, true);
+				// 默认不勾选“数据导出”
+				// this.parseFirstExport(firstid, secondid, true);
 			}
 		},
 		parseFirst(firstid, secondid, valafter) {
@@ -458,6 +480,12 @@ label {
 
 label input {
 	margin: 0 5px 0 0;
+}
+
+.clear-all {
+	position: absolute;
+    right: 20px;
+    top: 40px;
 }
 
 .con {
