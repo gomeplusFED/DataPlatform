@@ -292,7 +292,8 @@ var LimitList = Vue.extend({
 			if (valafter) {
 				Vue.set(this.limitedObj[firstid], secondid, true);
 				Vue.set(this.exportLimitObj[firstid], secondid, true);
-				this.parseFirst(firstid, secondid, valafter);
+				this.parseFirst(firstid, secondid, true);
+				this.parseFirstExport(firstid, secondid, true);
 			}
 		},
 		parseFirst(firstid, secondid, valafter) {
