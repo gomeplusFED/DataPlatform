@@ -164,6 +164,8 @@ module.exports = {
                 );
             }
         }
+        obj.one = obj.one || "0.00%";
+        obj.two = obj.two || "0.00%";
         one.date = "昨日对比";
         one.one = "--";
         one.two = "--";
