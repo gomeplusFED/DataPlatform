@@ -159,9 +159,9 @@ module.exports = (Router) => {
                     name : config[key].name,
                     cell : {}
                 };
-                for(let item of config[key].path) {
-                    obj[key].cell[item.id] = item.name;
-                }
+                config[key].path.forEach((item, index) => {
+                    obj[key].cell[index] = item.name;
+                });
             }
         }
         req.models.User2.find({
@@ -185,6 +185,7 @@ module.exports = (Router) => {
                 const list = _.uniq(Object(limited).keys.concat(Object(exports).keys));
                 for(let k of list) {
 
+                    arr.push([name, username, email, department, role, remark, obj[k].name]);
                 }
             }
         });
