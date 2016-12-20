@@ -11,11 +11,11 @@
 			</li>
 			<li v-for="(k1,item1) in pageAll">
 				<div @click.stop="showLevel($event, k1)">
-					<span><input @click="checkFirst('limit', k1)" type="checkbox" v-model="limitAll[k1]"></input></span>
+					<span><input @click="checkFirst(k1, limitAll[k1])" type="checkbox" v-model="limitAll[k1]"></input></span>
 					<span>{{item1.name}}</span>
 					<span>&nbsp;</span>
 					<span>&nbsp;</span>
-					<span><label><input @click="checkFirst('exportLimit', k1)" type="checkbox" v-model="exportLimitAll[k1]"/>数据导出</label></span>
+					<span><label><input @click="checkFirstExport(k1, exportLimitAll[k1])" type="checkbox" v-model="exportLimitAll[k1]"/>数据导出</label></span>
 				</div>
 				<ul v-show="levelShow[k1].show">
 					<li v-for="item2 of item1.path" >
@@ -24,7 +24,7 @@
 							<span>&nbsp;</span>
 							<span>{{item2.name}}</span>
 							<span>&nbsp;</span>
-							<span><label><input type="checkbox" v-model="exportLimitObj[k1][item2.id]"/>数据导出</label></span>
+							<span><label><input @click="checkSecondExport(k1, item2.id, exportLimitObj[k1][item2.id])" type="checkbox" v-model="exportLimitObj[k1][item2.id]"/>数据导出</label></span>
 						</div>
 						<ul v-show="levelShow[k1].subs[item2.id]">
 							<li v-for="item3 in item2.subPages">
@@ -160,15 +160,29 @@ var LimitList = Vue.extend({
 			// }
 			for(let item of subs) {
 				let id = item.id;
-				// 默认都打开三级目录折叠
-				Vue.set(this.levelShow[key].subs, id, true);
-				secIds.push(item.id);
-				let thirds = item.subPages || [];
-				let thirdIds = [];
-				for(let third of thirds){
-					thirdIds.push(third.id);
+				// 没有id的不予显示
+				if (id != null) {
+					// id一定为字符串
+					id = id.toString();
+					// 回写id为字符串
+					item.id = id;
+					// 默认都打开三级目录折叠
+					Vue.set(this.levelShow[key].subs, id, true);
+					secIds.push(id);
+					let thirds = item.subPages || [];
+					let thirdIds = [];
+					for(let third of thirds){
+						let tid = third.id;
+						// 三级页面也一定要有id
+						if (tid != null) {
+							tid = tid.toString();
+							// 回写id为字符串
+							third.id = tid;
+							thirdIds.push(tid.toString());
+						}
+					}
+					this.thirdAll[key][id] = thirdIds;
 				}
-				this.thirdAll[key][id] = thirdIds;
 			}
 			this.secondAll[key] = secIds;
 			count += 1;
@@ -186,45 +200,6 @@ var LimitList = Vue.extend({
 				return;
 			}
 			config.subs[index] = !config.subs[index];
-		},
-		parseLimitAll: function(type) {
-			// 判断是否已全部选中
-			if (type === 'limit') {
-				for (let item in this.limitedObj) {
-					let _count1 = 0;
-					for (let k in this.limitedObj[item]) {
-						if (this.limitedObj[item][k]) {
-							_count1 += 1;
-						}
-					}
-					if (_count1 === this.pageAll[item].path.length) {
-						Vue.set(this.limitAll, item, true);
-					} else {
-						Vue.set(this.limitAll, item, false);
-					}
-				}
-			} else if (type === 'exportLimit') {
-				for (let item in this.exportLimitObj) {
-					let _count1 = 0;
-					for (let k in this.exportLimitObj[item]) {
-						if (this.exportLimitObj[item][k]) {
-							_count1 += 1;
-						}
-					}
-					if (_count1 === this.pageAll[item].path.length) {
-						Vue.set(this.exportLimitAll, item, true);
-					} else {
-						Vue.set(this.exportLimitAll, item, false);
-					}
-				}
-			}
-		},
-		parseArrayToObject: function(array) {
-			var result = {};
-			for (var i = 0; i < array.length; i++) {
-				result[array[i]] = true;
-			}
-			return result;
 		},
 		parseObjectToLimitObj: function(obj) {
 			var result = {};
@@ -260,57 +235,54 @@ var LimitList = Vue.extend({
 			}
 			return result;
 		},
-		checkFirst: function(type, key, ev) {
-			if (type === 'limit') {
-				Vue.set(this.limitedObj, key, {});
-				let secPages = this.secondAll[key];
-				if (!this.limitAll[key]) {
-					for (let secid of secPages) {
-						if (this.limitedObj[key] === undefined) {
-							Vue.set(this.limitedObj, key, {});
-						}
-						Vue.set(this.limitedObj[key], secid, true);
-						this.checkSecond(key, secid, false);
-					}
-				} else {
-					for (let secid of secPages) {
-						if (this.limitedObj[key] === undefined) {
-							Vue.set(this.limitedObj, key, {});
-						}
-						Vue.set(this.limitedObj[key], secid, false);
-						this.checkSecond(key, secid, true);
-					}
-				}
-			} else if (type === 'exportLimit') {
-				Vue.set(this.exportLimitObj, key, {});
-				if (!this.exportLimitAll[key]) {
-					for (let item in this.pageAll[key]['path']) {
-						if (this.exportLimitObj[key] === undefined) {
-							Vue.set(this.exportLimitObj, key, {});
-						}
-						Vue.set(this.exportLimitObj[key], item, true);
-					}
-				} else {
-					for (let item in this.pageAll[key]['path']) {
-						if (this.exportLimitObj[key] === undefined) {
-							Vue.set(this.exportLimitObj, key, {});
-						}
-						Vue.set(this.exportLimitObj[key], item, false);
-					}
-				}
+		checkFirst(firstid, val) {
+			let valafter = !val;
+			Vue.set(this.exportLimitAll, firstid, valafter);
+			this.parseSubSecond(firstid, valafter);
+			this.parseSubSecondExport(firstid, valafter);
+		},
+		checkFirstExport(firstid, val) {
+			if (val) {
+				// 由true 变为false，仅取消下级导出功能
+				this.parseSubSecondExport(firstid, false);
+			} else {
+				// 由false 变为true，相当于全部选择
+				Vue.set(this.limitAll, firstid, true);
+				this.parseSubSecond(firstid, true);
+				this.parseSubSecondExport(firstid, true);
 			}
 		},
 		checkSecond(firstid, secondid, val) {
-			let subPagesCheckObj = this.subPagesObj[firstid][secondid];
-			// 保证subPagesCheckObj已包含全部三级页面的id
-			if(!val) {
-				for (let id in subPagesCheckObj) {
-					Vue.set(subPagesCheckObj, id, true);
-				}
+			let valafter = !val;
+
+			// 检查一级页面是否全选的状态
+			this.parseFirst(firstid, secondid, valafter);
+			
+			// 由 true变为false，取消其导出权限
+			// 由 false变为true，默认赋予其导出权限
+			Vue.set(this.exportLimitObj[firstid], secondid, valafter);
+			// 一级页面的导出全选状态
+			this.parseFirstExport(firstid, secondid, valafter);
+			
+			// 下属三级页面全部选中/不选
+			this.parseSubThird(firstid, secondid, valafter);
+		},
+		checkSecondExport(firstid, secondid, val) {
+			if (val) {
+				// 由true 变为false，仅取消下级导出功能
+				// 然而三级页面并没有导出权限
+				// 检查是否取消一级页面导出的选中
+				this.parseFirstExport(firstid, secondid, false);
 			} else {
-				for (let id in subPagesCheckObj) {
-					Vue.set(subPagesCheckObj, id, false);
-				}
+				// 由false 变为true，相当于check了二级页面
+				Vue.set(this.limitedObj[firstid], secondid, true);
+				this.parseFirst(firstid, secondid, true);
+			
+				// 一级页面的导出全选状态
+				this.parseFirstExport(firstid, secondid, true);
+				
+				// 下属三级页面全部选中/不选
+				this.parseSubThird(firstid, secondid, true);
 			}
 		},
 		checkThird(firstid, secondid, thirdid, val) {
@@ -319,20 +291,79 @@ var LimitList = Vue.extend({
 			// 仅在选中时判断 三级页面有选中的 二级页面一定需要被选中
 			if (valafter) {
 				Vue.set(this.limitedObj[firstid], secondid, true);
+				Vue.set(this.exportLimitObj[firstid], secondid, true);
+				this.parseFirst(firstid, secondid, valafter);
+			}
+		},
+		parseFirst(firstid, secondid, valafter) {
+			// 检查二级页面对应的一级页面是否全选的状态
+			let secs = this.limitedObj[firstid];
+			let firstChecked = valafter;
+			for (let k in secs) {
+				if ((k !== secondid) && (secs[k] != valafter)) {
+					// 有不同的 一级页面肯定不予全选
+					firstChecked = false;
+					break;
+				}
+			}
+			Vue.set(this.limitAll, firstid, firstChecked);
+		},
+		parseFirstExport(firstid, secondid, valafter) {
+			// 检查二级导出页面对应的一级导出页面是否全选的状态
+			let secs = this.exportLimitObj[firstid];
+			let firstChecked = valafter;
+			for (let k in secs) {
+				if ((k !== secondid) && (secs[k] != valafter)) {
+					// 有不同的 一级页面肯定不予全选
+					firstChecked = false;
+					break;
+				}
+			}
+			Vue.set(this.exportLimitAll, firstid, firstChecked);
+		},
+		parseSubSecond(firstid, valafter) {
+			// 下属二级页面全部全选或全不选
+			let secPages = this.secondAll[firstid];
+			for (let secid of secPages) {
+				Vue.set(this.limitedObj[firstid], secid, valafter);
+				// 连锁三级全部选中/全不选
+				this.parseSubThird(firstid, secid, valafter);
+			}
+		},
+		parseSubSecondExport(firstid, valafter) {
+			// 下属二级导出页面全部全选或全不选
+			let secPages = this.secondAll[firstid];
+			for (let secid of secPages) {
+				Vue.set(this.exportLimitObj[firstid], secid, valafter);
+				// 暂无三级导出
+				// this.parseSubThirdExport(firstid, secid, valafter);
+			}
+		},
+		parseSubThird(firstid, secondid, valafter) {
+			// 下属三级页面全部全选或全不选
+			let subPagesCheckObj = this.subPagesObj[firstid][secondid];
+			// 保证subPagesCheckObj已包含全部三级页面的id
+			for (let id in subPagesCheckObj) {
+				Vue.set(subPagesCheckObj, id, valafter);
 			}
 		}
 	},
 	watch: {
 		limited: {
 			handler: function(val) {
-				this.limitedObj = {};
-				this.limitAll = {};
-				for (var item in this.limited) {
-					var _curretnObj = this.parseArrayToObject(this.limited[item]);
-					if (window.allPageConfig.pageAll[item]) {
-						Vue.set(this.limitedObj, item, _curretnObj);
+				let limitedObj = {};
+				let limitAll = {};
+				for (let f in this.pageAll) {
+					let userLimtited = this.limited[f];
+					limitedObj[f] = {};
+					limitAll[f] = !!userLimtited;
+					let secAll = this.secondAll[f];
+					for (let s of secAll) {
+						limitedObj[f][s] = userLimtited && userLimtited.includes(s);
 					}
 				}
+				this.limitedObj = limitedObj;
+				this.limitAll = limitAll;
 			},
 			deep: true
 		},
@@ -343,7 +374,7 @@ var LimitList = Vue.extend({
 				for (let f in this.pageAll) {
 					// this.subPagesObj
 					Vue.set(this.subPagesObj, f, {});
-					let secs = this.subPages[f];
+					let secs = this.subPages ? this.subPages[f] : {};
 					let secAll = this.secondAll[f];
 					for (let s of secAll) {
 						Vue.set(this.subPagesObj[f], s, {});
@@ -356,27 +387,29 @@ var LimitList = Vue.extend({
 						}
 					}
 				}
-				// console.log('subPagesObj handler');
-				// console.log(this.subPagesObj);
 			},
 			deep: true
 		},
 		exportLimit: {
 			handler: function(val) {
-				this.exportLimitObj = {};
-				this.exportLimitAll = {};
-				for (var item in this.exportLimit) {
-					var _curretnObj = this.parseArrayToObject(this.exportLimit[item]);
-					if (window.allPageConfig.pageAll[item]) {
-						Vue.set(this.exportLimitObj, item, _curretnObj);
+				let exportLimitObj = {};
+				let exportLimitAll = {};
+				for (let f in this.pageAll) {
+					let userExportLimtited = this.exportLimit[f];
+					exportLimitObj[f] = {};
+					exportLimitAll[f] = !!userExportLimtited;
+					let secAll = this.secondAll[f];
+					for (let s of secAll) {
+						exportLimitObj[f][s] = userExportLimtited && userExportLimtited.includes(s);
 					}
 				}
+				this.exportLimitObj = exportLimitObj;
+				this.exportLimitAll = exportLimitAll;
 			},
 			deep: true
 		},
 		limitedObj: {
 			handler: function() {
-				this.parseLimitAll('limit');
 				var realLimit = this.parseObjectToLimitObj(this.limitedObj);
 				this.$dispatch('borcastLimit', realLimit);
 			},
@@ -391,7 +424,6 @@ var LimitList = Vue.extend({
 		},
 		exportLimitObj: {
 			handler: function() {
-				this.parseLimitAll('exportLimit');
 				var realLimit = this.parseObjectToLimitObj(this.exportLimitObj);
 				this.$dispatch('borcastExportLimit', realLimit);
 			},
