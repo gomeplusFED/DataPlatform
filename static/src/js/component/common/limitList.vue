@@ -484,18 +484,18 @@ label input {
 
 
 .con>li span:nth-child(1) {
-	width: 8%;
+	width: 6%;
 }
 
 .con>li span:nth-child(2) {
-	width: 16%;
+	width: 12%;
 }
 
 .con>li span:nth-child(3) {
-	width: 12%;
+	width: 18%;
 }
 .con>li span:nth-child(4) {
-	width: 12%;
+	width: 16%;
 }
 
 .con>li span:nth-child(5) {
@@ -503,7 +503,7 @@ label input {
 }
 
 .con>li span:nth-child(6) {
-	width: 18%;
+	width: 14%;
 	border-right: none;
 }
 
