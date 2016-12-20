@@ -5,6 +5,7 @@
  */
 var orm = require("orm"),
     config = require("../../../config/config"),
+    _ = require("lodash"),
     util = require("../../../utils");
 
 module.exports = (Router) => {
@@ -151,8 +152,21 @@ module.exports = (Router) => {
     });
 
     Router.get("/users/download", (req, res, next) => {
+        let obj = {};
+        for(let key in config) {
+            if(config[key].display) {
+                obj[key] = {
+                    name : config[key].name,
+                    cell : {}
+                };
+                for(let item of config[key].path) {
+                    obj[key].cell[item.id] = item.name;
+                }
+            }
+        }
         req.models.User2.find({
-            is_admin : orm.lt(99)
+            is_admin : orm.lt(99),
+            status : 1
         }, (err, data) => {
             if(err) {
                 return next(err);
@@ -160,7 +174,16 @@ module.exports = (Router) => {
             let newData = [];
             for(let key of data) {
                 let arr = [];
-                
+                const name = key.name;
+                const username = key.username;
+                const email = key.email;
+                const department = key.department;
+                const role = key.role;
+                const remark = key.remark;
+                const limited = JSON.parse(key.limited);
+                const exports = JSON.parse(key.export);
+                const list = _.uniq(Object(limited).keys.concat(Object(exports).keys));
+
             }
         });
     });
