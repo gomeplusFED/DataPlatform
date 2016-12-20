@@ -137,7 +137,7 @@ module.exports = (Router) => {
         platform : false,
         modelName : ["UserAnalysisUsersReport"],
         order : ["-date"],
-        global_platform : global_platform.day,
+        global_platform : global_platform.week,
         //control_table_col : true,
         //excel_export : true,
         flexible_btn : [{
@@ -207,7 +207,7 @@ module.exports = (Router) => {
         platform : false,
         modelName : ["UserAnalysisUsersReport"],
         order : ["-date"],
-        global_platform : global_platform.day,
+        global_platform : global_platform.month,
         //control_table_col : true,
         //excel_export : true,
         flexible_btn : [{

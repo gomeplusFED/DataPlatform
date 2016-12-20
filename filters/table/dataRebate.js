@@ -185,7 +185,7 @@ module.exports = {
             key.history_expect_rebate_amount = key.history_expect_rebate_amount.toFixed(2);
             key.history_cancel_rebate_amount = key.history_cancel_rebate_amount.toFixed(2);
             key.history_is_over_rebate_order_amount = key.history_is_over_rebate_order_amount.toFixed(2);
-            key.date = `${moment(key.date - 6 * 24 * 60 * 60 * 1000).format("MM-DD")}-${moment(key.date).format("MM-DD")}`;
+            key.date = `${moment(key.date - 6 * 24 * 60 * 60 * 1000).format("MM.DD")}-${moment(key.date).format("MM.DD")}`;
         }
 
         return util.toTable([source], rows, cols);
