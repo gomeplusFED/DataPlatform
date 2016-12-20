@@ -396,7 +396,7 @@ var Account = Vue.extend({
 	        	for (let key in roleLimited) {
 	        		let ul = userLimited[key] || [];
 	        		let rl = roleLimited[key] || [];
-	        		if ((ul.length === 0) || (ul && rl.some(x => !ul.includes(x)))) {
+	        		if ((ul.length === 0 && rl.length !== 0) || (ul && rl.some(x => !ul.includes(x)))) {
 	        			// 合并&去重
 	        			userLimited[key] = Array.from(new Set([...ul,...rl]));
 	        			ismodified = true;
@@ -404,7 +404,7 @@ var Account = Vue.extend({
 	        		// 比较export
 	        		let uel = userExportLimited[key] || [];
 	        		let rel = roleExportLimited[key] || [];
-	        		if ((uel.length === 0) || (uel && rel.some(x => !uel.includes(x)))) {
+	        		if ((uel.length === 0 && rel.length !== 0) || (uel && rel.some(x => !uel.includes(x)))) {
 	        			// 合并&去重
 	        			userExportLimited[key] = Array.from(new Set([...uel,...rel]));
 	        			ismodified = true;
@@ -416,7 +416,7 @@ var Account = Vue.extend({
 	        		for(let l of rl) {
 	        			let rs = roleSub[l] || [];
 	        			let us = userSub[l] || [];
-		        		if ((us.length === 0) || (us && rs.some(x => !us.includes(x)))) {
+		        		if ((us.length === 0 && rs.length !== 0) || (us && rs.some(x => !us.includes(x)))) {
 		        			// 合并&去重
 		        			userSub[l] = Array.from(new Set([...us,...rs]));
 		        			ismodified = true;
