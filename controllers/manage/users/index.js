@@ -183,7 +183,9 @@ module.exports = (Router) => {
                 const limited = JSON.parse(key.limited);
                 const exports = JSON.parse(key.export);
                 const list = _.uniq(Object(limited).keys.concat(Object(exports).keys));
+                for(let k of list) {
 
+                }
             }
         });
     });
