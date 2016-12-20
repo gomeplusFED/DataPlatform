@@ -32,7 +32,7 @@
 											<li v-show="item.status"><a @click="modifyRole(item.id, item.limited, item.export, item.name, item.remark, item.sub_pages)" class="btn btn-default" href="javascript:void(0)">修改<i class="fa fa-pencil-square-o"></i></a></li>
 											<li v-show="item.status"><a @click="forbidden(item.id, item.name)" class="btn btn-default" href="javascript:void(0)">禁用<i class="fa fa-remove"></i></a></li>
 											<li v-show="!item.status"><a @click="startUsing(item.id, item.name)" class="btn btn-default" href="javascript:void(0)">启用<i class="fa fa-check-square-o"></i></a></li>
-											<li v-show="item.status"><a @click="modifyUser(item.name, item.limited, item.sub_pages)" class="btn btn-default" href="javascript:void(0)">更新账户<i class="fa fa-pencil-square-o"></i></a></li>
+											<li v-show="item.status"><a @click="modifyUser(item.name, item.limited, item.export, item.sub_pages)" class="btn btn-default" href="javascript:void(0)">更新账户<i class="fa fa-pencil-square-o"></i></a></li>
 										</ul>
 									</td>
 								</tr>
@@ -161,6 +161,7 @@ var Role = Vue.extend({
 				title: '更新账户',
 				rolename: null,
 				limited: null,
+				exportLimit: null,
 				subPages: null
 			},
 			loading: {
@@ -241,8 +242,9 @@ var Role = Vue.extend({
 			this.modifyName = name;
 			this.modifyType = 'modify';
 		},
-		modifyUser(name, limited, subPages) {
+		modifyUser(name, limited, exportLimit, subPages) {
 			this.account.rolename = name;
+			this.account.exportLimit = exportLimit;
 			this.account.limited = limited;
 			this.account.subPages = subPages;
 			this.account.show = true;

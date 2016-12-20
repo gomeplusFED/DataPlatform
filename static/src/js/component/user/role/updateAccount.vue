@@ -382,26 +382,51 @@ var Account = Vue.extend({
         updateLimited(email = false) {
         	let _this = this;
         	//比较权限
-        	console.log(_this.modal.limited);
-        	let rolelimited = _this.modal.limited ? Object.entries(JSON.parse(_this.modal.limited)) : [];
+        	let roleLimited = _this.modal.limited ? JSON.parse(_this.modal.limited) : {};
+        	let roleExportLimited = _this.modal.exportLimit ? JSON.parse(_this.modal.exportLimit) : {};
         	let updateTasks = [];
+        	let roleSubPages = _this.modal.subPages ? JSON.parse(_this.modal.subPages) : {};
         	for(let userid of _this.checkedRecords) {
         		let useritem = _this.userListData.find(x => x.id.toString() === userid);
 
-        		let userlimited = (useritem && useritem.limited) ? JSON.parse(useritem.limited) : {};
+        		let userLimited = (useritem && useritem.limited) ? JSON.parse(useritem.limited) : {};
+        		let userExportLimited = (useritem && useritem.export) ? JSON.parse(useritem.export) : {};
+        		let usersub_pages = (useritem && useritem.sub_pages) ? JSON.parse(useritem.sub_pages) : {};
         		let ismodified = false;
-	        	for (let limit of rolelimited) {
-	        		let key = limit[0];
-	        		let ul = userlimited[key] || [];
-	        		let rl = limit[1];
+	        	for (let key in roleLimited) {
+	        		let ul = userLimited[key] || [];
+	        		let rl = roleLimited[key] || [];
 	        		if ((ul.length === 0) || (ul && rl.some(x => !ul.includes(x)))) {
 	        			// 合并&去重
-	        			userlimited[key] = Array.from(new Set([...ul,...rl]));
+	        			userLimited[key] = Array.from(new Set([...ul,...rl]));
 	        			ismodified = true;
+	        		}
+	        		// 比较export
+	        		let uel = userExportLimited[key] || [];
+	        		let rel = roleExportLimited[key] || [];
+	        		if ((uel.length === 0) || (uel && rel.some(x => !uel.includes(x)))) {
+	        			// 合并&去重
+	        			userExportLimited[key] = Array.from(new Set([...uel,...rel]));
+	        			ismodified = true;
+	        		}
+
+	        		// 比较三级页面subPages
+	        		let roleSub = roleSubPages[key] || [];
+	        		let userSub = usersub_pages[key] || [];
+	        		for(let l of rl) {
+	        			let rs = roleSub[l] || [];
+	        			let us = userSub[l] || [];
+		        		if ((us.length === 0) || (us && rs.some(x => !us.includes(x)))) {
+		        			// 合并&去重
+		        			userSub[l] = Array.from(new Set([...us,...rs]));
+		        			ismodified = true;
+		        		}
 	        		}
 	        	}
 	        	if(ismodified) {
-	        		let modifyLimited = JSON.stringify(userlimited);
+	        		let modifyLimited = JSON.stringify(userLimited);
+	        		let modifyExportLimited = JSON.stringify(userExportLimited);
+	        		let modifySubPages = JSON.stringify(usersub_pages);
 	        		// console.log(`更新${useritem.name}权限为${modifyLimited}`);
 	        		_this.loading.show = true;
 	        		
@@ -411,7 +436,9 @@ var Account = Vue.extend({
 							type: 'post',
 							data: {
 								id: useritem.id,
-								limited: modifyLimited
+								limited: modifyLimited,
+								export: modifyExportLimited,
+								sub_pages: modifySubPages
 							},
 							success: function(data){
 								if(!data.success){
