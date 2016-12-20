@@ -130,7 +130,7 @@ module.exports = (Router) => {
         platform : false,
         modelName : ["ReportRebateSumHistory"],
         order : ["-date"],
-        global_platform : global_platform.week,
+        global_platform : global_platform.month,
         control_table_col : true,
         excel_export : true,
         flexible_btn : [{

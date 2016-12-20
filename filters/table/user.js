@@ -331,7 +331,7 @@ module.exports = {
             key.one_two = util.toFixed(key.wap_new_reg, key.wap_new_visit);
             key.one_three = util.toFixed(key.wap_new_visit, key.wap_pv);
             key.one_four = util.toFixed(key.week_day_wap, key.week_day_wap_new);
-            key.date = `${moment(key.date - 6 * 24 * 60 * 60 * 1000).format("MM-DD")}-${moment(key.date).format("MM-DD")}`;
+            key.date = `${moment(key.date - 6 * 24 * 60 * 60 * 1000).format("MM.DD")}-${moment(key.date).format("MM.DD")}`;
         }
 
         return util.toTable([[one].concat(source)], rowsWeek, colsWeek);
