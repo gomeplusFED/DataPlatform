@@ -143,7 +143,10 @@ gulp.task('rev', function() {
 })
 
 gulp.task('watch', function() {
-    webpackConfig.watch = argv.env != 'pro';
+    if (argv.env != 'pro') {
+        webpackConfig.watch = true;
+        webpackConfig.devtool = 'inline-source-map';
+    }
     gulp.start('js', 'css', 'img', 'font');
     gulp.watch('./src/css/*', ['css']);
     gulp.watch('./src/img/*', ['img']);

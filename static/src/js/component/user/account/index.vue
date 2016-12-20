@@ -384,7 +384,7 @@ var User = Vue.extend({
 						}
 					}
 					_this.limited = JSON.parse(_this.userListData[index].limited);
-					_this.subPages = JSON.parse(_this.userListData[index].sub_pages);
+					_this.subPages = JSON.parse(_this.userListData[index].sub_pages || '{}');
 					_this.exportLimit = JSON.parse(_this.userListData[index].export);
 				}
 			});
@@ -406,20 +406,36 @@ var User = Vue.extend({
 				var currentUserRoleNameArr = _this.currentUserRoleName ? _this.currentUserRoleName.split(';') : [];
 
 				var resultLimited = utils.mixin(_this.limited, {});
+				var resultSubPages = utils.mixin(_this.subPages, {});
 				var resultExportLimited = utils.mixin(_this.exportLimit, {});
 
 				for (var item in _this.roleList) {
 					if (_this.roleList[item]['checked'] && !utils.isInArry(_this.roleList[item]['name'], currentUserRoleNameArr)) {
-						var obj1 = JSON.parse(_this.roleList[item]['limited']);
+						let roleObj = _this.roleList[item];
+						let obj1 = roleObj['limited'] ? JSON.parse(roleObj['limited']) : {};
+						let roleSubPages = roleObj['sub_pages'] ? JSON.parse(roleObj['sub_pages']) : {};
 						for (let k in obj1) {
 							if (!resultLimited[k]) {
 								resultLimited[k] = obj1[k];
 							}
 							let _currentArr = resultLimited[k].concat(obj1[k]);
-							resultLimited[k] = utils.uniqueArray(resultLimited[k]);
+							resultLimited[k] = utils.uniqueArray(_currentArr);
 							resultLimited[k].sort(function(a, b) {
 								return a - b;
 							});
+							// 处理三级页面
+							let roleSubs = roleSubPages[k];
+							let userSubs = resultSubPages[k];
+							let limiteds = resultLimited[k];
+							if (!userSubs) {
+								resultSubPages[k] = roleSubs;
+							} else {
+								for(let l of limiteds) {
+									let _current = userSubs[l].concat(roleSubs[l]);
+									userSubs[l] = utils.uniqueArray(_current);
+								}
+							}
+
 						}
 
 						var obj2 = JSON.parse(_this.roleList[item]['export']);
@@ -428,7 +444,7 @@ var User = Vue.extend({
 								resultExportLimited[k] = obj2[k];
 							}
 							let _currentArr = resultExportLimited[k].concat(obj2[k]);
-							resultExportLimited[k] = utils.uniqueArray(resultExportLimited[k]);
+							resultExportLimited[k] = utils.uniqueArray(_currentArr);
 							resultExportLimited[k].sort(function(a, b) {
 								return a - b;
 							});
@@ -446,6 +462,7 @@ var User = Vue.extend({
 				for (let item in resultLimited) {
 					if (resultLimited[item] === undefined || resultLimited[item].length === 0) {
 						delete resultLimited[item];
+						delete resultSubPages[item];
 					}
 				}
 
@@ -461,6 +478,7 @@ var User = Vue.extend({
 					data: {
 						id: _this.currentID,
 						limited: JSON.stringify(resultLimited),
+						sub_pages: JSON.stringify(resultSubPages),
 						export: JSON.stringify(resultExportLimited),
 						role: roleName.join(';')
 					},
@@ -487,6 +505,7 @@ var User = Vue.extend({
 				for (let item in _this.modifyLimited) {
 					if (_this.modifyLimited[item] === undefined || _this.modifyLimited[item].length === 0) {
 						delete _this.modifyLimited[item];
+						delete _this.modifySubPages[item];
 					}
 				}
 
@@ -495,6 +514,7 @@ var User = Vue.extend({
 						delete _this.modifyExportLimited[item];
 					}
 				}
+
 				$.ajax({
 					url: '/users/update',
 					type: 'post',
