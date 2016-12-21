@@ -217,19 +217,18 @@
         "href": "#",
         "path": [
             {
+                "id" : 110,
                 "name": "错误分析",
                 "path": "/performance/error",
                 "display": true,
                 "defaultData": [
                     {
-                        "id" : 110,
                         "type": "chart",
                         "title": "错误趋势",
                         "query_api": "/performance/error_One",
                         "mark": 1481187080040
                     },
                     {
-                        "id" : 111,
                         "type": "table",
                         "title": "错误列表",
                         "query_api": "/performance/error_Two",
