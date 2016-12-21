@@ -172,6 +172,7 @@ module.exports = (Router) => {
                 return next(err);
             }
             let newData = [];
+            let total = 0;
             for(let key of data) {
                 let arr = [];
                 const name = key.name;
@@ -183,10 +184,39 @@ module.exports = (Router) => {
                 const limited = JSON.parse(key.limited);
                 const exports = JSON.parse(key.export);
                 const list = _.uniq(Object(limited).keys.concat(Object(exports).keys));
+                let total_num = 0;
                 for(let k of list) {
-
-                    arr.push([name, username, email, department, role, remark, obj[k].name]);
+                    let num = 0;
+                    if(limited[k] && exports[k]) {
+                        if(limited[k].length >= exports[k].length) {
+                            num = limited[k].length;
+                            limited[k].forEach((item, index) => {
+                                arr.push([name, username, email, department, role, remark, obj[k].name], obj[k].cell[item], obj[k].cell[exports[k][index]] || "");
+                            });
+                        } else {
+                            num = exports[k].length;
+                            exports[k].forEach((item, index) => {
+                                arr.push([name, username, email, department, role, remark, obj[k].name], obj[k].cell[item] || "", obj[k].cell[item]);
+                            });
+                        }
+                    } else if(limited[k]) {
+                        num = limited[k].length;
+                        limited[k].forEach((item, index) => {
+                            arr.push([name, username, email, department, role, remark, obj[k].name], obj[k].cell[item], "");
+                        });
+                    } else if(exports[k]) {
+                        num = exports[k].length;
+                        exports[k].forEach((item, index) => {
+                            arr.push([name, username, email, department, role, remark, obj[k].name], "", obj[k].cell[item]);
+                        });
+                    }
+                    arr[0][6] = [7, total_num + 1, 7, total_num += num, arr[0][6]];
                 }
+                let start = total + 1;
+                for(let i = 0; i < 6; i++) {
+                    arr[0][i] = [1, start, 1, total += total_num, arr[0][i]];
+                }
+                newData.concat(arr);
             }
         });
     });
