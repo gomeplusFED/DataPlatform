@@ -262,6 +262,8 @@ module.exports = {
             key.six = util.toFixed(key.pc_new_visit, key.pc_visit);
             key.seven = util.toFixed(key.wap_new_reg, key.wap_new_visit);
             key.eight = util.toFixed(key.wap_new_visit, key.wap_visit);
+            key.aaccount = Math.ceil(key.aaccount);
+            key.new_reg_num = Math.ceil(key.new_reg_num);
             key.date = moment(key.date).format("YYYY-MM-DD");
             if(key.date === z && key.day_type === 1) {
                 zObj = key;
@@ -290,7 +292,7 @@ module.exports = {
                 three[row] = util.toFixed(two[row], qObj[row] || 0);
             }
         }
-        two.date = "昨日新增";
+        two.date = "昨日增长";
         two.one = "--";
         two.two = "--";
         two.three = "--";
@@ -299,7 +301,7 @@ module.exports = {
         two.seven = "--";
         two.eight = "--";
         two.four = two.four.toFixed(2);
-        three.date = "昨日新增比率";
+        three.date = "昨日对比";
         three.one = "--";
         three.two = "--";
         three.three = "--";
