@@ -292,7 +292,7 @@ module.exports = {
                 three[row] = util.toFixed(two[row], qObj[row] || 0);
             }
         }
-        two.date = "昨日新增";
+        two.date = "昨日增长";
         two.one = "--";
         two.two = "--";
         two.three = "--";
@@ -301,7 +301,7 @@ module.exports = {
         two.seven = "--";
         two.eight = "--";
         two.four = two.four.toFixed(2);
-        three.date = "昨日新增比率";
+        three.date = "昨日对比";
         three.one = "--";
         three.two = "--";
         three.three = "--";
