@@ -122,6 +122,12 @@ module.exports = {
             qb = true;
         }
         for(let key of source) {
+            key.history_is_rebate_order_num = key.history_is_rebate_order_num == -1 ? '-' : key.history_is_rebate_order_num;
+            key.history_is_over_rebate_order_num = key.history_is_over_rebate_order_num == -1 ? '-' : key.history_is_over_rebate_order_num;
+            key.history_expect_rebate_amount = key.history_expect_rebate_amount == -1 ? '-' : key.history_expect_rebate_amount;
+            key.history_cancel_rebate_amount = key.history_cancel_rebate_amount == -1 ? '-' : key.history_cancel_rebate_amount;
+            key.history_cancel_rebate_amount = key.history_cancel_rebate_amount == -1 ? '-' : key.history_cancel_rebate_amount;
+            key.history_is_over_rebate_order_amount = key.history_is_over_rebate_order_amount == -1 ? '-' : key.history_is_over_rebate_order_amount;
             key.one = util.toFixed(key.unique_is_rebate_order_num, key.unique_plat_order_num);
             key.two = util.toFixed(key.unique_expect_rebate_user_num, key.unique_active_users_num);
             key.is_rebate_fee = (key.is_rebate_fee / 100).toFixed(2);
