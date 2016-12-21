@@ -7,6 +7,7 @@
 const util = require("../../../utils"),
     request = require("request"),
     main = require("../../../base/main"),
+    orm = require("orm"),
     filter = require("../../../filters/table/rebate");
 
 module.exports = (Router) => {
@@ -17,7 +18,6 @@ module.exports = (Router) => {
         platform : false,
         modelName : ["ReportRebatePlanRebateTypeTotalSummary", "ReportRebatePlanRebateTypeTotalDaily", "TypeFlow"],
         date_picker_data : 1,
-        showDayUnit : true,
         global_platform : {
             show: true,
             key: 'type',
@@ -31,6 +31,11 @@ module.exports = (Router) => {
                 name: '新增返利',
                 url : "#!/socialAnalysis/rebateNew"
             }]
+        },
+        secondParams(query, params) {
+            params.plan_type = orm.not_in([4]);
+
+            return params;
         },
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',

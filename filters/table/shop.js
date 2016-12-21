@@ -86,8 +86,8 @@ module.exports = {
         for(let row of rows[0]) {
             if(row !== "date") {
                 obj[row] = util.toFixed(
-                    (z[row] || 0) - (q[row] || 0),
-                    q[row] || 0
+                    (zObj[row] || 0) - (qObj[row] || 0),
+                    qObj[row] || 0
                 );
             }
         }

@@ -44,7 +44,7 @@ module.exports = {
                 one[row] = (zObj[row] || 0) - (qObj[row] || 0);
             }
         }
-        one.date = "增比";
+        one.date = "增长";
         one.one = "--";
         one.four = "--";
         one.newadd_rebate_order_amount = one.newadd_rebate_order_amount.toFixed(2);
