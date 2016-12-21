@@ -97,6 +97,7 @@ module.exports = (Router) => {
                     data[0].remark = params.remark !== undefined ? params.remark : data[0].remark;
                     data[0].limited = params.limited || data[0].limited;
                     data[0].export = params.export || data[0].export;
+                    data[0].type = params.type || data[0].type;
                     _save();
                 } else {
                     res.json({

@@ -90,7 +90,7 @@
 							</tr>
 						</tbody>
 					</table>
-					<m-limit-list v-show="modal.type === 'limitList'" :id="id" :limited="limited" :sub-pages="subPages" :export-limit="exportLimit"></m-limit-list>
+					<m-limit-list v-ref:limitlist v-show="modal.type === 'limitList'" :id="id" :limited="limited" :sub-pages="subPages" :export-limit="exportLimit"></m-limit-list>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn default" data-dismiss="modal" @click="apply()">确定</button>
@@ -515,6 +515,23 @@ var User = Vue.extend({
 					}
 				}
 
+				let limitlist = this.$refs.limitlist;
+
+				let config = {}
+				function parseObject(obj) {
+					for (let key of Object.keys(obj)) {
+							let item = obj[key]
+							if (typeof item === 'object') {
+								parseObject(item)
+							} else if (item !== 'undefined') {
+								config[key] = item
+							}
+						}
+				}
+				if (limitlist.platfromPermission2) {
+					parseObject(limitlist.platfromPermission2)
+				}
+
 				$.ajax({
 					url: '/users/update',
 					type: 'post',
@@ -522,7 +539,8 @@ var User = Vue.extend({
 						id: _this.currentID,
 						limited: JSON.stringify(_this.modifyLimited),
 						sub_pages: JSON.stringify(_this.modifySubPages),
-						export: JSON.stringify(_this.modifyExportLimited)
+						export: JSON.stringify(_this.modifyExportLimited),
+						type: JSON.stringify(config)
 					},
 					success: function(data) {
 						if (!data.success) {
