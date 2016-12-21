@@ -46,6 +46,9 @@ module.exports = {
         one.date = "增比";
         one.one = "--";
         one.four = "--";
+        one.newadd_rebate_order_amount = one.newadd_rebate_order_amount.toFixed(2);
+        one.two = one.two.toFixed(2);
+        one.three = one.three.toFixed(2);
         for(let key in one) {
             if(key !== "date" && key !== "one" && key !== "four") {
                 two[key] = util.toFixed(one[key], qObj[key] || 0);
