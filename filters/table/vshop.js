@@ -7,7 +7,7 @@ const util = require("../../utils");
 const moment = require("moment");
 const rows = [
     ["date", "total_vshop_num", "new_vshop_num", "visited_vshop_num", "ordered_vshop_num",
-        "paid_vshop_num", "ordered_user_num", "paid_user_num", "ordered_order_num", "paid_order_num",
+        "paid_vshop_num", "ordered_user_num", "paid_user_num", "ordered_amount", "paid_amount",
         "ordered_item_num", "paid_item_num", "ordered_quantity", "paid_quantity", "delivery_amount",
         "delivery_item_quantity", "ordered_item_num_total", "ordered_quantity_toatl",
         "delivery_item_quantity_total", "delivery_amount_total"]
@@ -117,12 +117,11 @@ module.exports = {
         }
         for(let key of source) {
             key.date = moment(key.date).format("YYYY-MM-DD");
-            key.ordered_amount = key.ordered_amount.toFixed(2);
-            key.paid_amount = key.paid_amount.toFixed(2);
-            key.delivery_amount = key.delivery_amount.toFixed(2);
-            key.delivery_item_quantity = key.delivery_item_quantity.toFixed(2);
-            key.ordered_quantity_toatl = key.ordered_quantity_toatl.toFixed(2);
-            key.delivery_amount_total = key.delivery_amount_total.toFixed(2);
+            key.ordered_amount = (key.ordered_amount / 100).toFixed(2);
+            key.paid_amount = (key.paid_amount / 100).toFixed(2);
+            key.delivery_amount = (key.delivery_amount / 100).toFixed(2);
+            key.ordered_quantity_toatl = (key.ordered_quantity_toatl / 100).toFixed(2);
+            key.delivery_amount_total = (key.delivery_amount_total / 100).toFixed(2);
             if(key.date === z) {
                 zObj = key;
                 if(zb) {
@@ -154,6 +153,11 @@ module.exports = {
     weekOne(data) {
         const source = data.first.data[0];
         for(let key of source) {
+            key.ordered_amount = (key.ordered_amount / 100).toFixed(2);
+            key.paid_amount = (key.paid_amount / 100).toFixed(2);
+            key.delivery_amount = (key.delivery_amount / 100).toFixed(2);
+            key.ordered_quantity_toatl = (key.ordered_quantity_toatl / 100).toFixed(2);
+            key.delivery_amount_total = (key.delivery_amount_total / 100).toFixed(2);
             key.date = `${moment(new Date(key.date) - 6 * 24 * 60 * 60 * 1000).format("MM.DD")}-${moment(key.date).format("MM.DD")}`;
         }
 
@@ -162,6 +166,11 @@ module.exports = {
     monthOne(data) {
         const source = data.first.data[0];
         for(let key of source) {
+            key.ordered_amount = (key.ordered_amount / 100).toFixed(2);
+            key.paid_amount = (key.paid_amount / 100).toFixed(2);
+            key.delivery_amount = (key.delivery_amount / 100).toFixed(2);
+            key.ordered_quantity_toatl = (key.ordered_quantity_toatl / 100).toFixed(2);
+            key.delivery_amount_total = (key.delivery_amount_total / 100).toFixed(2);
             key.date = `${moment(key.date).format("MM")}月`;
         }
 

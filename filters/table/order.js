@@ -33,11 +33,11 @@ const cols = [
     },{
         caption : "客单价",
         type : "number",
-        help : "统计日期内，支付金额/支付人数x100%"
+        help : "统计日期内，支付金额/支付人数"
     },{
         caption : "笔单价",
         type : "number",
-        help : "统计日期内，支付金额/支付订单数x100%"
+        help : "统计日期内，支付金额/支付订单数"
     },{
         caption : "访问商品数",
         type : "number",
@@ -134,11 +134,11 @@ const colsWeek = [
     },{
         caption : "客单价",
         type : "number",
-        help : "统计日期内，支付金额/支付人数x100%"
+        help : "统计日期内，支付金额/支付人数"
     },{
         caption : "笔单价",
         type : "number",
-        help : "统计日期内，支付金额/支付订单数x100%"
+        help : "统计日期内，支付金额/支付订单数"
     },{
         caption : "访问商品数",
         type : "number",
@@ -223,8 +223,8 @@ module.exports = {
             qb = true;
         }
         for(let key of source) {
-            key.one = util.percentage(key.pay_sum, key.pay_user);
-            key.two = util.percentage(key.pay_sum, key.pay_num);
+            key.one = util.division(key.pay_sum / 100, key.pay_user);
+            key.two = util.division(key.pay_sum / 100, key.pay_num);
             key.three = util.toFixed(key.order_user, key.access_uv_pv);
             key.four = util.toFixed(key.pay_user, key.access_uv_pv);
             key.five = util.toFixed(key.day30gt2_user, key.day30_user);
@@ -273,8 +273,8 @@ module.exports = {
     orwOne(data) {
         const source = data.first.data[0];
         for(let key of source) {
-            key.one = util.percentage(key.pay_sum, key.pay_user);
-            key.two = util.percentage(key.pay_sum, key.pay_num);
+            key.one = util.division(key.pay_sum / 100, key.pay_user);
+            key.two = util.division(key.pay_sum / 100, key.pay_num);
             key.three = util.toFixed(key.order_user, key.access_uv_pv);
             key.four = util.toFixed(key.pay_user, key.access_uv_pv);
             //key.five = util.toFixed(key.day30gt2_user, key.day30_user);
@@ -291,8 +291,8 @@ module.exports = {
     ormOne(data) {
         const source = data.first.data[0];
         for(let key of source) {
-            key.one = util.percentage(key.pay_sum, key.pay_user);
-            key.two = util.percentage(key.pay_sum, key.pay_num);
+            key.one = util.division(key.pay_sum / 100, key.pay_user);
+            key.two = util.division(key.pay_sum / 100, key.pay_num);
             key.three = util.toFixed(key.order_user, key.access_uv_pv);
             key.four = util.toFixed(key.pay_user, key.access_uv_pv);
             key.five = util.toFixed(key.day30gt2_user, key.day30_user);

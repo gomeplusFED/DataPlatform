@@ -30,7 +30,7 @@ module.exports = (Router) => {
             customMethods: ''
         }],
         params(query, params) {
-            params.day_type = [1, 5];
+            params.day_type = [1, 6];
             const now = new Date();
             const date = util.times(query.startTime, query.endTime, "1");
             date.push(moment(now - 24 * 60 * 60 * 1000).format("YYYY-MM-DD"));
