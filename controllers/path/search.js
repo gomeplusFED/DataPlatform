@@ -7,7 +7,7 @@
 module.exports = {
     searchIndex(){
         return {
-            id : 0,
+            id : 68,
             name : "商品搜索关键指标",
             path : "/search/index",
             display : true,
@@ -27,7 +27,7 @@ module.exports = {
     },
     searchWord(){
         return {
-            id : 1,
+            id : 69,
             name : "商品搜索关键词分析",
             path : "/search/word",
             display : true,
@@ -52,7 +52,7 @@ module.exports = {
     },
     searchRecommend(){
         return {
-            id : 2,
+            id : 70,
             name : "商品推荐关键指标",
             path : "/search/recommend",
             display : true,

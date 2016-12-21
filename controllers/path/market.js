@@ -7,7 +7,7 @@
 module.exports = {
     channel() {
         return {
-            id : 0,
+            id : 55,
             name: "渠道管理",
             path: "/custom/channel",
             view: "/custom/channel",
@@ -17,7 +17,7 @@ module.exports = {
     },
     activity() {
         return {
-            id : 1,
+            id : 56,
             name: "活动管理",
             path: "/activity/list",
             display: true,

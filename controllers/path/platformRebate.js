@@ -7,7 +7,7 @@
 module.exports = {
     platformOrder() {
         return {
-            id : 0,
+            id : 60,
             path : "/platformRebate/platformOrder",
             name : "平台订单返利汇总",
             display : true,
@@ -40,7 +40,7 @@ module.exports = {
     },
     individualEvent() {
         return {
-            id : 1,
+            id : 61,
             path : "/platformRebate/individualEvent",
             name : "单项单级返利",
             display : true,
@@ -65,7 +65,7 @@ module.exports = {
     },
     platformPromotions() {
         return {
-            id : 2,
+            id : 62,
             path : "/platformRebate/platformPromotions",
             name : "平台促销返利",
             display : true,
@@ -94,7 +94,7 @@ module.exports = {
     },
     platformBasis() {
         return {
-            id : 3,
+            id : 63,
             path : "/platformRebate/platformBasis",
             name : "平台基础返利",
             display : true,
@@ -123,7 +123,7 @@ module.exports = {
     },
     inviteBusiness() {
         return {
-            id : 4,
+            id : 64,
             path : "/platformRebate/inviteBusiness",
             name : "邀请商户分享返利",
             display : true,
@@ -148,7 +148,7 @@ module.exports = {
     },
     inviteRegisterAndEnter(){
         return {
-            id : 5,
+            id : 65,
             path : "/platformRebate/inviteRegisterAndEnter",
             name : "邀请注册 / 入驻",
             display : true,

@@ -7,7 +7,7 @@
 module.exports = {
     table() {
         return {
-            id : 0,
+            id : 75,
             name : "社交报表",
             path : "/socialAnalysis/table",
             display : true,
@@ -22,7 +22,7 @@ module.exports = {
     },
     rebate_total() {
         return {
-            id : 4,
+            id : 76,
             name : "返利报表",
             path : "/socialAnalysis/rebate",
             display : true,
@@ -37,6 +37,7 @@ module.exports = {
     },
     rebate_total_new() {
         return {
+            id : 80,
             name : "返利报表",
             path : "/socialAnalysis/rebateNew",
             display : true,
@@ -51,7 +52,7 @@ module.exports = {
     },
     data_table_day() {
         return {
-            id : 1,
+            id : 77,
             name : "数据日报",
             path : "/socialAnalysis/dataTableDay",
             display : true,
@@ -76,7 +77,7 @@ module.exports = {
     },
     data_table_week() {
         return {
-            id : 2,
+            id : 78,
             name : "数据周报",
             path : "/socialAnalysis/dataTableWeek",
             display : true,
@@ -95,7 +96,7 @@ module.exports = {
     },
     data_table_month() {
         return {
-            id : 3,
+            id : 79,
             name : "数据月报",
             path : "/socialAnalysis/dataTableMonth",
             display : true,
@@ -114,6 +115,7 @@ module.exports = {
     },
     data_table_day_order() {
         return {
+            id : 81,
             name : "数据报表",
             path : "/socialAnalysis/dataTableDayOrder",
             display : true,
@@ -128,6 +130,7 @@ module.exports = {
     },
     data_table_week_order() {
         return {
+            id : 82,
             name : "数据报表",
             path : "/socialAnalysis/dataTableWeekOrder",
             display : true,
@@ -142,6 +145,7 @@ module.exports = {
     },
     data_table_month_order() {
         return {
+            id : 83,
             name : "数据报表",
             path : "/socialAnalysis/dataTableMonthOrder",
             display : true,
@@ -156,6 +160,7 @@ module.exports = {
     },
     data_table_day_user() {
         return {
+            id : 84,
             name : "数据报表",
             path : "/socialAnalysis/dataTableDayUser",
             display : true,
@@ -170,6 +175,7 @@ module.exports = {
     },
     data_table_week_user() {
         return {
+            id : 85,
             name : "数据报表",
             path : "/socialAnalysis/dataTableWeekUser",
             display : true,
@@ -184,6 +190,7 @@ module.exports = {
     },
     data_table_month_user() {
         return {
+            id : 86,
             name : "数据报表",
             path : "/socialAnalysis/dataTableMonthUser",
             display : true,
@@ -198,6 +205,7 @@ module.exports = {
     },
     data_table_day_shop() {
         return {
+            id : 87,
             name : "数据报表",
             path : "/socialAnalysis/dataTableDayShop",
             display : true,
@@ -212,6 +220,7 @@ module.exports = {
     },
     data_table_week_shop() {
         return {
+            id : 88,
             name : "数据报表",
             path : "/socialAnalysis/dataTableWeekShop",
             display : true,
@@ -226,6 +235,7 @@ module.exports = {
     },
     data_table_month_shop() {
         return {
+            id : 89,
             name : "数据报表",
             path : "/socialAnalysis/dataTableMonthShop",
             display : true,
@@ -240,6 +250,7 @@ module.exports = {
     },
     data_table_day_vshop() {
         return {
+            id : 90,
             name : "数据报表",
             path : "/socialAnalysis/dataTableDayVshop",
             display : true,
@@ -254,6 +265,7 @@ module.exports = {
     },
     data_table_week_vshop() {
         return {
+            id : 91,
             name : "数据报表",
             path : "/socialAnalysis/dataTableWeekVshop",
             display : true,
@@ -268,6 +280,7 @@ module.exports = {
     },
     data_table_month_vshop() {
         return {
+            id : 92,
             name : "数据报表",
             path : "/socialAnalysis/dataTableMonthVshop",
             display : true,
@@ -282,6 +295,7 @@ module.exports = {
     },
     data_table_day_dataRebate() {
         return {
+            id : 93,
             name : "数据报表",
             path : "/socialAnalysis/dataTableDayDataRebate",
             display : true,
@@ -296,6 +310,7 @@ module.exports = {
     },
     data_table_week_dataRebate() {
         return {
+            id : 94,
             name : "数据报表",
             path : "/socialAnalysis/dataTableWeekDataRebate",
             display : true,
@@ -310,6 +325,7 @@ module.exports = {
     },
     data_table_month_dataRebate() {
         return {
+            id : 95,
             name : "数据报表",
             path : "/socialAnalysis/dataTableMonthDataRebate",
             display : true,

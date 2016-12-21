@@ -7,7 +7,7 @@
 module.exports = {
     newUsers() {
         return {
-            id : 0,
+            id : 104,
             path : "/userAnalysis/newUsers",
             name : "新增用户",
             display : true,
@@ -24,7 +24,7 @@ module.exports = {
     },
     activeAccount() {
         return {
-            id : 1,
+            id : 105,
             path : "/userAnalysis/activeAccount",
             name : "活跃用户",
             display : true,
@@ -41,7 +41,7 @@ module.exports = {
     },
     startUp() {
         return {
-            id : 2,
+            id : 106,
             path : "/userAnalysis/startUp",
             name : "启动次数/浏览量",
             display : true,
@@ -58,7 +58,7 @@ module.exports = {
     },
     version() {
         return {
-            id : 3,
+            id : 107,
             path : "/userAnalysis/version",
             name : "版本分布",
             display : true,

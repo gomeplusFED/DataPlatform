@@ -7,7 +7,7 @@
 module.exports = {
     overview() {
         return {
-            id : 0,
+            id : 57,
             name: "实时活动分析",
             path: "/marketingAnalysis/overview",
             display: true,
@@ -32,7 +32,7 @@ module.exports = {
     },
     all() {
         return {
-            id : 1,
+            id : 58,
             name: "活动流量",
             path: "/marketingAnalysis/activityFlow",
             display: true,
@@ -53,7 +53,7 @@ module.exports = {
     },
     operating() {
         return {
-            id : 0,
+            id : 59,
             name: "活动流量",
             path: "/marketingAnalysis/operating",
             display: true,
