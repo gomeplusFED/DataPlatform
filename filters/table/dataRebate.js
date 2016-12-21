@@ -122,8 +122,8 @@ module.exports = {
             qb = true;
         }
         for(let key of source) {
-            key.one = util.toFixed(key.unique_is_rebate_order_num, key.history_is_rebate_order_num);
-            key.two = util.toFixed(key.unique_is_rebate_user_num, key.history_expect_rebate_user_dis);
+            key.one = util.toFixed(key.unique_is_rebate_order_num, key.unique_plat_order_num);
+            key.two = util.toFixed(key.unique_is_rebate_user_num, key.unique_active_users_num);
             key.is_rebate_fee = key.is_rebate_fee.toFixed(2);
             key.cancel_is_rebate_fee = key.cancel_is_rebate_fee.toFixed(2);
             key.expect_rebate_amount = key.expect_rebate_amount.toFixed(2);
