@@ -71,7 +71,7 @@ module.exports = {
             if(0 <= now - key.date && now - key.date <= 7 * 24 * 60 * 60 * 1000) {
                 key.date = "本周";
             } else {
-                key.date = "上周对比";
+                key.date = "上周";
             }
         }
 
@@ -106,7 +106,7 @@ module.exports = {
             source[0].date = "本月";
         }
         if(source[1]) {
-            source[1].date = "上月对比";
+            source[1].date = "上月";
         }
 
         newData.push({
