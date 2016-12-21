@@ -12,7 +12,7 @@ module.exports = {
             path : "/realTime",
             display : true,
             subPages : [{
-                id : 0,
+                id : 53,
                 url : "/dataOverview/app",
                 name : "数据概览"
             }],

@@ -12,11 +12,11 @@ module.exports = {
             path: "/dataOverview/app",
             display: true,
             subPages : [{
-                id : 0,
+                id : 98,
                 url : "/terminal/provinces",
                 name : "地域"
             }, {
-                id : 1,
+                id : 101,
                 url : "/useAnalysis/accessPage",
                 name : "访问页面"
             }],
