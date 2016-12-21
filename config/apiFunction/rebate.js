@@ -1031,4 +1031,124 @@ module.exports = {
         return params;
     },
 
+    //商家返利汇总 ---- 商家返利TOP50
+    rebate_shop_04(query , params , sendData){
+        // params.plan_type = "ALL";
+        params.plan_name = "ALL";
+        params.rebate_level = "ALL";
+        params.rebate_type = "ALL";
+        return params;
+    },
+    rebate_shop_04_f(data, query, dates){
+        let source = data.first.data[0],
+            count  = data.first.count;
+        count = count > 50 ? 50 : count;
+        source.map((item , index) => {
+            item.Number = (query.page - 1) * query.limit + index + 1;
+        });
+
+        return util.toTable([source], data.rows, data.cols , count);
+    },
+
+
+    rebate_shop_05(query , params , sendData){
+        // params.plan_type = "ALL";
+        // params.plan_name = "ALL";
+        // params.rebate_level = "ALL";
+        // params.rebate_type = "ALL";
+        return params;
+    },
+    rebate_shop_05_f(data, query, dates){
+        let source = data.first.data[0],
+            count  = data.first.count,
+            second = data.second.data[0];
+
+        count = count > 50 ? 50 : count;
+
+        let Translate = {};
+        second.map((item , index) => {
+            Translate[item.flow_code] = item.flow_name;
+        });
+
+        source.map((item , index) => {
+            item.Number = (query.page - 1) * query.limit + index + 1;
+            item.Return_lv = util.toFixed( item.is_rebate_back_merchandise_num , item.is_rebate_merchandise_num );
+            item.rebate_type = Translate[item.rebate_type];
+        });
+
+        return util.toTable([source], data.rows, data.cols , count);
+    },
+
+
+    rebate_shopPlan_01(query , params , sendData){
+
+        if(query.search_key){
+            if(query.search_key / 1){
+                query.plan_id = query.search_key;
+            }else{
+                query.plan_name = query.search_key;
+            }
+
+            delete params.search_key;
+            delete query.search_key;
+        }
+        return params;
+    },
+    rebate_shopPlan_01_second(query , params , sendData){
+        return {type_code : 3};
+    },
+   /* rebate_shopPlan_01_f(data, query, dates){
+        let source = data.first.data[0],
+            count  = data.first.count,
+            second = data.second.data[0];
+        count = count > 50 ? 50 : count;
+
+
+        let Translate = {};
+        second.map((item , index) => {
+            Translate[item.flow_code] = item.flow_name;
+        });
+
+
+        source.map((item , index) => {
+            item.Number = (query.page - 1) * query.limit + index + 1;
+            item.Return_lv = util.toFixed( item.is_rebate_back_merchandise_num , item.is_rebate_merchandise_num );
+            item.rebate_type = Translate[item.rebate_type];
+        });
+
+        return util.toTable([source], data.rows, data.cols , count);
+    },*/
+
+
+    rebate_shopPlan_SelectFilter(req , cb){
+        let filter_select = {
+            "title" : "关联流程",
+            "filter_key" : "rebate_type",
+            "groups" : [{
+                "key" : [],
+                "value":"全部返利"
+            }]
+        };
+
+        req.models.TypeFlow.find({
+            type_code : 3,
+            status : 1
+        }, (err, data) => {
+            if(err) {
+                cb(err);
+            } else {
+                var user_party = _.uniq(_.pluck(data, "flow_code"));
+                filter_select.groups[0].key = user_party;
+                
+                for(let item of data){
+                    let obj = {
+                        "key" : item.flow_code,
+                        "value":item.flow_name
+                    };
+                    filter_select.groups.push(obj);
+                }
+                cb(null, [filter_select]);
+            }
+        });
+    },
 }

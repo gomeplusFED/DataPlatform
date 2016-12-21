@@ -1313,5 +1313,256 @@
                 ]
             }
         ]
+    },
+    "1482299549508": {
+        "modelName": [
+            "ads2_new_rebate_order_shop_info"
+        ],
+        "date_picker": true,
+        "order": [
+            "-unique_is_rebate_order_num"
+        ],
+        "platform": false,
+        "router": "/rebate/shop_Four",
+        "names": "商家返利TOP50",
+        "filter": "rebate_shop_04_f",
+        "params": "rebate_shop_04",
+        "paging": [
+            true
+        ],
+        "rows": [
+            [
+                "Number",
+                "shop_name",
+                "unique_plan_id_num",
+                "unique_is_rebate_merchandise_num",
+                "unique_is_rebate_user_num",
+                "unique_is_rebate_order_num",
+                "is_rebate_fee",
+                "expect_rebate_amount",
+                "is_over_rebate_order_amount",
+                "平台到账金额"
+            ]
+        ],
+        "cols": [
+            [
+                {
+                    "caption": "排名",
+                    "type": "number"
+                },
+                {
+                    "caption": "商家名称",
+                    "type": "number"
+                },
+                {
+                    "caption": "计划数",
+                    "type": "number"
+                },
+                {
+                    "caption": "参与商品数",
+                    "type": "number"
+                },
+                {
+                    "caption": "购买用户数",
+                    "type": "number"
+                },
+                {
+                    "caption": "新增订单数/订单总数",
+                    "type": "number"
+                },
+                {
+                    "caption": "新增订单金额/订单总金额",
+                    "type": "number"
+                },
+                {
+                    "caption": "预计返利金额",
+                    "type": "number"
+                },
+                {
+                    "caption": "返利到账金额",
+                    "type": "number"
+                },
+                {
+                    "caption": "平台到账金额",
+                    "type": "number"
+                }
+            ]
+        ]
+    },
+    "1482301660558": {
+        "modelName": [
+            "ads2_new_rebate_order_shop_info",
+            "TypeFlows"
+        ],
+        "date_picker": true,
+        "order": [],
+        "platform": false,
+        "router": "/rebate/shop_Five",
+        "names": "商家返利计划TOP50",
+        "control_table_col": true,
+        "paging": [
+            true
+        ],
+        "secondParams" : "rebate_shopPlan_01_second",
+        "flexible_btn": [
+            {
+                "content": "<a href='#!/rebate/shopPlan'>更多</a>",
+                "preMethods": [],
+                "customMethods": ""
+            }
+        ],
+        "filter": "rebate_shop_05_f",
+        "params": "rebate_shop_05",
+        "rows": [
+            [
+                "Number",
+                "plan_name",
+                "shop_name",
+                "rebate_type",
+                "rebate_level",
+                "unique_is_rebate_user_num",
+                "unique_is_rebate_order_num",
+                "expect_rebate_amount",
+                "is_over_rebate_order_amount",
+                "Return_lv"
+            ]
+        ],
+        "cols": [
+            [
+                {
+                    "caption": "序号",
+                    "type": "number"
+                },
+                {
+                    "caption": "返利计划名称",
+                    "type": "string"
+                },
+                {
+                    "caption": "商家名称",
+                    "type": "string"
+                },
+                {
+                    "caption": "关联流程",
+                    "type": "string"
+                },
+                {
+                    "caption": "层级",
+                    "type": "string"
+                },
+                {
+                    "caption": "参与用户数",
+                    "type": "number"
+                },
+                {
+                    "caption": "新增订单数",
+                    "type": "number"
+                },
+                {
+                    "caption": "预计返利金额",
+                    "type": "number"
+                },
+                {
+                    "caption": "返利到账金额",
+                    "type": "number"
+                },
+                {
+                    "caption": "退货率",
+                    "type": "string",
+                    "help": "统计周期内，退货商品件数/销售商品总件数，统计时间为订单生成时间"
+                }
+            ]
+        ]
+    },
+    "1482305940029": {
+        "modelName": [
+            "ads2_new_rebate_order_shop_info",
+            "TypeFlow"
+        ],
+        "date_picker": true,
+        
+        "platform": false,
+        "router": "/rebate/shopPlan_One",
+        "names": "商家设置返利",
+        "excel_export": true,
+        "search" : {
+            "show" : true,
+            "title" : "请输入商家名称或ID",
+            "key" : "search_key"
+        },
+        "flexible_btn": [
+            {
+                "content": "<a href='javascript:void(0)'>导出</a>",
+                "preMethods": [
+                    "excel_export"
+                ]
+            }
+        ],
+        "selectFilter" : "rebate_shopPlan_SelectFilter",
+        "filter": "rebate_shop_05_f",
+        "params": "rebate_shopPlan_01",
+        "secondParams" : "rebate_shopPlan_01_second",
+        "control_table_col": true,
+        "paging": [
+            true,false
+        ],
+        "rows": [
+            [
+                "Number",
+                "plan_name",
+                "shop_name",
+                "rebate_type",
+                "rebate_level",
+                "unique_is_rebate_user_num",
+                "unique_is_rebate_order_num",
+                "expect_rebate_amount",
+                "is_over_rebate_order_amount",
+                "Return_lv"
+            ]
+        ],
+        "cols": [
+            [
+                {
+                    "caption": "序号",
+                    "type": "number"
+                },
+                {
+                    "caption": "返利计划名称",
+                    "type": "string"
+                },
+                {
+                    "caption": "商家名称",
+                    "type": "string"
+                },
+                {
+                    "caption": "关联流程",
+                    "type": "string"
+                },
+                {
+                    "caption": "层级",
+                    "type": "string"
+                },
+                {
+                    "caption": "参与用户数",
+                    "type": "number"
+                },
+                {
+                    "caption": "新增订单数",
+                    "type": "number"
+                },
+                {
+                    "caption": "预计返利金额",
+                    "type": "number"
+                },
+                {
+                    "caption": "返利到账金额",
+                    "type": "number"
+                },
+                {
+                    "caption": "退货率",
+                    "type": "string",
+                    "help": "统计周期内，退货商品件数/销售商品总件数，统计时间为订单生成时间"
+                }
+            ]
+        ]
     }
 }
