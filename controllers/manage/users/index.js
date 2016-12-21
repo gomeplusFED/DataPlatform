@@ -184,7 +184,7 @@ module.exports = (Router) => {
                 const remark = key.remark;
                 const limited = JSON.parse(key.limited);
                 const exports = JSON.parse(key.export);
-                const list = _.uniq(Object(limited).keys.concat(Object(exports).keys));
+                const list = _.uniq((Object(limited).keys || []).concat(Object(exports).keys));
                 let total_num = 0;
                 for(let k of list) {
                     let num = 0;
@@ -211,6 +211,7 @@ module.exports = (Router) => {
                             arr.push([name, username, email, department, role, remark, obj[k].name], "", obj[k].cell[item]);
                         });
                     }
+                    
                     arr[0][6] = [7, total_num + 1, 7, total_num += num, arr[0][6]];
                 }
                 let start = total + 1;
@@ -219,6 +220,7 @@ module.exports = (Router) => {
                 }
                 newData.concat(arr);
             }
+            console.log(newData);
         });
     });
 
