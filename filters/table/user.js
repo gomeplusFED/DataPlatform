@@ -262,6 +262,8 @@ module.exports = {
             key.six = util.toFixed(key.pc_new_visit, key.pc_visit);
             key.seven = util.toFixed(key.wap_new_reg, key.wap_new_visit);
             key.eight = util.toFixed(key.wap_new_visit, key.wap_visit);
+            key.aaccount = Math.ceil(key.aaccount);
+            key.new_reg_num = Math.ceil(key.new_reg_num);
             key.date = moment(key.date).format("YYYY-MM-DD");
             if(key.date === z && key.day_type === 1) {
                 zObj = key;

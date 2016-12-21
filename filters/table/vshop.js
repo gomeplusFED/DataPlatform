@@ -78,7 +78,7 @@ const cols = [
             type : "number",
             help : "统计日期内，美店订单中收货成功订单的金额"
         },{
-            caption : "美店累计分销商品件数",
+            caption : "美店累计分销商品数",
             type : "number",
             help : "截止到当前日期，美店累计创建订单中的商品件数"
         },{
