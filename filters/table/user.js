@@ -73,7 +73,9 @@ const _col = ["月份", "平台活跃账户数", "新增注册用户量", "注�
     "WAP站访问人数", "WAP站访问量", "WAP站访问IP数", "WAP站新问用户占比"];
 const rowsWeek = [
     ["date", "aaccount", "new_reg_num", "one", "reg_num", "app_new_act", "app_new_reg", "two", "app_auser",
-        "three", "four", "app_pv", "app_ip", "five", "six", "pc_new_visit", "pc_new_reg", "seven", "pc_visit",
+        "three",
+        //"four",
+        "app_pv", "app_ip", "five", "six", "pc_new_visit", "pc_new_reg", "seven", "pc_visit",
         "pc_pv", "pc_ip", "eight", "one_one", "wap_new_visit", "wap_new_reg", "one_two", "wap_visit",
         "wap_pv", "wap_ip", "one_three", "one_four"]
 ];
@@ -104,8 +106,8 @@ const colsWeek = [
         caption : ""
     },{
         caption : ""
-    },{
-        caption : ""
+    //},{
+    //    caption : ""
     },{
         caption : ""
     },{
@@ -334,7 +336,7 @@ module.exports = {
             key.eight = util.toFixed(key.pc_new_visit, key.pc_visit);
             key.one_one = util.toFixed(key.week_day_pc, key.week_day_pc_new);
             key.one_two = util.toFixed(key.wap_new_reg, key.wap_new_visit);
-            key.one_three = util.toFixed(key.wap_new_visit, key.wap_pv);
+            key.one_three = util.toFixed(key.wap_new_visit, key.wap_visit);
             key.one_four = util.toFixed(key.week_day_wap, key.week_day_wap_new);
             key.date = `${moment(key.date - 6 * 24 * 60 * 60 * 1000).format("MM.DD")}-${moment(key.date).format("MM.DD")}`;
         }
