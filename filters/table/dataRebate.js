@@ -7,10 +7,10 @@ const moment = require("moment");
 const util = require("../../utils");
 const rows = [
     ["date", "unique_plat_order_num", "unique_is_rebate_order_num", "one", "unique_active_users_num",
-        "unique_is_rebate_user_num", "two", "is_rebate_fee", "cancel_is_rebate_fee", "expect_rebate_amount",
+        "unique_expect_rebate_user_num", "two", "is_rebate_fee", "cancel_is_rebate_fee", "expect_rebate_amount",
         "cancel_rebate_amount", "unique_is_rebate_merchandise_num", "unique_is_rebate_shop_num",
         "unique_is_over_rebate_order_num", "is_over_rebate_order_amount", "history_is_rebate_order_num",
-        "history_is_over_rebate_order_num", "history_expect_rebate_user_num", "history_expect_rebate_amount",
+        "history_is_over_rebate_order_num", "history_expect_rebate_user_dis", "history_expect_rebate_amount",
         "history_cancel_rebate_amount", "history_is_over_rebate_order_amount"]
 ];
 const cols = [
@@ -122,16 +122,16 @@ module.exports = {
             qb = true;
         }
         for(let key of source) {
-            key.one = util.toFixed(key.unique_is_rebate_order_num, key.history_is_rebate_order_num);
-            key.two = util.toFixed(key.unique_is_rebate_user_num, key.history_expect_rebate_user_dis);
-            key.is_rebate_fee = key.is_rebate_fee.toFixed(2);
-            key.cancel_is_rebate_fee = key.cancel_is_rebate_fee.toFixed(2);
-            key.expect_rebate_amount = key.expect_rebate_amount.toFixed(2);
-            key.cancel_rebate_amount = key.cancel_rebate_amount.toFixed(2);
-            key.is_over_rebate_order_amount = key.is_over_rebate_order_amount.toFixed(2);
-            key.history_expect_rebate_amount = key.history_expect_rebate_amount.toFixed(2);
-            key.history_cancel_rebate_amount = key.history_cancel_rebate_amount.toFixed(2);
-            key.history_is_over_rebate_order_amount = key.history_is_over_rebate_order_amount.toFixed(2);
+            key.one = util.toFixed(key.unique_is_rebate_order_num, key.unique_plat_order_num);
+            key.two = util.toFixed(key.unique_expect_rebate_user_num, key.unique_active_users_num);
+            key.is_rebate_fee = (key.is_rebate_fee / 100).toFixed(2);
+            key.cancel_is_rebate_fee = (key.cancel_is_rebate_fee / 100).toFixed(2);
+            key.expect_rebate_amount = (key.expect_rebate_amount / 100).toFixed(2);
+            key.cancel_rebate_amount = (key.cancel_rebate_amount / 100).toFixed(2);
+            key.is_over_rebate_order_amount = (key.is_over_rebate_order_amount / 100).toFixed(2);
+            key.history_expect_rebate_amount = (key.history_expect_rebate_amount / 100).toFixed(2);
+            key.history_cancel_rebate_amount = (key.history_cancel_rebate_amount / 100).toFixed(2);
+            key.history_is_over_rebate_order_amount = (key.history_is_over_rebate_order_amount / 100).toFixed(2);
             key.date = moment(key.date).format("YYYY-MM-DD");
             if(key.day_type == 1) {
                 if(key.date === z) {
@@ -177,16 +177,16 @@ module.exports = {
     weekOne(data) {
         const source = data.first.data[0];
         for(let key of source) {
-            key.one = util.toFixed(key.unique_is_rebate_order_num, key.history_is_rebate_order_num);
-            key.two = util.toFixed(key.unique_is_rebate_user_num, key.history_expect_rebate_user_dis);
-            key.is_rebate_fee = key.is_rebate_fee.toFixed(2);
-            key.cancel_is_rebate_fee = key.cancel_is_rebate_fee.toFixed(2);
-            key.expect_rebate_amount = key.expect_rebate_amount.toFixed(2);
-            key.cancel_rebate_amount = key.cancel_rebate_amount.toFixed(2);
-            key.is_over_rebate_order_amount = key.is_over_rebate_order_amount.toFixed(2);
-            key.history_expect_rebate_amount = key.history_expect_rebate_amount.toFixed(2);
-            key.history_cancel_rebate_amount = key.history_cancel_rebate_amount.toFixed(2);
-            key.history_is_over_rebate_order_amount = key.history_is_over_rebate_order_amount.toFixed(2);
+            key.one = util.toFixed(key.unique_is_rebate_order_num, key.unique_plat_order_num);
+            key.two = util.toFixed(key.unique_expect_rebate_user_num, key.unique_active_users_num);
+            key.is_rebate_fee = (key.is_rebate_fee / 100).toFixed(2);
+            key.cancel_is_rebate_fee = (key.cancel_is_rebate_fee / 100).toFixed(2);
+            key.expect_rebate_amount = (key.expect_rebate_amount / 100).toFixed(2);
+            key.cancel_rebate_amount = (key.cancel_rebate_amount / 100).toFixed(2);
+            key.is_over_rebate_order_amount = (key.is_over_rebate_order_amount / 100).toFixed(2);
+            key.history_expect_rebate_amount = (key.history_expect_rebate_amount / 100).toFixed(2);
+            key.history_cancel_rebate_amount = (key.history_cancel_rebate_amount / 100).toFixed(2);
+            key.history_is_over_rebate_order_amount = (key.history_is_over_rebate_order_amount / 100).toFixed(2);
             key.date = `${moment(key.date - 6 * 24 * 60 * 60 * 1000).format("MM.DD")}-${moment(key.date).format("MM.DD")}`;
         }
 
@@ -195,16 +195,16 @@ module.exports = {
     monthOne(data) {
         const source = data.first.data[0];
         for(let key of source) {
-            key.one = util.toFixed(key.unique_is_rebate_order_num, key.history_is_rebate_order_num);
-            key.two = util.toFixed(key.unique_is_rebate_user_num, key.history_expect_rebate_user_dis);
-            key.is_rebate_fee = key.is_rebate_fee.toFixed(2);
-            key.cancel_is_rebate_fee = key.cancel_is_rebate_fee.toFixed(2);
-            key.expect_rebate_amount = key.expect_rebate_amount.toFixed(2);
-            key.cancel_rebate_amount = key.cancel_rebate_amount.toFixed(2);
-            key.is_over_rebate_order_amount = key.is_over_rebate_order_amount.toFixed(2);
-            key.history_expect_rebate_amount = key.history_expect_rebate_amount.toFixed(2);
-            key.history_cancel_rebate_amount = key.history_cancel_rebate_amount.toFixed(2);
-            key.history_is_over_rebate_order_amount = key.history_is_over_rebate_order_amount.toFixed(2);
+            key.one = util.toFixed(key.unique_is_rebate_order_num, key.unique_plat_order_num);
+            key.two = util.toFixed(key.unique_expect_rebate_user_num, key.unique_active_users_num);
+            key.is_rebate_fee = (key.is_rebate_fee / 100).toFixed(2);
+            key.cancel_is_rebate_fee = (key.cancel_is_rebate_fee / 100).toFixed(2);
+            key.expect_rebate_amount = (key.expect_rebate_amount / 100).toFixed(2);
+            key.cancel_rebate_amount = (key.cancel_rebate_amount / 100).toFixed(2);
+            key.is_over_rebate_order_amount = (key.is_over_rebate_order_amount / 100).toFixed(2);
+            key.history_expect_rebate_amount = (key.history_expect_rebate_amount / 100).toFixed(2);
+            key.history_cancel_rebate_amount = (key.history_cancel_rebate_amount / 100).toFixed(2);
+            key.history_is_over_rebate_order_amount = (key.history_is_over_rebate_order_amount / 100).toFixed(2);
             key.date = `${moment(key.date).format("MM")}月`;
         }
 

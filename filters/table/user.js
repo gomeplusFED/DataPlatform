@@ -252,12 +252,12 @@ module.exports = {
         newData.push(one);
         for(let key of source) {
             key.one = util.toFixed(
-                key.new_reg_num,
-                key.app_new_act + key.pc_new_visit + key.wap_new_visit
+                +key.new_reg_num,
+                +key.app_new_act + +key.pc_new_visit + +key.wap_new_visit
             );
             key.two = util.toFixed(key.app_new_reg, key.app_new_act);
             key.three = util.toFixed(key.app_new_act, key.app_auser);
-            key.four = util.division(key.app_pv, key.app_auser);
+            key.four = util.ceil(key.app_pv, key.app_auser);
             key.five = util.toFixed(key.pc_new_reg, key.pc_new_visit);
             key.six = util.toFixed(key.pc_new_visit, key.pc_visit);
             key.seven = util.toFixed(key.wap_new_reg, key.wap_new_visit);
@@ -267,7 +267,7 @@ module.exports = {
                 zObj = key;
             } else if(key.date === q && key.day_type === 1) {
                 qObj = key;
-            } else if(key.date === z && key.day_type === 5) {
+            } else if(key.date === z && key.day_type === 6) {
                 obj = key;
             }
             if(key.day_type === 1) {
@@ -276,6 +276,7 @@ module.exports = {
         }
         const two = {};
         const three = {};
+        obj.date = "近30天平均";
         for(let row of rows[0]) {
             if(row !== "date" &&
                 row !== "one" &&
@@ -297,6 +298,7 @@ module.exports = {
         two.six = "--";
         two.seven = "--";
         two.eight = "--";
+        two.four = two.four.toFixed(2);
         three.date = "昨日新增比率";
         three.one = "--";
         three.two = "--";
@@ -305,6 +307,7 @@ module.exports = {
         three.six = "--";
         three.seven = "--";
         three.eight = "--";
+        newData.push(obj);
         newData.push(two);
         newData.push(three);
         return util.toTable([newData], rows, cols);
@@ -317,13 +320,13 @@ module.exports = {
         }
         for(let key of source) {
             key.one = util.toFixed(
-                key.new_reg_num,
-                key.app_new_act + key.pc_new_visit + key.wap_new_visit
+                +key.new_reg_num,
+                +key.app_new_act + +key.pc_new_visit + +key.wap_new_visit
             );
             key.two = util.toFixed(key.app_new_reg, key.app_new_act);
             key.three = util.toFixed(key.app_new_act, key.app_auser);
             key.four = util.toFixed(key.app_auser, key.app_new_act);
-            key.five = util.toFixed(key.app_pv, key.app_auser);
+            key.five = util.ceil(key.app_pv, key.app_auser);
             key.six = util.toFixed(key.week_day_app, key.week_day_app_new);
             key.seven = util.toFixed(key.pc_new_reg, key.pc_new_visit);
             key.eight = util.toFixed(key.pc_new_visit, key.pc_visit);
@@ -350,7 +353,7 @@ module.exports = {
             key.two = util.toFixed(key.app_new_reg, key.app_new_act);
             key.three = util.toFixed(key.app_new_act, key.app_auser);
             //key.four = util.toFixed(key.app_auser, key.app_new_act);
-            key.five = util.toFixed(key.app_pv, key.app_auser);
+            key.five = util.ceil(key.app_pv, key.app_auser);
             key.six = util.toFixed(key.mon_day_app, key.mon_day_app_new);
             key.seven = util.toFixed(key.pc_new_reg, key.pc_new_visit);
             key.eight = util.toFixed(key.pc_new_visit, key.pc_visit);
