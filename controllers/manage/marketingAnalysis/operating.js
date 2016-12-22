@@ -63,7 +63,7 @@ module.exports = (Router) => {
         }],
         firstSql(query, params, isCount) {
             let filter_type = query.filter_type || "date",
-                config = ["date BETWEEN ? AND ?", "day_type=1", "active_no"],
+                config = ["date BETWEEN ? AND ?", "day_type=1", "active_no=?"],
                 obj = [query.startTime, query.endTime, query.active_no];
             if(isCount) {
                 let sql = `SELECT COUNT(*) count FROM ads2_cam_camlist_channel WHERE ${config.join(" AND ")} GROUP BY ${filter_type}`;
