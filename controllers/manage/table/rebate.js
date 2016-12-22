@@ -82,6 +82,11 @@ module.exports = (Router) => {
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
+        secondParams(query, params) {
+            params.plan_type = orm.not_in([4]);
+
+            return params;
+        },
         global_platform : {
             show: true,
             key: 'type',
