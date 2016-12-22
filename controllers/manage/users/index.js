@@ -170,8 +170,7 @@ module.exports = (Router) => {
         }
         req.models.User2.find({
             is_admin : orm.lt(99),
-            status : 1,
-            username : "yanglei"
+            status : 1
         }, (err, data) => {
             if(err) {
                 return next(err);
@@ -241,7 +240,7 @@ module.exports = (Router) => {
                                     role,
                                     remark,
                                     one : obj[k].name,
-                                    two : obj[k].cell[item],
+                                    two : obj[k].cell[item] || "",
                                     three : ""
                                 });
                             });
