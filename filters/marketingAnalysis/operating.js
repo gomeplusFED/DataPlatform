@@ -48,10 +48,10 @@ module.exports = {
         } else {
             let obj = {};
             for(let item of second) {
-                config[`${item.channel_type_code}${item.channel_code}`] = item.channel_name;
-                obj[`${item.channel_type_code}${item.channel_code}`] = {};
+                config[item.channel_id] = item.channel_name;
+                obj[item.channel_id] = {};
                 for(let key of filter_keys) {
-                    obj[`${item.channel_type_code}${item.channel_code}`][key] = 0;
+                    obj[item.channel_id][key] = 0;
                 }
             }
             for(let item of source) {
@@ -87,7 +87,7 @@ module.exports = {
             rowsObj = {
                 flow : ["active_pv", "active_uv", "register", "share_button_uv",
                     "share_button_pv", "product_rate"],
-                orderForm : ["order_num", "pay_user", "pay_num_money", "return_user",
+                orderForm : ["product_rate", "order_num", "pay_user", "pay_num_money", "return_user",
                     "return_num_money"],
                 coupon : ["product_rate", "coupon_get_user", "coupon_get_num", "coupon_use_user",
                     "coupon_use_num", "rate"],
@@ -225,7 +225,7 @@ module.exports = {
                 type : "string"
             }].concat(colsObj[filter_key])];
             for(let key of second) {
-                config[`${key.channel_type_code}${key.channel_code}`] = key.channel_name;
+                config[key.channel_id] = key.channel_name;
             }
         }
 
