@@ -21,7 +21,8 @@
 					:colspan="getColspan(tableItem.config || [], tableIndex, getIndexByKey(tableItem.rows,tableKey))"
 					:rowspan="getRowspan(tableItem.config || [], tableIndex, getIndexByKey(tableItem.rows,tableKey))"
 					>
-					<span @click="tableOperation(tableBody[tableCell], tableBody, tableItem.rows[1])">{{{tableBody[tableCell] | toThousands}}}
+					<span @click="tableOperation(tableBody[tableCell], tableBody, tableItem.rows[1])">
+					{{{tableBody[tableCell] | toThousands | decimal}}}
 					</span>
 				</td>
 			</tr>

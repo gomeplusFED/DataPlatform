@@ -33,11 +33,11 @@ const cols = [
     },{
         caption : "客单价",
         type : "number",
-        help : "统计日期内，支付金额/支付人数x100%"
+        help : "统计日期内，支付金额/支付人数"
     },{
         caption : "笔单价",
         type : "number",
-        help : "统计日期内，支付金额/支付订单数x100%"
+        help : "统计日期内，支付金额/支付订单数"
     },{
         caption : "访问商品数",
         type : "number",
@@ -134,11 +134,11 @@ const colsWeek = [
     },{
         caption : "客单价",
         type : "number",
-        help : "统计日期内，支付金额/支付人数x100%"
+        help : "统计日期内，支付金额/支付人数"
     },{
         caption : "笔单价",
         type : "number",
-        help : "统计日期内，支付金额/支付订单数x100%"
+        help : "统计日期内，支付金额/支付订单数"
     },{
         caption : "访问商品数",
         type : "number",
@@ -223,15 +223,15 @@ module.exports = {
             qb = true;
         }
         for(let key of source) {
-            key.one = util.percentage(key.pay_sum, key.pay_user);
-            key.two = util.percentage(key.pay_sum, key.pay_num);
+            key.one = util.division(key.pay_sum / 100, key.pay_user);
+            key.two = util.division(key.pay_sum / 100, key.pay_num);
             key.three = util.toFixed(key.order_user, key.access_uv_pv);
-            key.four = util.toFixed(key.pay_user, key.access_uv_pv);
+            key.four = util.toFixed(key.pay_user, key.order_user);
             key.five = util.toFixed(key.day30gt2_user, key.day30_user);
-            key.order_sum = key.order_sum.toFixed(2);
-            key.pay_sum = key.pay_sum.toFixed(2);
-            key.refund_sum = key.refund_sum.toFixed(2);
-            key.tuotou_sum = key.tuotou_sum.toFixed(2);
+            key.order_sum = (key.order_sum / 100).toFixed(2);
+            key.pay_sum = (key.pay_sum / 100).toFixed(2);
+            key.refund_sum = (key.refund_sum / 100).toFixed(2);
+            key.tuotou_sum = (key.tuotou_sum / 100).toFixed(2);
             key.date = moment(key.date).format("YYYY-MM-DD");
             if(key.date === z && key.last_30_days_avg === 1) {
                 last_30 = key;
@@ -273,16 +273,16 @@ module.exports = {
     orwOne(data) {
         const source = data.first.data[0];
         for(let key of source) {
-            key.one = util.percentage(key.pay_sum, key.pay_user);
-            key.two = util.percentage(key.pay_sum, key.pay_num);
+            key.one = util.division(key.pay_sum / 100, key.pay_user);
+            key.two = util.division(key.pay_sum / 100, key.pay_num);
             key.three = util.toFixed(key.order_user, key.access_uv_pv);
-            key.four = util.toFixed(key.pay_user, key.access_uv_pv);
+            key.four = util.toFixed(key.pay_user, key.order_user);
             //key.five = util.toFixed(key.day30gt2_user, key.day30_user);
-            key.order_sum = key.order_sum.toFixed(2);
-            key.pay_sum = key.pay_sum.toFixed(2);
-            key.refund_sum = key.refund_sum.toFixed(2);
-            key.tuotou_sum = key.tuotou_sum.toFixed(2);
-            const date = moment(new Date(key.date) - 7 * 24 * 60 * 60 * 1000).format("MM.DD");
+            key.order_sum = (key.order_sum / 100).toFixed(2);
+            key.pay_sum = (key.pay_sum / 100).toFixed(2);
+            key.refund_sum = (key.refund_sum / 100).toFixed(2);
+            key.tuotou_sum = (key.tuotou_sum / 100).toFixed(2);
+            const date = moment(new Date(key.date) - 6 * 24 * 60 * 60 * 1000).format("MM.DD");
             key.date = date + "-" + moment(key.date).format("MM.DD");
         }
 
@@ -291,15 +291,15 @@ module.exports = {
     ormOne(data) {
         const source = data.first.data[0];
         for(let key of source) {
-            key.one = util.percentage(key.pay_sum, key.pay_user);
-            key.two = util.percentage(key.pay_sum, key.pay_num);
+            key.one = util.division(key.pay_sum / 100, key.pay_user);
+            key.two = util.division(key.pay_sum / 100, key.pay_num);
             key.three = util.toFixed(key.order_user, key.access_uv_pv);
-            key.four = util.toFixed(key.pay_user, key.access_uv_pv);
+            key.four = util.toFixed(key.pay_user, key.order_user);
             key.five = util.toFixed(key.day30gt2_user, key.day30_user);
-            key.order_sum = key.order_sum.toFixed(2);
-            key.pay_sum = key.pay_sum.toFixed(2);
-            key.refund_sum = key.refund_sum.toFixed(2);
-            key.tuotou_sum = key.tuotou_sum.toFixed(2);
+            key.order_sum = (key.order_sum / 100).toFixed(2);
+            key.pay_sum = (key.pay_sum / 100).toFixed(2);
+            key.refund_sum = (key.refund_sum / 100).toFixed(2);
+            key.tuotou_sum = (key.tuotou_sum / 100).toFixed(2);
             key.date = moment(key.date).format("MM") + "月";
         }
 

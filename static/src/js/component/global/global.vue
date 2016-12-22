@@ -53,11 +53,13 @@
 				showConfig: {
 					flexible_btn: false,
 					level_select: false
-				}
+				},
+				watcher: []
 			}
 		},
 		ready() {
 			var _this = this;
+			eventBus.$off('loadGlobal');
 			eventBus.$on('loadGlobal', function(data) {
 				_this.$set('argvs', {
 					type: '',
@@ -77,7 +79,7 @@
 					data.filter_select.forEach(x => {
 						_this.$watch('argvs.' + x.filter_key, function(val, oldVal) {
 							if (val !== oldVal) {
-								eventBus.$emit('platformChange',val, x.filter_key);
+								eventBus.$emit('platformChange', val, x.filter_key);
 							}
 						});
 					});

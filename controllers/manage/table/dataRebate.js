@@ -138,7 +138,7 @@ module.exports = (Router) => {
             preMethods: ['excel_export']
         }],
         params(query, params) {
-            params.day_type = 2;
+            params.day_type = 3;
 
             return params;
         },
