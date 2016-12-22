@@ -4,7 +4,7 @@
  * @fileoverview 用户管理
  */
 var orm = require("orm"),
-    config = require("../../../config/config"),
+    config = require("../../../config/config").limit,
     _ = require("lodash"),
     util = require("../../../utils");
 
@@ -153,6 +153,9 @@ module.exports = (Router) => {
     });
 
     Router.get("/users/download", (req, res, next) => {
+        const xl = require("excel4node");
+        const wb = new xl.Workbook();
+        const ws = wb.addWorksheet("用户权限");
         let obj = {};
         for(let key in config) {
             if(config[key].display) {
@@ -167,27 +170,30 @@ module.exports = (Router) => {
         }
         req.models.User2.find({
             is_admin : orm.lt(99),
-            status : 1
+            status : 1,
+            username : "hexisen"
         }, (err, data) => {
             if(err) {
                 return next(err);
             }
             let newData = [];
+            newData = newData.concat([["姓名", "账户名", "邮箱", "部门", "角色", "备注", "一级页面", "菜单权限", "下载权限"]]);
             let total = 0;
             for(let key of data) {
-                let arr = [];
-                const name = key.name;
-                const username = key.username;
-                const email = key.email;
-                const department = key.department;
-                const role = key.role;
-                const remark = key.remark;
+                let array = [];
+                const name = key.name || "";
+                const username = key.username || "";
+                const email = key.email || "";
+                const department = key.department || "";
+                const role = key.role || "";
+                const remark = key.remark || "";
                 const limited = JSON.parse(key.limited);
                 const exports = JSON.parse(key.export);
-                const list = _.uniq((Object(limited).keys || []).concat(Object(exports).keys));
+                const list = _.uniq(Object.keys(limited).concat(Object.keys(exports)));
                 let total_num = 0;
                 for(let k of list) {
                     let num = 0;
+                    let arr = [];
                     if(limited[k] && exports[k]) {
                         if(limited[k].length >= exports[k].length) {
                             num = limited[k].length;
@@ -197,7 +203,7 @@ module.exports = (Router) => {
                         } else {
                             num = exports[k].length;
                             exports[k].forEach((item, index) => {
-                                arr.push([name, username, email, department, role, remark, obj[k].name], obj[k].cell[item] || "", obj[k].cell[item]);
+                                arr.push([name, username, email, department, role, remark, obj[k].name], obj[k].cell[limited[k][index]] || "", obj[k].cell[item]);
                             });
                         }
                     } else if(limited[k]) {
@@ -211,16 +217,24 @@ module.exports = (Router) => {
                             arr.push([name, username, email, department, role, remark, obj[k].name], "", obj[k].cell[item]);
                         });
                     }
-                    
+
                     arr[0][6] = [7, total_num + 1, 7, total_num += num, arr[0][6]];
+                    array = array.concat(arr);
                 }
                 let start = total + 1;
-                for(let i = 0; i < 6; i++) {
-                    arr[0][i] = [1, start, 1, total += total_num, arr[0][i]];
+                if(list.length === 0) {
+                    total += 1;
+                    array[0] = [name, username, email, department, role, remark, "", "", ""];
+                } else {
+                    for(let i = 0; i < 6; i++) {
+                        let o = i + 1;
+                        array[0][i] = [o, start, o, total += total_num, array[0][i]];
+                    }
                 }
-                newData.concat(arr);
+                newData = newData.concat(array);
             }
-            console.log(newData);
+            util.export(ws, newData);
+            wb.write("用户权限.xlsx", res);
         });
     });
 
