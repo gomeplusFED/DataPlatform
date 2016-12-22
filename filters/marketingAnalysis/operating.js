@@ -4,12 +4,14 @@
  * @fileoverview 活动流量
  */
 var util = require("../../utils"),
+    _ = require("lodash"),
     moment = require("moment");
 
 module.exports = {
     operatingOne(data, query, dates) {
         let source = data.first.data[0],
             second = data.second.data[0],
+            channel_ids = _.uniq(_.pluck(source, "channel_no")),
             filter_name = {
                 active_pv : "活动页PV",
                 register : "新增注册",
@@ -49,9 +51,11 @@ module.exports = {
             let obj = {};
             for(let item of second) {
                 config[item.channel_id] = item.channel_name;
-                obj[item.channel_id] = {};
+            }
+            for(let id of channel_ids) {
+                obj[id] = {};
                 for(let key of filter_keys) {
-                    obj[item.channel_id][key] = 0;
+                    obj[id][key] = 0;
                 }
             }
             for(let item of source) {
