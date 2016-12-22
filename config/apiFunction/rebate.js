@@ -902,4 +902,253 @@ module.exports = {
             }
         }];
     },
+
+
+    //商家返利汇总 -- 商家设置返利总览
+    rebate_shop_01(query , params , sendData){
+        params.plan_type = 3;
+        params.category_id_1 = "ALL";
+        params.category_id_2 = "ALL";
+        params.category_id_3 = "ALL";
+        params.category_id_4 = "ALL";
+        return params;
+    },
+    rebate_shop_01_f(data, query, dates){
+        let source = data.first.data[0];
+
+        let Table_Row1 = [
+            "Blank",
+            "unique_order_num",
+            "fee",
+            "unique_shop_num",
+            "unique_user_num",
+            "merchandise_num",
+            "cancel_order_num"
+        ],
+            Table_Row3 = [
+            "Blank",
+            "unique_back_merchandise_num",
+            "back_merchandise_num",
+            "unique_back_user_num",
+            "back_merchandise_amount"
+        ];
+
+        let Rows  = util.megerArray([] , [data.rows , Table_Row1 , Table_Row3]);
+        let ThisOne = {"expect_rebate_amount":0};
+
+        //整理数据
+        for(let item of source){
+            for(let key of Rows){
+                if(key == "Blank"){
+                    continue;
+                }
+                if(ThisOne[key]){
+                    ThisOne[key] += item[key];
+                }else{
+                    ThisOne[key] = item[key];
+                }
+            }
+        }
+
+        //拼装数据
+        //表一
+        let Table_1_row1 = Object.assign({} , ThisOne),
+            Table_1_row2 = {};
+        data.rows[0].map((item , index) => {
+            if(item != "Blank"){
+                Table_1_row2[item] = util.toFixed( ThisOne[item] || 0 , ThisOne[Table_Row1[index]] || 0 );
+            } 
+        });
+        Table_1_row1["Blank"] = "返利订单";
+        Table_1_row2["Blank"] = "总占比";
+
+        //表三
+        let Table_3_row1 = Object.assign({} , ThisOne) ,Table_3_row2 = {};
+        data.rows[2].map((item , index) => {
+            if(item != "Blank"){
+                Table_3_row2[item] = util.toFixed( ThisOne[item] || 0 , ThisOne[Table_Row3[index]] || 0 );
+            } 
+        });
+        Table_3_row1["Blank"] = "返利订单";
+        Table_3_row2["Blank"] = "返利退货订单占比";
+
+           
+        return util.toTable([[Table_1_row1 , Table_1_row2] , [ThisOne] , [Table_3_row1 , Table_3_row2]], data.rows, data.cols);
+    },
+
+
+
+
+    //商家返利汇总 -- 返利订单趋势
+    rebate_shop_02(query , params , sendData){
+        params.plan_type = 3;
+        return params;
+    },
+    rebate_shop_02_second(query , params , sendData){
+        return { type_code:3 };
+    },
+    rebate_shop_02_f(data, query, dates){
+        let source = data.first.data[0],
+            second = data.second.data[0],
+            map = {}, Result = {};
+
+        for(let item of second){
+            map[item.flow_code] = item.flow_name;
+        }
+         
+        for(let date of dates){
+            let obj = {};
+            for(let key in map){
+                obj[key] = 0;
+            }
+            Result[date] = obj;
+        }
+
+        let colum = query.filter_key;
+        for(let item of source){
+            item.date = util.getDate(item.date);
+
+            if(Result[item.date][item.rebate_type]){
+                Result[item.date][item.rebate_type] += item[colum];
+            }
+        }
+           
+        return [{
+            type : "line",
+            map : map,
+            data : Result,
+            config: { // 配置信息
+                stack: false  // 图的堆叠
+            }
+        }];
+    },
+
+
+    //商家返利汇总 ------ 返利层级分布
+
+    rebate_shop_03(query , params , sendData){
+        params.plan_type = 3;
+        return params;
+    },
+
+    //商家返利汇总 ---- 商家返利TOP50
+    rebate_shop_04(query , params , sendData){
+        // params.plan_type = "ALL";
+        params.plan_name = "ALL";
+        params.rebate_level = "ALL";
+        params.rebate_type = "ALL";
+        return params;
+    },
+    rebate_shop_04_f(data, query, dates){
+        let source = data.first.data[0],
+            count  = data.first.count;
+        count = count > 50 ? 50 : count;
+        source.map((item , index) => {
+            item.Number = (query.page - 1) * query.limit + index + 1;
+        });
+
+        return util.toTable([source], data.rows, data.cols , count);
+    },
+
+
+    rebate_shop_05(query , params , sendData){
+        // params.plan_type = "ALL";
+        // params.plan_name = "ALL";
+        // params.rebate_level = "ALL";
+        // params.rebate_type = "ALL";
+        return params;
+    },
+    rebate_shop_05_f(data, query, dates){
+        let source = data.first.data[0],
+            count  = data.first.count,
+            second = data.second.data[0];
+
+        count = count > 50 ? 50 : count;
+
+        let Translate = {};
+        second.map((item , index) => {
+            Translate[item.flow_code] = item.flow_name;
+        });
+
+        source.map((item , index) => {
+            item.Number = (query.page - 1) * query.limit + index + 1;
+            item.Return_lv = util.toFixed( item.is_rebate_back_merchandise_num , item.is_rebate_merchandise_num );
+            item.rebate_type = Translate[item.rebate_type];
+        });
+
+        return util.toTable([source], data.rows, data.cols , count);
+    },
+
+
+    rebate_shopPlan_01(query , params , sendData){
+
+        if(query.search_key){
+            if(query.search_key / 1){
+                query.plan_id = query.search_key;
+            }else{
+                query.plan_name = query.search_key;
+            }
+
+            delete params.search_key;
+            delete query.search_key;
+        }
+        return params;
+    },
+    rebate_shopPlan_01_second(query , params , sendData){
+        return {type_code : 3};
+    },
+   /* rebate_shopPlan_01_f(data, query, dates){
+        let source = data.first.data[0],
+            count  = data.first.count,
+            second = data.second.data[0];
+        count = count > 50 ? 50 : count;
+
+
+        let Translate = {};
+        second.map((item , index) => {
+            Translate[item.flow_code] = item.flow_name;
+        });
+
+
+        source.map((item , index) => {
+            item.Number = (query.page - 1) * query.limit + index + 1;
+            item.Return_lv = util.toFixed( item.is_rebate_back_merchandise_num , item.is_rebate_merchandise_num );
+            item.rebate_type = Translate[item.rebate_type];
+        });
+
+        return util.toTable([source], data.rows, data.cols , count);
+    },*/
+
+
+    rebate_shopPlan_SelectFilter(req , cb){
+        let filter_select = {
+            "title" : "关联流程",
+            "filter_key" : "rebate_type",
+            "groups" : [{
+                "key" : [],
+                "value":"全部返利"
+            }]
+        };
+
+        req.models.TypeFlow.find({
+            type_code : 3,
+            status : 1
+        }, (err, data) => {
+            if(err) {
+                cb(err);
+            } else {
+                var user_party = _.uniq(_.pluck(data, "flow_code"));
+                filter_select.groups[0].key = user_party;
+                
+                for(let item of data){
+                    let obj = {
+                        "key" : item.flow_code,
+                        "value":item.flow_name
+                    };
+                    filter_select.groups.push(obj);
+                }
+                cb(null, [filter_select]);
+            }
+        });
+    },
 }

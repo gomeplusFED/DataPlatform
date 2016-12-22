@@ -104,6 +104,43 @@
                         "mark": 1482135694948
                     }
                 ]
+            },
+            {
+                "name": "商家返利汇总",
+                "path": "/rebate/shop",
+                "display": true,
+                "defaultData": [
+                    {
+                        "type": "table",
+                        "title": "商家设置返利总览",
+                        "query_api": "/rebate/shop_One",
+                        "mark": 1482211894279
+                    },
+                    {
+                        "type": "chart",
+                        "title": "返利订单趋势",
+                        "query_api": "/rebate/shop_Two",
+                        "mark": 1482214982543
+                    },
+                    {
+                        "type": "chart",
+                        "title": "返利层级分布",
+                        "query_api": "/rebate/shop_Three",
+                        "mark": 1482222517054
+                    },
+                    {
+                        "type": "table",
+                        "title": "商家返利TOP50",
+                        "query_api": "/rebate/shop_Four",
+                        "mark": 1482299549508
+                    },
+                    {
+                        "type": "table",
+                        "title": "商家返利计划TOP50",
+                        "query_api": "/rebate/shop_Five",
+                        "mark": 1482301660558
+                    }
+                ]
             }
         ],
         "routers": [
@@ -204,6 +241,19 @@
                         "title": "返利层级分布",
                         "query_api": "/rebate/invitation_Three",
                         "mark": 1482118634978
+                    }
+                ]
+            },
+            {
+                "name": "商家返利计划",
+                "path": "/rebate/shopPlan",
+                "display": true,
+                "defaultData": [
+                    {
+                        "type": "table",
+                        "title": "商家设置返利",
+                        "query_api": "/rebate/shopPlan_One",
+                        "mark": 1482305940029
                     }
                 ]
             }
