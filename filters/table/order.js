@@ -282,7 +282,7 @@ module.exports = {
             key.pay_sum = (key.pay_sum / 100).toFixed(2);
             key.refund_sum = (key.refund_sum / 100).toFixed(2);
             key.tuotou_sum = (key.tuotou_sum / 100).toFixed(2);
-            const date = moment(new Date(key.date) - 7 * 24 * 60 * 60 * 1000).format("MM.DD");
+            const date = moment(new Date(key.date) - 6 * 24 * 60 * 60 * 1000).format("MM.DD");
             key.date = date + "-" + moment(key.date).format("MM.DD");
         }
 
