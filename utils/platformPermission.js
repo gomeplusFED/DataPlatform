@@ -2,9 +2,8 @@ const pageConfig = require('../config/config')
 const pageAll = pageConfig.limit
 
 const platformType = ['IOS', 'AND', 'APP', 'PC', 'WAP站']
-const platformKey = ['ios', 'android', 'app', 'pc', 'm']
 
-const filter = (url, type, config) => {
+const filter = (url, type, config, platformKey = ['ios', 'android', 'app', 'pc', 'm']) => {
     try {
         if (config.list && config.list.length) {
             let pageId
@@ -16,6 +15,7 @@ const filter = (url, type, config) => {
                 }
             }
             if (pageId) {
+                // 01001
                 let permission = type[pageId]
                 let removeList = []
                 for (let i = 0, length = config.list.length; i < length; i++) {
