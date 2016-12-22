@@ -171,16 +171,13 @@ module.exports = (Router) => {
         req.models.User2.find({
             is_admin : orm.lt(99),
             status : 1,
-            username : "hexisen"
+            username : "yanglei"
         }, (err, data) => {
             if(err) {
                 return next(err);
             }
-            let newData = [];
-            newData = newData.concat([["姓名", "账户名", "邮箱", "部门", "角色", "备注", "一级页面", "菜单权限", "下载权限"]]);
-            let total = 0;
+            let arr = [];
             for(let key of data) {
-                let array = [];
                 const name = key.name || "";
                 const username = key.username || "";
                 const email = key.email || "";
@@ -190,51 +187,97 @@ module.exports = (Router) => {
                 const limited = JSON.parse(key.limited);
                 const exports = JSON.parse(key.export);
                 const list = _.uniq(Object.keys(limited).concat(Object.keys(exports)));
-                let total_num = 0;
-                for(let k of list) {
-                    let num = 0;
-                    let arr = [];
-                    if(limited[k] && exports[k]) {
-                        if(limited[k].length >= exports[k].length) {
-                            num = limited[k].length;
+                if(list.length === 0) {
+                    arr.push({
+                        name,
+                        username,
+                        email,
+                        department,
+                        role,
+                        remark,
+                        one : "",
+                        two : "",
+                        three : ""
+                    });
+                } else {
+                    for(let k of list) {
+                        if(limited[k] && exports[k]) {
+                            if(limited[k].length >= exports[k].length) {
+                                limited[k].forEach((item, index) => {
+                                    arr.push({
+                                        name,
+                                        username,
+                                        email,
+                                        department,
+                                        role,
+                                        remark,
+                                        one : obj[k].name,
+                                        two : obj[k].cell[item] || "",
+                                        three : obj[k].cell[exports[index]] || ""
+                                    });
+                                });
+                            } else {
+                                exports[k].forEach((item, index) => {
+                                    arr.push({
+                                        name,
+                                        username,
+                                        email,
+                                        department,
+                                        role,
+                                        remark,
+                                        one : obj[k].name,
+                                        two : obj[k].cell[limited[index]] || "",
+                                        three : obj[k].cell[item] || ""
+                                    });
+                                });
+                            }
+                        } else if(limited[k]) {
                             limited[k].forEach((item, index) => {
-                                arr.push([name, username, email, department, role, remark, obj[k].name], obj[k].cell[item], obj[k].cell[exports[k][index]] || "");
+                                arr.push({
+                                    name,
+                                    username,
+                                    email,
+                                    department,
+                                    role,
+                                    remark,
+                                    one : obj[k].name,
+                                    two : obj[k].cell[item],
+                                    three : ""
+                                });
                             });
-                        } else {
-                            num = exports[k].length;
+                        } else if(exports[k]) {
                             exports[k].forEach((item, index) => {
-                                arr.push([name, username, email, department, role, remark, obj[k].name], obj[k].cell[limited[k][index]] || "", obj[k].cell[item]);
+                                arr.push({
+                                    name,
+                                    username,
+                                    email,
+                                    department,
+                                    role,
+                                    remark,
+                                    one : obj[k].name,
+                                    two : "",
+                                    three : obj[k].cell[item] || ""
+                                });
                             });
                         }
-                    } else if(limited[k]) {
-                        num = limited[k].length;
-                        limited[k].forEach((item, index) => {
-                            arr.push([name, username, email, department, role, remark, obj[k].name], obj[k].cell[item], "");
-                        });
-                    } else if(exports[k]) {
-                        num = exports[k].length;
-                        exports[k].forEach((item, index) => {
-                            arr.push([name, username, email, department, role, remark, obj[k].name], "", obj[k].cell[item]);
-                        });
-                    }
-
-                    arr[0][6] = [7, total_num + 1, 7, total_num += num, arr[0][6]];
-                    array = array.concat(arr);
-                }
-                let start = total + 1;
-                if(list.length === 0) {
-                    total += 1;
-                    array[0] = [name, username, email, department, role, remark, "", "", ""];
-                } else {
-                    for(let i = 0; i < 6; i++) {
-                        let o = i + 1;
-                        array[0][i] = [o, start, o, total += total_num, array[0][i]];
                     }
                 }
-                newData = newData.concat(array);
             }
+            const newData = util.arrayToArray([{
+                cols : [{caption : "姓名"},
+                    {caption : "账户名"},
+                    {caption : "邮箱"},
+                    {caption : "部门"},
+                    {caption : "角色"},
+                    {caption : "备注"},
+                    {caption : "一级页面"},
+                    {caption : "菜单权限"},
+                    {caption : "下载权限"}],
+                rows : ["name", "username", "email", "department", "role", "remark", "one", "two", "three"],
+                data : arr
+            }]);
             util.export(ws, newData);
-            wb.write("用户权限.xlsx", res);
+            wb.write("report.xlsx", res);
         });
     });
 
