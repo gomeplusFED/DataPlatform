@@ -96,7 +96,7 @@ var LimitList = Vue.extend({
 			platformType: ['IOS', 'AND', 'APP', 'PC', 'WAP站']
 		};
 	},
-	props: ['id', 'limited', 'exportLimit', 'subPages'],
+	props: ['id', 'limited', 'exportLimit', 'subPages', 'type'],
 	created: function() {
 		var count = 0;
 		for (let key in this.pageAll) {
@@ -346,6 +346,23 @@ var LimitList = Vue.extend({
 			},
 			deep: true
 		},
+		type: {
+			handler: function(val) {
+				for (let key of Object.keys(this.platfromPermission2)) {
+					for (let key2 of Object.keys(this.platfromPermission2[key])) {
+						this.platfromPermission2[key][key2] = val[key2] || '00000'
+					}
+				}
+				for (let key of Object.keys(this.platfromPermission3)) {
+					for (let key2 of Object.keys(this.platfromPermission3[key])) {
+						for (let key3 of Object.keys(this.platfromPermission3[key][key2])) {
+							this.platfromPermission3[key][key2][key3] = val[key3] || '00000'
+						}
+					}
+				}
+			},
+			deep: true
+		},
 		subPages: {
 			handler: function(val) {
 				this.subPagesObj = {};
@@ -421,21 +438,21 @@ var LimitList = Vue.extend({
 			}
 		},
 		checkboxChange2(obj, val) {
-			// 更改3级目录
-			let permission3 = this.platfromPermission3[obj.k1];
-			if (permission3) {
-				permission3 = permission3[obj.id2]
-				if (permission3) {
-					for (let item in permission3) {
-						permission3[item] = val
-					}
-				}
-			}
+			// 改为不更改3级目录
+			// let permission3 = this.platfromPermission3[obj.k1];
+			// if (permission3) {
+			// 	permission3 = permission3[obj.id2]
+			// 	if (permission3) {
+			// 		for (let item in permission3) {
+			// 			permission3[item] = val
+			// 		}
+			// 	}
+			// }
 			// 判断2级目录
 			let permission2 = this.platfromPermission2[obj.k1];
 			if (permission2) {
 				let all = ['1', '1', '1', '1', '1']
-				for (let key in Object.keys(permission2)) {
+				for (let key of Object.keys(permission2)) {
 					if (permission2[key]) {
 						permission2[key].split('').forEach((x, index) => {
 							if (x !== '1') {
@@ -451,20 +468,20 @@ var LimitList = Vue.extend({
 			}
 		},
 		checkboxChange3(obj, val) {
-			// 判断3级目录
-			let permission3 = this.platfromPermission3[obj.k1][obj.id2];
-			if (permission3) {
-				let all = ['1', '1', '1', '1', '1']
-				for (let key in Object.keys(permission3)) {
-					permission3[key].split('').forEach((x, index) => {
-						if (x !== '1') {
-							all[index] = '0'
-						}
-					})
-				}
-				// 赋值2级目录
-				this.platfromPermission2[obj.k1][obj.id2] = all.join('');
-			}
+			// 改为不判断二级目录
+			// let permission3 = this.platfromPermission3[obj.k1][obj.id2];
+			// if (permission3) {
+			// 	let all = ['1', '1', '1', '1', '1']
+			// 	for (let key of Object.keys(permission3)) {
+			// 		permission3[key].split('').forEach((x, index) => {
+			// 			if (x !== '1') {
+			// 				all[index] = '0'
+			// 			}
+			// 		})
+			// 	}	
+			// 	// 赋值2级目录
+			// 	this.platfromPermission2[obj.k1][obj.id2] = all.join('');
+			// }
 		}
 	}
 });

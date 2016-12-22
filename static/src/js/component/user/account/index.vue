@@ -45,7 +45,7 @@
 									</td>
 									<td>
 										<ul>
-											<li v-show="item.status"><a @click="showLimitList(item.id, item.limited, item.export, item.sub_pages)" class="btn btn-default" href="javascript:void(0)">权限修改<i class="fa fa-pencil-square-o"></i></a></li>
+											<li v-show="item.status"><a @click="showLimitList(item.id, item.limited, item.export, item.sub_pages, item.type)" class="btn btn-default" href="javascript:void(0)">权限修改<i class="fa fa-pencil-square-o"></i></a></li>
 											<li v-show="item.status"><a @click="forbidden(item.id, item.email)" class="btn btn-default" href="javascript:void(0)">禁用<i class="fa fa-remove"></i></a></li>
 											<li v-show="!item.status"><a @click="startUsing(item.id, item.email)" class="btn btn-default" href="javascript:void(0)">启用<i class="fa fa-check-square-o"></i></a></li>
 										</ul>
@@ -90,7 +90,7 @@
 							</tr>
 						</tbody>
 					</table>
-					<m-limit-list v-ref:limitlist v-show="modal.type === 'limitList'" :id="id" :limited="limited" :sub-pages="subPages" :export-limit="exportLimit"></m-limit-list>
+					<m-limit-list v-ref:limitlist v-show="modal.type === 'limitList'" :id="id" :limited="limited" :sub-pages="subPages" :type="type" :export-limit="exportLimit"></m-limit-list>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn default" data-dismiss="modal" @click="apply()">确定</button>
@@ -252,6 +252,7 @@ var User = Vue.extend({
 			id: null,
 			limited: {},
 			subPages: {},
+			type: {},
 			exportLimit: {},
 			roleList: [],
 			currentID: null,
@@ -389,7 +390,7 @@ var User = Vue.extend({
 				}
 			});
 		},
-		showLimitList: function(id, limited, exportLimit, subPages) {
+		showLimitList: function(id, limited, exportLimit, subPages, type) {
 			var _this = this;
 			_this.currentID = id;
 			_this.modal.show = true;
@@ -399,6 +400,7 @@ var User = Vue.extend({
 			_this.exportLimit = this.fixLimit(JSON.parse(exportLimit), 'exportLimit');
 			_this.limited = this.fixLimit(JSON.parse(limited), 'limit');
 			_this.subPages = this.fixLimit(JSON.parse(subPages), 'subPages');
+			_this.type = JSON.parse(type);
 		},
 		apply: function() {
 			var _this = this;
@@ -523,11 +525,16 @@ var User = Vue.extend({
 							let item = obj[key]
 							if (typeof item === 'object') {
 								parseObject(item)
-							} else if (item !== 'undefined') {
+							} else if (key && key !== 'undefined' && item && item !== 'undefined') {
 								config[key] = item
 							}
 						}
 				}
+				
+				if (limitlist.platfromPermission3) {
+					parseObject(limitlist.platfromPermission3)
+				}
+				// 相同页面的情况下，二级目录覆盖三级目录
 				if (limitlist.platfromPermission2) {
 					parseObject(limitlist.platfromPermission2)
 				}
