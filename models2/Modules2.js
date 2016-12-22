@@ -144,9 +144,6 @@ module.exports = {
     ads2_new_rebate_order_trend : {
         modelName : "ads2_new_rebate_order_trend"
     },
-    ads2_new_rebate_order_type_sum : {
-        modelName : "ads2_new_rebate_order_type_sum"
-    },
     ads2_report_rebate_plan_rebate_type_daily : {
         modelName : "ads2_report_rebate_plan_rebate_type_daily"
     },
