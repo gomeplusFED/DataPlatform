@@ -117,7 +117,11 @@ api.prototype = {
 
         // 平台权限控制
         if (this.global_platform && this.global_platform.show) {
-            this.global_platform = platformPermission(req.url, JSON.parse(req.session.userInfo.type || '{}'), this.global_platform)
+            this.global_platform = platformPermission(
+                req.url,
+                JSON.parse(req.session.userInfo.type || '{}'),
+                this.global_platform
+            )
         }
 
         //无参数时，返回组件信息
