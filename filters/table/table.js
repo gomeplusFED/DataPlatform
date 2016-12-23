@@ -32,7 +32,7 @@ module.exports = {
             key.three = util.division(key.pay_amount / 100, key.pay_order_num);
             key.four = util.toFixed(key.newadd_rebate_order_num, key.newadd_order_num);
             key.newadd_rebate_order_amount = (key.newadd_rebate_order_amount / 100).toFixed(2);
-            key.pay_amount = key.pay_amount.toFixed(2);
+            key.pay_amount = (key.pay_amount / 100).toFixed(2);
             if(key.date === z) {
                 zObj = key;
             } else if(key.date === q) {
