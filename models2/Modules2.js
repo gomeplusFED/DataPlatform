@@ -143,21 +143,6 @@ module.exports = {
     },
     ads2_new_rebate_order_trend : {
         modelName : "ads2_new_rebate_order_trend"
-    },
-    ads2_report_rebate_plan_rebate_type_daily : {
-        modelName : "ads2_report_rebate_plan_rebate_type_daily"
-    },
-    ads2_report_rebate_plan_rebate_type_summary : {
-        modelName : "ads2_report_rebate_plan_rebate_type_summary"
-    },
-    ads2_report_rebate_plan_rebate_type_total_daily : {
-        modelName : "ads2_report_rebate_plan_rebate_type_total_daily"
-    },
-    ads2_report_rebate_plan_rebate_type_total_summary : {
-        modelName : "ads2_report_rebate_plan_rebate_type_total_summary"
-    },
-    ads2_report_rebate_sum_history : {
-        modelName : "ads2_report_rebate_sum_history"
     }
     //返利   END --------------
 };

@@ -1,7 +1,7 @@
 {
     "1481596804809": {
         "modelName": [
-            "ads2_report_rebate_sum_history"
+            "ReportRebateSumHistory"
         ],
         "date_picker": false,
         "order": [],
@@ -55,7 +55,7 @@
     },
     "1481600577337": {
         "modelName": [
-            "ads2_report_rebate_sum_history"
+            "ReportRebateSumHistory"
         ],
         "date_picker": true,
         "order": [],
@@ -104,7 +104,7 @@
     },
     "1481609368254": {
         "modelName": [
-            "ads2_report_rebate_sum_history"
+            "ReportRebateSumHistory"
         ],
         "date_picker": true,
         "order": [
@@ -166,7 +166,7 @@
     },
     "1481614501111": {
         "modelName": [
-            "ads2_report_rebate_plan_rebate_type_daily"
+            "ReportRebatePlanRebateTypeDaily"
         ],
         "date_picker": true,
         "order": [],
@@ -177,7 +177,7 @@
     },
     "1481617501820": {
         "modelName": [
-            "ads2_report_rebate_plan_rebate_type_daily",
+            "ReportRebatePlanRebateTypeDaily",
             "TypeFlow"
         ],
         "date_picker": true,
