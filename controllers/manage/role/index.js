@@ -66,6 +66,7 @@ module.exports = (Router) => {
                 name : body.name,
                 date : new Date().getTime(),
                 limited : body.limited || "{}",
+                sub_pages: body.sub_pages || "{}",
                 export : body.export | "{}",
                 status : 1,
                 remark : body.remark
