@@ -350,13 +350,13 @@ var LimitList = Vue.extend({
 			handler: function(val) {
 				for (let key of Object.keys(this.platfromPermission2)) {
 					for (let key2 of Object.keys(this.platfromPermission2[key])) {
-						this.platfromPermission2[key][key2] = val[key2] || '00000'
+						this.platfromPermission2[key][key2] = (val && val[key2]) || '00000'
 					}
 				}
 				for (let key of Object.keys(this.platfromPermission3)) {
 					for (let key2 of Object.keys(this.platfromPermission3[key])) {
 						for (let key3 of Object.keys(this.platfromPermission3[key][key2])) {
-							this.platfromPermission3[key][key2][key3] = val[key3] || '00000'
+							this.platfromPermission3[key][key2][key3] = (val && val[key3]) || '00000'
 						}
 					}
 				}
