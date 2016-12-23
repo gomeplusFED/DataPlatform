@@ -411,8 +411,8 @@ var Account = Vue.extend({
 	        		}
 
 	        		// 比较三级页面subPages
-	        		let roleSub = roleSubPages[key] || [];
-	        		let userSub = usersub_pages[key] || [];
+	        		let roleSub = roleSubPages[key] || (roleSubPages[key] = {});
+	        		let userSub = usersub_pages[key] || (usersub_pages[key] = {});
 	        		for(let l of rl) {
 	        			let rs = roleSub[l] || [];
 	        			let us = userSub[l] || [];
