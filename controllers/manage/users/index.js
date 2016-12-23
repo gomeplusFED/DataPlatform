@@ -91,6 +91,16 @@ module.exports = (Router) => {
                             content.push(username + "被修改备注");
                         }
                     }
+                    if(params.type) {
+                        if(params.export !== data[0].export) {
+                            content.push(username + "平台权限被修改");
+                        }
+                    }
+                    if(params.sub_pages) {
+                        if(params.sub_pages !== data[0].sub_pages) {
+                            content.push(username + "三级页面权限被修改");
+                        }
+                    }
 
                     data[0].status = params.status || data[0].status;
                     data[0].role = params.role !== undefined ? params.role : data[0].role;
@@ -98,6 +108,7 @@ module.exports = (Router) => {
                     data[0].limited = params.limited || data[0].limited;
                     data[0].export = params.export || data[0].export;
                     data[0].type = params.type || data[0].type;
+                    data[0].sub_pages = params.sub_pages || data[0].sub_pages;
                     _save();
                 } else {
                     res.json({

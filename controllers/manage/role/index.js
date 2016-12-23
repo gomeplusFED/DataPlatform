@@ -134,6 +134,8 @@ module.exports = (Router) => {
                     data[0].export = body.export || data[0].export;
                     data[0].status = body.status || data[0].status;
                     data[0].remark = body.remark || data[0].remark;
+                    data[0].type = body.type || data[0].type;
+                    data[0].sub_pages = body.sub_pages || data[0].sub_pages;
                     data[0].save((err) => {
                         if(!err) {
                             res.json({
