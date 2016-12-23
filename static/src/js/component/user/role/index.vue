@@ -126,8 +126,6 @@ var $ = require('jQuery');
 
 var Pagination = require('../../common/pagination.vue');
 
-var UserVm = null;
-
 var store = require('store');
 var actions = require('actions');
 
@@ -150,9 +148,9 @@ var Role = Vue.extend({
 				totalItems: 30,     // 总条数
 				itemsPerPage: 10,    // 每页条数
 				pagesLength: 5,     // 显示几页( 1,2,3 / 1,2,3,4,5)
-				onChange: function() {
+				onChange: () => {
 					// 回调
-					UserVm.createTableBySearchStr();
+					this.createTableBySearchStr();
 				}
 			},
 			roleListData: null,
@@ -259,18 +257,19 @@ var Role = Vue.extend({
 				})
 				return;
 			}
+			for(var item in _this.modifyLimited){
+				if(_this.modifyLimited[item].length === 0){
+					Vue.delete(_this.modifyLimited, item);
+					Vue.delete(_this.modifySubPages, item);
+				}
+			}
+			for(var item in _this.modifyExportLimited){
+				if(_this.modifyExportLimited[item].length === 0){
+					Vue.delete(_this.modifyExportLimited, item);
+				}
+			}
 			if(this.modifyType === 'modify'){
-				for(var item in _this.modifyLimited){
-					if(_this.modifyLimited[item].length === 0){
-						Vue.delete(_this.modifyLimited, item);
-						Vue.delete(_this.modifySubPages, item);
-					}
-				}
-				for(var item in _this.modifyExportLimited){
-					if(_this.modifyExportLimited[item].length === 0){
-						Vue.delete(_this.modifyExportLimited, item);
-					}
-				}
+
 				$.ajax({
 					url: '/role/update',
 					type: 'post',
