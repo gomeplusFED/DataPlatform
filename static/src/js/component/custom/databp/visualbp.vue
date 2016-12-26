@@ -18,7 +18,7 @@
 	<div id='container' class='main'>
 		<div class='tabpanel_content' style='width: 100%; height: 1000px;'>
 			<div class='html_content' style='z-index: 2;'>
-				<iframe :class="{'pc-iframe': bpConfig.platform === 'PC', 'wap-iframe':  bpConfig.platform === 'H5'}" frameborder='no' border='0' marginwidth='0' marginheight='0' id='tab_baseQuery'  src='{{iframe_url}}' v-on:load="iframeload"></iframe>
+				<iframe :class="{'pc-iframe': bpConfig.platform === 'PC', 'wap-iframe':  bpConfig.platform === 'H5'}" frameborder='no' border='0' marginwidth='0' marginheight='0' id='iframenode'  src='{{iframe_url}}' v-on:load="iframeload"></iframe>
 			</div>
 		</div>
 	</div>
@@ -43,6 +43,7 @@
 		data: function() {
 			return {
 				iframe_url: '',
+				iframe_node: null,
 				bpConfig: {
 					show: false,
 					trigger: false,
@@ -56,6 +57,7 @@
 			}
 		},
 		ready() {
+			this.iframe_node = document.getElementById('iframenode');
 		},
 		route: {
 	        activate: function (transition) {
@@ -93,14 +95,14 @@
 				this.bpConfig.trigger = !this.bpConfig.trigger;
 				this.bpConfig.show = true;
 			},
-			iframeload(ev) {
+			iframeload() {
 				// console.log('load');
 				let _this = this;
 				if (!_this.bpConfig.pageUrl) {
 					return false;
 				}
 				_this.loading.show = false;
-				let iframenode = ev.path[0]
+				let iframenode = this.iframe_node;
 				let $iframe = $(iframenode).contents();
 
 
@@ -209,6 +211,17 @@
 					
 				}
 				this.iframe_url = newiframe_url;
+				setTimeout(() => {
+					if(this.loading.show) {
+						if (window.stop) {
+						    window.stop();
+						} else {
+						    document.execCommand('Stop'); // MSIE
+						}
+						this.iframeload();
+						this.loading.show = false;
+					}
+			    }, 10000);
 			}
 		}
 	});
