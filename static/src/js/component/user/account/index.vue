@@ -140,6 +140,10 @@
 	min-width: 120px;
 }
 
+.user_table td:nth-child(5) {
+	min-width: 180px;
+}
+
 .user_table th {
 	min-width: 120px;
 }
