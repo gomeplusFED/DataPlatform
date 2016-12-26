@@ -1,0 +1,1568 @@
+{
+    "1481596804809": {
+        "modelName": [
+            "ReportRebateSumHistory"
+        ],
+        "date_picker": false,
+        "order": [],
+        "platform": false,
+        "router": "/rebate/total_One",
+        "filter": "rebate_total_01_f",
+        "params": "rebate_total_01",
+        "rows": [
+            [
+                "history_is_rebate_order_num",
+                "history_expect_rebate_user_num",
+                "history_expect_rebate_amount",
+                "history_cancel_is_rebate_order_num",
+                "history_cancel_is_rebate_fee",
+                "history_is_over_rebate_order_num",
+                "history_is_over_rebate_order_amount"
+            ]
+        ],
+        "cols": [
+            [
+                {
+                    "caption": "累计返利订单数",
+                    "type": "number"
+                },
+                {
+                    "caption": "累计返利参与人次",
+                    "type": "number"
+                },
+                {
+                    "caption": "累计预计返利金额",
+                    "type": "number"
+                },
+                {
+                    "caption": "累计取消返利订单数",
+                    "type": "number"
+                },
+                {
+                    "caption": "累计取消返利金额",
+                    "type": "number"
+                },
+                {
+                    "caption": "累计到账订单数",
+                    "type": "number"
+                },
+                {
+                    "caption": "累计到账金额",
+                    "type": "number"
+                }
+            ]
+        ]
+    },
+    "1481600577337": {
+        "modelName": [
+            "ReportRebateSumHistory"
+        ],
+        "date_picker": true,
+        "order": [],
+        "platform": false,
+        "router": "/rebate/total_Two",
+        "filter": "rebate_total_02_f",
+        "params": "rebate_total_02",
+        "rows": [
+            [
+                "expect_rebate_amount",
+                "unique_expect_rebate_user_num",
+                "cancel_rebate_amount",
+                "is_over_rebate_order_amount",
+                "unique_is_rebate_order_num",
+                "unique_is_over_rebate_order_num"
+            ]
+        ],
+        "cols": [
+            [
+                {
+                    "caption": "预计返利金额",
+                    "type": "number"
+                },
+                {
+                    "caption": "预计获利人次",
+                    "type": "number"
+                },
+                {
+                    "caption": "已取消返利金额",
+                    "type": "number"
+                },
+                {
+                    "caption": "返利到账金额",
+                    "type": "number"
+                },
+                {
+                    "caption": "预计返利订单数",
+                    "type": "number"
+                },
+                {
+                    "caption": "返利到账订单数",
+                    "type": "number"
+                }
+            ]
+        ]
+    },
+    "1481609368254": {
+        "modelName": [
+            "ReportRebateSumHistory"
+        ],
+        "date_picker": true,
+        "order": [
+            "-date"
+        ],
+        "paging": [
+            true
+        ],
+        "platform": false,
+        "router": "/rebate/total_Three",
+        "filter": "rebate_total_03_f",
+        "params": "rebate_total_03",
+        "rows": [
+            [
+                "date",
+                "expect_rebate_amount",
+                "unique_expect_rebate_user_num",
+                "cancel_rebate_amount",
+                "is_over_rebate_order_amount",
+                "unique_is_rebate_order_num",
+                "unique_is_over_rebate_order_num"
+            ]
+        ],
+        "cols": [
+            [
+                {
+                    "caption": "日期",
+                    "type": "date"
+                },
+                {
+                    "caption": "预计返利金额",
+                    "type": "number"
+                },
+                {
+                    "caption": "预计获利人次",
+                    "type": "number"
+                },
+                {
+                    "caption": "已取消返利金额",
+                    "type": "number"
+                },
+                {
+                    "caption": "返利到账金额",
+                    "type": "number"
+                },
+                {
+                    "caption": "预计返利订单数",
+                    "type": "number"
+                },
+                {
+                    "caption": "返利到账订单数",
+                    "type": "number"
+                }
+            ]
+        ],
+        "toggle": {
+            "show": true
+        }
+    },
+    "1481614501111": {
+        "modelName": [
+            "ReportRebatePlanRebateTypeDaily"
+        ],
+        "date_picker": true,
+        "order": [],
+        "platform": false,
+        "router": "/rebate/total_Four",
+        "filter": "rebate_total_04_f",
+        "params": "rebate_total_04"
+    },
+    "1481617501820": {
+        "modelName": [
+            "ReportRebatePlanRebateTypeDaily",
+            "TypeFlow"
+        ],
+        "date_picker": true,
+        "showDayUnit": true,
+        "date_picker_data": 1,
+        "order": [],
+        "platform": false,
+        "router": "/rebate/total_Five",
+        "filter": "rebate_total_05_f",
+        "params": "rebate_total_05",
+        "secondParams": "rebate_total_05_second",
+        "rows": [
+            [
+                "flow_name_prefix",
+                "type_name",
+                "flow_name",
+                "rebate_type",
+                "unique_expect_rebate_user_num",
+                "expect_rebate_amount",
+                "cancel_rebate_amount",
+                "is_over_rebate_order_amount",
+                "unique_is_rebate_merchandise_num",
+                "unique_is_rebate_shop_num"
+            ]
+        ],
+        "cols": [
+            [
+                {
+                    "caption": "返利功能",
+                    "type": "string"
+                },
+                {
+                    "caption": "使用方",
+                    "type": "number"
+                },
+                {
+                    "caption": "关联流程",
+                    "type": "number"
+                },
+                {
+                    "caption": "关联流程序号",
+                    "type": "number"
+                },
+                {
+                    "caption": "参与返利人数",
+                    "type": "number"
+                },
+                {
+                    "caption": "预计返利金额(元)",
+                    "type": "number"
+                },
+                {
+                    "caption": "已取消返利金额(元)",
+                    "type": "number"
+                },
+                {
+                    "caption": "返利到账金额(元)",
+                    "type": "number"
+                },
+                {
+                    "caption": "参与商品数(SKU)",
+                    "type": "number"
+                },
+                {
+                    "caption": "参与商家数",
+                    "type": "number"
+                }
+            ]
+        ]
+    },
+    "1481684524556": {
+        "modelName": [
+            "ads2_new_rebate_order_overview"
+        ],
+        "date_picker": true,
+        "order": [],
+        "platform": false,
+        "router": "/rebate/platformAll_One",
+        "filter": "rebate_platformAll_01_f",
+        "params": "rebate_platformAll_01",
+        "fixedParams": "rebate_platformAll_01_fixed",
+        "level_select": true,
+        "level_select_url": "/api/categories",
+        "level_select_name": "category_id",
+        "global_platform": {
+            "show": true,
+            "key": "plan_type",
+            "name": "平台切换",
+            "list": [
+                {
+                    "key": "all",
+                    "name": "汇总",
+                    "url": "/#!/rebate/platformAll"
+                },
+                {
+                    "key": "1",
+                    "name": "平台基础返利",
+                    "url": "/#!/rebate/platformBase?plan_type=1"
+                },
+                {
+                    "key": "2",
+                    "name": "平台促销返利",
+                    "url": "/#!/rebate/promotion?plan_type=2"
+                },
+                {
+                    "key": "6",
+                    "name": "单项单级返利",
+                    "url": "/#!/rebate/singleStage?plan_type=6"
+                },
+                {
+                    "key": "5",
+                    "name": "邀请商户分析返利",
+                    "url": "/#!/rebate/invitation?plan_type=5"
+                }
+            ]
+        },
+        "rows": [
+            [
+                "Blank",
+                "unique_is_rebate_order_num",
+                "is_rebate_fee",
+                "unique_is_rebate_shop_num",
+                "unique_is_rebate_user_num",
+                "is_rebate_merchandise_num",
+                "cancel_is_rebate_order_num"
+            ],
+            [
+                "expect_rebate_amount",
+                "expect_rebate_user_num",
+                "cancel_rebate_amount",
+                "unique_is_over_rebate_order_num",
+                "is_over_rebate_order_amount"
+            ],
+            [
+                "Blank",
+                "unique_is_rebate_back_merchandise_num",
+                "is_rebate_back_merchandise_num",
+                "unique_is_rebate_back_user_num",
+                "is_rebate_back_merchandise_amount"
+            ]
+        ],
+        "cols": [
+            [
+                {
+                    "caption": "",
+                    "type": "string"
+                },
+                {
+                    "caption": "订单数",
+                    "type": "number"
+                },
+                {
+                    "caption": "订单总金额",
+                    "type": "number"
+                },
+                {
+                    "caption": "商家数",
+                    "type": "number"
+                },
+                {
+                    "caption": "下单用户数",
+                    "type": "number"
+                },
+                {
+                    "caption": "商品件数",
+                    "type": "number"
+                },
+                {
+                    "caption": "取消订单数",
+                    "type": "number"
+                }
+            ],
+            [
+                {
+                    "caption": "预计返利金额",
+                    "type": "string"
+                },
+                {
+                    "caption": "预计获利人次",
+                    "type": "number"
+                },
+                {
+                    "caption": "已取消返利金额",
+                    "type": "number"
+                },
+                {
+                    "caption": "返利到账订单数",
+                    "type": "number"
+                },
+                {
+                    "caption": "返利到账金额",
+                    "type": "number"
+                }
+            ],
+            [
+                {
+                    "caption": "",
+                    "type": "string"
+                },
+                {
+                    "caption": "退货商品数",
+                    "type": "number"
+                },
+                {
+                    "caption": "退货商品件数",
+                    "type": "number"
+                },
+                {
+                    "caption": "退货用户数",
+                    "type": "number"
+                },
+                {
+                    "caption": "退货商品总金额",
+                    "type": "number"
+                }
+            ]
+        ]
+    },
+    "1481706584277": {
+        "modelName": [
+            "ads2_new_rebate_order_trend"
+        ],
+        "date_picker": true,
+        "order": [
+            "-date"
+        ],
+        "platform": false,
+        "router": "/rebate/platformAll_Two",
+        "filter": "rebate_platformAll_02_f",
+        "params": "rebate_platformAll_02",
+        "fixedParams": "rebate_platformAll_02_fixed",
+        "level_select": true,
+        "level_select_url": "/api/categories",
+        "level_select_name": "category_id",
+        "filter_select": [
+            {
+                "title": "指标选择",
+                "filter_key": "filter_key",
+                "groups": [
+                    {
+                        "key": "unique_is_over_rebate_order_num",
+                        "value": "订单数"
+                    },
+                    {
+                        "key": "is_rebate_fee",
+                        "value": "订单总金额"
+                    },
+                    {
+                        "key": "is_rebate_merchandise_num",
+                        "value": "商品件数"
+                    },
+                    {
+                        "key": "cancel_is_rebate_order_num",
+                        "value": "取消订单数"
+                    }
+                ]
+            }
+        ]
+    },
+    "1481767267123": {
+        "modelName": [
+            "ads2_new_rebate_order_trend",
+            "ads2_new_rebate_order_level_sum"
+        ],
+        "date_picker": true,
+        "order": [],
+        "platform": false,
+        "router": "/rebate/platformAll_Three",
+        "filter": "rebate_platformAll_03_f",
+        "params": "rebate_platformAll_03",
+        "fixedParams": "rebate_platformAll_02_fixed",
+        "level_select": true,
+        "level_select_url": "/api/categories",
+        "level_select_name": "category_id",
+        "filter_select": [
+            {
+                "title": "指标选择",
+                "filter_key": "filter_key",
+                "groups": [
+                    {
+                        "key": "is_rebate_merchandise_num",
+                        "value": "商品件数"
+                    },
+                    {
+                        "key": "is_rebate_item_fee",
+                        "value": "商品总金额"
+                    },
+                    {
+                        "key": "unique_is_rebate_order_num",
+                        "value": "返利订单数"
+                    },
+                    {
+                        "key": "is_over_rebate_order_amount",
+                        "value": "返利到账金额"
+                    }
+                ]
+            }
+        ]
+    },
+    "1481784389540": {
+        "modelName": [
+            "ads2_new_rebate_order_plan_info",
+            "TypeFlow"
+        ],
+        "date_picker": true,
+        "order": [],
+        "platform": false,
+        "router": "/rebate/platformAll_Four",
+        "excel_export": true,
+        "flexible_btn": [
+            {
+                "content": "<a href='javascript:void(0)'>导出</a>",
+                "preMethods": [
+                    "excel_export"
+                ]
+            }
+        ],
+        "paging": [
+            true
+        ],
+        "control_table_col": true,
+        "filter": "rebate_platformAll_04_f",
+        "params": "rebate_platformAll_04",
+        "secondParams": "rebate_platformAll_04_second",
+        "selectFilter": "rebate_platformAll_04_selectFilter",
+        "rows": [
+            [
+                "Number",
+                "plan_name",
+                "plan_type_Translate",
+                "rebate_type_Translate",
+                "rebate_level",
+                "unique_is_rebate_shop_num",
+                "unique_is_rebate_merchandise_num",
+                "unique_is_rebate_order_num",
+                "unique_expect_rebate_user_num",
+                "expect_rebate_amount",
+                "is_over_rebate_order_amount"
+            ]
+        ],
+        "cols": [
+            [
+                {
+                    "caption": "序号",
+                    "type": "number"
+                },
+                {
+                    "caption": "返利计划名称",
+                    "type": "string"
+                },
+                {
+                    "caption": "使用方",
+                    "type": "string"
+                },
+                {
+                    "caption": "关联流程",
+                    "type": "string"
+                },
+                {
+                    "caption": "层级",
+                    "type": "string"
+                },
+                {
+                    "caption": "参与商家数",
+                    "type": "number"
+                },
+                {
+                    "caption": "参与商品数",
+                    "type": "number"
+                },
+                {
+                    "caption": "新增订单数",
+                    "type": "number"
+                },
+                {
+                    "caption": "获利用户数",
+                    "type": "number"
+                },
+                {
+                    "caption": "预计返利金额",
+                    "type": "number"
+                },
+                {
+                    "caption": "返利到账金额",
+                    "type": "number"
+                }
+            ]
+        ]
+    },
+    "1481856183500": {
+        "modelName": [
+            "ads2_new_rebate_order_trend"
+        ],
+        "date_picker": true,
+        "order": [],
+        "platform": false,
+        "router": "/rebate/platformBase_One",
+        "filter": "rebate_platformBase_01_f",
+        "params": "rebate_platformBase_01",
+        "global_platform": {
+            "show": true,
+            "key": "plan_type",
+            "name": "平台切换",
+            "list": [
+                {
+                    "key": "all",
+                    "name": "汇总",
+                    "url": "/#!/rebate/platformAll"
+                },
+                {
+                    "key": "1",
+                    "name": "平台基础返利",
+                    "url": "/#!/rebate/platformBase?plan_type=1"
+                },
+                {
+                    "key": "2",
+                    "name": "平台促销返利",
+                    "url": "/#!/rebate/promotion?plan_type=2"
+                },
+                {
+                    "key": "6",
+                    "name": "单项单级返利",
+                    "url": "/#!/rebate/singleStage?plan_type=6"
+                },
+                {
+                    "key": "5",
+                    "name": "邀请商户分析返利",
+                    "url": "/#!/rebate/invitation?plan_type=5"
+                }
+            ]
+        },
+        "rows": [
+            [
+                "unique_plan_id_num",
+                "unique_is_over_rebate_order_num",
+                "cancel_is_rebate_order_num",
+                "unique_is_over_rebate_order_num",
+                "unique_is_rebate_shop_num",
+                "unique_is_rebate_merchandise_num",
+                "unique_is_rebate_back_merchandise_num",
+                "is_rebate_back_merchandise_num"
+            ],
+            [
+                "unique_is_rebate_user_num",
+                "expect_rebate_user_num",
+                "expect_rebate_amount",
+                "cancel_rebate_amount",
+                "is_rebate_fee",
+                "is_over_rebate_order_amount",
+                "unique_is_rebate_back_user_num",
+                "is_rebate_back_merchandise_amount"
+            ]
+        ],
+        "cols": [
+            [
+                {
+                    "caption": "返利计划数",
+                    "type": "number"
+                },
+                {
+                    "caption": "订单数",
+                    "type": "number"
+                },
+                {
+                    "caption": "取消订单数",
+                    "type": "number"
+                },
+                {
+                    "caption": "返利到账订单数",
+                    "type": "number"
+                },
+                {
+                    "caption": "参与商户数",
+                    "type": "number"
+                },
+                {
+                    "caption": "参与商品数",
+                    "type": "number"
+                },
+                {
+                    "caption": "退货商品数",
+                    "type": "number"
+                },
+                {
+                    "caption": "退货商品件数",
+                    "type": "number"
+                }
+            ],
+            [
+                {
+                    "caption": "下单用户数",
+                    "type": "string"
+                },
+                {
+                    "caption": "预计获利人次",
+                    "type": "number"
+                },
+                {
+                    "caption": "预计返利金额",
+                    "type": "number"
+                },
+                {
+                    "caption": "已取消返利金额",
+                    "type": "number"
+                },
+                {
+                    "caption": "返利订单总金额",
+                    "type": "number"
+                },
+                {
+                    "caption": "返利到账金额",
+                    "type": "number"
+                },
+                {
+                    "caption": "退货用户数",
+                    "type": "number"
+                },
+                {
+                    "caption": "退货商品总金额",
+                    "type": "number"
+                }
+            ]
+        ]
+    },
+    "1481858831227": {
+        "modelName": [
+            "ads2_new_rebate_order_muiltiple_trend"
+        ],
+        "date_picker": true,
+        "order": [],
+        "platform": false,
+        "router": "/rebate/platformBase_Two",
+        "filter": "rebate_platformBase_02_f",
+        "params": "rebate_platformBase_02",
+        "fixedParams": "rebate_platformAll_02_fixed",
+        "level_select": true,
+        "level_select_url": "/api/categories",
+        "level_select_name": "category_id",
+        "filter_select": [
+            {
+                "title": "指标选择",
+                "filter_key": "filter_key",
+                "groups": [
+                    {
+                        "key": "unique_is_rebate_order_num",
+                        "value": "订单数"
+                    },
+                    {
+                        "key": "is_over_rebate_order_amount",
+                        "value": "订单总金额"
+                    },
+                    {
+                        "key": "is_rebate_merchandise_num",
+                        "value": "商品件数"
+                    },
+                    {
+                        "key": "cancel_is_rebate_order_num",
+                        "value": "取消订单数"
+                    }
+                ]
+            }
+        ]
+    },
+    "1481868861749": {
+        "modelName": [
+            "ads2_new_rebate_order_plantype_level_sum"
+        ],
+        "date_picker": true,
+        "order": [],
+        "platform": false,
+        "router": "/rebate/platformBase_Three",
+        "filter": "rebate_platformBase_03_f",
+        "params": "rebate_platformBase_03",
+        "fixedParams": "rebate_platformAll_02_fixed",
+        "level_select": true,
+        "level_select_url": "/api/categories",
+        "level_select_name": "category_id",
+        "filter_select": [
+            {
+                "title": "指标选择",
+                "filter_key": "filter_key",
+                "groups": [
+                    {
+                        "key": "is_rebate_merchandise_num",
+                        "value": "商品件数"
+                    },
+                    {
+                        "key": "is_rebate_item_fee",
+                        "value": "商品总金额"
+                    },
+                    {
+                        "key": "unique_is_over_rebate_order_num",
+                        "value": "返利订单数"
+                    },
+                    {
+                        "key": "is_over_rebate_order_amount",
+                        "value": "返利到账金额"
+                    }
+                ]
+            }
+        ]
+    },
+    "1482113885605": {
+        "modelName": [
+            "ads2_new_rebate_order_muiltiple_trend"
+        ],
+        "date_picker": true,
+        "order": [],
+        "platform": false,
+        "router": "/rebate/single_Three",
+        "names": "返利类型分布",
+        "filter": "rebate_single_03_f",
+        "params": "rebate_single_03",
+        "fixedParams": "rebate_platformAll_02_fixed",
+        "level_select": true,
+        "level_select_url": "/api/categories",
+        "level_select_name": "category_id",
+        "filter_select": [
+            {
+                "title": "指标选择",
+                "filter_key": "filter_key",
+                "groups": [
+                    {
+                        "key": "is_rebate_merchandise_num",
+                        "value": "商品件数"
+                    },
+                    {
+                        "key": "is_rebate_item_fee",
+                        "value": "商品总金额"
+                    },
+                    {
+                        "key": "unique_is_over_rebate_order_num",
+                        "value": "返利订单数"
+                    },
+                    {
+                        "key": "is_over_rebate_order_amount",
+                        "value": "返利到账金额"
+                    }
+                ]
+            }
+        ]
+    },
+    "1482117244953": {
+        "modelName": [
+            "ads2_new_rebate_order_muiltiple_trend"
+        ],
+        "date_picker": true,
+        "order": [],
+        "platform": false,
+        "router": "/rebate/invitation_Two",
+        "names": "返利订单趋势",
+        "filter": "rebate_invitation_01_f",
+        "params": "rebate_invitation_01",
+        "fixedParams": "rebate_platformAll_02_fixed",
+        "level_select": true,
+        "level_select_url": "/api/categories",
+        "level_select_name": "category_id",
+        "filter_select": [
+            {
+                "title": "指标选择",
+                "filter_key": "filter_key",
+                "groups": [
+                    {
+                        "key": "unique_is_rebate_order_num",
+                        "value": "订单数"
+                    },
+                    {
+                        "key": "is_over_rebate_order_amount",
+                        "value": "订单总金额"
+                    },
+                    {
+                        "key": "is_rebate_merchandise_num",
+                        "value": "商品件数"
+                    },
+                    {
+                        "key": "cancel_is_rebate_order_num",
+                        "value": "取消订单数"
+                    }
+                ]
+            }
+        ]
+    },
+    "1482118634978": {
+        "modelName": [
+            "ads2_new_rebate_order_muiltiple_trend"
+        ],
+        "date_picker": true,
+        "order": [],
+        "platform": false,
+        "router": "/rebate/invitation_Three",
+        "names": "返利层级分布",
+        "filter": "rebate_invitation_02_f",
+        "params": "rebate_invitation_02",
+        "fixedParams": "rebate_platformAll_02_fixed",
+        "level_select": true,
+        "level_select_url": "/api/categories",
+        "level_select_name": "category_id",
+        "filter_select": [
+            {
+                "title": "指标选择",
+                "filter_key": "filter_key",
+                "groups": [
+                    {
+                        "key": "is_rebate_merchandise_num",
+                        "value": "商品件数"
+                    },
+                    {
+                        "key": "is_rebate_item_fee",
+                        "value": "商品总金额"
+                    },
+                    {
+                        "key": "unique_is_over_rebate_order_num",
+                        "value": "返利订单数"
+                    },
+                    {
+                        "key": "is_over_rebate_order_amount",
+                        "value": "返利到账金额"
+                    }
+                ]
+            }
+        ]
+    },
+    "1482126654650": {
+        "modelName": [
+            "ads2_new_rebate_invite_overview"
+        ],
+        "date_picker": true,
+        "order": [],
+        "platform": false,
+        "router": "/rebate/regist_One",
+        "names": "邀请好友注册总览",
+        "filter": "rebate_regist_01_f",
+        "params": "rebate_regist_01",
+        "sum": [
+            "unique_rebate_invite_friend_planid_num",
+            "unique_rebate_invite_friend_user_num",
+            "unique_rebate_invite_friend_success_user_num",
+            "is_over_rebate_invite_friend_amount",
+            "all_register_user_num"
+        ],
+        "paging": [
+            true
+        ],
+        "rows": [
+            [
+                "unique_rebate_invite_friend_planid_num",
+                "unique_rebate_invite_friend_user_num",
+                "unique_rebate_invite_friend_success_user_num",
+                "regist_lv",
+                "is_over_rebate_invite_friend_amount"
+            ]
+        ],
+        "cols": [
+            [
+                {
+                    "caption": "返利计划数",
+                    "type": "number"
+                },
+                {
+                    "caption": "参与用户数",
+                    "type": "number"
+                },
+                {
+                    "caption": "注册成功数",
+                    "type": "number"
+                },
+                {
+                    "caption": "注册成功占比",
+                    "type": "number"
+                },
+                {
+                    "caption": "返利到账金额",
+                    "type": "number"
+                }
+            ]
+        ]
+    },
+    "1482127890980": {
+        "modelName": [
+            "ads2_new_rebate_invite_overview"
+        ],
+        "date_picker": true,
+        "order": [],
+        "platform": false,
+        "router": "/rebate/regist_Two",
+        "names": "邀请商户入驻总览",
+        "filter": "rebate_regist_02_f",
+        "params": "rebate_regist_02",
+        "sum": [
+            "unique_rebate_invite_shop_planid_num",
+            "unique_rebate_invite_shop_num",
+            "unique_rebate_invite_shop_success_num",
+            "is_over_rebate_invite_shop_amount",
+            "all_enter_shop_num"
+        ],
+        "paging": [
+            true
+        ],
+        "rows": [
+            [
+                "unique_rebate_invite_shop_planid_num",
+                "unique_rebate_invite_shop_num",
+                "unique_rebate_invite_shop_success_num",
+                "regist_lv",
+                "is_over_rebate_invite_shop_amount"
+            ]
+        ],
+        "cols": [
+            [
+                {
+                    "caption": "返利计划数",
+                    "type": "number"
+                },
+                {
+                    "caption": "参与用户数",
+                    "type": "number"
+                },
+                {
+                    "caption": "入驻成功数",
+                    "type": "number"
+                },
+                {
+                    "caption": "入驻成功占比",
+                    "type": "number"
+                },
+                {
+                    "caption": "返利到账金额",
+                    "type": "number"
+                }
+            ]
+        ]
+    },
+    "1482128543717": {
+        "modelName": [
+            "ads2_new_rebate_invite_trend"
+        ],
+        "date_picker": true,
+        "order": [],
+        "platform": false,
+        "router": "/rebate/regist_Three",
+        "names": "邀请趋势",
+        "filter": "rebate_regist_03_f",
+        "params": "rebate_regist_03",
+        "filter_select": [
+            {
+                "title": "指标选择",
+                "filter_key": "filter_key",
+                "groups": [
+                    {
+                        "key": "unique_rebate_invite_num",
+                        "value": "邀请成功数"
+                    },
+                    {
+                        "key": "is_over_rebate_invite_amount",
+                        "value": "返利到账金额"
+                    }
+                ]
+            }
+        ]
+    },
+    "1482135694948": {
+        "modelName": [
+            "ads2_new_rebate_invite_plan_info",
+            "TypeFlow"
+        ],
+        "date_picker": true,
+        "order": [],
+        "platform": false,
+        "router": "/rebate/regist_Four",
+        "names": "邀请返利汇总",
+        "excel_export": true,
+        "flexible_btn": [
+            {
+                "content": "<a href='javascript:void(0)'>导出</a>",
+                "preMethods": [
+                    "excel_export"
+                ]
+            }
+        ],
+        "paging": [
+            true
+        ],
+        "filter": "rebate_platformAll_04_f",
+        "params": "rebate_platformAll_04",
+        "secondParams": "rebate_platformAll_04_second",
+        "selectFilter": "rebate_platformAll_04_selectFilter",
+        "rows": [
+            [
+                "Number",
+                "plan_name",
+                "plan_type_Translate",
+                "validscope_time",
+                "rebate_type_Translate",
+                "unique_rebate_benefit_user_num",
+                "unique_rebate_invite_success_user_num",
+                "is_over_rebate_invite_amount"
+            ]
+        ],
+        "cols": [
+            [
+                {
+                    "caption": "序号",
+                    "type": "number"
+                },
+                {
+                    "caption": "返利计划名称",
+                    "type": "string"
+                },
+                {
+                    "caption": "使用方",
+                    "type": "string"
+                },
+                {
+                    "caption": "有效期",
+                    "type": "string"
+                },
+                {
+                    "caption": "关联流程",
+                    "type": "string"
+                },
+                {
+                    "caption": "参与用户数",
+                    "type": "number"
+                },
+                {
+                    "caption": "用户注册成功数",
+                    "type": "number",
+                    "help": "(商户入驻成功数)"
+                },
+                {
+                    "caption": "返利到账金额",
+                    "type": "number"
+                }
+            ]
+        ]
+    },
+    "1482211894279": {
+        "modelName": [
+            "ads2_new_rebate_order_trend"
+        ],
+        "date_picker": true,
+        "order": [],
+        "platform": false,
+        "router": "/rebate/shop_One",
+        "names": "商家设置返利总览",
+        "filter": "rebate_shop_01_f",
+        "params": "rebate_shop_01",
+        "rows": [
+            [
+                "Blank",
+                "unique_is_rebate_order_num",
+                "is_rebate_fee",
+                "unique_is_rebate_shop_num",
+                "unique_is_rebate_user_num",
+                "is_rebate_merchandise_num",
+                "cancel_is_rebate_order_num"
+            ],
+            [
+                "expect_rebate_amount",
+                "expect_rebate_user_num",
+                "cancel_rebate_amount",
+                "unique_is_over_rebate_order_num",
+                "is_over_rebate_order_amount",
+                "plat_rebate_order_amount"
+            ],
+            [
+                "Blank",
+                "unique_is_rebate_back_merchandise_num",
+                "is_rebate_back_merchandise_num",
+                "unique_is_rebate_back_user_num",
+                "is_rebate_back_merchandise_amount"
+            ]
+        ],
+        "cols": [
+            [
+                {
+                    "caption": "",
+                    "type": "string"
+                },
+                {
+                    "caption": "订单数",
+                    "type": "number"
+                },
+                {
+                    "caption": "订单总金额",
+                    "type": "number"
+                },
+                {
+                    "caption": "商家数",
+                    "type": "number"
+                },
+                {
+                    "caption": "购买用户数",
+                    "type": "number"
+                },
+                {
+                    "caption": "商品件数",
+                    "type": "number"
+                },
+                {
+                    "caption": "取消订单数",
+                    "type": "number"
+                }
+            ],
+            [
+                {
+                    "caption": "预计返利金额",
+                    "type": "string"
+                },
+                {
+                    "caption": "预计获利人次",
+                    "type": "number"
+                },
+                {
+                    "caption": "已取消返利金额",
+                    "type": "number"
+                },
+                {
+                    "caption": "返利到账订单数",
+                    "type": "number"
+                },
+                {
+                    "caption": "返利到账金额",
+                    "type": "number"
+                },
+                {
+                    "caption": "平台到账金额",
+                    "type": "number"
+                }
+            ],
+            [
+                {
+                    "caption": "",
+                    "type": "string"
+                },
+                {
+                    "caption": "退货商品数",
+                    "type": "number"
+                },
+                {
+                    "caption": "退货商品件数",
+                    "type": "number"
+                },
+                {
+                    "caption": "退货用户数",
+                    "type": "number"
+                },
+                {
+                    "caption": "退货商品总金额",
+                    "type": "number"
+                }
+            ]
+        ]
+    },
+    "1482214982543": {
+        "modelName": [
+            "ads2_new_rebate_order_muiltiple_trend",
+            "TypeFlow"
+        ],
+        "date_picker": true,
+        "order": [],
+        "platform": false,
+        "router": "/rebate/shop_Two",
+        "names": "返利订单趋势",
+        "filter": "rebate_shop_02_f",
+        "params": "rebate_shop_02",
+        "secondParams": "rebate_shop_02_second",
+        "fixedParams": "rebate_platformAll_02_fixed",
+        "level_select": true,
+        "level_select_url": "/api/categories",
+        "level_select_name": "category_id",
+        "filter_select": [
+            {
+                "title": "指标选择",
+                "filter_key": "filter_key",
+                "groups": [
+                    {
+                        "key": "unique_is_over_rebate_order_num",
+                        "value": "订单数"
+                    },
+                    {
+                        "key": "is_rebate_fee",
+                        "value": "订单总金额"
+                    },
+                    {
+                        "key": "is_rebate_merchandise_num",
+                        "value": "商品件数"
+                    },
+                    {
+                        "key": "cancel_is_rebate_order_num",
+                        "value": "取消订单数"
+                    }
+                ]
+            }
+        ]
+    },
+    "1482222517054": {
+        "modelName": [
+            "ads2_new_rebate_order_plantype_level_sum"
+        ],
+        "date_picker": true,
+        "order": [],
+        "platform": false,
+        "router": "/rebate/shop_Three",
+        "names": "返利层级分布",
+        "filter": "rebate_platformBase_03_f",
+        "params": "rebate_shop_03",
+        "fixedParams": "rebate_platformAll_02_fixed",
+        "level_select": true,
+        "level_select_url": "/api/categories",
+        "level_select_name": "category_id",
+        "filter_select": [
+            {
+                "title": "指标选择",
+                "filter_key": "filter_key",
+                "groups": [
+                    {
+                        "key": "is_rebate_merchandise_num",
+                        "value": "商品件数"
+                    },
+                    {
+                        "key": "is_rebate_item_fee",
+                        "value": "商品总金额"
+                    },
+                    {
+                        "key": "unique_is_rebate_order_num",
+                        "value": "返利订单数"
+                    },
+                    {
+                        "key": "is_over_rebate_order_amount",
+                        "value": "返利到账金额"
+                    }
+                ]
+            }
+        ]
+    },
+    "1482299549508": {
+        "modelName": [
+            "ads2_new_rebate_order_shop_info"
+        ],
+        "date_picker": true,
+        "order": [
+            "-unique_is_rebate_order_num"
+        ],
+        "platform": false,
+        "router": "/rebate/shop_Four",
+        "names": "商家返利TOP50",
+        "filter": "rebate_shop_04_f",
+        "params": "rebate_shop_04",
+        "paging": [
+            true
+        ],
+        "rows": [
+            [
+                "Number",
+                "shop_name",
+                "unique_plan_id_num",
+                "unique_is_rebate_merchandise_num",
+                "unique_is_rebate_user_num",
+                "unique_is_rebate_order_num",
+                "is_rebate_fee",
+                "expect_rebate_amount",
+                "is_over_rebate_order_amount",
+                "平台到账金额"
+            ]
+        ],
+        "cols": [
+            [
+                {
+                    "caption": "排名",
+                    "type": "number"
+                },
+                {
+                    "caption": "商家名称",
+                    "type": "number"
+                },
+                {
+                    "caption": "计划数",
+                    "type": "number"
+                },
+                {
+                    "caption": "参与商品数",
+                    "type": "number"
+                },
+                {
+                    "caption": "购买用户数",
+                    "type": "number"
+                },
+                {
+                    "caption": "新增订单数/订单总数",
+                    "type": "number"
+                },
+                {
+                    "caption": "新增订单金额/订单总金额",
+                    "type": "number"
+                },
+                {
+                    "caption": "预计返利金额",
+                    "type": "number"
+                },
+                {
+                    "caption": "返利到账金额",
+                    "type": "number"
+                },
+                {
+                    "caption": "平台到账金额",
+                    "type": "number"
+                }
+            ]
+        ]
+    },
+    "1482301660558": {
+        "modelName": [
+            "ads2_new_rebate_order_shop_info",
+            "TypeFlows"
+        ],
+        "date_picker": true,
+        "order": [],
+        "platform": false,
+        "router": "/rebate/shop_Five",
+        "names": "商家返利计划TOP50",
+        "control_table_col": true,
+        "paging": [
+            true
+        ],
+        "secondParams" : "rebate_shopPlan_01_second",
+        "flexible_btn": [
+            {
+                "content": "<a href='#!/rebate/shopPlan'>更多</a>",
+                "preMethods": [],
+                "customMethods": ""
+            }
+        ],
+        "filter": "rebate_shop_05_f",
+        "params": "rebate_shop_05",
+        "rows": [
+            [
+                "Number",
+                "plan_name",
+                "shop_name",
+                "rebate_type",
+                "rebate_level",
+                "unique_is_rebate_user_num",
+                "unique_is_rebate_order_num",
+                "expect_rebate_amount",
+                "is_over_rebate_order_amount",
+                "Return_lv"
+            ]
+        ],
+        "cols": [
+            [
+                {
+                    "caption": "序号",
+                    "type": "number"
+                },
+                {
+                    "caption": "返利计划名称",
+                    "type": "string"
+                },
+                {
+                    "caption": "商家名称",
+                    "type": "string"
+                },
+                {
+                    "caption": "关联流程",
+                    "type": "string"
+                },
+                {
+                    "caption": "层级",
+                    "type": "string"
+                },
+                {
+                    "caption": "参与用户数",
+                    "type": "number"
+                },
+                {
+                    "caption": "新增订单数",
+                    "type": "number"
+                },
+                {
+                    "caption": "预计返利金额",
+                    "type": "number"
+                },
+                {
+                    "caption": "返利到账金额",
+                    "type": "number"
+                },
+                {
+                    "caption": "退货率",
+                    "type": "string",
+                    "help": "统计周期内，退货商品件数/销售商品总件数，统计时间为订单生成时间"
+                }
+            ]
+        ]
+    },
+    "1482305940029": {
+        "modelName": [
+            "ads2_new_rebate_order_shop_info",
+            "TypeFlow"
+        ],
+        "date_picker": true,
+        
+        "platform": false,
+        "router": "/rebate/shopPlan_One",
+        "names": "商家设置返利",
+        "excel_export": true,
+        "search" : {
+            "show" : true,
+            "title" : "请输入商家名称或ID",
+            "key" : "search_key"
+        },
+        "flexible_btn": [
+            {
+                "content": "<a href='javascript:void(0)'>导出</a>",
+                "preMethods": [
+                    "excel_export"
+                ]
+            }
+        ],
+        "selectFilter" : "rebate_shopPlan_SelectFilter",
+        "filter": "rebate_shop_05_f",
+        "params": "rebate_shopPlan_01",
+        "secondParams" : "rebate_shopPlan_01_second",
+        "control_table_col": true,
+        "paging": [
+            true,false
+        ],
+        "rows": [
+            [
+                "Number",
+                "plan_name",
+                "shop_name",
+                "rebate_type",
+                "rebate_level",
+                "unique_is_rebate_user_num",
+                "unique_is_rebate_order_num",
+                "expect_rebate_amount",
+                "is_over_rebate_order_amount",
+                "Return_lv"
+            ]
+        ],
+        "cols": [
+            [
+                {
+                    "caption": "序号",
+                    "type": "number"
+                },
+                {
+                    "caption": "返利计划名称",
+                    "type": "string"
+                },
+                {
+                    "caption": "商家名称",
+                    "type": "string"
+                },
+                {
+                    "caption": "关联流程",
+                    "type": "string"
+                },
+                {
+                    "caption": "层级",
+                    "type": "string"
+                },
+                {
+                    "caption": "参与用户数",
+                    "type": "number"
+                },
+                {
+                    "caption": "新增订单数",
+                    "type": "number"
+                },
+                {
+                    "caption": "预计返利金额",
+                    "type": "number"
+                },
+                {
+                    "caption": "返利到账金额",
+                    "type": "number"
+                },
+                {
+                    "caption": "退货率",
+                    "type": "string",
+                    "help": "统计周期内，退货商品件数/销售商品总件数，统计时间为订单生成时间"
+                }
+            ]
+        ]
+    }
+}

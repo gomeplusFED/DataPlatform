@@ -3,10 +3,11 @@
  * @date 20151128
  * @fileoverview 全站统一配置
  */
+const path = require("path"),
+      fs   = require("fs");
 
-var obj = {},
-    filePath = "./controllers/path",
-    fs = require("fs"),
+const obj = {},
+    filePath = path.join(__dirname , "../controllers/path"),
     files = fs.readdirSync(filePath);
 for (var key of files) {
     if (key.indexOf(".js") > -1) {
@@ -14,7 +15,7 @@ for (var key of files) {
     }
 }
 
-const ConfigAdd = require("./config_add");
+const ConfigAdd = require("./config_add.json");
 const Config = {
     siteName: '美信数据平台',
     pageTitle: '',
@@ -27,15 +28,15 @@ const Config = {
             href: "#",
             path: [{
                 name: "帐号列表",
-                path: "/user",
+                path: "/user/account",
                 display: true
             }, {
                 name: "角色列表",
-                path: "/role",
+                path: "/user/role",
                 display: true
             }, {
                 name: "系统日志",
-                path: "/log",
+                path: "/user/log",
                 display: true
             }]
         },
@@ -174,10 +175,16 @@ const Config = {
 
                 obj.achievements.product(),
                 obj.achievements.productSale(),
-                obj.achievements.trade(),
+                
                 obj.achievements.tradePanel(),
+                obj.achievements.trade(),
+                
                 obj.achievements.vshop(),
                 obj.achievements.vtrade()
+            ],
+            routers: [
+                obj.achievements.pay(),
+                obj.achievements.order()
             ]
         },
         "14": {
@@ -193,21 +200,21 @@ const Config = {
                 obj.marketingAnalysis.operating()
             ]
         },
-        "15": {
-            name: "平台返利汇总",
-            display: true,
-            className: "fa fa-bar-chart-o fa-fw fa-fw",
-            href: "#",
-            path: [
-                obj.platformRebate.platformOrder(),
-                obj.platformRebate.individualEvent(),
-                obj.platformRebate.platformPromotions(),
-                obj.platformRebate.platformBasis(),
-                obj.platformRebate.inviteBusiness(),
-                obj.platformRebate.inviteRegisterAndEnter()
-            ],
-            routers: []
-        },
+        // "15": {
+        //     name: "平台返利汇总",
+        //     display: true,
+        //     className: "fa fa-bar-chart-o fa-fw fa-fw",
+        //     href: "#",
+        //     path: [
+        //         obj.platformRebate.platformOrder(),
+        //         obj.platformRebate.individualEvent(),
+        //         obj.platformRebate.platformPromotions(),
+        //         obj.platformRebate.platformBasis(),
+        //         obj.platformRebate.inviteBusiness(),
+        //         obj.platformRebate.inviteRegisterAndEnter()
+        //     ],
+        //     routers: []
+        // },
         "16": {
             name: "商家返利汇总",
             display: true,
@@ -296,7 +303,29 @@ const Config = {
             className: "fa  fa-laptop fa-fw",
             href: "#",
             path: [
-                obj.table.table()
+                obj.table.table(),
+                obj.table.data_table_day(),
+                obj.table.data_table_week(),
+                obj.table.data_table_month(),
+                obj.table.rebate_total()
+            ],
+            routers : [
+                obj.table.rebate_total_new(),
+                obj.table.data_table_day_order(),
+                obj.table.data_table_week_order(),
+                obj.table.data_table_month_order(),
+                obj.table.data_table_day_user(),
+                obj.table.data_table_week_user(),
+                obj.table.data_table_month_user(),
+                obj.table.data_table_day_shop(),
+                obj.table.data_table_week_shop(),
+                obj.table.data_table_month_shop(),
+                obj.table.data_table_day_vshop(),
+                obj.table.data_table_week_vshop(),
+                obj.table.data_table_month_vshop(),
+                obj.table.data_table_day_dataRebate(),
+                obj.table.data_table_week_dataRebate(),
+                obj.table.data_table_month_dataRebate()
             ]
         }
     }

@@ -1,0 +1,291 @@
+{
+    "15": {
+        "name": "返利分析",
+        "display": true,
+        "className": "fa  fa-laptop fa-fw",
+        "filename": "rebate",
+        "href": "#",
+        "path": [
+            {
+                "name": "返利汇总",
+                "path": "/rebate/all",
+                "display": true,
+                "defaultData": [
+                    {
+                        "type": "table",
+                        "title": "返利统计",
+                        "query_api": "/rebate/total_One",
+                        "mark": 1481596804809
+                    },
+                    {
+                        "type": "table",
+                        "title": "返利总览",
+                        "query_api": "/rebate/total_two",
+                        "mark": 1481600577337
+                    },
+                    {
+                        "type": "chart",
+                        "title": "返利订单趋势",
+                        "query_api": "/rebate/total_Three",
+                        "mark": 1481609368254
+                    },
+                    {
+                        "type": "chart",
+                        "title": "返利占比",
+                        "query_api": "/rebate/total_Four",
+                        "mark": 1481614501111
+                    },
+                    {
+                        "type": "table",
+                        "title": "返利功能详情",
+                        "query_api": "/rebate/total_Five",
+                        "mark": 1481617501820
+                    }
+                ]
+            },
+            {
+                "name": "平台订单返利汇总",
+                "path": "/rebate/platformAll",
+                "display": true,
+                "defaultData": [
+                    {
+                        "type": "table",
+                        "title": "返利订单总览",
+                        "query_api": "/rebate/platformAll_One",
+                        "mark": 1481684524556
+                    },
+                    {
+                        "type": "chart",
+                        "title": "返利订单趋势",
+                        "query_api": "/rebate/platformAll_Two",
+                        "mark": 1481706584277
+                    },
+                    {
+                        "type": "chart",
+                        "title": "返利层级分布",
+                        "query_api": "/rebate/platformAll_Three",
+                        "mark": 1481767267123
+                    },
+                    {
+                        "type": "table",
+                        "title": "返利计划汇总",
+                        "query_api": "/rebate/platformAll_Four",
+                        "mark": 1481784389540
+                    }
+                ]
+            },
+            {
+                "name": "邀请注册/入驻",
+                "path": "/rebate/regist",
+                "display": true,
+                "defaultData": [
+                    {
+                        "type": "table",
+                        "title": "邀请好友注册总览",
+                        "query_api": "/rebate/regist_One",
+                        "mark": 1482126654650
+                    },
+                    {
+                        "type": "table",
+                        "title": "邀请商户入驻总览",
+                        "query_api": "/rebate/regist_Two",
+                        "mark": 1482127890980
+                    },
+                    {
+                        "type": "chart",
+                        "title": "邀请趋势",
+                        "query_api": "/rebate/regist_Three",
+                        "mark": 1482128543717
+                    },
+                    {
+                        "type": "table",
+                        "title": "邀请返利汇总",
+                        "query_api": "/rebate/regist_Four",
+                        "mark": 1482135694948
+                    }
+                ]
+            },
+            {
+                "name": "商家返利汇总",
+                "path": "/rebate/shop",
+                "display": true,
+                "defaultData": [
+                    {
+                        "type": "table",
+                        "title": "商家设置返利总览",
+                        "query_api": "/rebate/shop_One",
+                        "mark": 1482211894279
+                    },
+                    {
+                        "type": "chart",
+                        "title": "返利订单趋势",
+                        "query_api": "/rebate/shop_Two",
+                        "mark": 1482214982543
+                    },
+                    {
+                        "type": "chart",
+                        "title": "返利层级分布",
+                        "query_api": "/rebate/shop_Three",
+                        "mark": 1482222517054
+                    },
+                    {
+                        "type": "table",
+                        "title": "商家返利TOP50",
+                        "query_api": "/rebate/shop_Four",
+                        "mark": 1482299549508
+                    },
+                    {
+                        "type": "table",
+                        "title": "商家返利计划TOP50",
+                        "query_api": "/rebate/shop_Five",
+                        "mark": 1482301660558
+                    }
+                ]
+            }
+        ],
+        "routers": [
+            {
+                "name": "平台基础返利",
+                "path": "/rebate/platformBase",
+                "display": true,
+                "defaultData": [
+                    {
+                        "type": "table",
+                        "title": "平台基础返利总览",
+                        "query_api": "/rebate/platformBase_One",
+                        "mark": 1481856183500
+                    },
+                    {
+                        "type": "chart",
+                        "title": "返利订单趋势",
+                        "query_api": "/rebate/platformBase_Two",
+                        "mark": 1481858831227
+                    },
+                    {
+                        "type": "chart",
+                        "title": "返利层级分布",
+                        "query_api": "/rebate/platformBase_Three",
+                        "mark": 1481868861749
+                    }
+                ]
+            },
+            {
+                "name": "平台促销返利",
+                "path": "/rebate/promotion",
+                "display": true,
+                "defaultData": [
+                    {
+                        "type": "table",
+                        "title": "平台促销返利订单总览",
+                        "query_api": "/rebate/platformBase_One",
+                        "mark": 1481856183500
+                    },
+                    {
+                        "type": "chart",
+                        "title": "返利订单趋势",
+                        "query_api": "/rebate/platformBase_Two",
+                        "mark": 1481858831227
+                    },
+                    {
+                        "type": "chart",
+                        "title": "返利层级分布",
+                        "query_api": "/rebate/platformBase_Three",
+                        "mark": 1481868861749
+                    }
+                ]
+            },
+            {
+                "name": "单项单级返利",
+                "path": "/rebate/singleStage",
+                "display": true,
+                "defaultData": [
+                    {
+                        "type": "table",
+                        "title": "单项单级返利总览",
+                        "query_api": "/rebate/platformBase_One",
+                        "mark": 1481856183500
+                    },
+                    {
+                        "type": "chart",
+                        "title": "返利订单趋势",
+                        "query_api": "/rebate/platformBase_Two",
+                        "mark": 1481858831227
+                    },
+                    {
+                        "type": "chart",
+                        "title": "返利类型分布",
+                        "query_api": "/rebate/single_Three",
+                        "mark": 1482113885605
+                    }
+                ]
+            },
+            {
+                "name": "邀请商户分享返利",
+                "path": "/rebate/invitation",
+                "display": true,
+                "defaultData": [
+                    {
+                        "type": "table",
+                        "title": "邀请商户分享返利总览",
+                        "query_api": "/rebate/platformBase_One",
+                        "mark": 1481856183500
+                    },
+                    {
+                        "type": "chart",
+                        "title": "返利订单趋势",
+                        "query_api": "/rebate/invitation_Two",
+                        "mark": 1482117244953
+                    },
+                    {
+                        "type": "chart",
+                        "title": "返利层级分布",
+                        "query_api": "/rebate/invitation_Three",
+                        "mark": 1482118634978
+                    }
+                ]
+            },
+            {
+                "name": "商家返利计划",
+                "path": "/rebate/shopPlan",
+                "display": true,
+                "defaultData": [
+                    {
+                        "type": "table",
+                        "title": "商家设置返利",
+                        "query_api": "/rebate/shopPlan_One",
+                        "mark": 1482305940029
+                    }
+                ]
+            }
+        ]
+    },
+    "22": {
+        "name": "性能分析",
+        "display": true,
+        "className": "fa  fa-laptop fa-fw",
+        "filename": "performance",
+        "href": "#",
+        "path": [
+            {
+                "name": "错误分析",
+                "path": "/performance/error",
+                "display": true,
+                "defaultData": [
+                    {
+                        "type": "chart",
+                        "title": "错误趋势",
+                        "query_api": "/performance/error_One",
+                        "mark": 1481187080040
+                    },
+                    {
+                        "type": "table",
+                        "title": "错误列表",
+                        "query_api": "/performance/error_Two",
+                        "mark": 1481265531352
+                    }
+                ]
+            }
+        ],
+        "routers": []
+    }
+}

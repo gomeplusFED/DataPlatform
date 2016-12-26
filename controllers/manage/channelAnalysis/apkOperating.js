@@ -91,9 +91,10 @@ module.exports = (Router) => {
 
             return params;
         },
-        thirdParams(query) {
+        thirdParams(query, params) {
+            let channel_id = params.channel_id;
             return {
-                channel_id : query.channel_id.split(",")
+                channel_id
             };
         },
         selectFilter(req, cb) {

@@ -262,6 +262,16 @@ var Chart = Vue.extend({
 	            }
 			}
 
+			if (chartType === 'bar' && config.stack) {
+				options.series.forEach(x => {
+					x.label = {
+						normal: {
+							show: true
+						}
+					}
+				})
+			}
+
 			if (chartType === 'map') {
 				options.visualMap = visualMap;
 				options.visualMap.max = config.mapMaxValue;
@@ -333,7 +343,7 @@ var Chart = Vue.extend({
 							}
 							var chartOptions = _this.rinseData(item.type, item.data, item.map, item.config);
 							setTimeout(function() {
-								if (chartOptions.series[0].data.length) {
+								if (chartOptions.series.length && chartOptions.series[0].data.length) {
 									var Chart = echarts.init($('#chart_' + _this.index).find('.chart_con').eq(domIndex)[0]);
 									_this.chartHeight = 400;
 									if (item.type === 'map') {

@@ -24,6 +24,12 @@ import eventBus from '../support/event-bus.vue';
 import utils from 'utils';
 export default {
 	name: 'plataform',
+	props: {
+		index: {
+			type: String,
+			default: ''
+		}
+	},
 	data() {
 		return {
 			platafromData: {},
@@ -31,15 +37,25 @@ export default {
 		};
 	},
 	ready() {
-		eventBus.$on('globalPlataform', (data) => {
+		eventBus.$on('globalPlataform' + this.index, (data) => {
 			this.platafromData = data;
 			if (this.platafromData.list && this.platafromData.list.length) {
-				this.key = this.platafromData.list[0].key;
+				let curQuery = utils.parseUrlQuery(this.$route.path);
+				let check = curQuery[this.platafromData.key]
+				if (check) {
+					this.key = check
+				} else {
+					this.key = this.platafromData.list[0].key;
+				}
 			}
 		});
 	},
 	methods: {
 		plataformLink(item) {
+			if (item.url) {
+				location.href = item.url;
+				return;
+			}
 			this.key = item.key;
 			let key = this.platafromData.key;
 			let curQuery = utils.parseUrlQuery(this.$route.path);

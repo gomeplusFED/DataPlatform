@@ -7,7 +7,7 @@ var ejs = require('ejs');
 var express = require('express');
 var session = require('cookie-session');
 var lactate = require('lactate');
-var config = require('./config');
+var config = require('./config/config');
 var bodyParser = require('body-parser');
 var flash = require('flashify');
 var mysql = require('./models2/mysql');
@@ -27,7 +27,6 @@ orm.settings.set("connection.pool", true);
 Object.keys(config).forEach(function(key) {
     app.locals[key] = config[key];
 });
-
 
 // 测试使用 
 // var logger = require("morgan");
@@ -102,6 +101,6 @@ app.use((req, res, next) => {
 });
 
 app.listen(7879 , function(){
-    console.log("启动成功");
+    console.log("启动成功" , new Date().toLocaleTimeString());
 });
 

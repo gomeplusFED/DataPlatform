@@ -29,12 +29,15 @@ module.exports = (Router) => {
                     if(channel[key.channel_type_code]) {
                         channel[key.channel_type_code].options.push({
                             text : key.channel_name,
-                            value : key.channel_type_code + key.channel_code
+                            value : key.channel_id
                         });
                     } else {
                         channel[key.channel_type_code] = {
                             name : key.channel_type,
-                            options : []
+                            options : [{
+                                text : key.channel_name,
+                                value : key.channel_id
+                            }]
                         };
                     }
                 }
@@ -87,6 +90,9 @@ module.exports = (Router) => {
                         caption : "分享人数",
                         type : "number"
                     },{
+                        caption : "分享次数",
+                        type : "number"
+                    },{
                         caption : "下单总量",
                         type : "number"
                     },{
@@ -125,12 +131,36 @@ module.exports = (Router) => {
                                     data.now.share_user.push(
                                         await (_find(`all:market:activity:share:${date + i}:${key}:pv`))
                                     );
+                                    data.now.create_count.push(
+                                        await (_find(`all:order:create:activity:${key}:${date + i}:counts`))
+                                    );
+                                    data.now.create_amount.push(
+                                        await (_find(`all:order:create:activity:${key}:${date + i}:amount`))
+                                    );
+                                    data.now.payment_count.push(
+                                        await (_find(`all:order:payment:activity:${key}:${date + i}:counts`))
+                                    );
+                                    data.now.payment_amount.push(
+                                        await (_find(`all:order:payment:activity:${key}:${date + i}:amount`))
+                                    );
                                 } else {
                                     data.now.pv.push(
                                         await (_find(`all:market:activity:${date}0${i}:${key}:pv`))
                                     );
                                     data.now.share_user.push(
                                         await (_find(`all:market:activity:share:${date}0${i}:${key}:pv`))
+                                    );
+                                    data.now.create_count.push(
+                                        await (_find(`all:order:create:activity:${key}:${date}0${i}:counts`))
+                                    );
+                                    data.now.create_amount.push(
+                                        await (_find(`all:order:create:activity:${key}:${date}0${i}:amount`))
+                                    );
+                                    data.now.payment_count.push(
+                                        await (_find(`all:order:payment:activity:${key}:${date}0${i}:counts`))
+                                    );
+                                    data.now.payment_amount.push(
+                                        await (_find(`all:order:payment:activity:${key}:${date}0${i}:amount`))
                                     );
                                 }
                             }
@@ -142,12 +172,36 @@ module.exports = (Router) => {
                                     data.old.share_user.push(
                                         await (_find(`all:market:activity:share:${oldDate + i}:${key}:pv`))
                                     );
+                                    data.old.create_count.push(
+                                        await (_find(`all:order:create:activity:${key}:${oldDate + i}:counts`))
+                                    );
+                                    data.old.create_amount.push(
+                                        await (_find(`all:order:create:activity:${key}:${oldDate + i}:amount`))
+                                    );
+                                    data.old.payment_count.push(
+                                        await (_find(`all:order:payment:activity:${key}:${oldDate + i}:counts`))
+                                    );
+                                    data.old.payment_amount.push(
+                                        await (_find(`all:order:payment:activity:${key}:${oldDate + i}:amount`))
+                                    );
                                 } else {
                                     data.old.pv.push(
                                         await (_find(`all:market:activity:${oldDate}0${i}:${key}:pv`))
                                     );
                                     data.old.share_user.push(
                                         await (_find(`all:market:activity:share:${oldDate}0${i}:${key}:pv`))
+                                    );
+                                    data.old.create_count.push(
+                                        await (_find(`all:order:create:activity:${key}:${oldDate}0${i}:counts`))
+                                    );
+                                    data.old.create_amount.push(
+                                        await (_find(`all:order:create:activity:${key}:${oldDate}0${i}:amount`))
+                                    );
+                                    data.old.payment_count.push(
+                                        await (_find(`all:order:payment:activity:${key}:${oldDate}0${i}:counts`))
+                                    );
+                                    data.old.payment_amount.push(
+                                        await (_find(`all:order:payment:activity:${key}:${oldDate}0${i}:amount`))
                                     );
                                 }
                             }
@@ -331,7 +385,7 @@ module.exports = (Router) => {
                             _findRedis(query.filter_key, {
                                 now : now,
                                 old : old
-                            }, hour, query.channel_id)
+                            }, hour, query.channel_id), query.day
                         ), modules);
                     } else {
                         _render(res, filter.overviewTwo(
@@ -395,14 +449,14 @@ module.exports = (Router) => {
                             _findRedis(query.filter_key, {
                                 now : now,
                                 old : old
-                            }, hour, query.channel_id)
+                            }, hour, query.channel_id), query.day
                         ), modules);
                     } else {
                         _render(res, filter.overviewTwo(
                             _findRedis(query.filter_key, {
                                 now : now,
                                 old : old
-                            }, hour, []), query.day
+                            }, hour, []), query.day, query.filter_key
                         ), modules);
                     }
                 } catch(err) {
@@ -474,7 +528,7 @@ module.exports = (Router) => {
                             old : await (_find(`${key + date.old + i}:${end}`)) || 0
                         };
                     } else {
-                        data[`0${i}:00-0${i+1}:00`] = {
+                        data[`0${i}:00-${i + 1 === 10 ? 10 : "0" + (i + 1)}:00`] = {
                             now : await (_find(`${key + date.now}0${i}:${end}`)) || 0,
                             old : await (_find(`${key + date.old}0${i}:${end}`)) || 0
                         };
@@ -497,13 +551,13 @@ module.exports = (Router) => {
                                 };
                             }
                         } else {
-                            if(data[`0${i}:00-0${i+1}:00`]) {
-                                data[`0${i}:00-0${i+1}:00`].now +=
+                            if(data[`0${i}:00-${i + 1 === 10 ? 10 : "0" + (i + 1)}:00`]) {
+                                data[`0${i}:00-${i + 1 === 10 ? 10 : "0" + (i + 1)}:00`].now +=
                                     await (_find(`${key}${channel}:${date.now}0${i + ":" + end}`)) || 0;
-                                data[`0${i}:00-0${i+1}:00`].now +=
+                                data[`0${i}:00-${i + 1 === 10 ? 10 : "0" + (i + 1)}:00`].now +=
                                     await (_find(`${key}${channel}:${date.old}0${i + ":" + end}`)) || 0;
                             } else {
-                                data[`0${i}:00-0${i+1}:00`] = {
+                                data[`0${i}:00-${i + 1 === 10 ? 10 : "0" + (i + 1)}:00`] = {
                                     now : await (_find(`${key}${channel}:${date.now}0${i + ":" + end}`)) || 0,
                                     old : await (_find(`${key}${channel}:${date.old}0${i + ":" + end}`)) || 0
                                 };
@@ -527,13 +581,13 @@ module.exports = (Router) => {
                                 };
                             }
                         } else {
-                            if(data[`0${i}:00-0${i+1}:00`]) {
-                                data[`0${i}:00-0${i+1}:00`].now +=
+                            if(data[`0${i}:00-${i + 1 === 10 ? 10 : "0" + (i + 1)}:00`]) {
+                                data[`0${i}:00-${i + 1 === 10 ? 10 : "0" + (i + 1)}:00`].now +=
                                     await (_find(`${key}${date.now}0${i + ":" + channel + ":" + end}`)) || 0;
-                                data[`0${i}:00-0${i+1}:00`].now +=
+                                data[`0${i}:00-${i + 1 === 10 ? 10 : "0" + (i + 1)}:00`].now +=
                                     await (_find(`${key}${date.old}0${i + ":" + channel + ":" + end}`)) || 0;
                             } else {
-                                data[`0${i}:00-0${i+1}:00`] = {
+                                data[`0${i}:00-${i + 1 === 10 ? 10 : "0" + (i + 1)}:00`] = {
                                     now : await (_find(`${key}${date.now}0${i + ":" + channel + ":" + end}`)) || 0,
                                     old : await (_find(`${key}${date.old}0${i + ":" + channel + ":" + end}`)) || 0
                                 };

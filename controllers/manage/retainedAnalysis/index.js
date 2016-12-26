@@ -8,17 +8,33 @@ var api = require("../../../base/main"),
 
 module.exports = (Router) => {
 
+    Router = Router.get("/retainedAnalysis/retainedZero_json" , function(req , res , next){
+        res.json({
+            code: 200,
+            modelData: [],
+            components: {
+                date_picker: {
+                    show: true,
+                    defaultData: 7,
+                    showDayUnit : true
+                }
+            }
+        });
+    });
+
     Router = new api(Router,{
         router : "/retainedAnalysis/retainedOne",
         platform : false,
         modelName : ["UserKeepResult"],
+        date_picker : false,
         params(query, params) {
             params.type = query.type || "ios";
+            if(query.type === "all") {
+                params.type = ["android", "ios"];
+            }
 
              return params;
         },
-        paging : [true],
-        order : ["-date"],
         global_platform : {
             show: true,
             key: 'type',
@@ -29,51 +45,58 @@ module.exports = (Router) => {
                 key: 'android',
                 name: 'Android'
             }, {
-                key: 'app',
+                key: 'all',
                 name: 'APP'
             }, {
                 key: 'pc',
                 name: 'PC'
             }, {
-                key: 'm',
+                key: 'h5',
                 name: 'H5'
             }]
         },
-        filter(data) {
-            return filter.retainedOne(data);
+        filter(data, query, dates) {
+            return filter.retainedOne(data, query, dates);
+        },
+    });
+
+    Router = new api(Router,{
+        router : "/retainedAnalysis/retainedTwo",
+        platform : false,
+        modelName : ["UserKeepResult"],
+        date_picker : false,
+        params(query, params) {
+            params.type = query.type || "ios";
+
+             return params;
+        },
+        firstSql(query, params) {
+            let _sql = 'SELECT date, GROUP_CONCAT(value, ";", `rate_key`) AS `key`, day_type FROM `ads2_user_retention_rate` WHERE date BETWEEN ? AND ? AND ';
+            let _params = [query.startTime, query.endTime, query.day_type];
+
+            if(query.type === "all") {
+                _sql += ` type IN ('android', 'ios')`
+            } else {
+                _sql += ` type='${params.type}'`
+            }
+
+            _sql += ` AND day_type=? GROUP BY date ORDER BY date DESC`;
+
+            return {
+                sql : _sql,
+                params : _params
+            };
+        },
+        filter(data, query) {
+            return filter.retainedTwo(data, query.day_type);
         },
         excel_export : true,
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
-        rows: [
-            [ 'date', 'new_users', 'last_1_keep', 'last_7_keep', "last_14_keep", "last_30_keep"]
-        ],
-        cols: [
-            [
-                {
-                    caption : '时间',
-                    type : 'string',
-                    width : 20
-                }, {
-                    caption: '新增用户',
-                    type: 'number'
-                }, {
-                    caption: '次日留存率',
-                    type: 'string'
-                }, {
-                    caption: '7日留存率',
-                    type: 'string'
-                }, {
-                    caption: '14日留存率',
-                    type: 'string'
-                }, {
-                    caption: '30日留存率',
-                    type: 'string'
-                }
-            ]
-        ]
+        rows: [],
+        cols: []
     });
 
     return Router;

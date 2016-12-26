@@ -230,7 +230,8 @@ module.exports = (Router)=>{
         platform : false,
         date_picker_data : 1,
         showDayUnit: true,
-        order : ["-date"],
+        order : ["-group_mess_pv"],
+        paing: [true],
         rows : [
             [
                 "group_name",

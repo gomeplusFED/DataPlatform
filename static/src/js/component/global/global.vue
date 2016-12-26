@@ -1,11 +1,23 @@
 <template>
 	<div class="global">
-		<button class="btn btn-default" v-if="pageComponentsData['flexible_btn']" @click="tab_checkbox(pageComponentsData['flexible_btn'])">筛选</button>
-		<m-level-select v-if="pageComponentsData['level_select']" :index="1" :init-data="initData" :page-components-data="pageComponentsData" component-type="level_select" :argvs.sync='argvs'></m-level-select>
-		<m-filter-select v-if="pageComponentsData['filter_select']" :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'filter_select'" :argvs.sync='argvs'></m-filter-select>
+		<button class="btn btn-default" v-if="pageComponentsData['flexible_btn']" @click="tab_checkbox(pageComponentsData['flexible_btn'])">{{pageComponentsData['flexible_btn'].content || 筛选}}</button>
+		<button class="btn btn-default excel-export" v-if="pageComponentsData['export']" @click="location(pageComponentsData['export'])">导出</button>
+		<m-level-select v-if="pageComponentsData['level_select']" :index="-1" :init-data="initData" :page-components-data="pageComponentsData" component-type="level_select" :argvs.sync='argvs'></m-level-select>
+		<m-filter-select v-if="pageComponentsData['filter_select']" index="-1" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'filter_select'" :argvs.sync='argvs'></m-filter-select>
 		<m-date :is-global="true" :index="-1" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'date_picker'" :argvs.sync='argvs'></m-date>
 	</div>
 </template>
+<style>
+    #datePicker_-1 {
+        float: right;
+        bottom: 10px;
+    }
+    .excel-export {
+        float: right;
+        margin-right: 20px;
+        margin-bottom: 10px;
+    }
+</style>
 <script>
 	var Vue = require('Vue');
 	var FilterTabCheckbox = require('../common/filter-tab-checkbox.vue');
@@ -29,31 +41,45 @@
 					}
 				},
 				argvs: {
-					channel: "",
-					coupon_type: "",
+					type: '',
+					channel: '',
+					ver: '',
+					coupon_type: '',
+					startTime: '',
+					endTime: '',
 					day_type: 1,
-					endTime: "2016-08-29",
-					startTime: "2016-08-23",
-					type: "",
-					ver: ""
+					main_show_type_filter : ''
 				},
 				showConfig: {
 					flexible_btn: false,
 					level_select: false
-				}
+				},
+				watcher: []
 			}
 		},
 		ready() {
 			var _this = this;
+			eventBus.$off('loadGlobal');
 			eventBus.$on('loadGlobal', function(data) {
-				data.date_picker = data.date_picker || {show: false};
+				_this.$set('argvs', {
+					type: '',
+					channel: '',
+					ver: '',
+					coupon_type: '',
+					startTime: '',
+					endTime: '',
+					day_type: 1,
+					main_show_type_filter: ''
+				});
+
+				data.date_picker = data.date_picker || {show: false, defaultData: 7};
 				_this.pageComponentsData = data;
 
 				if (data.filter_select && data.filter_select.length) { 
 					data.filter_select.forEach(x => {
 						_this.$watch('argvs.' + x.filter_key, function(val, oldVal) {
 							if (val !== oldVal) {
-								eventBus.$emit('platformChange',val, x.filter_key);
+								eventBus.$emit('platformChange', val, x.filter_key);
 							}
 						});
 					});
@@ -87,6 +113,9 @@
 			// 			defaultData: 7,
 			// 			showDayUnit: true,
 			// 			show: true
+			// 		},
+			// 		export: {
+			// 			url: 'http://baidu.com'
 			// 		}
 			// 	}
 			// 	eventBus.$emit('loadGlobal', data);
@@ -103,11 +132,11 @@
 				var _this = this;
 				actions.tabCheckbox(store, {
 					show: true,
-					title: '筛选',
+					title: item.content || '筛选',
 					max: item.max,
 					groups: item.groups,
 					apply: val => {
-						eventBus.$emit('platformChange',val , item.key);
+						eventBus.$emit('platformChange', val, item.key);
 						actions.tabCheckbox(store, {
 							show: false
 						});
@@ -118,6 +147,10 @@
 						});
 					}
 				});
+			},
+			location: function(item) {
+				if (item.url)
+				window.open(item.url)
 			}
 		},
 		watch: {
@@ -127,14 +160,17 @@
 			},
 			'argvs.startTime' : function (val, oldVal) {
 				// level_select
+				if (this.pageComponentsData['date_picker'].show)
 				eventBus.$emit('platformChange',val, this.pageComponentsData.date_picker.name || 'startTime');
 			},
 			'argvs.endTime' : function (val, oldVal) {
 				// level_select
+				if (this.pageComponentsData['date_picker'].show)
 				eventBus.$emit('platformChange',val, this.pageComponentsData.date_picker.endname || 'endTime');
 			},
 			'argvs.day_type' : function (val, oldVal) {
 				// level_select
+				if (this.pageComponentsData['date_picker'].show)
 				eventBus.$emit('platformChange',val, 'day_type');
 			}
 		}

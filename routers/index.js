@@ -1,6 +1,6 @@
 var express = require('express'),
     router = express.Router(),
-    config = require('../config'),
+    config = require('../config/config.js'),
     fs = require("fs"),
     files = "./controllers/manage",
     renderApi = require("./renderApi");
@@ -20,6 +20,7 @@ function addRouter(path) {
         console.warn("路由加载警告,",path);
         return;
     } 
+
     module.exports.push(require(path)(router));
 }
 
@@ -60,3 +61,11 @@ Object.keys(config.limit).forEach((key) => {
         }
     }
 });
+
+//new
+const autoApi = require("../config/index_concat");
+
+for(let item of autoApi){
+    module.exports.push(item(router));
+}
+

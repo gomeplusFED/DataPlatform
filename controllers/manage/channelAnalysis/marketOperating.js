@@ -18,8 +18,9 @@ module.exports = (Router) => {
             return params;
         },
         secondParams(query) {
+            let channel_id = query.channel_no.split(",");
             return {
-                channel_id : query.channel_no.split(",")
+                channel_id
             };
         },
         selectFilter(req, cb) {

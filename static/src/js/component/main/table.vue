@@ -3,10 +3,13 @@
 		<table v-for="(outerTableIndex, tableItem) in tableData" class="table table-bordered table-condensed table-hover" :class="{'table-nobordered': tableData[outerTableIndex].nobordered}" role="grid" aria-describedby="dataTables_info">
 			<thead>
 				<tr v-if="outerTableIndex === 0">
-					<th v-for="(captionIndex, captionItem) in tableItem.cols" v-show="tableColControl[captionIndex]">{{captionItem.caption}} <i v-show="captionItem.caption !== ' ' && captionItem.help" style="opacity: 0.8;cursor: pointer;" class="fa fa-question-circle-o" v-tips="{direction: 'top', msg: captionItem.help}"></i></th>
+					<th v-for="(captionIndex, captionItem) in tableItem.cols"
+					 v-show="tableColControl[captionIndex]"
+					 :colspan="captionItem.colspan"
+					 >{{captionItem.caption}} <i v-show="captionItem.caption !== ' ' && captionItem.help" style="opacity: 0.8;cursor: pointer;" class="fa fa-question-circle-o" v-tips="{direction: 'top', msg: captionItem.help}"></i></th>
 				</tr>
 				<tr v-else>
-					<th v-for="(captionIndex, captionItem) in tableItem.cols">{{captionItem.caption}} <i v-show="captionItem.caption !== ' ' && captionItem.help" style="opacity: 0.8;cursor: pointer;" class="fa fa-question-circle-o" v-tips="{direction: 'top', msg: captionItem.help}"></i></th>
+					<th v-for="(captionIndex, captionItem) in tableItem.cols" :colspan="captionItem.colspan">{{captionItem.caption}} <i v-show="captionItem.caption !== ' ' && captionItem.help" style="opacity: 0.8;cursor: pointer;" class="fa fa-question-circle-o" v-tips="{direction: 'top', msg: captionItem.help}"></i></th>
 				</tr>
 			</thead>
 			<tbody v-if="tableItem.data.length !== 0">
@@ -18,7 +21,8 @@
 					:colspan="getColspan(tableItem.config || [], tableIndex, getIndexByKey(tableItem.rows,tableKey))"
 					:rowspan="getRowspan(tableItem.config || [], tableIndex, getIndexByKey(tableItem.rows,tableKey))"
 					>
-					<span @click="tableOperation(tableBody[tableCell], tableBody, tableItem.rows[1])">{{{tableBody[tableCell] | toThousands}}}
+					<span @click="tableOperation(tableBody[tableCell], tableBody, tableItem.rows[1])">
+					{{{tableBody[tableCell] | toThousands | decimal}}}
 					</span>
 				</td>
 			</tr>
@@ -181,6 +185,7 @@
 			// 弹层表格详情
 			if (item.indexOf('url_detail') !== -1) {
 				var urlDetail = $(utils.strToDom(item)).attr('url_detail');
+				var bottom = $(utils.strToDom(item)).attr('bottom');
 				var url = tableBody[detailParam];
 				var params = {};
 
@@ -200,13 +205,19 @@
 					success: function(data) {
 						// _this.hasRequestUrl = url;
 						var tableData = data.modelData;
-						actions.modalTable(store, {
-							show: true,
-							title: '详情',
-							data: tableData,
-							query_api: urlDetail + '_json',
-							query_parmas: params
-						});
+						
+						if (!bottom) {
+							_this.tableData.splice(1, 1);
+							actions.modalTable(store, {
+								show: true,
+								title: '详情',
+								data: tableData,
+								query_api: urlDetail + '_json',
+								query_parmas: params
+							});
+						} else {
+							_this.$set('tableData[1]', data.modelData[0])
+						}
 					}
 				});
 			}

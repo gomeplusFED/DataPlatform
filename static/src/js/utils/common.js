@@ -69,4 +69,47 @@ utils.parseUrlQuery = function(fullUrl) {
 	return _cur;
 }
 
+utils.wait = (str , callback , time) => {
+	let times = time || 300;
+	let value = eval(str);
+	if(value){
+		return callback && callback();
+	}else{
+		setTimeout(()=>{
+			return utils.wait(str , callback , time);
+		} , times);
+	}
+}
+
+utils.convertDecimal = (num) => {
+    try {
+		num = num.trim()
+        if (!isNaN(parseInt(num))) {
+            let arr = num.split('.')
+            if (arr.length === 2) {
+                let integer = arr[0]
+                if (integer.length > 3) {
+                    arr[0] = utils.insertChar(integer)
+					return arr.join('.')
+                }
+            }
+        }
+        return num
+    } catch (e) {
+        console.error(e)
+        return num
+    }
+}
+
+utils.insertChar = (str, interval=3, char=',') => {
+    let arr = str.split('')
+    let index = 0
+    for (let i= arr.length-1;i>0;i--) {
+        if (++index%interval === 0) {
+            arr.splice(i, 0, char)
+        }
+    }
+    return arr.join('')
+}
+
 module.exports = utils;

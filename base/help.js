@@ -7,7 +7,7 @@ var utils = require("../utils");
 
 function help(Router, options) {
     this.modelData = utils.toTable(
-        [options.data],
+        [options.data, []],
         options.rows,
         options.cols
     );

@@ -3,7 +3,8 @@
  * @date 2016-10-14
  * @fileoverview
  */
-const util = require("../../utils");
+const util = require("../../utils"),
+    _ = require("lodash");
 
 module.exports = {
     apkOne(data, query, dates) {
@@ -11,18 +12,27 @@ module.exports = {
             second = data.second.data[0],
             third = data.third.data[0],
             filter_key = query.filter_key,
+            config = {},
             type = "line";
         let newData = {},
+            channel_ids = _.uniq(_.pluck(source, "channel_id")),
             map = {};
 
+        if(channel_ids.length === 0) {
+            channel_ids = _.uniq(_.pluck(second, "channel_id"));
+        }
         for(let item of third) {
-            map[item.channel_id] = item.channel_name;
+            config[item.channel_id] = item.channel_name;
+        }
+
+        for(let id of channel_ids) {
+            map[id] = config[id];
         }
 
         for(let date of dates) {
             newData[date] = {};
-            for(let item of third) {
-                newData[date][item.channel_id] = 0;
+            for(let item in map) {
+                newData[date][item] = 0;
             }
         }
 

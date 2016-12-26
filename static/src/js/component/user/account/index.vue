@@ -205,24 +205,24 @@ var Vue = require('Vue');
 
 var $ = require('jQuery');
 
-var Pagination = require('../common/pagination.vue');
+var Pagination = require('common/pagination.vue');
 
 var UserVm = null;
 
-var store = require('../../store/store.js');
-var actions = require('../../store/actions.js');
+var store = require('store');
+var actions = require('actions');
 
-var Loading = require('../common/loading.vue');
-var Alert = require('../common/alert.vue');
-var ModalTable = require('../common/modalTable.vue');
-var Confirm = require('../common/confirm.vue');
+var Loading = require('common/loading.vue');
+var Alert = require('common/alert.vue');
+var ModalTable = require('common/modalTable.vue');
+var Confirm = require('common/confirm.vue');
 
-var LimitList = require('../common/limitList.vue');
+var LimitList = require('common/limitList.vue');
 
 var utils = require('utils');
 
 // fileter
-require('../../filter/index.js');
+require('filter');
 
 var User = Vue.extend({
 	name: 'User',
@@ -587,9 +587,14 @@ var User = Vue.extend({
 			var _cur = Object.assign({}, limit);
 			for (let key1 in _cur) {
 				for (let key2 in _cur[key1]) {
-					if (window.allPageConfig.pageAll[key1].path[key2] === undefined) {
-						_cur[key1].splice(key2, 1);
+					try{
+						if (window.allPageConfig.pageAll[key1].path[key2] === undefined) {
+							_cur[key1].splice(key2, 1);
+						}
+					}catch(e){
+						console.log("数据库中保存了未定义权限，请检查代码:" , key1 , key2);
 					}
+						
 				}
 			}
 			return _cur;

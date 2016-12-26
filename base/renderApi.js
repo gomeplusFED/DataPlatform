@@ -6,7 +6,7 @@
 var utils = require("../utils"),
     _ = require("lodash"),
     cache = require("../utils/cache"),
-    config = require("../config"),
+    config = require("../config/config"),
     cacheTime = 1;
 
 function renderApi(Router, options) {

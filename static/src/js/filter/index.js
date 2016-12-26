@@ -1,4 +1,5 @@
 var Vue = require('Vue');
+import utils from '../utils'
 
 // 毫秒转标准日期
 Vue.filter('Date', function(value, format) {
@@ -35,3 +36,10 @@ Vue.filter('toThousands', function(num) {
 	}
 	return num;
 });
+
+Vue.filter('decimal', function(num) {
+	if (typeof num === 'string') {
+		return utils.convertDecimal(num);
+	}
+	return num
+})

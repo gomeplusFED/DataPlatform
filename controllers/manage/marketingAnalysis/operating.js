@@ -4,6 +4,7 @@
  * @fileoverview 活动详情
  */
 var api = require("../../../base/main"),
+    orm = require("orm"),
     _ = require("lodash"),
     filter = require("../../../filters/marketingAnalysis/operating");
 
@@ -14,10 +15,7 @@ module.exports = (Router) => {
         modelName : ["CamCamlistChannel", "Channel"],
         platform : false,
         secondParams(query, params, data) {
-            let ids = _.uniq(_.pluck(data.first.data[0], "channel_no"));
-            return {
-                channel_id : ids
-            };
+            return {};
         },
         filter(data, query, dates) {
             return filter.operatingOne(data, query, dates);
@@ -65,8 +63,8 @@ module.exports = (Router) => {
         }],
         firstSql(query, params, isCount) {
             let filter_type = query.filter_type || "date",
-                config = ["date BETWEEN ? AND ?", "active_no=?", "day_type=?"],
-                obj = [query.startTime, query.endTime, query.active_no, 1];
+                config = ["date BETWEEN ? AND ?", "day_type=1", "active_no=?"],
+                obj = [query.startTime, query.endTime, query.active_no];
             if(isCount) {
                 let sql = `SELECT COUNT(*) count FROM ads2_cam_camlist_channel WHERE ${config.join(" AND ")} GROUP BY ${filter_type}`;
                 return {
@@ -107,10 +105,7 @@ module.exports = (Router) => {
             }
         },
         secondParams(query, params, data) {
-            let ids = _.uniq(_.pluck(data.first.data[0], "channel_no"));
-            return {
-                channel_id : ids
-            };
+            return {};
         },
         filter(data, query, dates) {
             return filter.operatingTwo(data, query, dates);
