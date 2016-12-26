@@ -397,9 +397,9 @@ var User = Vue.extend({
 			_this.modal.title = '修改权限';
 			_this.modal.type = 'limitList';
 			_this.id = id;
-			_this.exportLimit = this.fixLimit(JSON.parse(exportLimit), 'exportLimit');
-			_this.limited = this.fixLimit(JSON.parse(limited), 'limit');
-			_this.subPages = this.fixLimit(JSON.parse(subPages), 'subPages');
+			_this.exportLimit = JSON.parse(exportLimit);
+			_this.limited = JSON.parse(limited);
+			_this.subPages = JSON.parse(subPages);
 			_this.type = JSON.parse(type);
 		},
 		apply: function() {
@@ -636,23 +636,6 @@ var User = Vue.extend({
 					});
 				}
 			});
-		},
-		fixLimit(limit, type) {
-			// 修正页面列表与权限列表不对应的情况
-			var _cur = Object.assign({}, limit);
-			for (let key1 in _cur) {
-				for (let key2 in _cur[key1]) {
-					try{
-						if (window.allPageConfig.pageAll[key1].path[key2] === undefined) {
-							_cur[key1].splice(key2, 1);
-						}
-					}catch(e){
-						console.log("数据库中保存了未定义权限，请检查代码:" , key1 , key2);
-					}
-						
-				}
-			}
-			return _cur;
 		}
 	},
 	watch: {
