@@ -28,8 +28,8 @@
 <script>
 	var Vue = require('Vue');
 	var $ = require('jQuery');
-	var utils = require('utils');
-	var api = require('./api');
+	var getSelector = require('./lib/selector.js').getSelector;
+	var api = require('./lib/api.js');
 	var Alert = require('../../common/alert.vue');
 	var bpInfo = require('./bpinfo.vue');
 	
@@ -45,6 +45,7 @@
 				iframe_url: '',
 				bpConfig: {
 					show: false,
+					trigger: false,
 					pointName: '',
 					platform: 'PC',
 					pageUrl: '',
@@ -78,7 +79,7 @@
 				let platform = query.platform;
 				if (pageUrl && platform) {
 					if(query.selector) {
-						this.bpConfig.show = true;
+						this.trigger();
 						// actions.databp(store, query);
 					}
 					this.bpConfig.pageUrl = pageUrl;
@@ -87,6 +88,10 @@
 				} else if (this.iframe_url === '') {
 					this.loading.show = false;
 				}
+			},
+			trigger() {
+				this.bpConfig.trigger = !this.bpConfig.trigger;
+				this.bpConfig.show = true;
 			},
 			iframeload(ev) {
 				// console.log('load');
@@ -137,13 +142,13 @@
 							selected.removeClass('bphover-position-fix');
 						}
 						// 去除css类防止选择器中被加入该类
-						var selector = utils.getSelector(e.target);
+						var selector = getSelector(e.target);
 						if (/static|inherit|initial/.test(window.getComputedStyle(e.target).position)) {
 							selected.addClass('bphover-position-fix');
 						}
 						selected.addClass('bphover');
 						_this.bpConfig.selector = selector;
-						_this.bpConfig.show = true;
+						_this.trigger();
 						// actions.databp(store, _this.bpConfig);
 						e.preventDefault();
 					});

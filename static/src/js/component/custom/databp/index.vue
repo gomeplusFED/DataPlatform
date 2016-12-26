@@ -10,7 +10,7 @@
 	var Loading = require('../../common/loading.vue');
 	var Alert = require('../../common/alert.vue');
 	var Confirm = require('../../common/confirm.vue');
-	var store = require('../../../store/store.js');
+	var store = require('store');
 	var App = Vue.extend({
 		name: 'DataBp',
 		data: function() {

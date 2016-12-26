@@ -87,7 +87,7 @@
 	var store = require('../../../store/store.js');
 	var actions = require('../../../store/actions.js');
 	var Pagination = require('../../common/pagination.vue');
-	var api = require('./api.mock.js');
+	var api = require('./mock/api.js');
 	var utils = require('utils');
 	
 	var databp = Vue.extend({

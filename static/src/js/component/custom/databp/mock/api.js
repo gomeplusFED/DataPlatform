@@ -1,5 +1,5 @@
-var store = require('../../../store/store.js');
-var actions = require('../../../store/actions.js');
+var store = require('store');
+var actions = require('actions');
 
 function extractResult(res) {
 	return new Promise(function(s, j){

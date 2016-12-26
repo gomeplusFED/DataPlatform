@@ -1,5 +1,5 @@
-var store = require('../../../store/store.js');
-var actions = require('../../../store/actions.js');
+var store = require('store');
+var actions = require('actions');
 var $ = require('jQuery');
 const baseurl = 'http://10.69.10.13:8080/bomber-pie';
 // const baseurl = 'http://10.69.112.146:38080/bomber-pie'

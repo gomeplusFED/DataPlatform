@@ -64,7 +64,7 @@
 
 <script>
 var Vue = require('Vue');
-var api = require('./api.mock.js');
+var api = require('./lib/api.js');
 var bpinfo = Vue.extend({
 	data: function() {
 		return {
@@ -152,11 +152,11 @@ var bpinfo = Vue.extend({
 	},
 	props:['loading', 'bpConfig'],
 	created() {
-		// this.$watch('bpConfig.trigger', function (val) {
-		// 	if (this.bpConfig.show) {
-		// 		this.init();
-		// 	}
-		// });
+		this.$watch('bpConfig.trigger', function (val) {
+			if (this.bpConfig.show) {
+				this.init();
+			}
+		});
 		let {name, username, email, department} = window.allPageConfig.userInfo;
 		this.userInfo = {name, username, email, department};
 	},

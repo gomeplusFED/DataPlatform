@@ -22,10 +22,10 @@
 	const Vue = require('Vue');
 	const $ = require('jQuery');
 	const utils = require('utils');
-	const api = require('./api');
+	const api = require('./lib/api.js');
 	var DatePicker = require('../../common/datePicker.vue');
 	const visualbp = require('./visualbp.vue');
-	const Heatmap = require('./heatmap.js');
+	const Heatmap = require('./lib/heatmap.js');
 
 	let heatmap = Vue.extend({
 		name: 'heatmap',
