@@ -77,6 +77,11 @@
 				let href = $target.attr('href') || $target.parents('a').attr('href');
 				if (/^#!(\/[^\/]+?)+$/.test(href) && !this.subPages.some(x => href.includes(x.url))) {
 					console.log(href +' has been stoped');
+					actions.alert(store, {
+						show: true,
+						msg: '无权访问该页面!',
+						type: 'danger'
+					});
 					ev.preventDefault();
 				}
 			}
@@ -99,6 +104,8 @@
 				$('[href="#!' + url + '"]').addClass('active');
 
 				var currentPageDefaultData = window.allPageConfig.page[url];
+				var id = currentPageDefaultData.id;
+				// 筛选出当前页面有权限的三级页面
 				this.subPages = currentPageDefaultData.subPages;
 
 				var query_api = currentPageDefaultData.defaultData[0].query_api;
