@@ -18,6 +18,9 @@
 							<div><label>选择器</label>{{config.selector}}</div>
 							<div><label>事件类型</label>单击事件</div>
 							<div><label>匹配模式</label>{{config.pattern}}</div>
+							<div class="type-filter"><label>是否模块</label>
+								<button @click="config.type = 'block'" :class="{'active': config.type === 'block'}">是</button>
+								<button @click="config.type = 'point'" :class="{'active': config.type !== 'block'}">否</button></div>
 							<div><label>全局埋点信息</label>{{publicBpStr}} <button @click="publicBp.push(['', ''])">+</button></div>
 							<div>
 								<div v-for="(i,item) in publicBp" class="pair">
@@ -61,7 +64,7 @@
 
 <script>
 var Vue = require('Vue');
-var api = require('./api');
+var api = require('./api.mock.js');
 var store = require('../../../store/store.js');
 var actions = require('../../../store/actions.js');
 var bpinfo = Vue.extend({
@@ -75,6 +78,7 @@ var bpinfo = Vue.extend({
 				pointName: '',
 				pattern: '',
 				platform: 'PC',
+				type: 'block',
 				pageUrl: '',
 				selector:'',
 				privateParam: '',
@@ -163,9 +167,8 @@ var bpinfo = Vue.extend({
 				this.init();
 			}
 		});
-		api.getUserInfo().then((data) =>{
-			this.userInfo = JSON.stringify(data);
-		});
+		let {name, username, email, department} = window.allPageConfig.userInfo;
+		this.userInfo = {name, username, email, department};
 	},
 	methods: {
 		setDraggable(val) {
@@ -358,6 +361,25 @@ module.exports = bpinfo;
     font-size: 17px;
 }
 
+.type-filter button {
+	display: inline-block;
+    vertical-align: middle;
+    border: 1px solid #cacaca;
+    color: #333;
+    padding: 2px 12px;
+    background: #fff;
+    font-size: 12px;
+    outline: none;
+    margin-left: -3px;
+    transition: all ease 0.2s;
+    -webkit-transition: all ease 0.2s;
+}
+
+.type-filter button.active {
+    background: #3389d4;
+    border: 1px solid #3389d4;
+    color: #fff;
+}
 #tab_baseinfo input[type='text'] {
 	max-width: 180px;
 	display: inline-block;
