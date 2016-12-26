@@ -394,6 +394,9 @@ module.exports = {
         for(let key in param2){
             let obj = {};
             for(let one in param3){
+                if(one > key){
+                    continue;
+                }
                 obj[one] = 0;
             }
             Result3[param2[key]] = obj;
@@ -634,6 +637,9 @@ module.exports = {
         for(let key in param2){
             let obj = {};
             for(let one in param3){
+                if(one > key){
+                    continue;
+                }
                 obj[one] = 0;
             }
             Result3[param2[key]] = obj;
@@ -795,6 +801,9 @@ module.exports = {
         for(let key in param2){
             let obj = {};
             for(let one in param3){
+                if(one > key){
+                    continue;
+                }
                 obj[one] = 0;
             }
             Result3[param2[key]] = obj;
