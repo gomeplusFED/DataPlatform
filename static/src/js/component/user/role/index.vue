@@ -29,7 +29,7 @@
 									<td>{{item.remark}}</td>
 									<td style="width: 270px">
 										<ul>
-											<li v-show="item.status"><a @click="modifyRole(item.id, item.limited, item.export, item.name, item.remark, item.sub_pages)" class="btn btn-default" href="javascript:void(0)">修改<i class="fa fa-pencil-square-o"></i></a></li>
+											<li v-show="item.status"><a @click="modifyRole(item.id, item.limited, item.export, item.name, item.remark, item.sub_pages, item.type)" class="btn btn-default" href="javascript:void(0)">修改<i class="fa fa-pencil-square-o"></i></a></li>
 											<li v-show="item.status"><a @click="forbidden(item.id, item.name)" class="btn btn-default" href="javascript:void(0)">禁用<i class="fa fa-remove"></i></a></li>
 											<li v-show="!item.status"><a @click="startUsing(item.id, item.name)" class="btn btn-default" href="javascript:void(0)">启用<i class="fa fa-check-square-o"></i></a></li>
 											<li v-show="item.status"><a @click="modifyUser(item.name, item.limited, item.export, item.sub_pages)" class="btn btn-default" href="javascript:void(0)">更新账户<i class="fa fa-pencil-square-o"></i></a></li>
@@ -230,11 +230,12 @@ var Role = Vue.extend({
 			this.modifyName = '';
 			this.modifyType = 'add';
 		},
-		modifyRole: function(id, limited, exportLimit, name, remark, subPages){
+		modifyRole: function(id, limited, exportLimit, name, remark, subPages, type){
 			this.id = id;
 			this.exportLimit = JSON.parse(exportLimit);
 			this.limited = JSON.parse(limited);
 			this.subPages = JSON.parse(subPages || '{}');
+			this.type = JSON.parse(type || '{}');
 			this.modal.show = true;
 			this.modal.title = '修改角色';
 			this.modifyRemark = remark;
