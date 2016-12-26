@@ -22,7 +22,7 @@
 						:list="platformType" 
 						level="1" 
 						:obj="{k1: k1}" 
-						:val.sync="platfromPermission1[k1]">
+						:val.sync="platformPermission1[k1]">
 						</checkbox-list>
 					</span>
 					<span><label><input @click="checkFirstExport(k1, exportLimitAll[k1])" type="checkbox" v-model="exportLimitAll[k1]"/>数据导出</label></span>
@@ -39,7 +39,7 @@
 								:list="platformType" 
 								level="2" 
 								:obj="{k1: k1, id2: item2.id}" 
-								:val.sync="platfromPermission2[k1][item2.id]">
+								:val.sync="platformPermission2[k1][item2.id]">
 								</checkbox-list>
 							</span>
 							<span><label><input @click="checkSecondExport(k1, item2.id, exportLimitObj[k1][item2.id])" type="checkbox" v-model="exportLimitObj[k1][item2.id]"/>数据导出</label></span>
@@ -55,7 +55,7 @@
 									:list="platformType" 
 									level="3" 
 									:obj="{k1: k1, id2: item2.id, id3: item3.id}" 
-									:val.sync="platfromPermission3[k1][item2.id][item3.id]">
+									:val.sync="platformPermission3[k1][item2.id][item3.id]">
 									</checkbox-list>
 								</span>
 								<span>&nbsp;</span>
@@ -90,9 +90,9 @@ var LimitList = Vue.extend({
 			subPagesObj: {},
 			limitAll: {},
 			exportLimitAll: {},
-			platfromPermission1: {},
-			platfromPermission2: {},
-			platfromPermission3: {},
+			platformPermission1: {},
+			platformPermission2: {},
+			platformPermission3: {},
 			platformType: ['IOS', 'Android', 'APP', 'PC', 'WAP站']
 		};
 	},
@@ -203,12 +203,28 @@ var LimitList = Vue.extend({
 				}
 			}
 		},
+		clearPlatform(obj) {
+			if (typeof obj === 'object') {
+				for (let key in obj) {
+					if (typeof obj[key] === 'object') {	
+						this.clearPlatform(obj[key]);
+					} else {
+						if(obj[key] !== '00000') {
+							obj[key] = '00000';
+						}
+					}
+				}
+			}
+		},
 		clearAll(){
 			this.clear(this.limitAll);
 			this.clear(this.exportLimitAll);
 			this.clear(this.limitedObj);
 			this.clear(this.exportLimitObj);
 			this.clear(this.subPagesObj);
+			this.clearPlatform(this.platformPermission1);
+			this.clearPlatform(this.platformPermission2);
+			this.clearPlatform(this.platformPermission3);
 		},
 		checkFirst(firstid, val) {
 			let valafter = !val;
@@ -348,15 +364,15 @@ var LimitList = Vue.extend({
 		},
 		type: {
 			handler: function(val) {
-				for (let key of Object.keys(this.platfromPermission2)) {
-					for (let key2 of Object.keys(this.platfromPermission2[key])) {
-						this.platfromPermission2[key][key2] = (val && val[key2]) || '00000'
+				for (let key of Object.keys(this.platformPermission2)) {
+					for (let key2 of Object.keys(this.platformPermission2[key])) {
+						this.platformPermission2[key][key2] = (val && val[key2]) || '00000'
 					}
 				}
-				for (let key of Object.keys(this.platfromPermission3)) {
-					for (let key2 of Object.keys(this.platfromPermission3[key])) {
-						for (let key3 of Object.keys(this.platfromPermission3[key][key2])) {
-							this.platfromPermission3[key][key2][key3] = (val && val[key3]) || '00000'
+				for (let key of Object.keys(this.platformPermission3)) {
+					for (let key2 of Object.keys(this.platformPermission3[key])) {
+						for (let key3 of Object.keys(this.platformPermission3[key][key2])) {
+							this.platformPermission3[key][key2][key3] = (val && val[key3]) || '00000'
 						}
 					}
 				}
@@ -430,7 +446,7 @@ var LimitList = Vue.extend({
 		checkboxChange1(obj, val) {
 			// 更改2级目录
 			let k1 = obj.k1;
-			let permission2 = this.platfromPermission2[k1];
+			let permission2 = this.platformPermission2[k1];
 			if (permission2) {
 				for (let item in permission2) {
 					permission2[item] = val
@@ -439,7 +455,7 @@ var LimitList = Vue.extend({
 		},
 		checkboxChange2(obj, val) {
 			// 改为不更改3级目录
-			// let permission3 = this.platfromPermission3[obj.k1];
+			// let permission3 = this.platformPermission3[obj.k1];
 			// if (permission3) {
 			// 	permission3 = permission3[obj.id2]
 			// 	if (permission3) {
@@ -449,7 +465,7 @@ var LimitList = Vue.extend({
 			// 	}
 			// }
 			// 判断2级目录
-			let permission2 = this.platfromPermission2[obj.k1];
+			let permission2 = this.platformPermission2[obj.k1];
 			if (permission2) {
 				let all = ['1', '1', '1', '1', '1']
 				for (let key of Object.keys(permission2)) {
@@ -464,12 +480,12 @@ var LimitList = Vue.extend({
 					}
 				}
 				// 赋值1级目录
-				this.platfromPermission1[obj.k1] = all.join('');
+				this.platformPermission1[obj.k1] = all.join('');
 			}
 		},
 		checkboxChange3(obj, val) {
 			// 改为不判断二级目录
-			// let permission3 = this.platfromPermission3[obj.k1][obj.id2];
+			// let permission3 = this.platformPermission3[obj.k1][obj.id2];
 			// if (permission3) {
 			// 	let all = ['1', '1', '1', '1', '1']
 			// 	for (let key of Object.keys(permission3)) {
@@ -480,7 +496,7 @@ var LimitList = Vue.extend({
 			// 		})
 			// 	}	
 			// 	// 赋值2级目录
-			// 	this.platfromPermission2[obj.k1][obj.id2] = all.join('');
+			// 	this.platformPermission2[obj.k1][obj.id2] = all.join('');
 			// }
 		}
 	}

@@ -520,9 +520,9 @@ var User = Vue.extend({
 						delete _this.modifyExportLimited[item];
 					}
 				}
-
+				
+				// 平台权限
 				let limitlist = this.$refs.limitlist;
-
 				let config = {}
 				function parseObject(obj) {
 					for (let key of Object.keys(obj)) {
@@ -535,12 +535,12 @@ var User = Vue.extend({
 						}
 				}
 				
-				if (limitlist.platfromPermission3) {
-					parseObject(limitlist.platfromPermission3)
+				if (limitlist.platformPermission3) {
+					parseObject(limitlist.platformPermission3)
 				}
 				// 相同页面的情况下，二级目录覆盖三级目录
-				if (limitlist.platfromPermission2) {
-					parseObject(limitlist.platfromPermission2)
+				if (limitlist.platformPermission2) {
+					parseObject(limitlist.platformPermission2)
 				}
 
 				$.ajax({
