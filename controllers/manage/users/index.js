@@ -109,7 +109,9 @@ module.exports = (Router) => {
                     data[0].export = params.export || data[0].export;
                     data[0].type = params.type || data[0].type;
                     data[0].sub_pages = params.sub_pages || data[0].sub_pages;
-                    _save();
+                    if(content.length > 0) {
+                        _save();
+                    }
                 } else {
                     res.json({
                         code : 400,
