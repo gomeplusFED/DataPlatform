@@ -391,6 +391,7 @@ var User = Vue.extend({
 					_this.limited = JSON.parse(_this.userListData[index].limited);
 					_this.subPages = JSON.parse(_this.userListData[index].sub_pages || '{}');
 					_this.exportLimit = JSON.parse(_this.userListData[index].export);
+					_this.type = JSON.parse(_this.userListData[index].type || '{}');
 				}
 			});
 		},
@@ -404,10 +405,11 @@ var User = Vue.extend({
 			_this.exportLimit = JSON.parse(exportLimit);
 			_this.limited = JSON.parse(limited);
 			_this.subPages = JSON.parse(subPages);
-			_this.type = JSON.parse(type);
+			_this.type = JSON.parse(type || '{}');
 		},
 		apply: function() {
 			var _this = this;
+			debugger
 			if (this.modal.type === 'roleList') {
 				var currentUserRoleNameArr = _this.currentUserRoleName ? _this.currentUserRoleName.split(';') : [];
 
@@ -478,6 +480,26 @@ var User = Vue.extend({
 					}
 				}
 
+				// 平台权限合并
+				let roleCheckedList = _this.roleList.filter(r => r.checked)
+				if (roleCheckedList) {
+					roleCheckedList.forEach(x => {
+						let roleType = JSON.parse(x.type || '{}')
+						for(let key in roleType) {
+							if (_this.type[key] && roleType[key] !== '00000') {
+								let arrRole =  roleType[key].split('').filter(x => x === '1')
+								let arrTemp = _this.type[key].split('')
+								roleType[key].split('').forEach((x, index) => {
+									if (x === '1') {
+										arrTemp[index] = '1'
+									}
+								})
+								_this.type[key] = arrTemp.join('')
+							}
+						}
+					})
+				}
+
 				$.ajax({
 					url: '/users/update',
 					type: 'post',
@@ -486,7 +508,8 @@ var User = Vue.extend({
 						limited: JSON.stringify(resultLimited),
 						sub_pages: JSON.stringify(resultSubPages),
 						export: JSON.stringify(resultExportLimited),
-						role: roleName.join(';')
+						role: roleName.join(';'),
+						type: JSON.stringify(_this.type)
 					},
 					success: function(data) {
 						if (!data.success) {
@@ -522,7 +545,7 @@ var User = Vue.extend({
 				}
 				
 				// 平台权限
-				let limitlist = this.$refs.limitlist;
+				let limitlist = this.$refs.limitlist
 				let config = {}
 				function parseObject(obj) {
 					for (let key of Object.keys(obj)) {
@@ -542,6 +565,7 @@ var User = Vue.extend({
 				if (limitlist.platformPermission2) {
 					parseObject(limitlist.platformPermission2)
 				}
+				_this.$set('type', config)
 
 				$.ajax({
 					url: '/users/update',
@@ -551,7 +575,7 @@ var User = Vue.extend({
 						limited: JSON.stringify(_this.modifyLimited),
 						sub_pages: JSON.stringify(_this.modifySubPages),
 						export: JSON.stringify(_this.modifyExportLimited),
-						type: JSON.stringify(config)
+						type: JSON.stringify(_this.type)
 					},
 					success: function(data) {
 						if (!data.success) {

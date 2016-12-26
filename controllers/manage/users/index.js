@@ -92,7 +92,7 @@ module.exports = (Router) => {
                         }
                     }
                     if(params.type) {
-                        if(params.export !== data[0].export) {
+                        if(params.type !== data[0].type) {
                             content.push(username + "平台权限被修改");
                         }
                     }
@@ -111,6 +111,12 @@ module.exports = (Router) => {
                     data[0].sub_pages = params.sub_pages || data[0].sub_pages;
                     if(content.length > 0) {
                         _save();
+                    } else {
+                        res.json({
+                            code : 400,
+                            success : false,
+                            msg : "请修改后再提交"
+                        })
                     }
                 } else {
                     res.json({
