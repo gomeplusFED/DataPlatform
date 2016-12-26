@@ -93,7 +93,7 @@ var LimitList = Vue.extend({
 			platfromPermission1: {},
 			platfromPermission2: {},
 			platfromPermission3: {},
-			platformType: ['IOS', 'AND', 'APP', 'PC', 'WAP站']
+			platformType: ['IOS', 'Android', 'APP', 'PC', 'WAP站']
 		};
 	},
 	props: ['id', 'limited', 'exportLimit', 'subPages', 'type'],
