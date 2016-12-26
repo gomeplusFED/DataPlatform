@@ -23,13 +23,22 @@
 					<option value='PC'>PC</option>
 					<option value='H5'>H5</option>
 				</select>
+				<label>类型</label>
+				<select class="form-control inp inpW2" v-model="searchParam.type">
+					<option value=''>全部</option>
+					<option value='0'>模块</option>
+					<option value='0'>单点</option>
+				</select>
 
+			</li>
+			<li>
 				<label><input type="checkbox" v-model="showDate"></input>起止时间</label>
 				<div class="date_picker">                
 					<m-date :index="index" :page-components-data="pageComponentsData" :component-type="'date_picker'" :argvs.sync='argvs' diasbled></m-date>
 				</div>
 
 				<button id="btnSearch" class="btn btn-searchLi-top btn-primary" type="button" data-toggle="popover" data-trigger="focus" @click="queryClick">查询</button>
+
 			</li>
 		</ul> 
 	</div>
@@ -42,7 +51,6 @@
 					<th >事件</th>
 					<th >页面URL</th>
 					<th >匹配模式</th>
-<!-- 					<th >选择器</th> -->
 					<th >埋点参数</th>
 					<th >修改人</th>
 					<th >埋点设置时间</th>
@@ -56,7 +64,6 @@
 					<td>单击</td>
 					<td title="{{item.pageUrl}}"><a @click="heatmap(item)">{{item.pageUrl}}</a></td>
 					<td title="{{item.pattern}}">{{item.pattern}}</td>
-<!-- 					<td title="{{item.selector}}">{{item.selector}}</td> -->
 					<td title="{{item.pointParam}}">{{item.pointParam}}</td>
 					<td title="{{item.userInfo?(item.userInfo.department + item.userInfo.email) : '--'}}">{{item.userInfo.name || '--'}}</td>
 					<td>{{item.updateTime |Date 'yyyy-MM-dd hh:mm:ss'}}</td>
@@ -80,7 +87,7 @@
 	var store = require('../../../store/store.js');
 	var actions = require('../../../store/actions.js');
 	var Pagination = require('../../common/pagination.vue');
-	var api = require('./api.js');
+	var api = require('./api.mock.js');
 	var utils = require('utils');
 	
 	var databp = Vue.extend({
@@ -132,7 +139,8 @@
 					platform: 'PC',
 					pageUrl: '',
 					pattern: '',
-					isActive: '1'
+					isActive: '1',
+					type: ''
 				}
 			}
 		},
@@ -208,7 +216,7 @@
 				let {pageUrl, pointName, pointParam, selector, platform} = item;
 				this.$router.go({
 					path: '/databp/visualbp',
-					query: {pageUrl, pointName, pointParam, selector, platform}
+					query: {pageUrl, pointName, pointParam, selector, platform, type}
 				}); 
 			},
 			heatmap(item) {
@@ -257,6 +265,7 @@
 	padding: 11px;
 }
 .nform-box ul li{
+	overflow: hidden;
 	padding-bottom: 6px;
 	list-style: none;
 	margin-bottom: 10px;
@@ -299,7 +308,7 @@
 	margin-right: 4px;
 }
 .nform-box li .btn-searchLi-top {
-	margin: 0 13px 0 35px;
+	margin: 0 13px 0 118px;
 }
 .nform-box li a.btn-reset-search {
 	line-height: 28px;
