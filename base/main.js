@@ -120,7 +120,8 @@ api.prototype = {
             this.global_platform = platformPermission(
                 req.url,
                 JSON.parse(req.session.userInfo.type || '{}'),
-                this.global_platform
+                this.global_platform,
+                this.global_platform_types
             )
         }
 
