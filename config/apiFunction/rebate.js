@@ -267,13 +267,16 @@ module.exports = {
         query.category_id_4 = "ALL";
         let category_id = query.category_id;
         delete query.category_id;
-        if(!category_id){
+        if(!category_id && category_id == "all"){
             cb(null , query);
         }else{
             req.models.ConfCategories.find({
                 id : category_id
             } , 1 , (err , data)=>{
                 if(err) cb(err);
+                if(data.length == 0){
+                    return cb(null , query);
+                }
                 data = data[0];
                 switch(data.level + 1){
                     case 1:
