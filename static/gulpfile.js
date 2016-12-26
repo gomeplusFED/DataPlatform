@@ -145,6 +145,7 @@ gulp.task('rev', function() {
 gulp.task('watch', function() {
     if (argv.env != 'pro') {
         webpackConfig.watch = true;
+        webpackConfig.debug = true;
         webpackConfig.devtool = 'inline-source-map';
     }
     gulp.start('js', 'css', 'img', 'font');
