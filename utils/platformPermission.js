@@ -1,7 +1,7 @@
 const pageConfig = require('../config/config')
 const pageAll = pageConfig.limit
 
-const platformType = ['IOS', 'AND', 'APP', 'PC', 'WAP站']
+const platformType = ['IOS', 'Android', 'APP', 'PC', 'WAP站']
 
 const filter = (url, type, config, platformKey = ['ios', 'android', 'app', 'pc', 'm']) => {
     try {

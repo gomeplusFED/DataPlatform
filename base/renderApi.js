@@ -92,8 +92,12 @@ renderApi.prototype = {
         for(var key in config.limit) {
             var limit = config.limit[key];
             if(limited[key]) {
+                let obj = {};
+                for(let k of limit.path) {
+                    obj[k.id] = k;
+                }
                 for(var value of limited[key]) {
-                    var path = limit.path[value];
+                    var path = obj[value];
                     if(path) {
                         page[path.path] = {
                             id: path.id,
