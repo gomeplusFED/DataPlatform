@@ -195,7 +195,7 @@ module.exports = {
             }
         }
 
-        if(Object.keys(ThisOne).length == 0){
+        if(Object.keys(ThisOne).length <= 3){
             //all
             ThisOne = AllOne;
         }
