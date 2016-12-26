@@ -100,14 +100,6 @@ var bpinfo = Vue.extend({
 			privateBp: [['','']]
 		}
 	},
-	// vuex: {
-	// 	getters: {
-	// 		bpConfig: function() {
-	// 			return store.state.bpConfig;
-	// 		}
-	// 	},
-	// 	actions: actions
-	// },
 	computed:  {
 		publicBpStr: {
 			get() {
@@ -200,9 +192,7 @@ var bpinfo = Vue.extend({
 			});
 		},
 		hide() {
-			actions.databp(store, {
-				show: false
-			});
+			this.bpConfig.show = false;
 		},
 		showDropDown(item, e) {
 
@@ -293,13 +283,15 @@ var bpinfo = Vue.extend({
 			if (_this.config.pointId) {
 				api.updateBp(_this.config).then(function(res) {
 					// 更新成功刷新传入的数据
-					_this.config.show = false;
-					actions.databp(store, _this.config);
+					_this.bpConfig.show = false;
+					// _this.bpConfig = _this.config;
+					// actions.databp(store, _this.config);
 				});
 			} else {
 				api.saveBp(_this.config).then(function() {
-					_this.config.show = false;
-					actions.databp(store, _this.config);
+					_this.bpConfig.show = false;
+					// _this.bpConfig = _this.config;
+					// actions.databp(store, _this.config);
 				});
 			}
 		}

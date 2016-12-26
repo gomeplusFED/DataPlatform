@@ -23,18 +23,15 @@
 		</div>
 	</div>
 </div>
-	<m-bpinfo  :loading.sync='loading'></m-bpinfo>
+	<m-bpinfo  :loading.sync='loading' :bp-config.sync='bpConfig'></m-bpinfo>
 </template>
 <script>
 	var Vue = require('Vue');
-	Vue.config.debug = true;
 	var $ = require('jQuery');
 	var utils = require('utils');
 	var api = require('./api');
 	var Alert = require('../../common/alert.vue');
 	var bpInfo = require('./bpinfo.vue');
-	var store = require('../../../store/store.js');
-	var actions = require('../../../store/actions.js');
 	
 	var visualbp = Vue.extend({
 		name: 'databp',
@@ -65,7 +62,8 @@
 				return Promise.resolve(true);
 	        },
 	        deactivate: function() {
-	        	actions.databp(store, {show: false});
+	        	this.bpConfig.show = false;
+	        	// actions.databp(store, {show: false});
 	        }
     	},
     	events: {
@@ -80,8 +78,8 @@
 				let platform = query.platform;
 				if (pageUrl && platform) {
 					if(query.selector) {
-						query.show = true;
-						actions.databp(store, query);
+						this.bpConfig.show = true;
+						// actions.databp(store, query);
 					}
 					this.bpConfig.pageUrl = pageUrl;
 					this.bpConfig.platform = platform;
@@ -146,7 +144,7 @@
 						selected.addClass('bphover');
 						_this.bpConfig.selector = selector;
 						_this.bpConfig.show = true;
-						actions.databp(store, _this.bpConfig);
+						// actions.databp(store, _this.bpConfig);
 						e.preventDefault();
 					});
 					$body.mouseover(

@@ -213,7 +213,7 @@
 				this.query();
 			},
 			edit(item) {
-				let {pageUrl, pointName, pointParam, selector, platform} = item;
+				let {pageUrl, pointName, pointParam, selector, platform, type} = item;
 				this.$router.go({
 					path: '/databp/visualbp',
 					query: {pageUrl, pointName, pointParam, selector, platform, type}
