@@ -1026,8 +1026,7 @@ module.exports = {
         let colum = query.filter_key;
         for(let item of source){
             item.date = util.getDate(item.date);
-
-            if(Result[item.date][item.rebate_type]){
+            if(Result[item.date][item.rebate_type] != undefined){
                 Result[item.date][item.rebate_type] += item[colum];
             }
         }
