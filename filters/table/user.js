@@ -6,7 +6,7 @@
 const rows = [
     ["date", "new_reg_num", "one", "reg_num", "aaccount", "app_new_act", "app_new_reg",
         "two", "app_auser", "three", "app_pv", "four", "app_ip", "pc_new_visit", "pc_new_reg",
-        "five", "pc_visit", "six",  "pc_pv", "pc_ip","wap_new_visit", "wap_new_reg",
+        "five", "pc_visit", "six",  "pc_pv", "pc_ip", "wap_new_visit", "wap_new_reg",
         "seven", "wap_visit", "eight", "wap_pv", "wap_ip"]
 ];
 const cols = [
@@ -72,12 +72,12 @@ const _col = ["月份", "新增注册用户量", "注册转化率", "累计注�
     "pc端访问量","PC端访问IP数","WAP站新增访问人数", "WAP站注册人数", "WAP站注册转化率",
     "WAP站访问人数", "WAP站新问用户占比", "WAP站访问量", "WAP站访问IP数"];
 const rowsWeek = [
-    ["date", "aaccount", "new_reg_num", "one", "reg_num", "app_new_act", "app_new_reg", "two", "app_auser",
+    ["date", "new_reg_num", "one", "reg_num", "aaccount", "app_new_act", "app_new_reg", "two", "app_auser",
         "three",
         //"four",
-        "app_pv", "app_ip", "five", "six", "pc_new_visit", "pc_new_reg", "seven", "pc_visit",
+        "app_pv", "six", "five", "app_ip", "pc_new_visit", "pc_new_reg", "seven", "pc_visit",
         "pc_pv", "pc_ip", "eight", "one_one", "wap_new_visit", "wap_new_reg", "one_two", "wap_visit",
-        "wap_pv", "wap_ip", "one_three", "one_four"]
+        "one_three", "wap_pv", "wap_ip", "one_four"]
 ];
 const colsWeek = [
     [{
@@ -144,18 +144,18 @@ const colsWeek = [
         caption : ""
     }]
 ];
-const _colWeek = ["日期", "平台活跃账户数", "新增注册用户量", "注册转化率", "累计注册用户数", "APP新增激活",
+const _colWeek = ["日期", "新增注册用户量", "注册转化率", "累计注册用户数", "平台活跃账户数", "APP新增激活",
     "APP新增注册", "APP注册转化率", "APP活跃用户量", "APP新用户占比",
     //"APP活跃率",
-    "APP启动次数", "APP启动IP数",
-    "APP人均启动次数", "APP次日留存", "pc端新增访问人数", "pc端注册人数", "pc端注册转化率", "pc端访问人数",
-    "pc端访问量", "PC端访问IP数", "PC端新用户占比", "PC端次日留存", "WAP站新增访问人数", "WAP站注册人数",
-    "WAP站注册转化率", "WAP站访问人数", "WAP站访问量", "WAP站访问IP数", "WAP站新用户占比", "WAP站次日留存"];
+    "APP启动次数", "APP人均启动次数",
+    "APP启动IP数", "APP次日留存", "pc端新增访问人数", "pc端注册人数", "pc端注册转化率", "pc端访问人数",
+    "PC端新用户占比", "pc端访问量", "PC端访问IP数", "PC端次日留存", "WAP站新增访问人数", "WAP站注册人数",
+    "WAP站注册转化率", "WAP站访问人数", "WAP站新用户占比", "WAP站访问量", "WAP站访问IP数", "WAP站次日留存"];
 const rowsMonth = [
-    ["date", "aaccount", "new_reg_num", "one", "reg_num", "app_new_act", "app_new_reg", "two", "app_auser",
-        "three", "app_pv", "app_ip", "five", "six", "app7", "app14", "pc_new_visit", "pc_new_reg", "seven", "pc_visit",
-        "pc_pv", "pc_ip", "eight", "one_one", "pc7", "pc14", "wap_new_visit", "wap_new_reg", "one_two", "wap_visit",
-        "wap_pv", "wap_ip", "one_three", "one_four", "wap7", "wap14"]
+    ["date", "new_reg_num", "one", "reg_num", "aaccount", "app_new_act", "app_new_reg", "two", "app_auser",
+        "three", "app_pv", "five", "app_ip", "six", "app7", "app14", "pc_new_visit", "pc_new_reg", "seven", "pc_visit",
+        "eight", "pc_pv", "pc_ip", "one_one", "pc7", "pc14", "wap_new_visit", "wap_new_reg", "one_two", "wap_visit",
+        "one_three","wap_pv", "wap_ip", "one_four", "wap7", "wap14"]
 ];
 const colsMonth = [
     [{
@@ -232,11 +232,11 @@ const colsMonth = [
         caption : ""
     }]
 ];
-const _colMonth = ["日期", "平台活跃账户数", "新增注册用户量", "注册转化率", "累计注册用户数", "APP新增激活",
-    "APP新增注册", "APP注册转化率", "APP活跃用户量", "APP新用户占比", "APP启动次数", "APP启动IP数",
-    "APP人均启动次数", "APP次日留存", "APP七日留存", "APP14日留存", "pc端新增访问人数", "pc端注册人数", "pc端注册转化率", "pc端访问人数",
-    "pc端访问量", "PC端访问IP数", "PC端新用户占比", "PC端次日留存", "PC端七日留存", "PC端14日留存", "WAP站新增访问人数", "WAP站注册人数",
-    "WAP站注册转化率", "WAP站访问人数", "WAP站访问量", "WAP站访问IP数", "WAP站新用户占比", "WAP站次日留存", "WAP站7日留存", "WAP站14日留存"];
+const _colMonth = ["日期", "新增注册用户量", "注册转化率", "累计注册用户数", "平台活跃账户数", "APP新增激活",
+    "APP新增注册", "APP注册转化率", "APP活跃用户量", "APP新用户占比", "APP启动次数", "APP人均启动次数",
+    "APP启动IP数", "APP次日留存", "APP七日留存", "APP14日留存", "pc端新增访问人数", "pc端注册人数", "pc端注册转化率", "pc端访问人数",
+    "PC端新用户占比", "pc端访问量", "PC端访问IP数", "PC端次日留存", "PC端七日留存", "PC端14日留存", "WAP站新增访问人数", "WAP站注册人数",
+    "WAP站注册转化率", "WAP站访问人数", "WAP站新用户占比", "WAP站访问量", "WAP站访问IP数", "WAP站次日留存", "WAP站7日留存", "WAP站14日留存"];
 const moment = require("moment");
 const util = require("../../utils");
 
