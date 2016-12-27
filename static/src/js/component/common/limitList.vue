@@ -376,6 +376,9 @@ var LimitList = Vue.extend({
 						}
 					}
 				}
+				for (let key in this.platformPermission1) {
+					this.$emit('checkboxChange2', {k1: key}, this.platformPermission1[key]);
+				}
 			},
 			deep: true
 		},
@@ -443,17 +446,23 @@ var LimitList = Vue.extend({
 		}
 	},
 	events: {
-		checkboxChange1(obj, val) {
+		checkboxChange1(obj, val, index) {
 			// 更改2级目录
 			let k1 = obj.k1;
 			let permission2 = this.platformPermission2[k1];
 			if (permission2) {
 				for (let item in permission2) {
-					permission2[item] = val
+					if (index === -1) {
+						permission2[item] = val
+					} else {
+						let temp = permission2[item].split('')
+						temp[index] = val[index]
+						permission2[item] = temp.join('')
+					}
 				}
 			}
 		},
-		checkboxChange2(obj, val) {
+		checkboxChange2(obj, val, index) {
 			// 改为不更改3级目录
 			// let permission3 = this.platformPermission3[obj.k1];
 			// if (permission3) {
@@ -480,7 +489,7 @@ var LimitList = Vue.extend({
 					}
 				}
 				// 赋值1级目录
-				this.platformPermission1[obj.k1] = all.join('');
+				this.$set(`platformPermission1[${obj.k1}]`, all.join(''))
 			}
 		},
 		checkboxChange3(obj, val) {
