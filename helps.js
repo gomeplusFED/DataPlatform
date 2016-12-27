@@ -45,7 +45,7 @@ module.exports = function(app) {
                     str += '<span class="fa arrow"></span></a><ul class="nav nav-second-level collapse">';
                     for(let pathItem of path) {
                         let id;
-                        if(pathItem && pathItem.display && (id = pathItem.id) && limitedPath.includes(id.toString())) {
+                        if(pathItem && pathItem.display && ((id = pathItem.id) != null) && limitedPath.includes(id.toString())) {
                             str += '<li><a href="#!' + pathItem.path + '">' + pathItem.name + '</a></li>';
                         }
                     }
