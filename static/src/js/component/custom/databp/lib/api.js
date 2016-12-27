@@ -1,8 +1,8 @@
 var store = require('store');
 var actions = require('actions');
 var $ = require('jQuery');
-const baseurl = 'http://10.69.10.13:8080/bomber-pie';
-// const baseurl = 'http://10.69.112.146:38080/bomber-pie'
+// const baseurl = 'http://10.69.10.13:8080/bomber-pie';
+const baseurl = 'http://10.69.112.146:38080/bomber-pie'
 // 请求失败 重试一次
 const RETRY_TIMES = 2;
 
