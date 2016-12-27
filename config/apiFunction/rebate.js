@@ -1063,6 +1063,7 @@ module.exports = {
         count = count > 50 ? 50 : count;
 
         query.page = query.page || 1;
+        query.limit = query.limit || 1;
         source.map((item , index) => {
             item.Number = (query.page - 1) * query.limit + index + 1;
         });
@@ -1091,6 +1092,7 @@ module.exports = {
         });
 
         query.page = query.page || 1;
+        query.limit = query.limit || 1;
         source.map((item , index) => {
             item.Number = (query.page - 1) * query.limit + index + 1;
             item.Return_lv = util.toFixed( item.is_rebate_back_merchandise_num , item.is_rebate_merchandise_num );
