@@ -100,9 +100,10 @@ renderApi.prototype = {
                 for(var value of limited[key]) {
                     var path = obj[value];
                     if(path) {
-                        let userSubs = [];
+                        let userSubs;
                         let subPages = path.subPages || [] ;
                         sub_pages && (userSubs = sub_pages[key]) && (userSubs = userSubs[value]);
+                        userSubs = userSubs || [];
                         subPages = subPages.filter(x => userSubs.includes(x.id.toString()));
                         page[path.path] = {
                             id: path.id,
