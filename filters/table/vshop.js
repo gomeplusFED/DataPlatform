@@ -6,9 +6,9 @@
 const util = require("../../utils");
 const moment = require("moment");
 const rows = [
-    ["date", "total_vshop_num", "new_vshop_num", "visited_vshop_num", "ordered_vshop_num",
+    ["date", "new_vshop_num", "total_vshop_num", "visited_vshop_num", "ordered_vshop_num",
         "paid_vshop_num", "ordered_user_num", "paid_user_num", "ordered_amount", "paid_amount",
-        "ordered_item_num", "paid_item_num", "ordered_quantity", "paid_quantity", "delivery_amount",
+        "delivery_amount","ordered_item_num", "paid_item_num", "ordered_quantity", "paid_quantity",
         "delivery_item_quantity", "ordered_item_num_total", "ordered_quantity_toatl",
         "delivery_item_quantity_total", "delivery_amount_total"]
 ];
@@ -18,13 +18,13 @@ const cols = [
             caption : "日期",
             type : "string"
         },{
-            caption : "累计美店数",
-            type : "number",
-            help : "截止到统计日期平台累计开通的美店数"
-        },{
             caption : "新增美店",
             type : "number",
             help : "统计日期内，新开通的美店数"
+        },{
+            caption : "累计美店数",
+            type : "number",
+            help : "截止到统计日期平台累计开通的美店数"
         },{
             caption : "被访问美店数",
             type : "number",
@@ -54,6 +54,10 @@ const cols = [
             type : "number",
             help : "统计日期内，在美店支付订单的金额"
         },{
+            caption : "美店妥投金额",
+            type : "number",
+            help : "统计日期内，美店订单中收货成功的商品件数"
+        },{
             caption : "美店下单商品数",
             type : "number",
             help : "统计日期内，在美店创建订单中的商品数"
@@ -69,10 +73,6 @@ const cols = [
             caption : "美店支付商品件数",
             type : "number",
             help : "统计日期内，在美店支付的商品件数"
-        },{
-            caption : "美店妥投金额",
-            type : "number",
-            help : "统计日期内，美店订单中收货成功的商品件数"
         },{
             caption : "美店妥投商品件数",
             type : "number",
