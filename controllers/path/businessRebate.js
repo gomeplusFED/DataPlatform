@@ -7,6 +7,7 @@
 module.exports = {
     all() {
         return {
+            id : 41,
             name : "商家返利汇总",
             path : "/businessRebate",
             display : true,
@@ -51,6 +52,7 @@ module.exports = {
     },
     plan() {
         return {
+            id : 42,
             name : "商家返利计划",
             router : "/businessRebate/plan",
             path : "/businessRebate/plan",

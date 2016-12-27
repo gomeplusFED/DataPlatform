@@ -45,7 +45,7 @@
 									</td>
 									<td>
 										<ul>
-											<li v-show="item.status"><a @click="showLimitList(item.id, item.limited, item.export)" class="btn btn-default" href="javascript:void(0)">权限修改<i class="fa fa-pencil-square-o"></i></a></li>
+											<li v-show="item.status"><a @click="showLimitList(item.id, item.limited, item.export, item.sub_pages, item.type)" class="btn btn-default" href="javascript:void(0)">权限修改<i class="fa fa-pencil-square-o"></i></a></li>
 											<li v-show="item.status"><a @click="forbidden(item.id, item.email)" class="btn btn-default" href="javascript:void(0)">禁用<i class="fa fa-remove"></i></a></li>
 											<li v-show="!item.status"><a @click="startUsing(item.id, item.email)" class="btn btn-default" href="javascript:void(0)">启用<i class="fa fa-check-square-o"></i></a></li>
 										</ul>
@@ -90,7 +90,7 @@
 							</tr>
 						</tbody>
 					</table>
-					<m-limit-list v-show="modal.type === 'limitList'" :id="id" :limited="limited" :export-limit="exportLimit"></m-limit-list>
+					<m-limit-list v-ref:limitlist v-show="modal.type === 'limitList'" :id="id" :limited="limited" :sub-pages="subPages" :type="type" :export-limit="exportLimit"></m-limit-list>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn default" data-dismiss="modal" @click="apply()">确定</button>
@@ -138,6 +138,10 @@
 
 .user_table td {
 	min-width: 120px;
+}
+
+.user_table td:nth-child(5) {
+	min-width: 180px;
 }
 
 .user_table th {
@@ -251,6 +255,8 @@ var User = Vue.extend({
 			},
 			id: null,
 			limited: {},
+			subPages: {},
+			type: {},
 			exportLimit: {},
 			roleList: [],
 			currentID: null,
@@ -259,6 +265,7 @@ var User = Vue.extend({
 			// curretnLimited: null,
 			// currentExportLimited: null,
 			modifyLimited: {},
+			modifySubPages: {},
 			modifyExportLimited: {},
 			showRemarkLen: false
 		};
@@ -344,6 +351,11 @@ var User = Vue.extend({
 					page: _this.paginationConf.currentPage
 				},
 				success: function(data) {
+					// mock data 
+					// for (let p of data.data) {
+					// 	p.sub_pages = JSON.stringify({"0": {"1": ["test1","test2"]}, "3": {"1": ["test1"]}});
+					// }
+					// console.log(JSON.stringify(data,null,4));
 					_this.paginationConf.totalItems = data.count;
 					_this.userListData = data.data;
 					_this.loading.show = false;
@@ -377,19 +389,22 @@ var User = Vue.extend({
 						}
 					}
 					_this.limited = JSON.parse(_this.userListData[index].limited);
+					_this.subPages = JSON.parse(_this.userListData[index].sub_pages || '{}');
 					_this.exportLimit = JSON.parse(_this.userListData[index].export);
 				}
 			});
 		},
-		showLimitList: function(id, limited, exportLimit) {
+		showLimitList: function(id, limited, exportLimit, subPages, type) {
 			var _this = this;
 			_this.currentID = id;
 			_this.modal.show = true;
 			_this.modal.title = '修改权限';
 			_this.modal.type = 'limitList';
 			_this.id = id;
-			_this.exportLimit = this.fixLimit(JSON.parse(exportLimit), 'exportLimit');
-			_this.limited = this.fixLimit(JSON.parse(limited), 'limit');
+			_this.exportLimit = JSON.parse(exportLimit);
+			_this.limited = JSON.parse(limited);
+			_this.subPages = JSON.parse(subPages);
+			_this.type = JSON.parse(type);
 		},
 		apply: function() {
 			var _this = this;
@@ -397,20 +412,36 @@ var User = Vue.extend({
 				var currentUserRoleNameArr = _this.currentUserRoleName ? _this.currentUserRoleName.split(';') : [];
 
 				var resultLimited = utils.mixin(_this.limited, {});
+				var resultSubPages = utils.mixin(_this.subPages, {});
 				var resultExportLimited = utils.mixin(_this.exportLimit, {});
 
 				for (var item in _this.roleList) {
 					if (_this.roleList[item]['checked'] && !utils.isInArry(_this.roleList[item]['name'], currentUserRoleNameArr)) {
-						var obj1 = JSON.parse(_this.roleList[item]['limited']);
+						let roleObj = _this.roleList[item];
+						let obj1 = roleObj['limited'] ? JSON.parse(roleObj['limited']) : {};
+						let roleSubPages = roleObj['sub_pages'] ? JSON.parse(roleObj['sub_pages']) : {};
 						for (let k in obj1) {
 							if (!resultLimited[k]) {
 								resultLimited[k] = obj1[k];
 							}
 							let _currentArr = resultLimited[k].concat(obj1[k]);
-							resultLimited[k] = utils.uniqueArray(resultLimited[k]);
+							resultLimited[k] = utils.uniqueArray(_currentArr);
 							resultLimited[k].sort(function(a, b) {
 								return a - b;
 							});
+							// 处理三级页面
+							let roleSubs = roleSubPages[k];
+							let userSubs = resultSubPages[k];
+							let limiteds = resultLimited[k];
+							if (!userSubs) {
+								resultSubPages[k] = roleSubs;
+							} else {
+								for(let l of limiteds) {
+									let _current = userSubs[l].concat(roleSubs[l]);
+									userSubs[l] = utils.uniqueArray(_current);
+								}
+							}
+
 						}
 
 						var obj2 = JSON.parse(_this.roleList[item]['export']);
@@ -419,7 +450,7 @@ var User = Vue.extend({
 								resultExportLimited[k] = obj2[k];
 							}
 							let _currentArr = resultExportLimited[k].concat(obj2[k]);
-							resultExportLimited[k] = utils.uniqueArray(resultExportLimited[k]);
+							resultExportLimited[k] = utils.uniqueArray(_currentArr);
 							resultExportLimited[k].sort(function(a, b) {
 								return a - b;
 							});
@@ -437,6 +468,7 @@ var User = Vue.extend({
 				for (let item in resultLimited) {
 					if (resultLimited[item] === undefined || resultLimited[item].length === 0) {
 						delete resultLimited[item];
+						delete resultSubPages[item];
 					}
 				}
 
@@ -452,6 +484,7 @@ var User = Vue.extend({
 					data: {
 						id: _this.currentID,
 						limited: JSON.stringify(resultLimited),
+						sub_pages: JSON.stringify(resultSubPages),
 						export: JSON.stringify(resultExportLimited),
 						role: roleName.join(';')
 					},
@@ -478,6 +511,7 @@ var User = Vue.extend({
 				for (let item in _this.modifyLimited) {
 					if (_this.modifyLimited[item] === undefined || _this.modifyLimited[item].length === 0) {
 						delete _this.modifyLimited[item];
+						delete _this.modifySubPages[item];
 					}
 				}
 
@@ -486,13 +520,38 @@ var User = Vue.extend({
 						delete _this.modifyExportLimited[item];
 					}
 				}
+
+				let limitlist = this.$refs.limitlist;
+
+				let config = {}
+				function parseObject(obj) {
+					for (let key of Object.keys(obj)) {
+							let item = obj[key]
+							if (typeof item === 'object') {
+								parseObject(item)
+							} else if (key && key !== 'undefined' && item && item !== 'undefined') {
+								config[key] = item
+							}
+						}
+				}
+				
+				if (limitlist.platfromPermission3) {
+					parseObject(limitlist.platfromPermission3)
+				}
+				// 相同页面的情况下，二级目录覆盖三级目录
+				if (limitlist.platfromPermission2) {
+					parseObject(limitlist.platfromPermission2)
+				}
+
 				$.ajax({
 					url: '/users/update',
 					type: 'post',
 					data: {
 						id: _this.currentID,
 						limited: JSON.stringify(_this.modifyLimited),
-						export: JSON.stringify(_this.modifyExportLimited)
+						sub_pages: JSON.stringify(_this.modifySubPages),
+						export: JSON.stringify(_this.modifyExportLimited),
+						type: JSON.stringify(config)
 					},
 					success: function(data) {
 						if (!data.success) {
@@ -581,23 +640,6 @@ var User = Vue.extend({
 					});
 				}
 			});
-		},
-		fixLimit(limit, type) {
-			// 修正页面列表与权限列表不对应的情况
-			var _cur = Object.assign({}, limit);
-			for (let key1 in _cur) {
-				for (let key2 in _cur[key1]) {
-					try{
-						if (window.allPageConfig.pageAll[key1].path[key2] === undefined) {
-							_cur[key1].splice(key2, 1);
-						}
-					}catch(e){
-						console.log("数据库中保存了未定义权限，请检查代码:" , key1 , key2);
-					}
-						
-				}
-			}
-			return _cur;
 		}
 	},
 	watch: {
@@ -610,6 +652,9 @@ var User = Vue.extend({
 	events: {
 		borcastLimit: function(limit) {
 			this.modifyLimited = limit;
+		},
+		borcastSubPages: function(subPages) {
+			this.modifySubPages = subPages;
 		},
 		borcastExportLimit: function(limit) {
 			this.modifyExportLimited = limit;

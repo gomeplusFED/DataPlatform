@@ -7,6 +7,7 @@
 module.exports = {
     retained() {
         return {
+            id : 67,
             name: "留存分析",
             path: "/retainedAnalysis",
             display: true,

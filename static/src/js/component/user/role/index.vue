@@ -29,10 +29,10 @@
 									<td>{{item.remark}}</td>
 									<td style="width: 270px">
 										<ul>
-											<li v-show="item.status"><a @click="modifyRole(item.id, item.limited, item.export, item.name, item.remark)" class="btn btn-default" href="javascript:void(0)">修改<i class="fa fa-pencil-square-o"></i></a></li>
+											<li v-show="item.status"><a @click="modifyRole(item.id, item.limited, item.export, item.name, item.remark, item.sub_pages)" class="btn btn-default" href="javascript:void(0)">修改<i class="fa fa-pencil-square-o"></i></a></li>
 											<li v-show="item.status"><a @click="forbidden(item.id, item.name)" class="btn btn-default" href="javascript:void(0)">禁用<i class="fa fa-remove"></i></a></li>
 											<li v-show="!item.status"><a @click="startUsing(item.id, item.name)" class="btn btn-default" href="javascript:void(0)">启用<i class="fa fa-check-square-o"></i></a></li>
-											<li v-show="false"><a @click="modifyUser(item.name, item.limited)" class="btn btn-default" href="javascript:void(0)">更新账户<i class="fa fa-pencil-square-o"></i></a></li>
+											<li v-show="item.status"><a @click="modifyUser(item.name, item.limited, item.export, item.sub_pages)" class="btn btn-default" href="javascript:void(0)">更新账户<i class="fa fa-pencil-square-o"></i></a></li>
 										</ul>
 									</td>
 								</tr>
@@ -70,7 +70,7 @@
 							</div>
 						</div>
 					</form>
-	            	<m-limit-list :id="id" :limited="limited" :export-limit="exportLimit"></m-limit-list>
+	            	<m-limit-list :id="id" :limited="limited" :sub-pages="subPages" :export-limit="exportLimit"></m-limit-list>
 	            </div>
 	            <div class="modal-footer">
 	                <button type="button" class="btn default" data-dismiss="modal" @click="apply()">确定</button>
@@ -126,8 +126,6 @@ var $ = require('jQuery');
 
 var Pagination = require('../../common/pagination.vue');
 
-var UserVm = null;
-
 var store = require('store');
 var actions = require('actions');
 
@@ -150,9 +148,9 @@ var Role = Vue.extend({
 				totalItems: 30,     // 总条数
 				itemsPerPage: 10,    // 每页条数
 				pagesLength: 5,     // 显示几页( 1,2,3 / 1,2,3,4,5)
-				onChange: function() {
+				onChange: () => {
 					// 回调
-					UserVm.createTableBySearchStr();
+					this.createTableBySearchStr();
 				}
 			},
 			roleListData: null,
@@ -160,7 +158,9 @@ var Role = Vue.extend({
 				show: false,
 				title: '更新账户',
 				rolename: null,
-				limited: null
+				limited: null,
+				exportLimit: null,
+				subPages: null
 			},
 			loading: {
 				show: true,
@@ -172,11 +172,13 @@ var Role = Vue.extend({
 			},
 			id: null,
 			limited: {},
+			subPages: {},
 			exportLimit: {},
 			modifyName: '',
 			modifyRemark: '',
 			modifyType: null,
 			modifyLimited: {},
+			modifySubPages: {},
 			modifyExportLimited: {}
 		}
 	},
@@ -220,25 +222,29 @@ var Role = Vue.extend({
 		addRole: function(){
 			this.exportLimit = {};
 			this.limited = {};
+			this.subPages = {};
 			this.modal.show = true;
 			this.modal.title = '新增角色';
 			this.modifyRemark = '';
 			this.modifyName = '';
 			this.modifyType = 'add';
 		},
-		modifyRole: function(id, limited, exportLimit, name, remark){
+		modifyRole: function(id, limited, exportLimit, name, remark, subPages){
 			this.id = id;
 			this.exportLimit = JSON.parse(exportLimit);
 			this.limited = JSON.parse(limited);
+			this.subPages = JSON.parse(subPages || '{}');
 			this.modal.show = true;
 			this.modal.title = '修改角色';
 			this.modifyRemark = remark;
 			this.modifyName = name;
 			this.modifyType = 'modify';
 		},
-		modifyUser(name, limited) {
+		modifyUser(name, limited, exportLimit, subPages) {
 			this.account.rolename = name;
+			this.account.exportLimit = exportLimit;
 			this.account.limited = limited;
+			this.account.subPages = subPages;
 			this.account.show = true;
 		},
 		apply: function(){
@@ -251,17 +257,19 @@ var Role = Vue.extend({
 				})
 				return;
 			}
+			for(var item in _this.modifyLimited){
+				if(_this.modifyLimited[item].length === 0){
+					Vue.delete(_this.modifyLimited, item);
+					Vue.delete(_this.modifySubPages, item);
+				}
+			}
+			for(var item in _this.modifyExportLimited){
+				if(_this.modifyExportLimited[item].length === 0){
+					Vue.delete(_this.modifyExportLimited, item);
+				}
+			}
 			if(this.modifyType === 'modify'){
-				for(var item in _this.modifyLimited){
-					if(_this.modifyLimited[item].length === 0){
-						Vue.delete(_this.modifyLimited, item);
-					}
-				}
-				for(var item in _this.modifyExportLimited){
-					if(_this.modifyExportLimited[item].length === 0){
-						Vue.delete(_this.modifyExportLimited, item);
-					}
-				}
+
 				$.ajax({
 					url: '/role/update',
 					type: 'post',
@@ -270,6 +278,7 @@ var Role = Vue.extend({
 						name: _this.modifyName,
 						remark: _this.modifyRemark,
 						limited: JSON.stringify(_this.modifyLimited),
+						sub_pages: JSON.stringify(_this.modifySubPages),
 						export: JSON.stringify(_this.modifyExportLimited)
 					},
 					success: function(data){
@@ -298,6 +307,7 @@ var Role = Vue.extend({
 						name: _this.modifyName,
 						remark: _this.modifyRemark,
 						limited: JSON.stringify(_this.modifyLimited),
+						sub_pages: JSON.stringify(_this.modifySubPages),
 						export: JSON.stringify(_this.modifyExportLimited)
 					},
 					success: function(data){
@@ -377,6 +387,7 @@ var Role = Vue.extend({
 			this.modal.show = false;
 			this.id = null;
 			this.limited = {};
+			this.subPages = {};
 			this.exportLimit = {};
 			this.modifyName = '';
 			this.modifyRemark = '';
@@ -388,6 +399,9 @@ var Role = Vue.extend({
 	events: {
 		borcastLimit: function(limit){
 			this.modifyLimited = limit
+		},
+		borcastSubPages: function(subPages) {
+			this.modifySubPages = subPages;
 		},
 		borcastExportLimit: function(limit){
 			this.modifyExportLimited = limit;

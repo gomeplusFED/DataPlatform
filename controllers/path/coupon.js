@@ -7,6 +7,7 @@
 module.exports = {
     all() {
         return {
+            id : 47,
             name: "优惠券汇总",
             path: "/coupon",
             display: true,
@@ -27,6 +28,7 @@ module.exports = {
     },
     platformCoupon() {
         return {
+            id : 48,
             name: "平台优惠券总览",
             path: "/coupon/platformCoupon",
             display: true,
@@ -55,6 +57,7 @@ module.exports = {
     },
     shopCoupon() {
         return {
+            id : 49,
             name: "店铺优惠券总览",
             path: "/coupon/shopCoupon",
             display: true,

@@ -7,6 +7,7 @@
 module.exports = {
     visualbp() {
         return {
+            id : 50,
             name : "可视化埋点",
             path : "/databp/visualbp",
             display : true,
@@ -16,6 +17,7 @@ module.exports = {
     },
     bpmanage(){
         return {
+            id : 51,
             name : "埋点管理",
             path : "/databp/bpmanage",
             display : true,
@@ -26,6 +28,7 @@ module.exports = {
     },
     spread() {
         return {
+            id : 52,
             name : "热点分布",
             path : "/databp/heatmap",
             display : true,

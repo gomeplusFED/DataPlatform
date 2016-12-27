@@ -43,7 +43,11 @@ module.exports = function(app) {
                 if(limited[limitItem].length){
                     str += '<span class="fa arrow"></span></a><ul class="nav nav-second-level collapse">';
                     limited[limitItem].forEach(function(v, k){
-                        var pathItem = path[v];
+                        let obj = {};
+                        for(let k of path) {
+                            obj[k.id] = k;
+                        }
+                        var pathItem = obj[v];
                         if(pathItem && pathItem.display){
                             str += '<li><a href="#!' + pathItem.path + '">' + pathItem.name + '</a></li>';
                         }

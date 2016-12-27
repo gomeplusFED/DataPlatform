@@ -36,6 +36,7 @@ module.exports = {
     },
     shopOverview(){
         return {
+            id : 31,
             name : "店铺总览",
             path : "/achievements/shopOverview",
             display : true,
@@ -70,6 +71,7 @@ module.exports = {
     },
     shopRun(){
         return {
+            id : 32,
             name : "店铺运营分析",
             path : "/achievements/shopRun",
             display : true,
@@ -99,6 +101,7 @@ module.exports = {
     },
     product() {
         return {
+            id : 33,
             name : "商品运营分析",
             path : "/achievements/product",
             display : true,
@@ -142,6 +145,7 @@ module.exports = {
     },
     productSale() {
         return {
+            id : 34,
             name : "商品销售分析",
             path : "/achievements/productSale",
             display : true,
@@ -175,6 +179,7 @@ module.exports = {
     },
     trade() {
         return {
+            id : 35,
             name : "交易分析",
             path : "/achievements/trade",
             display : true,
@@ -208,9 +213,31 @@ module.exports = {
     },
     tradePanel(){
         return {
+            id : 36,
             name : "交易面板",
             path : "/achievements/tradePanel",
             display : true,
+            subPages : [{
+                id : 35,
+                url : "/achievements/trade",
+                name : "交易分析"
+            }, {
+                id : 39,
+                url : "/achievements/order",
+                name : "订单分析"
+            }, {
+                id : 34,
+                url : "/achievements/productSale",
+                name : "商品分析"
+            }, {
+                id : 40,
+                url : "/achievements/pay",
+                name : "支付分析"
+            }, {
+                id : 47,
+                url : "/coupon",
+                name : "优惠劵分析"
+            }],
             defaultData : [
                 {
                     type : "chart",
@@ -251,6 +278,7 @@ module.exports = {
     },
     vshop() {
         return {
+            id : 37,
             name : "美店店铺商品",
             path : "/achievements/vshop",
             display : true,
@@ -285,6 +313,7 @@ module.exports = {
     },
     vtrade() {
         return {
+            id : 38,
             name : "美店交易",
             path : "/achievements/vtrade",
             display : true,
@@ -321,6 +350,7 @@ module.exports = {
     //订单分析
     order(){
         return {
+            id : 39,
             name : "订单分析",
             path : "/achievements/order",
             display : true,
@@ -351,6 +381,7 @@ module.exports = {
     //支付分析 
     pay(){
         return {
+            id : 40,
             name : "支付分析",
             path : "/achievements/pay",
             display : true,

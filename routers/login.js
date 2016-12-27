@@ -42,6 +42,8 @@ module.exports = function(Router) {
         }
         userInfo.limited =  JSON.parse(userInfo.limited);
         userInfo.export =  JSON.parse(userInfo.export);
+        userInfo.sub_pages =  JSON.parse(userInfo.sub_pages);
+        userInfo.type =  JSON.parse(userInfo.type);
         req.sessionOptions.maxAge = new Date(Date.now() + maxAge);
         req.session.userInfo = userInfo;
         req.session.isLogin = true;
