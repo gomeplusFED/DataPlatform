@@ -1105,9 +1105,9 @@ module.exports = {
 
         if(query.search_key){
             if(query.search_key / 1){
-                query.plan_id = query.search_key;
+                params.plan_id = query.search_key;
             }else{
-                query.plan_name = query.search_key;
+                params.shop_name = query.search_key;
             }
 
             delete params.search_key;
