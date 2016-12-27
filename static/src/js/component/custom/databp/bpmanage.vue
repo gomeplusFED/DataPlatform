@@ -240,192 +240,131 @@
 	module.exports = databp;
 </script>
 <style scoped>
-.bp-container {
-	height: 100% !important;
-	min-height: 600px;
-	overflow: hidden;
-	margin: -20px -15px;
-}
-.nform-box {
-	border-bottom: 1px solid #ccc !important;
-	background-color: #efefef;
-	position: relative;
-}
-.nform-box ul {
-	width: 100%;
-	margin: 0 auto;
-	padding: 11px;
-	padding-bottom: 2px;
-}
-.nform-box ul li{
-	overflow: hidden;
-	padding-bottom: 6px;
-	list-style: none;
-	margin-bottom: 10px;
-	padding: 0;
-}
+	.bp-container {
+		height: 100% !important;
+		min-height: 600px;
+		overflow: hidden;
+		margin: -20px -15px;
+	}
+	.nform-box {
+		border-bottom: 1px solid #ccc !important;
+		background-color: #efefef;
+		position: relative;
+	}
+	.nform-box ul {
+		width: 100%;
+		margin: 0 auto;
+		padding: 11px;
+		padding-bottom: 2px;
+	}
+	.nform-box ul li{
+		overflow: hidden;
+		padding-bottom: 6px;
+		list-style: none;
+		margin-bottom: 10px;
+		padding: 0;
+	}
 
-.nform-box ul li label {
-	margin: 0 18px 0 0;
-	padding: 0;
-	font-weight: normal !important;
-	font-size: 12px !important;
-	line-height: 28px;
-	display: inline-block;
-	min-width: 50px;
-}
-.nform-box ul li .date_picker {
-	margin-left: -5px;
-	float: left;
-	min-width: 220px;
-}
-.nform-box li label, .nform-box li a, .nform-box li input, .nform-box li button, .nform-box li select, .nform-box li .sel-simulation, .nform-box li .sel-simulation span {
-	float: left;
-}
-.nform-box ul li input, .nform-box ul li select {
-	max-height: 30px;
-	margin-right: 50px;
-	border-color: #c2c2c2 !important;
-}
-.nform-box ul li .inpW1 {
-	max-width: 200px;
-}
-.nform-box ul li .inpW2 {
-	max-width: 100px;
-}
-.nform-box ul li input:last-child {
-	margin-right: 0px;
-}
-.nform-box ul li input[type="checkbox"] {
-	margin-top: 8px;
-	margin-right: 4px;
-}
-.nform-box li .btn-searchLi-top {
-	margin: 0 13px 0 235px;
-    width: 80px;
-}
-.nform-box li a.btn-reset-search {
-	line-height: 28px;
-}
-.pr {
-	position: relative;
-}
-.sel-simulation {
-	position: relative;
-	display: inline-block;
-}
-.nform-box li .sel-simulation {
-	margin-right: 12px;
-}
-.sel-simulation-tit {
-	border-color: #c2c2c2 !important;
-	background: none !important;
-	background-color: #fafafa !important;
-	cursor: default;
-	position: relative;
-	z-index: 2;
-	width: 144px;
-	height: 28px;
-	padding-right: 25px;
-	padding-left: 11px;
-	border: 1px solid #2d2d2d;
-	border-radius: 4px;
-	background-position: 0 -763px;
-	line-height: 26px;
-	color: #333;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
-.sel-simulation-tit .sel-simulation-down {
-	position: absolute;
-	right: 9px;
-	top: 3px;
-}
-.sel-simulation-down {
-	display: inline-block;
-	width: 17px;
-	height: 26px;
-	background-position: -83px -54px;
-}
-.sel-simulation-cot {
-	position: absolute;
-	left: 1px;
-	top: 28px;
-	z-index: 3;
-	display: none;
-	width: 180px;
-	border: 1px solid #c2c2c2 !important;
-	border-radius: 0 4px 4px 4px;
-	background: #e6e6e6;
-	box-shadow: 0 7px 9px rgba(0,0,0,.5);
-	overflow: hidden;
-	color: #333;
-}
-.div-selitem {
-	display: flex;
-	margin-bottom: 10px;
-}
-.list-cot-h {
-	height: -moz-calc(100% - 166px);
-	height: -webkit-calc(100% - 166px);
-	height: calc(100% - 166px);
-	background: #fff;
-	overflow: auto;
-}
-.list-cot .ntable {
-	border-top-color: #999;
-}
-.ntable {
-	border-top: 1px solid #d6d6d6;
-	border-bottom: 1px solid #d6d6d6;
-	font-size: 12px;
-	table-layout: fixed;
-}
-.ntable thead tr th, .ntable tbody tr th, .ntable tbody tr td, .ntable tbody tr td .pop {
-	height: 30px;
-	padding: 0 2px;
-	font-weight: normal;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-	line-height: 30px;
-}
-.ntable thead tr th {
-	text-align: center;
-	border-top: 1px solid #d6d6d6;
-	border-left: 1px solid #d6d6d6;
-	border-bottom: 1px solid #d6d6d6;
-	font-weight: normal;
-}
-.ntable tr:nth-child(odd) {
-    background-color: #f2faff;
-}
-.ntable tr th:nth-child(3) {
-	width: 50px;
-}
-.ntable tr th:first-child {
-	width: 50px;
-}
-.ntable tr th:last-child {
-	width: 80px;
-}
-.ntable tr th:first-child {
-	width: 5%
-}
-.ntable tr th:nth-child(4) {
-	width: 300px;
-}
-.ntable tr th:nth-child(5) {
-	width: 200px;
-}
-.ntable tr th:nth-child(7) {
-	width: 80px;
-}
-.ntable tr td {
-	text-align: center;
-}
-.ntable tr a {
-	cursor: pointer;
-}
+	.nform-box ul li label {
+		margin: 0 18px 0 0;
+		padding: 0;
+		font-weight: normal !important;
+		font-size: 12px !important;
+		line-height: 28px;
+		display: inline-block;
+		min-width: 50px;
+	}
+	.nform-box ul li .date_picker {
+		margin-left: -5px;
+		float: left;
+		min-width: 220px;
+	}
+	.nform-box li label, .nform-box li a, .nform-box li input, .nform-box li button, .nform-box li select {
+		float: left;
+	}
+	.nform-box ul li input, .nform-box ul li select {
+		max-height: 30px;
+		margin-right: 50px;
+		border-color: #c2c2c2 !important;
+	}
+	.nform-box ul li .inpW1 {
+		max-width: 200px;
+	}
+	.nform-box ul li .inpW2 {
+		max-width: 100px;
+	}
+	.nform-box ul li input:last-child {
+		margin-right: 0px;
+	}
+	.nform-box ul li input[type="checkbox"] {
+		margin-top: 8px;
+		margin-right: 4px;
+	}
+	.nform-box li .btn-searchLi-top {
+		margin: 0 13px 0 235px;
+	    width: 80px;
+	}
+
+	.list-cot-h {
+		height: -moz-calc(100% - 166px);
+		height: -webkit-calc(100% - 166px);
+		height: calc(100% - 166px);
+		background: #fff;
+		overflow: auto;
+	}
+	.list-cot .ntable {
+		border-top-color: #999;
+	}
+	.ntable {
+		border-top: 1px solid #d6d6d6;
+		border-bottom: 1px solid #d6d6d6;
+		font-size: 12px;
+		table-layout: fixed;
+	}
+	.ntable thead tr th, .ntable tbody tr th, .ntable tbody tr td, .ntable tbody tr td .pop {
+		height: 30px;
+		padding: 0 2px;
+		font-weight: normal;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		line-height: 30px;
+	}
+	.ntable thead tr th {
+		text-align: center;
+		border-top: 1px solid #d6d6d6;
+		border-left: 1px solid #d6d6d6;
+		border-bottom: 1px solid #d6d6d6;
+		font-weight: normal;
+	}
+	.ntable tr:nth-child(odd) {
+	    background-color: #f2faff;
+	}
+	.ntable tr th:nth-child(3) {
+		width: 50px;
+	}
+	.ntable tr th:first-child {
+		width: 50px;
+	}
+	.ntable tr th:last-child {
+		width: 80px;
+	}
+	.ntable tr th:first-child {
+		width: 5%
+	}
+	.ntable tr th:nth-child(4) {
+		width: 300px;
+	}
+	.ntable tr th:nth-child(5) {
+		width: 200px;
+	}
+	.ntable tr th:nth-child(7) {
+		width: 80px;
+	}
+	.ntable tr td {
+		text-align: center;
+	}
+	.ntable tr a {
+		cursor: pointer;
+	}
 </style>
