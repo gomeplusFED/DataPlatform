@@ -4,10 +4,10 @@
  * @fileoverview
  */
 const rows = [
-    ["date", "aaccount", "new_reg_num", "one", "reg_num", "app_new_act", "app_new_reg",
-        "two", "app_auser", "three", "app_pv", "app_ip", "four", "pc_new_visit", "pc_new_reg",
-        "five", "pc_visit", "pc_pv", "pc_ip", "six", "wap_new_visit", "wap_new_reg",
-        "seven", "wap_visit", "wap_pv", "wap_ip", "eight"]
+    ["date", "new_reg_num", "one", "reg_num", "aaccount", "app_new_act", "app_new_reg",
+        "two", "app_auser", "three", "app_pv", "four", "app_ip", "pc_new_visit", "pc_new_reg",
+        "five", "pc_visit", "six",  "pc_pv", "pc_ip","wap_new_visit", "wap_new_reg",
+        "seven", "wap_visit", "eight", "wap_pv", "wap_ip"]
 ];
 const cols = [
     [{
@@ -66,11 +66,11 @@ const cols = [
         caption : ""
     }]
 ];
-const _col = ["月份", "平台活跃账户数", "新增注册用户量", "注册转化率", "累计注册用户数", "APP新增激活",
-    "APP新增注册", "APP注册转化率", "APP活跃用户量", "APP新用户占比", "APP启动次数", "APP启动IP数",
-    "APP人均启动次数", "pc端新增访问人数", "pc端注册人数", "pc端注册转化率", "pc端访问人数", "pc端访问量",
-    "PC端访问IP数", "PC端新用户占比", "WAP站新增访问人数", "WAP站注册人数", "WAP站注册转化率",
-    "WAP站访问人数", "WAP站访问量", "WAP站访问IP数", "WAP站新问用户占比"];
+const _col = ["月份", "新增注册用户量", "注册转化率", "累计注册用户数", "平台活跃账户数", "APP新增激活",
+    "APP新增注册", "APP注册转化率", "APP活跃用户量", "APP新用户占比", "APP启动次数","APP人均启动次数",
+    "APP启动IP数", "pc端新增访问人数", "pc端注册人数", "pc端注册转化率", "pc端访问人数", "PC端新用户占比",
+    "pc端访问量","PC端访问IP数","WAP站新增访问人数", "WAP站注册人数", "WAP站注册转化率",
+    "WAP站访问人数", "WAP站新问用户占比", "WAP站访问量", "WAP站访问IP数"];
 const rowsWeek = [
     ["date", "aaccount", "new_reg_num", "one", "reg_num", "app_new_act", "app_new_reg", "two", "app_auser",
         "three",

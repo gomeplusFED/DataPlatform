@@ -4,11 +4,10 @@
  * @fileoverview
  */
 const rows = [
-    ["date", "order_num", "pay_num", "order_sum", "pay_sum", "one", "two",
+    ["date", "order_num", "pay_num", "order_sum", "pay_sum", "one", "two", "refund_sum", "tuotou_sum",
         "access_product", "order_product", "pay_product", "order_product_num",
-        "pay_product_num", "access_user", "access_uv_pv", "order_user", "three",
-        "pay_user", "four", "five", "refund_pro_quantity", "refund_sum",
-        "tuotou_pro_quantity", "tuotou_sum"]
+        "pay_product_num", "refund_pro_quantity","tuotou_pro_quantity",  "access_user",
+        "access_uv_pv", "order_user", "three","pay_user", "four", "five"]
 ];
 const cols = [
     [{
@@ -39,6 +38,14 @@ const cols = [
         type : "number",
         help : "统计日期内，支付金额/支付订单数"
     },{
+        caption : "退货金额",
+        type : "number",
+        help : "统计日期内，拒收入库和退货订单入库的退款金额"
+    },{
+        caption : "妥投金额",
+        type : "number",
+        help : "统计日期内，收货成功订单的金额"
+    },{
         caption : "访问商品数",
         type : "number",
         help : "统计日期内，被访问的商品数（商品详情页被访问）"
@@ -58,6 +65,14 @@ const cols = [
         caption : "支付件数",
         type : "number",
         help : "统计日期内，创建订单中的商品件数"
+    },{
+        caption : "退货商品件数",
+        type : "number",
+        help : "统计日期内，拒收入库和退货订单入库的商品件数"
+    },{
+        caption : "妥投商品件数",
+        type : "number",
+        help : "统计日期内，收货成功的订单中商品件数"
     },{
         caption : "启动/访问用户数",
         type : "number",
@@ -86,30 +101,13 @@ const cols = [
         caption : "复购率",
         type : "string",
         help : "最近30天内支付订单数超过2单的人数/最近30天支付订单的人数"
-    },{
-        caption : "退货商品件数",
-        type : "number",
-        help : "统计日期内，拒收入库和退货订单入库的商品件数"
-    },{
-        caption : "退货金额",
-        type : "number",
-        help : "统计日期内，拒收入库和退货订单入库的退款金额"
-    },{
-        caption : "妥投商品件数",
-        type : "number",
-        help : "统计日期内，收货成功的订单中商品件数"
-    },{
-        caption : "妥投金额",
-        type : "number",
-        help : "统计日期内，收货成功订单的金额"
     }]
 ];
 const rowsWeek = [
-    ["date", "order_num", "pay_num", "order_sum", "pay_sum", "one", "two",
+    ["date", "order_num", "pay_num", "order_sum", "pay_sum", "one", "two", "refund_sum", "tuotou_sum",
         "access_product", "order_product", "pay_product", "order_product_num",
-        "pay_product_num", "access_user", "access_uv_pv", "order_user", "three",
-        "pay_user", "four", "refund_pro_quantity", "refund_sum",
-        "tuotou_pro_quantity", "tuotou_sum"]
+        "pay_product_num", "refund_pro_quantity","tuotou_pro_quantity",  "access_user",
+        "access_uv_pv", "order_user", "three","pay_user", "four"]
 ];
 const colsWeek = [
     [{
@@ -140,6 +138,14 @@ const colsWeek = [
         type : "number",
         help : "统计日期内，支付金额/支付订单数"
     },{
+        caption : "退货金额",
+        type : "number",
+        help : "统计日期内，拒收入库和退货订单入库的退款金额"
+    },{
+        caption : "妥投金额",
+        type : "number",
+        help : "统计日期内，收货成功订单的金额"
+    },{
         caption : "访问商品数",
         type : "number",
         help : "统计日期内，被访问的商品数（商品详情页被访问）"
@@ -159,6 +165,14 @@ const colsWeek = [
         caption : "支付件数",
         type : "number",
         help : "统计日期内，创建订单中的商品件数"
+    },{
+        caption : "退货商品件数",
+        type : "number",
+        help : "统计日期内，拒收入库和退货订单入库的商品件数"
+    },{
+        caption : "妥投商品件数",
+        type : "number",
+        help : "统计日期内，收货成功的订单中商品件数"
     },{
         caption : "启动/访问用户数",
         type : "number",
@@ -183,22 +197,6 @@ const colsWeek = [
         caption : "支付转化率",
         type : "string",
         help : "支付人数/下单人数x100%"
-    },{
-        caption : "退货商品件数",
-        type : "number",
-        help : "统计日期内，拒收入库和退货订单入库的商品件数"
-    },{
-        caption : "退货金额",
-        type : "number",
-        help : "统计日期内，拒收入库和退货订单入库的退款金额"
-    },{
-        caption : "妥投商品件数",
-        type : "number",
-        help : "统计日期内，收货成功的订单中商品件数"
-    },{
-        caption : "妥投金额",
-        type : "number",
-        help : "统计日期内，收货成功订单的金额"
     }]
 ];
 const util  = require("../../utils");
