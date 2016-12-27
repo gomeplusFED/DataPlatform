@@ -239,7 +239,7 @@ var api = {
 		            "platform": "H5",
 		            "isActive": "1",
 		            "uniquePoint": "0"
-		        }]
+		        }].slice(page*size ,page*size + size)
 		    },
 		    "code": "200",
 		    "msg": "",
