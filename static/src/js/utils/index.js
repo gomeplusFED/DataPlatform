@@ -2,7 +2,6 @@
 
 var common = require('./common.js');
 var dom = require('./dom.js');
-var selector = require('./selector.js');
 
 var utils = {};
 
@@ -17,6 +16,5 @@ utils.mixin = function(source, target) {
 
 utils.mixin(utils, common);
 utils.mixin(utils, dom);
-utils.mixin(utils, selector);
 
 module.exports = utils;

@@ -1,5 +1,5 @@
-var store = require('../../../store/store.js');
-var actions = require('../../../store/actions.js');
+var store = require('store');
+var actions = require('actions');
 
 function extractResult(res) {
 	return new Promise(function(s, j){
@@ -239,7 +239,7 @@ var api = {
 		            "platform": "H5",
 		            "isActive": "1",
 		            "uniquePoint": "0"
-		        }]
+		        }].slice(page*size ,page*size + size)
 		    },
 		    "code": "200",
 		    "msg": "",
