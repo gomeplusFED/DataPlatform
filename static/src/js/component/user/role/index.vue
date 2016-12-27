@@ -29,7 +29,7 @@
 									<td>{{item.remark}}</td>
 									<td style="width: 270px">
 										<ul>
-											<li v-show="item.status"><a @click="modifyRole(item.id, item.limited, item.export, item.name, item.remark, item.sub_pages)" class="btn btn-default" href="javascript:void(0)">修改<i class="fa fa-pencil-square-o"></i></a></li>
+											<li v-show="item.status"><a @click="modifyRole(item.id, item.limited, item.export, item.name, item.remark, item.sub_pages, item.type)" class="btn btn-default" href="javascript:void(0)">修改<i class="fa fa-pencil-square-o"></i></a></li>
 											<li v-show="item.status"><a @click="forbidden(item.id, item.name)" class="btn btn-default" href="javascript:void(0)">禁用<i class="fa fa-remove"></i></a></li>
 											<li v-show="!item.status"><a @click="startUsing(item.id, item.name)" class="btn btn-default" href="javascript:void(0)">启用<i class="fa fa-check-square-o"></i></a></li>
 											<li v-show="item.status"><a @click="modifyUser(item.name, item.limited, item.export, item.sub_pages)" class="btn btn-default" href="javascript:void(0)">更新账户<i class="fa fa-pencil-square-o"></i></a></li>
@@ -70,7 +70,7 @@
 							</div>
 						</div>
 					</form>
-	            	<m-limit-list :id="id" :limited="limited" :sub-pages="subPages" :export-limit="exportLimit"></m-limit-list>
+	            	<m-limit-list v-ref:limitlist :id="id" :limited="limited" :sub-pages="subPages" :type="type" :export-limit="exportLimit"></m-limit-list>
 	            </div>
 	            <div class="modal-footer">
 	                <button type="button" class="btn default" data-dismiss="modal" @click="apply()">确定</button>
@@ -173,6 +173,7 @@ var Role = Vue.extend({
 			id: null,
 			limited: {},
 			subPages: {},
+			type: {},
 			exportLimit: {},
 			modifyName: '',
 			modifyRemark: '',
@@ -229,11 +230,12 @@ var Role = Vue.extend({
 			this.modifyName = '';
 			this.modifyType = 'add';
 		},
-		modifyRole: function(id, limited, exportLimit, name, remark, subPages){
+		modifyRole: function(id, limited, exportLimit, name, remark, subPages, type){
 			this.id = id;
 			this.exportLimit = JSON.parse(exportLimit);
 			this.limited = JSON.parse(limited);
 			this.subPages = JSON.parse(subPages || '{}');
+			this.type = JSON.parse(type || '{}');
 			this.modal.show = true;
 			this.modal.title = '修改角色';
 			this.modifyRemark = remark;
@@ -268,6 +270,29 @@ var Role = Vue.extend({
 					Vue.delete(_this.modifyExportLimited, item);
 				}
 			}
+
+			// 平台权限
+			let limitlist = this.$refs.limitlist;
+			let config = {}
+			function parseObject(obj) {
+				for (let key of Object.keys(obj)) {
+						let item = obj[key]
+						if (typeof item === 'object') {
+							parseObject(item)
+						} else if (key && key !== 'undefined' && item && item !== 'undefined') {
+							config[key] = item
+						}
+					}
+			}
+			
+			if (limitlist.platformPermission3) {
+				parseObject(limitlist.platformPermission3)
+			}
+			// 相同页面的情况下，二级目录覆盖三级目录
+			if (limitlist.platformPermission2) {
+				parseObject(limitlist.platformPermission2)
+			}
+
 			if(this.modifyType === 'modify'){
 
 				$.ajax({
@@ -279,7 +304,8 @@ var Role = Vue.extend({
 						remark: _this.modifyRemark,
 						limited: JSON.stringify(_this.modifyLimited),
 						sub_pages: JSON.stringify(_this.modifySubPages),
-						export: JSON.stringify(_this.modifyExportLimited)
+						export: JSON.stringify(_this.modifyExportLimited),
+						type: JSON.stringify(config)
 					},
 					success: function(data){
 						if(!data.success){
@@ -308,7 +334,8 @@ var Role = Vue.extend({
 						remark: _this.modifyRemark,
 						limited: JSON.stringify(_this.modifyLimited),
 						sub_pages: JSON.stringify(_this.modifySubPages),
-						export: JSON.stringify(_this.modifyExportLimited)
+						export: JSON.stringify(_this.modifyExportLimited),
+						type: JSON.stringify(config)
 					},
 					success: function(data){
 						if(!data.success){
