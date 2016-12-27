@@ -17,7 +17,7 @@ module.exports = (Router) => {
             customMethods: ''
         }],
         params(query, params) {
-            params.type = query.type || 'ios';
+            params.type = query.type || this.global_platform.list[0].key;
             return params;
         },
         global_platform : {
@@ -54,8 +54,28 @@ module.exports = (Router) => {
         modelName : ["NewAccount"],
         paging : [true],
         platform : false,
+        global_platform : {
+            show: true,
+            key: 'type',
+            list: [{
+                key: 'ios',
+                name: 'IOS'
+            }, {
+                key: 'android',
+                name: 'Android'
+            }, {
+                key: 'app',
+                name: 'APP'
+            }, {
+                key: 'pc',
+                name: 'PC'
+            }, {
+                key: 'm',
+                name: 'H5'
+            }]
+        },
         params(query, params) {
-            params.type = query.type || 'ios';
+            params.type = query.type || this.global_platform.list[0].key;
 
             return params;
         },
