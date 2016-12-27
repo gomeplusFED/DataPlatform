@@ -457,6 +457,8 @@ module.exports = {
             }
         }
 
+
+        query.page = query.page || 1;
         source.map((item , index) => {
             item.Number = (query.page - 1)*20 + index + 1;
             item.plan_type_Translate = TypeName[item.plan_type];
@@ -1060,6 +1062,8 @@ module.exports = {
         let source = data.first.data[0],
             count  = data.first.count;
         count = count > 50 ? 50 : count;
+
+        query.page = query.page || 1;
         source.map((item , index) => {
             item.Number = (query.page - 1) * query.limit + index + 1;
         });
@@ -1087,6 +1091,7 @@ module.exports = {
             Translate[item.flow_code] = item.flow_name;
         });
 
+        query.page = query.page || 1;
         source.map((item , index) => {
             item.Number = (query.page - 1) * query.limit + index + 1;
             item.Return_lv = util.toFixed( item.is_rebate_back_merchandise_num , item.is_rebate_merchandise_num );
