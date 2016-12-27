@@ -1107,7 +1107,7 @@ module.exports = {
             if(query.search_key / 1){
                 params.plan_id = query.search_key;
             }else{
-                params.shop_name = query.search_key;
+                params.shop_name = orm.like("%" + query.search_key + "%");
             }
 
             delete params.search_key;
