@@ -7,17 +7,6 @@
 				<input class="form-control inp inpW1" type="text" placeholder="" v-model="searchParam.pageUrl">
 				<label>埋点名称</label>
 				<input class="form-control inp inpW2" type="text" placeholder="" v-model="searchParam.pointName">
-				<label>状态</label>
-				<select class="form-control inp inpW2" v-model="searchParam.isActive">
-					<option value='1'>正常</option>
-					<option value='0'>已删除</option>
-				</select>
-				<label>埋点事件名称</label>
-				<input class="form-control inp inpW2" type="text" placeholder="" value="单击" disabled>
-			</li>
-			<li>
-				<label>匹配模式</label>
-				<input class="form-control inp inpW1" type="text" placeholder="" v-model="searchParam.pattern">
 				<label>平台</label>
 				<select class="form-control inp inpW2" v-model="searchParam.platform">
 					<option value='PC'>PC</option>
@@ -29,16 +18,17 @@
 					<option value='0'>模块</option>
 					<option value='0'>单点</option>
 				</select>
-
 			</li>
 			<li>
-				<label><input type="checkbox" v-model="showDate"></input>起止时间</label>
+				<label>查询时间</label>
 				<div class="date_picker">                
-					<m-date :index="index" :page-components-data="pageComponentsData" :component-type="'date_picker'" :argvs.sync='argvs' diasbled></m-date>
+					<m-date :index="index" :page-components-data="pageComponentsData" :component-type="'date_picker'" :argvs.sync='argvs' ></m-date>
 				</div>
-
 				<button id="btnSearch" class="btn btn-searchLi-top btn-primary" type="button" data-toggle="popover" data-trigger="focus" @click="queryClick">查询</button>
-
+			</li>
+			<li style="height:30px;">
+				<label><input type="checkbox" v-model="showSum"></input>总计</label>
+				<input v-show="showSum" class="form-control inp inpW1" type="text" placeholder="" disabled>
 			</li>
 		</ul> 
 	</div>
@@ -46,15 +36,14 @@
 		<table class="table table-hover ntable">
 			<thead>
 				<tr>
-					<th >序号</th>
-					<th >埋点名称</th>
-					<th >事件</th>
-					<th >页面URL</th>
-					<th >匹配模式</th>
-					<th >埋点参数</th>
-					<th >修改人</th>
-					<th >埋点设置时间</th>
-					<th>操作</th>
+					<th>序号</th>
+					<th>埋点名称</th>
+					<th>事件</th>
+					<th>是否模块</th>
+					<th>页面URL</th>
+					<th>PV</th>
+					<th>UV</th>
+					<th>详情</th>
 				</tr>
 			</thead>
 			<tbody> 
@@ -62,12 +51,11 @@
 					<td>{{i + baseIndex}}</td>
 					<td>{{item.pointName}}</td>
 					<td>单击</td>
+					<td title="{{item.type}}">{{item.type}}</td>
 					<td title="{{item.pageUrl}}"><a @click="heatmap(item)">{{item.pageUrl}}</a></td>
-					<td title="{{item.pattern}}">{{item.pattern}}</td>
-					<td title="{{item.pointParam}}">{{item.pointParam}}</td>
-					<td title="{{item.userInfo?(item.userInfo.department + item.userInfo.email) : '--'}}">{{item.userInfo.name || '--'}}</td>
-					<td>{{item.updateTime |Date 'yyyy-MM-dd hh:mm:ss'}}</td>
-					<td><a @click="edit(item)">修改</a>&nbsp<a v-if="item.isActive === '1'" @click="del(item.pointId)">删除</a><a v-else @click="restore(item.pointId)">恢复</a></td>
+					<td title="{{item.PV}}">{{item.PV}}</td>
+					<td title="{{item.UV}}">{{item.UV}}</td>
+					<td><a @click="edit(item)">趋势</a></td>
 				</tr>
 				<tr v-show="noData">
 					 <td colspan="7">暂无数据</td>
@@ -84,8 +72,8 @@
 	var Vue = require('Vue');
 	var $ = require('jQuery');
 	var DatePicker = require('../../common/datePicker.vue');
-	var store = require('../../../store/store.js');
-	var actions = require('../../../store/actions.js');
+	var store = require('store');
+	var actions = require('actions');
 	var Pagination = require('../../common/pagination.vue');
 	var api = require('./mock/api.js');
 	var utils = require('utils');
@@ -106,7 +94,7 @@
 			return {
 				index: 1,
 				noData: false,
-				showDate: null,
+				showSum: null,
 				argvs: {},
 				paginationConf: {
 					currentPage: 1,     // 当前页
@@ -137,7 +125,8 @@
 			}
 		},
 		ready() {
-			this.showDate = false;
+			// triger the date picker
+			this.pageComponentsData.trigger = !this.pageComponentsData.trigger;
 		},
 		route: {
 	        activate: function (transition) {
@@ -153,13 +142,6 @@
 					page: this.paginationConf.currentPage - 1,
 					size: this.paginationConf.itemsPerPage
 				}, this.searchParam);
-				if (this.showDate) {
-					options.startTime = this.argvs.startTime + ' 00:00:00';
-					options.endTime= this.argvs.endTime + ' 23:59:59';
-				} else {
-					options.startTime = '2000-01-01 00:00:00';
-					options.endTime = utils.formatDate(new Date(), 'yyyy-MM-dd hh:mm:ss');
-				}
 				api.listBps(options).then((res) => {
 					this.dataList = res.data;
 					if (this.dataList.length === 0) {
@@ -220,20 +202,6 @@
 			}
 		},
 		watch: {
-			'showDate' :{
-				handler(val) {
-					let $dateInput = $('.date_picker input');
-					if(val) {
-						// triger the date picker
-						this.pageComponentsData.trigger = !this.pageComponentsData.trigger;
-						$dateInput.removeAttr("disabled");
-					} else {
-						$dateInput.attr('disabled',true);
-						$dateInput.val('');
-						
-					}
-				}   
-			}
 		}
 	});
 
