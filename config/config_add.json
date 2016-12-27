@@ -10,6 +10,7 @@
                 "name": "返利汇总",
                 "path": "/rebate/all",
                 "display": true,
+                "id" : "00002",
                 "defaultData": [
                     {
                         "type": "table",
@@ -47,6 +48,7 @@
                 "name": "平台订单返利汇总",
                 "path": "/rebate/platformAll",
                 "display": true,
+                "id" : "00003",
                 "defaultData": [
                     {
                         "type": "table",
@@ -78,6 +80,7 @@
                 "name": "邀请注册/入驻",
                 "path": "/rebate/regist",
                 "display": true,
+                "id" : "00004",
                 "defaultData": [
                     {
                         "type": "table",
@@ -109,6 +112,7 @@
                 "name": "商家返利汇总",
                 "path": "/rebate/shop",
                 "display": true,
+                "id" : "00005",
                 "defaultData": [
                     {
                         "type": "table",
@@ -148,6 +152,7 @@
                 "name": "平台基础返利",
                 "path": "/rebate/platformBase",
                 "display": true,
+                "id" : "00006",
                 "defaultData": [
                     {
                         "type": "table",
@@ -173,6 +178,7 @@
                 "name": "平台促销返利",
                 "path": "/rebate/promotion",
                 "display": true,
+                "id" : "00007",
                 "defaultData": [
                     {
                         "type": "table",
@@ -198,6 +204,7 @@
                 "name": "单项单级返利",
                 "path": "/rebate/singleStage",
                 "display": true,
+                "id" : "00008",
                 "defaultData": [
                     {
                         "type": "table",
@@ -223,6 +230,7 @@
                 "name": "邀请商户分享返利",
                 "path": "/rebate/invitation",
                 "display": true,
+                "id" : "00009",
                 "defaultData": [
                     {
                         "type": "table",
@@ -248,6 +256,7 @@
                 "name": "商家返利计划",
                 "path": "/rebate/shopPlan",
                 "display": true,
+                "id" : "00010",
                 "defaultData": [
                     {
                         "type": "table",
