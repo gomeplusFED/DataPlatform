@@ -1,10 +1,10 @@
 <template>
     <label v-show="isShowAll">
-        <input type="checkbox" @click="checkAll" v-model="isAll"/>
+        <input type="checkbox" @click="check(-1)" :checked="isAll"/>
         全部
     </label>
     <label v-for="(index,item) in list">
-        <input type="checkbox" v-model="arr[index]" />
+        <input type="checkbox" @click="check(index)" :checked="arr[index]" />
         {{item}}
     </label>
 </template>
@@ -36,11 +36,20 @@ export default {
         }).join('');
     },
     methods: {
-        checkAll() {
-            let state = !this.isAll;
-            this.arr = this.arr.map(x => {
-               return x = state;
-            })
+        check(index) {
+            if (index === -1) {
+                let state = !this.isAll;
+                this.arr = this.arr.map(x => {
+                    return x = state;
+                })
+            } else {
+                this.arr[index] = !this.arr[index]
+            }
+            let temp = this.arr.map(x => {
+                return x ? '1' : '0'
+            }).join('');
+            this.val = temp;
+            this.$dispatch('checkboxChange' + (this.level || ''), this.obj || {}, this.val, index);
         }
     },
     computed: {
@@ -49,18 +58,9 @@ export default {
         }
     },
     watch: {
-        arr(val) {
-            let temp = val.map(x => {
-                return x ? '1' : '0'
-            }).join('');
-            if (temp !== this.val) {
-                this.val = temp;
-            }
-            this.$dispatch('checkboxChange' + (this.level || ''), this.obj || {}, this.val);
-        },
         val(val) {
-            this.arr = val.split('').map(x => {
-                return !!parseInt(x);
+             this.arr = val.split('').map((x, i) => {
+                return !!parseInt(x)
             })
         }
     }
