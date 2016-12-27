@@ -4,11 +4,10 @@
  * @fileoverview
  */
 const rows = [
-    ["date", "order_num", "pay_num", "order_sum", "pay_sum", "one", "two",
+    ["date", "order_num", "pay_num", "order_sum", "pay_sum", "one", "two", "refund_sum", "tuotou_sum",
         "access_product", "order_product", "pay_product", "order_product_num",
-        "pay_product_num", "access_user", "access_uv_pv", "order_user", "three",
-        "pay_user", "four", "five", "refund_pro_quantity", "refund_sum",
-        "tuotou_pro_quantity", "tuotou_sum"]
+        "pay_product_num", "refund_pro_quantity","tuotou_pro_quantity",  "access_user",
+        "access_uv_pv", "order_user", "three","pay_user", "four", "five"]
 ];
 const cols = [
     [{
@@ -33,11 +32,19 @@ const cols = [
     },{
         caption : "客单价",
         type : "number",
-        help : "统计日期内，支付金额/支付人数x100%"
+        help : "统计日期内，支付金额/支付人数"
     },{
         caption : "笔单价",
         type : "number",
-        help : "统计日期内，支付金额/支付订单数x100%"
+        help : "统计日期内，支付金额/支付订单数"
+    },{
+        caption : "退货金额",
+        type : "number",
+        help : "统计日期内，拒收入库和退货订单入库的退款金额"
+    },{
+        caption : "妥投金额",
+        type : "number",
+        help : "统计日期内，收货成功订单的金额"
     },{
         caption : "访问商品数",
         type : "number",
@@ -58,6 +65,14 @@ const cols = [
         caption : "支付件数",
         type : "number",
         help : "统计日期内，创建订单中的商品件数"
+    },{
+        caption : "退货商品件数",
+        type : "number",
+        help : "统计日期内，拒收入库和退货订单入库的商品件数"
+    },{
+        caption : "妥投商品件数",
+        type : "number",
+        help : "统计日期内，收货成功的订单中商品件数"
     },{
         caption : "启动/访问用户数",
         type : "number",
@@ -86,30 +101,13 @@ const cols = [
         caption : "复购率",
         type : "string",
         help : "最近30天内支付订单数超过2单的人数/最近30天支付订单的人数"
-    },{
-        caption : "退货商品件数",
-        type : "number",
-        help : "统计日期内，拒收入库和退货订单入库的商品件数"
-    },{
-        caption : "退货金额",
-        type : "number",
-        help : "统计日期内，拒收入库和退货订单入库的退款金额"
-    },{
-        caption : "妥投商品件数",
-        type : "number",
-        help : "统计日期内，收货成功的订单中商品件数"
-    },{
-        caption : "妥投金额",
-        type : "number",
-        help : "统计日期内，收货成功订单的金额"
     }]
 ];
 const rowsWeek = [
-    ["date", "order_num", "pay_num", "order_sum", "pay_sum", "one", "two",
+    ["date", "order_num", "pay_num", "order_sum", "pay_sum", "one", "two", "refund_sum", "tuotou_sum",
         "access_product", "order_product", "pay_product", "order_product_num",
-        "pay_product_num", "access_user", "access_uv_pv", "order_user", "three",
-        "pay_user", "four", "refund_pro_quantity", "refund_sum",
-        "tuotou_pro_quantity", "tuotou_sum"]
+        "pay_product_num", "refund_pro_quantity","tuotou_pro_quantity",  "access_user",
+        "access_uv_pv", "order_user", "three","pay_user", "four"]
 ];
 const colsWeek = [
     [{
@@ -134,11 +132,19 @@ const colsWeek = [
     },{
         caption : "客单价",
         type : "number",
-        help : "统计日期内，支付金额/支付人数x100%"
+        help : "统计日期内，支付金额/支付人数"
     },{
         caption : "笔单价",
         type : "number",
-        help : "统计日期内，支付金额/支付订单数x100%"
+        help : "统计日期内，支付金额/支付订单数"
+    },{
+        caption : "退货金额",
+        type : "number",
+        help : "统计日期内，拒收入库和退货订单入库的退款金额"
+    },{
+        caption : "妥投金额",
+        type : "number",
+        help : "统计日期内，收货成功订单的金额"
     },{
         caption : "访问商品数",
         type : "number",
@@ -159,6 +165,14 @@ const colsWeek = [
         caption : "支付件数",
         type : "number",
         help : "统计日期内，创建订单中的商品件数"
+    },{
+        caption : "退货商品件数",
+        type : "number",
+        help : "统计日期内，拒收入库和退货订单入库的商品件数"
+    },{
+        caption : "妥投商品件数",
+        type : "number",
+        help : "统计日期内，收货成功的订单中商品件数"
     },{
         caption : "启动/访问用户数",
         type : "number",
@@ -183,22 +197,6 @@ const colsWeek = [
         caption : "支付转化率",
         type : "string",
         help : "支付人数/下单人数x100%"
-    },{
-        caption : "退货商品件数",
-        type : "number",
-        help : "统计日期内，拒收入库和退货订单入库的商品件数"
-    },{
-        caption : "退货金额",
-        type : "number",
-        help : "统计日期内，拒收入库和退货订单入库的退款金额"
-    },{
-        caption : "妥投商品件数",
-        type : "number",
-        help : "统计日期内，收货成功的订单中商品件数"
-    },{
-        caption : "妥投金额",
-        type : "number",
-        help : "统计日期内，收货成功订单的金额"
     }]
 ];
 const util  = require("../../utils");
@@ -223,15 +221,15 @@ module.exports = {
             qb = true;
         }
         for(let key of source) {
-            key.one = util.percentage(key.pay_sum, key.pay_user);
-            key.two = util.percentage(key.pay_sum, key.pay_num);
+            key.one = util.division(key.pay_sum / 100, key.pay_user);
+            key.two = util.division(key.pay_sum / 100, key.pay_num);
             key.three = util.toFixed(key.order_user, key.access_uv_pv);
-            key.four = util.toFixed(key.pay_user, key.access_uv_pv);
+            key.four = util.toFixed(key.pay_user, key.order_user);
             key.five = util.toFixed(key.day30gt2_user, key.day30_user);
-            key.order_sum = key.order_sum.toFixed(2);
-            key.pay_sum = key.pay_sum.toFixed(2);
-            key.refund_sum = key.refund_sum.toFixed(2);
-            key.tuotou_sum = key.tuotou_sum.toFixed(2);
+            key.order_sum = (key.order_sum / 100).toFixed(2);
+            key.pay_sum = (key.pay_sum / 100).toFixed(2);
+            key.refund_sum = (key.refund_sum / 100).toFixed(2);
+            key.tuotou_sum = (key.tuotou_sum / 100).toFixed(2);
             key.date = moment(key.date).format("YYYY-MM-DD");
             if(key.date === z && key.last_30_days_avg === 1) {
                 last_30 = key;
@@ -273,16 +271,16 @@ module.exports = {
     orwOne(data) {
         const source = data.first.data[0];
         for(let key of source) {
-            key.one = util.percentage(key.pay_sum, key.pay_user);
-            key.two = util.percentage(key.pay_sum, key.pay_num);
+            key.one = util.division(key.pay_sum / 100, key.pay_user);
+            key.two = util.division(key.pay_sum / 100, key.pay_num);
             key.three = util.toFixed(key.order_user, key.access_uv_pv);
-            key.four = util.toFixed(key.pay_user, key.access_uv_pv);
+            key.four = util.toFixed(key.pay_user, key.order_user);
             //key.five = util.toFixed(key.day30gt2_user, key.day30_user);
-            key.order_sum = key.order_sum.toFixed(2);
-            key.pay_sum = key.pay_sum.toFixed(2);
-            key.refund_sum = key.refund_sum.toFixed(2);
-            key.tuotou_sum = key.tuotou_sum.toFixed(2);
-            const date = moment(new Date(key.date) - 7 * 24 * 60 * 60 * 1000).format("MM.DD");
+            key.order_sum = (key.order_sum / 100).toFixed(2);
+            key.pay_sum = (key.pay_sum / 100).toFixed(2);
+            key.refund_sum = (key.refund_sum / 100).toFixed(2);
+            key.tuotou_sum = (key.tuotou_sum / 100).toFixed(2);
+            const date = moment(new Date(key.date) - 6 * 24 * 60 * 60 * 1000).format("MM.DD");
             key.date = date + "-" + moment(key.date).format("MM.DD");
         }
 
@@ -291,15 +289,15 @@ module.exports = {
     ormOne(data) {
         const source = data.first.data[0];
         for(let key of source) {
-            key.one = util.percentage(key.pay_sum, key.pay_user);
-            key.two = util.percentage(key.pay_sum, key.pay_num);
+            key.one = util.division(key.pay_sum / 100, key.pay_user);
+            key.two = util.division(key.pay_sum / 100, key.pay_num);
             key.three = util.toFixed(key.order_user, key.access_uv_pv);
-            key.four = util.toFixed(key.pay_user, key.access_uv_pv);
+            key.four = util.toFixed(key.pay_user, key.order_user);
             key.five = util.toFixed(key.day30gt2_user, key.day30_user);
-            key.order_sum = key.order_sum.toFixed(2);
-            key.pay_sum = key.pay_sum.toFixed(2);
-            key.refund_sum = key.refund_sum.toFixed(2);
-            key.tuotou_sum = key.tuotou_sum.toFixed(2);
+            key.order_sum = (key.order_sum / 100).toFixed(2);
+            key.pay_sum = (key.pay_sum / 100).toFixed(2);
+            key.refund_sum = (key.refund_sum / 100).toFixed(2);
+            key.tuotou_sum = (key.tuotou_sum / 100).toFixed(2);
             key.date = moment(key.date).format("MM") + "月";
         }
 

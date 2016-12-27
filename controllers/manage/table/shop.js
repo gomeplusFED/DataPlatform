@@ -18,6 +18,7 @@ module.exports = (Router) => {
         platform : false,
         control_table_col : true,
         global_platform : global_platform.day,
+        order : ["-date"],
         flexible_btn : [{
             content: '<a href="javascript:void(0)">数据导出</a>',
             preMethods: ['excel_export']

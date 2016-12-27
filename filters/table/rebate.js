@@ -130,16 +130,27 @@ module.exports = {
         }
 
         for(let key of source) {
+            key.expect_rebate_amount = (key.expect_rebate_amount / 100).toFixed(2);
+            key.cancel_rebate_amount = (key.cancel_rebate_amount / 100).toFixed(2);
+            key.is_over_rebate_order_amount = (key.is_over_rebate_order_amount / 100).toFixed(2);
             key.date = moment(key.date).format("YYYY-MM-DD");
         }
 
         for(let key of second) {
-            key.plan_type_name = plan_type[key.plan_type];
-            key.rebate_type_name = rebate_type[key.rebate_type];
-            if(rebate_type[key.rebate_type].indexOf("-") === -1) {
-                key.name = rebate_type[key.rebate_type];
+            key.order_create_time_min = moment(new Date(key.order_create_time_min)).format("YYYY-MM-DD");
+            key.plan_type_name = plan_type[key.plan_type] || "";
+            key.rebate_type_name = rebate_type[key.rebate_type] || "";
+            key.expect_rebate_amount = (key.expect_rebate_amount / 100).toFixed(2);
+            key.cancel_rebate_amount = (key.cancel_rebate_amount / 100).toFixed(2);
+            key.is_over_rebate_order_amount = (key.is_over_rebate_order_amount / 100).toFixed(2);
+            if(rebate_type[key.rebate_type]) {
+                if(rebate_type[key.rebate_type].indexOf("-") === -1) {
+                    key.name = rebate_type[key.rebate_type];
+                } else {
+                    key.name = rebate_type[key.rebate_type].substr(0, rebate_type[key.rebate_type].indexOf("-"));
+                }
             } else {
-                key.name = rebate_type[key.rebate_type].substr(0, rebate_type[key.rebate_type].indexOf("-"));
+                key.name = "";
             }
         }
 
@@ -158,16 +169,26 @@ module.exports = {
         }
 
         for(let key of source) {
+            key.expect_rebate_amount = (key.expect_rebate_amount / 100).toFixed(2);
+            key.cancel_rebate_amount = (key.cancel_rebate_amount / 100).toFixed(2);
+            key.is_over_rebate_order_amount = (key.is_over_rebate_order_amount / 100).toFixed(2);
             key.date = moment(key.date).format("YYYY-MM-DD");
         }
 
         for(let key of second) {
-            key.plan_type_name = plan_type[key.plan_type];
-            key.rebate_type_name = rebate_type[key.rebate_type];
-            if(rebate_type[key.rebate_type].indexOf("-") === -1) {
-                key.name = rebate_type[key.rebate_type];
+            key.plan_type_name = plan_type[key.plan_type] || "";
+            key.rebate_type_name = rebate_type[key.rebate_type] || "";
+            key.expect_rebate_amount = (key.expect_rebate_amount / 100).toFixed(2);
+            key.cancel_rebate_amount = (key.cancel_rebate_amount / 100).toFixed(2);
+            key.is_over_rebate_order_amount = (key.is_over_rebate_order_amount / 100).toFixed(2);
+            if(rebate_type[key.rebate_type]) {
+                if(rebate_type[key.rebate_type].indexOf("-") === -1) {
+                    key.name = rebate_type[key.rebate_type];
+                } else {
+                    key.name = rebate_type[key.rebate_type].substr(0, rebate_type[key.rebate_type].indexOf("-"));
+                }
             } else {
-                key.name = rebate_type[key.rebate_type].substr(0, rebate_type[key.rebate_type].indexOf("-"));
+                key.name = "";
             }
         }
 

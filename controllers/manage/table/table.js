@@ -288,7 +288,7 @@ module.exports = (Router) => {
         params(query, params) {
             const now = new Date();
             params.date = orm.between(
-                moment(now - 15 * 24 * 60 * 60 * 1000).format("YYYY-MM-DD"),
+                moment(now - 14 * 24 * 60 * 60 * 1000).format("YYYY-MM-DD"),
                 moment(now - 24 * 60 * 60 * 1000).format("YYYY-MM-DD")
             );
             delete params.day_type;

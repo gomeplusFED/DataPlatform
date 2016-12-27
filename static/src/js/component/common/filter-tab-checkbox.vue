@@ -63,7 +63,7 @@
 				if (length > max){
 					actions.alert(store, {
 						show: true,
-						msg: '最多只能选中'+ max + "个选项,当 前选中" + length,
+						msg: '最多只能选中'+ max + "个选项,当前选中" + length,
 						type: 'warning'
 					});
 				}else{

@@ -11,8 +11,8 @@ module.exports = {
         const source = data.first.data[0];
         for(let key of source) {
             key.date = moment(key.date).format("YYYY-MM-DD");
-            key.month_cumulative_pay_amount = key.month_cumulative_pay_amount.toFixed(2);
-            key.meidian_cumulative_tuotou_amount = key.meidian_cumulative_tuotou_amount.toFixed(2);
+            key.month_cumulative_pay_amount = (key.month_cumulative_pay_amount / 100).toFixed(2);
+            key.meidian_cumulative_tuotou_amount = (key.meidian_cumulative_tuotou_amount / 100).toFixed(2);
         }
 
         return util.toTable([source], data.rows, data.cols);
@@ -28,10 +28,11 @@ module.exports = {
         for(let key of source) {
             key.date = moment(key.date).format("YYYY-MM-DD");
             key.one = util.toFixed(key.pay_order_num, key.newadd_order_num);
-            key.two = util.division(key.pay_amount, key.pay_user_num);
-            key.three = util.division(key.pay_amount, key.pay_order_num);
+            key.two = util.division(key.pay_amount / 100, key.pay_user_num);
+            key.three = util.division(key.pay_amount / 100, key.pay_order_num);
             key.four = util.toFixed(key.newadd_rebate_order_num, key.newadd_order_num);
-            key.newadd_rebate_order_amount = key.newadd_rebate_order_amount.toFixed(2);
+            key.newadd_rebate_order_amount = (key.newadd_rebate_order_amount / 100).toFixed(2);
+            key.pay_amount = (key.pay_amount / 100).toFixed(2);
             if(key.date === z) {
                 zObj = key;
             } else if(key.date === q) {
@@ -43,9 +44,13 @@ module.exports = {
                 one[row] = (zObj[row] || 0) - (qObj[row] || 0);
             }
         }
-        one.date = "增比";
+        one.date = "增长";
         one.one = "--";
         one.four = "--";
+        one.newadd_rebate_order_amount = one.newadd_rebate_order_amount.toFixed(2);
+        one.pay_amount = one.pay_amount.toFixed(2);
+        one.two = one.two.toFixed(2);
+        one.three = one.three.toFixed(2);
         for(let key in one) {
             if(key !== "date" && key !== "one" && key !== "four") {
                 two[key] = util.toFixed(one[key], qObj[key] || 0);
@@ -62,11 +67,11 @@ module.exports = {
     WeekOne(data, now) {
         const source = data.first.data[0];
         for(let key of source) {
-            key.pay_amount = key.pay_amount.toFixed(2);
+            key.pay_amount = (key.pay_amount / 100).toFixed(2);
             if(0 <= now - key.date && now - key.date <= 7 * 24 * 60 * 60 * 1000) {
                 key.date = "本周";
             } else {
-                key.date = "上周对比";
+                key.date = "上周";
             }
         }
 
@@ -101,7 +106,7 @@ module.exports = {
             source[0].date = "本月";
         }
         if(source[1]) {
-            source[1].date = "上月对比";
+            source[1].date = "上月";
         }
 
         newData.push({
