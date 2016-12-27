@@ -409,7 +409,6 @@ var User = Vue.extend({
 		},
 		apply: function() {
 			var _this = this;
-			debugger
 			if (this.modal.type === 'roleList') {
 				var currentUserRoleNameArr = _this.currentUserRoleName ? _this.currentUserRoleName.split(';') : [];
 
@@ -486,15 +485,15 @@ var User = Vue.extend({
 					roleCheckedList.forEach(x => {
 						let roleType = JSON.parse(x.type || '{}')
 						for(let key in roleType) {
-							if (_this.type[key] && roleType[key] !== '00000') {
+							if (roleType[key] !== '00000') {
 								let arrRole =  roleType[key].split('').filter(x => x === '1')
-								let arrTemp = _this.type[key].split('')
+								let arrTemp = (_this.type[key] || '00000').split('')
 								roleType[key].split('').forEach((x, index) => {
 									if (x === '1') {
 										arrTemp[index] = '1'
 									}
 								})
-								_this.type[key] = arrTemp.join('')
+								_this.$set(`type[${key}]`, arrTemp.join(''))
 							}
 						}
 					})
