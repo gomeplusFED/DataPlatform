@@ -9,7 +9,7 @@ module.exports = {
         return {
             id : 53,
             name: "数据概览",
-            path: "/dataOverview/app",
+            path: "/dataOverview/dataOverviewAll",
             display: true,
             subPages : [{
                 id : 98,
