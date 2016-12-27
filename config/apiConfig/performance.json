@@ -8,8 +8,6 @@
             "-date"
         ],
         "platform": false,
-        "sum" : ["error_num"],
-        "paging":["true"],
         "router": "/performance/error_One",
         "toggle": {
             "show": true
@@ -82,8 +80,6 @@
         "order": [
             "-date"
         ],
-        "sum" : ["error_num"],
-        "paging":[true],
         "platform": false,
         "router": "/performance/error_Two",
         "rows": [

@@ -169,7 +169,9 @@ module.exports = {
     rebate_platformAll_01_f(data, query, dates){
         let source = data.first.data[0];
         let Rows  = util.megerArray([] , data.rows);
-        let ThisOne = {} , AllOne = {};
+        let ThisOne = {
+            "expect_rebate_amount":0
+        } , AllOne = {};
 
         //整理数据
         for(let item of source){
@@ -193,7 +195,7 @@ module.exports = {
             }
         }
 
-        if(Object.keys(ThisOne).length == 0){
+        if(Object.keys(ThisOne).length <= 3){
             //all
             ThisOne = AllOne;
         }
@@ -204,7 +206,7 @@ module.exports = {
         for(let key of data.rows[0]){
             if(key == "Blank") continue;
             Table_1_row1[key] = ThisOne[key];
-            Table_1_row2[key] = util.toFixed( ThisOne[key] , AllOne[key]);
+            Table_1_row2[key] = util.toFixed( ThisOne[key] || 0 , AllOne[key] || 0);
         }
         Table_1_row1["Blank"] = "返利订单";
         Table_1_row2["Blank"] = "总占比";
@@ -214,7 +216,7 @@ module.exports = {
         for(let key of data.rows[2]){
             if(key == "Blank") continue;
             Table_3_row1[key] = ThisOne[key];
-            Table_3_row2[key] = util.toFixed( ThisOne[key] , AllOne[key]);
+            Table_3_row2[key] = util.toFixed( ThisOne[key] || 0 , AllOne[key] || 0);
         }
         Table_3_row1["Blank"] = "返利订单";
         Table_3_row2["Blank"] = "返利退货订单占比";
@@ -229,13 +231,16 @@ module.exports = {
         query.category_id_4 = "ALL";
         let category_id = query.category_id;
         delete query.category_id;
-        if(!category_id){
+        if(!category_id && category_id == "all"){
             cb(null , query);
         }else{
             req.models.ConfCategories.find({
                 id : category_id
             } , 1 , (err , data)=>{
                 if(err) cb(err);
+                if(data.length == 0){
+                    return cb(null , query);
+                }
                 data = data[0];
                 switch(data.level + 1){
                     case 1:
@@ -262,13 +267,16 @@ module.exports = {
         query.category_id_4 = "ALL";
         let category_id = query.category_id;
         delete query.category_id;
-        if(!category_id){
+        if(!category_id && category_id == "all"){
             cb(null , query);
         }else{
             req.models.ConfCategories.find({
                 id : category_id
             } , 1 , (err , data)=>{
                 if(err) cb(err);
+                if(data.length == 0){
+                    return cb(null , query);
+                }
                 data = data[0];
                 switch(data.level + 1){
                     case 1:
@@ -389,6 +397,9 @@ module.exports = {
         for(let key in param2){
             let obj = {};
             for(let one in param3){
+                if(one > key){
+                    continue;
+                }
                 obj[one] = 0;
             }
             Result3[param2[key]] = obj;
@@ -629,6 +640,9 @@ module.exports = {
         for(let key in param2){
             let obj = {};
             for(let one in param3){
+                if(one > key){
+                    continue;
+                }
                 obj[one] = 0;
             }
             Result3[param2[key]] = obj;
@@ -790,6 +804,9 @@ module.exports = {
         for(let key in param2){
             let obj = {};
             for(let one in param3){
+                if(one > key){
+                    continue;
+                }
                 obj[one] = 0;
             }
             Result3[param2[key]] = obj;
