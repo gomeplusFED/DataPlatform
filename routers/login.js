@@ -87,7 +87,7 @@ module.exports = function(Router) {
                                 username : "superAdmin",
                                 role : "超级管理员",
                                 status : 1,
-                                limited : '{"0":[0,1,2]}',
+                                limited : '{"0":["0","1","2"]}',
                                 is_admin : 99
                             }, (err, data) => {
                                 if(!err) {
