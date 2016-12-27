@@ -23,7 +23,7 @@
 					<option value='PC'>PC</option>
 					<option value='H5'>H5</option>
 				</select>
-				<label>类型</label>
+				<label>是否模块</label>
 				<select class="form-control inp inpW2" v-model="searchParam.type">
 					<option value=''>全部</option>
 					<option value='0'>模块</option>
@@ -97,14 +97,6 @@
 			'm-date': DatePicker
 		},
 		props:['loading'],
-		vuex: {
-			getters: {
-				vuexbp: function() {
-					return store.state.bpConfig;
-				}
-			},
-			actions: actions
-		},
 		computed: {
 			baseIndex: function () {
 				return (this.paginationConf.currentPage - 1) * this.paginationConf.itemsPerPage + 1;
@@ -308,7 +300,8 @@
 	margin-right: 4px;
 }
 .nform-box li .btn-searchLi-top {
-	margin: 0 13px 0 118px;
+	margin: 0 13px 0 235px;
+    width: 80px;
 }
 .nform-box li a.btn-reset-search {
 	line-height: 28px;
