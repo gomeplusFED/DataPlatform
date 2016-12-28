@@ -5,7 +5,27 @@
  */
 var api = require("../../../base/main"),
     frequency = [ '1-2次', '3-5次', '6-9次', '10-19次', '20-49次', '50+次'],
-    filter = require("../../../filters/useAnalysis/useFrequency");
+    filter = require("../../../filters/useAnalysis/useFrequency"),
+    global_platform = {
+        show: true,
+        key: 'type',
+        list: [{
+            key: 'ios',
+            name: 'IOS'
+        }, {
+            key: 'android',
+            name: 'Android'
+        }, {
+            key: 'app',
+            name: 'APP'
+        }, {
+            key: 'pc',
+            name: 'PC'
+        }, {
+            key: 'm',
+            name: 'H5'
+        }]
+    };
 
 module.exports = (Router) => {
     const procedure = [
@@ -23,30 +43,11 @@ module.exports = (Router) => {
         router : "/useAnalysis/useFrequencyOne",
         modelName : ["UserCompose"],
         platform : false,
-        global_platform : {
-            show: true,
-            key: 'type',
-            list: [{
-                key: 'ios',
-                name: 'IOS'
-            }, {
-                key: 'android',
-                name: 'Android'
-            }, {
-                key: 'app',
-                name: 'APP'
-            }, {
-                key: 'pc',
-                name: 'PC'
-            }, {
-                key: 'm',
-                name: 'H5'
-            }]
-        },
+        global_platform : global_platform,
         procedure : procedure,
         params(query, params) {
             params.use_type = 2;
-            params.type = query.type || 'ios';
+            params.type = query.type || this.global_platform.list[0].key;
             return params;
         },
         filter(data, filter_key, dates) {
@@ -59,9 +60,10 @@ module.exports = (Router) => {
         modelName : ["UserCompose"],
         procedure : procedure,
         platform : false,
+        global_platform : global_platform,
         params(query, params) {
             params.use_type = 2;
-            params.type = query.type || "ios";
+            params.type = query.type || this.global_platform.list[0].key;
             return params;
         },
         excel_export : true,
@@ -94,10 +96,11 @@ module.exports = (Router) => {
         modelName : ["UserCompose"],
         procedure : procedure,
         platform : false,
+        global_platform : global_platform,
         params(query, params) {
             params.use_type = 2;
             params.day_type = 2;
-            params.type = query.type || "ios";
+            params.type = query.type || this.global_platform.list[0].key;
             return params;
         },
         filter(data, filter_key, dates) {
@@ -110,10 +113,11 @@ module.exports = (Router) => {
         modelName : ["UserCompose"],
         procedure : procedure,
         platform : false,
+        global_platform : global_platform,
         params(query, params) {
             params.use_type = 2;
             params.day_type = 2;
-            params.type = query.type || "ios";
+            params.type = query.type || this.global_platform.list[0].key;
             return params;
         },
         excel_export : true,
@@ -146,10 +150,11 @@ module.exports = (Router) => {
         modelName : ["UserCompose"],
         procedure : procedure,
         platform : false,
+        global_platform : global_platform,
         params(query, params) {
             params.use_type = 2;
             params.day_type = 3;
-            params.type = query.type || "ios";
+            params.type = query.type || this.global_platform.list[0].key;
             return params;
         },
         filter(data, filter_key, dates) {
@@ -162,10 +167,11 @@ module.exports = (Router) => {
         modelName : ["UserCompose"],
         procedure : procedure,
         platform : false,
+        global_platform : global_platform,
         params(query, params) {
             params.use_type = 2;
             params.day_type = 3;
-            params.type = query.type || "ios";
+            params.type = query.type || this.global_platform.list[0].key;
             return params;
         },
         excel_export : true,

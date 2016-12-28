@@ -122,8 +122,9 @@ api.prototype = {
                 req.session.userInfo.type || '{}',
                 this.global_platform,
                 this.global_platform_types
-            )
+            );
         }
+        this.global_platform_filter && this.global_platform_filter(req);
 
         //无参数时，返回组件信息
         if(Object.keys(query).length === 0) {

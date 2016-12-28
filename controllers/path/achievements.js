@@ -185,10 +185,6 @@ module.exports = {
             display : true,
             defaultData : [
                 {
-                    type : "chart",
-                    query_api : "/achievements/tradeZero"
-                },
-                {
                     type : "table",
                     title : "交易总览",
                     query_api : "/achievements/tradeOne"
@@ -357,10 +353,6 @@ module.exports = {
             defaultData : [
                 {
                     type : "chart",
-                    query_api : "/achievements/orderZero"
-                },
-                {
-                    type : "chart",
                     title : "订单趋势",
                     query_api : "/achievements/orderOne"
                 },
@@ -386,10 +378,6 @@ module.exports = {
             path : "/achievements/pay",
             display : true,
             defaultData : [
-                {
-                    type : "chart",
-                    query_api : "/achievements/payZero"
-                },
                 {
                     type : "chart",
                     title : "支付趋势",

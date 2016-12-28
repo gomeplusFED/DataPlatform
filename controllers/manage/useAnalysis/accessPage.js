@@ -4,30 +4,31 @@
  * @fileoverview 访问页面
  */
 var api = require("../../../base/main"),
-    filter = require("../../../filters/useAnalysis/accessPage");
+    filter = require("../../../filters/useAnalysis/accessPage"),
+    global_platform = {
+        show: true,
+        key: 'type',
+        list: [{
+            key: 'ios',
+            name: 'IOS'
+        }, {
+            key: 'android',
+            name: 'Android'
+        }, {
+            key: 'app',
+            name: 'APP'
+        }]
+    };
 
 module.exports = (Router) => {
     Router = new api(Router,{
         router : "/useAnalysis/accessPageOne",
         modelName : ["UsersAccess"],
         platform : false,
+        global_platform : global_platform,
         params(query, params) {
-            params.type = query.type || "ios";
+            params.type = query.type || this.global_platform.list[0].key;
             return params;
-        },
-        global_platform : {
-            show: true,
-            key: 'type',
-            list: [{
-                key: 'ios',
-                name: 'IOS'
-            }, {
-                key: 'android',
-                name: 'Android'
-            }, {
-                key: 'app',
-                name: 'APP'
-            }]
         },
         flexible_btn: [{
             content: '<a href="javascript:void(0)" help_url="/useAnalysis/accessPage/help_json">帮助</a>',
@@ -61,8 +62,9 @@ module.exports = (Router) => {
         paging : [true],
         sum : ["acc_num", "acc_time"],
         order : ["-date"],
+        global_platform : global_platform,
         params(query, params) {
-            params.type = query.type || 'ios';
+            params.type = query.type || this.global_platform.list[0].key;
             return params;
         },
         flexible_btn : [{
@@ -127,8 +129,9 @@ module.exports = (Router) => {
         paging : [true],
         order : [ "-date" ],
         platform : false,
+        global_platform : global_platform,
         params(query, params) {
-            params.type = query.type || "ios";
+            params.type = query.type || this.global_platform.list[0].key;
             return params;
         },
         filter(data, query, dates) {

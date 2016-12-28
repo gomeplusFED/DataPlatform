@@ -4,24 +4,25 @@
  * @fileoverview 访问页面-wap
  */
 var api = require("../../../base/main"),
-    filter = require("../../../filters/useAnalysis/accessWap");
+    filter = require("../../../filters/useAnalysis/accessWap"),
+    global_platform = {
+        show: true,
+        key: 'type',
+        list: [{
+            key: 'pc',
+            name: 'PC'
+        }, {
+            key: 'm',
+            name: 'H5'
+        }]
+    };
 
 module.exports = (Router) => {
     Router = new api(Router,{
         router : "/useAnalysis/accessWapOne",
         modelName : ["UrlAccessWap"],
         platform : false,
-        global_platform : {
-            show: true,
-            key: 'type',
-            list: [{
-                key: 'pc',
-                name: 'PC'
-            }, {
-                key: 'm',
-                name: 'H5'
-            }]
-        },
+        global_platform : global_platform,
         procedure : [{
             aggregate : {
                 params : "params",
@@ -32,7 +33,7 @@ module.exports = (Router) => {
             get : ""
         }],
         params(query, params) {
-            params.type = query.type || 'pc';
+            params.type = query.type || this.global_platform.list[0].key;
             params.url_type = 1;
             return params;
         },
@@ -67,8 +68,9 @@ module.exports = (Router) => {
         platform : false,
         paging : [true],
         order : ["-date"],
+        global_platform : global_platform,
         params(query, params) {
-            params.type = query.type || "pc";
+            params.type = query.type || this.global_platform.list[0].key;
             return params;
         },
         flexible_btn : [{
@@ -127,6 +129,11 @@ module.exports = (Router) => {
         platform : false,
         order : ["-date"],
         toggle : true,
+        global_platform : global_platform,
+        params(query, params) {
+            params.type = query.type || this.global_platform.list[0].key;
+            return params;
+        },
         filter(data, query, dates) {
             return filter.wap(data, dates);
         },
