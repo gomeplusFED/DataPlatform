@@ -314,7 +314,7 @@ module.exports = {
             }
         }
 
-        let outCount = data.first.count[0].count > 100 ? 100 : data.first.count[0].count;
+        let outCount = data.first.count[0].count > 200 ? 200 : data.first.count[0].count;
 
         return util.toTable([source], data.rows, data.cols , [ outCount ]); 
     }

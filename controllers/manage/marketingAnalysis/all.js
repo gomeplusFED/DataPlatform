@@ -71,10 +71,7 @@ module.exports = (Router) => {
         modelName : ["CamCamlistActive", "Activity"],
         platform : false,
         secondParams(query, params, data) {
-            let ids = _.uniq(_.pluck(data.first.data[0], "active_no"));
-            return {
-                activity_id : ids
-            };
+            return {};
         },
         filter(data, query, dates) {
             return filter.allTwo(data, query, dates);

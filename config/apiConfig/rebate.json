@@ -1392,7 +1392,7 @@
     "1482301660558": {
         "modelName": [
             "ads2_new_rebate_order_shop_info",
-            "TypeFlows"
+            "TypeFlow"
         ],
         "date_picker": true,
         "order": [],
