@@ -881,7 +881,7 @@
     },
     "1482118634978": {
         "modelName": [
-            "ads2_new_rebate_order_muiltiple_trend"
+            "ads2_new_rebate_order_plantype_level_sum"
         ],
         "date_picker": true,
         "order": [],

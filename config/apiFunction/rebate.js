@@ -796,9 +796,8 @@ module.exports = {
         }
 
         for(let item of source){
-            console.log(item.rebate_type , param2[item.rebate_type])
-            if(param2[item.rebate_type]){
-                Result2[param2[item.rebate_type]].value += item[filter_key];
+            if(param2[item.level]){
+                Result2[param2[item.level]].value += item[filter_key];
             }
         }
 
@@ -822,7 +821,7 @@ module.exports = {
            
         return [{
             type : "pie",
-            map : {value:"0"},
+            map : {value:"返利层级分布"},
             data : Result2,
             config: { // 配置信息
                 stack: false  // 图的堆叠
