@@ -6,7 +6,9 @@
 var api = require("../../../base/main"),
     orm = require("orm"),
     _ = require("lodash"),
-    filter = require("../../../filters/dataExport/all");
+    filter = require("../../../filters/dataExport/all"),
+    request = require('request'),
+    db = require('../../../db//config.json');
 
 module.exports = (Router) => {
 
@@ -21,14 +23,25 @@ module.exports = (Router) => {
         filter(data) {
             return filter.allThree(data);
         },
+        selectFilter(req, cb) {
+            let ip = db.db === 'pro' ? '10.125.143.168' : '10.69.42.76'
+            let url = `http://${ip}:8080/api/o2m/download`
+            let _this = this
+            request(url, (error, response, body) => {
+                let obj = JSON.parse(body)
+                let downloadurl = obj.downloadurl
+                _this.flexible_btn[1].content =  `<a target="_blank" href="${downloadurl}">下载商品</a>`
+                cb(null, {})
+            })
+        },
         excel_export: true,
         flexible_btn: [{
             content: '<a href="javascript:void(0)">数据导出</a>',
             preMethods: ['excel_export']
         },
         {
-            content: '<a href="javascript:void(0)">下载商品</a>',
-            preMethods: ['excel_export']
+            content: `<a href="javascript:void(0)">下载商品</a>`,
+            preMethods: ['']
         }],
         firstSql(query, params, isCount) {
             let date_type_list = ['', 'DAY', 'WEEK' ,'MONTH']
