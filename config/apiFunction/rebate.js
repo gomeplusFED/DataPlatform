@@ -658,14 +658,14 @@ module.exports = {
            
         return [{
             type : "pie",
-            map : {value:"0"},
+            map : {value:"返利类型占比"},
             data : Result1,
             config: { // 配置信息
                 stack: false  // 图的堆叠
             }
         }, {
             type : "pie",
-            map : {value:"0"},
+            map : {value:"返利层级占比"},
             data : Result2,
             config: { // 配置信息
                 stack: false  // 图的堆叠
@@ -719,7 +719,7 @@ module.exports = {
            
         return [{
             type : "pie",
-            map : {value:"0"},
+            map : {value:"返利类型占比"},
             data : Result1,
             config: { // 配置信息
                 stack: false  // 图的堆叠

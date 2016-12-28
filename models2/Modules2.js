@@ -143,8 +143,23 @@ module.exports = {
     },
     ads2_new_rebate_order_trend : {
         modelName : "ads2_new_rebate_order_trend"
-    }
+    },
     //返利   END --------------
+
+
+
+    //社交三期
+    ads2_soc_total_summary : {
+        modelName : "ads2_soc_total_summary"
+    },
+    ads2_soc_topic_ordered : {
+        modelName : "ads2_soc_topic_ordered"
+    },
+    ads2_soc_topic_item : {
+        modelName : "ads2_soc_topic_item"
+    }
+    
+
 };
 
 
