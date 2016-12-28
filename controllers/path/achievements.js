@@ -167,7 +167,7 @@ module.exports = {
                 },
                 {
                     type : "table",
-                    title : "商品排行TOP200",
+                    title : "商品排行TOP100",
                     query_api : "/achievements/productSaleFour"
                 }
             ]
