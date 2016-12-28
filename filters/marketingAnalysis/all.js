@@ -4,6 +4,7 @@
  * @fileoverview 优惠券信息
  */
 var moment = require("moment"),
+    _ = require("lodash"),
     util = require("../../utils");
 
 module.exports = {
@@ -23,6 +24,7 @@ module.exports = {
     allTwo(data, query, dates) {
         let source = data.first.data[0],
             second = data.second.data[0],
+            ids = _.uniq(_.pluck(source, "active_no")),
             newData = {},
             filter_name = {
                 active_pv : "活动页PV",
@@ -61,12 +63,16 @@ module.exports = {
         } else {
             type = "bar";
             let obj = {};
+            let _config = {};
             for(let key of second) {
-                obj[key.activity_id] = {
-                    name : key.activity_name
+                _config[key.activity_id.substr(0, 5)] = key.activity_name;
+            }
+            for(let id of ids) {
+                obj[id] = {
+                    name : _config[id]
                 };
                 for(let key of filter_keys) {
-                    obj[key.activity_id][key] = 0;
+                    obj[id][key] = 0;
                 }
             }
             for(let item of source) {
