@@ -6,18 +6,18 @@
 var api = require("../../../base/main"),
     orm = require("orm"),
     _ = require("lodash"),
-    filter = require("../../../filters/marketingAnalysis/all");
+    filter = require("../../../filters/dataExport/all");
 
 module.exports = (Router) => {
 
     Router = new api(Router, {
         router: "/dataExport/shopFlowOne",
-        modelName: ["CamCamlistActive", "Activity"],
+        modelName: ["ads2_o2m_shop_trade_info"],
         platform: false,
         control_table_col: false,
         date_picker_data : 1,
         showDayUnit: true,
-        paging: [true, false],
+        paging: [true],
         filter(data) {
             return filter.allThree(data);
         },
@@ -31,53 +31,37 @@ module.exports = (Router) => {
             preMethods: ['excel_export']
         }],
         firstSql(query, params, isCount) {
-            console.log(query, params)
+            let date_type_list = ['', 'DAY', 'WEEK' ,'MONTH']
             if (isCount) {
                 let config = ["date BETWEEN ? AND ?", "day_type=?"],
-                    params = [query.startTime, query.endTime, 1];
-                if (query.active_no) {
-                    config.push("active_no=?");
-                    params.push(query.active_no);
+                    params = [query.startTime, query.endTime, query.day_type || 1];
+                if (query.shop_name) {
+                    config.push("shop_name=?");
+                    params.push(query.shop_name);
                 }
-                let sql = `SELECT COUNT(*) count FROM ads2_cam_camlist_active WHERE ${config.join(" AND ")} GROUP BY active_no`;
+                let sql = `SELECT COUNT(*) count FROM ads2_o2m_shop_trade_info WHERE ${config.join(" AND ")}`;
                 return {
                     sql: sql,
                     params: params
                 };
             } else {
-                let config = ["date BETWEEN ? AND ?", "day_type=?"],
-                    params = [query.startTime, query.endTime, 1],
+                let config = ["a.date BETWEEN ? AND ?", "a.day_type=?"],
+                    params = [query.startTime, query.endTime, query.day_type || 1],
                     page = query.from || query.page || 1,
                     limit = query.to || query.limit || 20;
 
-                if (query.active_no) {
-                    config.push("active_no=?");
-                    params.push(query.active_no);
+                if (query.shop_name) {
+                    config.push("a.shop_name= ?");
+                    params.push(query.shop_name);
                 }
                 params.push(page - 1);
                 params.push(+limit);
-                let sql = `SELECT
-                    active_no,
-                    SUM(active_pv) active_pv,
-                    SUM(active_uv) active_uv,
-                    SUM(register) register,
-                    SUM(share_button_uv) share_button_uv,
-                    SUM(share_button_pv) share_button_pv,
-                    SUM(product_pv) product_pv,
-                    SUM(coupon_get_user) coupon_get_user,
-                    SUM(coupon_get_num) coupon_get_num,
-                    SUM(coupon_use_user) coupon_use_user,
-                    SUM(coupon_use_num) coupon_use_num,
-                    SUM(order_num) order_num,
-                    SUM(order_num_money) order_num_money,
-                    SUM(pay_num) pay_num,
-                    SUM(pay_user) pay_user,
-                    SUM(pay_num_money) pay_num_money,
-                    SUM(return_num) return_num,
-                    SUM(return_user) return_user,
-                    SUM(return_num_money) return_num_money
-                     FROM ads2_cam_camlist_active
-                    WHERE ${config.join(" AND ")} GROUP BY active_no LIMIT ?,?`;
+                let sql = `SELECT a.*, b.uv as uv_pre, b.pv as pv_pre, b.shop_share_uv as shop_share_uv_pre, b.shop_share_pv as shop_share_pv_pre
+                , b.comm_share_uv as comm_share_uv_pre, b.comm_share_pv as comm_share_pv_pre, b.gmv as gmv_pre, b.pay_num as pay_num_pre
+                    FROM ads2_o2m_shop_trade_info a 
+                    LEFT JOIN ads2_o2m_shop_trade_info b 
+                     on a.day_type = b.day_type and a.shop_id = b.shop_id and b.date = DATE_ADD(a.date,INTERVAL -1 ${date_type_list[query.day_type || 1]})
+                    WHERE ${config.join(" AND ")} LIMIT ?,?`;
                 return {
                     sql: sql,
                     params: params
@@ -90,89 +74,78 @@ module.exports = (Router) => {
         search: {
             show: true,
             title: "店铺查询",
-            key: "active_no"
+            key: "shop_name"
         },
         rows: [
-            ["name", "active_no", "date", "active_pv", "active_uv",
-                "register", "share_button_uv", "share_button_pv",
-                //"coupon_get_num",
-                "rate",
-                "order_num",
-                "order_num_money", "pay_num",
-                "pay_user", "pay_num_money", "return_num",
-                "return_user", "return_num_money",
-                "operating"]
+            ["shop_id", "shop_name", "on_comm", 
+                "uv", "uv_ratio", "pv", "pv_ratio",
+                "shop_share_uv", "shop_share_uv_ratio",
+                "shop_share_pv", "shop_share_pv_ratio",
+                "comm_share_uv", "comm_share_uv_ratio",
+                "comm_share_pv", "comm_share_pv_ratio",
+                "gmv", "gmv_ratio",
+                "pay_num", "pay_num_ratio"]
         ],
         cols: [
             [
                 {
-                    caption: "活动名称",
-                    type: "string"
-                }, {
-                    caption: "活动ID",
-                    type: "string"
-                }, {
-                    caption: "活动时间",
-                    type: "string"
-                }, {
-                    caption: "活动页PV",
-                    type: "number",
-                    help: "活动页的访问次数"
-                }, {
-                    caption: "活动页UV",
-                    type: "number",
-                    help: "活动页的访问人数"
-                }, {
-                    caption: "新增注册",
-                    type: "number",
-                    help: "通过活动带来的注册数"
-                }, {
-                    caption: "分享按钮点击人数",
-                    type: "number",
-                    help: "分享按钮点击人数"
-                }, {
-                    caption: "分享按钮点击次数",
-                    type: "number",
-                    help: "分享按钮的点击次数"
-                }, {
-                    caption: "进入商品页转化率",
-                    type: "string",
-                    help: "通过活动页跳转商品页的浏览人数/活动页浏览人数"
-                    //},{
-                    //    caption : "优惠券领取量",
-                    //    type : "number"
-                }, {
-                    caption: "订单总量",
-                    type: "number",
-                    help: "活动页带来的订单总量（支付成功）"
-                }, {
-                    caption: "订单总金额",
+                    caption: "店铺ID",
                     type: "number"
                 }, {
-                    caption: "支付总量",
+                    caption: "店铺名称",
+                    type: "string"
+                }, {
+                    caption: "上架商品数",
                     type: "number"
                 }, {
-                    caption: "支付用户数",
-                    type: "number",
-                    help: "支付成功订单的用户数量"
+                    caption: "uv",
+                    type: "number"
                 }, {
-                    caption: "实际支付总金额",
-                    type: "number",
-                    help: "支付成功订单的实际支付总金额"
+                    caption: "uv环比",
+                    type: "string"
+                },
+                {
+                    caption: "pv",
+                    type: "number"
+                },  {
+                    caption: "pv环比",
+                    type: "string"
                 }, {
-                    caption: "退货订单总量",
-                    type: "number",
-                    help: "时间段内活动退货的订单总量"
+                    caption: "店铺分享uv",
+                    type: "number"
                 }, {
-                    caption: "退货用户数",
-                    type: "number",
-                    help: "时间段内活动退货的用户数量"
+                    caption: "店铺分享uv环比",
+                    type: "string"
                 }, {
-                    caption: "退货总金额",
-                    type: "number",
-                    help: "时间段内活动退货的总金额"
+                    caption: "店铺分享pv",
+                    type: "number"
                 }, {
-                    caption: "操作"
+                    caption: "店铺分享pv环比",
+                    type: "string"
+                }, {
+                    caption: "商品分享uv",
+                    type: "number"
+                }, {
+                    caption: "商品分享uv环比",
+                    type: "string"
+                },{
+                    caption: "商品分享pv",
+                    type: "number"
+                }, {
+                    caption: "商品分享pv环比",
+                    type: "string"
+                }, {
+                    caption: "GMV",
+                    type: "number"
+                }, {
+                    caption: "GMV环比",
+                    type: "string"
+                }, {
+                    caption: "销量",
+                    type: "number"
+                }, {
+                    caption: "销量环比",
+                    type: "string"
                 }
             ]
         ]
