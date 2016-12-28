@@ -36,8 +36,7 @@ module.exports = (Router) => {
                 let config = ["date BETWEEN ? AND ?", "day_type=?"],
                     params = [query.startTime, query.endTime, query.day_type || 1];
                 if (query.shop_name) {
-                    config.push("shop_name=?");
-                    params.push(query.shop_name);
+                    config.push(`shop_name like '%${query.shop_name}%'`);
                 }
                 let sql = `SELECT COUNT(*) count FROM ads2_o2m_shop_trade_info WHERE ${config.join(" AND ")}`;
                 return {
@@ -51,8 +50,7 @@ module.exports = (Router) => {
                     limit = query.to || query.limit || 20;
 
                 if (query.shop_name) {
-                    config.push("a.shop_name= ?");
-                    params.push(query.shop_name);
+                    config.push(`a.shop_name like '%${query.shop_name}%'`);
                 }
                 params.push(page - 1);
                 params.push(+limit);
