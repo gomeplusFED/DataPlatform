@@ -232,6 +232,7 @@ const Config = {
             className: "fa  fa-laptop fa-fw",
             href: "#",
             path: [
+                obj.socialAnalysis.panel(),
                 obj.socialAnalysis.group(),
                 obj.socialAnalysis.topics(),
                 obj.socialAnalysis.groupHost()

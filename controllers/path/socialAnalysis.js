@@ -5,6 +5,44 @@
  */
 
 module.exports = {
+    panel(){
+        return {
+            name : "社交面板",
+            path : "/socialAnalysis/panel",
+            display: true,
+            defaultData : [
+                {
+                    title: "",
+                    query_api : "/achievements/tradePanelZero"
+                },
+                {
+                    type : "table",
+                    title : "圈子汇总",
+                    query_api : "/socialAnalysis/panelOne"
+                },
+                {
+                    type : "table",
+                    title : "话题汇总",
+                    query_api : "/socialAnalysis/panelTwo"
+                },
+                {
+                    type : "table",
+                    title : "话题交易汇总",
+                    query_api : "/socialAnalysis/panelThree"
+                },
+                {
+                    type : "table",
+                    title : "好友关系汇总",
+                    query_api : "/socialAnalysis/panelFour"
+                },
+                {
+                    type : "table",
+                    title : "兴趣点汇总",
+                    query_api : "/socialAnalysis/panelFive"
+                }
+            ]
+        }
+    },
     group() {
         return {
             name : "圈子数据",

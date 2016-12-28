@@ -775,7 +775,6 @@ module.exports = {
         let source = data.first.data[0],
             filter_key  = query.filter_key,
             Result1 = {} , Result2 = {} , Result3 = {};
-
         let param2 = {
             "1" : "1级计划",
             "2" : "2级计划",
@@ -797,8 +796,9 @@ module.exports = {
         }
 
         for(let item of source){
-            if(param2[item.rebate_level]){
-                Result2[param2[item.rebate_level]].value += item[filter_key];
+            console.log(item.rebate_type , param2[item.rebate_type])
+            if(param2[item.rebate_type]){
+                Result2[param2[item.rebate_type]].value += item[filter_key];
             }
         }
 
