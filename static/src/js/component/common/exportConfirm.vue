@@ -20,7 +20,7 @@
 			</ul>
 		</div>
 		<div class="panel-footer">
-			<a href="javascript:void(0)" class="btn btn-default" :disabled="(parseInt(to) - parseInt(from)) > 1000 || (parseInt(from) - parseInt(to)) > 0 || (parseInt(to) - parseInt(from)) > exportConfirmConfig.len || parseInt(from) <= 0" @click="apply(),hide()">确认</a>
+			<a href="javascript:void(0)" class="btn btn-default" :disabled="checkedRadio === 'b' && ((parseInt(to) - parseInt(from)) > 1000 || (parseInt(from) - parseInt(to)) > 0 || (parseInt(to) - parseInt(from)) > exportConfirmConfig.len || parseInt(from) <= 0)" @click="apply(),hide()">确认</a>
 			<a href="javascript:void(0)" class="btn btn-default" @click="cancel(),hide()">取消</a>
 		</div>
 	</div>

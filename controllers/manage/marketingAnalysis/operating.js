@@ -97,7 +97,7 @@ module.exports = (Router) => {
                     SUM(return_user) return_user,
                     SUM(return_num_money) return_num_money
                      FROM ads2_cam_camlist_channel
-                    WHERE ${config.join(" AND ")} GROUP BY ${filter_type} LIMIT ?,?`;
+                    WHERE ${config.join(" AND ")} GROUP BY ${filter_type} ${filter_type === "date" ? 'ORDER BY date DESC' : ""} LIMIT ?,?`;
                 return {
                     sql : sql,
                     params : obj
