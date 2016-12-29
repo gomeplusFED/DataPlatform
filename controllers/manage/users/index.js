@@ -299,5 +299,62 @@ module.exports = (Router) => {
         });
     });
 
+    Router.get("/users/delete", (req, res, next) => {
+        var params = req.query;
+        req.models.User2.find({
+            id : params.id
+        }, (err, data) => {
+            if(!err) {
+                if(data.length) {
+                    data[0].status = 0;
+                    data[0].is_admin = 250;
+                    data[0].save((err) => {
+                        if(!err) {
+                            var log = {
+                                username : req.session.userInfo.username,
+                                date : new Date().getTime(),
+                                ip : util.getClientIp(req),
+                                content : `${data[0].username}被删除`
+                            };
+                            req.models.Log.create(log, (err, data) => {
+                                if(!err) {
+                                    res.json({
+                                        code : 200,
+                                        success : true,
+                                        msg : "删除成功"
+                                    })
+                                } else {
+                                    res.json({
+                                        code : 400,
+                                        success : false,
+                                        msg : "删除失败"
+                                    })
+                                }
+                            });
+                        } else {
+                            res.json({
+                                code : 400,
+                                success : false,
+                                msg : "删除失败"
+                            });
+                        }
+                    });
+                } else {
+                    res.json({
+                        code : 400,
+                        success : false,
+                        msg : "无该用户，无法删除"
+                    });
+                }
+            } else {
+                res.json({
+                    code : 400,
+                    success : false,
+                    msg : "删除失败"
+                });
+            }
+        });
+    });
+
      return Router;
 };
