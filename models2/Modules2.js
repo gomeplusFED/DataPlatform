@@ -143,6 +143,9 @@ module.exports = {
     },
     ads2_new_rebate_order_trend : {
         modelName : "ads2_new_rebate_order_trend"
+    },
+    ads2_o2m_shop_trade_info : {
+        modelName : "ads2_o2m_shop_trade_info"
     }
     //返利   END --------------
 };
