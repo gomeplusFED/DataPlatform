@@ -95,7 +95,7 @@ var api = {
 		}).catch(errHandler);
 	},
 	getBp(data) {
-		return buildAjax('/point', filterArgs(data, ['pageUrl', 'selector', 'platform', 'pointId', 'type'])).then(extractResult).then(function(res){
+		return buildAjax('/point', filterArgs(data, ['pageUrl', 'selector', 'platform', 'pointId'])).then(extractResult).then(function(res){
 			// 从私有埋点中去除公共埋点	
 			//let tmppub = res.publicParam.split('&');
 			//let tmppri = res.privateParam;
