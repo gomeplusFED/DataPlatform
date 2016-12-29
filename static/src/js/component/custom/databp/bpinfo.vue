@@ -76,7 +76,7 @@ var bpinfo = Vue.extend({
 				pointName: '',
 				pattern: '',
 				platform: 'PC',
-				type: 'point',
+				type: '',
 				pageUrl: '',
 				selector:'',
 				privateParam: '',
@@ -177,7 +177,7 @@ var bpinfo = Vue.extend({
 				let keys = Object.keys(data);
 				for (let key of keys) {
 					if(data[key] === '') {
-						_this.config[key] = _this.bpConfig[key] || _this.config[key];
+						_this.config[key] = _this.bpConfig[key];
 					} else {
 						_this.config[key] = data[key];
 					}

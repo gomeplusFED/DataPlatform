@@ -51,9 +51,7 @@
 					platform: 'PC',
 					pageUrl: '',
 					selector:'',
-					privateParam: '',
-					publicParam: '',
-					type: ''
+					type: 'point'
 				}
 			}
 		},
@@ -98,6 +96,11 @@
 			trigger() {
 				this.bpConfig.trigger = !this.bpConfig.trigger;
 				this.bpConfig.show = true;
+			},
+			resetConfig() {
+				this.bpConfig.pointName = '';
+				this.bpConfig.selector = '';
+				this.bpConfig.type = 'point';
 			},
 			iframeload() {
 				// console.log('load');
@@ -153,6 +156,7 @@
 							selected.addClass('bphover-position-fix');
 						}
 						selected.addClass('bphover');
+						_this.resetConfig();
 						_this.bpConfig.selector = selector;
 						_this.trigger();
 						// actions.databp(store, _this.bpConfig);
