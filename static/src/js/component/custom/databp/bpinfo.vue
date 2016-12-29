@@ -19,8 +19,8 @@
 							<div><label>事件类型</label>单击事件</div>
 							<div><label>匹配模式</label>{{config.pattern}}</div>
 							<div class="type-filter"><label>是否模块</label>
-								<button @click="config.type = 'block'" :class="{'active': config.type === 'block'}">是</button>
-								<button @click="config.type = 'point'" :class="{'active': config.type !== 'block'}">否</button></div>
+								<button @click="config.type = 'block'" :class="{'active': (config.type === 'block')}">是</button>
+								<button @click="config.type = 'point'" :class="{'active': (config.type !== 'block')}">否</button></div>
 							<div><label>全局埋点信息</label>{{publicBpStr}} <button @click="publicBp.push(['', ''])">+</button></div>
 							<div>
 								<div v-for="(i,item) in publicBp" class="pair">
@@ -76,7 +76,7 @@ var bpinfo = Vue.extend({
 				pointName: '',
 				pattern: '',
 				platform: 'PC',
-				type: 'block',
+				type: 'point',
 				pageUrl: '',
 				selector:'',
 				privateParam: '',
@@ -177,7 +177,7 @@ var bpinfo = Vue.extend({
 				let keys = Object.keys(data);
 				for (let key of keys) {
 					if(data[key] === '') {
-						_this.config[key] = _this.bpConfig[key];
+						_this.config[key] = _this.bpConfig[key] || _this.config[key];
 					} else {
 						_this.config[key] = data[key];
 					}
@@ -279,7 +279,7 @@ var bpinfo = Vue.extend({
 			}
 			_this.config.publicParam = _this.publicBpStr;
 			_this.config.privateParam = _this.privateBpStr;
-			_this.config.userInfo = _this.userInfo;
+			_this.config.userInfo = JSON.stringify(_this.userInfo);
 			if (_this.config.pointId) {
 				api.updateBp(_this.config).then(function(res) {
 					// 更新成功刷新传入的数据
