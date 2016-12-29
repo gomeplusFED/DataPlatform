@@ -9,6 +9,48 @@ let api = require("../../../base/main"),
     orm = require("orm"),
     filter = require("../../../filters/achievements/vtrade");
 
+function globalPlatform(type, filter_select) {
+    let all = true;
+    let ios = filter_select[0].groups[0],
+        and = filter_select[0].groups[1],
+        pc = filter_select[0].groups[2],
+        h5 = filter_select[0].groups[3];
+    const select = {
+        title : filter_select[0].title,
+        filter_key : filter_select[0].filter_key,
+        groups : []
+    };
+    if(type[0] == "1") {
+        select.groups.push(ios);
+    } else {
+        all = false;
+    }
+    if(type[1] == "1") {
+        select.groups.push(and);
+    } else {
+        all = false;
+    }
+    if(type[3] == "1") {
+        select.groups.push(pc);
+    } else {
+        all = false;
+    }
+    if(type[4] == "1") {
+        select.groups.push(h5);
+    } else {
+        all = false;
+    }
+
+    if(all) {
+        select.groups = [{
+            key: 'all',
+            value: '全部'
+        }].concat(select.groups);
+    }
+
+    return [select];
+}
+
 module.exports = (Router) => {
 
     /**
@@ -149,14 +191,6 @@ module.exports = (Router) => {
             filter_key: 'type',
             groups: [
                 {
-                    key: 'all',
-                    value: '全部'
-                },
-                {
-                    key: 'pc',
-                    value: 'PC'
-                },
-                {
                     key: 'ios',
                     value: 'iOS'
                 },
@@ -165,8 +199,12 @@ module.exports = (Router) => {
                     value: 'Android'
                 },
                 {
+                    key: 'pc',
+                    value: 'PC'
+                },
+                {
                     key: 'h5',
-                    value: 'WAP'
+                    value: 'H5'
                 }
             ]
         }
@@ -184,7 +222,9 @@ module.exports = (Router) => {
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ["excel_export"]
         }],
-        filter_select: filter_select_platform,
+        selectFilter(req, cb) {
+            cb(null, globalPlatform(req.session.userInfo.type["38"], filter_select_platform));
+        },
         filter(data, query, dates, type) {
             return filter.vtradeThree(data, dates);
         },
@@ -261,7 +301,9 @@ module.exports = (Router) => {
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ["excel_export"]
         }],
-        filter_select: filter_select_platform,
+        selectFilter(req, cb) {
+            cb(null, globalPlatform(req.session.userInfo.type["38"], filter_select_platform));
+        },
         filter(data, query, dates, type) {
             return filter.vtradeFour(data, dates);
         },

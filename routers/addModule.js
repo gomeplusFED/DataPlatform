@@ -9,7 +9,7 @@ const path=require("path");
 const ConfigApi = require("../config/");
 
 /* 有权限修改的用户 */
-let Usersname = [ "hexisen" , "yanglei" , "zhangkexin"];
+let Usersname = [ "hexisen" , "yanglei-ds6" , "zhangkexin"];
 
 module.exports = (Router) => {
 
