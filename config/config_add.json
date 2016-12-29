@@ -283,7 +283,6 @@
         "href": "#",
         "path": [
             {
-                "id" : 110,
                 "name": "错误分析",
                 "path": "/performance/error",
                 "id" : "00001",

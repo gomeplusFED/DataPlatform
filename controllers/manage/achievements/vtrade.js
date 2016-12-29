@@ -88,9 +88,7 @@ module.exports = (Router) => {
             }
         ]]
     });
-
     // 交易趋势
-
     Router = new api(Router, {
         router: "/achievements/vtradeTwo",
         modelName : ["VtradeDetail"],
