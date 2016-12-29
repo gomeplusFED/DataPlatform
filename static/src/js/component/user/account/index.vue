@@ -46,8 +46,9 @@
 									<td>
 										<ul>
 											<li v-show="item.status"><a @click="showLimitList(item.id, item.limited, item.export, item.sub_pages, item.type)" class="btn btn-default" href="javascript:void(0)">权限修改<i class="fa fa-pencil-square-o"></i></a></li>
-											<li v-show="item.status"><a @click="forbidden(item.id, item.email)" class="btn btn-default" href="javascript:void(0)">禁用<i class="fa fa-remove"></i></a></li>
+											<li v-show="item.status"><a @click="forbidden(item.id, item.email)" class="btn btn-default" href="javascript:void(0)">禁用<i class="fa fa-ban"></i></a></li>
 											<li v-show="!item.status"><a @click="startUsing(item.id, item.email)" class="btn btn-default" href="javascript:void(0)">启用<i class="fa fa-check-square-o"></i></a></li>
+											<li><a @click="deleteUser(item.id, item.email)" class="btn btn-danger" href="javascript:void(0)">删除<i class="fa fa-trash"></i></a></li>
 										</ul>
 									</td>
 								</tr>
@@ -663,7 +664,37 @@ var User = Vue.extend({
 					});
 				}
 			});
-		}
+		},
+		deleteUser: function(id, email) {
+			var _this = this;
+			actions.confirm(store, {
+				show: true,
+				msg: '是否删除账户 ' + email + '？',
+				apply: function() {
+					$.ajax({
+						url: '/users/delete?id=' + id,
+						type: 'get',
+						success: function(data) {
+							if (!data.success) {
+								actions.alert(store, {
+									show: true,
+									msg: data.msg,
+									type: 'danger'
+								});
+								return;
+							}
+							actions.alert(store, {
+								show: true,
+								msg: '删除成功',
+								type: 'success'
+							});
+							_this.createTableBySearchStr();
+							_this.modal.show = false;
+						}
+					});
+				}
+			});
+		},
 	},
 	watch: {
 		searchStr: {
