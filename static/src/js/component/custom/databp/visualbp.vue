@@ -52,7 +52,8 @@
 					pageUrl: '',
 					selector:'',
 					privateParam: '',
-					publicParam: ''
+					publicParam: '',
+					type: ''
 				}
 			}
 		},
@@ -81,6 +82,9 @@
 				let platform = query.platform;
 				if (pageUrl && platform) {
 					if(query.selector) {
+						this.bpConfig.selector = query.selector;
+						this.bpConfig.type = query.type;
+						this.bpConfig.pointName = query.pointName;
 						this.trigger();
 						// actions.databp(store, query);
 					}
