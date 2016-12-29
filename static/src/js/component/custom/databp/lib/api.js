@@ -2,7 +2,8 @@ var store = require('store');
 var actions = require('actions');
 var $ = require('jQuery');
 // const baseurl = 'http://10.69.10.13:8080/bomber-pie';
-const baseurl = 'http://10.69.112.146:38080/bomber-pie'
+const baseurl = window.location.href.startsWith('http://bi.') ? 
+'http://10.69.112.146:38080/bomber-pie' : 'http://10.69.10.16:8088/bomber-pie'
 // 请求失败 重试一次
 const RETRY_TIMES = 2;
 
@@ -110,7 +111,11 @@ var api = {
 	},
 	// {pageUrl, selector, pointName, platform, pointId, matchUrlId, pattern, publicParam, privateParam}
 	updateBp(data) {
-		return buildAjax('/point', filterArgs(data, ['pageUrl', 'selector', 'pointName', 'platform', 'pointId', 'matchUrlId', 'pattern', 'publicParam', 'privateParam', 'userInfo', 'type']), 'put').then(extractResult).catch(errHandler).then(function(res) {
+		return buildAjax('/point', filterArgs(data, ['pageUrl', 'selector', 'pointName', 'platform', 'pointId', 'matchUrlId', 'pattern', 'publicParam', 'privateParam', 'userInfo', 'type']), 'put').then((res) => {
+			if(res.code !== '200' || res.iserror !== '0') {
+				return Promise.reject('更新失败：' + res.msg);
+			}
+		}).catch(errHandler).then(function(res) {
 			actions.alert(store, {
 				show: true,
 				msg: '更新成功',
@@ -129,8 +134,9 @@ var api = {
 		});
 	},
 	// {pointId, matchUrlId}
-	deleteBp(id) {
-		return buildAjax('/point?pointId='+ id, null, 'delete').then(function(res) {
+	deleteBp({pointId, type}) {
+
+		return buildAjax(`/point?pointId=${pointId}&type=${type}`, null, 'delete').then(function(res) {
 			if(res.code !== '200' || res.iserror !== '0') {
 				return Promise.reject('删除失败：' + res.msg);
 			}
