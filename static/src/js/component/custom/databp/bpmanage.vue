@@ -67,7 +67,7 @@
 					<td title="{{item.pointParam}}">{{item.pointParam}}</td>
 					<td title="{{item.userInfo?(item.userInfo.department + item.userInfo.email) : '--'}}">{{item.userInfo.name || '--'}}</td>
 					<td>{{item.updateTime |Date 'yyyy-MM-dd hh:mm:ss'}}</td>
-					<td><a @click="edit(item)">修改</a>&nbsp<a v-if="item.isActive === '1'" @click="del(item.pointId)">删除</a><a v-else @click="restore(item.pointId)">恢复</a></td>
+					<td><a @click="edit(item)">修改</a>&nbsp<a v-if="item.isActive === '1'" @click="del(item)">删除</a><a v-else @click="restore(item.pointId)">恢复</a></td>
 				</tr>
 				<tr v-show="noData">
 					 <td colspan="7">暂无数据</td>
@@ -175,13 +175,13 @@
 					this.loading.show = false;
 				});
 			},
-			del(id) {
+			del(item) {
 				actions.confirm(store, {
 					show: true,
 					title: '删除确认',
 					msg: '确定删除吗',
 					apply: () => {
-						api.deleteBp(id).then(() =>{
+						api.deleteBp(item).then(() =>{
 							this.query()
 						});
 						
