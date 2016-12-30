@@ -22,7 +22,7 @@ module.exports = (Router) => {
         },
         global_platform : {
             show : true,
-            name : "(默认日期)",
+            name : "",
             key : "filter_type",
             list : [{
                 key: 'date',
