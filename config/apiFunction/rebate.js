@@ -700,8 +700,8 @@ module.exports = {
         }
 
         for(let item of source){
-            if(param1[item.plan_type]){
-                Result1[param1[item.plan_type]].value += item[filter_key];
+            if(param1[item.rebate_type]){
+                Result1[param1[item.rebate_type]].value += item[filter_key];
             }
         }
 
@@ -712,8 +712,8 @@ module.exports = {
         }
 
         for(let item of source){
-            if(param1[item.rebate_level]){
-                Result3[param1[item.rebate_level]].value += item[filter_key];
+            if(param1[item.rebate_type]){
+                Result3[param1[item.rebate_type]].value += item[filter_key];
             }
         }
            

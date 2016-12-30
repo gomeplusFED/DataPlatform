@@ -233,6 +233,7 @@ const Config = {
             href: "#",
             path: [
                 obj.socialAnalysis.panel(),
+                obj.socialAnalysis.total(),
                 obj.socialAnalysis.group(),
                 obj.socialAnalysis.topics(),
                 obj.socialAnalysis.groupHost()

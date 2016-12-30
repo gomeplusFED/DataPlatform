@@ -43,6 +43,25 @@ module.exports = {
             ]
         }
     },
+    total(){
+        return {
+            name : "累计数据",
+            path : "/socialAnalysis/total",
+            display:true,
+            defaultData : [
+                {
+                    type : "table",
+                    title: "社交数据总览",
+                    query_api: "/socialAnalysis/totalOne"
+                },
+                {
+                    type : "chart",
+                    title: "话题数据一级分布",
+                    query_api: "/socialAnalysis/totalTwo"
+                }
+            ]
+        }
+    },
     group() {
         return {
             name : "圈子数据",

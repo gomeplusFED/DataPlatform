@@ -157,8 +157,13 @@ module.exports = {
     },
     ads2_soc_topic_item : {
         modelName : "ads2_soc_topic_item"
+    },
+    ads2_soc_group : {
+        modelName : "ads2_soc_group"
+    },
+    ads2_soc_group_topic : {
+        modelName : "ads2_soc_group_topic"
     }
-    
 
 };
 
