@@ -24,7 +24,7 @@ module.exports = (Router) => {
             return filter.allThree(data);
         },
         selectFilter(req, cb) {
-            let ip = db.db === 'pro' ? '10.125.143.168' : '10.69.42.76'
+            let ip = db.db === 'pro' ? '10.125.143' : '10.125.70.23'
             let url = `http://${ip}:8080/api/o2m/download`
             let _this = this
             request(url, (error, response, body) => {
