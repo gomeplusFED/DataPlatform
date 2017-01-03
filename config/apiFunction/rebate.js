@@ -200,12 +200,16 @@ module.exports = {
             ThisOne = AllOne;
         }
 
+        for(let key of data.rows[1]){
+            ThisOne[key] = 0;
+        }
+
         //拼装数据
         //表一
         let Table_1_row1 = {},Table_1_row2 = {};
         for(let key of data.rows[0]){
             if(key == "Blank") continue;
-            Table_1_row1[key] = ThisOne[key];
+            Table_1_row1[key] = ThisOne[key] || 0;
             Table_1_row2[key] = util.toFixed( ThisOne[key] || 0 , AllOne[key] || 0);
         }
         Table_1_row1["Blank"] = "返利订单";
@@ -215,7 +219,7 @@ module.exports = {
         let Table_3_row1 = {},Table_3_row2 = {};
         for(let key of data.rows[2]){
             if(key == "Blank") continue;
-            Table_3_row1[key] = ThisOne[key];
+            Table_3_row1[key] = ThisOne[key] || 0;
             Table_3_row2[key] = util.toFixed( ThisOne[key] || 0 , AllOne[key] || 0);
         }
         Table_3_row1["Blank"] = "返利订单";
