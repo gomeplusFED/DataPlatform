@@ -62,14 +62,14 @@ module.exports = (Router) => {
             } else {
                 let config = ["a.date BETWEEN ? AND ?", "a.day_type=?"],
                     params = [query.startTime, query.endTime, query.day_type || 1],
-                    page = query.from || query.page || 1,
-                    limit = query.to || query.limit || 20;
+                    page = +(query.from || query.page || 1),
+                    limit = +(query.to || query.limit || 20);
 
                 if (query.shop_name) {
                     config.push(`a.shop_name like '%${query.shop_name}%'`);
                 }
-                params.push(page - 1);
-                params.push(+limit);
+                params.push((page - 1) * limit);
+                params.push(page * limit);
                 let sql = `SELECT a.*, b.uv as uv_pre, b.pv as pv_pre, b.shop_share_uv as shop_share_uv_pre, b.shop_share_pv as shop_share_pv_pre
                 , b.comm_share_uv as comm_share_uv_pre, b.comm_share_pv as comm_share_pv_pre, b.gmv as gmv_pre, b.pay_num as pay_num_pre
                     FROM ads2_o2m_shop_trade_info a 
