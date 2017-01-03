@@ -75,7 +75,7 @@ module.exports = (Router) => {
                     FROM ads2_o2m_shop_trade_info a 
                     LEFT JOIN ads2_o2m_shop_trade_info b 
                      on a.day_type = b.day_type and a.shop_id = b.shop_id and b.date = DATE_ADD(a.date,INTERVAL -1 ${date_type_list[query.day_type || 1]})
-                    WHERE ${config.join(" AND ")} LIMIT ?,?`;
+                    WHERE ${config.join(" AND ")} order by a.uv desc  LIMIT ?,?`;
                 return {
                     sql: sql,
                     params: params
