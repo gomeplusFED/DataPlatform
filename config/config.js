@@ -75,14 +75,28 @@ const Config = {
                 obj.retainedAnalysis.retained()
             ]
         },
-        "4": {
-            name: "留存分析",
-            display: false,
-            className: "fa fa-th-list fa-fw",
-            href: "/retainedAnalysis",
-            path: [],
-            routers: [
-                obj.retainedAnalysis.retained()
+        "6": {
+            name: "使用分析",
+            display: true,
+            className: "fa fa-th fa-fw",
+            href: "#",
+            path: [
+                obj.useAnalysis.useTime(),
+                obj.useAnalysis.useFrequency(),
+                obj.useAnalysis.accessPage(),
+                obj.useAnalysis.accessWap(),
+                obj.useAnalysis.accessPageNum()
+            ]
+        },
+        "8": {
+            name: "终端属性",
+            display: true,
+            className: "fa fa-tablet fa-fw",
+            href: "#",
+            path: [
+                obj.terminal.model(),
+                obj.terminal.network(),
+                obj.terminal.provinces()
             ]
         },
         "5": {
@@ -99,17 +113,34 @@ const Config = {
                 obj.channelAnalysis.apkOperating()
             ]
         },
-        "6": {
-            name: "使用分析",
+        "4": {
+            name: "留存分析",
+            display: false,
+            className: "fa fa-th-list fa-fw",
+            href: "/retainedAnalysis",
+            path: [],
+            routers: [
+                obj.retainedAnalysis.retained()
+            ]
+        },
+        "19": {
+            name: "搜索推荐",
             display: true,
-            className: "fa fa-th fa-fw",
+            className: "fa  fa-laptop fa-fw",
             href: "#",
             path: [
-                obj.useAnalysis.useTime(),
-                obj.useAnalysis.useFrequency(),
-                obj.useAnalysis.accessPage(),
-                obj.useAnalysis.accessWap(),
-                obj.useAnalysis.accessPageNum()
+                obj.search.searchIndex(),
+                obj.search.searchWord(),
+                obj.search.searchRecommend()
+            ]
+        },
+        "9": {
+            name: "分享收藏",
+            display: true,
+            className: "fa fa-external-link fa-fw",
+            href: "#",
+            path: [
+                obj.share.index()
             ]
         },
         "7": {
@@ -121,26 +152,6 @@ const Config = {
                 obj.coupon.all(),
                 obj.coupon.platformCoupon(),
                 obj.coupon.shopCoupon()
-            ]
-        },
-        "8": {
-            name: "终端属性",
-            display: true,
-            className: "fa fa-tablet fa-fw",
-            href: "#",
-            path: [
-                obj.terminal.model(),
-                obj.terminal.network(),
-                obj.terminal.provinces()
-            ]
-        },
-        "9": {
-            name: "分享收藏",
-            display: true,
-            className: "fa fa-external-link fa-fw",
-            href: "#",
-            path: [
-                obj.share.index()
             ]
         },
         "10": {
@@ -170,17 +181,14 @@ const Config = {
             className: "fa fa-flag-checkered fa-fw",
             href: "#",
             path: [
-                obj.achievements.shopOverview(),
-                obj.achievements.shopRun(),
-
-                obj.achievements.product(),
-                obj.achievements.productSale(),
-                
                 obj.achievements.tradePanel(),
                 obj.achievements.trade(),
-                
+                obj.achievements.shopOverview(),
+                obj.achievements.shopRun(),
                 obj.achievements.vshop(),
-                obj.achievements.vtrade()
+                obj.achievements.vtrade(),
+                obj.achievements.product(),
+                obj.achievements.productSale()
             ],
             routers: [
                 obj.achievements.pay(),
@@ -241,29 +249,8 @@ const Config = {
                 obj.socialAnalysis.topicsDetail()
             ]
         },
-        "18": {
-            name: "视频统计",
-            display: true,
-            className: "fa  fa-laptop fa-fw",
-            href: "#",
-            path: [
-                obj.videoStatis.video(),
-                obj.videoStatis.videoEdition()
-            ]
-        },
-        "19": {
-            name: "搜索推荐",
-            display: true,
-            className: "fa  fa-laptop fa-fw",
-            href: "#",
-            path: [
-                obj.search.searchIndex(),
-                obj.search.searchWord(),
-                obj.search.searchRecommend()
-            ]
-        },
         "20": {
-            name: "IM使用",
+            name: "IM统计",
             display: true,
             className: "fa  fa-laptop fa-fw",
             href: "#",
@@ -275,26 +262,14 @@ const Config = {
                 obj.IM.FaceDownload()
             ]
         },
-        "21": {
-            name: "数据埋点",
+        "18": {
+            name: "视频统计",
             display: true,
             className: "fa  fa-laptop fa-fw",
             href: "#",
             path: [
-                obj.databp.visualbp(),
-                obj.databp.bpmanage(),
-                obj.databp.bpstats(),
-                obj.databp.spread()
-            ]
-        },
-        "29": {
-            name: "营销管理后台",
-            display: true,
-            className: "fa  fa-laptop fa-fw",
-            href: "#",
-            path: [
-                obj.market.channel(),
-                obj.market.activity()
+                obj.videoStatis.video(),
+                obj.videoStatis.videoEdition()
             ]
         },
         "30": {
@@ -335,6 +310,28 @@ const Config = {
             href: "#",
             path: [
                 obj.dataExport.shopflow()
+            ]
+        },
+        "29": {
+            name: "营销管理后台",
+            display: true,
+            className: "fa  fa-laptop fa-fw",
+            href: "#",
+            path: [
+                obj.market.channel(),
+                obj.market.activity()
+            ]
+        },
+        "21": {
+            name: "数据埋点",
+            display: true,
+            className: "fa  fa-laptop fa-fw",
+            href: "#",
+            path: [
+                obj.databp.visualbp(),
+                obj.databp.bpmanage(),
+                obj.databp.bpstats(),
+                obj.databp.spread()
             ]
         }
     }

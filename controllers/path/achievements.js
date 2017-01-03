@@ -37,7 +37,7 @@ module.exports = {
     shopOverview(){
         return {
             id : 31,
-            name : "店铺总览",
+            name : "店铺运营分析",
             path : "/achievements/shopOverview",
             display : true,
             defaultData : [
@@ -72,7 +72,7 @@ module.exports = {
     shopRun(){
         return {
             id : 32,
-            name : "店铺运营分析",
+            name : "店铺交易分析",
             path : "/achievements/shopRun",
             display : true,
             defaultData : [
@@ -275,7 +275,7 @@ module.exports = {
     vshop() {
         return {
             id : 37,
-            name : "美店店铺商品",
+            name : "美店运营分析",
             path : "/achievements/vshop",
             display : true,
             defaultData : [
@@ -310,7 +310,7 @@ module.exports = {
     vtrade() {
         return {
             id : 38,
-            name : "美店交易",
+            name : "美店交易分析",
             path : "/achievements/vtrade",
             display : true,
             defaultData : [
