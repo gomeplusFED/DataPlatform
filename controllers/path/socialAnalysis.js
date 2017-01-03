@@ -68,11 +68,11 @@ module.exports = {
             path : "/socialAnalysis/group",
             display : true,
             defaultData : [    
-                {
+                /*{
                     type : "table",
                     title : "圈子数据总览",
                     query_api : "/socialAnalysis/groupSix"
-                },
+                },*/
                 {
                     type: "table",
                     title:"圈子数据统计",

@@ -2,6 +2,7 @@ var path = require('path');
 var config = require('./config.json');
 const validator = require('validator');
 const request = require("request");
+const Assist = require("./assist");
 const style = {
     border : {
         left : {
@@ -29,6 +30,10 @@ const header = {
         fgColor: '#FFFF33'
     }
 };
+
+for(let key in Assist){
+    exports[key] = Assist[key];
+}
 
 exports.unique = function(data) {
     data = data || [];

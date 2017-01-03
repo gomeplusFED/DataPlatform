@@ -6,7 +6,8 @@
 
 var api = require("../../../base/main"),
     filter = require("../../../filters/socialAnalysis/f_total"),
-    util = require("../../../utils");
+    util = require("../../../utils"),
+    orm  = require("orm");
 
 module.exports = (Router) => {
    
@@ -103,93 +104,82 @@ module.exports = (Router) => {
     });
 
 
+
+    let totalTwo_json = [{
+        key: 'new_topic_num',
+        value: '话题'
+    }, {
+        key: 'new_topic_reply_num',
+        value: '回复'
+    }, {
+        key: 'new_topic_like_num',
+        value: '点赞'
+    }, {
+        key: 'new_topic_save_num',
+        value: '收藏'
+    }, {
+        key: 'new_topic_share_num',
+        value: '分享'
+    }];
     Router.get("/socialAnalysis/totalTwo_json" , (req , res , next)=>{
-        res.json({
-            code: 200,
-            modelData: [],
-            components: {
-                date_picker:{
-                    show: true, 
-                    defaultData: 7,
-                    name : "startTime",
-                    endname: "endTime"
-                },
-                filter_select: [{
-                    title: "平台选择",
-                    filter_key: "type",
-                    groups: [{
-                        key: "ALL",
-                        value: "全部平台"
-                    }, {
-                        key: "app",
-                        value: "APP"
-                    }, {
-                        key: "wap",
-                        value: "WAP"
-                    }, {
-                        key: "pc",
-                        value: "PC"
-                    }]
-                }]
+        let query = req.query;
+        req.models.SocialCategory.find({pid:""} , (err , data) => {
+            let Result = {};
+            for(let item of data){
+                Result[item.id] = item.name;
             }
+            req.models.SocialTopicCategoryDistribution.find({
+                category_id : Object.keys(Result),
+                date        : orm.between(query.startTime , query.endTime),
+                day_type    : query.day_type,
+                ver         : 0,
+                channel     : 0,
+                type        : "all"
+            } , (err , result)=>{
+                let newData = {};
+                for(let key in Result){
+                    newData[Result[key]] = { value:0 }
+                }
+
+                for(let item of result){
+                    newData[item.category_id].value += item[query.filter_key];
+                }
+
+                let str;
+                for(let item of totalTwo_json){
+                    if(item.key == query.filter_key){
+                        str = item.value;
+                    }
+                }
+
+                let Return = {
+                    type : "pie",
+                    map : {value : str},
+                    data : newData,
+                    config: {
+                        stack: false
+                    }
+                };
+                res.json({
+                    code: 200,
+                    modelData: [Return],
+                    components: {
+                        date_picker:{
+                            show: true, 
+                            defaultData: 7,
+                            name : "startTime",
+                            endname: "endTime"
+                        },
+                        filter_select: [{
+                            title: '指标选择',
+                            filter_key: 'filter_key',
+                            groups: totalTwo_json
+                        }]
+                    }
+                });
+            });
         });
     });
-
-    /*Router = new api(Router,{
-        router : "/socialAnalysis/totalTwo",
-        modelName : [ "SocialTopicStatistics", "SocialCategory" ],
-        platform : false,
-        params(query , params , sendData){
-            console.log(params);
-            return params;
-        },
-        secondParams(query, params, sendData) {
-            return {
-                pid : ""
-            };
-        },
-        fixedParams(req, query, cb) {
-            var group_type = [];
-            req.models.SocialCategory.find({
-                pid : ""   //没有pid的数据级为一级类目
-            }, (err, data) => {
-                if(!err) {
-                    for(var key of data) {
-                        group_type.push(key.id);
-                    }
-                    query.category_id = group_type;
-                    cb(null, query);
-                } else {
-                    cb(err);
-                }
-            });
-        },
-        filter_select: [
-            {
-                title: '指标选择',
-                filter_key: 'filter_key',
-                groups: [{
-                    key: 'new_topic_num',
-                    value: '话题'
-                }, {
-                    key: 'new_topic_reply_num',
-                    value: '回复'
-                }, {
-                    key: 'new_topic_like_num',
-                    value: '点赞'
-                }, {
-                    key: 'new_topic_save_num',
-                    value: '收藏'
-                }, {
-                    key: 'new_topic_share_num',
-                    value: '分享'
-                }]
-            }
-        ],
-        filter(data, query, dates, type) {
-            return filter.totalTwo(data , query , dates);
-        }
-    });*/
 
     return Router;
 };
