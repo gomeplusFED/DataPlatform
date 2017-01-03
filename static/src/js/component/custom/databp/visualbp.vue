@@ -30,7 +30,7 @@
 	var $ = require('jQuery');
 	var getSelector = require('./lib/selector.js').getSelector;
 	var api = require('./lib/api.js');
-	var Alert = require('../../common/alert.vue');
+	var Alert = require('common/alert.vue');
 	var bpInfo = require('./bpinfo.vue');
 	
 	var visualbp = Vue.extend({

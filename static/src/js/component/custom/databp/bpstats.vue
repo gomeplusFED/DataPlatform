@@ -71,10 +71,10 @@
 <script>
 	var Vue = require('Vue');
 	var $ = require('jQuery');
-	var DatePicker = require('../../common/datePicker.vue');
+	var DatePicker = require('common/datePicker.vue');
 	var store = require('store');
 	var actions = require('actions');
-	var Pagination = require('../../common/pagination.vue');
+	var Pagination = require('common/pagination.vue');
 	var api = require('./lib/api.js');
 	var utils = require('utils');
 	
