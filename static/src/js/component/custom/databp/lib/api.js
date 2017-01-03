@@ -3,7 +3,7 @@ var actions = require('actions');
 var $ = require('jQuery');
 
 const baseurl = window.location.href.startsWith('http://bi.') ? 
-'http://10.125.192.133:8180/bomber-pie' : 'http://10.69.10.16:8088/bomber-pie'
+'http://10.125.192.133:8180/bomber-pie' : 'http://10.69.10.26:8088/bomber-pie'
 // 请求失败 重试一次
 const RETRY_TIMES = 2;
 
@@ -162,6 +162,22 @@ var api = {
 	// {pageUrl, platform, pointName, page, size}
 	listBps(data){
 		return buildAjax('/pointList', filterArgs(data, ['pageUrl', 'platform', 'pointName', 'page', 'size', 'startTime', 'endTime', 'pattern', 'isActive', 'type'])).then(function(res) {
+			if(res.code !== '200' || res.iserror !== '0') {
+				return Promise.reject('获取埋点信息失败：' + res.msg);
+			}
+			var data;
+			if (res && (data = res.data) && (data = data.result)) {
+				return {
+					data,
+					total: res.data.total
+				}
+			} else {
+				return Promise.reject('获取的埋点信息为空');
+			}
+		}).catch(errHandler);
+	},
+	getHeatList(data) {
+		return buildAjax('/pointHeatList', filterArgs(data, ['pageUrl', 'platform', 'pointName', 'page', 'size', 'startTime', 'endTime', 'pattern', 'isActive', 'type'])).then(function(res) {
 			if(res.code !== '200' || res.iserror !== '0') {
 				return Promise.reject('获取埋点信息失败：' + res.msg);
 			}

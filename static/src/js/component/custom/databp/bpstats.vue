@@ -75,7 +75,7 @@
 	var store = require('store');
 	var actions = require('actions');
 	var Pagination = require('../../common/pagination.vue');
-	var api = require('./mock/api.js');
+	var api = require('./lib/api.js');
 	var utils = require('utils');
 	
 	var databp = Vue.extend({
@@ -140,9 +140,11 @@
 				let options = Object.assign({
 					// page从0开始
 					page: this.paginationConf.currentPage - 1,
-					size: this.paginationConf.itemsPerPage
+					size: this.paginationConf.itemsPerPage,
+					startTime: this.argvs.startTime + ' 00:00:00',
+					endTime: this.argvs.endTime + ' 23:59:59'
 				}, this.searchParam);
-				api.listBps(options).then((res) => {
+				api.getHeatList(options).then((res) => {
 					this.dataList = res.data;
 					if (this.dataList.length === 0) {
 						 this.noData = true;
