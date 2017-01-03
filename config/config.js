@@ -307,7 +307,8 @@ const Config = {
                 obj.table.data_table_day(),
                 obj.table.data_table_week(),
                 obj.table.data_table_month(),
-                obj.table.rebate_total()
+                obj.table.rebate_total(),
+                obj.table.data_table_shopflow()
             ],
             routers : [
                 obj.table.rebate_total_new(),
@@ -327,16 +328,16 @@ const Config = {
                 obj.table.data_table_week_dataRebate(),
                 obj.table.data_table_month_dataRebate()
             ]
-        },
-        "1001": {
-            name: "数据导出",
-            display: true,
-            className: "fa  fa-database fa-fw",
-            href: "#",
-            path: [
-                obj.dataExport.shopflow()
-            ]
         }
+        // "1001": {
+        //     name: "数据导出",
+        //     display: true,
+        //     className: "fa  fa-database fa-fw",
+        //     href: "#",
+        //     path: [
+        //         obj.dataExport.shopflow()
+        //     ]
+        // }
     }
 };
 
