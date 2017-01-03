@@ -24,10 +24,13 @@ module.exports = (Router) => {
             return filter.allThree(data);
         },
         selectFilter(req, cb) {
-            let ip = db.db === 'pro' ? '10.125.143' : '10.125.70.23'
+            let ip = db.db === 'pro' ? '10.125.143.169' : '10.125.70.23'
             let url = `http://${ip}:8080/api/o2m/download`
             let _this = this
             request(url, (error, response, body) => {
+                if(error) {
+                    return cb(error);
+                }
                 let obj = JSON.parse(body)
                 let downloadurl = obj.downloadurl
                 _this.flexible_btn[1].content =  `<a target="_blank" href="${downloadurl}">商品数据导出</a>`
