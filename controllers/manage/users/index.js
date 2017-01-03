@@ -69,6 +69,16 @@ module.exports = (Router) => {
                     }
 
                     if(params.limited) {
+                        let l = JSON.parse(params.limited);
+                        let u = JSON.parse(data[0].limited);
+                        if(req.session.userInfo.username !== "superAdmin") {
+                            if(!u[0]) {
+                                if(l["0"]) {
+                                    delete l["0"];
+                                }
+                            }
+                        }
+                        params.limited = JSON.stringify(l);
                         if(params.limited !== data[0].limited) {
                             content.push(username + "权限被修改");
                         }
@@ -179,6 +189,7 @@ module.exports = (Router) => {
         for(let key in config) {
             if(config[key].display) {
                 obj[key] = {
+                    id : key,
                     name : config[key].name,
                     cell : {}
                 };
@@ -214,6 +225,7 @@ module.exports = (Router) => {
                         role,
                         remark,
                         one : "",
+                        id : "",
                         two : "",
                         three : ""
                     });
@@ -230,6 +242,7 @@ module.exports = (Router) => {
                                         role,
                                         remark,
                                         one : obj[k].name,
+                                        id : k,
                                         two : obj[k].cell[item] || "",
                                         three : obj[k].cell[exports[index]] || ""
                                     });
@@ -244,6 +257,7 @@ module.exports = (Router) => {
                                         role,
                                         remark,
                                         one : obj[k].name,
+                                        id : k,
                                         two : obj[k].cell[limited[index]] || "",
                                         three : obj[k].cell[item] || ""
                                     });
@@ -259,6 +273,7 @@ module.exports = (Router) => {
                                     role,
                                     remark,
                                     one : obj[k].name,
+                                    id : k,
                                     two : obj[k].cell[item] || "",
                                     three : ""
                                 });
@@ -273,6 +288,7 @@ module.exports = (Router) => {
                                     role,
                                     remark,
                                     one : obj[k].name,
+                                    id : k,
                                     two : "",
                                     three : obj[k].cell[item] || ""
                                 });
@@ -289,9 +305,10 @@ module.exports = (Router) => {
                     {caption : "角色"},
                     {caption : "备注"},
                     {caption : "一级页面"},
+                    {caption : "一级ID"},
                     {caption : "菜单权限"},
                     {caption : "下载权限"}],
-                rows : ["name", "username", "email", "department", "role", "remark", "one", "two", "three"],
+                rows : ["name", "username", "email", "department", "role", "remark", "one", "id", "two", "three"],
                 data : arr
             }]);
             util.export(ws, newData);

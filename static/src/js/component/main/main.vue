@@ -3,7 +3,7 @@
 		<div class="col-lg-12">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					<strong>{{currentData.title}}</strong>
+					<strong>{{currentData.title}}  {{debug}}</strong>
 					<div class="head_group_con clearfix">
 						<m-drop-down :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'platform'" :argvs.sync='argvs'></m-drop-down>
 						<m-drop-down :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'channel'" :argvs.sync='argvs'></m-drop-down>
@@ -93,7 +93,8 @@ var Main = Vue.extend({
 			pageComponentsData: null,
 			resultArgvs: {},
 			count: 0,
-			canUpdate: false
+			canUpdate: false,
+			debug : null
 		};
 	},
 	props: ['initData', 'currentData', 'loading', 'index'],
@@ -121,7 +122,8 @@ var Main = Vue.extend({
 			type: 'get',
 			success: function(data) {
 				_this.pageComponentsData = data.components;
-				
+				_this.debug =  data.modelName;
+
 				if (_this.isnoComponent(data.components)) {
 					Vue.set(_this.argvs, 'forceChange', true);
 					_this.count = 0;

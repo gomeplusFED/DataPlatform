@@ -14,7 +14,9 @@ var utils = require("../utils"),
     orm = require("orm"),
     sqlLogRunTime = require("./sqlLogRunTime"),
     cacheTime = 1,
-    platformPermission = require('../utils/platformPermission');
+    platformPermission = require('../utils/platformPermission'),
+    models = require("../models2/Modules"),
+    _ = require("lodash");
 
 let eventproxy = require("eventproxy");
 
@@ -99,7 +101,9 @@ function api(Router, options) {
         //全局模块
         global_platform: {show: false},
         //是否支持图转表
-        toggle : false
+        toggle : false,
+        //是否页面显示表名
+        debug : true
     }, options);
 
     utils.mixin(this, defaultOption);
@@ -192,7 +196,7 @@ api.prototype = {
         }
     },
     _render(res, sendData, type) {
-        res[type]({
+        const render = {
             code: 200,
             modelData: sendData,
             components: {
@@ -221,7 +225,21 @@ api.prototype = {
                 global_plataform : this.global_platform,
                 toggle: this.toggle
             }
-        });
+        };
+        if(this.debug) {
+            let modelName = this.modelName;
+            let _modelName = [];
+            for(let name of modelName) {
+                for(let model in models) {
+                    if(models[model].modelName === name) {
+                        _modelName.push(model);
+                    }
+                }
+            }
+            render.modelName = _.uniq(_modelName).join(";  ");
+        }
+
+        res[type](render);
     },
     _checkParams(next, query, params, cacheData) {
         var errObj = {},
