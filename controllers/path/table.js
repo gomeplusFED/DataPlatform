@@ -337,5 +337,19 @@ module.exports = {
                 }
             ]
         };
+    },
+    data_table_shopflow() {
+        return {
+            name : "O2M店铺流量交易",
+            path : "/dataExport/shopFlow",
+            display : true,
+            defaultData : [
+                {
+                    type : "table",
+                    title : "O2M店铺流量交易",
+                    query_api : "/dataExport/shopFlowOne"
+                }
+            ]
+        }
     }
 };

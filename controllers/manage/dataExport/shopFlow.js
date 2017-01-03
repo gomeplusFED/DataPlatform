@@ -24,23 +24,26 @@ module.exports = (Router) => {
             return filter.allThree(data);
         },
         selectFilter(req, cb) {
-            let ip = db.db === 'pro' ? '10.125.143' : '10.125.70.23'
+            let ip = db.db === 'pro' ? '10.125.143.169' : '10.125.70.23'
             let url = `http://${ip}:8080/api/o2m/download`
             let _this = this
             request(url, (error, response, body) => {
+                if(error) {
+                    return cb(error);
+                }
                 let obj = JSON.parse(body)
                 let downloadurl = obj.downloadurl
-                _this.flexible_btn[1].content =  `<a target="_blank" href="${downloadurl}">下载商品</a>`
+                _this.flexible_btn[1].content =  `<a target="_blank" href="${downloadurl}">商品数据导出</a>`
                 cb(null, {})
             })
         },
         excel_export: true,
         flexible_btn: [{
-            content: '<a href="javascript:void(0)">数据导出</a>',
+            content: '<a href="javascript:void(0)">店铺数据导出</a>',
             preMethods: ['excel_export']
         },
         {
-            content: `<a href="javascript:void(0)">下载商品</a>`,
+            content: `<a href="javascript:void(0)">商品数据导出</a>`,
             preMethods: ['']
         }],
         firstSql(query, params, isCount) {
@@ -72,7 +75,7 @@ module.exports = (Router) => {
                     FROM ads2_o2m_shop_trade_info a 
                     LEFT JOIN ads2_o2m_shop_trade_info b 
                      on a.day_type = b.day_type and a.shop_id = b.shop_id and b.date = DATE_ADD(a.date,INTERVAL -1 ${date_type_list[query.day_type || 1]})
-                    WHERE ${config.join(" AND ")} LIMIT ?,?`;
+                    WHERE ${config.join(" AND ")} order by a.uv desc  LIMIT ?,?`;
                 return {
                     sql: sql,
                     params: params

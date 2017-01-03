@@ -22,8 +22,9 @@ module.exports = {
             item.comm_share_pv_ratio = item.comm_share_pv_pre ? util.toFixed(item.comm_share_pv - item.comm_share_pv_pre, item.comm_share_pv_pre) : '-'
             item.gmv_ratio = item.gmv_pre ? util.toFixed(item.gmv - item.gmv_pre, item.gmv_pre) : '-'
             item.pay_num_ratio = item.pay_num_pre ? util.toFixed(item.pay_num - item.pay_num_pre, item.pay_num_pre) : '-'
-        }
+            item.gmv = item.gmv && item.gmv/100
+    }
 
-        return util.toTable([source], data.rows, data.cols, count.count);
+        return util.toTable([source], data.rows, data.cols, [count.count]);
     }
 };
