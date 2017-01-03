@@ -30,17 +30,17 @@ module.exports = (Router) => {
             request(url, (error, response, body) => {
                 let obj = JSON.parse(body)
                 let downloadurl = obj.downloadurl
-                _this.flexible_btn[1].content =  `<a target="_blank" href="${downloadurl}">下载商品</a>`
+                _this.flexible_btn[1].content =  `<a target="_blank" href="${downloadurl}">商品数据导出</a>`
                 cb(null, {})
             })
         },
         excel_export: true,
         flexible_btn: [{
-            content: '<a href="javascript:void(0)">数据导出</a>',
+            content: '<a href="javascript:void(0)">店铺数据导出</a>',
             preMethods: ['excel_export']
         },
         {
-            content: `<a href="javascript:void(0)">下载商品</a>`,
+            content: `<a href="javascript:void(0)">商品数据导出</a>`,
             preMethods: ['']
         }],
         firstSql(query, params, isCount) {
