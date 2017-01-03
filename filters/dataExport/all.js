@@ -24,6 +24,6 @@ module.exports = {
             item.pay_num_ratio = item.pay_num_pre ? util.toFixed(item.pay_num - item.pay_num_pre, item.pay_num_pre) : '-'
         }
 
-        return util.toTable([source], data.rows, data.cols, count.count);
+        return util.toTable([source], data.rows, data.cols, [count.count]);
     }
 };
