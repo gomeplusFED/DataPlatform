@@ -150,9 +150,9 @@ var Role = Vue.extend({
 				totalItems: 30,     // 总条数
 				itemsPerPage: 10,    // 每页条数
 				pagesLength: 5,     // 显示几页( 1,2,3 / 1,2,3,4,5)
-				onChange: function() {
+				onChange: () => {
 					// 回调
-					UserVm.createTableBySearchStr();
+					this.createTableBySearchStr();
 				}
 			},
 			roleListData: null,
