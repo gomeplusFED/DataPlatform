@@ -6,7 +6,7 @@
 					<h4 class="modal-title">{{modalTableData.title}}</h4>
 				</div>
 				<div class="modal-body">
-					<m-toggle style="margin-bottom: 10px;" :show="type === 'toggle'" :page-components-data="pageComponentsData" component-type="toggle" :fun="toggle"></m-toggle>
+					<m-toggle style="margin-bottom: 10px;" :show="type === 'toggle'" :page-components-data="pageComponentsData" component-type="toggle" :show-type="showType" :fun="toggle"></m-toggle>
 					<table v-if="showType === 'table'" class="table table-bordered table-hover" role="grid" aria-describedby="dataTables_info">
 						<thead>
 							<tr>
@@ -146,19 +146,22 @@ var ModalTable = Vue.extend({
 		'modalTableData.data': {
 			handler: function(val) {
 				if (val) {
+					debugger
 					if (val.length > 1) {
 						if (val[1].type && val[0].count) {
 							this.type = 'toggle';
-						}
-						if (val[0].count) {
-							this.showType = 'table';
-							this.paginationConf.totalItems = this.modalTableData.data[0].count ? this.modalTableData.data[0].count : 0;
-						} else if (val[1].type) {
-							this.showType = 'chart';
-						}
+						} else {
+							this.type = '';
+							if (val[0].count) {
+								this.showType = 'table';
+								this.paginationConf.totalItems = this.modalTableData.data[0].count ? this.modalTableData.data[0].count : 0;
+							} else if (val[1].type) {
+								this.showType = 'chart';
 
-						if (val[1].default) {
-							this.showType = 'chart';
+								if (val[1].default) {
+									this.showType = 'chart';
+								}
+							}
 						}
 					} else if (val.length === 1 && val[0].count) {
 						this.showType = 'table';
