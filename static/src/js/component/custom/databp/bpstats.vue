@@ -58,7 +58,7 @@
 					<td><a @click="edit(item)">趋势</a></td>
 				</tr>
 				<tr v-show="noData">
-					 <td colspan="7">暂无数据</td>
+					 <td colspan="8">暂无数据</td>
 				 </tr>
 			</tbody>
 		</table>
