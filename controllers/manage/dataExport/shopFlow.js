@@ -69,7 +69,7 @@ module.exports = (Router) => {
                     config.push(`a.shop_name like '%${query.shop_name}%'`);
                 }
                 params.push((page - 1) * limit);
-                params.push(page * limit);
+                params.push(limit);
                 let sql = `SELECT a.*, b.uv as uv_pre, b.pv as pv_pre, b.shop_share_uv as shop_share_uv_pre, b.shop_share_pv as shop_share_pv_pre
                 , b.comm_share_uv as comm_share_uv_pre, b.comm_share_pv as comm_share_pv_pre, b.gmv as gmv_pre, b.pay_num as pay_num_pre
                     FROM ads2_o2m_shop_trade_info a 
