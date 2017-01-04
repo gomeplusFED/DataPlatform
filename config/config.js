@@ -27,14 +27,17 @@ const Config = {
             className: "fa fa-user fa-fw",
             href: "#",
             path: [{
+                id: "0",
                 name: "帐号列表",
                 path: "/user/account",
                 display: true
             }, {
+                id : "1",
                 name: "角色列表",
                 path: "/user/role",
                 display: true
             }, {
+                id : "2",
                 name: "系统日志",
                 path: "/user/log",
                 display: true
