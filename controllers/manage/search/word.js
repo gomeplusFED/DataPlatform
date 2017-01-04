@@ -9,13 +9,10 @@ const utils = require("../../../utils");
 const orm = require("orm");
 const filter = require("../../../filters/search/fword");
 
-const TypeObj = {
+const TypeObj = [{
     title: "平台选择",
     filter_key: "type",
     groups: [{
-        key: "ALL",
-        value: "全部平台"
-    }, {
         key: "ios",
         value: "IOS"
     }, {
@@ -28,7 +25,7 @@ const TypeObj = {
         key: "h5",
         value: "H5"
     }]
-};
+}];
 
 
 module.exports = (Router) => {
@@ -38,7 +35,9 @@ module.exports = (Router) => {
         router: "/search/WordOne",
         modelName : ["SearchSource"],
         platform: false,
-        filter_select: [TypeObj],
+        selectFilter(req, cb) {
+            cb(null, utils.globalPlatform(req.session.userInfo.type["69"], TypeObj));
+        },
         params(query, params){
             params.search_source = "ALL";
             return params;
@@ -53,7 +52,9 @@ module.exports = (Router) => {
         router: "/search/WordTwo",
         modelName : ["SearchSource"],
         platform: false,
-        filter_select: [TypeObj],
+        selectFilter(req, cb) {
+            cb(null, utils.globalPlatform(req.session.userInfo.type["69"], TypeObj));
+        },
         params(query, params){
             params.search_position = "ALL";
             return params;
@@ -81,7 +82,9 @@ module.exports = (Router) => {
              content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ["excel_export"]
         }],
-        filter_select: [TypeObj],
+        selectFilter(req, cb) {
+            cb(null, utils.globalPlatform(req.session.userInfo.type["69"], TypeObj));
+        },
         rows: [
             [
                 "search_keyword",

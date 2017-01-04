@@ -18,12 +18,11 @@
 				<a href="javascript:void(0)" aria-label="Next" :class="{disabled: paginationConf.currentPage == paginationConf.numberOfPages}" @click="nextPage()">
 					<span aria-hidden="true">&raquo;</span>
 				</a>
-				<input type="text" v-model="page" number :placeholder="pageList.length && pageList[pageList.length-1]" class="form-control" style="width: 50px;display: inline;margin-left:4px;">
+				<input type="text" v-model="page" number :placeholder="paginationConf.numberOfPages" class="form-control" style="width: 50px;display: inline;margin-left:4px;" @input="inputChanged(page)">
 				<button class="btn  btn-default" style="margin-bottom: 3px;" @click="gotoPage">
 					Go
 				</button>
 			</li>
-			
 			<!-- <li :class="{disabled: paginationConf.currentPage == paginationConf.numberOfPages}" @click="changeCurrentPage(paginationConf.numberOfPages)"><span>末页</span></li> -->
 		</ul>
 	</div>
@@ -65,15 +64,19 @@ vm.$data.paginationConf = {
 
 
 var Vue = require('Vue');
-var store = require('../../store/store.js');
-var actions = require('../../store/actions.js');
+var $ = require('jQuery');
 
 var Pagination = Vue.extend({
 	name: 'Pagination',
 	data: function(){
 		return {
 			page: '',
-			pageList: []
+			pageList: [],
+			popoverConfig: {
+				title: '',
+				msg: ''
+			},
+			$input: null
 		}
 	},
 	created: function(){
@@ -88,6 +91,9 @@ var Pagination = Vue.extend({
 		if(this.paginationConf.totalItems){
 			this.getPagination();
 		}
+	},
+	ready: function() {
+		this.$input = $(this.$el).find('input');
 	},
 	props:['paginationConf'],
 	methods: {
@@ -104,22 +110,33 @@ var Pagination = Vue.extend({
 		        this.paginationConf.currentPage += 1;
 		    }
 		},
-		gotoPage: function() {
-			if (isNaN(parseInt(this.page))) {
-				actions.alert(store, {
-					show: true,
-					msg: "输入有误",
-					type: 'danger'
+		inputChanged: function(page){
+			var $input =this.$input;
+			if (page && isNaN(parseInt(page))) {
+				$input.popover({
+					content: '输入有误'
 				});
-			} else if (this.page > this.pageList[this.pageList.length-1]) {
-				actions.alert(store, {
-					show: true,
-					msg: "超过最大页数",
-					type: 'danger'
+				$input.popover('show');
+				setTimeout(() => { 
+					$input.popover("destroy");
+					this.page = '';
+				}, 1000);
+			} else if (page > this.paginationConf.numberOfPages) {
+				$input.popover({
+					content: '超过最大页数'
 				});
-			} else {
+				$input.popover('show');
+				setTimeout(() => { 
+					$input.popover("destroy"); 
+					this.page = '';
+				}, 1000);
+			}
+			return true;
+		},
+		gotoPage: function(ev) {
+			if(this.page && this.inputChanged(this.page)) {
 				this.changeCurrentPage(this.page)
-				this.page = ''
+				this.page = '';
 			}
 		},
 		getPagination: function(newValue, oldValue) {

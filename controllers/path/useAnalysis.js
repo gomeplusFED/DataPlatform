@@ -7,6 +7,7 @@
 module.exports = {
     useTime() {
         return {
+            id : 99,
             path : "/useAnalysis/useTime",
             name : "使用时长",
             display : true,
@@ -31,6 +32,7 @@ module.exports = {
     },
     useFrequency() {
         return {
+            id : 100,
             path : "/useAnalysis/useFrequency",
             name : "使用频率",
             display : true,
@@ -63,6 +65,7 @@ module.exports = {
     },
     accessPage() {
         return {
+            id : 101,
             router : "/useAnalysis/accessPage",
             path : "/useAnalysis/accessPage",
             name : "访问页面",
@@ -80,6 +83,7 @@ module.exports = {
     },
     accessWap() {
         return {
+            id : 102,
             path : "/useAnalysis/accessWap",
             name : "访问页面-wap",
             display : true,
@@ -96,6 +100,7 @@ module.exports = {
     },
     accessPageNum() {
         return {
+            id : 103,
             path : "/useAnalysis/accessNum",
             name : "访问页面数量分布",
             display : true,

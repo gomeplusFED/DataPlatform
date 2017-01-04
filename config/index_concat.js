@@ -14,7 +14,8 @@ const Result=[];
 const Jsons = fs.readdirSync(path.join(__dirname , "./apiConfig"));
 const Functions = fs.readdirSync(path.join(__dirname , "./apiFunction"));
 let AllFn = {};
-let FnProperty = ["filter" , "params" , "secondParams" , "thirdParams" , "fourthParams" , "fixedParams" , "selectFilter"];
+let FnProperty = ["filter" , "params" , "secondParams" , "thirdParams" , "fourthParams" ,
+    "fixedParams" , "selectFilter", "global_platform_filter"];
 
 
 //获取所有函数
@@ -49,9 +50,9 @@ for(let item of Jsons){
         }
 
         let FUN = (Router) => {
-            new api(Router , obj);
+            Router = new api(Router , obj);
             return Router;
-        }
+        };
 
         Result.push(FUN);
     }

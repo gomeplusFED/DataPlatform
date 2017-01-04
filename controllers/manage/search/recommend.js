@@ -12,9 +12,6 @@ const TypeObj = {
     title: "平台选择",
     filter_key: "type",
     groups: [{
-        key: "ALL",
-        value: "全部平台"
-    }, {
         key: "ios",
         value: "IOS"
     }, {
@@ -44,17 +41,19 @@ module.exports = (Router) => {
             query.date = date;
             return params;
         },
-        filter_select: [TypeObj , {
-            title: "推荐位所在页面",
-            filter_key: "recommend_page",
-            groups: [{
-                key: "逛逛首页",
-                value: "逛逛首页"
-            }, {
-                key: "商品详情页",
-                value: "商品详情页"
-            }]
-        }],
+        selectFilter(req, cb) {
+            cb(null, utils.globalPlatform(req.session.userInfo.type["70"], [TypeObj , {
+                title: "推荐位所在页面",
+                filter_key: "recommend_page",
+                groups: [{
+                    key: "逛逛首页",
+                    value: "逛逛首页"
+                }, {
+                    key: "商品详情页",
+                    value: "商品详情页"
+                }]
+            }]));
+        },
         rows: [
             ["date",
                 "recommend_result_pv",
@@ -152,11 +151,13 @@ module.exports = (Router) => {
         params: function(query, params, sendData) {
             return params;
         },
-        filter_select: [TypeObj],
+        selectFilter(req, cb) {
+            cb(null, utils.globalPlatform(req.session.userInfo.type["70"], [TypeObj]));
+        },
         filter(data, query, dates) {
             return filter.recommendTwo(data, query, dates);
         }
     });
 
     return Router;
-}
+};

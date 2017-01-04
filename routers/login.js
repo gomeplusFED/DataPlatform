@@ -42,6 +42,8 @@ module.exports = function(Router) {
         }
         userInfo.limited =  JSON.parse(userInfo.limited);
         userInfo.export =  JSON.parse(userInfo.export);
+        userInfo.sub_pages =  JSON.parse(userInfo.sub_pages);
+        userInfo.type =  JSON.parse(userInfo.type);
         req.sessionOptions.maxAge = new Date(Date.now() + maxAge);
         req.session.userInfo = userInfo;
         req.session.isLogin = true;
@@ -85,7 +87,7 @@ module.exports = function(Router) {
                                 username : "superAdmin",
                                 role : "超级管理员",
                                 status : 1,
-                                limited : '{"0":[0,1,2]}',
+                                limited : '{"0":["0","1","2"]}',
                                 is_admin : 99
                             }, (err, data) => {
                                 if(!err) {

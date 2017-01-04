@@ -7,6 +7,7 @@
 module.exports = {
     index() {
         return {
+            id : 71,
             name : "分享数据",
             path : "/share/index",
             display : true,

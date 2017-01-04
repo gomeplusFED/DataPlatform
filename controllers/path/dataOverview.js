@@ -7,9 +7,19 @@
 module.exports = {
     all() {
         return {
+            id : 53,
             name: "数据概览",
-            path: "/dataOverview/app",
+            path: "/dataOverview/dataOverviewAll",
             display: true,
+            subPages : [{
+                id : 98,
+                url : "/terminal/provinces",
+                name : "地域"
+            }, {
+                id : 101,
+                url : "/useAnalysis/accessPage",
+                name : "访问页面"
+            }],
             defaultData: [{
                 type: "table",
                 title: "数据概览",

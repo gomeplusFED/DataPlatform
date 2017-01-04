@@ -4,42 +4,38 @@
  * @fileoverview 用户分析
  */
 var api = require("../../../base/main"),
-    userAnalysis = require("../../../filters/userAnalysis");
+    userAnalysis = require("../../../filters/userAnalysis"),
+    global_platform = {
+        show: true,
+        key: 'type',
+        list: [{
+            key: 'ios',
+            name: 'IOS'
+        }, {
+            key: 'android',
+            name: 'Android'
+        }, {
+            key: 'app',
+            name: 'APP'
+        }, {
+            key: 'pc',
+            name: 'PC'
+        }, {
+            key: 'm',
+            name: 'H5'
+        }]
+    };
 
 module.exports = (Router) => {
     Router = new api(Router,{
         router : "/userAnalysis/newUsersOne",
         modelName : ["NewAccount"],
         platform : false,
-        flexible_btn: [{
-            content: '<a href="javascript:void(0)" help_url="/userAnalysis/newUsers/help_json">帮助</a>',
-            preMethods: ["show_help"],
-            customMethods: ''
-        }],
         params(query, params) {
-            params.type = query.type || 'ios';
+            params.type = query.type || this.global_platform.list[0].key;
             return params;
         },
-        global_platform : {
-            show: true,
-            key: 'type',
-            list: [{
-                key: 'ios',
-                name: 'IOS'
-            }, {
-                key: 'android',
-                name: 'Android'
-            }, {
-                key: 'app',
-                name: 'APP'
-            }, {
-                key: 'pc',
-                name: 'PC'
-            }, {
-                key: 'm',
-                name: 'H5'
-            }]
-        },
+        global_platform : global_platform,
         filter(data, query, dates) {
             return userAnalysis.One(data,
                 [ "new_users", "new_account" ],
@@ -54,8 +50,9 @@ module.exports = (Router) => {
         modelName : ["NewAccount"],
         paging : [true],
         platform : false,
+        global_platform : global_platform,
         params(query, params) {
-            params.type = query.type || 'ios';
+            params.type = query.type || this.global_platform.list[0].key;
 
             return params;
         },
