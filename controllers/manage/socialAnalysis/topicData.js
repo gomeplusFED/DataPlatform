@@ -243,84 +243,181 @@ module.exports = (Router) => {
             return filter.topicsThree(data, query, dates);
         }
     });
-    
-    Router = new api(Router,{
-        router : "/socialAnalysis/topicsFour",
-        modelName : [ "SocialTopicCategoryDistribution", "SocialCategory" ],
-        platform : false,
-        secondParams(query, params, sendData) {
-            return {
-                pid : ""
-            };
-        },
-        procedure : [{
-            aggregate : {
-                value : ["category_id"]
-            },
-            sum : ["new_topic_num", "new_topic_reply_num", "new_topic_like_num",
-                "new_topic_save_num", "new_topic_share_num"],
-            groupBy : ["category_id"],
-            get : ""
-        }, false],
-        fixedParams(req, query, cb) {
-            var group_type = [];
-            req.models.SocialCategory.find({
-                pid : ""   //没有pid的数据级为一级类目
-            }, (err, data) => {
-                if(!err) {
-                    for(var key of data) {
-                        group_type.push(key.id);
-                    }
-                    query.category_id = group_type;
-                    cb(null, query);
-                } else {
-                    cb(err);
-                }
-            });
-        },
-        filter_select: [
-            {
-               title: "平台选择",
-               filter_key : 'type',
-               groups: [{
-                   key: ['APP','WAP','PC'],
-                   value: '全部平台'
-               },{
-                   key: 'APP',
-                   value: 'APP'
-               },{
-                   key: 'WAP',
-                   value: 'WAP'
-               },{
-                   key: 'PC',
-                   value: 'PC'
-               }]
-            },
-            {
-                title: '指标选择',
-                filter_key: 'filter_key',
-                groups: [{
-                    key: 'new_topic_num',
-                    value: '话题'
-                }, {
-                    key: 'new_topic_reply_num',
-                    value: '回复'
-                }, {
-                    key: 'new_topic_like_num',
-                    value: '点赞'
-                }, {
-                    key: 'new_topic_save_num',
-                    value: '收藏'
-                }, {
-                    key: 'new_topic_share_num',
-                    value: '分享'
-                }]
+
+    //一级圈子分类
+    let topicsFour = {
+        title: '指标选择',
+        filter_key: 'filter_key',
+        groups: [{
+            key: 'new_topic_num',
+            value: '话题'
+        }, {
+            key: 'new_topic_reply_num',
+            value: '回复'
+        }, {
+            key: 'new_topic_like_num',
+            value: '点赞'
+        }, {
+            key: 'new_topic_save_num',
+            value: '收藏'
+        }, {
+            key: 'new_topic_share_num',
+            value: '分享'
+        }]
+    };
+    let Type = {
+        title: "平台选择",
+        filter_key : 'type',
+        groups: [{
+           key: ['APP','WAP','PC'],
+           value: '全部平台'
+        },{
+           key: 'APP',
+           value: 'APP'
+        },{
+           key: 'WAP',
+           value: 'WAP'
+        },{
+           key: 'PC',
+           value: 'PC'
+        }]
+    };
+
+
+    Router.get("/socialAnalysis/topicsFour_json" , (req , res , next) => {
+        let query = req.query;
+        req.models.SocialCategory.find({pid:""} , (err , data) => {
+            let Result = {};
+            for(let item of data){
+                Result[item.id] = item.name;
             }
-        ],
-        filter(data, query, dates, type) {
-            return filter.topicsFour(data, query.filter_key);
-        }
+            req.models.SocialTopicStatistics.find({
+                category_id : Object.keys(Result),
+                date        : orm.between(query.startTime , query.endTime),
+                day_type    : query.day_type,
+                ver         : 0,
+                channel     : 0,
+                type        : query.type || "all"
+            } , (err , result)=>{
+                let newData = {};
+                for(let key in Result){
+                    newData[Result[key]] = { value:0 }
+                }
+
+                for(let item of result){
+                    newData[item.category_id].value += item[query.filter_key];
+                }
+
+                let str;
+                for(let item of topicsFour.groups){
+                    if(item.key == query.filter_key){
+                        str = item.value;
+                    }
+                }
+
+                let Return = {
+                    type : "pie",
+                    map : {value : str},
+                    data : newData,
+                    config: {
+                        stack: false
+                    }
+                };
+                res.json({
+                    code: 200,
+                    modelData: [Return],
+                    components: {
+                        date_picker:{
+                            show: true, 
+                            defaultData: 7,
+                            name : "startTime",
+                            endname: "endTime"
+                        },
+                        filter_select: [Type , topicsFour]
+                    }
+                });
+            });
+        });
     });
+
+    
+    // Router = new api(Router,{
+    //     router : "/socialAnalysis/topicsFour",
+    //     modelName : [ "SocialTopicStatistics", "SocialCategory" ],
+    //     platform : false,
+    //     secondParams(query, params, sendData) {
+    //         return {
+    //             pid : ""
+    //         };
+    //     },
+    //     procedure : [{
+    //         aggregate : {
+    //             value : ["category_id"]
+    //         },
+    //         sum : ["new_topic_num", "new_topic_reply_num", "new_topic_like_num",
+    //             "new_topic_save_num", "new_topic_share_num"],
+    //         groupBy : ["category_id"],
+    //         get : ""
+    //     }, false],
+    //     fixedParams(req, query, cb) {
+    //         var group_type = [];
+    //         req.models.SocialCategory.find({
+    //             pid : ""   //没有pid的数据级为一级类目
+    //         }, (err, data) => {
+    //             if(!err) {
+    //                 for(var key of data) {
+    //                     group_type.push(key.id);
+    //                 }
+    //                 query.category_id = group_type;
+    //                 cb(null, query);
+    //             } else {
+    //                 cb(err);
+    //             }
+    //         });
+    //     },
+    //     filter_select: [
+    //         {
+    //            title: "平台选择",
+    //            filter_key : 'type',
+    //            groups: [{
+    //                key: ['APP','WAP','PC'],
+    //                value: '全部平台'
+    //            },{
+    //                key: 'APP',
+    //                value: 'APP'
+    //            },{
+    //                key: 'WAP',
+    //                value: 'WAP'
+    //            },{
+    //                key: 'PC',
+    //                value: 'PC'
+    //            }]
+    //         },
+    //         {
+    //             title: '指标选择',
+    //             filter_key: 'filter_key',
+    //             groups: [{
+    //                 key: 'new_topic_num',
+    //                 value: '话题'
+    //             }, {
+    //                 key: 'new_topic_reply_num',
+    //                 value: '回复'
+    //             }, {
+    //                 key: 'new_topic_like_num',
+    //                 value: '点赞'
+    //             }, {
+    //                 key: 'new_topic_save_num',
+    //                 value: '收藏'
+    //             }, {
+    //                 key: 'new_topic_share_num',
+    //                 value: '分享'
+    //             }]
+    //         }
+    //     ],
+    //     filter(data, query, dates, type) {
+    //         return filter.topicsFour(data, query.filter_key);
+    //     }
+    // });
 
     //二级圈子类型分布
     Router = new api(Router,{

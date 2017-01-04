@@ -10,6 +10,7 @@ module.exports = {
             name : "社交面板",
             path : "/socialAnalysis/panel",
             display: true,
+            id : "00045",
             defaultData : [
                 {
                     title: "",
@@ -48,6 +49,7 @@ module.exports = {
             name : "累计数据",
             path : "/socialAnalysis/total",
             display:true,
+            id : "00046",
             defaultData : [
                 {
                     type : "table",
