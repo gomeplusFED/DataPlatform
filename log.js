@@ -12,7 +12,7 @@ var config = {
             type : "file" ,
             filename : "logs/logfile.log",
             category : "cheese",
-            maxLogSize: 102400,
+            maxLogSize: 102400*5,
             "backups": 10,
             // "pattern": "-yyyy-MM-dd",
             "alwaysIncludePattern": true
