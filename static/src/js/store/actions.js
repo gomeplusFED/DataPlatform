@@ -7,10 +7,6 @@ actions.alert = function(store, params) {
     }, 2500);
 }
 
-actions.databp = function(store, params) {
-    store.dispatch('DATABP', params);
-}
-
 actions.modalTable = function(store, params) {
     store.dispatch('MODALTABLE', params);
 }

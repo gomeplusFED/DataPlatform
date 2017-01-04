@@ -6,7 +6,27 @@
 var api = require("../../../base/main"),
     orm = require("orm"),
     moment = require("moment"),
-    userAnalysis = require("../../../filters/userAnalysis");
+    userAnalysis = require("../../../filters/userAnalysis"),
+    global_platform = {
+        show: true,
+        key: 'type',
+        list: [{
+            key: 'ios',
+            name: 'IOS'
+        }, {
+            key: 'android',
+            name: 'Android'
+        }, {
+            key: 'app',
+            name: 'APP'
+        }, {
+            key: 'pc',
+            name: 'PC'
+        }, {
+            key: 'm',
+            name: 'H5'
+        }]
+    };
 
 module.exports = (Router) => {
     Router = new api(Router,{
@@ -14,7 +34,7 @@ module.exports = (Router) => {
         modelName : ["UserAnalysisVersion", "UserAnalysisVersion"],
         platform : false,
         params(query, params) {
-            params.type = query.type || "ios";
+            params.type = query.type || this.global_platform.list[0].key;
             return params;
         },
         procedure : [false, {
@@ -25,26 +45,7 @@ module.exports = (Router) => {
             groupBy : ["version"],
             get : ""
         }],
-        global_platform : {
-            show: true,
-            key: 'type',
-            list: [{
-                key: 'ios',
-                name: 'IOS'
-            }, {
-                key: 'android',
-                name: 'Android'
-            }, {
-                key: 'app',
-                name: 'APP'
-            }, {
-                key: 'pc',
-                name: 'PC'
-            }, {
-                key: 'm',
-                name: 'H5'
-            }]
-        },
+        global_platform : global_platform,
         filter_select: [{
             title: '',
             filter_key : 'filter_key',
@@ -67,8 +68,9 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/userAnalysis/versionTwo",
         modelName : ["UserAnalysisVersion", "UserAnalysisVersion"],
+        global_platform : global_platform,
         params(query, params) {
-            params.type = query.type || "ios";
+            params.type = query.type || this.global_platform.list[0].key;
             return params;
         },
         secondParams(query, params) {

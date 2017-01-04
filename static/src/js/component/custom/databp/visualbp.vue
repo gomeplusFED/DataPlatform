@@ -18,23 +18,20 @@
 	<div id='container' class='main'>
 		<div class='tabpanel_content' style='width: 100%; height: 1000px;'>
 			<div class='html_content' style='z-index: 2;'>
-				<iframe :class="{'pc-iframe': bpConfig.platform === 'PC', 'wap-iframe':  bpConfig.platform === 'H5'}" frameborder='no' border='0' marginwidth='0' marginheight='0' id='tab_baseQuery'  src='{{iframe_url}}' v-on:load="iframeload"></iframe>
+				<iframe :class="{'pc-iframe': bpConfig.platform === 'PC', 'wap-iframe':  bpConfig.platform === 'H5'}" frameborder='no' border='0' marginwidth='0' marginheight='0' id='iframenode'  src='{{iframe_url}}' v-on:load="iframeload"></iframe>
 			</div>
 		</div>
 	</div>
 </div>
-	<m-bpinfo  :loading.sync='loading'></m-bpinfo>
+	<m-bpinfo  :loading.sync='loading' :bp-config.sync='bpConfig'></m-bpinfo>
 </template>
 <script>
 	var Vue = require('Vue');
-	Vue.config.debug = true;
 	var $ = require('jQuery');
-	var utils = require('utils');
-	var api = require('./api');
+	var getSelector = require('./lib/selector.js').getSelector;
+	var api = require('./lib/api.js');
 	var Alert = require('../../common/alert.vue');
 	var bpInfo = require('./bpinfo.vue');
-	var store = require('../../../store/store.js');
-	var actions = require('../../../store/actions.js');
 	
 	var visualbp = Vue.extend({
 		name: 'databp',
@@ -46,8 +43,10 @@
 		data: function() {
 			return {
 				iframe_url: '',
+				iframe_node: null,
 				bpConfig: {
 					show: false,
+					trigger: false,
 					pointName: '',
 					platform: 'PC',
 					pageUrl: '',
@@ -58,6 +57,7 @@
 			}
 		},
 		ready() {
+			this.iframe_node = document.getElementById('iframenode');
 		},
 		route: {
 	        activate: function (transition) {
@@ -65,7 +65,8 @@
 				return Promise.resolve(true);
 	        },
 	        deactivate: function() {
-	        	actions.databp(store, {show: false});
+	        	this.bpConfig.show = false;
+	        	// actions.databp(store, {show: false});
 	        }
     	},
     	events: {
@@ -80,8 +81,8 @@
 				let platform = query.platform;
 				if (pageUrl && platform) {
 					if(query.selector) {
-						query.show = true;
-						actions.databp(store, query);
+						this.trigger();
+						// actions.databp(store, query);
 					}
 					this.bpConfig.pageUrl = pageUrl;
 					this.bpConfig.platform = platform;
@@ -90,14 +91,18 @@
 					this.loading.show = false;
 				}
 			},
-			iframeload(ev) {
+			trigger() {
+				this.bpConfig.trigger = !this.bpConfig.trigger;
+				this.bpConfig.show = true;
+			},
+			iframeload() {
 				// console.log('load');
 				let _this = this;
 				if (!_this.bpConfig.pageUrl) {
 					return false;
 				}
 				_this.loading.show = false;
-				let iframenode = ev.path[0]
+				let iframenode = this.iframe_node;
 				let $iframe = $(iframenode).contents();
 
 
@@ -139,14 +144,14 @@
 							selected.removeClass('bphover-position-fix');
 						}
 						// 去除css类防止选择器中被加入该类
-						var selector = utils.getSelector(e.target);
+						var selector = getSelector(e.target);
 						if (/static|inherit|initial/.test(window.getComputedStyle(e.target).position)) {
 							selected.addClass('bphover-position-fix');
 						}
 						selected.addClass('bphover');
 						_this.bpConfig.selector = selector;
-						_this.bpConfig.show = true;
-						actions.databp(store, _this.bpConfig);
+						_this.trigger();
+						// actions.databp(store, _this.bpConfig);
 						e.preventDefault();
 					});
 					$body.mouseover(
@@ -206,6 +211,17 @@
 					
 				}
 				this.iframe_url = newiframe_url;
+				setTimeout(() => {
+					if(this.loading.show) {
+						if (window.stop) {
+						    window.stop();
+						} else {
+						    document.execCommand('Stop'); // MSIE
+						}
+						this.iframeload();
+						this.loading.show = false;
+					}
+			    }, 10000);
 			}
 		}
 	});

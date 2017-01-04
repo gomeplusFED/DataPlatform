@@ -88,16 +88,27 @@ renderApi.prototype = {
     _renderData(req, res, dataParams) {
         var pageAll = {},
             page = {},
-            limited = req.session.userInfo.limited;
+            limited = req.session.userInfo.limited,
+            sub_pages = req.session.userInfo.sub_pages;
         for(var key in config.limit) {
             var limit = config.limit[key];
             if(limited[key]) {
+                let obj = {};
+                for(let k of limit.path) {
+                    obj[k.id] = k;
+                }
                 for(var value of limited[key]) {
-                    var path = limit.path[value];
+                    var path = obj[value];
                     if(path) {
+                        let userSubs;
+                        let subPages = path.subPages || [] ;
+                        sub_pages && (userSubs = sub_pages[key]) && (userSubs = userSubs[value]);
+                        userSubs = userSubs || [];
+                        subPages = subPages.filter(x => userSubs.includes(x.id.toString()));
                         page[path.path] = {
-                            id: key,
+                            id: path.id,
                             pageTitle : path.name,
+                            subPages,
                             defaultData : path.defaultData
                         };
                     }
@@ -105,7 +116,7 @@ renderApi.prototype = {
                 if(limit.routers) {
                     for(var k of limit.routers) {
                         page[k.path] = {
-                            id: key,
+                            id: k.id,
                             pageTitle : k.name,
                             defaultData : k.defaultData
                         };
@@ -114,6 +125,7 @@ renderApi.prototype = {
             }
             if(limit.display) {
                 pageAll[key] = {
+                    id : limit.id,
                     name : limit.name,
                     path : limit.path
                 };

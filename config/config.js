@@ -133,6 +133,7 @@ const Config = {
                 obj.terminal.provinces()
             ]
         },
+        "15" : ConfigAdd["15"],
         "9": {
             name: "分享收藏",
             display: true,
@@ -200,6 +201,7 @@ const Config = {
                 obj.marketingAnalysis.operating()
             ]
         },
+        "22" : ConfigAdd["22"],
         // "15": {
         //     name: "平台返利汇总",
         //     display: true,
@@ -344,7 +346,11 @@ const Config = {
 };
 
 for(let key in ConfigAdd){
-    if(Config.limit[key]) throw Error("config.js key 重复定义，请检查代码");
+    if(Config.limit[key]) {
+        if(Config.limit[key] !== ConfigAdd[key]) {
+            throw Error("config.js key 重复定义，请检查代码");
+        }
+    }
     Config.limit[key] = ConfigAdd[key];
 }
 

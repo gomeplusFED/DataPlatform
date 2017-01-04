@@ -8,8 +8,48 @@ var api = require("../../../base/main"),
     filter = require("../../../filters/achievements/f_tradePanel"),
     util = require("../../../utils");
 
+function globalPlatform(type) {
+    let all = true;
+    let global_platform = {
+        show: true,
+        key : "type",
+        name : "平台选择",
+        list : []
+    };
+    if(type[2] == "1") {
+        global_platform.list.push({
+            key: "app",
+            name: "APP"
+        });
+    } else {
+        all = false;
+    }
+    if(type[3] == "1") {
+        global_platform.list.push({
+            key: "pc",
+            name: "PC"
+        });
+    } else {
+        all = false;
+    }
+    if(type[4] == "1") {
+        global_platform.list.push({
+            key: "wap",
+            name: "H5"
+        });
+    } else {
+        all = false;
+    }
+    if(all) {
+        global_platform.list = [{
+            key: "ALL",
+            name: "全部平台"
+        }].concat(global_platform.list);
+    }
+    return global_platform;
+}
+
 module.exports = (Router) => {
-   
 
     Router = Router.get("/achievements/tradePanelZero_json" , function(req , res , next){
 
@@ -22,24 +62,7 @@ module.exports = (Router) => {
                     defaultData: 7,
                     name : "startTime",
                     endname: "endTime"
-                },
-                filter_select: [{
-                    title: "平台选择",
-                    filter_key: "type",
-                    groups: [{
-                        key: "ALL",
-                        value: "全部平台"
-                    }, {
-                        key: "app",
-                        value: "APP"
-                    }, {
-                        key: "wap",
-                        value: "WAP"
-                    }, {
-                        key: "pc",
-                        value: "PC"
-                    }]
-                }]
+                }
             }
         });
     });
@@ -59,8 +82,11 @@ module.exports = (Router) => {
             preMethods: [], 
             customMethods: ""
         }],
+        global_platform_filter(req) {
+            this.global_platform = globalPlatform(req.session.userInfo.type["36"]);
+        },
         params(query , params , sendData){
-            if(!query.type) params.type = "ALL";
+            if(!query.type) params.type = this.global_platform.list[0].key;
             return params;
         },
         filter(data, query, dates) {
@@ -78,8 +104,11 @@ module.exports = (Router) => {
         modelName : ["SalesPerfProTotal2"],
         platform : false,
         date_picker : false,
+        global_platform_filter(req) {
+            this.global_platform = globalPlatform(req.session.userInfo.type["36"]);
+        },
         params(query , params , sendData){
-            if(!query.type) params.type = "ALL";
+            if(!query.type) params.type = this.global_platform.list[0].key;
             return params;
         },
         flexible_btn : [{
@@ -104,8 +133,11 @@ module.exports = (Router) => {
         // paging : [true],
         toggel : true,
         order : ["-date"],
+        global_platform_filter(req) {
+            this.global_platform = globalPlatform(req.session.userInfo.type["36"]);
+        },
         params(query , params , sendData){
-            if(!query.type) params.type = "ALL";
+            if(!query.type) params.type = this.global_platform.list[0].key;
 
             delete params.order_user;
             return params;
@@ -133,7 +165,6 @@ module.exports = (Router) => {
         ]
     });
 
-
      //支付方式汇总
     Router = new api(Router, {
         router : "/achievements/tradePanelThree",
@@ -141,8 +172,11 @@ module.exports = (Router) => {
         platform : false,
         date_picker : false,
         order : ["-order_channel"],
+        global_platform_filter(req) {
+            this.global_platform = globalPlatform(req.session.userInfo.type["36"]);
+        },
         params(query , params , sendData){
-            if(!query.type) params.type = "ALL";
+            if(!query.type) params.type = this.global_platform.list[0].key;
             return params;
         },
         flexible_btn : [{
@@ -164,8 +198,11 @@ module.exports = (Router) => {
         // paging : [true],
         toggel : true,
         order : ["-date","-order_channel"],
+        global_platform_filter(req) {
+            this.global_platform = globalPlatform(req.session.userInfo.type["36"]);
+        },
         params(query , params , sendData){
-            if(!query.type) params.type = "ALL";
+            if(!query.type) params.type = this.global_platform.list[0].key;
             try{
                 //rows依据数据库数据生成，不知道前端会发哪个特殊字段。所以过滤所有没有查询意义的字段
                 let key = ["starttime" , "endtime" , "day_type" , "type" , "limit" , "page" , "date"];
@@ -203,15 +240,17 @@ module.exports = (Router) => {
         ]*/
     });
 
-
     //国美币汇总
     Router = new api(Router, {
         router : "/achievements/tradePanelFour",
         modelName : ["SalesPerfGuomeibiTotal2"],
         platform : false,
         date_picker : false,
+        global_platform_filter(req) {
+            this.global_platform = globalPlatform(req.session.userInfo.type["36"]);
+        },
         params(query , params , sendData){
-            if(!query.type) params.type = "ALL";
+            if(!query.type) params.type = this.global_platform.list[0].key;
             return params;
         },
         filter(data, query, dates) {
@@ -245,8 +284,11 @@ module.exports = (Router) => {
         // paging : [true],
         toggel : true,
         order : ["-date"],
+        global_platform_filter(req) {
+            this.global_platform = globalPlatform(req.session.userInfo.type["36"]);
+        },
         params(query , params , sendData){
-            if(!query.type) params.type = "ALL";
+            if(!query.type) params.type = this.global_platform.list[0].key;
             delete params[sendData.rows[0][2]];
             return params;
         },
@@ -273,15 +315,17 @@ module.exports = (Router) => {
         ]
     });
 
-
     //交易优惠券汇总
     Router = new api(Router, {
         router : "/achievements/tradePanelFive",
         modelName : ["SalesPerfCoupleTotal2"],
         platform : false,
         date_picker : false,
+        global_platform_filter(req) {
+            this.global_platform = globalPlatform(req.session.userInfo.type["36"]);
+        },
         params(query , params , sendData){
-            if(!query.type) params.type = "ALL";
+            if(!query.type) params.type = this.global_platform.list[0].key;
             return params;
         },
         flexible_btn : [{
@@ -306,8 +350,11 @@ module.exports = (Router) => {
         // paging : [true],
         toggel : true,
         order : ["-date"],
+        global_platform_filter(req) {
+            this.global_platform = globalPlatform(req.session.userInfo.type["36"]);
+        },
         params(query , params , sendData){
-            if(!query.type) params.type = "ALL";
+            if(!query.type) params.type = this.global_platform.list[0].key;
             delete params[sendData.rows[0][2]];            
             return params;
         },
@@ -343,18 +390,17 @@ module.exports = (Router) => {
         ]
     });
 
-
-
-
-
     //转化率
     Router = new api(Router, {
         router : "/achievements/tradePanelSix",
         modelName : ["SalesPerfConversion2"],
         platform : false,
         date_picker : false,
+        global_platform_filter(req) {
+            this.global_platform = globalPlatform(req.session.userInfo.type["36"]);
+        },
         params(query , params , sendData){
-            if(!query.type) params.type = "ALL";
+            if(!query.type) params.type = this.global_platform.list[0].key;
             return params;
         },
         filter(data, query, dates) {
@@ -391,8 +437,11 @@ module.exports = (Router) => {
         // paging : [true],
         toggel : true,
         order : ["-date"],
+        global_platform_filter(req) {
+            this.global_platform = globalPlatform(req.session.userInfo.type["36"]);
+        },
         params(query , params , sendData){
-            if(!query.type) params.type = "ALL";
+            if(!query.type) params.type = this.global_platform.list[0].key;
             delete params[sendData.rows[0][2]]; 
             return params;
         },

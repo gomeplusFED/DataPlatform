@@ -1,8 +1,8 @@
-var store = require('../../../store/store.js');
-var actions = require('../../../store/actions.js');
+var store = require('store');
+var actions = require('actions');
 var $ = require('jQuery');
-// const baseurl = 'http://10.69.10.127:8080/bomber-pie';
-const baseurl = 'http://10.69.112.146:38080/bomber-pie'
+const baseurl = 'http://10.69.10.13:8080/bomber-pie';
+// const baseurl = 'http://10.69.112.146:38080/bomber-pie'
 // 请求失败 重试一次
 const RETRY_TIMES = 2;
 
@@ -94,7 +94,7 @@ var api = {
 		}).catch(errHandler);
 	},
 	getBp(data) {
-		return buildAjax('/point', filterArgs(data, ['pageUrl', 'selector', 'platform', 'pointId'])).then(extractResult).then(function(res){
+		return buildAjax('/point', filterArgs(data, ['pageUrl', 'selector', 'platform', 'pointId', 'type'])).then(extractResult).then(function(res){
 			// 从私有埋点中去除公共埋点	
 			//let tmppub = res.publicParam.split('&');
 			//let tmppri = res.privateParam;
@@ -110,7 +110,7 @@ var api = {
 	},
 	// {pageUrl, selector, pointName, platform, pointId, matchUrlId, pattern, publicParam, privateParam}
 	updateBp(data) {
-		return buildAjax('/point', filterArgs(data, ['pageUrl', 'selector', 'pointName', 'platform', 'pointId', 'matchUrlId', 'pattern', 'publicParam', 'privateParam', 'userInfo']), 'put').then(extractResult).catch(errHandler).then(function(res) {
+		return buildAjax('/point', filterArgs(data, ['pageUrl', 'selector', 'pointName', 'platform', 'pointId', 'matchUrlId', 'pattern', 'publicParam', 'privateParam', 'userInfo', 'type']), 'put').then(extractResult).catch(errHandler).then(function(res) {
 			actions.alert(store, {
 				show: true,
 				msg: '更新成功',
@@ -155,7 +155,7 @@ var api = {
 	// useless: selector
 	// {pageUrl, platform, pointName, page, size}
 	listBps(data){
-		return buildAjax('/pointList', filterArgs(data, ['pageUrl', 'platform', 'pointName', 'page', 'size', 'startTime', 'endTime', 'pattern', 'isActive'])).then(function(res) {
+		return buildAjax('/pointList', filterArgs(data, ['pageUrl', 'platform', 'pointName', 'page', 'size', 'startTime', 'endTime', 'pattern', 'isActive', 'type'])).then(function(res) {
 			if(res.code !== '200' || res.iserror !== '0') {
 				return Promise.reject('获取埋点信息失败：' + res.msg);
 			}
