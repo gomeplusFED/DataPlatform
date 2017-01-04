@@ -53,8 +53,8 @@
 					<td>单击</td>
 					<td title="{{item.type}}">{{item.type}}</td>
 					<td title="{{item.pageUrl}}"><a @click="heatmap(item)">{{item.pageUrl}}</a></td>
-					<td title="{{item.PV}}">{{item.PV}}</td>
-					<td title="{{item.UV}}">{{item.UV}}</td>
+					<td title="{{item.PV}}">{{item.pv || '-'}}</td>
+					<td title="{{item.UV}}">{{item.uv || '-'}}</td>
 					<td><a @click="edit(item)">趋势</a></td>
 				</tr>
 				<tr v-show="noData">
@@ -95,7 +95,15 @@
 				index: 1,
 				noData: false,
 				showSum: null,
-				argvs: {},
+				argvs: {
+					// 注意此时时间选取控件尚未初始化
+					startTime: utils.formatDate(new Date(), 'yyyy-MM-dd'),
+					endTime: utils.formatDate((() => {
+						let date = new Date();
+						date.setDate(date.getDate() - 7);
+						return date;
+					})(), 'yyyy-MM-dd')
+				},
 				paginationConf: {
 					currentPage: 1,     // 当前页
 					totalItems: 0,     // 总条数
@@ -274,7 +282,7 @@
 		margin-right: 4px;
 	}
 	.nform-box li .btn-searchLi-top {
-		margin: 0 13px 0 235px;
+		margin: 0 13px 0 540px;
 	    width: 80px;
 	}
 
