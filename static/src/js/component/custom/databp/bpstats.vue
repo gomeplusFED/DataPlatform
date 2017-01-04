@@ -28,11 +28,11 @@
 			</li>
 			<li style="height:30px;">
 				<label><input type="checkbox" v-model="showSum"></input>总计</label>
-				<input v-show="showSum" class="form-control inp inpW1" type="text" placeholder="" disabled>
+				<input v-show="showSum" class="form-control inp inpW1" type="text" placeholder="" value="PV : {{sum.pv || '-'}}   UV : {{sum.uv || '-'}}" disabled>
 			</li>
 		</ul> 
 	</div>
-	<div class="list-cot list-cot-h list-group">
+	<div class="list-cot list-cot-h list-gro	up">
 		<table class="table table-hover ntable">
 			<thead>
 				<tr>
@@ -66,6 +66,21 @@
 	<div class="panel-footer" v-show="paginationConf.totalItems > paginationConf.itemsPerPage">
 		<m-pagination :pagination-conf="paginationConf"></m-pagination>
 	</div>
+    <div v-show="trend.show" class="modal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                	<button type="button" class="close" @click="trend.show=false">
+						&times;
+					</button>
+                    <h4 class="modal-title">修改数据</h4>
+                </div>
+                <div class="modal-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 </template>
 <script>
@@ -94,7 +109,8 @@
 			return {
 				index: 1,
 				noData: false,
-				showSum: null,
+				showSum: false,
+				sum: {pv: -1, uv: -1},
 				argvs: {
 					// 注意此时时间选取控件尚未初始化
 					startTime: utils.formatDate(new Date(), 'yyyy-MM-dd'),
@@ -103,6 +119,9 @@
 						date.setDate(date.getDate() - 7);
 						return date;
 					})(), 'yyyy-MM-dd')
+				},
+				trend: {
+					show: true
 				},
 				paginationConf: {
 					currentPage: 1,     // 当前页
@@ -148,14 +167,14 @@
 		methods: {
 			query() {
 				this.loading.show = true;
-				let options = Object.assign({
+				Object.assign(this.searchParam, {
 					// page从0开始
 					page: this.paginationConf.currentPage - 1,
 					size: this.paginationConf.itemsPerPage,
 					startTime: this.argvs.startTime + ' 00:00:00',
 					endTime: this.argvs.endTime + ' 23:59:59'
-				}, this.searchParam);
-				api.getHeatList(options).then((res) => {
+				});
+				api.getHeatList(this.searchParam).then((res) => {
 					this.dataList = res.data;
 					if (this.dataList.length === 0) {
 						 this.noData = true;
@@ -215,6 +234,18 @@
 			}
 		},
 		watch: {
+			'showSum' :{
+				handler(val) {
+					if (val) {
+						api.getHeatSum(this.searchParam).then((data) => {
+							this.sum = data;
+						});
+					} else {
+						this.sum.pv = -1;
+						this.sum.uv = -1;
+					}
+				}  
+			}
 		}
 	});
 
