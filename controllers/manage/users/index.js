@@ -198,7 +198,9 @@ module.exports = (Router) => {
                 config[key].path.forEach((item, index) => {
                     NewData.push({
                         one : config[key].name,
-                        two : item.name
+                        o : key,
+                        two : item.name,
+                        t : index
                     });
                     obj[key].cell[index] = item.name;
                 });
@@ -206,8 +208,8 @@ module.exports = (Router) => {
         }
 
         util.export(wss, util.arrayToArray([{
-            cols : [{caption : "一级页面"},{caption : "二级页面"}],
-            rows : ["one", "two"],
+            cols : [{caption : "一级页面"},{caption : "一级id"},{caption : "二级页面"},{caption:"二级id"}],
+            rows : ["one", "o", "two", "t"],
             data : NewData
         }]));
         req.models.User2.find({
