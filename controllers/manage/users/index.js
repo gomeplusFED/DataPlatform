@@ -231,8 +231,40 @@ module.exports = (Router) => {
                     });
                 } else {
                     for(let k of list) {
-                        if(limited[k] && exports[k]) {
-                            if(limited[k].length >= exports[k].length) {
+                        if(k != "16") {
+                            if(limited[k] && exports[k]) {
+                                if(limited[k].length >= exports[k].length) {
+                                    limited[k].forEach((item, index) => {
+                                        arr.push({
+                                            name,
+                                            username,
+                                            email,
+                                            department,
+                                            role,
+                                            remark,
+                                            one : obj[k].name,
+                                            id : k,
+                                            two : obj[k].cell[item] || "",
+                                            three : obj[k].cell[exports[index]] || ""
+                                        });
+                                    });
+                                } else {
+                                    exports[k].forEach((item, index) => {
+                                        arr.push({
+                                            name,
+                                            username,
+                                            email,
+                                            department,
+                                            role,
+                                            remark,
+                                            one : obj[k].name,
+                                            id : k,
+                                            two : obj[k].cell[limited[index]] || "",
+                                            three : obj[k].cell[item] || ""
+                                        });
+                                    });
+                                }
+                            } else if(limited[k]) {
                                 limited[k].forEach((item, index) => {
                                     arr.push({
                                         name,
@@ -244,10 +276,10 @@ module.exports = (Router) => {
                                         one : obj[k].name,
                                         id : k,
                                         two : obj[k].cell[item] || "",
-                                        three : obj[k].cell[exports[index]] || ""
+                                        three : ""
                                     });
                                 });
-                            } else {
+                            } else if(exports[k]) {
                                 exports[k].forEach((item, index) => {
                                     arr.push({
                                         name,
@@ -258,41 +290,11 @@ module.exports = (Router) => {
                                         remark,
                                         one : obj[k].name,
                                         id : k,
-                                        two : obj[k].cell[limited[index]] || "",
+                                        two : "",
                                         three : obj[k].cell[item] || ""
                                     });
                                 });
                             }
-                        } else if(limited[k]) {
-                            limited[k].forEach((item, index) => {
-                                arr.push({
-                                    name,
-                                    username,
-                                    email,
-                                    department,
-                                    role,
-                                    remark,
-                                    one : obj[k].name,
-                                    id : k,
-                                    two : obj[k].cell[item] || "",
-                                    three : ""
-                                });
-                            });
-                        } else if(exports[k]) {
-                            exports[k].forEach((item, index) => {
-                                arr.push({
-                                    name,
-                                    username,
-                                    email,
-                                    department,
-                                    role,
-                                    remark,
-                                    one : obj[k].name,
-                                    id : k,
-                                    two : "",
-                                    three : obj[k].cell[item] || ""
-                                });
-                            });
                         }
                     }
                 }
