@@ -136,7 +136,7 @@ const Config = {
                 obj.terminal.provinces()
             ]
         },
-        "15" : ConfigAdd["15"],
+        "22" : ConfigAdd["22"],
         "9": {
             name: "分享收藏",
             display: true,
@@ -204,7 +204,7 @@ const Config = {
                 obj.marketingAnalysis.operating()
             ]
         },
-        "22" : ConfigAdd["22"],
+        "15" : ConfigAdd["15"],
         // "15": {
         //     name: "平台返利汇总",
         //     display: true,
