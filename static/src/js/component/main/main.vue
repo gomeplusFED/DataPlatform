@@ -3,7 +3,7 @@
 		<div class="col-lg-12">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					<strong>{{currentData.title}}  {{debug}}</strong>
+					<strong>{{currentData.title}} {{debug}}</strong>
 					<div class="head_group_con clearfix">
 						<m-drop-down :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'platform'" :argvs.sync='argvs'></m-drop-down>
 						<m-drop-down :index="index" :init-data="initData" :page-components-data="pageComponentsData" :component-type="'channel'" :argvs.sync='argvs'></m-drop-down>
