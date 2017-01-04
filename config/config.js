@@ -215,23 +215,25 @@ const Config = {
         //     ],
         //     routers: []
         // },
-        "16": {
-            name: "商家返利汇总",
-            display: true,
-            className: "fa fa-desktop fa-fw",
-            href: "#",
-            path: [
-                obj.businessRebate.all(),
-                obj.businessRebate.plan()
-            ],
-            routers: []
-        },
+        // "16": {
+        //     name: "商家返利汇总",
+        //     display: true,
+        //     className: "fa fa-desktop fa-fw",
+        //     href: "#",
+        //     path: [
+        //         obj.businessRebate.all(),
+        //         obj.businessRebate.plan()
+        //     ],
+        //     routers: []
+        // },
         "17": {
             name: "社交分析",
             display: true,
             className: "fa  fa-laptop fa-fw",
             href: "#",
             path: [
+                obj.socialAnalysis.panel(),
+                obj.socialAnalysis.total(),
                 obj.socialAnalysis.group(),
                 obj.socialAnalysis.topics(),
                 obj.socialAnalysis.groupHost()

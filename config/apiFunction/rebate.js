@@ -200,12 +200,16 @@ module.exports = {
             ThisOne = AllOne;
         }
 
+        for(let key of data.rows[1]){
+            ThisOne[key] = 0;
+        }
+
         //拼装数据
         //表一
         let Table_1_row1 = {},Table_1_row2 = {};
         for(let key of data.rows[0]){
             if(key == "Blank") continue;
-            Table_1_row1[key] = ThisOne[key];
+            Table_1_row1[key] = ThisOne[key] || 0;
             Table_1_row2[key] = util.toFixed( ThisOne[key] || 0 , AllOne[key] || 0);
         }
         Table_1_row1["Blank"] = "返利订单";
@@ -215,7 +219,7 @@ module.exports = {
         let Table_3_row1 = {},Table_3_row2 = {};
         for(let key of data.rows[2]){
             if(key == "Blank") continue;
-            Table_3_row1[key] = ThisOne[key];
+            Table_3_row1[key] = ThisOne[key] || 0;
             Table_3_row2[key] = util.toFixed( ThisOne[key] || 0 , AllOne[key] || 0);
         }
         Table_3_row1["Blank"] = "返利订单";
@@ -413,14 +417,14 @@ module.exports = {
            
         return [{
             type : "pie",
-            map : {value:"0"},
+            map : {value:"返利类型占比"},
             data : Result1,
             config: { // 配置信息
                 stack: false  // 图的堆叠
             }
         }, {
             type : "pie",
-            map : {value:"0"},
+            map : {value:"返利层级占比"},
             data : Result2,
             config: { // 配置信息
                 stack: false  // 图的堆叠
@@ -658,14 +662,14 @@ module.exports = {
            
         return [{
             type : "pie",
-            map : {value:"0"},
+            map : {value:"返利类型占比"},
             data : Result1,
             config: { // 配置信息
                 stack: false  // 图的堆叠
             }
         }, {
             type : "pie",
-            map : {value:"0"},
+            map : {value:"返利层级占比"},
             data : Result2,
             config: { // 配置信息
                 stack: false  // 图的堆叠
@@ -700,8 +704,8 @@ module.exports = {
         }
 
         for(let item of source){
-            if(param1[item.plan_type]){
-                Result1[param1[item.plan_type]].value += item[filter_key];
+            if(param1[item.rebate_type]){
+                Result1[param1[item.rebate_type]].value += item[filter_key];
             }
         }
 
@@ -712,14 +716,14 @@ module.exports = {
         }
 
         for(let item of source){
-            if(param1[item.rebate_level]){
-                Result3[param1[item.rebate_level]].value += item[filter_key];
+            if(param1[item.rebate_type]){
+                Result3[param1[item.rebate_type]].value += item[filter_key];
             }
         }
            
         return [{
             type : "pie",
-            map : {value:"0"},
+            map : {value:"返利类型占比"},
             data : Result1,
             config: { // 配置信息
                 stack: false  // 图的堆叠
@@ -775,7 +779,6 @@ module.exports = {
         let source = data.first.data[0],
             filter_key  = query.filter_key,
             Result1 = {} , Result2 = {} , Result3 = {};
-
         let param2 = {
             "1" : "1级计划",
             "2" : "2级计划",
@@ -797,8 +800,8 @@ module.exports = {
         }
 
         for(let item of source){
-            if(param2[item.rebate_level]){
-                Result2[param2[item.rebate_level]].value += item[filter_key];
+            if(param2[item.level]){
+                Result2[param2[item.level]].value += item[filter_key];
             }
         }
 
@@ -822,7 +825,7 @@ module.exports = {
            
         return [{
             type : "pie",
-            map : {value:"0"},
+            map : {value:"返利层级分布"},
             data : Result2,
             config: { // 配置信息
                 stack: false  // 图的堆叠
@@ -1026,8 +1029,7 @@ module.exports = {
         let colum = query.filter_key;
         for(let item of source){
             item.date = util.getDate(item.date);
-
-            if(Result[item.date][item.rebate_type]){
+            if(Result[item.date][item.rebate_type] != undefined){
                 Result[item.date][item.rebate_type] += item[colum];
             }
         }
@@ -1064,6 +1066,7 @@ module.exports = {
         count = count > 50 ? 50 : count;
 
         query.page = query.page || 1;
+        query.limit = query.limit || 1;
         source.map((item , index) => {
             item.Number = (query.page - 1) * query.limit + index + 1;
         });
@@ -1092,6 +1095,7 @@ module.exports = {
         });
 
         query.page = query.page || 1;
+        query.limit = query.limit || 1;
         source.map((item , index) => {
             item.Number = (query.page - 1) * query.limit + index + 1;
             item.Return_lv = util.toFixed( item.is_rebate_back_merchandise_num , item.is_rebate_merchandise_num );
@@ -1106,9 +1110,9 @@ module.exports = {
 
         if(query.search_key){
             if(query.search_key / 1){
-                query.plan_id = query.search_key;
+                params.merchant_id = query.search_key;
             }else{
-                query.plan_name = query.search_key;
+                params.shop_name = orm.like("%" + query.search_key + "%");
             }
 
             delete params.search_key;

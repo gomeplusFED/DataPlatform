@@ -269,6 +269,25 @@ module.exports = {
             newData[date].value += key[query.filter_key];
         }
 
+        if(query.main_show_type_filter == "table"){
+            data.rows[0] = Object.keys(filter_name);
+            data.rows[0].unshift("date");
+            data.cols[0] = [];
+            for(let key in filter_name){
+                let obj = {
+                    "caption" : filter_name[key],
+                    "type" : "number"
+                }
+                data.cols[0].push(obj);
+            }
+            data.cols[0].unshift({
+                "caption":"日期",
+                "type"   :"date"
+            });
+            return util.toTable([source], data.rows, data.cols);
+        }
+
+
         return [{
             type : type,
             map : map,
