@@ -599,6 +599,83 @@ module.exports = (Router) => {
             return filter.videoFour(data , query , dates);
         }
     });
+
+    Router = new api(Router , {
+        router : "/videoStatis/videoKpiOne",
+        modelName : ["VideoPlay"],
+        platform : false,
+        filter(data , query , dates , type){
+            return filter.videoKpiOne(data , query , dates);
+        },
+        params: function(query , params){
+            return params;
+        },
+        firstSql(query, params, isCount) {
+            let date_type_list = ['', 'DAY', 'WEEK' ,'MONTH']
+            let config = ["date BETWEEN ? AND ?", "day_type=?"],
+                params = [query.startTime, query.endTime, query.day_type || 1];
+
+            let sql = `SELECT a.*, b.uv as uv_pre, b.pv as pv_pre, b.shop_share_uv as shop_share_uv_pre, b.shop_share_pv as shop_share_pv_pre
+                , b.comm_share_uv as comm_share_uv_pre, b.comm_share_pv as comm_share_pv_pre, b.gmv as gmv_pre, b.pay_num as pay_num_pre
+                    FROM ads2_o2m_shop_trade_info a 
+                    LEFT JOIN ads2_o2m_shop_trade_info b 
+                     on a.day_type = b.day_type and a.shop_id = b.shop_id and b.date = DATE_ADD(a.date,INTERVAL -1 ${date_type_list[query.day_type || 1]})
+                    WHERE ${config.join(" AND ")} order by a.uv desc  LIMIT ?,?`;
+                    
+            return {
+                sql: sql,
+                params: params
+            };
+        },
+        date_picker_data : 1,
+        global_platform : {
+            show: true,
+            key: 'type',
+            name: '视频类型: ',
+            list: [{
+                key: 'videoplay',
+                name: '点播'
+            }, {
+                key: 'livevideo',
+                name: '直播'
+            }]
+        },
+        filter_select : [
+            {
+                title : "",
+                filter_key : "filter_key",
+                groups : [
+                    {
+                        key : "data_overview",
+                        value:"数据概况"
+                    },{
+                        key : "health_play",
+                        value:"健康播放统计"
+                    },{
+                        key : "error_play",
+                        value:"错误播放统计"
+                    }
+                ]
+            }
+        ],
+        rows: ['index', 'play_user', 'play_num'],
+        cols: [
+            [
+                {
+                    caption: "数据指标",
+                    type: "string"
+                },
+                {
+                    caption: "播放用户数",
+                    type: "string"
+                },
+                {
+                    caption: "播放次数",
+                    type: "string"
+                }
+            ]
+        ]
+    });
     
 
     return Router;

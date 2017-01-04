@@ -290,5 +290,18 @@ module.exports = {
             count : [count],
             config : [merge]
         });
+    },
+
+    videoKpiOne(data , query , dates) {
+        let source = data.first.data[0],
+            count  = data.first.count;
+
+        let data = [{
+            index: '数值'
+        }, {
+            index: '环比'
+        }]
+
+        return util.toTable([data], data.rows, data.cols, [count]);
     }
 };

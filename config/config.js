@@ -248,7 +248,8 @@ const Config = {
             href: "#",
             path: [
                 obj.videoStatis.video(),
-                obj.videoStatis.videoEdition()
+                obj.videoStatis.videoEdition(),
+                obj.videoStatis.videoKPI()
             ]
         },
         "19": {

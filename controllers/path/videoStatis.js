@@ -42,5 +42,29 @@ module.exports = {
                 }
             ]
         }
+    },
+    videoKPI() {
+        return {
+            name : "视频播放KPI",
+            path : "/videoStatis/videokpi",
+            display : true,
+            defaultData : [
+                {
+                    type : "table",
+                    title: "指标概览 (12/14)",
+                    query_api : "/videoStatis/videoKpiOne"
+                },
+                // {
+                //     type : "chart",
+                //     title: "指标趋势",
+                //     query_api : "/videoStatis/videokpiTwo"
+                // },
+                // {
+                //     type : "table",
+                //     title: "数据明细",
+                //     query_api : "/videoStatis/videokpiThree"
+                // }
+            ]
+        }
     }
 };
