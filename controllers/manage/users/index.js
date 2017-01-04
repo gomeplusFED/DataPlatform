@@ -247,37 +247,59 @@ module.exports = (Router) => {
                     for(let k of list) {
                         if(k != "16") {
                             if(limited[k] && exports[k]) {
-                                if(limited[k].length >= exports[k].length) {
-                                    limited[k].forEach((item, index) => {
-                                        arr.push({
-                                            name,
-                                            username,
-                                            email,
-                                            department,
-                                            role,
-                                            remark,
-                                            one : obj[k].name,
-                                            id : k,
-                                            two : obj[k].cell[item] || "",
-                                            three : obj[k].cell[exports[index]] || ""
-                                        });
-                                    });
-                                } else {
-                                    exports[k].forEach((item, index) => {
-                                        arr.push({
-                                            name,
-                                            username,
-                                            email,
-                                            department,
-                                            role,
-                                            remark,
-                                            one : obj[k].name,
-                                            id : k,
-                                            two : obj[k].cell[limited[index]] || "",
-                                            three : obj[k].cell[item] || ""
-                                        });
-                                    });
+                                const l = _.uniq(limited[k].concat(exports[k]));
+                                for(let j of l) {
+                                    const o = {
+                                        name,
+                                        username,
+                                        email,
+                                        department,
+                                        role,
+                                        remark,
+                                        one : obj[k].name,
+                                        id : k,
+                                        two : "",
+                                        three : ""
+                                    };
+                                    if(limited[k].indexOf(j) !== -1) {
+                                        o.two = obj[k].cell[j] || "";
+                                    }
+                                    if(exports[k].indexOf(j) !== -1) {
+                                        o.three = obj[k].cell[j] || "";
+                                    }
+                                    arr.push(o);
                                 }
+                                //if(limited[k].length >= exports[k].length) {
+                                //    limited[k].forEach((item, index) => {
+                                //        arr.push({
+                                //            name,
+                                //            username,
+                                //            email,
+                                //            department,
+                                //            role,
+                                //            remark,
+                                //            one : obj[k].name,
+                                //            id : k,
+                                //            two : obj[k].cell[item] || "",
+                                //            three : obj[k].cell[exports[index]] || ""
+                                //        });
+                                //    });
+                                //} else {
+                                //    exports[k].forEach((item, index) => {
+                                //        arr.push({
+                                //            name,
+                                //            username,
+                                //            email,
+                                //            department,
+                                //            role,
+                                //            remark,
+                                //            one : obj[k].name,
+                                //            id : k,
+                                //            two : obj[k].cell[limited[index]] || "",
+                                //            three : obj[k].cell[item] || ""
+                                //        });
+                                //    });
+                                //}
                             } else if(limited[k]) {
                                 limited[k].forEach((item, index) => {
                                     arr.push({
