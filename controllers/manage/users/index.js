@@ -262,10 +262,10 @@ module.exports = (Router) => {
                                         three : ""
                                     };
                                     if(limited[k].indexOf(j) !== -1) {
-                                        o.two = obj[k].cell[j];
+                                        o.two = obj[k].cell[j] || "";
                                     }
                                     if(exports[k].indexOf(j) !== -1) {
-                                        o.three = obj[k].cell[j];
+                                        o.three = obj[k].cell[j] || "";
                                     }
                                     arr.push(o);
                                 }
