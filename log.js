@@ -1,4 +1,9 @@
 const log4js = require("log4js");
+const fs     = require("fs");
+
+if(!fs.existsSync(__dirname+"/logs")){
+    fs.mkdirSync(__dirname+"/logs");
+}
 
 /* 定义配置文件 */
 var config = {

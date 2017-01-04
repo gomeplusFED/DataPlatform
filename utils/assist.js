@@ -2,6 +2,8 @@
  * ./index.js  补充功能函数
 */
 
-exports.go = ()=>{
-    console.log("go");
+
+/* 扇形默认数据 */
+exports.pie = ()=>{
+    // return 
 }
