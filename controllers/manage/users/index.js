@@ -261,7 +261,7 @@ module.exports = (Router) => {
                                         two : "",
                                         three : ""
                                     };
-                                    if(limited[k].indexOf[j] !== -1) {
+                                    if(limited[k].indexOf(j) !== -1) {
                                         o.two = obj[k].cell[j];
                                     }
                                     if(exports[k].indexOf(j) !== -1) {
