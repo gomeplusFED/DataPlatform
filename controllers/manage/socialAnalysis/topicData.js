@@ -11,7 +11,11 @@ var api = require("../../../base/main"),
     util = require("../../../utils"),
     config = require("../../../utils/config.json"),
     filter = require("../../../filters/socialAnalysis/topicData"),
-    topicsTwo = ["new_topic_num", "delete_topic_num", "new_topic_reply_num",
+    topicsTwo = ["new_topic_num", 
+        "new_pv",
+        "is_item_topic_num",
+        "is_vedio_topic_num",
+    "delete_topic_num", "new_topic_reply_num",
         "new_topic_reply_user_num", "delete_topic_reply_num",
         "new_topic_like_num", "new_topic_save_num", "new_topic_share_num",
         "new_reply_topic_num"];
@@ -95,7 +99,13 @@ module.exports = (Router) => {
             return filter.topicsTwo(data);
         },
         rows : [
-            ["type" , "new_topic_num", "delete_topic_num", "new_topic_reply_num",
+            ["type" , "new_topic_num",
+
+            "new_pv",
+            "is_item_topic_num",
+            "is_vedio_topic_num",
+
+             "delete_topic_num", "new_topic_reply_num",
                 "new_topic_reply_user_num", "delete_topic_reply_num", "rate",
                 "new_topic_like_num", "new_topic_save_num", "new_topic_share_num"]
         ],
@@ -107,6 +117,15 @@ module.exports = (Router) => {
                 caption: "新增话题数",
                 type: "number",
                 help : "新增的话题数"
+            },{
+                caption: "新增PV",
+                type: "number"
+            },{
+                caption: "新增带商品话题数",
+                type: "number"
+            },{
+                caption: "新增带视频话题数",
+                type: "number"
             },{
                 caption: "删除话题数",
                 type: "number"
@@ -144,6 +163,9 @@ module.exports = (Router) => {
         level_select : true,
         level_select_name : "category_id",
         level_select_url : "/api/socialAnalysisCategories",
+        toggle : {
+            show : true
+        },
         params(query, params) {
             params.category_id = query.category_id || "ALL";
             if(params.category_id === "all") {
@@ -159,34 +181,44 @@ module.exports = (Router) => {
             sum : ["new_topic_num", "delete_topic_num", "new_topic_reply_num",
                 "delete_topic_reply_num", "new_topic_like_num", "new_topic_save_num",
                 "new_topic_share_num"],
-            groupBy : ["date"],
+            groupBy : ["-date"],
             get : ""
         }],
         filter_select: [
-            //{
-            //    title: '平台选择',
-            //    filter_key: 'type',
-            //    groups: [{
-            //        key: ['APP','WAP','PC'],
-            //        value: '全部平台'
-            //    },{
-            //        key: 'APP',
-            //        value: 'APP'
-            //    },{
-            //        key: 'WAP',
-            //        value: 'WAP'
-            //    },{
-            //        key: 'PC',
-            //        value: 'PC'
-            //    }]
-            //},
+            {
+               title: '平台选择',
+               filter_key: 'type',
+               groups: [{
+                   key: ['APP','WAP','PC'],
+                   value: '全部平台'
+               },{
+                   key: 'APP',
+                   value: 'APP'
+               },{
+                   key: 'WAP',
+                   value: 'WAP'
+               },{
+                   key: 'PC',
+                   value: 'PC'
+               }]
+            },
             {
                 title: "指标",
                 filter_key: "filter_key",
                 groups: [{
                     key: "new_topic_num",
                     value:"新增话题数"
-                }, {
+                }, 
+                {
+                    key: "is_item_topic_num",
+                    value: "新增带商品话题数"
+                },
+                {
+                    key: "is_vedio_topic_num",
+                    value: "新增带视频话题数"
+                },
+
+                {
                     key: "delete_topic_num",
                     value:"删除话题数"
                 }, {
@@ -208,7 +240,7 @@ module.exports = (Router) => {
             }
         ],
         filter(data, query, dates, type) {
-            return filter.topicsThree(data, query.filter_key, dates);
+            return filter.topicsThree(data, query, dates);
         }
     });
     
@@ -247,23 +279,23 @@ module.exports = (Router) => {
             });
         },
         filter_select: [
-            //{
-            //    title: "平台选择",
-            //    filter_key : 'type',
-            //    groups: [{
-            //        key: ['APP','WAP','PC'],
-            //        value: '全部平台'
-            //    },{
-            //        key: 'APP',
-            //        value: 'APP'
-            //    },{
-            //        key: 'WAP',
-            //        value: 'WAP'
-            //    },{
-            //        key: 'PC',
-            //        value: 'PC'
-            //    }]
-            //},
+            {
+               title: "平台选择",
+               filter_key : 'type',
+               groups: [{
+                   key: ['APP','WAP','PC'],
+                   value: '全部平台'
+               },{
+                   key: 'APP',
+                   value: 'APP'
+               },{
+                   key: 'WAP',
+                   value: 'WAP'
+               },{
+                   key: 'PC',
+                   value: 'PC'
+               }]
+            },
             {
                 title: '指标选择',
                 filter_key: 'filter_key',
@@ -355,23 +387,23 @@ module.exports = (Router) => {
             });
         },
         filter_select: [
-            //{
-            //    title: "平台选择",
-            //    filter_key : 'type',
-            //    groups: [{
-            //        key: ['APP','WAP','PC'],
-            //        value: '全部平台'
-            //    },{
-            //        key: 'APP',
-            //        value: 'APP'
-            //    },{
-            //        key: 'WAP',
-            //        value: 'WAP'
-            //    },{
-            //        key: 'PC',
-            //        value: 'PC'
-            //    }]
-            //},
+            {
+               title: "平台选择",
+               filter_key : 'type',
+               groups: [{
+                   key: ['APP','WAP','PC'],
+                   value: '全部平台'
+               },{
+                   key: 'APP',
+                   value: 'APP'
+               },{
+                   key: 'WAP',
+                   value: 'WAP'
+               },{
+                   key: 'PC',
+                   value: 'PC'
+               }]
+            },
             {
                 title: '指标选择',
                 filter_key: 'filter_key2',
@@ -464,23 +496,23 @@ module.exports = (Router) => {
             }
         },
         filter_select: [
-            //{
-            //    title: '',
-            //    filter_key: 'type',
-            //    groups: [{
-            //        key: ['APP', "WAP", "PC"],
-            //        value: '全部'
-            //    }, {
-            //        key: 'APP',
-            //        value: 'APP'
-            //    }, {
-            //        key: 'WAP',
-            //        value: 'WAP'
-            //    }, {
-            //        key: 'PC',
-            //        value: 'PC'
-            //    }]
-            //},
+            {
+               title: '',
+               filter_key: 'type',
+               groups: [{
+                   key: ['APP', "WAP", "PC"],
+                   value: '全部'
+               }, {
+                   key: 'APP',
+                   value: 'APP'
+               }, {
+                   key: 'WAP',
+                   value: 'WAP'
+               }, {
+                   key: 'PC',
+                   value: 'PC'
+               }]
+            },
             {
                 title: '排行',
                 filter_key: 'filter_key',
