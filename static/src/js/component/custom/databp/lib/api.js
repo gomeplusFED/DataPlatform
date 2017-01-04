@@ -179,7 +179,7 @@ var api = {
 	getHeatList(data) {
 		return buildAjax('/pointHeatList', filterArgs(data, ['pageUrl', 'platform', 'pointName', 'page', 'size', 'startTime', 'endTime', 'pattern', 'isActive', 'type'])).then(function(res) {
 			if(res.code !== '200' || res.iserror !== '0') {
-				return Promise.reject('获取埋点信息失败：' + res.msg);
+				return Promise.reject('获取热力列表信息失败：' + res.msg);
 			}
 			var data;
 			if (res && (data = res.data) && (data = data.result)) {
@@ -188,7 +188,36 @@ var api = {
 					total: res.data.total
 				}
 			} else {
-				return Promise.reject('获取的埋点信息为空');
+				return Promise.reject('获取的热力列表信息为空');
+			}
+		}).catch(errHandler);
+	},
+	getHeatSum(data) {
+		return buildAjax('/pointHeatList/total', filterArgs(data, ['pageUrl', 'platform', 'pointName', 'page', 'size', 'startTime', 'endTime', 'pattern', 'isActive', 'type'])).then(function(res) {
+			if(res.code !== '200' || res.iserror !== '0') {
+				return Promise.reject('获取热力总计信息失败：' + res.msg);
+			}
+			var data;
+			if (res && (data = res.data) && (data = data.result)) {
+				return data;
+			} else {
+				return Promise.reject('获取的热力总计信息为空');
+			}
+		}).catch(errHandler);
+	},
+	getHeatDetail(data) {
+		return buildAjax('/pointHeatList/detail', filterArgs(data, ['pageUrl', 'platform', 'pointName', 'page', 'size', 'startTime', 'endTime', 'pattern', 'isActive', 'type'])).then(function(res) {
+			if(res.code !== '200' || res.iserror !== '0') {
+				return Promise.reject('获取热力趋势信息失败：' + res.msg);
+			}
+			var data;
+			if (res && (data = res.data) && (data = data.result)) {
+				return {
+					data,
+					total: res.data.total
+				}
+			} else {
+				return Promise.reject('获取的热力趋势信息为空');
 			}
 		}).catch(errHandler);
 	},
