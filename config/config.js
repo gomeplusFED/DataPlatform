@@ -173,7 +173,6 @@ const Config = {
             className: "fa fa-flag-checkered fa-fw",
             href: "#",
             path: [
-                obj.achievements.shop(),
                 obj.achievements.shopOverview(),
                 obj.achievements.shopRun(),
 
