@@ -296,12 +296,105 @@ module.exports = {
         let source = data.first.data[0],
             count  = data.first.count;
 
-        let data = [{
-            index: '数值'
+        let data2 = source ? [{
+            index: '数值',
+            play_user: source.play_user,
+            play_num: source.play_num
         }, {
-            index: '环比'
-        }]
+            index: '环比',
+            play_user: source.play_user_pre ? util.toFixed(source.play_user - source.play_user_pre, source.play_user_pre) : '-',
+            play_num: source.play_num_pre ? util.toFixed(source.play_num - source.play_num_pre, source.play_num_pre) : '-'
+        }]: []
 
-        return util.toTable([data], data.rows, data.cols, [count]);
-    }
+        return util.toTable([data2], data.rows, data.cols, [count]);
+    },
+
+    videoKpiTwo(data , query , dates){
+        /* 前端组件参数 */
+        var type = "line";
+        var filterKey = {
+                "play_user" : "播放用户数",
+                "play_num"  : "播放次数",
+                "start_frame_succ"   : "首帧成功数",
+                "play_failed": "播放失败数"
+            },
+            filter_key = query.filter_key;
+
+        var map  = {
+            "ios" : "ios",
+            "android" : "android",
+            "h5_custom" : "h5_custom",
+            "h5_native" : "h5_native",
+            "flash" : "flash"
+        };
+
+        /* init Data */
+        var source = data.first.data;
+        var newData = {};  //输出的数据
+
+        //有几个时间输出几个以时间为键的值
+        for(let item of dates){
+            //每一个时间的键都应包含以下数据
+            var theobj = {
+                "ios" : 0,
+                "android" : 0,
+                "h5_custom":0,
+                "h5_native":0,
+                "flash":0
+            };
+
+            if (query && query.sdk_app_type && query.sdk_app_type !== 'ALL') {
+                theobj = {}
+                theobj[query.sdk_app_type] = 0
+            }
+
+            //遍历查询结果找出和当前时间相等的值
+            for(let key of source){
+                if(util.getDate(key.date) != item){
+                    continue;
+                }
+                //与当前时间相等的值包括sdk的所有类型,找出这条记录与谁相等
+                for(var onekey in theobj){
+                    if(onekey == key.sdk_type){
+                        //找到了对应的记录，根据filter_key赋值
+                        var number;
+                        switch(filter_key){
+                            case "play_user":
+                            case "play_num":
+                            case "start_frame_succ":
+                            case "play_failed":
+                            case "unhealth_pro":
+                                number = key[filter_key];
+                                break;
+                        }
+                        theobj[onekey] = number;
+                    }
+                }
+            }
+
+            newData[item] = theobj;
+        }
+
+        /* 输出格式
+        {
+            "2016-08-22" : {
+                "ios" : 3333,
+                "android" : 2323,
+                "h5_custom" : 2344,
+                "h5_native" : 2111,
+                "flash" : 333
+            }
+        }*/
+
+        return [{
+            type : type,
+            map : map,
+            data : newData,
+            config: { // 配置信息
+                stack: false, // 图的堆叠
+                categoryY : false //柱状图竖着
+            }
+        }];
+    },
+
 };

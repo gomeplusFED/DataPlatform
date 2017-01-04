@@ -249,7 +249,7 @@ const Config = {
             path: [
                 obj.videoStatis.video(),
                 obj.videoStatis.videoEdition(),
-                obj.videoStatis.videoKPI()
+                obj.videoStatis.videoKpi()
             ]
         },
         "19": {

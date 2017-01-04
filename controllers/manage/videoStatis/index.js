@@ -612,22 +612,36 @@ module.exports = (Router) => {
         },
         firstSql(query, params, isCount) {
             let date_type_list = ['', 'DAY', 'WEEK' ,'MONTH']
-            let config = ["date BETWEEN ? AND ?", "day_type=?"],
-                params = [query.startTime, query.endTime, query.day_type || 1];
+            let config = ["a.date BETWEEN ? AND ?", "a.day_type=?"],
+                param = [query.startTime, query.endTime, query.day_type || 1],
+                sql = '';
 
-            let sql = `SELECT a.*, b.uv as uv_pre, b.pv as pv_pre, b.shop_share_uv as shop_share_uv_pre, b.shop_share_pv as shop_share_pv_pre
-                , b.comm_share_uv as comm_share_uv_pre, b.comm_share_pv as comm_share_pv_pre, b.gmv as gmv_pre, b.pay_num as pay_num_pre
-                    FROM ads2_o2m_shop_trade_info a 
-                    LEFT JOIN ads2_o2m_shop_trade_info b 
-                     on a.day_type = b.day_type and a.shop_id = b.shop_id and b.date = DATE_ADD(a.date,INTERVAL -1 ${date_type_list[query.day_type || 1]})
-                    WHERE ${config.join(" AND ")} order by a.uv desc  LIMIT ?,?`;
-                    
+            switch(query.filter_key || 'data_overview') {
+                case 'data_overview': {
+                    sql = `SELECT a.play_user, a.play_num, b.play_user as play_user_pre, b.play_num as play_num_pre
+                        FROM ads2_videoplay_overview2 a 
+                        LEFT JOIN ads2_videoplay_overview2 b 
+                        on a.day_type = b.day_type and b.date = DATE_ADD(a.date,INTERVAL -1 ${date_type_list[query.day_type || 1]})
+                        WHERE ${config.join(" AND ")}`;
+                    break;
+                }
+                case 'health_play': {
+
+                    break;
+                }
+                case 'error_play': {
+
+                    break;
+                }
+            }
+
             return {
                 sql: sql,
-                params: params
+                params: param
             };
         },
         date_picker_data : 1,
+        showDayUnit: true,
         global_platform : {
             show: true,
             key: 'type',
@@ -658,7 +672,9 @@ module.exports = (Router) => {
                 ]
             }
         ],
-        rows: ['index', 'play_user', 'play_num'],
+        rows: [
+            ['index', 'play_user', 'play_num']
+        ],
         cols: [
             [
                 {
@@ -676,6 +692,77 @@ module.exports = (Router) => {
             ]
         ]
     });
+
+     Router = new api(Router , {
+        router : "/videoStatis/videoKpiTwo",
+        modelName : ["VideoPlay"],
+        platform : false,
+        filter(data , query , dates , type){
+            return filter.videoKpiTwo(data , query , dates);
+        },
+        params: function(query , params){
+            return params;
+        },
+        firstSql(query, params, isCount) {
+            let config = ["date BETWEEN ? AND ?", "day_type=?"],
+                param = [query.startTime, query.endTime, query.day_type || 1];
+
+            let sql = `SELECT play_user, play_num, start_frame_succ, play_failed, date, sdk_type
+                    FROM ads2_videoplay_overview2
+                    WHERE day_type='1' and ${config.join(" AND ")}`;
+
+            return {
+                sql: sql,
+                params: param
+            };
+        },
+        filter_select : [
+            {
+                title : "SDK选择",
+                filter_key : "sdk_app_type",
+                groups : [
+                    {
+                        key : "ALL",
+                        value:"全部SDK"
+                    },{
+                        key : "ios" ,
+                        value: "IOS"
+                    },{
+                        key : "android",
+                        value: "android"
+                    },{
+                        key : "h5_custom",
+                        value: "h5_custom"
+                    },{
+                        key : "h5_native",
+                        value: "h5_native"
+                    },{
+                        key : "flash",
+                        value: "flash"
+                    }
+                ]
+            },
+            {
+                title : "指标选择",
+                filter_key : "filter_key",
+                groups : [
+                    {
+                        key : "play_user",
+                        value:"播放用户数"
+                    },{
+                        key : "play_num",
+                        value:"播放次数"
+                    },{
+                        key : "start_frame_succ",
+                        value:"首帧成功数"
+                    },{
+                        key : "play_failed",
+                        value:"播放失败数"
+                    }
+                ]
+            }
+        ]
+     });
     
 
     return Router;

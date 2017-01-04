@@ -43,7 +43,7 @@ module.exports = {
             ]
         }
     },
-    videoKPI() {
+    videoKpi() {
         return {
             name : "视频播放KPI",
             path : "/videoStatis/videokpi",
@@ -54,11 +54,11 @@ module.exports = {
                     title: "指标概览 (12/14)",
                     query_api : "/videoStatis/videoKpiOne"
                 },
-                // {
-                //     type : "chart",
-                //     title: "指标趋势",
-                //     query_api : "/videoStatis/videokpiTwo"
-                // },
+                {
+                    type : "chart",
+                    title: "指标趋势",
+                    query_api : "/videoStatis/videoKpiTwo"
+                },
                 // {
                 //     type : "table",
                 //     title: "数据明细",
