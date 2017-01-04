@@ -615,9 +615,11 @@ module.exports = (Router) => {
             let config = ["a.date BETWEEN ? AND ?", "a.day_type=?"],
                 param = [query.startTime, query.endTime, query.day_type || 1],
                 sql = '';
-
+            
+            var _this = this
             switch(query.filter_key || 'data_overview') {
                 case 'data_overview': {
+                    
                     sql = `SELECT a.play_user, a.play_num, b.play_user as play_user_pre, b.play_num as play_num_pre
                         FROM ads2_videoplay_overview2 a 
                         LEFT JOIN ads2_videoplay_overview2 b 
@@ -626,11 +628,23 @@ module.exports = (Router) => {
                     break;
                 }
                 case 'health_play': {
-
+                    sql = `SELECT 
+                    a.play_num, a.port_succ, a.start_frame_succ, a.stop_play_num, a.play_fluent,
+                    b.port_succ as port_succ_pre, b.start_frame_succ as start_frame_succ_pre, b.stop_play_num as stop_play_num_pre, b.play_fluent as play_fluent_pre
+                        FROM ads2_videoplay_overview2 a
+                         LEFT JOIN ads2_videoplay_overview2 b 
+                        on a.day_type = b.day_type and b.date = DATE_ADD(a.date,INTERVAL -1 ${date_type_list[query.day_type || 1]})
+                        WHERE ${config.join(" AND ")}`;
                     break;
                 }
                 case 'error_play': {
-
+                    sql = `SELECT 
+                    a.play_num, a.port_io_failed, a.port_data_failed, a.port_overtime, a.port_overtime, a.play_failed, a.play_error, a.improper_play,
+                    b.port_io_failed as port_io_failed_pre, b.port_data_failed as port_data_failed_pre, b.port_overtime as port_overtime_pre, b.port_overtime as port_overtime_pre, b.play_failed as play_failed_pre, b.play_error as play_error_pre, b.improper_play as improper_play_pre
+                        FROM ads2_videoplay_overview2 a
+                         LEFT JOIN ads2_videoplay_overview2 b 
+                        on a.day_type = b.day_type and b.date = DATE_ADD(a.date,INTERVAL -1 ${date_type_list[query.day_type || 1]})
+                        WHERE ${config.join(" AND ")}`;
                     break;
                 }
             }
@@ -672,25 +686,25 @@ module.exports = (Router) => {
                 ]
             }
         ],
-        rows: [
-            ['index', 'play_user', 'play_num']
-        ],
-        cols: [
-            [
-                {
-                    caption: "数据指标",
-                    type: "string"
-                },
-                {
-                    caption: "播放用户数",
-                    type: "string"
-                },
-                {
-                    caption: "播放次数",
-                    type: "string"
-                }
-            ]
-        ]
+        // rows: [
+        //     ['index', 'play_user', 'play_num']
+        // ],
+        // cols: [
+        //     [
+        //         {
+        //             caption: "数据指标",
+        //             type: "string"
+        //         },
+        //         {
+        //             caption: "播放用户数",
+        //             type: "string"
+        //         },
+        //         {
+        //             caption: "播放次数",
+        //             type: "string"
+        //         }
+        //     ]
+        // ]
     });
 
      Router = new api(Router , {
