@@ -185,7 +185,9 @@ module.exports = (Router) => {
         const xl = require("excel4node");
         const wb = new xl.Workbook();
         const ws = wb.addWorksheet("用户权限");
+        const wss = wb.addWorksheet("权限");
         let obj = {};
+        let NewData = [];
         for(let key in config) {
             if(config[key].display) {
                 obj[key] = {
@@ -194,10 +196,20 @@ module.exports = (Router) => {
                     cell : {}
                 };
                 config[key].path.forEach((item, index) => {
+                    NewData.push({
+                        one : config[key].name,
+                        two : item.name
+                    });
                     obj[key].cell[index] = item.name;
                 });
             }
         }
+
+        util.export(wss, util.arrayToArray([{
+            cols : [{caption : "一级页面"},{caption : "二级页面"}],
+            rows : ["one", "two"],
+            data : NewData
+        }]));
         req.models.User2.find({
             is_admin : orm.lt(99),
             status : 1
