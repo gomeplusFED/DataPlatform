@@ -45,6 +45,7 @@ module.exports = {
     },
     videoKpi() {
         return {
+            id: 1002,
             name : "视频播放KPI",
             path : "/videoStatis/videokpi",
             display : true,
