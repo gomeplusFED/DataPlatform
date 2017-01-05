@@ -70,25 +70,15 @@ module.exports = {
     },
     videoDetails() {
         return {
-            id: 1002,
-            name : "视频播放KPI",
-            path : "/videoStatis/videokpi",
+            id: 200,
+            name : "视频明细",
+            path : "/videoStatis/videoDetails",
             display : true,
             defaultData : [
                 {
                     type : "table",
-                    title: "指标概览 (12/14)",
-                    query_api : "/videoStatis/videoKpiOne"
-                },
-                {
-                    type : "chart",
-                    title: "指标趋势",
-                    query_api : "/videoStatis/videoKpiTwo"
-                },
-                {
-                    type : "table",
-                    title: "数据明细",
-                    query_api : "/videoStatis/videokpiThree"
+                    title: "视频明细",
+                    query_api : "/videoStatis/videoDetailsOne"
                 }
             ]
         }
