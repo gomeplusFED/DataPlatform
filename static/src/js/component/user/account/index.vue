@@ -389,10 +389,10 @@ var User = Vue.extend({
 							Vue.set(_this.roleList[item], 'checked', true);
 						}
 					}
-					_this.limited = JSON.parse(_this.userListData[index].limited);
-					_this.subPages = JSON.parse(_this.userListData[index].sub_pages || '{}');
-					_this.exportLimit = JSON.parse(_this.userListData[index].export);
-					_this.type = JSON.parse(_this.userListData[index].type || '{}');
+					_this.limited = JSON.parse(_this.userListData[index].limited || '{}') || {};
+					_this.subPages = JSON.parse(_this.userListData[index].sub_pages || '{}') || {};
+					_this.exportLimit = JSON.parse(_this.userListData[index].export  || '{}') || {};
+					_this.type = JSON.parse(_this.userListData[index].type || '{}') || {};
 				}
 			});
 		},
@@ -403,10 +403,10 @@ var User = Vue.extend({
 			_this.modal.title = '修改权限';
 			_this.modal.type = 'limitList';
 			_this.id = id;
-			_this.exportLimit = JSON.parse(exportLimit);
-			_this.limited = JSON.parse(limited);
-			_this.subPages = JSON.parse(subPages);
-			_this.type = JSON.parse(type || '{}');
+			_this.exportLimit = JSON.parse(exportLimit || '{}') || {};
+			_this.limited = JSON.parse(limited || '{}') || {};
+			_this.subPages = JSON.parse(subPages || '{}') || {};
+			_this.type = JSON.parse(type || '{}') || {};
 		},
 		apply: function() {
 			var _this = this;
@@ -446,7 +446,7 @@ var User = Vue.extend({
 
 						}
 
-						var obj2 = JSON.parse(_this.roleList[item]['export']);
+						var obj2 = JSON.parse(_this.roleList[item]['export']) || {};
 						for (let k in obj2) {
 							if (!resultExportLimited[k]) {
 								resultExportLimited[k] = obj2[k];
@@ -484,7 +484,7 @@ var User = Vue.extend({
 				let roleCheckedList = _this.roleList.filter(r => r.checked)
 				if (roleCheckedList) {
 					roleCheckedList.forEach(x => {
-						let roleType = JSON.parse(x.type || '{}')
+						let roleType = JSON.parse(x.type || '{}') || {}
 						for(let key in roleType) {
 							if (roleType[key] !== '00000') {
 								let arrRole =  roleType[key].split('').filter(x => x === '1')

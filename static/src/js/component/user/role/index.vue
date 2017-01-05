@@ -232,10 +232,10 @@ var Role = Vue.extend({
 		},
 		modifyRole: function(id, limited, exportLimit, name, remark, subPages, type){
 			this.id = id;
-			this.exportLimit = JSON.parse(exportLimit);
-			this.limited = JSON.parse(limited);
-			this.subPages = JSON.parse(subPages || '{}');
-			this.type = JSON.parse(type || '{}');
+			this.exportLimit = JSON.parse(exportLimit || '{}') || {};
+			this.limited = JSON.parse(limited || '{}') || {};
+			this.subPages = JSON.parse(subPages || '{}') || {};
+			this.type = JSON.parse(type || '{}') || {};
 			this.modal.show = true;
 			this.modal.title = '修改角色';
 			this.modifyRemark = remark;
