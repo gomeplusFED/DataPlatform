@@ -51,11 +51,11 @@
 					<td>{{i + baseIndex}}</td>
 					<td>{{item.pointName}}</td>
 					<td>单击</td>
-					<td title="{{item.type}}">{{item.type}}</td>
+					<td title="{{item.type}}">{{item.type === 'block' ? '是' : '否'}}</td>
 					<td title="{{item.pageUrl}}"><a @click="heatmap(item)">{{item.pageUrl}}</a></td>
 					<td title="{{item.PV}}">{{item.pv || '-'}}</td>
 					<td title="{{item.UV}}">{{item.uv || '-'}}</td>
-					<td><a @click="edit(item)">趋势</a></td>
+					<td><a @click="detail(item)">趋势</a></td>
 				</tr>
 				<tr v-show="noData">
 					 <td colspan="8">暂无数据</td>
@@ -80,9 +80,26 @@
                 </div>
                 <div class="modal-body tab-content">
                 	<div id="tab_chart" class="tab-pane active in">
-                		<div v-if="trend.show || chartOption" class="trend-chart" v-echarts="chartOption"></div>
+                		<div v-if="trend.show || trend.chartOption" class="trend-chart" v-echarts="trend.chartOption"></div>
                 	</div>
-                	<div id="tab_table" class="tab-pane fade"></div>
+                	<div id="tab_table" class="tab-pane fade">
+                		<table class="table table-hover trend-table">
+                			<thead>
+                				<tr>
+                					<th>日期</th>
+                					<th>PV</th>
+                					<th>UV</th>
+                				</tr>
+                			</thead>
+            				<tbody>
+            					<tr v-for="item of trend.data">
+            						<td>{{item.date}}</td>
+            						<td>{{item.pv}}</td>
+            						<td>{{item.uv}}</td>
+            					</tr>
+            				</tbody>
+                		</table>
+                	</div>
                 </div>
             </div>
         </div>
@@ -96,70 +113,45 @@
 	var store = require('store');
 	var actions = require('actions');
 	var Pagination = require('common/pagination.vue');
-	var api = require('./lib/api.js');
+	var api = require('./mock/api.js');
 	var utils = require('utils');
-var chartOption = {
-    title: {
-        text: '折线图堆叠'
-    },
-    tooltip: {
-        trigger: 'axis'
-    },
-    legend: {
-        data:['邮件营销','联盟广告','视频广告','直接访问','搜索引擎']
-    },
-    grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
-        containLabel: true
-    },
-    toolbox: {
-        feature: {
-            saveAsImage: {}
-        }
-    },
-    xAxis: {
-        type: 'category',
-        boundaryGap: false,
-        data: ['周一','周二','周三','周四','周五','周六','周日']
-    },
-    yAxis: {
-        type: 'value'
-    },
-    series: [
-        {
-            name:'邮件营销',
-            type:'line',
-            stack: '总量',
-            data:[120, 132, 101, 134, 90, 230, 210]
-        },
-        {
-            name:'联盟广告',
-            type:'line',
-            stack: '总量',
-            data:[220, 182, 191, 234, 290, 330, 310]
-        },
-        {
-            name:'视频广告',
-            type:'line',
-            stack: '总量',
-            data:[150, 232, 201, 154, 190, 330, 410]
-        },
-        {
-            name:'直接访问',
-            type:'line',
-            stack: '总量',
-            data:[320, 332, 301, 334, 390, 330, 320]
-        },
-        {
-            name:'搜索引擎',
-            type:'line',
-            stack: '总量',
-            data:[820, 932, 901, 934, 1290, 1330, 1320]
-        }
-    ]
-};
+	var defaultChartOption = {
+	    tooltip: {
+	        trigger: 'axis'
+	    },
+	    legend: {
+	    	show: true,
+	    	bottom: 10,
+	        data:['PV', 'UV']
+	    },
+	    grid: {
+	    	top: 10,
+	        left: '3%',
+	        right: '4%',
+	        bottom: '13%',
+	        containLabel: true
+	    },
+	    xAxis: {
+	        type: 'category',
+	        boundaryGap: false,
+	        data: ['周一','周二','周三','周四','周五','周六','周日']
+	    },
+	    yAxis: {
+	        type: 'value'
+	    },
+	    series: [
+	        {
+	            name:'PV',
+	            type:'line',
+	            data:[120, 132, 101, 134, 90, 230, 210]
+	        },
+	        {
+	            name:'UV',
+	            type:'line',
+	            data:[220, 182, 191, 234, 290, 330, 310]
+	        }
+	    ]
+	};
 	var databp = Vue.extend({
 		name: 'bpmanage',
 		components: {
@@ -188,7 +180,9 @@ var chartOption = {
 					})(), 'yyyy-MM-dd')
 				},
 				trend: {
-					show: false
+					show: false,
+					data: null,
+					chartOption: null
 				},
 				paginationConf: {
 					currentPage: 1,     // 当前页
@@ -202,7 +196,6 @@ var chartOption = {
 				datepickerOption: {
 					opens: 'right'
 				},
-				chartOption: null,
 				pageComponentsData: {
 					date_picker: {
 						show: true,
@@ -225,9 +218,6 @@ var chartOption = {
 		ready() {
 			// triger the date picker
 			this.pageComponentsData.trigger = !this.pageComponentsData.trigger;
-			this.trend.show = window.location.href.startsWith('http://localhost');
-
-			this.chartOption = chartOption;
 		},
 		route: {
 	        activate: function (transition) {
@@ -289,12 +279,30 @@ var chartOption = {
 				this.paginationConf.currentPage = 1;
 				this.query();
 			},
-			edit(item) {
-				let {pageUrl, pointName, pointParam, selector, platform, type} = item;
-				this.$router.go({
-					path: '/databp/visualbp',
-					query: {pageUrl, pointName, pointParam, selector, platform, type}
-				}); 
+			detail(item) {
+				// fetch detail data
+				api.getHeatDetail(item).then((data) => {
+					// show modal
+					this.trend.show = window.location.href.startsWith('http://localhost');
+					// build chart option
+					let xdata = [];
+					let pvdata = [];
+					let uvdata = [];
+					for(let item of data) {
+						// parse the date to string
+						item.date = utils.formatDate(new Date(item.date), 'yyyy-MM-dd');
+						xdata.push(item.date);
+						pvdata.push(item.pv);
+						uvdata.push(item.uv);
+					}
+					// store the data
+					this.trend.data = data;
+					let chartOption = Object.assign({}, defaultChartOption);
+					chartOption.xAxis.data = xdata;
+					chartOption.series[0].data = pvdata;
+					chartOption.series[1].data = uvdata;
+					this.trend.chartOption = chartOption;
+				});
 			},
 			heatmap(item) {
 				let {pageUrl, platform} = item;
@@ -323,15 +331,28 @@ var chartOption = {
 	module.exports = databp;
 </script>
 <style scoped>
+	.modal-body {
+		height: 450px;
+	}
 	.trend-chart {
 		width:100%;
-		height:400px;
+		height:420px;
 	}
 	.modal .nav-tabs {
 		border: none;
 	}
 	.modal-header {
 		padding-bottom: 0;
+	}
+	.trend-table {
+	    width: 800px;
+	    margin: 20px auto;
+	}
+	.trend-table th, .trend-table td {
+		text-align: center;
+		border: 1px solid #d6d6d6 !important;
+		border-top: 1px solid #d6d6d6;
+		font-weight: normal;
 	}
 	.bp-container {
 		height: 100% !important;
@@ -433,9 +454,7 @@ var chartOption = {
 	.ntable tr:nth-child(odd) {
 	    background-color: #f2faff;
 	}
-	.ntable tr th:nth-child(3) {
-		width: 50px;
-	}
+
 	.ntable tr th:first-child {
 		width: 50px;
 	}
@@ -445,13 +464,16 @@ var chartOption = {
 	.ntable tr th:first-child {
 		width: 5%
 	}
+	.ntable tr th:nth-child(3) {
+		width: 50px;
+	}
 	.ntable tr th:nth-child(4) {
-		width: 300px;
+		width: 100px;
 	}
 	.ntable tr th:nth-child(5) {
 		width: 200px;
 	}
-	.ntable tr th:nth-child(7) {
+	.ntable tr th:nth-child(8) {
 		width: 80px;
 	}
 	.ntable tr td {
