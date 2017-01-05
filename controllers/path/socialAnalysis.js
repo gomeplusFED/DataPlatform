@@ -10,6 +10,7 @@ module.exports = {
             name : "社交面板",
             path : "/socialAnalysis/panel",
             display: true,
+            id   : "00209",
             defaultData : [
                 {
                     title: "",
@@ -48,6 +49,7 @@ module.exports = {
             name : "累计数据",
             path : "/socialAnalysis/total",
             display:true,
+            id   : "00210",
             defaultData : [
                 {
                     type : "table",
@@ -107,6 +109,7 @@ module.exports = {
             name : "单条圈子数据",
             path : "/socialAnalysis/groupDetail",
             display : true,
+            id   : "00212",
             defaultData : [
                 {
                     type : "table",
@@ -176,6 +179,7 @@ module.exports = {
             name : "单条话题数据",
             path : "/socialAnalysis/topicsDetail",
             display : true,
+            id   : "00213",
             defaultData : [
                 {
                     type : "table",

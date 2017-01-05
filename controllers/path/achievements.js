@@ -10,6 +10,7 @@ module.exports = {
             name : "店铺分析",
             path : "/achievements/shop",
             display : true,
+            id   : "00203",
             defaultData : [
                 {
                     type : "chart",

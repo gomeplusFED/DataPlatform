@@ -35,6 +35,7 @@ module.exports = {
             name: "数据概览-WAP",
             path: "/dataOverview/wap",
             display: true,
+            id     : "00208",
             defaultData: [{
                 type: "table",
                 title: "数据概览",
