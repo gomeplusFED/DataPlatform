@@ -138,9 +138,16 @@ module.exports = {
                 //商家
                 newData["商家返利"].value += item.expect_rebate_amount;
                 newData2["商家返利"].value += item.is_over_rebate_order_amount;
+
+                newData["商家返利"].value = util.numberLeave(newData["商家返利"].value , 2);
+                newData2["商家返利"].value = util.numberLeave(newData2["商家返利"].value , 2);
             }else{
                 newData["平台返利"].value += item.expect_rebate_amount;
                 newData2["平台返利"].value += item.is_over_rebate_order_amount;
+
+                newData["平台返利"].value = util.numberLeave(newData["平台返利"].value , 2);
+                newData2["平台返利"].value = util.numberLeave(newData2["平台返利"].value , 2);
+
             }
         }
        
