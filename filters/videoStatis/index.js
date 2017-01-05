@@ -38,7 +38,7 @@ var tableConfig = {
 
     },
     health_play: {
-        rows: [['index', 'port_succ','port_succ_ratio',  'start_frame_succ',  'start_frame_succ_ratio',  'stop_play_num', 'stop_play_num_ratio', 'play_fluent', 'play_fluent_ratio' ]],
+        rows: [['index', 'port_succ', 'port_succ_ratio', 'start_frame_succ', 'start_frame_succ_ratio', 'stop_play_num', 'stop_play_num_ratio', 'play_fluent', 'play_fluent_ratio']],
         cols: [[
             {
                 caption: "指标",
@@ -396,119 +396,119 @@ module.exports = {
     },
 
     videoKpiOne(data, query, dates) {
-        let source = data.first.data[0],
-            count = data.first.count,
-            data2 = [];
+        let one = data.first.data[0],
+            second = data.second.data[0],
+            third = data.third.data[0],
+            count1 = data.first.count,
+            count2 = data.second.count,
+            count3 = data.third.count,
+            data1 = [],
+            data2 = [],
+            data3 = []
 
-        query.filter_key = query.filter_key || data_overview
-        data.cols = tableConfig[query.filter_key].cols
-        data.rows = tableConfig[query.filter_key].rows
-
-        if (source) {
-            switch (query.filter_key || 'data_overview') {
-                case 'data_overview': {
-                    data2 = [{
-                        index: '数值',
-                        play_user: source.play_user,
-                        play_num: source.play_num
-                    }, {
-                        index: '环比',
-                        play_user: Chain(source.play_user, source.play_user_pre),
-                        play_num: Chain(source.play_num, source.play_num_pre)
-                    }]
-                    break;
-                }
-                case 'health_play': {
-                    data2 = [
-                        {
-                            index: '',
-                            port_succ: 'play接口成功数',
-                            port_succ_ratio: 'play接口成功率',
-                            start_frame_succ: '首帧成功数',
-                            start_frame_succ_ratio: '首帧成功率',
-                            stop_play_num: '卡顿播放次数',
-                            stop_play_num_ratio: '卡顿播放次率',
-                            play_fluent: '播放流畅数',
-                            play_fluent_ratio: '播放流畅率'
-                        },
-                        {
-                            index: '数值',
-                            port_succ: source.port_succ,
-                            port_succ_ratio: util.toFixedLength(source.port_succ, source.play_num, 4),
-                            start_frame_succ: source.start_frame_succ,
-                            start_frame_succ_ratio: util.toFixedLength(source.start_frame_succ, source.play_num, 4),
-                            stop_play_num: source.stop_play_num,
-                            stop_play_num_ratio: util.toFixedLength(source.stop_play_num, source.play_num, 4),
-                            play_fluent: source.play_fluent,
-                            play_fluent_ratio: util.toFixedLength(source.play_fluent, source.play_num, 4)
-                        },
-                        {
-                            index: '环比',
-                            port_succ:  Chain(source.port_succ, source.port_succ_pre),
-                            port_succ_ratio: '--',
-                            start_frame_succ: Chain(source.start_frame_succ, source.start_frame_succ_pre),
-                            start_frame_succ_ratio: '--',
-                            stop_play_num: Chain(source.stop_play_num, source.stop_play_num_pre),
-                            stop_play_num_ratio: '--',
-                            play_fluent: Chain(source.play_fluent, source.play_fluent_pre),
-                            play_fluent_ratio: '--'
-                        }
-                    ]
-                    break;
-                }
-                case 'error_play': {
-                    data2 = [
-                        {
-                            index: '',
-                            port_io_failed: 'play接口IO错误数',
-                            port_io_failed_ratio: 'play接口IO错误率',
-                            port_data_failed: 'play接口数据错误数',
-                            port_data_failed_ratio: 'play接口数据错误率',
-                            port_overtime: 'play接口超时数',
-                            port_overtime_ratio: 'play接口超时率',
-                            play_failed: '播放失败数',
-                            play_failed_ratio: '播放失败率',
-                            play_error: '视频错误数',
-                            play_error_ratio: '视频错误率',
-                            improper_play: '非正常播放数',
-                            improper_play_ratio: '非正常播放率'
-                        }, {
-                            index: '数值',
-                            port_io_failed: source.port_io_failed,
-                            port_io_failed_ratio: util.toFixedLength(source.port_io_failed, source.play_num, 4),
-                            port_data_failed: source.port_data_failed,
-                            port_data_failed_ratio: util.toFixedLength(source.port_data_failed, source.play_num, 4),
-                            port_overtime: source.port_overtime,
-                            port_overtime_ratio: util.toFixedLength(source.port_overtime, source.play_num, 4),
-                            play_failed: source.play_failed,
-                            play_failed_ratio: util.toFixedLength(source.play_failed, source.play_num, 4),
-                            play_error: source.play_error,
-                            play_error_ratio: util.toFixedLength(source.play_error, source.play_num, 4),
-                            improper_play: source.improper_play,
-                            improper_play_ratio: util.toFixedLength(source.improper_play, source.play_num, 4)
-                        },
-                        {
-                            index: '环比',
-                            port_io_failed: Chain(source.port_io_failed, source.port_io_failed_pre),
-                            port_io_failed_ratio: '--',
-                            port_data_failed: Chain(source.port_data_failed, source.port_data_failed_pre),
-                            port_data_failed_ratio: '--',
-                            port_overtime: Chain(source.port_overtime, source.port_overtime_pre),
-                            port_overtime_ratio: '--',
-                            play_failed: Chain(source.play_failed, source.play_failed_pre),
-                            play_failed_ratio: '--',
-                            play_error: Chain(source.play_error, source.play_error_pre),
-                            play_error_ratio: '--',
-                            improper_play: Chain(source.improper_play, source.improper_play_pre),
-                            improper_play_ratio: '--'
-                        }
-                    ]
-                    break;
-                }
+        if (one) {
+            let source = one
+            data1 = [{
+                // index: '数值',
+                play_user: '播放用户数: ' + source.play_user,
+                play_num: '播放次数: ' + source.play_num
             }
+            // , {
+            //     index: '环比',
+            //     play_user: Chain(source.play_user, source.play_user_pre),
+            //     play_num: Chain(source.play_num, source.play_num_pre)
+            // }
+            ]
+        }
+        if (second) {
+            let source = second
+            data2 = [
+                {
+                    index: '',
+                    port_succ: 'play接口成功数',
+                    port_succ_ratio: 'play接口成功率',
+                    start_frame_succ: '首帧成功数',
+                    start_frame_succ_ratio: '首帧成功率',
+                    stop_play_num: '卡顿播放次数',
+                    stop_play_num_ratio: '卡顿播放次率',
+                    play_fluent: '播放流畅数',
+                    play_fluent_ratio: '播放流畅率'
+                },
+                {
+                    index: '数值',
+                    port_succ: source.port_succ,
+                    port_succ_ratio: util.toFixedLength(source.port_succ, source.play_num, 4),
+                    start_frame_succ: source.start_frame_succ,
+                    start_frame_succ_ratio: util.toFixedLength(source.start_frame_succ, source.play_num, 4),
+                    stop_play_num: source.stop_play_num,
+                    stop_play_num_ratio: util.toFixedLength(source.stop_play_num, source.play_num, 4),
+                    play_fluent: source.play_fluent,
+                    play_fluent_ratio: util.toFixedLength(source.play_fluent, source.play_num, 4)
+                },
+                {
+                    index: '环比',
+                    port_succ: Chain(source.port_succ, source.port_succ_pre),
+                    port_succ_ratio: '--',
+                    start_frame_succ: Chain(source.start_frame_succ, source.start_frame_succ_pre),
+                    start_frame_succ_ratio: '--',
+                    stop_play_num: Chain(source.stop_play_num, source.stop_play_num_pre),
+                    stop_play_num_ratio: '--',
+                    play_fluent: Chain(source.play_fluent, source.play_fluent_pre),
+                    play_fluent_ratio: '--'
+                }
+            ]
+        }
+        if (third) {
+            let source = third
+            data3 = [
+                {
+                    index: '',
+                    port_io_failed: 'play接口IO错误数',
+                    port_io_failed_ratio: 'play接口IO错误率',
+                    port_data_failed: 'play接口数据错误数',
+                    port_data_failed_ratio: 'play接口数据错误率',
+                    port_overtime: 'play接口超时数',
+                    port_overtime_ratio: 'play接口超时率',
+                    play_failed: '播放失败数',
+                    play_failed_ratio: '播放失败率',
+                    play_error: '视频错误数',
+                    play_error_ratio: '视频错误率',
+                    improper_play: '非正常播放数',
+                    improper_play_ratio: '非正常播放率'
+                }, {
+                    index: '数值',
+                    port_io_failed: source.port_io_failed,
+                    port_io_failed_ratio: util.toFixedLength(source.port_io_failed, source.play_num, 4),
+                    port_data_failed: source.port_data_failed,
+                    port_data_failed_ratio: util.toFixedLength(source.port_data_failed, source.play_num, 4),
+                    port_overtime: source.port_overtime,
+                    port_overtime_ratio: util.toFixedLength(source.port_overtime, source.play_num, 4),
+                    play_failed: source.play_failed,
+                    play_failed_ratio: util.toFixedLength(source.play_failed, source.play_num, 4),
+                    play_error: source.play_error,
+                    play_error_ratio: util.toFixedLength(source.play_error, source.play_num, 4),
+                    improper_play: source.improper_play,
+                    improper_play_ratio: util.toFixedLength(source.improper_play, source.play_num, 4)
+                },
+                {
+                    index: '环比',
+                    port_io_failed: Chain(source.port_io_failed, source.port_io_failed_pre),
+                    port_io_failed_ratio: '--',
+                    port_data_failed: Chain(source.port_data_failed, source.port_data_failed_pre),
+                    port_data_failed_ratio: '--',
+                    port_overtime: Chain(source.port_overtime, source.port_overtime_pre),
+                    port_overtime_ratio: '--',
+                    play_failed: Chain(source.play_failed, source.play_failed_pre),
+                    play_failed_ratio: '--',
+                    play_error: Chain(source.play_error, source.play_error_pre),
+                    play_error_ratio: '--',
+                    improper_play: Chain(source.improper_play, source.improper_play_pre),
+                    improper_play_ratio: '--'
+                }
+            ]
         }
 
-        return util.toTable([data2], data.rows, data.cols, [count]);
+        return util.toTable([data1, data2, data3], data.rows, data.cols, [count1, count2, count3], [true, false, false]);
     },
 
     videoKpiTwo(data, query, dates) {
@@ -640,10 +640,10 @@ module.exports = {
             x.play_failed_ratio = util.toFixedLength(x.play_failed, x.play_num, 4)
             x.play_error_ratio = util.toFixedLength(x.play_error, x.play_num, 4)
             x.improper_play_ratio = util.toFixedLength(x.improper_play, x.play_num, 4)
-            
+
             data2.push(x)
         })
-        
+
 
         return util.toTable([data2], data.rows, data.cols, [count]);
     }

@@ -602,7 +602,7 @@ module.exports = (Router) => {
 
     Router = new api(Router, {
         router: "/videoStatis/videoKpiOne",
-        modelName: ["VideoPlay"],
+        modelName: ["", "", ""],
         platform: false,
         filter(data, query, dates, type) {
             return filter.videoKpiOne(data, query, dates);
@@ -621,39 +621,56 @@ module.exports = (Router) => {
                 tablename = query.type === 'livevideo' ? 'ads2_livevideo_overview2' : 'ads2_videoplay_overview2'
             }
 
-            var _this = this
-            switch (query.filter_key || 'data_overview') {
-                case 'data_overview': {
+            sql = `SELECT a.play_user, a.play_num, b.play_user as play_user_pre, b.play_num as play_num_pre
+                FROM ${tablename} a 
+                LEFT JOIN ${tablename} b 
+                on a.day_type = b.day_type and b.date = DATE_ADD(a.date,INTERVAL -1 ${date_type_list[query.day_type || 1]})
+                WHERE ${config.join(" AND ")}`;
 
-                    sql = `SELECT a.play_user, a.play_num, b.play_user as play_user_pre, b.play_num as play_num_pre
-                        FROM ${tablename} a 
-                        LEFT JOIN ${tablename} b 
-                        on a.day_type = b.day_type and b.date = DATE_ADD(a.date,INTERVAL -1 ${date_type_list[query.day_type || 1]})
-                        WHERE ${config.join(" AND ")}`;
-                    break;
-                }
-                case 'health_play': {
-                    sql = `SELECT 
+            return {
+                sql: sql,
+                params: param
+            };
+        },
+        secondSql(query, params, isCount) {
+            let date_type_list = ['', 'DAY', 'WEEK', 'MONTH']
+            let config = ["a.date BETWEEN ? AND ?", "a.day_type=?"],
+                param = [query.startTime, query.endTime, query.day_type || 1],
+                sql = '',
+                tablename = 'ads2_videoplay_overview2';
+
+            if (query.type) {
+                tablename = query.type === 'livevideo' ? 'ads2_livevideo_overview2' : 'ads2_videoplay_overview2'
+            }
+            sql = `SELECT 
                     a.play_num, a.port_succ, a.start_frame_succ, a.stop_play_num, a.play_fluent,
                     b.port_succ as port_succ_pre, b.start_frame_succ as start_frame_succ_pre, b.stop_play_num as stop_play_num_pre, b.play_fluent as play_fluent_pre
                         FROM ${tablename} a
                          LEFT JOIN ${tablename} b 
                         on a.day_type = b.day_type and b.date = DATE_ADD(a.date,INTERVAL -1 ${date_type_list[query.day_type || 1]})
                         WHERE ${config.join(" AND ")}`;
-                    break;
-                }
-                case 'error_play': {
-                    sql = `SELECT 
+            return {
+                sql: sql,
+                params: param
+            };
+        },
+        thirdSql(query, params, isCount) {
+            let date_type_list = ['', 'DAY', 'WEEK', 'MONTH']
+            let config = ["a.date BETWEEN ? AND ?", "a.day_type=?"],
+                param = [query.startTime, query.endTime, query.day_type || 1],
+                sql = '',
+                tablename = 'ads2_videoplay_overview2';
+
+            if (query.type) {
+                tablename = query.type === 'livevideo' ? 'ads2_livevideo_overview2' : 'ads2_videoplay_overview2'
+            }
+            sql = `SELECT 
                     a.play_num, a.port_io_failed, a.port_data_failed, a.port_overtime, a.port_overtime, a.play_failed, a.play_error, a.improper_play,
                     b.port_io_failed as port_io_failed_pre, b.port_data_failed as port_data_failed_pre, b.port_overtime as port_overtime_pre, b.port_overtime as port_overtime_pre, b.play_failed as play_failed_pre, b.play_error as play_error_pre, b.improper_play as improper_play_pre
                         FROM ${tablename} a
                          LEFT JOIN ${tablename} b 
                         on a.day_type = b.day_type and b.date = DATE_ADD(a.date,INTERVAL -1 ${date_type_list[query.day_type || 1]})
                         WHERE ${config.join(" AND ")}`;
-                    break;
-                }
-            }
-
             return {
                 sql: sql,
                 params: param
@@ -673,43 +690,103 @@ module.exports = (Router) => {
                 name: '直播'
             }]
         },
-        filter_select: [
-            {
-                title: "",
-                filter_key: "filter_key",
-                groups: [
-                    {
-                        key: "data_overview",
-                        value: "数据概况"
-                    }, {
-                        key: "health_play",
-                        value: "健康播放统计"
-                    }, {
-                        key: "error_play",
-                        value: "错误播放统计"
-                    }
-                ]
-            }
+        rows: [
+            ['play_user', 'play_num'],
+            ['index', 'port_succ', 'port_succ_ratio', 'start_frame_succ', 'start_frame_succ_ratio', 'stop_play_num', 'stop_play_num_ratio', 'play_fluent', 'play_fluent_ratio'],
+            ['index', 'port_io_failed', 'port_io_failed_ratio', 'port_data_failed', 'port_data_failed_ratio', 'port_overtime', 'port_overtime_ratio', 'play_failed', 'play_failed_ratio', 'play_error', 'play_error_ratio', 'improper_play', 'improper_play_ratio']
         ],
-        // rows: [
-        //     ['index', 'play_user', 'play_num']
-        // ],
-        // cols: [
-        //     [
-        //         {
-        //             caption: "数据指标",
-        //             type: "string"
-        //         },
-        //         {
-        //             caption: "播放用户数",
-        //             type: "string"
-        //         },
-        //         {
-        //             caption: "播放次数",
-        //             type: "string"
-        //         }
-        //     ]
-        // ]
+        cols: [
+            [
+                {
+                    // caption: "数据指标",
+                    caption: "",
+                    type: "string"
+                },
+                {
+                    // caption: "播放用户数",
+                    caption: "",
+                    type: "string"
+                },
+                // {
+                //     caption: "播放次数",
+                //     type: "string"
+                // }
+            ],
+            [
+                {
+                    caption: "指标",
+                    type: "string"
+                },
+                {
+                    caption: "健康播放统计",
+                    type: "string"
+                },
+                {
+                    caption: ""
+                },
+                {
+                    caption: ""
+                },
+                {
+                    caption: ""
+                },
+                {
+                    caption: ""
+                },
+                {
+                    caption: ""
+                },
+                {
+                    caption: ""
+                },
+                {
+                    caption: ""
+                }
+            ],
+            [
+                {
+                    caption: "指标",
+                    type: "string"
+                },
+                {
+                    caption: "错误播放统计",
+                    type: "string"
+                },
+                {
+                    caption: ""
+                },
+                {
+                    caption: ""
+                },
+                {
+                    caption: ""
+                },
+                {
+                    caption: ""
+                },
+                {
+                    caption: ""
+                },
+                {
+                    caption: ""
+                },
+                {
+                    caption: ""
+                },
+                {
+                    caption: ""
+                },
+                {
+                    caption: ""
+                },
+                {
+                    caption: ""
+                },
+                {
+                    caption: ""
+                }
+            ]
+        ]
     });
 
     Router = new api(Router, {
@@ -801,7 +878,7 @@ module.exports = (Router) => {
         firstSql(query, params, isCount) {
             let config = ["date BETWEEN ? AND ?", "day_type=?"],
                 param = [query.startTime, query.endTime, query.day_type || 1],
-                 tablename = 'ads2_videoplay_overview2';
+                tablename = 'ads2_videoplay_overview2';
 
             if (query.type) {
                 tablename = query.type === 'livevideo' ? 'ads2_livevideo_overview2' : 'ads2_videoplay_overview2'
