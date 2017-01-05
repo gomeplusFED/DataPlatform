@@ -213,26 +213,14 @@ module.exports = {
             name : "交易面板",
             path : "/achievements/tradePanel",
             display : true,
-            subPages : [{
-                id : 35,
-                url : "/achievements/trade",
-                name : "交易分析"
-            }, {
+            subPages : [ {
                 id : 39,
                 url : "/achievements/order",
                 name : "订单分析"
             }, {
-                id : 34,
-                url : "/achievements/productSale",
-                name : "商品分析"
-            }, {
                 id : 40,
                 url : "/achievements/pay",
                 name : "支付分析"
-            }, {
-                id : 47,
-                url : "/coupon",
-                name : "优惠劵分析"
             }],
             defaultData : [
                 {
