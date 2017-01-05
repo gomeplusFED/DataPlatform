@@ -336,7 +336,8 @@
 	}
 	.trend-chart {
 		width:100%;
-		height:420px;
+		height:410px;
+		overflow: hidden;
 	}
 	.modal .nav-tabs {
 		border: none;
@@ -471,7 +472,7 @@
 		width: 100px;
 	}
 	.ntable tr th:nth-child(5) {
-		width: 200px;
+		width: 250px;
 	}
 	.ntable tr th:nth-child(8) {
 		width: 80px;
