@@ -73,10 +73,16 @@
                 	<button type="button" class="close" @click="trend.show=false">
 						&times;
 					</button>
-                    <h4 class="modal-title">修改数据</h4>
+					<ul class="nav nav-tabs">
+					    <li role="presentation" class="active"><a href="#tab_chart" data-toggle="tab" aria-expanded="true"><span class="fa fa-line-chart"></span></a></li>
+					    <li role="presentation" class=""><a href="#tab_table" data-toggle="tab" aria-expanded="false"><span class="fa fa-table"></span></a></li>
+					</ul>
                 </div>
-                <div class="modal-body">
-
+                <div class="modal-body tab-content">
+                	<div id="tab_chart" class="tab-pane active in">
+                		<div v-if="trend.show || chartOption" class="trend-chart" v-echarts="chartOption"></div>
+                	</div>
+                	<div id="tab_table" class="tab-pane fade"></div>
                 </div>
             </div>
         </div>
@@ -92,7 +98,68 @@
 	var Pagination = require('common/pagination.vue');
 	var api = require('./lib/api.js');
 	var utils = require('utils');
-	
+var chartOption = {
+    title: {
+        text: '折线图堆叠'
+    },
+    tooltip: {
+        trigger: 'axis'
+    },
+    legend: {
+        data:['邮件营销','联盟广告','视频广告','直接访问','搜索引擎']
+    },
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+    },
+    toolbox: {
+        feature: {
+            saveAsImage: {}
+        }
+    },
+    xAxis: {
+        type: 'category',
+        boundaryGap: false,
+        data: ['周一','周二','周三','周四','周五','周六','周日']
+    },
+    yAxis: {
+        type: 'value'
+    },
+    series: [
+        {
+            name:'邮件营销',
+            type:'line',
+            stack: '总量',
+            data:[120, 132, 101, 134, 90, 230, 210]
+        },
+        {
+            name:'联盟广告',
+            type:'line',
+            stack: '总量',
+            data:[220, 182, 191, 234, 290, 330, 310]
+        },
+        {
+            name:'视频广告',
+            type:'line',
+            stack: '总量',
+            data:[150, 232, 201, 154, 190, 330, 410]
+        },
+        {
+            name:'直接访问',
+            type:'line',
+            stack: '总量',
+            data:[320, 332, 301, 334, 390, 330, 320]
+        },
+        {
+            name:'搜索引擎',
+            type:'line',
+            stack: '总量',
+            data:[820, 932, 901, 934, 1290, 1330, 1320]
+        }
+    ]
+};
 	var databp = Vue.extend({
 		name: 'bpmanage',
 		components: {
@@ -121,7 +188,7 @@
 					})(), 'yyyy-MM-dd')
 				},
 				trend: {
-					show: true
+					show: false
 				},
 				paginationConf: {
 					currentPage: 1,     // 当前页
@@ -135,6 +202,7 @@
 				datepickerOption: {
 					opens: 'right'
 				},
+				chartOption: null,
 				pageComponentsData: {
 					date_picker: {
 						show: true,
@@ -157,6 +225,9 @@
 		ready() {
 			// triger the date picker
 			this.pageComponentsData.trigger = !this.pageComponentsData.trigger;
+			this.trend.show = window.location.href.startsWith('http://localhost');
+
+			this.chartOption = chartOption;
 		},
 		route: {
 	        activate: function (transition) {
@@ -252,6 +323,16 @@
 	module.exports = databp;
 </script>
 <style scoped>
+	.trend-chart {
+		width:100%;
+		height:400px;
+	}
+	.modal .nav-tabs {
+		border: none;
+	}
+	.modal-header {
+		padding-bottom: 0;
+	}
 	.bp-container {
 		height: 100% !important;
 		min-height: 600px;

@@ -41,5 +41,6 @@
 
 	});
 
+	Vue.directive('echarts', require('./directives/echarts'));
 	module.exports = App;
 </script>
