@@ -22,61 +22,61 @@ var api = require("../../../base/main"),
 
 module.exports = (Router) => {
 
-    Router = new api(Router,{
-        router : "/socialAnalysis/topicsOne",
-        modelName : ["Statistics"],
-        platform : false,
-        date_picker: false,
-        //date_picker_data: 1,
-        params(query, params, data) {
-            var now = new Date().getTime(),
-                date = util.getDate(new Date(now - 24 * 60 * 60 * 1000));
+    // Router = new api(Router,{
+    //     router : "/socialAnalysis/topicsOne",
+    //     modelName : ["Statistics"],
+    //     platform : false,
+    //     date_picker: false,
+    //     //date_picker_data: 1,
+    //     params(query, params, data) {
+    //         var now = new Date().getTime(),
+    //             date = util.getDate(new Date(now - 24 * 60 * 60 * 1000));
 
-            return {
-                date : orm.between(date + " 00:00:00", date + " 23:59:59"),
-                key : ["all_topic_num", "all_topic_reply_num", "all_topic_subReply_num", "all_praise_num"]
-            };
-        },
-        procedure : [{
-            aggregate : {
-                value : ["key"]
-            },
-            sum : ["value"],
-            groupBy : ["key"],
-            get : ""
-        }],
-        filter(data) {
-            return filter.topicsOne(data);
-        },
-        /*flexible_btn: [{
-            content: '<a href="javascript:void(0)" help_url="/socialAnalysis/helpTwo_json">帮助</a>',
-            preMethods: ["show_help"],
-            customMethods: ''
-        }],*/
-        rows: [
-            ["all_topic_num", "all", "all_praise_num"]
-        ],
-        cols: [
-            [{
-                caption: "累计话题数",
-                type: "number",
-                help : "累计话题数"
-            }, {
-                caption: "累计回复次数",
-                type: "number"
-            //}, {
-            //    caption: "话题回复率", // = 被回复的话题数 / 话题数
-            //    type: "string",
-            //    help : "被回复的话题数/话题数"
-            }, {
-                caption: "累计点赞数",
-                type: "number"
-            //}, {
-            //    caption: "累计收藏数",
-            //    type: "number"
-            }]
-        ]
-    });
+    //         return {
+    //             date : orm.between(date + " 00:00:00", date + " 23:59:59"),
+    //             key : ["all_topic_num", "all_topic_reply_num", "all_topic_subReply_num", "all_praise_num"]
+    //         };
+    //     },
+    //     procedure : [{
+    //         aggregate : {
+    //             value : ["key"]
+    //         },
+    //         sum : ["value"],
+    //         groupBy : ["key"],
+    //         get : ""
+    //     }],
+    //     filter(data) {
+    //         return filter.topicsOne(data);
+    //     },
+    //     /*flexible_btn: [{
+    //         content: '<a href="javascript:void(0)" help_url="/socialAnalysis/helpTwo_json">帮助</a>',
+    //         preMethods: ["show_help"],
+    //         customMethods: ''
+    //     }],*/
+    //     rows: [
+    //         ["all_topic_num", "all", "all_praise_num"]
+    //     ],
+    //     cols: [
+    //         [{
+    //             caption: "累计话题数",
+    //             type: "number",
+    //             help : "累计话题数"
+    //         }, {
+    //             caption: "累计回复次数",
+    //             type: "number"
+    //         //}, {
+    //         //    caption: "话题回复率", // = 被回复的话题数 / 话题数
+    //         //    type: "string",
+    //         //    help : "被回复的话题数/话题数"
+    //         }, {
+    //             caption: "累计点赞数",
+    //             type: "number"
+    //         //}, {
+    //         //    caption: "累计收藏数",
+    //         //    type: "number"
+    //         }]
+    //     ]
+    // });
 
     Router = new api(Router,{
         router : "/socialAnalysis/topicsTwo",
@@ -341,88 +341,48 @@ module.exports = (Router) => {
     });
 
     
-    // Router = new api(Router,{
-    //     router : "/socialAnalysis/topicsFour",
-    //     modelName : [ "SocialTopicStatistics", "SocialCategory" ],
-    //     platform : false,
-    //     secondParams(query, params, sendData) {
-    //         return {
-    //             pid : ""
-    //         };
-    //     },
-    //     procedure : [{
-    //         aggregate : {
-    //             value : ["category_id"]
-    //         },
-    //         sum : ["new_topic_num", "new_topic_reply_num", "new_topic_like_num",
-    //             "new_topic_save_num", "new_topic_share_num"],
-    //         groupBy : ["category_id"],
-    //         get : ""
-    //     }, false],
-    //     fixedParams(req, query, cb) {
-    //         var group_type = [];
-    //         req.models.SocialCategory.find({
-    //             pid : ""   //没有pid的数据级为一级类目
-    //         }, (err, data) => {
-    //             if(!err) {
-    //                 for(var key of data) {
-    //                     group_type.push(key.id);
-    //                 }
-    //                 query.category_id = group_type;
-    //                 cb(null, query);
-    //             } else {
-    //                 cb(err);
-    //             }
-    //         });
-    //     },
-    //     filter_select: [
-    //         {
-    //            title: "平台选择",
-    //            filter_key : 'type',
-    //            groups: [{
-    //                key: ['APP','WAP','PC'],
-    //                value: '全部平台'
-    //            },{
-    //                key: 'APP',
-    //                value: 'APP'
-    //            },{
-    //                key: 'WAP',
-    //                value: 'WAP'
-    //            },{
-    //                key: 'PC',
-    //                value: 'PC'
-    //            }]
-    //         },
-    //         {
-    //             title: '指标选择',
-    //             filter_key: 'filter_key',
-    //             groups: [{
-    //                 key: 'new_topic_num',
-    //                 value: '话题'
-    //             }, {
-    //                 key: 'new_topic_reply_num',
-    //                 value: '回复'
-    //             }, {
-    //                 key: 'new_topic_like_num',
-    //                 value: '点赞'
-    //             }, {
-    //                 key: 'new_topic_save_num',
-    //                 value: '收藏'
-    //             }, {
-    //                 key: 'new_topic_share_num',
-    //                 value: '分享'
-    //             }]
-    //         }
-    //     ],
-    //     filter(data, query, dates, type) {
-    //         return filter.topicsFour(data, query.filter_key);
-    //     }
-    // });
-
     //二级圈子类型分布
+    Router.get("/socialAnalysis/topicsFive_json" , (req , res , next) => {
+        let query = req.query;
+        if(!query.category_use_id){
+            req.models.SocialCategory.find({pid:""} , (err , data) => {
+                let LevelOne = {
+                    title: "一级分类",
+                    filter_key : 'category_use_id',
+                    groups: []
+                };
+                for(let item of data){
+                    LevelOne.groups.push({
+                        key : item.id,
+                        value:item.name
+                    });
+                }
+                res.json({
+                    code: 200,
+                    modelData: [],
+                    components: {
+                        date_picker:{
+                            show: true, 
+                            defaultData: 7,
+                            name : "startTime",
+                            endname: "endTime"
+                        },
+                        filter_select: [Type , topicsFour , LevelOne]
+                    }
+                });
+            });
+        }
+            
+
+                
+    });
+
+
+
+
     Router = new api(Router,{
         router : "/socialAnalysis/topicsFive",
-        modelName : [ "SocialTopicCategoryDistribution", "SocialCategory" ],
+        modelName : [ "SocialTopicStatistics", "SocialCategory" ],
         platform : false,
         secondParams(query, params, sendData) {
             return {};
