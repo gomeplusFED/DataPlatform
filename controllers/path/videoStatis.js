@@ -59,11 +59,11 @@ module.exports = {
                     title: "指标趋势",
                     query_api : "/videoStatis/videoKpiTwo"
                 },
-                // {
-                //     type : "table",
-                //     title: "数据明细",
-                //     query_api : "/videoStatis/videokpiThree"
-                // }
+                {
+                    type : "table",
+                    title: "数据明细",
+                    query_api : "/videoStatis/videokpiThree"
+                }
             ]
         }
     }

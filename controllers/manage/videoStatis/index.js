@@ -777,6 +777,132 @@ module.exports = (Router) => {
             }
         ]
      });
+     Router = new api(Router , {
+        router : "/videoStatis/videoKpiThree",
+        modelName : ["VideoPlay"],
+        platform : false,
+        control_table_col: true,
+        filter(data , query , dates , type){
+            return filter.videoKpiThree(data , query , dates);
+        },
+        params: function(query , params){
+            return params;
+        },
+        firstSql(query, params, isCount) {
+            let config = ["date BETWEEN ? AND ?", "day_type=?"],
+                param = [query.startTime, query.endTime, query.day_type || 1];
+
+            if (query.sdk_app_type && query.sdk_app_type!=='ALL') {
+                config.push('sdk_type = ?')
+                param.push(query.sdk_app_type)
+            }
+
+            let sql = `SELECT *
+                    FROM ads2_videoplay_overview2
+                    WHERE day_type='1' and ${config.join(" AND ")}`;
+
+            return {
+                sql: sql,
+                params: param
+            };
+        },
+        filter_select : [
+            {
+                title : "SDK选择",
+                filter_key : "sdk_app_type",
+                groups : [
+                    {
+                        key : "ALL",
+                        value:"全部SDK"
+                    },{
+                        key : "ios" ,
+                        value: "IOS"
+                    },{
+                        key : "android",
+                        value: "android"
+                    },{
+                        key : "h5_custom",
+                        value: "h5_custom"
+                    },{
+                        key : "h5_native",
+                        value: "h5_native"
+                    },{
+                        key : "flash",
+                        value: "flash"
+                    }
+                ]
+            }
+        ],
+        rows: [[
+            "date", "play_user", "play_num", 'port_succ', 'port_succ_ratio',  'start_frame_succ',  'start_frame_succ_ratio',  'stop_play_num', 'stop_play_num_ratio', 'play_fluent', 'play_fluent_ratio',
+            'port_io_failed', 'port_io_failed_ratio', 'port_data_failed', 'port_data_failed_ratio', 'port_overtime', 'port_overtime_ratio', 'play_failed', 'play_failed_ratio', 'play_error', 'play_error_ratio', 'improper_play', 'improper_play_ratio'
+        ]],
+        cols: [[
+            {
+                caption: "日期",
+                type: "string"
+            },
+            {
+                caption: "播放用户数",
+                type: "number"
+            },
+            {
+                caption: "播放次数",
+                type: "number"
+            },
+            {
+                caption: "健康播放统计",
+                type: "string"
+            },
+            {
+                caption: ""
+            },
+            {
+                caption: ""
+            },
+            {
+                caption: ""
+            },
+            {
+                caption: ""
+            },
+            {
+                caption: ""
+            },
+            {
+                caption: ""
+            },
+            {
+                caption: ""
+            },
+            {
+                caption: "错误播放统计",
+                type: "string"
+            },{
+                caption: ""
+            },{
+                caption: ""
+            },{
+                caption: ""
+            },{
+                caption: ""
+            },{
+                caption: ""
+            },{
+                caption: ""
+            },{
+                caption: ""
+            },{
+                caption: ""
+            },{
+                caption: ""
+            },{
+                caption: ""
+            },{
+                caption: ""
+            },
+        ]]
+     });
     
 
     return Router;

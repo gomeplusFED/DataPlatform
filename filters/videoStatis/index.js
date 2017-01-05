@@ -4,7 +4,8 @@
  * @fileoverview 视频统计，数据过滤处理
  */
 var util = require("../../utils"),
-    _ = require("lodash");
+    _ = require("lodash"),
+    moment = require('moment');
 
 /* 环比计算 , 昨天－前天  ／  前天 */
 function Chain(lastday, beforeLastday) {
@@ -119,7 +120,6 @@ var tableConfig = {
         ]]
     }
 }
-
 
 module.exports = {
 
@@ -598,5 +598,54 @@ module.exports = {
             }
         }];
     },
+
+    videoKpiThree(data, query, dates) {
+        let source = data.first.data,
+            count = data.first.count;
+
+        let data2 = [{
+            date: "",
+            play_user: "",
+            play_num: "",
+            port_succ: 'play接口成功数',
+            port_succ_ratio: 'play接口成功率',
+            start_frame_succ: '首帧成功数',
+            start_frame_succ_ratio: '首帧成功率',
+            stop_play_num: '卡顿播放次数',
+            stop_play_num_ratio: '卡顿播放次率',
+            play_fluent: '播放流畅数',
+            play_fluent_ratio: '播放流畅率',
+            port_io_failed: 'play接口IO错误数',
+            port_io_failed_ratio: 'play接口IO错误率',
+            port_data_failed: 'play接口数据错误数',
+            port_data_failed_ratio: 'play接口数据错误率',
+            port_overtime: 'play接口超时数',
+            port_overtime_ratio: 'play接口超时率',
+            play_failed: '播放失败数',
+            play_failed_ratio: '播放失败率',
+            play_error: '视频错误数',
+            play_error_ratio: '视频错误率',
+            improper_play: '非正常播放数',
+            improper_play_ratio: '非正常播放率'
+        }]
+        source.forEach(x => {
+            x.date = moment(x.date).format('MM月DD日')
+            x.port_succ_ratio = util.toFixedLength(x.port_succ, x.play_num, 4)
+            x.start_frame_succ_ratio = util.toFixedLength(x.start_frame_succ, x.play_num, 4)
+            x.stop_play_num_ratio = util.toFixedLength(x.stop_play_num, x.play_num, 4)
+            x.play_fluent_ratio = util.toFixedLength(x.play_fluent, x.play_num, 4)
+            x.port_io_failed_ratio = util.toFixedLength(x.port_io_failed, x.play_num, 4)
+            x.port_data_failed_ratio = util.toFixedLength(x.port_data_failed, x.play_num, 4)
+            x.port_overtime_ratio = util.toFixedLength(x.port_overtime, x.play_num, 4)
+            x.play_failed_ratio = util.toFixedLength(x.play_failed, x.play_num, 4)
+            x.play_error_ratio = util.toFixedLength(x.play_error, x.play_num, 4)
+            x.improper_play_ratio = util.toFixedLength(x.improper_play, x.play_num, 4)
+            
+            data2.push(x)
+        })
+        
+
+        return util.toTable([data2], data.rows, data.cols, [count]);
+    }
 
 };
