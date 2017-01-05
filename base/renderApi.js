@@ -106,7 +106,8 @@ renderApi.prototype = {
                         userSubs = userSubs || [];
                         subPages = subPages.filter(x => userSubs.includes(x.id.toString()));
                         page[path.path] = {
-                            id: path.id,
+                            id: path.id.toString(),
+                            f_id: key,
                             pageTitle : path.name,
                             subPages,
                             defaultData : path.defaultData
