@@ -340,7 +340,7 @@ module.exports = {
     },
     data_table_shopflow() {
         return {
-            id : "6666",
+            id: 1001,
             name : "O2M店铺流量交易",
             path : "/dataExport/shopFlow",
             display : true,
