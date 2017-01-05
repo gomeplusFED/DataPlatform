@@ -421,10 +421,10 @@ var User = Vue.extend({
 					if (_this.roleList[item]['checked'] && !utils.isInArry(_this.roleList[item]['name'], currentUserRoleNameArr)) {
 						let roleObj = _this.roleList[item];
 						let obj1 = roleObj['limited'] ? JSON.parse(roleObj['limited']) : {};
-						let roleSubPages = roleObj['sub_pages'] ? JSON.parse(roleObj['sub_pages']) : {};
+						let roleSubPages = roleObj['sub_pages'] ? JSON.parse(roleObj['sub_pages']) : null;
 						for (let k in obj1) {
 							if (!resultLimited[k]) {
-								resultLimited[k] = obj1[k];
+								resultLimited[k] = obj1[k] || [];
 							}
 							let _currentArr = resultLimited[k].concat(obj1[k]);
 							resultLimited[k] = utils.uniqueArray(_currentArr);
@@ -432,24 +432,27 @@ var User = Vue.extend({
 								return a - b;
 							});
 							// 处理三级页面
-							let roleSubs = roleSubPages[k];
-							let userSubs = resultSubPages[k];
-							let limiteds = resultLimited[k];
-							if (!userSubs) {
-								resultSubPages[k] = roleSubs;
-							} else {
-								for(let l of limiteds) {
-									let _current = userSubs[l].concat(roleSubs[l]);
-									userSubs[l] = utils.uniqueArray(_current);
+							let roleSubs;
+							if (roleSubPages && (roleSubs = roleSubPages[k])) {
+								let userSubs = resultSubPages[k];
+								let limiteds = resultLimited[k];
+								if (!userSubs) {
+									resultSubPages[k] = roleSubs;
+								} else {
+									for(let l of limiteds) {
+										if (Array.isArray(roleSubs[l])) {
+											let _current = (userSubs[l] || []).concat(roleSubs[l]);
+											userSubs[l] = utils.uniqueArray(_current);
+										}
+									}
 								}
 							}
-
 						}
 
 						var obj2 = JSON.parse(_this.roleList[item]['export']);
 						for (let k in obj2) {
 							if (!resultExportLimited[k]) {
-								resultExportLimited[k] = obj2[k];
+								resultExportLimited[k] = obj2[k] || [];
 							}
 							let _currentArr = resultExportLimited[k].concat(obj2[k]);
 							resultExportLimited[k] = utils.uniqueArray(_currentArr);
