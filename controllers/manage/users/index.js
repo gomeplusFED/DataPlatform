@@ -72,7 +72,7 @@ module.exports = (Router) => {
                         let l = JSON.parse(params.limited);
                         let u = JSON.parse(data[0].limited);
                         if(req.session.userInfo.username !== "superAdmin") {
-                            if(!u[0]) {
+                            if(u && (!u[0])) {
                                 if(l["0"]) {
                                     delete l["0"];
                                 }
