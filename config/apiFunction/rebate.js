@@ -40,7 +40,7 @@ module.exports = {
     },
     rebate_total_01_f(data, query, dates){
         let source = data.first.data[0];
-        source = Deal100(source , ["history_expect_rebate_amount" , "history_cancel_is_rebate_fee" , "history_is_over_rebate_order_amount"]);
+        source = Deal100(source , ["history_expect_rebate_amount" , "history_cancel_is_rebate_fee" , "history_is_over_rebate_order_amount" , "history_cancel_rebate_amount"]);
         return util.toTable([source], data.rows, data.cols);
     },
     //返利总览
@@ -431,8 +431,8 @@ module.exports = {
 
         for(let item of secondSource){
             item = Deal100(item , ["is_rebate_item_fee" , "is_over_rebate_order_amount"]);
-            if(param2[item.rebate_level]){
-                Result2[param2[item.rebate_level]].value += item[filter_key];
+            if(param2[item.rebate_level] && item.level == "all"){
+                Result2[param2[item.rebate_level]].value = item[filter_key];
             }
         }
 

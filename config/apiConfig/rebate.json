@@ -15,7 +15,7 @@
                 "history_expect_rebate_user_num",
                 "history_expect_rebate_amount",
                 "history_cancel_is_rebate_order_num",
-                "history_cancel_is_rebate_fee",
+                "history_cancel_rebate_amount",
                 "history_is_over_rebate_order_num",
                 "history_is_over_rebate_order_amount"
             ]
@@ -435,7 +435,7 @@
                 "filter_key": "filter_key",
                 "groups": [
                     {
-                        "key": "unique_is_over_rebate_order_num",
+                        "key": "unique_is_rebate_order_num",
                         "value": "订单数"
                     },
                     {
@@ -630,7 +630,7 @@
         "rows": [
             [
                 "unique_plan_id_num",
-                "unique_is_over_rebate_order_num",
+                "unique_is_rebate_order_num",
                 "cancel_is_rebate_order_num",
                 "unique_is_over_rebate_order_num",
                 "unique_is_rebate_shop_num",
@@ -1286,7 +1286,7 @@
                 "filter_key": "filter_key",
                 "groups": [
                     {
-                        "key": "unique_is_over_rebate_order_num",
+                        "key": "unique_is_rebate_order_num",
                         "value": "订单数"
                     },
                     {
