@@ -460,19 +460,23 @@ var api = {
         }).catch(errHandler);
     },
     getHeatDetail(data) {
+    	function genObj() {
+    		return {
+                "pv": Math.ceil(Math.random()*1000),
+                "uv": Math.ceil(Math.random()*1000),
+                "date": 1483459200000 + Math.ceil(Math.random()*10000000000)
+            }
+    	}
+    	let result = [];
+    	let len = Math.ceil(Math.random()*50);
+    	for(let i =0;i< len;i++) {
+    		result.push(genObj());
+    	}
         return Promise.resolve({
             "msg": "成功",
             "code": "200",
             "data": {
-                "result": [{
-                    "pv": Math.ceil(Math.random()*1000),
-                    "uv": Math.ceil(Math.random()*1000),
-                    "date": 1483459200000
-                }, {
-                    "pv": Math.ceil(Math.random()*1000),
-                    "uv": Math.ceil(Math.random()*1000),
-                    "date": 1483372800000
-                }],
+                result,
                 "total": 2
             },
             "iserror": "0"
