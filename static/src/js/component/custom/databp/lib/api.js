@@ -3,7 +3,7 @@ var actions = require('actions');
 var $ = require('jQuery');
 
 const baseurl = window.location.href.startsWith('http://bi.') ? 
-'http://10.125.192.133:8180/bomber-pie' : 'http://10.69.10.26:8088/bomber-pie'
+'http://10.125.192.133:8180/bomber-pie' : 'http://10.69.10.20:8088/bomber-pie'
 // 请求失败 重试一次
 const RETRY_TIMES = 2;
 
