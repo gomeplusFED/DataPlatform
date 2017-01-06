@@ -49,10 +49,7 @@
 						</div>
 					</div> 
 					<div id="tab_bpdata" class="tab-pane fade">
-
-						<div class="extendinfo">
-						TODO
-						</div>
+						<div v-if="trend.chartOption" class="bp-chart" v-echarts="trend.chartOption"></div>
 					</div> 
 				</div>
 				<button class="btn btn-success save" @click="save" data-toggle="popover">{{config.pointId ? '更新埋点' : '保存埋点'}}</button>
@@ -65,6 +62,46 @@
 <script>
 var Vue = require('Vue');
 var api = require('./lib/api.js');
+var utils = require('utils');
+var defaultChartOption = {
+    tooltip: {
+        trigger: 'axis'
+    },
+    legend: {
+    	show: true,
+    	bottom: 0,
+        data:['PV', 'UV']
+    },
+    grid: {
+    	top: 10,
+        left: '3%',
+        right: '4%',
+        bottom: '10%',
+        containLabel: true
+    },
+    xAxis: {
+        type: 'category',
+        boundaryGap: false,
+        data: []
+    },
+    yAxis: {
+        type: 'value'
+    },
+    series: [
+        {
+            name:'PV',
+            type:'line',
+            data:[]
+        },
+        {
+            name:'UV',
+            type:'line',
+            data:[]
+        }
+    ]
+};
+
+
 var bpinfo = Vue.extend({
 	data: function() {
 		return {
@@ -97,7 +134,10 @@ var bpinfo = Vue.extend({
 				item: null
 			},
 			publicBp: [['','']],
-			privateBp: [['','']]
+			privateBp: [['','']],
+			trend: {
+				chartOption: null
+			}
 		}
 	},
 	computed:  {
@@ -190,6 +230,7 @@ var bpinfo = Vue.extend({
 				console.log(err);
 				_this.loading.show = false;
 			});
+			this.loadChart();
 		},
 		hide() {
 			this.bpConfig.show = false;
@@ -242,6 +283,27 @@ var bpinfo = Vue.extend({
 					type: 'warning'
 				});
 			}
+		},
+		loadChart(ev) {
+			// fetch detail data
+			api.getHeatDetail(this.config).then((data) => {
+				// build chart option
+				let xdata = [];
+				let pvdata = [];
+				let uvdata = [];
+				for(let item of data) {
+					// parse the date to string
+					item.date = utils.formatDate(new Date(item.date), 'yyyy-MM-dd');
+					xdata.push(item.date);
+					pvdata.push(item.pv);
+					uvdata.push(item.uv);
+				}
+				let chartOption = Object.assign({}, defaultChartOption);
+				chartOption.xAxis.data = xdata;
+				chartOption.series[0].data = pvdata;
+				chartOption.series[1].data = uvdata;
+				this.trend.chartOption = chartOption;
+			});
 		},
 		save(ev) {
 			let $save = $(ev.target);
@@ -484,5 +546,13 @@ button.save {
 }
 .value-list li:hover {
 	background-color: #eee;
+}
+#tab_bpdata {
+	width: 100%;
+	height: 100%;
+}
+#tab_bpdata .bp-chart {
+	width: 336px;
+	height: 200px;
 }
 </style>
