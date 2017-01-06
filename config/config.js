@@ -249,7 +249,11 @@ const Config = {
             path: [
                 obj.videoStatis.video(),
                 obj.videoStatis.videoEdition(),
-                obj.videoStatis.videoKpi()
+                obj.videoStatis.videoKpi(),
+                obj.videoStatis.videoDetails()
+            ],
+            routers : [
+                obj.videoStatis.videoDetailsTwo()
             ]
         },
         "19": {

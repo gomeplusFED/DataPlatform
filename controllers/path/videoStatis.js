@@ -82,5 +82,20 @@ module.exports = {
                 }
             ]
         }
+    },
+    videoDetailsTwo() {
+        return {
+            id: 201,
+            name : "视频明细",
+            path : "/videoStatis/videoDetails2",
+            display : true,
+            defaultData : [
+                {
+                    type : "table",
+                    title: "视频明细",
+                    query_api : "/videoStatis/videoDetailsTwo"
+                }
+            ]
+        }
     }
 };
