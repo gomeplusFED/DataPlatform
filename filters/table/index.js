@@ -6,14 +6,19 @@
 var util = require("../../utils");
 
 module.exports = {
-    tableOne(data, filter_key) {
+    tableOne(data, query) {
+        let filter_key = query.filter_key,
+            filter_key2= query.filter_key2;
         var source = data.first.data[0],
+            // source2= [].concat(source),
             count = data.first.count,
             secondSource = data.second.data[0],
+            // secondSource2= [].concat(secondSource),
             config = {},
             rows = [],
             cols = [],
             merge = util.mergeCell(source, ["category_id_1"]);
+
         if(filter_key === "social") {
             for(let key of secondSource) {
                 if(+key.pid < 0) {
@@ -64,9 +69,18 @@ module.exports = {
             }]);
         }
 
-        return util.toTable([source], rows, cols, {
-            count : [count],
-            config : [merge]
-        });
+
+        if(query.filter_key2 == "one"){
+            rows[0].splice(1,1);
+            cols[0].splice(1,1);
+            return util.toTable([source] , rows , cols , count);
+        }else{
+            return util.toTable([source], rows, cols, {
+                count : [count],
+                config : [merge]
+            });
+        }
+
+        
     }
 };

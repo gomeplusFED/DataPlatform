@@ -11,6 +11,11 @@ module.exports = {
             path : "/socialAnalysis/panel",
             display: true,
             id   : "00209",
+            subPages : [ {
+                id : "00320",
+                url : "/socialAnalysis/topicDeal",
+                name : "话题交易"
+            }],
             defaultData : [
                 {
                     title: "",
@@ -40,6 +45,26 @@ module.exports = {
                     type : "table",
                     title : "兴趣点汇总",
                     query_api : "/socialAnalysis/panelFive"
+                }
+            ]
+        }
+    },
+    topicDeal(){
+        return {
+            name : "话题交易",
+            path : "/socialAnalysis/topicDeal",
+            display:true,
+            id   : "00320",
+            defaultData : [
+                {
+                    type : "chart",
+                    title: "带商品的话题数据统计",
+                    query_api:"/socialAnalysis/topicDeal_One"
+                },
+                {
+                    type : "chart",
+                    title: "带商品的话题数据统计",
+                    query_api:"/socialAnalysis/topicDeal_Two"
                 }
             ]
         }
@@ -141,11 +166,11 @@ module.exports = {
             path : "/socialAnalysis/topics",
             display : true,
             defaultData : [
-                {
-                    type : "table",
-                    title : "话题数据总览",
-                    query_api : "/socialAnalysis/topicsOne"
-                },
+                // {
+                //     type : "table",
+                //     title : "话题数据总览",
+                //     query_api : "/socialAnalysis/topicsOne"
+                // },
                 {
                     type : "table",
                     title : "话题数据统计",
