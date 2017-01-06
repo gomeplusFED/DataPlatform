@@ -284,14 +284,10 @@ var bpinfo = Vue.extend({
 				api.updateBp(_this.config).then(function(res) {
 					// 更新成功刷新传入的数据
 					_this.bpConfig.show = false;
-					// _this.bpConfig = _this.config;
-					// actions.databp(store, _this.config);
 				});
 			} else {
 				api.saveBp(_this.config).then(function() {
 					_this.bpConfig.show = false;
-					// _this.bpConfig = _this.config;
-					// actions.databp(store, _this.config);
 				});
 			}
 		}
