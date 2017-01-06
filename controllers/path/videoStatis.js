@@ -82,5 +82,35 @@ module.exports = {
                 }
             ]
         }
+    },
+    videoDetailsOperating() {
+        return {
+            id: 201,
+            name : "视频明细",
+            path : "/videoStatis/videoDetailsOperating",
+            display : true,
+            defaultData : [
+                {
+                    type : "chart",
+                    title: "趋势",
+                    query_api : "/videoStatis/videoDetailsOperatingOne"
+                }
+            ]
+        }
+    },
+    videoDetailsTwo() {
+        return {
+            id: 201,
+            name : "视频明细",
+            path : "/videoStatis/videoDetails2",
+            display : true,
+            defaultData : [
+                {
+                    type : "table",
+                    title: "视频明细",
+                    query_api : "/videoStatis/videoDetailsTwo"
+                }
+            ]
+        }
     }
 };
