@@ -104,7 +104,7 @@ module.exports = (Router) => {
             return params;
         },
         flexible_btn : [{
-            content: `<a href="#!/achievements/pay">话题交易分析</a>`, 
+            content: `<a href="#!/socialAnalysis/topicDeal">话题交易分析</a>`, 
             preMethods: [], 
             customMethods: ""
         }],

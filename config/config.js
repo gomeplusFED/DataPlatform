@@ -244,7 +244,8 @@ const Config = {
             ],
             routers: [
                 obj.socialAnalysis.groupDetail(),
-                obj.socialAnalysis.topicsDetail()
+                obj.socialAnalysis.topicsDetail(),
+                obj.socialAnalysis.topicDeal()
             ]
         },
         "18": {
@@ -310,6 +311,7 @@ const Config = {
             href: "#",
             path: [
                 obj.table.table(),
+                obj.table.topic(),
                 obj.table.data_table_day(),
                 obj.table.data_table_week(),
                 obj.table.data_table_month(),

@@ -344,7 +344,7 @@ module.exports = (Router) => {
     //二级圈子类型分布
     Router.get("/socialAnalysis/topicsFive_json" , (req , res , next) => {
         let query = req.query;
-        if(!query.category_use_id){
+        if(query.category_use_id == undefined){
             req.models.SocialCategory.find({pid:""} , (err , data) => {
                 let LevelOne = {
                     title: "一级分类",
@@ -371,123 +371,55 @@ module.exports = (Router) => {
                     }
                 });
             });
-        }
-            
-
-                
-    });
-
-
-
-
-    Router = new api(Router,{
-        router : "/socialAnalysis/topicsFive",
-        modelName : [ "SocialTopicStatistics", "SocialCategory" ],
-        platform : false,
-        secondParams(query, params, sendData) {
-            return {};
-        },
-        procedure : [{
-            aggregate : {
-                value : ["category_id"]
-            },
-            sum : ["new_topic_num", "new_topic_reply_num", "new_topic_like_num",
-                "new_topic_save_num", "new_topic_share_num"],
-            groupBy : ["category_id"],
-            get : ""
-        }, false],
-        fixedParams(req, query, cb) {
-            //依据选择的一级分类id获取对应的二级列表，保存二级类id至req中
-            var filter_key = query.filter_key || "-1";
-            var group_type = [];
-            req.models.SocialCategory.find({
-                pid : filter_key
-            }, (err, data) => {
-                if(!err) {
-                    for(var key of data) {
-                        group_type.push(key.id);
-                    }
-                    query.category_id = group_type;
-                    cb(null, query);
-                } else {
-                    cb(err);
+        }else{
+            req.models.SocialCategory.find({pid:query.category_use_id} , (err , data) => {
+                let CategoryResult = {};
+                for(let item of data){
+                    CategoryResult[item.id] = item.name;
                 }
-            });
-        },
-        //初始化一级分类选项
-        selectFilter(req , cb){
-            var filter_select = {
-                title : "一级分类",
-                filter_key : "filter_key",
-                groups : []
-            };
-
-            req.models.SocialCategory.find({
-                pid : ""
-            }, (err , data)=>{
-                if(!err){
-                    for(var key of data){
-                        var obj = {
-                            key : key.id,
-                            value:key.name
-                        };
-                        filter_select.groups.push(obj);
+                req.models.SocialTopicStatistics.find({
+                    category_id : Object.keys(CategoryResult),
+                    date        : orm.between(query.startTime , query.endTime),
+                    day_type    : query.day_type,
+                    ver         : 0,
+                    channel     : 0,
+                    type        : query.type || "all"
+                } , (err , result) => {
+                    let newData = {};
+                    for(let key in CategoryResult){
+                        newData[CategoryResult[key]] = { value:0 }
                     }
 
-                    if(this.filter_select.length < 2){
-                        this.filter_select.push(filter_select);
+                    for(let item of result){
+                        newData[item.category_id].value += item[query.filter_key];
                     }
-                    cb(null, this.filter_select);
-                }else{
-                    cb(err);
-                }
-            });
-        },
-        filter_select: [
-            {
-               title: "平台选择",
-               filter_key : 'type',
-               groups: [{
-                   key: ['APP','WAP','PC'],
-                   value: '全部平台'
-               },{
-                   key: 'APP',
-                   value: 'APP'
-               },{
-                   key: 'WAP',
-                   value: 'WAP'
-               },{
-                   key: 'PC',
-                   value: 'PC'
-               }]
-            },
-            {
-                title: '指标选择',
-                filter_key: 'filter_key2',
-                groups: [{
-                    key: 'new_topic_num',
-                    value: '话题'
-                }, {
-                    key: 'new_topic_reply_num',
-                    value: '回复'
-                }, {
-                    key: 'new_topic_like_num',
-                    value: '点赞'
-                }, {
-                    key: 'new_topic_save_num',
-                    value: '收藏'
-                }, {
-                    key: 'new_topic_share_num',
-                    value: '分享'
-                }]
-            }
-        ],
-        filter(data, query, dates, type) {
 
-            return filter.topicsFive(data, query);
+                    let str;
+                    for(let item of topicsFour.groups){
+                        if(item.key == query.filter_key){
+                            str = item.value;
+                        }
+                    }
+
+                    let Return = {
+                        type : "pie",
+                        map : {value : str},
+                        data : newData,
+                        config: {
+                            stack: false
+                        }
+                    };
+                    res.json({
+                        code: 200,
+                        modelData: [Return]
+                    });
+                });
+            });
         }
     });
+
     
+    //热门话题排行TOP100    
     Router = new api(Router,{
         router : "/socialAnalysis/topicsSix",
         modelName : [ "SocialTopicList" , "Statistics", "SocialCategory" ],

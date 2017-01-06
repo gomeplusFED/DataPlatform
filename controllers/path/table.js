@@ -20,6 +20,21 @@ module.exports = {
             ]
         };
     },
+    topic(){
+        return {
+            id: 00234,
+            name: "话题报表",
+            path: "/socialAnalysis/topic",
+            display: true,
+            defaultData : [
+                {
+                    type : "table",
+                    title: "热门话题排行TOP100",
+                    query_api : "/socialAnalysis/topic_ReportOne"
+                }
+            ]
+        }
+    },
     rebate_total() {
         return {
             id : 76,
