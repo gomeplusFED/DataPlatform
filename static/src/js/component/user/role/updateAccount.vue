@@ -321,7 +321,7 @@ var Account = Vue.extend({
 			modifyExportLimited: {}
 		}
 	},
-	props: ['modal', 'loading'],
+	props: ['modal', 'loading', 'type'],
 	components: {
 		'm-pagination': Pagination
 	},
@@ -388,11 +388,31 @@ var Account = Vue.extend({
         	let roleSubPages = _this.modal.subPages ? JSON.parse(_this.modal.subPages) : {};
         	for(let userid of _this.checkedRecords) {
         		let useritem = _this.userListData.find(x => x.id.toString() === userid);
+				let ismodified = false;
 
+				// 平台权限合并
+				let type = JSON.parse(useritem.type || '{}')
+				debugger
+				for(let key of Object.keys(_this.type)) {
+					let item = _this.type[key]
+					if (item.indexOf('1') > -1) {
+						let item2 = (type[key] || '00000').split('')
+						item.split('').forEach((x, i) => {
+							item2[i] = '1'
+						})
+						type[key] = item2.join('')
+					}
+				}
+				let typeStr = JSON.stringify(type)
+				if (typeStr !== useritem.type) {
+					ismodified = true
+					useritem.type = typeStr
+				}
+				
         		let userLimited = (useritem && useritem.limited) ? JSON.parse(useritem.limited) : {};
         		let userExportLimited = (useritem && useritem.export) ? JSON.parse(useritem.export) : {};
         		let usersub_pages = (useritem && useritem.sub_pages) ? JSON.parse(useritem.sub_pages) : {};
-        		let ismodified = false;
+        		
 	        	for (let key in roleLimited) {
 	        		let ul = userLimited[key] || [];
 	        		let rl = roleLimited[key] || [];
@@ -438,7 +458,8 @@ var Account = Vue.extend({
 								id: useritem.id,
 								limited: modifyLimited,
 								export: modifyExportLimited,
-								sub_pages: modifySubPages
+								sub_pages: modifySubPages,
+								type: useritem.type
 							},
 							success: function(data){
 								if(!data.success){
