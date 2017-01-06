@@ -22,17 +22,17 @@
 			<li>
 				<label>查询时间</label>
 				<div class="date_picker">                
-					<m-date :index="index" :page-components-data="pageComponentsData" :component-type="'date_picker'" :argvs.sync='argvs' ></m-date>
+					<m-date :index="index" :page-components-data="pageComponentsData" :component-type="'date_picker'" :argvs.sync='argvs' :custom-option = "datepickerOption"></m-date>
 				</div>
 				<button id="btnSearch" class="btn btn-searchLi-top btn-primary" type="button" data-toggle="popover" data-trigger="focus" @click="queryClick">查询</button>
 			</li>
 			<li style="height:30px;">
 				<label><input type="checkbox" v-model="showSum"></input>总计</label>
-				<input v-show="showSum" class="form-control inp inpW1" type="text" placeholder="" disabled>
+				<input v-show="showSum" class="form-control inp inpW1" type="text" placeholder="" value="PV : {{sum.pv || '-'}}   UV : {{sum.uv || '-'}}" disabled>
 			</li>
 		</ul> 
 	</div>
-	<div class="list-cot list-cot-h list-group">
+	<div class="list-cot list-cot-h list-gro	up">
 		<table class="table table-hover ntable">
 			<thead>
 				<tr>
@@ -51,14 +51,14 @@
 					<td>{{i + baseIndex}}</td>
 					<td>{{item.pointName}}</td>
 					<td>单击</td>
-					<td title="{{item.type}}">{{item.type}}</td>
+					<td title="{{item.type}}">{{item.type === 'block' ? '是' : '否'}}</td>
 					<td title="{{item.pageUrl}}"><a @click="heatmap(item)">{{item.pageUrl}}</a></td>
-					<td title="{{item.PV}}">{{item.PV}}</td>
-					<td title="{{item.UV}}">{{item.UV}}</td>
-					<td><a @click="edit(item)">趋势</a></td>
+					<td title="{{item.PV}}">{{item.pv || '-'}}</td>
+					<td title="{{item.UV}}">{{item.uv || '-'}}</td>
+					<td><a @click="detail(item)">趋势</a></td>
 				</tr>
 				<tr v-show="noData">
-					 <td colspan="7">暂无数据</td>
+					 <td colspan="8">暂无数据</td>
 				 </tr>
 			</tbody>
 		</table>
@@ -66,20 +66,94 @@
 	<div class="panel-footer" v-show="paginationConf.totalItems > paginationConf.itemsPerPage">
 		<m-pagination :pagination-conf="paginationConf"></m-pagination>
 	</div>
+    <div v-show="trend.show" class="modal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                	<button type="button" class="close" @click="trend.show=false">
+						&times;
+					</button>
+					<ul class="nav nav-tabs">
+					    <li role="presentation" class="active"><a href="#tab_chart" data-toggle="tab" aria-expanded="true"><span class="fa fa-line-chart"></span></a></li>
+					    <li role="presentation" class=""><a href="#tab_table" data-toggle="tab" aria-expanded="false"><span class="fa fa-table"></span></a></li>
+					</ul>
+                </div>
+                <div class="modal-body tab-content">
+                	<div id="tab_chart" class="tab-pane active in">
+                		<div v-if="trend.show || trend.chartOption" class="trend-chart" v-echarts="trend.chartOption"></div>
+                	</div>
+                	<div id="tab_table" class="tab-pane fade">
+                		<table class="table table-hover trend-table">
+                			<thead>
+                				<tr>
+                					<th>日期</th>
+                					<th>PV</th>
+                					<th>UV</th>
+                				</tr>
+                			</thead>
+            				<tbody>
+            					<tr v-for="item of trend.data">
+            						<td>{{item.date}}</td>
+            						<td>{{item.pv}}</td>
+            						<td>{{item.uv}}</td>
+            					</tr>
+            				</tbody>
+                		</table>
+                	</div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 </template>
 <script>
 	var Vue = require('Vue');
 	var $ = require('jQuery');
-	var DatePicker = require('../../common/datePicker.vue');
+	var DatePicker = require('common/datePicker.vue');
 	var store = require('store');
 	var actions = require('actions');
-	var Pagination = require('../../common/pagination.vue');
-	var api = require('./mock/api.js');
+	var Pagination = require('common/pagination.vue');
+	var api = require('./lib/api.js');
 	var utils = require('utils');
-	
+	var defaultChartOption = {
+	    tooltip: {
+	        trigger: 'axis'
+	    },
+	    legend: {
+	    	show: true,
+	    	bottom: 10,
+	        data:['PV', 'UV']
+	    },
+	    grid: {
+	    	top: 10,
+	        left: '3%',
+	        right: '4%',
+	        bottom: '13%',
+	        containLabel: true
+	    },
+	    xAxis: {
+	        type: 'category',
+	        boundaryGap: false,
+	        data: []
+	    },
+	    yAxis: {
+	        type: 'value'
+	    },
+	    series: [
+	        {
+	            name:'PV',
+	            type:'line',
+	            data:[]
+	        },
+	        {
+	            name:'UV',
+	            type:'line',
+	            data:[]
+	        }
+	    ]
+	};
 	var databp = Vue.extend({
-		name: 'bpmanage',
+		name: 'bpstats',
 		components: {
 			'm-pagination': Pagination,
 			'm-date': DatePicker
@@ -94,8 +168,22 @@
 			return {
 				index: 1,
 				noData: false,
-				showSum: null,
-				argvs: {},
+				showSum: false,
+				sum: {pv: -1, uv: -1},
+				argvs: {
+					// 注意此时时间选取控件尚未初始化
+					startTime: utils.formatDate(new Date(), 'yyyy-MM-dd'),
+					endTime: utils.formatDate((() => {
+						let date = new Date();
+						date.setDate(date.getDate() - 7);
+						return date;
+					})(), 'yyyy-MM-dd')
+				},
+				trend: {
+					show: false,
+					data: null,
+					chartOption: null
+				},
 				paginationConf: {
 					currentPage: 1,     // 当前页
 					totalItems: 0,     // 总条数
@@ -104,6 +192,9 @@
 					onChange: () => {
 						this.query();
 					}
+				},
+				datepickerOption: {
+					opens: 'right'
 				},
 				pageComponentsData: {
 					date_picker: {
@@ -137,12 +228,14 @@
 		methods: {
 			query() {
 				this.loading.show = true;
-				let options = Object.assign({
+				Object.assign(this.searchParam, {
 					// page从0开始
 					page: this.paginationConf.currentPage - 1,
-					size: this.paginationConf.itemsPerPage
-				}, this.searchParam);
-				api.listBps(options).then((res) => {
+					size: this.paginationConf.itemsPerPage,
+					startTime: this.argvs.startTime + ' 00:00:00',
+					endTime: this.argvs.endTime + ' 23:59:59'
+				});
+				api.getHeatList(this.searchParam).then((res) => {
 					this.dataList = res.data;
 					if (this.dataList.length === 0) {
 						 this.noData = true;
@@ -186,12 +279,30 @@
 				this.paginationConf.currentPage = 1;
 				this.query();
 			},
-			edit(item) {
-				let {pageUrl, pointName, pointParam, selector, platform, type} = item;
-				this.$router.go({
-					path: '/databp/visualbp',
-					query: {pageUrl, pointName, pointParam, selector, platform, type}
-				}); 
+			detail(item) {
+				// fetch detail data
+				api.getHeatDetail(item).then((data) => {
+					// show modal
+					this.trend.show = window.location.href.startsWith('http://localhost');
+					// build chart option
+					let xdata = [];
+					let pvdata = [];
+					let uvdata = [];
+					for(let item of data) {
+						// parse the date to string
+						item.date = utils.formatDate(new Date(item.date), 'yyyy-MM-dd');
+						xdata.push(item.date);
+						pvdata.push(item.pv);
+						uvdata.push(item.uv);
+					}
+					// store the data
+					this.trend.data = data;
+					let chartOption = Object.assign({}, defaultChartOption);
+					chartOption.xAxis.data = xdata;
+					chartOption.series[0].data = pvdata;
+					chartOption.series[1].data = uvdata;
+					this.trend.chartOption = chartOption;
+				});
 			},
 			heatmap(item) {
 				let {pageUrl, platform} = item;
@@ -202,12 +313,48 @@
 			}
 		},
 		watch: {
+			'showSum' :{
+				handler(val) {
+					if (val) {
+						api.getHeatSum(this.searchParam).then((data) => {
+							this.sum = data;
+						});
+					} else {
+						this.sum.pv = -1;
+						this.sum.uv = -1;
+					}
+				}  
+			}
 		}
 	});
 
 	module.exports = databp;
 </script>
 <style scoped>
+	.modal-body {
+		height: 450px;
+	}
+	.trend-chart {
+		width:100%;
+		height:410px;
+		overflow: hidden;
+	}
+	.modal .nav-tabs {
+		border: none;
+	}
+	.modal-header {
+		padding-bottom: 0;
+	}
+	.trend-table {
+	    width: 800px;
+	    margin: 20px auto;
+	}
+	.trend-table th, .trend-table td {
+		text-align: center;
+		border: 1px solid #d6d6d6 !important;
+		border-top: 1px solid #d6d6d6;
+		font-weight: normal;
+	}
 	.bp-container {
 		height: 100% !important;
 		min-height: 600px;
@@ -269,7 +416,7 @@
 		margin-right: 4px;
 	}
 	.nform-box li .btn-searchLi-top {
-		margin: 0 13px 0 235px;
+		margin: 0 13px 0 540px;
 	    width: 80px;
 	}
 
@@ -308,9 +455,7 @@
 	.ntable tr:nth-child(odd) {
 	    background-color: #f2faff;
 	}
-	.ntable tr th:nth-child(3) {
-		width: 50px;
-	}
+
 	.ntable tr th:first-child {
 		width: 50px;
 	}
@@ -320,13 +465,16 @@
 	.ntable tr th:first-child {
 		width: 5%
 	}
+	.ntable tr th:nth-child(3) {
+		width: 50px;
+	}
 	.ntable tr th:nth-child(4) {
-		width: 300px;
+		width: 100px;
 	}
 	.ntable tr th:nth-child(5) {
-		width: 200px;
+		width: 250px;
 	}
-	.ntable tr th:nth-child(7) {
+	.ntable tr th:nth-child(8) {
 		width: 80px;
 	}
 	.ntable tr td {

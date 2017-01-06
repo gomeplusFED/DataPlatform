@@ -30,7 +30,7 @@
 	var $ = require('jQuery');
 	var getSelector = require('./lib/selector.js').getSelector;
 	var api = require('./lib/api.js');
-	var Alert = require('../../common/alert.vue');
+	var Alert = require('common/alert.vue');
 	var bpInfo = require('./bpinfo.vue');
 	
 	var visualbp = Vue.extend({
@@ -51,8 +51,7 @@
 					platform: 'PC',
 					pageUrl: '',
 					selector:'',
-					privateParam: '',
-					publicParam: ''
+					type: 'point'
 				}
 			}
 		},
@@ -81,6 +80,9 @@
 				let platform = query.platform;
 				if (pageUrl && platform) {
 					if(query.selector) {
+						this.bpConfig.selector = query.selector;
+						this.bpConfig.type = query.type;
+						this.bpConfig.pointName = query.pointName;
 						this.trigger();
 						// actions.databp(store, query);
 					}
@@ -94,6 +96,11 @@
 			trigger() {
 				this.bpConfig.trigger = !this.bpConfig.trigger;
 				this.bpConfig.show = true;
+			},
+			resetConfig() {
+				this.bpConfig.pointName = '';
+				this.bpConfig.selector = '';
+				this.bpConfig.type = 'point';
 			},
 			iframeload() {
 				// console.log('load');
@@ -149,6 +156,7 @@
 							selected.addClass('bphover-position-fix');
 						}
 						selected.addClass('bphover');
+						_this.resetConfig();
 						_this.bpConfig.selector = selector;
 						_this.trigger();
 						// actions.databp(store, _this.bpConfig);

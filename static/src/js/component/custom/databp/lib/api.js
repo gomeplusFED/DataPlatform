@@ -1,8 +1,9 @@
 var store = require('store');
 var actions = require('actions');
 var $ = require('jQuery');
-const baseurl = 'http://10.69.10.13:8080/bomber-pie';
-// const baseurl = 'http://10.69.112.146:38080/bomber-pie'
+
+const baseurl = window.location.href.startsWith('http://bi.') ? 
+'http://api.point.bi.pre.gomeplus.com/bomber-pie' : 'http://10.69.10.20:8088/bomber-pie'
 // 请求失败 重试一次
 const RETRY_TIMES = 2;
 
@@ -94,7 +95,7 @@ var api = {
 		}).catch(errHandler);
 	},
 	getBp(data) {
-		return buildAjax('/point', filterArgs(data, ['pageUrl', 'selector', 'platform', 'pointId', 'type'])).then(extractResult).then(function(res){
+		return buildAjax('/point', filterArgs(data, ['pageUrl', 'selector', 'platform', 'pointId'])).then(extractResult).then(function(res){
 			// 从私有埋点中去除公共埋点	
 			//let tmppub = res.publicParam.split('&');
 			//let tmppri = res.privateParam;
@@ -110,7 +111,11 @@ var api = {
 	},
 	// {pageUrl, selector, pointName, platform, pointId, matchUrlId, pattern, publicParam, privateParam}
 	updateBp(data) {
-		return buildAjax('/point', filterArgs(data, ['pageUrl', 'selector', 'pointName', 'platform', 'pointId', 'matchUrlId', 'pattern', 'publicParam', 'privateParam', 'userInfo', 'type']), 'put').then(extractResult).catch(errHandler).then(function(res) {
+		return buildAjax('/point', filterArgs(data, ['pageUrl', 'selector', 'pointName', 'platform', 'pointId', 'matchUrlId', 'pattern', 'publicParam', 'privateParam', 'userInfo', 'type']), 'put').then((res) => {
+			if(res.code !== '200' || res.iserror !== '0') {
+				return Promise.reject('更新失败：' + res.msg);
+			}
+		}).catch(errHandler).then(function(res) {
 			actions.alert(store, {
 				show: true,
 				msg: '更新成功',
@@ -129,8 +134,9 @@ var api = {
 		});
 	},
 	// {pointId, matchUrlId}
-	deleteBp(id) {
-		return buildAjax('/point?pointId='+ id, null, 'delete').then(function(res) {
+	deleteBp({pointId, type}) {
+
+		return buildAjax(`/point?pointId=${pointId}&type=${type}`, null, 'delete').then(function(res) {
 			if(res.code !== '200' || res.iserror !== '0') {
 				return Promise.reject('删除失败：' + res.msg);
 			}
@@ -167,6 +173,48 @@ var api = {
 				}
 			} else {
 				return Promise.reject('获取的埋点信息为空');
+			}
+		}).catch(errHandler);
+	},
+	getHeatList(data) {
+		return buildAjax('/pointHeatList', filterArgs(data, ['pageUrl', 'platform', 'pointName', 'page', 'size', 'startTime', 'endTime', 'pattern', 'isActive', 'type'])).then(function(res) {
+			if(res.code !== '200' || res.iserror !== '0') {
+				return Promise.reject('获取热力列表信息失败：' + res.msg);
+			}
+			var data;
+			if (res && (data = res.data) && (data = data.result)) {
+				return {
+					data,
+					total: res.data.total
+				}
+			} else {
+				return Promise.reject('获取的热力列表信息为空');
+			}
+		}).catch(errHandler);
+	},
+	getHeatSum(data) {
+		return buildAjax('/pointHeatList/total', filterArgs(data, ['pageUrl', 'platform', 'pointName', 'page', 'size', 'startTime', 'endTime', 'pattern', 'isActive', 'type'])).then(function(res) {
+			if(res.code !== '200' || res.iserror !== '0') {
+				return Promise.reject('获取热力总计信息失败：' + res.msg);
+			}
+			var data;
+			if (res && (data = res.data) && (data = data.result)) {
+				return data;
+			} else {
+				return Promise.reject('获取的热力总计信息为空');
+			}
+		}).catch(errHandler);
+	},
+	getHeatDetail(data) {
+		return buildAjax('/pointHeatList/detail', filterArgs(data, ['pageUrl', 'platform', 'pointId', 'startTime', 'endTime', 'pattern', 'isActive', 'type'])).then(function(res) {
+			if(res.code !== '200' || res.iserror !== '0') {
+				return Promise.reject('获取热力趋势信息失败：' + res.msg);
+			}
+			var data;
+			if (res && (data = res.data) && (data = data.result) && (data.length)) {
+				return data;
+			} else {
+				return Promise.reject('获取的热力趋势信息为空');
 			}
 		}).catch(errHandler);
 	},

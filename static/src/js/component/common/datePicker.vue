@@ -39,7 +39,7 @@ var DateCom = Vue.extend({
             validlist: [ '/custom/saveActivity', '/databp/bpmanage', '/databp/heatmap' ]
         }
     },
-    props: ['index','pageComponentsData','componentType','argvs','initData', 'cancelDateLimit', 'isGlobal'],
+    props: ['index','pageComponentsData','componentType','argvs','initData', 'cancelDateLimit', 'isGlobal', 'customOption'],
     ready: function() {
        
     },
@@ -104,6 +104,9 @@ var DateCom = Vue.extend({
                 // 取消日期限制
                 if(this.cancelDateLimit) {
                     options.dateLimit = null;
+                }
+                if(this.customOption) {
+                    Object.assign(options, this.customOption);
                 }
                 $('#datePicker_' + this.index).find('input').daterangepicker(options);
                 $('#datePicker_' + this.index).find('input').on('cancel.daterangepicker',function(ev, picker){

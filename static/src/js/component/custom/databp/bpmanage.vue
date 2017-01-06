@@ -26,15 +26,15 @@
 				<label>是否模块</label>
 				<select class="form-control inp inpW2" v-model="searchParam.type">
 					<option value=''>全部</option>
-					<option value='0'>模块</option>
-					<option value='0'>单点</option>
+					<option value='block'>模块</option>
+					<option value='point'>单点</option>
 				</select>
 
 			</li>
 			<li>
 				<label><input type="checkbox" v-model="showDate"></input>起止时间</label>
 				<div class="date_picker">                
-					<m-date :index="index" :page-components-data="pageComponentsData" :component-type="'date_picker'" :argvs.sync='argvs' diasbled></m-date>
+					<m-date :index="index" :page-components-data="pageComponentsData" :component-type="'date_picker'" :argvs.sync='argvs' :custom-option="datepickerOption" diasbled></m-date>
 				</div>
 
 				<button id="btnSearch" class="btn btn-searchLi-top btn-primary" type="button" data-toggle="popover" data-trigger="focus" @click="queryClick">查询</button>
@@ -67,7 +67,7 @@
 					<td title="{{item.pointParam}}">{{item.pointParam}}</td>
 					<td title="{{item.userInfo?(item.userInfo.department + item.userInfo.email) : '--'}}">{{item.userInfo.name || '--'}}</td>
 					<td>{{item.updateTime |Date 'yyyy-MM-dd hh:mm:ss'}}</td>
-					<td><a @click="edit(item)">修改</a>&nbsp<a v-if="item.isActive === '1'" @click="del(item.pointId)">删除</a><a v-else @click="restore(item.pointId)">恢复</a></td>
+					<td><a @click="edit(item)">修改</a>&nbsp<a v-if="item.isActive === '1'" @click="del(item)">删除</a><a v-else @click="restore(item.pointId)">恢复</a></td>
 				</tr>
 				<tr v-show="noData">
 					 <td colspan="7">暂无数据</td>
@@ -83,11 +83,11 @@
 <script>
 	var Vue = require('Vue');
 	var $ = require('jQuery');
-	var DatePicker = require('../../common/datePicker.vue');
-	var store = require('../../../store/store.js');
-	var actions = require('../../../store/actions.js');
-	var Pagination = require('../../common/pagination.vue');
-	var api = require('./mock/api.js');
+	var DatePicker = require('common/datePicker.vue');
+	var store = require('store');
+	var actions = require('actions');
+	var Pagination = require('common/pagination.vue');
+	var api = require('./lib/api.js');
 	var utils = require('utils');
 	
 	var databp = Vue.extend({
@@ -116,6 +116,9 @@
 					onChange: () => {
 						this.query();
 					}
+				},
+				datepickerOption: {
+					opens: 'right'
 				},
 				pageComponentsData: {
 					date_picker: {
@@ -175,13 +178,13 @@
 					this.loading.show = false;
 				});
 			},
-			del(id) {
+			del(item) {
 				actions.confirm(store, {
 					show: true,
 					title: '删除确认',
 					msg: '确定删除吗',
 					apply: () => {
-						api.deleteBp(id).then(() =>{
+						api.deleteBp(item).then(() =>{
 							this.query()
 						});
 						
