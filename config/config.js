@@ -288,6 +288,7 @@ const Config = {
             path: [
                 obj.databp.visualbp(),
                 obj.databp.bpmanage(),
+                obj.databp.bpstats(),
                 obj.databp.spread()
 
             ]
