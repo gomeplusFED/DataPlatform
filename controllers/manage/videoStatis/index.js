@@ -368,7 +368,7 @@ module.exports = (Router) => {
         },
         firstSql(query, params, isCount) {
             let date_type_list = ['', 'DAY', 'WEEK', 'MONTH']
-            let config = ["a.date BETWEEN ? AND ?", "a.day_type=?"],
+            let config = ["date BETWEEN ? AND ?", "day_type=?"],
                 param = [query.startTime, query.endTime, query.day_type || 1],
                 sql = '',
                 tablename = 'ads2_videoplay_overview2';
@@ -377,9 +377,19 @@ module.exports = (Router) => {
                 tablename = query.type === 'livevideo' ? 'ads2_livevideo_overview2' : 'ads2_videoplay_overview2'
             }
 
+            if (query.ver && query.ver!=='ALL') {
+                config.push('ver=?')
+                param.push(query.ver)
+            }
+
+            if (query.sdk_type && query.sdk_type!=='ALL') {
+                config.push('sdk_type = ?')
+                param.push(query.sdk_type)
+            }
+
             sql = `SELECT *
                 FROM ${tablename} 
-                WHERE day_type=1 and ${config.join(" AND ")}`;
+                WHERE day_type=1 and ${config.join(" AND ")} group by date,sdk_type order by date desc`;
 
             return {
                 sql: sql,
@@ -397,14 +407,12 @@ module.exports = (Router) => {
                 }]
             };
 
-            req.models.AdsKeyValue.find({
-                "key_name": "video_version"
-            }, (err, data) => {
+            req.models.ads2_videoplay_overview2.find({}, (err, data) => {
                 if (!err) {
                     for (var key of data) {
                         var obj = {
-                            key: key.values1,
-                            value: key.values1
+                            key: key.ver,
+                            value: key.ver
                         }
                         if (filter_select.groups.every(x => x.key !== obj.key)) {
                             filter_select.groups.push(obj);
@@ -424,7 +432,7 @@ module.exports = (Router) => {
         filter_select: [
             {
                 title: "SDK选择",
-                filter_key: "sdk_app_type",
+                filter_key: "sdk_type",
                 groups: [
                     {
                         key: "ALL",
@@ -451,38 +459,34 @@ module.exports = (Router) => {
         rows: [
             [
                 "date",
-                "sdk_app_type",
+                "sdk_type",
                 "ver",
-                "sid_num",
-                "5",
+                "play_user",
+                "play_num",
 
                 //健康播放统计
                 "port_succ",
+                "port_succ_ratio",
                 "start_frame_succ",
+                "start_frame_succ_ratio",
                 "stop_play_num",
+                "stop_play_num_ratio",
                 "play_fluent",
-
-                //健康播放概率
-                "port_succ_lv",
-                "start_frame_succ_lv",
-                "stop_play_num_lv",
-                "play_fluent_lv",
+                "play_fluent_ratio",
 
                 //错误播放统计
                 "port_io_failed",
+                "port_io_failed_ratio",
                 "port_data_failed",
+                "port_data_failed_ratio",
                 "port_overtime",
+                "port_overtime_ratio",
                 "play_failed",
+                "play_failed_ratio",
                 "play_error",
+                "play_error_ratio",
                 "improper_play",
-
-                //错误播放概率
-                "port_io_failed_lv",
-                "port_data_failed_lv",
-                "port_overtime_lv",
-                "play_failed_lv",
-                "play_error_lv",
-                "improper_play_lv",
+                "improper_play_ratio"
             ]
         ],
         cols: [
@@ -826,6 +830,11 @@ module.exports = (Router) => {
         modelName: ["VideoPlay"],
         platform: false,
         control_table_col: false,
+        excel_export: true,
+        flexible_btn: [{
+            content: '<a href="javascript:void(0)">导出</a>',
+            preMethods: ["excel_export"]
+        }],
         filter(data, query, dates, type) {
             return filter.videoKpiThree(data, query, dates);
         },

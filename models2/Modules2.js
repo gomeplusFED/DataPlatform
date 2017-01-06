@@ -147,9 +147,16 @@ module.exports = {
     //返利   END --------------
 
     
-    //o2o店铺
+    // O2M店铺
     ads2_o2m_shop_trade_info : {
         modelName : "ads2_o2m_shop_trade_info"
+    },
+    // 视频统计
+    ads2_videoplay_overview2: {
+        modelName: 'ads2_videoplay_overview2'
+    },
+    ads2_livevideo_overview2: {
+        modelName: 'ads2_livevideo_overview2'
     }
 };
 

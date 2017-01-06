@@ -238,7 +238,7 @@ module.exports = {
     },
 
     videoFour(data, query, dates) {
-        var source = data.first.data[0],
+        var source = data.first.data,
             count = data.first.count;
 
         var RowsOther = [
@@ -267,10 +267,8 @@ module.exports = {
             }
             item.date = util.getDate(item.date);
 
-            item["5"] = util.percentage(item.health_play, item.sid_num) + "%";
-
             for (let key of RowsOther) {
-                item[key + "_lv"] = util.percentage(item[key], item.sid_num) + "%";
+                item[key + "_ratio"] = util.toFixedLength(item[key], item.play_num) + "%";
             }
 
             if (!ArrObj[item.date][item.sdk_app_type]) ArrObj[item.date][item.sdk_app_type] = [];
@@ -287,7 +285,7 @@ module.exports = {
             }
         }
 
-        var merge = util.mergeCell(EndArr, ["date", "sdk_app_type"]);
+        var merge = util.mergeCell(EndArr, ["date"]);
 
         return util.toTable([EndArr], data.rows, data.cols, {
             count: [count],
@@ -317,6 +315,7 @@ module.exports = {
         }
         if (second) {
             let source = second
+            let cols = ['port_succ', 'start_frame_succ', 'stop_play_num', 'play_fluent']
             data2 = [
                 {
                     index: '数值',
@@ -327,22 +326,19 @@ module.exports = {
                 },
                 {
                     index: '概率',
-                    port_succ: util.toFixedLength(source.port_succ, source.play_num, 4),
-                    start_frame_succ: util.toFixedLength(source.start_frame_succ, source.play_num, 4),
-                    stop_play_num: util.toFixedLength(source.stop_play_num, source.play_num, 4),
-                    play_fluent: util.toFixedLength(source.play_fluent, source.play_num, 4)
                 },
                 {
                     index: '环比',
-                    port_succ: Chain(source.port_succ, source.port_succ_pre),
-                    start_frame_succ: Chain(source.start_frame_succ, source.start_frame_succ_pre),
-                    stop_play_num: Chain(source.stop_play_num, source.stop_play_num_pre),
-                    play_fluent: Chain(source.play_fluent, source.play_fluent_pre),
                 }
             ]
+            cols.forEach(col => {
+                data2[1][col] = util.toFixedLength(source[col], source.play_num, 4)
+                data2[2][col] = Chain(source[col], source[col+'_pre'])
+            })
         }
         if (third) {
             let source = third
+            let cols = ['port_io_failed', 'port_data_failed', 'port_overtime', 'play_failed', 'play_error', 'improper_play']
             data3 = [
                {
                     index: '数值',
@@ -355,23 +351,15 @@ module.exports = {
                 },
                  {
                     index: '概率',
-                    port_io_failed: util.toFixedLength(source.port_io_failed, source.play_num, 4),
-                    port_data_failed: util.toFixedLength(source.port_data_failed, source.play_num, 4),
-                    port_overtime: util.toFixedLength(source.port_overtime, source.play_num, 4),
-                    play_failed: util.toFixedLength(source.play_failed, source.play_num, 4),
-                    play_error: util.toFixedLength(source.play_error, source.play_num, 4),
-                    improper_play: util.toFixedLength(source.improper_play, source.play_num, 4)
                 },
                 {
                     index: '环比',
-                    port_io_failed: Chain(source.port_io_failed, source.port_io_failed_pre),
-                    port_data_failed: Chain(source.port_data_failed, source.port_data_failed_pre),
-                    port_overtime: Chain(source.port_overtime, source.port_overtime_pre),
-                    play_failed: Chain(source.play_failed, source.play_failed_pre),
-                    play_error: Chain(source.play_error, source.play_error_pre),
-                    improper_play: Chain(source.improper_play, source.improper_play_pre),
                 }
             ]
+            cols.forEach(col => {
+                data3[1][col] = util.toFixedLength(source[col], source.play_num, 4)
+                data3[2][col] = Chain(source[col], source[col+'_pre'])
+            })
         }
 
         return util.toTable([data1, data2, data3], data.rows, data.cols, [count1, count2, count3], [true, false, false]);
@@ -494,18 +482,12 @@ module.exports = {
             improper_play: '非正常播放数',
             improper_play_ratio: '非正常播放率'
         }]
+        let cols = ['port_succ', 'start_frame_succ', 'stop_play_num', 'play_fluent', 'port_io_failed', 'port_data_failed', 'port_overtime', 'play_failed', 'play_error', 'improper_play']
         source.forEach(x => {
             x.date = moment(x.date).format('MM月DD日')
-            x.port_succ_ratio = util.toFixedLength(x.port_succ, x.play_num, 4)
-            x.start_frame_succ_ratio = util.toFixedLength(x.start_frame_succ, x.play_num, 4)
-            x.stop_play_num_ratio = util.toFixedLength(x.stop_play_num, x.play_num, 4)
-            x.play_fluent_ratio = util.toFixedLength(x.play_fluent, x.play_num, 4)
-            x.port_io_failed_ratio = util.toFixedLength(x.port_io_failed, x.play_num, 4)
-            x.port_data_failed_ratio = util.toFixedLength(x.port_data_failed, x.play_num, 4)
-            x.port_overtime_ratio = util.toFixedLength(x.port_overtime, x.play_num, 4)
-            x.play_failed_ratio = util.toFixedLength(x.play_failed, x.play_num, 4)
-            x.play_error_ratio = util.toFixedLength(x.play_error, x.play_num, 4)
-            x.improper_play_ratio = util.toFixedLength(x.improper_play, x.play_num, 4)
+            cols.forEach(col => {
+                x[col+'_ratio'] =  util.toFixedLength(x[col], x.play_num, 4)
+            })
 
             data2.push(x)
         })
