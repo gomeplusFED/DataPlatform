@@ -37,7 +37,7 @@ module.exports = {
             defaultData : [
                 {
                     type : "table",
-                    title: "多端统计",
+                    title: "版本统计",
                     query_api : "/videoStatis/videoFour"
                 }
             ]

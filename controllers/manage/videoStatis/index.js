@@ -345,7 +345,7 @@ module.exports = (Router) => {
 
     Router = new api(Router, {
         router: "/videoStatis/videoFour",
-        modelName: ["VideoPlay"],
+        modelName: ["W"],
         platform: false,
         paging: [false],
         order: ["-date"],
@@ -354,14 +354,47 @@ module.exports = (Router) => {
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ["excel_export"]
         }],
-        params: function (query, params, sendData) {
-            if (params.ver == "ALL") {
-                delete params.ver;
+        global_platform: {
+            show: true,
+            key: 'type',
+            name: '视频类型: ',
+            list: [{
+                key: 'videoplay',
+                name: '点播'
+            }, {
+                key: 'livevideo',
+                name: '直播'
+            }]
+        },
+        firstSql(query, params, isCount) {
+            let date_type_list = ['', 'DAY', 'WEEK', 'MONTH']
+            let config = ["date BETWEEN ? AND ?", "day_type=?"],
+                param = [query.startTime, query.endTime, query.day_type || 1],
+                sql = '',
+                tablename = 'ads2_videoplay_overview2';
+
+            if (query.type) {
+                tablename = query.type === 'livevideo' ? 'ads2_livevideo_overview2' : 'ads2_videoplay_overview2'
             }
-            if (params.sdk_app_type == "ALL") {
-                params.sdk_app_type = ["ios", "android", "h5_custom", "h5_native", "flash"];
+
+            if (query.ver && query.ver!=='ALL') {
+                config.push('ver=?')
+                param.push(query.ver)
             }
-            return params;
+
+            if (query.sdk_type && query.sdk_type!=='ALL') {
+                config.push('sdk_type = ?')
+                param.push(query.sdk_type)
+            }
+
+            sql = `SELECT *
+                FROM ${tablename} 
+                WHERE day_type=1 and ${config.join(" AND ")} group by date,sdk_type order by date desc`;
+
+            return {
+                sql: sql,
+                params: param
+            };
         },
         //初始化一级分类选项
         selectFilter(req, cb) {
@@ -374,16 +407,16 @@ module.exports = (Router) => {
                 }]
             };
 
-            req.models.AdsKeyValue.find({
-                "key_name": "video_version"
-            }, (err, data) => {
+            req.models.ads2_videoplay_overview2.find({}, (err, data) => {
                 if (!err) {
                     for (var key of data) {
                         var obj = {
-                            key: key.values1,
-                            value: key.values1
+                            key: key.ver,
+                            value: key.ver
                         }
-                        filter_select.groups.push(obj);
+                        if (filter_select.groups.every(x => x.key !== obj.key)) {
+                            filter_select.groups.push(obj);
+                        }
                     }
                     if (this.filter_select[1]) {
                         this.filter_select[1] = filter_select;
@@ -399,7 +432,7 @@ module.exports = (Router) => {
         filter_select: [
             {
                 title: "SDK选择",
-                filter_key: "sdk_app_type",
+                filter_key: "sdk_type",
                 groups: [
                     {
                         key: "ALL",
@@ -426,38 +459,34 @@ module.exports = (Router) => {
         rows: [
             [
                 "date",
-                "sdk_app_type",
+                "sdk_type",
                 "ver",
-                "sid_num",
-                "5",
+                "play_user",
+                "play_num",
 
                 //健康播放统计
                 "port_succ",
+                "port_succ_ratio",
                 "start_frame_succ",
+                "start_frame_succ_ratio",
                 "stop_play_num",
+                "stop_play_num_ratio",
                 "play_fluent",
-
-                //健康播放概率
-                "port_succ_lv",
-                "start_frame_succ_lv",
-                "stop_play_num_lv",
-                "play_fluent_lv",
+                "play_fluent_ratio",
 
                 //错误播放统计
                 "port_io_failed",
+                "port_io_failed_ratio",
                 "port_data_failed",
+                "port_data_failed_ratio",
                 "port_overtime",
+                "port_overtime_ratio",
                 "play_failed",
+                "play_failed_ratio",
                 "play_error",
+                "play_error_ratio",
                 "improper_play",
-
-                //错误播放概率
-                "port_io_failed_lv",
-                "port_data_failed_lv",
-                "port_overtime_lv",
-                "play_failed_lv",
-                "play_error_lv",
-                "improper_play_lv",
+                "improper_play_ratio"
             ]
         ],
         cols: [
@@ -469,111 +498,83 @@ module.exports = (Router) => {
                     caption: "SDK类型",
                     type: "string"
                 }, {
-                    caption: "版本号",
+                    caption: "版本",
+                    type: "string"
+                }, {
+                    caption: "播放用户数",
                     type: "string"
                 }, {
                     caption: "播放次数",
-                    type: "number",
-                    help: "某视频只要播放过次数"
-                }, {
-                    caption: "健康播放概率",
-                    type: "string",
+                    type: "number"
                 },
 
                 //健康播放统计
                 {
-                    caption: "接口成功数",
-                    type: "number",
-                    help: "视频请求play接口成功"
-                }, {
+                    caption: "play接口成功数",
+                    type: "number"
+                },  {
+                    caption: "play接口成功率",
+                    type: "string"
+                },{
                     caption: "首帧成功数",
-                    type: "number",
-                    help: "视频获取首帧成功"
-                }, {
-                    caption: "卡顿播放次数",
-                    type: "number",
-                    help: "视频卡的视频"
-                }, {
-                    caption: "播放流畅数",
-                    type: "number",
-                    help: "视频一次没有卡的视频"
-                },
-
-                //健康播放概率
-                {
-                    caption: "接口成功率",
-                    type: "string",
-                    help: "视频请求play接口成功"
+                    type: "number"
                 }, {
                     caption: "首帧成功率",
-                    type: "string",
-                    help: "视频获取首帧成功"
-                }, {
+                    type: "string"
+                },{
+                    caption: "卡顿播放次数",
+                    type: "number"
+                },{
                     caption: "卡顿播放率",
-                    type: "string",
-                    help: "视频卡的视频"
+                    type: "string"
+                }, {
+                    caption: "播放流畅数",
+                    type: "number"
                 }, {
                     caption: "播放流畅率",
-                    type: "string",
-                    help: "视频一次没有卡的视频"
+                    type: "string"
                 },
-
                 //错误播放统计
                 {
-                    caption: "接口IO错误数",
+                    caption: "play接口IO错误数",
                     type: "number",
-                    help: "视频play接口io错误"
                 }, {
-                    caption: "接口数据错误数",
-                    type: "number",
-                    help: "视频play接口数据错误"
+                    caption: "play接口IO错误率",
+                    type: "string",
                 }, {
-                    caption: "接口超时数",
+                    caption: "play接口数据错误数",
                     type: "number",
-                    help: "视频play接口超时"
+                }, {
+                    caption: "play接口数据错误率",
+                    type: "string",
+                }, {
+                    caption: "play接口超时数",
+                    type: "number",
+                },{
+                    caption: "play接口超时率",
+                    type: "string",
                 }, {
                     caption: "播放失败数",
                     type: "number",
-                    help: "播放视频渲染失败的视频"
+                },{
+                    caption: "播放失败率",
+                    type: "string",
                 }, {
                     caption: "视频错误数",
                     type: "number",
-                    help: "视频出现错误等级error的视频"
+                },{
+                    caption: "视频错误率",
+                    type: "string",
                 }, {
                     caption: "非正常播放数",
                     type: "number",
-                    help: "视频出现错误等级warn的视频"
-                },
-
-                //错误播放概率
-                {
-                    caption: "接口IO错误率",
-                    type: "string",
-                    help: "视频play接口io错误"
-                }, {
-                    caption: "接口数据错误率",
-                    type: "string",
-                    help: "视频play接口数据错误"
-                }, {
-                    caption: "接口超时率",
-                    type: "string",
-                    help: "视频play接口超时"
-                }, {
-                    caption: "播放失败率",
-                    type: "string",
-                    help: "播放视频渲染失败的视频"
-                }, {
-                    caption: "视频错误率",
-                    type: "string",
-                    help: "视频出现错误等级error的视频"
                 }, {
                     caption: "非正常播放率",
                     type: "string",
-                    help: "视频出现错误等级warn的视频"
                 }
             ]
         ],
-        control_table_col: true,
+        control_table_col: false,
         /*filter_select : [
             {
                 title : "指标",
@@ -612,7 +613,7 @@ module.exports = (Router) => {
         },
         firstSql(query, params, isCount) {
             let date_type_list = ['', 'DAY', 'WEEK', 'MONTH']
-            let config = ["a.date BETWEEN ? AND ?", "a.day_type=?"],
+            let config = ["date BETWEEN ? AND ?", "day_type=?"],
                 param = [query.startTime, query.endTime, query.day_type || 1],
                 sql = '',
                 tablename = 'ads2_videoplay_overview2';
@@ -621,10 +622,8 @@ module.exports = (Router) => {
                 tablename = query.type === 'livevideo' ? 'ads2_livevideo_overview2' : 'ads2_videoplay_overview2'
             }
 
-            sql = `SELECT a.play_user, a.play_num, b.play_user as play_user_pre, b.play_num as play_num_pre
-                FROM ${tablename} a 
-                LEFT JOIN ${tablename} b 
-                on a.day_type = b.day_type and b.date = DATE_ADD(a.date,INTERVAL -1 ${date_type_list[query.day_type || 1]})
+            sql = `SELECT sum(play_user) as play_user, sum(play_num) as play_num
+                FROM ${tablename} 
                 WHERE ${config.join(" AND ")}`;
 
             return {
@@ -643,7 +642,7 @@ module.exports = (Router) => {
                 tablename = query.type === 'livevideo' ? 'ads2_livevideo_overview2' : 'ads2_videoplay_overview2'
             }
             sql = `SELECT 
-                    a.play_num, a.port_succ, a.start_frame_succ, a.stop_play_num, a.play_fluent,
+                    sum(a.play_num) as play_num, sum(a.port_succ) as port_succ, sum(a.start_frame_succ) as start_frame_succ, sum(a.stop_play_num) as stop_play_num, sum(a.play_fluent) as play_fluent,
                     b.port_succ as port_succ_pre, b.start_frame_succ as start_frame_succ_pre, b.stop_play_num as stop_play_num_pre, b.play_fluent as play_fluent_pre
                         FROM ${tablename} a
                          LEFT JOIN ${tablename} b 
@@ -665,7 +664,7 @@ module.exports = (Router) => {
                 tablename = query.type === 'livevideo' ? 'ads2_livevideo_overview2' : 'ads2_videoplay_overview2'
             }
             sql = `SELECT 
-                    a.play_num, a.port_io_failed, a.port_data_failed, a.port_overtime, a.port_overtime, a.play_failed, a.play_error, a.improper_play,
+                    a.play_num, sum(a.port_io_failed) as port_io_failed, sum(a.port_data_failed) as port_data_failed, sum(a.port_overtime) as port_overtime, sum(a.port_overtime) as port_overtime, sum(a.play_failed) as play_failed, sum(a.play_error) as play_error, sum(a.improper_play) as improper_play,
                     b.port_io_failed as port_io_failed_pre, b.port_data_failed as port_data_failed_pre, b.port_overtime as port_overtime_pre, b.port_overtime as port_overtime_pre, b.play_failed as play_failed_pre, b.play_error as play_error_pre, b.improper_play as improper_play_pre
                         FROM ${tablename} a
                          LEFT JOIN ${tablename} b 
@@ -692,98 +691,60 @@ module.exports = (Router) => {
         },
         rows: [
             ['play_user', 'play_num'],
-            ['index', 'port_succ', 'port_succ_ratio', 'start_frame_succ', 'start_frame_succ_ratio', 'stop_play_num', 'stop_play_num_ratio', 'play_fluent', 'play_fluent_ratio'],
-            ['index', 'port_io_failed', 'port_io_failed_ratio', 'port_data_failed', 'port_data_failed_ratio', 'port_overtime', 'port_overtime_ratio', 'play_failed', 'play_failed_ratio', 'play_error', 'play_error_ratio', 'improper_play', 'improper_play_ratio']
+            ['index', 'port_succ', 'start_frame_succ', 'stop_play_num', 'play_fluent', ],
+            ['index', 'port_io_failed', 'port_data_failed', 'port_overtime', 'play_failed', 'play_error', 'improper_play']
         ],
         cols: [
             [
                 {
-                    // caption: "数据指标",
                     caption: "",
                     type: "string"
                 },
                 {
-                    // caption: "播放用户数",
                     caption: "",
                     type: "string"
-                },
-                // {
-                //     caption: "播放次数",
-                //     type: "string"
-                // }
+                }
             ],
             [
-                {
-                    caption: "指标",
-                    type: "string"
-                },
                 {
                     caption: "健康播放统计",
                     type: "string"
                 },
                 {
-                    caption: ""
+                    caption: "play接口成功数"
                 },
                 {
-                    caption: ""
+                    caption: "首帧成功数"
                 },
                 {
-                    caption: ""
+                    caption: "卡顿播放次数"
                 },
                 {
-                    caption: ""
-                },
-                {
-                    caption: ""
-                },
-                {
-                    caption: ""
-                },
-                {
-                    caption: ""
+                    caption: "播放流畅数"
                 }
             ],
             [
-                {
-                    caption: "指标",
-                    type: "string"
-                },
                 {
                     caption: "错误播放统计",
                     type: "string"
                 },
                 {
-                    caption: ""
+                    caption: "play接口IO错误数"
                 },
                 {
-                    caption: ""
+                    caption: "play接口数据错误数"
                 },
                 {
-                    caption: ""
+                    caption: "play接口超时数"
                 },
                 {
-                    caption: ""
+                    caption: "播放失败数"
                 },
                 {
-                    caption: ""
+                    caption: "视频错误数"
                 },
                 {
-                    caption: ""
-                },
-                {
-                    caption: ""
-                },
-                {
-                    caption: ""
-                },
-                {
-                    caption: ""
-                },
-                {
-                    caption: ""
-                },
-                {
-                    caption: ""
+                    caption: "非正常播放数"
                 }
             ]
         ]
@@ -869,6 +830,11 @@ module.exports = (Router) => {
         modelName: ["VideoPlay"],
         platform: false,
         control_table_col: false,
+        excel_export: true,
+        flexible_btn: [{
+            content: '<a href="javascript:void(0)">导出</a>',
+            preMethods: ["excel_export"]
+        }],
         filter(data, query, dates, type) {
             return filter.videoKpiThree(data, query, dates);
         },
@@ -889,9 +855,11 @@ module.exports = (Router) => {
                 param.push(query.sdk_app_type)
             }
 
-            let sql = `SELECT *
+            let sql = `SELECT 
+            date, sum(play_user) as play_user, sum(play_num) as play_num, sum(port_succ) as port_succ, sum(start_frame_succ) as start_frame_succ, sum(stop_play_num) as stop_play_num, sum(play_fluent) as play_fluent,
+            sum(port_io_failed) as port_io_failed, sum(port_data_failed) as port_data_failed, sum(port_overtime) as port_overtime, sum(port_overtime) as port_overtime, sum(play_failed) as play_failed, sum(play_error) as play_error, sum(improper_play) as improper_play
                     FROM ${tablename}
-                    WHERE day_type='1' and ${config.join(" AND ")}`;
+                    WHERE ${config.join(" AND ")} group by date order by date desc`;
 
             return {
                 sql: sql,
@@ -942,6 +910,7 @@ module.exports = (Router) => {
                 caption: "播放次数",
                 type: "number"
             },
+            // 健康播放统计
             {
                 caption: "健康播放统计",
                 type: "string"
@@ -967,6 +936,7 @@ module.exports = (Router) => {
             {
                 caption: ""
             },
+            // 错误播放统计
             {
                 caption: "错误播放统计",
                 type: "string"
