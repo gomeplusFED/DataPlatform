@@ -134,7 +134,7 @@
 	    xAxis: {
 	        type: 'category',
 	        boundaryGap: false,
-	        data: ['周一','周二','周三','周四','周五','周六','周日']
+	        data: []
 	    },
 	    yAxis: {
 	        type: 'value'
@@ -143,12 +143,12 @@
 	        {
 	            name:'PV',
 	            type:'line',
-	            data:[120, 132, 101, 134, 90, 230, 210]
+	            data:[]
 	        },
 	        {
 	            name:'UV',
 	            type:'line',
-	            data:[220, 182, 191, 234, 290, 330, 310]
+	            data:[]
 	        }
 	    ]
 	};
