@@ -345,7 +345,7 @@ module.exports = (Router) => {
 
     Router = new api(Router, {
         router: "/videoStatis/videoFour",
-        modelName: ["VideoPlay"],
+        modelName: ["W"],
         platform: false,
         paging: [false],
         order: ["-date"],
@@ -354,14 +354,37 @@ module.exports = (Router) => {
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ["excel_export"]
         }],
-        params: function (query, params, sendData) {
-            if (params.ver == "ALL") {
-                delete params.ver;
+        global_platform: {
+            show: true,
+            key: 'type',
+            name: '视频类型: ',
+            list: [{
+                key: 'videoplay',
+                name: '点播'
+            }, {
+                key: 'livevideo',
+                name: '直播'
+            }]
+        },
+        firstSql(query, params, isCount) {
+            let date_type_list = ['', 'DAY', 'WEEK', 'MONTH']
+            let config = ["a.date BETWEEN ? AND ?", "a.day_type=?"],
+                param = [query.startTime, query.endTime, query.day_type || 1],
+                sql = '',
+                tablename = 'ads2_videoplay_overview2';
+
+            if (query.type) {
+                tablename = query.type === 'livevideo' ? 'ads2_livevideo_overview2' : 'ads2_videoplay_overview2'
             }
-            if (params.sdk_app_type == "ALL") {
-                params.sdk_app_type = ["ios", "android", "h5_custom", "h5_native", "flash"];
-            }
-            return params;
+
+            sql = `SELECT *
+                FROM ${tablename} 
+                WHERE day_type=1 and ${config.join(" AND ")}`;
+
+            return {
+                sql: sql,
+                params: param
+            };
         },
         //初始化一级分类选项
         selectFilter(req, cb) {
@@ -383,7 +406,9 @@ module.exports = (Router) => {
                             key: key.values1,
                             value: key.values1
                         }
-                        filter_select.groups.push(obj);
+                        if (filter_select.groups.every(x => x.key !== obj.key)) {
+                            filter_select.groups.push(obj);
+                        }
                     }
                     if (this.filter_select[1]) {
                         this.filter_select[1] = filter_select;
@@ -469,15 +494,15 @@ module.exports = (Router) => {
                     caption: "SDK类型",
                     type: "string"
                 }, {
-                    caption: "版本号",
+                    caption: "版本",
+                    type: "string"
+                }, {
+                    caption: "播放用户数",
                     type: "string"
                 }, {
                     caption: "播放次数",
                     type: "number",
                     help: "某视频只要播放过次数"
-                }, {
-                    caption: "健康播放概率",
-                    type: "string",
                 },
 
                 //健康播放统计
@@ -573,7 +598,7 @@ module.exports = (Router) => {
                 }
             ]
         ],
-        control_table_col: true,
+        control_table_col: false,
         /*filter_select : [
             {
                 title : "指标",
@@ -612,7 +637,7 @@ module.exports = (Router) => {
         },
         firstSql(query, params, isCount) {
             let date_type_list = ['', 'DAY', 'WEEK', 'MONTH']
-            let config = ["a.date BETWEEN ? AND ?", "a.day_type=?"],
+            let config = ["date BETWEEN ? AND ?", "day_type=?"],
                 param = [query.startTime, query.endTime, query.day_type || 1],
                 sql = '',
                 tablename = 'ads2_videoplay_overview2';
@@ -621,10 +646,8 @@ module.exports = (Router) => {
                 tablename = query.type === 'livevideo' ? 'ads2_livevideo_overview2' : 'ads2_videoplay_overview2'
             }
 
-            sql = `SELECT a.play_user, a.play_num, b.play_user as play_user_pre, b.play_num as play_num_pre
-                FROM ${tablename} a 
-                LEFT JOIN ${tablename} b 
-                on a.day_type = b.day_type and b.date = DATE_ADD(a.date,INTERVAL -1 ${date_type_list[query.day_type || 1]})
+            sql = `SELECT play_user, play_num
+                FROM ${tablename} 
                 WHERE ${config.join(" AND ")}`;
 
             return {
@@ -692,98 +715,60 @@ module.exports = (Router) => {
         },
         rows: [
             ['play_user', 'play_num'],
-            ['index', 'port_succ', 'port_succ_ratio', 'start_frame_succ', 'start_frame_succ_ratio', 'stop_play_num', 'stop_play_num_ratio', 'play_fluent', 'play_fluent_ratio'],
-            ['index', 'port_io_failed', 'port_io_failed_ratio', 'port_data_failed', 'port_data_failed_ratio', 'port_overtime', 'port_overtime_ratio', 'play_failed', 'play_failed_ratio', 'play_error', 'play_error_ratio', 'improper_play', 'improper_play_ratio']
+            ['index', 'port_succ', 'start_frame_succ', 'stop_play_num', 'play_fluent', ],
+            ['index', 'port_io_failed', 'port_data_failed', 'port_overtime', 'play_failed', 'play_error', 'improper_play']
         ],
         cols: [
             [
                 {
-                    // caption: "数据指标",
                     caption: "",
                     type: "string"
                 },
                 {
-                    // caption: "播放用户数",
                     caption: "",
                     type: "string"
-                },
-                // {
-                //     caption: "播放次数",
-                //     type: "string"
-                // }
+                }
             ],
             [
-                {
-                    caption: "指标",
-                    type: "string"
-                },
                 {
                     caption: "健康播放统计",
                     type: "string"
                 },
                 {
-                    caption: ""
+                    caption: "play接口成功数"
                 },
                 {
-                    caption: ""
+                    caption: "首帧成功数"
                 },
                 {
-                    caption: ""
+                    caption: "卡顿播放次数"
                 },
                 {
-                    caption: ""
-                },
-                {
-                    caption: ""
-                },
-                {
-                    caption: ""
-                },
-                {
-                    caption: ""
+                    caption: "播放流畅数"
                 }
             ],
             [
-                {
-                    caption: "指标",
-                    type: "string"
-                },
                 {
                     caption: "错误播放统计",
                     type: "string"
                 },
                 {
-                    caption: ""
+                    caption: "play接口IO错误数"
                 },
                 {
-                    caption: ""
+                    caption: "play接口数据错误数"
                 },
                 {
-                    caption: ""
+                    caption: "play接口超时数"
                 },
                 {
-                    caption: ""
+                    caption: "播放失败数"
                 },
                 {
-                    caption: ""
+                    caption: "视频错误数"
                 },
                 {
-                    caption: ""
-                },
-                {
-                    caption: ""
-                },
-                {
-                    caption: ""
-                },
-                {
-                    caption: ""
-                },
-                {
-                    caption: ""
-                },
-                {
-                    caption: ""
+                    caption: "非正常播放数"
                 }
             ]
         ]
