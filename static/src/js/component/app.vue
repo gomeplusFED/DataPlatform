@@ -38,7 +38,7 @@
 					noLoaded: 0
 				},
 				initData: window.allPageConfig,
-				subPages: []
+				banSubPages: []
 			};
 		},
 		vuex: {
@@ -75,7 +75,7 @@
 			hrefCheck(ev) {
 				let $target = $(ev.target);
 				let href = $target.attr('href') || $target.parents('a').attr('href');
-				if (/^#!(\/[^\/]+?)+$/.test(href) && !this.subPages.some(x => href.includes(x.url))) {
+				if (/^#!(\/[^\/]+?)+$/.test(href) && this.banSubPages.some(x => href.includes(x.url))) {
 					console.log(href +' has been stoped');
 					actions.alert(store, {
 						show: true,
@@ -106,7 +106,7 @@
 				var currentPageDefaultData = window.allPageConfig.page[url];
 				var id = currentPageDefaultData.id;
 				// 筛选出当前页面有权限的三级页面
-				this.subPages = currentPageDefaultData.subPages;
+				this.banSubPages = currentPageDefaultData.banSubPages || [];
 
 				var query_api = currentPageDefaultData.defaultData[0].query_api;
 
