@@ -271,8 +271,8 @@ module.exports = {
                 item[key + "_ratio"] = util.toFixedLength(item[key], item.play_num) + "%";
             }
 
-            if (!ArrObj[item.date][item.sdk_app_type]) ArrObj[item.date][item.sdk_app_type] = [];
-            ArrObj[item.date][item.sdk_app_type].push(item);
+            if (!ArrObj[item.date][item.sdk_type]) ArrObj[item.date][item.sdk_type] = [];
+            ArrObj[item.date][item.sdk_type].push(item);
         }
 
         //重新排序
