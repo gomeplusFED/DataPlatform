@@ -32,7 +32,7 @@
 											<li v-show="item.status"><a @click="modifyRole(item.id, item.limited, item.export, item.name, item.remark, item.sub_pages, item.type)" class="btn btn-default" href="javascript:void(0)">修改<i class="fa fa-pencil-square-o"></i></a></li>
 											<li v-show="item.status"><a @click="forbidden(item.id, item.name)" class="btn btn-default" href="javascript:void(0)">禁用<i class="fa fa-remove"></i></a></li>
 											<li v-show="!item.status"><a @click="startUsing(item.id, item.name)" class="btn btn-default" href="javascript:void(0)">启用<i class="fa fa-check-square-o"></i></a></li>
-											<li v-show="item.status"><a @click="modifyUser(item.name, item.limited, item.export, item.sub_pages)" class="btn btn-default" href="javascript:void(0)">更新账户<i class="fa fa-pencil-square-o"></i></a></li>
+											<li v-show="item.status"><a @click="modifyUser(item.name, item.limited, item.export, item.sub_pages, item.type)" class="btn btn-default" href="javascript:void(0)">更新账户<i class="fa fa-pencil-square-o"></i></a></li>
 										</ul>
 									</td>
 								</tr>
@@ -79,7 +79,7 @@
 	        </div>
 	    </div>
 	</div>
-	<m-account :modal.sync="account" :loading.sync="loading"></m-account>
+	<m-account :modal.sync="account" :loading.sync="loading" :type="type"></m-account>
 	<m-confirm></m-confirm>
 </template>
 
@@ -242,11 +242,12 @@ var Role = Vue.extend({
 			this.modifyName = name;
 			this.modifyType = 'modify';
 		},
-		modifyUser(name, limited, exportLimit, subPages) {
+		modifyUser(name, limited, exportLimit, subPages, type) {
 			this.account.rolename = name;
 			this.account.exportLimit = exportLimit;
 			this.account.limited = limited;
 			this.account.subPages = subPages;
+			this.type = JSON.parse(type || '{}');
 			this.account.show = true;
 		},
 		apply: function(){
@@ -284,6 +285,7 @@ var Role = Vue.extend({
 						}
 					}
 			}
+			_this.$set('type', config)
 			
 			if (limitlist.platformPermission3) {
 				parseObject(limitlist.platformPermission3)
@@ -305,7 +307,7 @@ var Role = Vue.extend({
 						limited: JSON.stringify(_this.modifyLimited),
 						sub_pages: JSON.stringify(_this.modifySubPages),
 						export: JSON.stringify(_this.modifyExportLimited),
-						type: JSON.stringify(config)
+						type: JSON.stringify(_this.type)
 					},
 					success: function(data){
 						if(!data.success){
@@ -335,7 +337,7 @@ var Role = Vue.extend({
 						limited: JSON.stringify(_this.modifyLimited),
 						sub_pages: JSON.stringify(_this.modifySubPages),
 						export: JSON.stringify(_this.modifyExportLimited),
-						type: JSON.stringify(config)
+						type: JSON.stringify(_this.type)
 					},
 					success: function(data){
 						if(!data.success){
