@@ -83,6 +83,21 @@ module.exports = {
             ]
         }
     },
+    videoDetailsOperating() {
+        return {
+            id: 201,
+            name : "视频明细",
+            path : "/videoStatis/videoDetailsOperating",
+            display : true,
+            defaultData : [
+                {
+                    type : "chart",
+                    title: "趋势",
+                    query_api : "/videoStatis/videoDetailsOperatingOne"
+                }
+            ]
+        }
+    },
     videoDetailsTwo() {
         return {
             id: 201,

@@ -9,7 +9,7 @@ const util = require("../../utils"),
             //直播id
             "live_play_id",
             //直播名称
-            "live_play_name",
+            //"live_play_name",
             //直播开始时间
             "live_play_startime",
             //直播结束时间
@@ -67,8 +67,8 @@ const util = require("../../utils"),
     cols = [
         [{
             caption : ""
-        },{
-            caption : ""
+        //},{
+        //    caption : ""
         },{
             caption : ""
         },{
@@ -176,7 +176,8 @@ module.exports = {
             key.eight = util.toFixed(key.play_failed, key.play_num);
             key.night = util.toFixed(key.play_error, key.play_num);
             key.ten = util.toFixed(key.improper_play, key.play_num);
-            key.operating = "";
+            key.operating =
+                `<button class='btn btn-default' url_link='/videoStatis/videoDetailsOperatingg' url_fixed_params='{"live_play_id": "${key.live_play_id}"}'>详细>></button>`;
         }
 
         return util.toTable([[row].concat(source)], rows, cols, [count]);
@@ -186,7 +187,9 @@ module.exports = {
             count = data.first.count,
             sum = data.first.sum,
             rows = [
-                ["id", "play_id", "play_name", "play_num", "one"]
+                ["id", "play_id",
+                    //"play_name",
+                    "play_num", "one"]
             ],
             cols = [
                 [{
@@ -195,9 +198,9 @@ module.exports = {
                 },{
                     caption : "video_id",
                     type : "string"
-                },{
-                    caption : "视频名称",
-                    type : "string"
+                //},{
+                //    caption : "视频名称",
+                //    type : "string"
                 },{
                     caption : "播放次数",
                     type : "number"

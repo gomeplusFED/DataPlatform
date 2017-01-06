@@ -67,6 +67,63 @@ module.exports = (Router) => {
         }
     });
 
+    //直播详情
+    Router = new api(Router, {
+        router: "/videoStatis/videoDetailsOperatingOn",
+        modelName: ["LivevideoDetail2"],
+        platform: false,
+        paging : [true],
+        flexible_btn : [{
+            content: '<a href="javascript:void(0)">导出</a>',
+            preMethods: ['excel_export']
+        }],
+        global_platform : {
+            show: true,
+            key: 'type',
+            name : "",
+            list: [{
+                name: '直播',
+                url : "#!/videoStatis/videoDetail"
+            }, {
+                name: '点播',
+                url : "#!/videoStatis/videoDetails2"
+            }]
+        },
+        search : {
+            show : true,
+            title : "请输入视频ID",
+            key : "live_play_id"
+        },
+        //showDayUnit: true,
+        order: ["-date"],
+        filter_select: [{
+            title: 'sdk类型：',
+            filter_key : 'sdk_type',
+            groups: [{
+                key: "ALL",
+                value: 'ALL'
+            }, {
+                key: 'android',
+                value: 'Android'
+            }, {
+                key: 'flash',
+                value: 'Flash'
+            }, {
+                key: 'h5_custom',
+                value: 'H5_custom'
+            }, {
+                key: 'h5_native',
+                value: 'H5_native'
+            }, {
+                key: 'ios',
+                value: 'IOS'
+            }]
+        }],
+        filter(data) {
+            return filter.One(data);
+        }
+    });
+
     Router.get("/videoStatis/videoDetailsOne_excel", (req, res, next) => {
         const query = req.query;
         const xl = require("excel4node");
