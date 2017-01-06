@@ -243,7 +243,8 @@
 					}
 				});
 
-				this.$route.router.go(urlLink + '?' + resultArray.join('&'));
+				window.open(`${location.origin}#!/${urlLink}?${resultArray.join('&')}`)
+				// this.$route.router.go(urlLink + '?' + resultArray.join('&'));
 			}
 		},
 		generatorTable: function() {
