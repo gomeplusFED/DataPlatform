@@ -253,7 +253,8 @@ const Config = {
                 obj.videoStatis.videoDetails()
             ],
             routers : [
-                obj.videoStatis.videoDetailsTwo()
+                obj.videoStatis.videoDetailsTwo(),
+                obj.videoStatis.videoDetailsOperating()
             ]
         },
         "19": {

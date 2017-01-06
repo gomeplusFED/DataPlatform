@@ -228,12 +228,29 @@ module.exports = {
                 live_play_user : "直播同时在线播放人数",
                 live_play_num : "直播同时在线播放次数"
             },
-            obj = {},
-            newData = {};
+            obj = {};
+
         let start = new Date(query.startTime).getTime(),
-            end = new Date(query.endTime).getTime();
+            end = new Date(query.endTime).getTime(),
+            stop_play_num = {
+                num : 0,
+                name : ""
+            },
+            rate = {
+                num : 0,
+                name : ""
+            },
+            live_play_user = {
+                num : 0,
+                name : ""
+            },
+            live_play_num = {
+                num : 0,
+                name : ""
+            };
         while(start <= end) {
-            obj[start] = {
+            let time = moment(start).format("HH:mm");
+            obj[time] = {
                 stop_play_num : 0,
                 rate : 0.00,
                 live_play_user : 0,
@@ -241,10 +258,49 @@ module.exports = {
             };
             for(let key of source) {
                 if(start <= key.live_play_startime && key.live_play_startime <= start + 1000 * 60 * 5) {
-
+                    if(stop_play_num.num < key.stop_play_num) {
+                        stop_play_num.name = time;
+                    }
+                    if(live_play_user.num < key.live_play_user) {
+                        live_play_user.name = time;
+                    }
+                    if(live_play_num.num < key.live_play_num) {
+                        live_play_num.name = time;
+                    }
+                    if(rate.num < util.percentage(key.stop_play_num, key.live_play_num)) {
+                        rate.name = time;
+                    }
+                    obj[time].stop_play_num = key.stop_play_num;
+                    obj[time].live_play_user = key.live_play_user;
+                    obj[time].live_play_num = key.live_play_num;
+                    obj[time].rate = util.percentage(key.stop_play_num, key.live_play_num);
                 }
             }
             start += 1000 * 60 * 5;
         }
+
+        return [{
+            type : "line",
+            map : map,
+            data : obj,
+            markArea: {
+                data: [ [{
+                    name: '卡顿播放数',
+                    xAxis: stop_play_num.name
+                },{
+                    name: '卡顿播放率',
+                    xAxis: rate.name
+                },{
+                    name: '直播同时在线播放人数',
+                    xAxis: live_play_user.name
+                },{
+                    name: '直播同时在线播放次数',
+                    xAxis: live_play_num.name
+                }] ]
+            },
+            config: { // 配置信息
+                stack: false  // 图的堆叠
+            }
+        }];
     }
 };
