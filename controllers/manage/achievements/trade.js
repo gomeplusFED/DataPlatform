@@ -12,36 +12,48 @@ var api = require("../../../base/main"),
     filter = require("../../../filters/achievements/f_trade");
 let orm = require("orm");
 
-module.exports = (Router) => {
-
-    Router = Router.get("/achievements/tradeZero_json" , function(req , res , next){
-
-        res.json({
-            code: 200,
-            modelData: [],
-            components: {
-                filter_select: [{
-                    title: "平台选择",
-                    filter_key: "type",
-                    groups: [{
-                        key: "ALL",
-                        value: "全部平台"
-                    }, {
-                        key: "app",
-                        value: "APP"
-                    }, {
-                        key: "wap",
-                        value: "WAP"
-                    }, {
-                        key: "pc",
-                        value: "PC"
-                    }]
-                }]
-            }
+function globalPlatform(type) {
+    let all = true;
+    let global_platform = {
+        show: true,
+        key : "type",
+        name : "平台选择",
+        list : []
+    };
+    if(type[2] == "1") {
+        global_platform.list.push({
+            key: "app",
+            name: "APP"
         });
-    });
+    } else {
+        all = false;
+    }
+    if(type[3] == "1") {
+        global_platform.list.push({
+            key: "pc",
+            name: "PC"
+        });
+    } else {
+        all = false;
+    }
+    if(type[4] == "1") {
+        global_platform.list.push({
+            key: "wap",
+            name: "H5"
+        });
+    } else {
+        all = false;
+    }
+    if(all) {
+        global_platform.list = [{
+            key: "ALL",
+            name: "全部平台"
+        }].concat(global_platform.list);
+    }
+    return global_platform;
+}
 
-
+module.exports = (Router) => {
 
     //交易总览
     Router = new api(Router, {
@@ -66,9 +78,12 @@ module.exports = (Router) => {
                 name: 'PC'
             }]
         },*/
+        global_platform_filter(req) {
+            this.global_platform = globalPlatform(req.session.userInfo.type["35"]);
+        },
         params(query, params, sendData) {
             if (!query.type) {
-                params.type = "ALL";
+                params.type = this.global_platform.list[0].key;
             }
             return params;
         },
@@ -184,9 +199,12 @@ module.exports = (Router) => {
                 { key: 'plat_couple_use_sum', value: '平台优惠券使额' }
             ]
         }],
+        global_platform_filter(req) {
+            this.global_platform = globalPlatform(req.session.userInfo.type["35"]);
+        },
         params(query, params, sendData) {
             if (!query.type) {
-                params.type = "ALL";
+                params.type = this.global_platform.list[0].key;
             }
             return params;
         },
@@ -233,9 +251,12 @@ module.exports = (Router) => {
                 value: '客单价'
             }]
         }],
+        global_platform_filter(req) {
+            this.global_platform = globalPlatform(req.session.userInfo.type["35"]);
+        },
         params(query, params, sendData) {
             if (!query.type) {
-                params.type = "ALL";
+                params.type = this.global_platform.list[0].key;
             }
             return params;
         },
@@ -301,9 +322,12 @@ module.exports = (Router) => {
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],*/
+        global_platform_filter(req) {
+            this.global_platform = globalPlatform(req.session.userInfo.type["35"]);
+        },
         params(query, params, sendData) {
             if (!query.type) {
-                params.type = "ALL";
+                params.type = this.global_platform.list[0].key;
             }
             return params;
         },

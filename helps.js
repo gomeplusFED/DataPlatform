@@ -33,21 +33,22 @@ module.exports = function(app) {
     app.locals.createNavBarByLimit = function(userInfo,limit){
         var limited = userInfo.limited;
         var str = '';
-        for(limitItem in limited){
-            if(limit[limitItem]){
-                var href = limit[limitItem].href;
-                var name = limit[limitItem].name;
-                var path = limit[limitItem].path;
-                var className = limit[limitItem].className;
+        for(limitItem in limit){
+            if(limited[limitItem]){
+                let href = limit[limitItem].href;
+                let name = limit[limitItem].name;
+                let path = limit[limitItem].path;
+                let limitedPath = limited[limitItem] || [];
+                let className = limit[limitItem].className;
                 str += '<li><a href="#!' + href + '"><i class="' + className + '"></i>' + name;
-                if(limited[limitItem].length){
+                if(limitedPath.length){
                     str += '<span class="fa arrow"></span></a><ul class="nav nav-second-level collapse">';
-                    limited[limitItem].forEach(function(v, k){
-                        var pathItem = path[v];
-                        if(pathItem && pathItem.display){
+                    for(let pathItem of path) {
+                        let id;
+                        if(pathItem && pathItem.display && ((id = pathItem.id) != null) && limitedPath.includes(id.toString())) {
                             str += '<li><a href="#!' + pathItem.path + '">' + pathItem.name + '</a></li>';
                         }
-                    })
+                    }
                     str += '</ul>';
                 }else{
                     str += '</a>';

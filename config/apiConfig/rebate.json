@@ -24,27 +24,33 @@
             [
                 {
                     "caption": "累计返利订单数",
-                    "type": "number"
+                    "type": "number",
+                    "help": "截止到目前，累计返利订单数（订单状态下单）"
                 },
                 {
                     "caption": "累计返利参与人次",
-                    "type": "number"
+                    "type": "number",
+                    "help": "截止到目前，累积获得预计返利的人数（不去重）"
                 },
                 {
                     "caption": "累计预计返利金额",
-                    "type": "number"
+                    "type": "number",
+                    "help": "截止到目前，返利订单数累计的返利金额"
                 },
                 {
                     "caption": "累计取消返利订单数",
-                    "type": "number"
+                    "type": "number",
+                    "help": "截止到目前，返利订单已取消订单总数"
                 },
                 {
                     "caption": "累计取消返利金额",
-                    "type": "number"
+                    "type": "number",
+                    "help": "截止到目前，返利订单中累计取消的返利金额"
                 },
                 {
                     "caption": "累计到账订单数",
-                    "type": "number"
+                    "type": "number",
+                    "help": "截止到目前，累计返利订单中返利到账订单数"
                 },
                 {
                     "caption": "累计到账金额",
@@ -77,27 +83,33 @@
             [
                 {
                     "caption": "预计返利金额",
-                    "type": "number"
+                    "type": "number",
+                    "help": "时间段内预计返利金额之和"
                 },
                 {
                     "caption": "预计获利人次",
-                    "type": "number"
+                    "type": "number",
+                    "help": "时间段内预计返利人次（不去重）"
                 },
                 {
                     "caption": "已取消返利金额",
-                    "type": "number"
+                    "type": "number",
+                    "help": "时间段内已取消订单的返利金额之和"
                 },
                 {
                     "caption": "返利到账金额",
-                    "type": "number"
+                    "type": "number",
+                    "help": "时间段内返利到账金额之和"
                 },
                 {
                     "caption": "预计返利订单数",
-                    "type": "number"
+                    "type": "number",
+                    "help": "所有带返利的订单总数目"
                 },
                 {
                     "caption": "返利到账订单数",
-                    "type": "number"
+                    "type": "number",
+                    "help": "时间段内返利到账的订单总数"
                 }
             ]
         ]
@@ -223,7 +235,8 @@
                 },
                 {
                     "caption": "参与返利人数",
-                    "type": "number"
+                    "type": "number",
+                    "help": "预计获取返利的人数（按返利功能去重）"
                 },
                 {
                     "caption": "预计返利金额(元)",
@@ -243,7 +256,8 @@
                 },
                 {
                     "caption": "参与商家数",
-                    "type": "number"
+                    "type": "number",
+                    "help": "产生返利订单的商家数（按返利功能去重）"
                 }
             ]
         ]
@@ -327,15 +341,18 @@
                 },
                 {
                     "caption": "订单数",
-                    "type": "number"
+                    "type": "number",
+                    "help": "所有带返利的订单总数目"
                 },
                 {
                     "caption": "订单总金额",
-                    "type": "number"
+                    "type": "number",
+                    "help": "所有带返利的订单总金额"
                 },
                 {
                     "caption": "商家数",
-                    "type": "number"
+                    "type": "number",
+                    "help": "所有参与返利活动的商家数"
                 },
                 {
                     "caption": "下单用户数",
@@ -546,7 +563,8 @@
                 },
                 {
                     "caption": "参与商品数",
-                    "type": "number"
+                    "type": "number",
+                    "help": "订单中带返利的商品数（按返利功能去重）"
                 },
                 {
                     "caption": "新增订单数",
@@ -635,7 +653,8 @@
             [
                 {
                     "caption": "返利计划数",
-                    "type": "number"
+                    "type": "number",
+                    "help": "时间段内所有平台邀请返利计划数"
                 },
                 {
                     "caption": "订单数",
@@ -862,7 +881,7 @@
     },
     "1482118634978": {
         "modelName": [
-            "ads2_new_rebate_order_muiltiple_trend"
+            "ads2_new_rebate_order_plantype_level_sum"
         ],
         "date_picker": true,
         "order": [],
@@ -934,19 +953,23 @@
             [
                 {
                     "caption": "返利计划数",
-                    "type": "number"
+                    "type": "number",
+                    "help": "时间段内所有平台邀请返利计划数"
                 },
                 {
                     "caption": "参与用户数",
-                    "type": "number"
+                    "type": "number",
+                    "help": "时间段内所有参与邀请返利的用户数"
                 },
                 {
                     "caption": "注册成功数",
-                    "type": "number"
+                    "type": "number",
+                    "help": "用户注册成功"
                 },
                 {
                     "caption": "注册成功占比",
-                    "type": "number"
+                    "type": "number",
+                    "help": "时间段内（返利注册成功数/总注册成功数）"
                 },
                 {
                     "caption": "返利到账金额",
@@ -997,11 +1020,13 @@
                 },
                 {
                     "caption": "入驻成功数",
-                    "type": "number"
+                    "type": "number",
+                    "help": "商家入驻成功"
                 },
                 {
                     "caption": "入驻成功占比",
-                    "type": "number"
+                    "type": "number",
+                    "help": "时间段内（返利入驻成功数/总入驻成功数）"
                 },
                 {
                     "caption": "返利到账金额",
@@ -1175,11 +1200,13 @@
                 },
                 {
                     "caption": "商品件数",
-                    "type": "number"
+                    "type": "number",
+                    "help": "所有订单中带返利活动商品的总件数(SKU)"
                 },
                 {
                     "caption": "取消订单数",
-                    "type": "number"
+                    "type": "number",
+                    "help": "已取消的返利订单数"
                 }
             ],
             [
@@ -1215,19 +1242,23 @@
                 },
                 {
                     "caption": "退货商品数",
-                    "type": "number"
+                    "type": "number",
+                    "help": "带返利商品退货数（SPU）"
                 },
                 {
                     "caption": "退货商品件数",
-                    "type": "number"
+                    "type": "number",
+                    "help": "带返利商品退货件数（SKU）"
                 },
                 {
                     "caption": "退货用户数",
-                    "type": "number"
+                    "type": "number",
+                    "help": "用户退货带返利商品（UV）"
                 },
                 {
                     "caption": "退货商品总金额",
-                    "type": "number"
+                    "type": "number",
+                    "help": "带返利商品退货的销售金额"
                 }
             ]
         ]
@@ -1341,7 +1372,7 @@
                 "is_rebate_fee",
                 "expect_rebate_amount",
                 "is_over_rebate_order_amount",
-                "平台到账金额"
+                "plat_rebate_order_amount"
             ]
         ],
         "cols": [
@@ -1384,7 +1415,8 @@
                 },
                 {
                     "caption": "平台到账金额",
-                    "type": "number"
+                    "type": "number",
+                    "help": "时间段内商家设置返利中平台到账总金额"
                 }
             ]
         ]

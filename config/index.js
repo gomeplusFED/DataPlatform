@@ -99,6 +99,7 @@ Config.sonChange = (option) => {
             "name" : option.sonName,
             "path" : option.path,
             "display": true,
+            "id" : Math.random().toString(32).substr(2,6),
             "defaultData" : []
         }
         Arr.push(tempData);

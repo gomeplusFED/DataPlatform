@@ -145,18 +145,34 @@ module.exports = {
         modelName : "ads2_new_rebate_order_trend"
     },
     //返利   END --------------
-
     
-    // O2M店铺
+    //o2o店铺
     ads2_o2m_shop_trade_info : {
         modelName : "ads2_o2m_shop_trade_info"
     },
-    // 视频统计
-    ads2_videoplay_overview2: {
-        modelName: 'ads2_videoplay_overview2'
+
+    //社交三期
+    ads2_soc_total_summary : {
+        modelName : "ads2_soc_total_summary"
     },
-    ads2_livevideo_overview2: {
-        modelName: 'ads2_livevideo_overview2'
+    ads2_soc_topic_ordered : {
+        modelName : "ads2_soc_topic_ordered"
+    },
+    ads2_soc_topic_item : {
+        modelName : "ads2_soc_topic_item"
+    },
+    ads2_soc_group : {
+        modelName : "ads2_soc_group"
+    },
+    ads2_soc_group_topic : {
+        modelName : "ads2_soc_group_topic"
+    },
+    //视频
+    ads2_videoplay_overview2 : {
+        modelName : "ads2_videoplay_overview2"
+    },
+    ads2_livevideo_overview2 : {
+        modelName : "ads2_livevideo_overview2"
     }
 };
 

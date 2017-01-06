@@ -7,6 +7,7 @@
 module.exports = {
     Index(){
         return {
+            id : 54,
             name : "IM使用查看",
             path : "/IM/index",
             display : true,

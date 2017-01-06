@@ -32,14 +32,10 @@ let CodeTranslate = {
     "505" : "HTTP版本不受支持"
 };
 
-
-
-
-
 module.exports = {
     performance_01(query , params , sendData){
         if(!params.type){
-            params.type = "PC";
+            params.type = this.global_platform.list[0].key;
         }
         return params;
     },
@@ -99,9 +95,13 @@ module.exports = {
 
     performance_02(query , params , sendData){
         if(!params.type){
-            params.type = "PC";
+            params.type = this.global_platform.list[0].key;
         }
         return params;
+    },
+
+    performance_02_f_f(req) {
+        this.global_platform = globalPlatform(req.session.userInfo.type["00001"]);
     },
 
     performance_02_f(data, query, dates){
@@ -136,4 +136,39 @@ module.exports = {
 
         return util.toTable([theResource], data.rows, data.cols);
     },
+};
+
+function globalPlatform(type) {
+    let global_platform = {
+        show: true,
+        key : "type",
+        name : "平台切换",
+        list : []
+    };
+    if(type[0] == "1") {
+        global_platform.list.push({
+            key: 'IOS',
+            name: 'IOS'
+        });
+    }
+    if(type[1] == "1") {
+        global_platform.list.push({
+            key: 'Android',
+            name: 'Android'
+        });
+    }
+    if(type[3] == "1") {
+        global_platform.list.push({
+            "key": "PC",
+            "name": "PC"
+        });
+    }
+    if(type[4] == "1") {
+        global_platform.list.push({
+            "key": "WAP",
+            "name": "H5"
+        });
+    }
+
+    return global_platform;
 }

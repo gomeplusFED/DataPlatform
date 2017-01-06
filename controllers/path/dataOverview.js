@@ -7,8 +7,9 @@
 module.exports = {
     all() {
         return {
+            id : 53,
             name: "数据概览",
-            path: "/dataOverview/app",
+            path: "/dataOverview/dataOverviewAll",
             display: true,
             defaultData: [{
                 type: "table",

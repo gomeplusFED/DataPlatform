@@ -1,32 +1,520 @@
 <template>
 	<div class="limit_list">
 		<h2>权限列表</h2>
+		<a class="btn btn-default clear-all" href="javascript:void(0)" @click="clearAll">全部清空</a>
 		<ul class="con">
 			<li>
 				<span>选择</span>
 				<span>一级目录</span>
 				<span>二级目录／页面</span>
+				<span>三级目录／页面</span>
+				<span>平台权限</span>
 				<span>导出权限</span>
 			</li>
-			<li v-for="(key,item1) in pageAll">
-				<div @click.stop="showLevel($event, $index)">
-					<span><input @click="checkAll('limit', key)" type="checkbox" v-model="limitAll[key]"></input></span>
+			<li v-for="(k1,item1) in pageAll">
+				<div @click.stop="showLevel($event, k1)">
+					<span><input @click="checkFirst(k1, limitAll[k1])" type="checkbox" v-model="limitAll[k1]"></input></span>
 					<span>{{item1.name}}</span>
 					<span>&nbsp;</span>
-					<span><label><input @click="checkAll('exportLimit', key)" type="checkbox" v-model="exportLimitAll[key]"/>数据导出</label></span>
+					<span>&nbsp;</span>
+					<span>
+						<checkbox-list 
+						:list="platformType" 
+						level="1" 
+						:obj="{k1: k1}" 
+						:val.sync="platformPermission1[k1]">
+						</checkbox-list>
+					</span>
+					<span><label><input @click="checkFirstExport(k1, exportLimitAll[k1])" type="checkbox" v-model="exportLimitAll[k1]"/>数据导出</label></span>
 				</div>
-				<ul v-show="levelShow[$index]">
-					<li v-for="item2 in item1.path">
-						<span><input type="checkbox" v-model="limitedObj[key][$index]"></input></span>
-						<span>&nbsp;</span>
-						<span>{{item2.name}}</span>
-						<span><label><input type="checkbox" v-model="exportLimitObj[key][$index]"/>数据导出</label></span>
+				<ul v-show="levelShow[k1].show">
+					<li v-for="item2 of item1.path" >
+						<div @click.stop="showSubLevel($event, levelShow[k1], item2.id)" class="second-level">
+							<span><input @click="checkSecond(k1, item2.id, limitedObj[k1][item2.id])" type="checkbox" v-model="limitedObj[k1][item2.id]"></input></span>
+							<span>&nbsp;</span>
+							<span>{{item2.name}}</span>
+							<span>&nbsp;</span>
+							<span>
+								<checkbox-list 
+								:list="platformType" 
+								level="2" 
+								:obj="{k1: k1, id2: item2.id}" 
+								:val.sync="platformPermission2[k1][item2.id]">
+								</checkbox-list>
+							</span>
+							<span><label><input @click="checkSecondExport(k1, item2.id, exportLimitObj[k1][item2.id])" type="checkbox" v-model="exportLimitObj[k1][item2.id]"/>数据导出</label></span>
+						</div>
+						<ul v-show="levelShow[k1].subs[item2.id]">
+							<li v-for="item3 in item2.subPages">
+								<span><input @click="checkThird(k1, item2.id, item3.id, subPagesObj[k1][item2.id][item3.id])" type="checkbox" v-model="subPagesObj[k1][item2.id][item3.id]"></input></span>
+								<span>&nbsp;</span>
+								<span>&nbsp;</span>
+								<span>{{item3.name}}</span>
+								<span>
+									<checkbox-list 
+									:list="platformType" 
+									level="3" 
+									:obj="{k1: k1, id2: item2.id, id3: item3.id}" 
+									:val.sync="platformPermission3[k1][item2.id][item3.id]">
+									</checkbox-list>
+								</span>
+								<span>&nbsp;</span>
+							</li>
+						</ul>
 					</li>
+
 				</ul>
 			</li>
 		</ul>
 	</div>
 </template>
+<script>
+var Vue = require('Vue');
+var $ = require('jQuery');
+
+var utils = require('utils');
+import checkboxList from './checkboxList.vue'
+
+var LimitList = Vue.extend({
+	name: 'LimitList',
+	components: {checkboxList},
+	data: function() {
+		return {
+			pageAll: window.allPageConfig.pageAll,
+			// 记录所有二级页面列表
+			secondAll: {},
+			thirdAll: {},
+			levelShow: {},
+			limitedObj: {},
+			exportLimitObj: {},
+			subPagesObj: {},
+			limitAll: {},
+			exportLimitAll: {},
+			platformPermission1: {},
+			platformPermission2: {},
+			platformPermission3: {},
+			platformType: ['IOS', 'Android', 'APP', 'PC', 'H5']
+		};
+	},
+	props: ['id', 'limited', 'exportLimit', 'subPages', 'type'],
+	created: function() {
+		var count = 0;
+		for (let key in this.pageAll) {
+			if (count === 0) {
+				Vue.set(this.levelShow, key, {show: true, subs: {}});
+			} else {
+				Vue.set(this.levelShow, key, {show: false, subs: {}});
+			}
+			let subs = this.pageAll[key].path || [];
+			this.thirdAll[key] = {};
+			let secIds = [];
+			// mock subPages and ID 
+			// delete after API finished
+			// for(let index in subs) {
+				// let id = index.toString();
+				// Vue.set(subs[index], 'id', id);
+				// Vue.set(subs[index], 'subPages', [{id: "test1",name: 'mock1', url: 'mock1url'}, {id: "test2",name: 'mock2', url: 'mock2url'}]);
+			// }
+			for(let item of subs) {
+				let id = item.id;
+				// 没有id的不予显示
+				if (id != null) {
+					// id一定为字符串
+					id = id.toString();
+					// 回写id为字符串
+					item.id = id;
+					// 默认都打开三级目录折叠
+					Vue.set(this.levelShow[key].subs, id, true);
+					secIds.push(id);
+					let thirds = item.subPages || [];
+					let thirdIds = [];
+					for(let third of thirds){
+						let tid = third.id;
+						// 三级页面也一定要有id
+						if (tid != null) {
+							tid = tid.toString();
+							// 回写id为字符串
+							third.id = tid;
+							thirdIds.push(tid.toString());
+						}
+					}
+					this.thirdAll[key][id] = thirdIds;
+				}
+			}
+			this.secondAll[key] = secIds;
+			count += 1;
+		}
+	},
+	methods: {
+		showLevel: function(ev, index) {
+			if (ev.target.tagName === 'INPUT' || ev.target.tagName === 'LABEL') {
+				return;
+			}
+			this.levelShow[index].show = !this.levelShow[index].show;
+		},
+		showSubLevel(ev, config, index) {
+			if (ev.target.tagName === 'INPUT' || ev.target.tagName === 'LABEL') {
+				return;
+			}
+			config.subs[index] = !config.subs[index];
+		},
+		parseObjectToLimitObj: function(obj) {
+			var result = {};
+			for (var item in obj) {
+				var _current = [];
+				for (var k in obj[item]) {
+					if (obj[item][k]) {
+						_current.push(k);
+					}
+				}
+				result[item] = _current;
+			}
+			return result;
+		},
+		parseObjectToSubPagesObj(obj) {
+			let result = {};
+			// 遍历第一层
+			for (let f in obj) {
+				let secs = obj[f];
+				result[f] = {};
+				// 遍历第二层
+				for (let s in secs) {
+					let thirds = secs[s];
+					// 遍历第三层 
+					let _current = [];
+					for (let t in thirds) {
+						if (thirds[t]) {
+							_current.push(t);
+						}
+					}
+					result[f][s] = _current;
+				}
+			}
+			return result;
+		},
+		clear(obj){
+			if (typeof obj === 'object') {
+				for (let key in obj) {
+					if(obj[key] === true) {
+						obj[key] = false;
+					} else {
+						this.clear(obj[key]);
+					}
+				}
+			}
+		},
+		clearPlatform(obj) {
+			if (typeof obj === 'object') {
+				for (let key in obj) {
+					if (typeof obj[key] === 'object') {	
+						this.clearPlatform(obj[key]);
+					} else {
+						if(obj[key] !== '00000') {
+							obj[key] = '00000';
+						}
+					}
+				}
+			}
+		},
+		clearAll(){
+			this.clear(this.limitAll);
+			this.clear(this.exportLimitAll);
+			this.clear(this.limitedObj);
+			this.clear(this.exportLimitObj);
+			this.clear(this.subPagesObj);
+			this.clearPlatform(this.platformPermission1);
+			this.clearPlatform(this.platformPermission2);
+			this.clearPlatform(this.platformPermission3);
+		},
+		checkFirst(firstid, val) {
+			let valafter = !val;
+			
+			this.parseSubSecond(firstid, valafter);
+			// 默认不勾选“数据导出”
+			// this.parseSubSecondExport(firstid, valafter);
+			// Vue.set(this.exportLimitAll, firstid, valafter);
+		},
+		checkFirstExport(firstid, val) {
+			if (val) {
+				// 由true 变为false，仅取消下级导出功能
+				this.parseSubSecondExport(firstid, false);
+			} else {
+				// 由false 变为true，相当于全部选择
+				Vue.set(this.limitAll, firstid, true);
+				this.parseSubSecond(firstid, true);
+				this.parseSubSecondExport(firstid, true);
+			}
+		},
+		checkSecond(firstid, secondid, val) {
+			let valafter = !val;
+
+			// 检查一级页面是否全选的状态
+			this.parseFirst(firstid, secondid, valafter);
+			
+			
+			// 一级页面的导出全选状态
+			// 默认不勾选“数据导出”
+			// this.parseFirstExport(firstid, secondid, valafter);
+			// Vue.set(this.exportLimitObj[firstid], secondid, valafter);
+			// 下属三级页面全部选中/不选
+			this.parseSubThird(firstid, secondid, valafter);
+		},
+		checkSecondExport(firstid, secondid, val) {
+			if (val) {
+				// 由true 变为false，仅取消下级导出功能
+				// 然而三级页面并没有导出权限
+				// 检查是否取消一级页面导出的选中
+				this.parseFirstExport(firstid, secondid, false);
+			} else {
+				// 由false 变为true，相当于check了二级页面
+				Vue.set(this.limitedObj[firstid], secondid, true);
+				this.parseFirst(firstid, secondid, true);
+			
+				// 一级页面的导出全选状态
+				this.parseFirstExport(firstid, secondid, true);
+				
+				// 下属三级页面全部选中/不选
+				this.parseSubThird(firstid, secondid, true);
+			}
+		},
+		checkThird(firstid, secondid, thirdid, val) {
+			// 检查三级页面是否有构成全选和全不选
+			let valafter = !val;
+			// 仅在选中时判断 三级页面有选中的 二级页面一定需要被选中
+			if (valafter) {
+				Vue.set(this.limitedObj[firstid], secondid, true);
+				// 默认不勾选“数据导出”
+				// Vue.set(this.exportLimitObj[firstid], secondid, true);
+				this.parseFirst(firstid, secondid, true);
+				// 默认不勾选“数据导出”
+				// this.parseFirstExport(firstid, secondid, true);
+			}
+		},
+		parseFirst(firstid, secondid, valafter) {
+			// 检查二级页面对应的一级页面是否全选的状态
+			let secs = this.limitedObj[firstid];
+			let firstChecked = valafter;
+			for (let k in secs) {
+				if ((k !== secondid) && (secs[k] != valafter)) {
+					// 有不同的 一级页面肯定不予全选
+					firstChecked = false;
+					break;
+				}
+			}
+			Vue.set(this.limitAll, firstid, firstChecked);
+		},
+		parseFirstExport(firstid, secondid, valafter) {
+			// 检查二级导出页面对应的一级导出页面是否全选的状态
+			let secs = this.exportLimitObj[firstid];
+			let firstChecked = valafter;
+			for (let k in secs) {
+				if ((k !== secondid) && (secs[k] != valafter)) {
+					// 有不同的 一级页面肯定不予全选
+					firstChecked = false;
+					break;
+				}
+			}
+			Vue.set(this.exportLimitAll, firstid, firstChecked);
+		},
+		parseSubSecond(firstid, valafter) {
+			// 下属二级页面全部全选或全不选
+			let secPages = this.secondAll[firstid];
+			for (let secid of secPages) {
+				Vue.set(this.limitedObj[firstid], secid, valafter);
+				// 连锁三级全部选中/全不选
+				this.parseSubThird(firstid, secid, valafter);
+			}
+		},
+		parseSubSecondExport(firstid, valafter) {
+			// 下属二级导出页面全部全选或全不选
+			let secPages = this.secondAll[firstid];
+			for (let secid of secPages) {
+				Vue.set(this.exportLimitObj[firstid], secid, valafter);
+				// 暂无三级导出
+				// this.parseSubThirdExport(firstid, secid, valafter);
+			}
+		},
+		parseSubThird(firstid, secondid, valafter) {
+			// 下属三级页面全部全选或全不选
+			let subPagesCheckObj = this.subPagesObj[firstid][secondid];
+			// 保证subPagesCheckObj已包含全部三级页面的id
+			for (let id in subPagesCheckObj) {
+				Vue.set(subPagesCheckObj, id, valafter);
+			}
+		}
+	},
+	watch: {
+		limited: {
+			handler: function(val) {
+				let limitedObj = {};
+				let limitAll = {};
+				for (let f in this.pageAll) {
+					let userLimtited = this.limited[f];
+					limitedObj[f] = {};
+					limitAll[f] = !!userLimtited;
+					let secAll = this.secondAll[f];
+					for (let s of secAll) {
+						limitedObj[f][s] = userLimtited && userLimtited.includes(s);
+					}
+				}
+				this.limitedObj = limitedObj;
+				this.limitAll = limitAll;
+			},
+			deep: true
+		},
+		type: {
+			handler: function(val) {
+				for (let key of Object.keys(this.platformPermission2)) {
+					for (let key2 of Object.keys(this.platformPermission2[key])) {
+						this.platformPermission2[key][key2] = (val && val[key2]) || '00000'
+					}
+				}
+				for (let key of Object.keys(this.platformPermission3)) {
+					for (let key2 of Object.keys(this.platformPermission3[key])) {
+						for (let key3 of Object.keys(this.platformPermission3[key][key2])) {
+							this.platformPermission3[key][key2][key3] = (val && val[key3]) || '00000'
+						}
+					}
+				}
+				for (let key in this.platformPermission1) {
+					this.$emit('checkboxChange2', {k1: key}, this.platformPermission1[key]);
+				}
+			},
+			deep: true
+		},
+		subPages: {
+			handler: function(val) {
+				this.subPagesObj = {};
+				// 筛选掉limit中不能存在
+				for (let f in this.pageAll) {
+					// this.subPagesObj
+					Vue.set(this.subPagesObj, f, {});
+					let secs = this.subPages ? this.subPages[f] : {};
+					let secAll = this.secondAll[f];
+					for (let s of secAll) {
+						Vue.set(this.subPagesObj[f], s, {});
+						let secIncluded = secs ? Object.keys(secs).includes(s) : false;
+						let thirdsAll = this.thirdAll[f][s];
+						let thirds = secIncluded ? secs[s] : [];
+						for(let tid of thirdsAll) {
+							let ischecked = secIncluded && thirds.includes(tid);
+							Vue.set(this.subPagesObj[f][s], tid, ischecked);
+						}
+					}
+				}
+			},
+			deep: true
+		},
+		exportLimit: {
+			handler: function(val) {
+				let exportLimitObj = {};
+				let exportLimitAll = {};
+				for (let f in this.pageAll) {
+					let userExportLimtited = this.exportLimit[f];
+					exportLimitObj[f] = {};
+					exportLimitAll[f] = !!userExportLimtited;
+					let secAll = this.secondAll[f];
+					for (let s of secAll) {
+						exportLimitObj[f][s] = userExportLimtited && userExportLimtited.includes(s);
+					}
+				}
+				this.exportLimitObj = exportLimitObj;
+				this.exportLimitAll = exportLimitAll;
+			},
+			deep: true
+		},
+		limitedObj: {
+			handler: function() {
+				var realLimit = this.parseObjectToLimitObj(this.limitedObj);
+				this.$dispatch('borcastLimit', realLimit);
+			},
+			deep: true
+		},
+		subPagesObj: {
+			handler: function() {
+				var realSubPages = this.parseObjectToSubPagesObj(this.subPagesObj);
+				this.$dispatch('borcastSubPages', realSubPages);
+			},
+			deep: true
+		},
+		exportLimitObj: {
+			handler: function() {
+				var realLimit = this.parseObjectToLimitObj(this.exportLimitObj);
+				this.$dispatch('borcastExportLimit', realLimit);
+			},
+			deep: true
+		}
+	},
+	events: {
+		checkboxChange1(obj, val, index) {
+			// 更改2级目录
+			let k1 = obj.k1;
+			let permission2 = this.platformPermission2[k1];
+			if (permission2) {
+				for (let item in permission2) {
+					if (index === -1) {
+						permission2[item] = val
+					} else {
+						let temp = permission2[item].split('')
+						temp[index] = val[index]
+						permission2[item] = temp.join('')
+					}
+				}
+			}
+		},
+		checkboxChange2(obj, val, index) {
+			// 改为不更改3级目录
+			// let permission3 = this.platformPermission3[obj.k1];
+			// if (permission3) {
+			// 	permission3 = permission3[obj.id2]
+			// 	if (permission3) {
+			// 		for (let item in permission3) {
+			// 			permission3[item] = val
+			// 		}
+			// 	}
+			// }
+			// 判断2级目录
+			let permission2 = this.platformPermission2[obj.k1];
+			if (permission2) {
+				let all = ['1', '1', '1', '1', '1']
+				for (let key of Object.keys(permission2)) {
+					if (permission2[key]) {
+						permission2[key].split('').forEach((x, index) => {
+							if (x !== '1') {
+								all[index] = '0'
+							}
+						})
+					} else {
+						all = ['0', '0', '0', '0', '0']
+					}
+				}
+				// 赋值1级目录
+				this.$set(`platformPermission1[${obj.k1}]`, all.join(''))
+			}
+		},
+		checkboxChange3(obj, val) {
+			// 改为不判断二级目录
+			// let permission3 = this.platformPermission3[obj.k1][obj.id2];
+			// if (permission3) {
+			// 	let all = ['1', '1', '1', '1', '1']
+			// 	for (let key of Object.keys(permission3)) {
+			// 		permission3[key].split('').forEach((x, index) => {
+			// 			if (x !== '1') {
+			// 				all[index] = '0'
+			// 			}
+			// 		})
+			// 	}	
+			// 	// 赋值2级目录
+			// 	this.platformPermission2[obj.k1][obj.id2] = all.join('');
+			// }
+		}
+	}
+});
+
+module.exports = LimitList;
+</script>
+
+
 <style scoped>
 label {
 	margin: 0;
@@ -34,6 +522,15 @@ label {
 
 label input {
 	margin: 0 5px 0 0;
+}
+
+.limit_list .clear-all {
+    float: right;
+    margin-top: 25px;
+}
+
+.limit_list h2 {
+	display: inline-block;
 }
 
 .con {
@@ -58,26 +555,39 @@ label input {
 	box-sizing: border-box;
 }
 
+
 .con>li span:nth-child(1) {
-	width: 10%;
+	width: 6%;
 }
 
 .con>li span:nth-child(2) {
-	width: 30%;
+	width: 12%;
 }
 
 .con>li span:nth-child(3) {
-	width: 30%;
+	width: 18%;
+}
+.con>li span:nth-child(4) {
+	width: 16%;
 }
 
-.con>li span:nth-child(4) {
-	width: 30%;
+.con>li span:nth-child(5) {
+	width: 34%;
+}
+
+.con>li span:nth-child(6) {
+	width: 14%;
 	border-right: none;
 }
 
 .con>li>div {
 	font-size: 0;
 	background-color: rgb(204, 204, 255);
+	cursor: pointer;
+}
+
+.second-level {
+	background: rgba(204,204,255,0.2);
 	cursor: pointer;
 }
 
@@ -94,177 +604,3 @@ label input {
 	font-size: 0px;
 }
 </style>
-<script>
-var Vue = require('Vue');
-var $ = require('jQuery');
-
-var utils = require('utils');
-
-var LimitList = Vue.extend({
-	name: 'LimitList',
-	data: function() {
-		return {
-			pageAll: window.allPageConfig.pageAll,
-			levelShow: {},
-			limitedObj: {},
-			exportLimitObj: {},
-			limitAll: {},
-			exportLimitAll: {}
-		};
-	},
-	props: ['id', 'limited', 'exportLimit'],
-	created: function() {
-		var count = 0;
-		for (let item in this.pageAll) {
-			if (count === 0) {
-				Vue.set(this.levelShow, count, true);
-			} else {
-				Vue.set(this.levelShow, count, false);
-			}
-			count += 1;
-		}
-	},
-	methods: {
-		showLevel: function(ev, index) {
-			if (ev.target.tagName === 'INPUT' || ev.target.tagName === 'LABEL') {
-				return;
-			}
-			this.levelShow[index] = !this.levelShow[index];
-		},
-		parseLimitAll: function(type) {
-			if (type === 'limit') {
-				for (let item in this.limitedObj) {
-					let _count1 = 0;
-					for (let k in this.limitedObj[item]) {
-						if (this.limitedObj[item][k]) {
-							_count1 += 1;
-						}
-					}
-					if (_count1 === this.pageAll[item].path.length) {
-						Vue.set(this.limitAll, item, true);
-					} else {
-						Vue.set(this.limitAll, item, false);
-					}
-				}
-			} else if (type === 'exportLimit') {
-				for (let item in this.exportLimitObj) {
-					let _count1 = 0;
-					for (let k in this.exportLimitObj[item]) {
-						if (this.exportLimitObj[item][k]) {
-							_count1 += 1;
-						}
-					}
-					if (_count1 === this.pageAll[item].path.length) {
-						Vue.set(this.exportLimitAll, item, true);
-					} else {
-						Vue.set(this.exportLimitAll, item, false);
-					}
-				}
-			}
-		},
-		parseArrayToObject: function(array) {
-			var result = {};
-			for (var i = 0; i < array.length; i++) {
-				result[array[i]] = true;
-			}
-			return result;
-		},
-		parseObjectToLimitObj: function(obj) {
-			var result = {};
-			for (var item in obj) {
-				var _current = [];
-				for (var k in obj[item]) {
-					if (obj[item][k]) {
-						_current.push(k);
-					}
-				}
-				result[item] = _current;
-			}
-			return result;
-		},
-		checkAll: function(type, key, ev) {
-			if (type === 'limit') {
-				Vue.set(this.limitedObj, key, {});
-				if (!this.limitAll[key]) {
-					for (let item in this.pageAll[key]['path']) {
-						if (this.limitedObj[key] === undefined) {
-							Vue.set(this.limitedObj, key, {});
-						}
-						Vue.set(this.limitedObj[key], item, true);
-					}
-				} else {
-					for (let item in this.pageAll[key]['path']) {
-						if (this.limitedObj[key] === undefined) {
-							Vue.set(this.limitedObj, key, {});
-						}
-						Vue.set(this.limitedObj[key], item, false);
-					}
-				}
-			} else if (type === 'exportLimit') {
-				Vue.set(this.exportLimitObj, key, {});
-				if (!this.exportLimitAll[key]) {
-					for (let item in this.pageAll[key]['path']) {
-						if (this.exportLimitObj[key] === undefined) {
-							Vue.set(this.exportLimitObj, key, {});
-						}
-						Vue.set(this.exportLimitObj[key], item, true);
-					}
-				} else {
-					for (let item in this.pageAll[key]['path']) {
-						if (this.exportLimitObj[key] === undefined) {
-							Vue.set(this.exportLimitObj, key, {});
-						}
-						Vue.set(this.exportLimitObj[key], item, false);
-					}
-				}
-			}
-		}
-	},
-	watch: {
-		limited: {
-			handler: function(val) {
-				this.limitedObj = {};
-				this.limitAll = {};
-				for (var item in this.limited) {
-					var _curretnObj = this.parseArrayToObject(this.limited[item]);
-					if (window.allPageConfig.pageAll[item]) {
-						Vue.set(this.limitedObj, item, _curretnObj);
-					}
-				}
-			},
-			deep: true
-		},
-		exportLimit: {
-			handler: function(val) {
-				this.exportLimitObj = {};
-				this.exportLimitAll = {};
-				for (var item in this.exportLimit) {
-					var _curretnObj = this.parseArrayToObject(this.exportLimit[item]);
-					if (window.allPageConfig.pageAll[item]) {
-						Vue.set(this.exportLimitObj, item, _curretnObj);
-					}
-				}
-			},
-			deep: true
-		},
-		limitedObj: {
-			handler: function() {
-				this.parseLimitAll('limit');
-				var realLimit = this.parseObjectToLimitObj(this.limitedObj);
-				this.$dispatch('borcastLimit', realLimit);
-			},
-			deep: true
-		},
-		exportLimitObj: {
-			handler: function() {
-				this.parseLimitAll('exportLimit');
-				var realLimit = this.parseObjectToLimitObj(this.exportLimitObj);
-				this.$dispatch('borcastExportLimit', realLimit);
-			},
-			deep: true
-		}
-	}
-});
-
-module.exports = LimitList;
-</script>
