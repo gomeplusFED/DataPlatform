@@ -70,32 +70,10 @@ module.exports = (Router) => {
     //直播详情
     Router = new api(Router, {
         router: "/videoStatis/videoDetailsOperatingOn",
-        modelName: ["LivevideoDetail2"],
+        modelName: ["LivevideoTrend2"],
         platform: false,
-        paging : [true],
-        flexible_btn : [{
-            content: '<a href="javascript:void(0)">导出</a>',
-            preMethods: ['excel_export']
-        }],
-        global_platform : {
-            show: true,
-            key: 'type',
-            name : "",
-            list: [{
-                name: '直播',
-                url : "#!/videoStatis/videoDetail"
-            }, {
-                name: '点播',
-                url : "#!/videoStatis/videoDetails2"
-            }]
-        },
-        search : {
-            show : true,
-            title : "请输入视频ID",
-            key : "live_play_id"
-        },
         //showDayUnit: true,
-        order: ["-date"],
+        date_picker : false,
         filter_select: [{
             title: 'sdk类型：',
             filter_key : 'sdk_type',
@@ -119,8 +97,8 @@ module.exports = (Router) => {
                 value: 'IOS'
             }]
         }],
-        filter(data) {
-            return filter.One(data);
+        filter(data, query) {
+            return filter.Three(data, query);
         }
     });
 
