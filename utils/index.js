@@ -2,6 +2,7 @@ var path = require('path');
 var config = require('./config.json');
 const validator = require('validator');
 const request = require("request");
+const moment = require("moment");
 const style = {
     border : {
         left : {
@@ -278,6 +279,37 @@ exports.times = function(startTime, endTime, day_type) {
                 new Date(new Date(year, month, 1).getTime() - 24 * 60 * 60 * 1000).getDate()) {
                 month++;
                 array.push(exports.getDate(new Date(start)));
+                start = new Date(year, month, 1).getTime() - 24 * 60 * 60 * 1000;
+            } else {
+                start = new Date(year, month, 1).getTime() - 24 * 60 * 60 * 1000;
+            }
+        }
+    }
+    return array;
+};
+
+exports.timesTwo = function(startTime, endTime, day_type) {
+    var start = new Date(startTime).getTime(),
+        end = new Date(endTime).getTime(),
+        year = new Date(start).getFullYear(),
+        month = new Date(start).getMonth() + 1,
+        array = [];
+    while(start <= end) {
+        if(day_type === '1') {
+            array.push(moment(new Date(start)).format("YYYY-MM-DD"));
+            start = start + 24 * 60 * 60 * 1000;
+        } else if(day_type === '2') {
+            if(new Date(start).getDay() === 0) {
+                array.push(moment(new Date(start)).format("YYYY-MM-DD"));
+                start = start + 7 * 24 * 60 * 60 * 1000;
+            } else {
+                start = start + 24 * 60 * 60 * 1000;
+            }
+        } else if(day_type === '3') {
+            if(new Date(start).getDate() ===
+                new Date(new Date(year, month, 1).getTime() - 24 * 60 * 60 * 1000).getDate()) {
+                month++;
+                array.push(moment(new Date(start)).format("YYYY-MM-DD"));
                 start = new Date(year, month, 1).getTime() - 24 * 60 * 60 * 1000;
             } else {
                 start = new Date(year, month, 1).getTime() - 24 * 60 * 60 * 1000;
