@@ -281,21 +281,21 @@ module.exports = {
             type : type,
             map : map,
             data : obj,
-            //markArea: {
-            //    data: [ [{
-            //        name: '卡顿播放数',
-            //        xAxis: stop_play_num.name
-            //    },{
-            //        name: '卡顿播放率',
-            //        xAxis: rate.name
-            //    },{
-            //        name: '直播同时在线播放人数',
-            //        xAxis: live_play_user.name
-            //    },{
-            //        name: '直播同时在线播放次数',
-            //        xAxis: live_play_num.name
-            //    }] ]
-            //},
+            markArea: {
+                data: [ [{
+                    name: '卡顿播放数',
+                    xAxis: stop_play_num.name
+                },{
+                    name: '卡顿播放率',
+                    xAxis: rate.name
+                },{
+                    name: '直播同时在线播放人数',
+                    xAxis: live_play_user.name
+                },{
+                    name: '直播同时在线播放次数',
+                    xAxis: live_play_num.name
+                }] ]
+            },
             config: { // 配置信息
                 stack: false  // 图的堆叠
             }

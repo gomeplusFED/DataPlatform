@@ -69,7 +69,7 @@ module.exports = (Router) => {
 
     //直播详情
     Router = new api(Router, {
-        router: "/videoStatis/videoDetailsOperatingOn",
+        router: "/videoStatis/videoDetailsOperatingOne",
         modelName: ["LivevideoTrend2"],
         platform: false,
         //showDayUnit: true,
