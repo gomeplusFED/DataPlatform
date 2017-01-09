@@ -392,7 +392,6 @@ var Account = Vue.extend({
 
 				// 平台权限合并
 				let type = JSON.parse(useritem.type || '{}')
-				debugger
 				for(let key of Object.keys(_this.type)) {
 					let item = _this.type[key]
 					if (item.indexOf('1') > -1) {
