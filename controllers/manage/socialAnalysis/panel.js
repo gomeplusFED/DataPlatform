@@ -70,7 +70,7 @@ module.exports = (Router) => {
     //话题汇总
     Router = new api(Router, {
         router : "/socialAnalysis/panelTwo",
-        modelName : ["GroupStatistics"],
+        modelName : ["SocialTopicStatistics"],
         platform : false,
         date_picker : false,
         params(query , params , sendData){
