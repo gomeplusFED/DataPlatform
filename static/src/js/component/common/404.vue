@@ -6,7 +6,6 @@
 <script>
 	
 var Vue = require('Vue');
-var timer;
 var Erro = Vue.extend({
     name: 'Erro',
     data() {
@@ -16,13 +15,13 @@ var Erro = Vue.extend({
     },
     route: {
         data() {
-            clearInterval(timer);
-            timer = setInterval(() => {
-                if (!this.second) {
+            clearInterval(this.timer);
+            this.timer = setInterval(() => {
+                if (!this.second && this.$route.path === '/error') {
                     this.$route.router.go({
 						path: '/'
 					});
-                    clearInterval(timer);
+                    clearInterval(this.timer);
                 } else {
                     this.second--;
                 }
