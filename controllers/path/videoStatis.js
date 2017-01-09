@@ -87,7 +87,7 @@ module.exports = {
     },
     videoDetailsOperating() {
         return {
-            id: 201,
+            id: 202,
             name : "视频明细",
             path : "/videoStatis/videoDetailsOperating",
             display : true,
@@ -104,13 +104,13 @@ module.exports = {
         return {
             id: 201,
             name : "视频明细",
-            path : "/videoStatis/videoDetails2",
+            path : "/videoStatis/videoDetailsDian",
             display : true,
             defaultData : [
                 {
                     type : "table",
                     title: "视频明细",
-                    query_api : "/videoStatis/videoDetailsTwo"
+                    query_api : "/videoStatis/videoDetailsDianOne"
                 }
             ]
         }

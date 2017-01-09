@@ -177,7 +177,7 @@ module.exports = {
             key.night = util.toFixed(key.play_error, key.play_num);
             key.ten = util.toFixed(key.improper_play, key.play_num);
             key.operating =
-                `<button class='btn btn-default' url_link='/videoStatis/videoDetailsOperatingg' url_fixed_params='{"live_play_id": "${key.live_play_id}","startTime" : "${key.live_play_startime}", "endTime" : "${key.live_play_endtime}"}'>详细>></button>`;
+                `<button class='btn btn-default' url_link='/videoStatis/videoDetailsOperating' url_fixed_params='{"live_play_id": "${key.live_play_id}","startTime" : "${key.live_play_startime}", "endTime" : "${key.live_play_endtime}"}'>详细>></button>`;
         }
 
         return util.toTable([[row].concat(source)], rows, cols, [count]);
@@ -209,8 +209,6 @@ module.exports = {
                     type : "string"
                 }]
             ];
-        console.log(sum);
-        console.log(count);
 
         for(let i = 0, len = source.length; i < len; i++) {
             source[i].id = ((page || 1) - 1) * 20 + i + 1;
@@ -280,24 +278,24 @@ module.exports = {
         }
 
         return [{
-            type : "line",
+            type : type,
             map : map,
             data : obj,
-            markArea: {
-                data: [ [{
-                    name: '卡顿播放数',
-                    xAxis: stop_play_num.name
-                },{
-                    name: '卡顿播放率',
-                    xAxis: rate.name
-                },{
-                    name: '直播同时在线播放人数',
-                    xAxis: live_play_user.name
-                },{
-                    name: '直播同时在线播放次数',
-                    xAxis: live_play_num.name
-                }] ]
-            },
+            //markArea: {
+            //    data: [ [{
+            //        name: '卡顿播放数',
+            //        xAxis: stop_play_num.name
+            //    },{
+            //        name: '卡顿播放率',
+            //        xAxis: rate.name
+            //    },{
+            //        name: '直播同时在线播放人数',
+            //        xAxis: live_play_user.name
+            //    },{
+            //        name: '直播同时在线播放次数',
+            //        xAxis: live_play_num.name
+            //    }] ]
+            //},
             config: { // 配置信息
                 stack: false  // 图的堆叠
             }
