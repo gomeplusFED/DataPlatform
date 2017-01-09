@@ -6,6 +6,8 @@
 const filter = require("../../../filters/videoStatis/details"),
     api = require("../../../base/main"),
     request = require("request"),
+    orm = require("orm"),
+    moment = require("moment"),
     util = require("../../../utils");
 
 module.exports = (Router) => {
@@ -97,6 +99,14 @@ module.exports = (Router) => {
                 value: 'IOS'
             }]
         }],
+        params(query, params) {
+            params.date = orm.between(
+                moment(new Date(query.startTime)).format("YYYY-MM-DD"),
+                moment(new Date(query.endTime)).format("YYYY-MM-DD")
+            );
+
+            return params;
+        },
         filter(data, query) {
             return filter.Three(data, query);
         }

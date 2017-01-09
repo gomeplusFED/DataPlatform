@@ -188,6 +188,8 @@ api.prototype = {
         if(query.startTime === undefined && query.endTime === undefined) {
             return true;
         } else {
+            query.startTime = decodeURI(query.startTime);
+            query.endTime = decodeURI(query.endTime);
             if (!validator.isDate(query.startTime) && !validator.isDate(query.endTime)) {
                 next(new Error("startTime参数出错或者endTime参数出错"));
                 return false;
