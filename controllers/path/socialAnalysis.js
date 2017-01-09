@@ -5,17 +5,75 @@
  */
 
 module.exports = {
+    panel(){
+        return {
+            name : "社交面板",
+            path : "/socialAnalysis/panel",
+            display: true,
+            defaultData : [
+                {
+                    title: "",
+                    query_api : "/achievements/tradePanelZero"
+                },
+                {
+                    type : "table",
+                    title : "圈子汇总",
+                    query_api : "/socialAnalysis/panelOne"
+                },
+                {
+                    type : "table",
+                    title : "话题汇总",
+                    query_api : "/socialAnalysis/panelTwo"
+                },
+                {
+                    type : "table",
+                    title : "话题交易汇总",
+                    query_api : "/socialAnalysis/panelThree"
+                },
+                {
+                    type : "table",
+                    title : "好友关系汇总",
+                    query_api : "/socialAnalysis/panelFour"
+                },
+                {
+                    type : "table",
+                    title : "兴趣点汇总",
+                    query_api : "/socialAnalysis/panelFive"
+                }
+            ]
+        }
+    },
+    total(){
+        return {
+            name : "累计数据",
+            path : "/socialAnalysis/total",
+            display:true,
+            defaultData : [
+                {
+                    type : "table",
+                    title: "社交数据总览",
+                    query_api: "/socialAnalysis/totalOne"
+                },
+                {
+                    type : "chart",
+                    title: "话题数据一级分布",
+                    query_api: "/socialAnalysis/totalTwo"
+                }
+            ]
+        }
+    },
     group() {
         return {
+            id : 72,
             name : "圈子数据",
             path : "/socialAnalysis/group",
             display : true,
             defaultData : [    
-                {
+                /*{
                     type : "table",
                     title : "圈子数据总览",
                     query_api : "/socialAnalysis/groupSix"
-                },
+                },*/
                 {
                     type: "table",
                     title:"圈子数据统计",
@@ -75,6 +133,7 @@ module.exports = {
     },
     topics() {
         return {
+            id : 73,
             name : "话题数据",
             path : "/socialAnalysis/topics",
             display : true,
@@ -138,6 +197,7 @@ module.exports = {
     },
     groupHost() {
         return {
+            id : 74,
             name : "圈主数据",
             path : "/socialAnalysis/host",
             display : true,

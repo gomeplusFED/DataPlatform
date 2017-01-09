@@ -10,6 +10,27 @@ const filter = require("../../../filters/search/findex");
 
 module.exports = (Router)=>{
 
+    const filter_select = [
+        {
+            title : "平台选择",
+            filter_key : "type",
+            groups : [
+                {
+                    key : "ios",
+                    value:"IOS"
+                },{
+                    key : "android",
+                    value:"Android"
+                },{
+                    key : "pc",
+                    value:"PC"
+                },{
+                    key : "h5",
+                    value:"H5"
+                }
+            ]
+        }
+    ];
     //商品搜索大盘指标
     Router = new api(Router , {
         router : "/search/indexOne",
@@ -25,31 +46,9 @@ module.exports = (Router)=>{
             query.date = date;
             return params;
         },
-        filter_select : [
-            {
-                title : "平台选择",
-                filter_key : "type",
-                groups : [
-                    {
-                        key : "ALL",
-                        value:"全部平台"
-                    },
-                    {
-                        key : "ios",
-                        value:"IOS"
-                    },{
-                        key : "android",
-                        value:"Android"
-                    },{
-                        key : "pc",
-                        value:"PC"
-                    },{
-                        key : "h5",
-                        value:"H5"
-                    }
-                ]
-            }
-        ],
+        selectFilter(req, cb) {
+            cb(null, utils.globalPlatform(req.session.userInfo.type["68"], filter_select));
+        },
         rows : [
             ["date", "search_result_pv", "search_result_uv", "search_prodet_ipv" , "search_prodet_ipv_uv",
             "search_avg_turnpage",
@@ -144,34 +143,13 @@ module.exports = (Router)=>{
             params.search_keyword = "ALL";
             return params;
         },
-        filter_select : [
-            {
-                title : "平台选择",
-                filter_key : "type",
-                groups : [
-                    {
-                        key : "ALL",
-                        value:"全部平台"
-                    },{
-                        key : "ios",
-                        value:"IOS"
-                    },{
-                        key : "android",
-                        value:"Android"
-                    },{
-                        key : "pc",
-                        value:"PC"
-                    },{
-                        key : "h5",
-                        value:"H5"
-                    }
-                ]
-            }
-        ],
+        selectFilter(req, cb) {
+            cb(null, utils.globalPlatform(req.session.userInfo.type["68"], filter_select));
+        },
         filter (data , query , dates){
             return filter.indexTwo(data , query , dates);
         }
     });
 
     return Router;
-}
+};

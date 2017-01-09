@@ -7,8 +7,9 @@
 module.exports = {
     retained() {
         return {
+            id : 67,
             name: "留存分析",
-            path: "/retainedAnalysis",
+            path: "/retainedAnalysis/retained",
             display: true,
             defaultData: [{
                 type : "chart",

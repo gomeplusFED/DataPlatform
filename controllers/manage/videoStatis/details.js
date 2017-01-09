@@ -26,10 +26,10 @@ module.exports = (Router) => {
             name : "",
             list: [{
                 name: '直播',
-                url : "#!/videoStatis/videoDetail"
+                url : "#!/videoStatis/videoDetails"
             }, {
                 name: '点播',
-                url : "#!/videoStatis/videoDetails2"
+                url : "#!/videoStatis/videoDetailsDian"
             }]
         },
         search : {
@@ -162,7 +162,7 @@ module.exports = (Router) => {
 
     //点播
     Router = new api(Router, {
-        router: "/videoStatis/videoDetailsTwo",
+        router: "/videoStatis/videoDetailsDianOne",
         modelName: ["VideoplayDetail2"],
         platform: false,
         paging : [true],
@@ -177,10 +177,10 @@ module.exports = (Router) => {
             name : "",
             list: [{
                 name: '直播',
-                url : "#!/videoStatis/videoDetail"
+                url : "#!/videoStatis/videoDetails"
             }, {
                 name: '点播',
-                url : "#!/videoStatis/videoDetails2"
+                url : "#!/videoStatis/videoDetailsDian"
             }]
         },
         search : {

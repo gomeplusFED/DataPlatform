@@ -2,6 +2,7 @@ var path = require('path');
 var config = require('./config.json');
 const validator = require('validator');
 const request = require("request");
+const Assist = require("./assist");
 const style = {
     border : {
         left : {
@@ -29,6 +30,10 @@ const header = {
         fgColor: '#FFFF33'
     }
 };
+
+for(let key in Assist){
+    exports[key] = Assist[key];
+}
 
 exports.unique = function(data) {
     data = data || [];
@@ -719,4 +724,52 @@ exports.megerArray = (result = [] , arr) => {
         }
     }
     return result;
+};
+
+exports.globalPlatform = (type, filter_select) => {
+    let all = true;
+    let ios = filter_select[0].groups[0],
+        and = filter_select[0].groups[1],
+        pc = filter_select[0].groups[2],
+        h5 = filter_select[0].groups[3];
+    const select = {
+        title : filter_select[0].title,
+        filter_key : filter_select[0].filter_key,
+        groups : []
+    };
+    if(type[0] == "1") {
+        select.groups.push(ios);
+    } else {
+        all = false;
+    }
+    if(type[1] == "1") {
+        select.groups.push(and);
+    } else {
+        all = false;
+    }
+    if(type[3] == "1") {
+        select.groups.push(pc);
+    } else {
+        all = false;
+    }
+    if(type[4] == "1") {
+        select.groups.push(h5);
+    } else {
+        all = false;
+    }
+
+    if(all) {
+        select.groups = [{
+            key: 'all',
+            value: '全部'
+        }].concat(select.groups);
+    }
+
+    let arr = [];
+    arr.push(select);
+    for(let i = 1; i < filter_select.length; i++) {
+        arr.push(filter_select[i]);
+    }
+
+    return arr;
 };

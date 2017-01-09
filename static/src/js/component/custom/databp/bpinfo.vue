@@ -18,6 +18,9 @@
 							<div><label>选择器</label>{{config.selector}}</div>
 							<div><label>事件类型</label>单击事件</div>
 							<div><label>匹配模式</label>{{config.pattern}}</div>
+							<div class="type-filter"><label>是否模块</label>
+								<button @click="config.type = 'block'" :class="{'active': config.type === 'block'}">是</button>
+								<button @click="config.type = 'point'" :class="{'active': config.type !== 'block'}">否</button></div>
 							<div><label>全局埋点信息</label>{{publicBpStr}} <button @click="publicBp.push(['', ''])">+</button></div>
 							<div>
 								<div v-for="(i,item) in publicBp" class="pair">
@@ -61,9 +64,7 @@
 
 <script>
 var Vue = require('Vue');
-var api = require('./api');
-var store = require('../../../store/store.js');
-var actions = require('../../../store/actions.js');
+var api = require('./lib/api.js');
 var bpinfo = Vue.extend({
 	data: function() {
 		return {
@@ -75,6 +76,7 @@ var bpinfo = Vue.extend({
 				pointName: '',
 				pattern: '',
 				platform: 'PC',
+				type: 'block',
 				pageUrl: '',
 				selector:'',
 				privateParam: '',
@@ -97,14 +99,6 @@ var bpinfo = Vue.extend({
 			publicBp: [['','']],
 			privateBp: [['','']]
 		}
-	},
-	vuex: {
-		getters: {
-			bpConfig: function() {
-				return store.state.bpConfig;
-			}
-		},
-		actions: actions
 	},
 	computed:  {
 		publicBpStr: {
@@ -156,16 +150,15 @@ var bpinfo = Vue.extend({
 			}
 		}
 	},
-	props:['loading'],
+	props:['loading', 'bpConfig'],
 	created() {
 		this.$watch('bpConfig.trigger', function (val) {
 			if (this.bpConfig.show) {
 				this.init();
 			}
 		});
-		api.getUserInfo().then((data) =>{
-			this.userInfo = JSON.stringify(data);
-		});
+		let {name, username, email, department} = window.allPageConfig.userInfo;
+		this.userInfo = {name, username, email, department};
 	},
 	methods: {
 		setDraggable(val) {
@@ -199,9 +192,7 @@ var bpinfo = Vue.extend({
 			});
 		},
 		hide() {
-			actions.databp(store, {
-				show: false
-			});
+			this.bpConfig.show = false;
 		},
 		showDropDown(item, e) {
 
@@ -292,13 +283,15 @@ var bpinfo = Vue.extend({
 			if (_this.config.pointId) {
 				api.updateBp(_this.config).then(function(res) {
 					// 更新成功刷新传入的数据
-					_this.config.show = false;
-					actions.databp(store, _this.config);
+					_this.bpConfig.show = false;
+					// _this.bpConfig = _this.config;
+					// actions.databp(store, _this.config);
 				});
 			} else {
 				api.saveBp(_this.config).then(function() {
-					_this.config.show = false;
-					actions.databp(store, _this.config);
+					_this.bpConfig.show = false;
+					// _this.bpConfig = _this.config;
+					// actions.databp(store, _this.config);
 				});
 			}
 		}
@@ -358,6 +351,25 @@ module.exports = bpinfo;
     font-size: 17px;
 }
 
+.type-filter button {
+	display: inline-block;
+    vertical-align: middle;
+    border: 1px solid #cacaca;
+    color: #333;
+    padding: 2px 12px;
+    background: #fff;
+    font-size: 12px;
+    outline: none;
+    margin-left: -3px;
+    transition: all ease 0.2s;
+    -webkit-transition: all ease 0.2s;
+}
+
+.type-filter button.active {
+    background: #3389d4;
+    border: 1px solid #3389d4;
+    color: #fff;
+}
 #tab_baseinfo input[type='text'] {
 	max-width: 180px;
 	display: inline-block;

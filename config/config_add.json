@@ -7,6 +7,7 @@
         "href": "#",
         "path": [
             {
+                "id" : 111,
                 "name": "返利汇总",
                 "path": "/rebate/all",
                 "display": true,
@@ -45,6 +46,7 @@
                 ]
             },
             {
+                "id" : 112,
                 "name": "平台订单返利汇总",
                 "path": "/rebate/platformAll",
                 "display": true,
@@ -77,6 +79,7 @@
                 ]
             },
             {
+                "id" : 113,
                 "name": "邀请注册/入驻",
                 "path": "/rebate/regist",
                 "display": true,
@@ -149,6 +152,7 @@
         ],
         "routers": [
             {
+                "id" : 114,
                 "name": "平台基础返利",
                 "path": "/rebate/platformBase",
                 "display": true,
@@ -175,6 +179,7 @@
                 ]
             },
             {
+                "id" : 115,
                 "name": "平台促销返利",
                 "path": "/rebate/promotion",
                 "display": true,
@@ -201,6 +206,7 @@
                 ]
             },
             {
+                "id" : 116,
                 "name": "单项单级返利",
                 "path": "/rebate/singleStage",
                 "display": true,
@@ -227,6 +233,7 @@
                 ]
             },
             {
+                "id" : 117,
                 "name": "邀请商户分享返利",
                 "path": "/rebate/invitation",
                 "display": true,

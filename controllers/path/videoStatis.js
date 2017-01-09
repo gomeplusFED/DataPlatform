@@ -7,6 +7,7 @@
 module.exports = {
     video() {
         return {
+            id : 108,
             name : "视频统计",
             path : "/videoStatis/video",
             display : true,
@@ -31,6 +32,7 @@ module.exports = {
     },
     videoEdition() {
         return {
+            id : 109,
             name : "视频版本统计",
             path : "/videoStatis/edition",
             display : true,
@@ -85,7 +87,7 @@ module.exports = {
     },
     videoDetailsOperating() {
         return {
-            id: 201,
+            id: 202,
             name : "视频明细",
             path : "/videoStatis/videoDetailsOperating",
             display : true,
@@ -102,13 +104,13 @@ module.exports = {
         return {
             id: 201,
             name : "视频明细",
-            path : "/videoStatis/videoDetails2",
+            path : "/videoStatis/videoDetailsDian",
             display : true,
             defaultData : [
                 {
                     type : "table",
                     title: "视频明细",
-                    query_api : "/videoStatis/videoDetailsTwo"
+                    query_api : "/videoStatis/videoDetailsDianOne"
                 }
             ]
         }

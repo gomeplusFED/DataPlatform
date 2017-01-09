@@ -27,14 +27,17 @@ const Config = {
             className: "fa fa-user fa-fw",
             href: "#",
             path: [{
+                id: "0",
                 name: "帐号列表",
                 path: "/user/account",
                 display: true
             }, {
+                id : "1",
                 name: "角色列表",
                 path: "/user/role",
                 display: true
             }, {
+                id : "2",
                 name: "系统日志",
                 path: "/user/log",
                 display: true
@@ -88,7 +91,6 @@ const Config = {
             className: "fa  fa-laptop fa-fw",
             href: "#",
             path: [
-                obj.channelAnalysis.channel(),
                 obj.channelAnalysis.market(),
                 obj.channelAnalysis.apk()
             ],
@@ -133,6 +135,7 @@ const Config = {
                 obj.terminal.provinces()
             ]
         },
+        "22" : ConfigAdd["22"],
         "9": {
             name: "分享收藏",
             display: true,
@@ -200,6 +203,7 @@ const Config = {
                 obj.marketingAnalysis.operating()
             ]
         },
+        "15" : ConfigAdd["15"],
         // "15": {
         //     name: "平台返利汇总",
         //     display: true,
@@ -215,23 +219,25 @@ const Config = {
         //     ],
         //     routers: []
         // },
-        "16": {
-            name: "商家返利汇总",
-            display: true,
-            className: "fa fa-desktop fa-fw",
-            href: "#",
-            path: [
-                obj.businessRebate.all(),
-                obj.businessRebate.plan()
-            ],
-            routers: []
-        },
+        // "16": {
+        //     name: "商家返利汇总",
+        //     display: true,
+        //     className: "fa fa-desktop fa-fw",
+        //     href: "#",
+        //     path: [
+        //         obj.businessRebate.all(),
+        //         obj.businessRebate.plan()
+        //     ],
+        //     routers: []
+        // },
         "17": {
             name: "社交分析",
             display: true,
             className: "fa  fa-laptop fa-fw",
             href: "#",
             path: [
+                obj.socialAnalysis.panel(),
+                obj.socialAnalysis.total(),
                 obj.socialAnalysis.group(),
                 obj.socialAnalysis.topics(),
                 obj.socialAnalysis.groupHost()
@@ -253,7 +259,8 @@ const Config = {
                 obj.videoStatis.videoDetails()
             ],
             routers : [
-                obj.videoStatis.videoDetailsTwo()
+                obj.videoStatis.videoDetailsTwo(),
+                obj.videoStatis.videoDetailsOperating()
             ]
         },
         "19": {
@@ -347,7 +354,11 @@ const Config = {
 };
 
 for(let key in ConfigAdd){
-    if(Config.limit[key]) throw Error("config.js key 重复定义，请检查代码");
+    if(Config.limit[key]) {
+        if(Config.limit[key] !== ConfigAdd[key]) {
+            throw Error("config.js key 重复定义，请检查代码");
+        }
+    }
     Config.limit[key] = ConfigAdd[key];
 }
 

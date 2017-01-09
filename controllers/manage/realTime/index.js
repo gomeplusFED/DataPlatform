@@ -18,6 +18,32 @@ var cluster = global.cluster,
     helpConfig = require("../../../utils/config.json"),
     moment = require("moment");
 
+function globalPlatform(type, filter_select) {
+    let ios = filter_select[0].groups[0],
+        and = filter_select[0].groups[1],
+        pc = filter_select[0].groups[2],
+        h5 = filter_select[0].groups[3];
+    const select = {
+        title : filter_select[0].title,
+        filter_key : filter_select[0].filter_key,
+        groups : []
+    };
+    if(type[0] == "1") {
+         select.groups.push(ios);
+     }
+    if(type[1] == "1") {
+        select.groups.push(and);
+    }
+    if(type[3] == "1") {
+        select.groups.push(pc);
+    }
+    if(type[4] == "1") {
+        select.groups.push(h5);
+    }
+    filter_select[0] = select;
+
+    return filter_select;
+}
 
 module.exports = (Router) => {
     Router = Router.get("/realTime/one_json", (req, res, next) => {
@@ -88,6 +114,7 @@ module.exports = (Router) => {
             ],
             cols = [[]];
 
+        modules.filter_select = globalPlatform(req.session.userInfo.type["66"], modules.filter_select);
         if(Object.keys(params).length === 0) {
             _render(res, [], modules);
         } else {
@@ -271,6 +298,7 @@ module.exports = (Router) => {
             });
         }
 
+        modules.filter_select = globalPlatform(req.session.userInfo.type["66"], modules.filter_select);
         if(params.type === "PC" || params.type === "H5") {
             start = "js:";
         } else {
@@ -403,6 +431,7 @@ module.exports = (Router) => {
             start = "app:";
         }
 
+        modules.filter_select = globalPlatform(req.session.userInfo.type["66"], modules.filter_select);
         if(Object.keys(params).length === 0) {
             _render(res, [], modules);
         } else {
@@ -486,6 +515,7 @@ module.exports = (Router) => {
             start = "app:";
         }
 
+        modules.filter_select = globalPlatform(req.session.userInfo.type["66"], modules.filter_select);
         if(Object.keys(params).length === 0) {
             _render(res, [], modules);
         } else {
