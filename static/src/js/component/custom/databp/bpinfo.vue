@@ -225,12 +225,15 @@ var bpinfo = Vue.extend({
 				// show the config window
 				_this.publicBpStr = data.publicParam;			
 				_this.privateBpStr = data.privateParam;
+				if(data.pointId) {
+					this.loadChart();
+				}
 				_this.loading.show = false;
 			}).catch(function(err) {
 				console.log(err);
 				_this.loading.show = false;
 			});
-			this.loadChart();
+			
 		},
 		hide() {
 			this.bpConfig.show = false;
