@@ -104,12 +104,12 @@ renderApi.prototype = {
                         let subPages = path.subPages || [] ;
                         sub_pages && (userSubs = sub_pages[key]) && (userSubs = userSubs[value]);
                         userSubs = userSubs || [];
-                        subPages = subPages.filter(x => userSubs.includes(x.id.toString()));
+                        let banSubPages = subPages.filter(x => !userSubs.includes(x.id.toString()));
                         page[path.path] = {
                             id: path.id.toString(),
                             f_id: key,
                             pageTitle : path.name,
-                            subPages,
+                            banSubPages,
                             defaultData : path.defaultData
                         };
                     }
@@ -118,6 +118,7 @@ renderApi.prototype = {
                     for(var k of limit.routers) {
                         page[k.path] = {
                             id: k.id,
+                            f_id: key,
                             pageTitle : k.name,
                             defaultData : k.defaultData
                         };
