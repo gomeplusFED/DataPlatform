@@ -11,7 +11,15 @@ module.exports = {
             path : "/socialAnalysis/panel",
             display: true,
             id   : "00209",
-            subPages : [ {
+            subPages : [{
+                id : "72",
+                url : "/socialAnalysis/group",
+                name : "圈子分析"
+            }, {
+                id : "73",
+                url : "/socialAnalysis/topics",
+                name : "话题分析"
+            }, {
                 id : "00320",
                 url : "/socialAnalysis/topicDeal",
                 name : "话题交易"
