@@ -308,8 +308,8 @@ module.exports = {
             let source = one
             data1 = [
                 {
-                    play_user: '播放用户数: ' + source.play_user,
-                    play_num: '播放次数: ' + source.play_num
+                    play_user: '播放用户数: ' + (source.play_user || 0),
+                    play_num: '播放次数: ' + (source.play_num || 0)
                 }
             ]
         }
