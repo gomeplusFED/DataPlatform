@@ -240,9 +240,9 @@ module.exports = {
             ThisOne = AllOne;
         }
 
-        for(let key of data.rows[1]){
-            ThisOne[key] = 0;
-        }
+        // for(let key of data.rows[1]){
+        //     ThisOne[key] = 0;
+        // }
 
         //拼装数据
         //表一
