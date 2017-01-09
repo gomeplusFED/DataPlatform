@@ -398,7 +398,9 @@ var Account = Vue.extend({
 					if (item.indexOf('1') > -1) {
 						let item2 = (type[key] || '00000').split('')
 						item.split('').forEach((x, i) => {
-							item2[i] = x
+							if (x === '1') {
+								item2[i] = '1'
+							}
 						})
 						type[key] = item2.join('')
 					}
