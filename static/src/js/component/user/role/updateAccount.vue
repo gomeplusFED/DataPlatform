@@ -406,14 +406,15 @@ var Account = Vue.extend({
 				let ismodified = false;
 
 				// 平台权限合并
-				let type = JSON.parse(useritem.type || '{}')
-
+				let type = JSON.parse(useritem.type || '{}');
 				for(let key of Object.keys(_this.type)) {
 					let item = _this.type[key]
 					if (item.indexOf('1') > -1) {
 						let item2 = (type[key] || '00000').split('')
 						item.split('').forEach((x, i) => {
-							item2[i] = x
+							if (x === '1') {
+								item2[i] = '1'
+							}
 						})
 						type[key] = item2.join('')
 					}
