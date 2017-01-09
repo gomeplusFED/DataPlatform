@@ -27,7 +27,7 @@ module.exports = (Router) => {
         params(query, params) {
             params.day_type = 1;
             const now = new Date();
-            const date = util.times(query.startTime, query.endTime, "1");
+            const date = util.timesTwo(query.startTime, query.endTime, "1");
             date.push(moment(now - 24 * 60 * 60 * 1000).format("YYYY-MM-DD"));
             date.push(moment(now - 2 * 24 * 60 * 60 * 1000).format("YYYY-MM-DD"));
             params.date = date;

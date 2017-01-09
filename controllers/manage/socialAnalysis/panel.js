@@ -51,7 +51,7 @@ module.exports = (Router) => {
         platform : false,
         date_picker : false,
         flexible_btn : [{
-            content: `<a href="#!/achievements/trade">圈子分析</a>`, 
+            content: `<a href="#!/socialAnalysis/group">圈子分析</a>`, 
             preMethods: [], 
             customMethods: ""
         }],
@@ -78,7 +78,7 @@ module.exports = (Router) => {
             return params;
         },
         flexible_btn : [{
-            content: `<a href="#!/achievements/productSale">话题分析</a>`, 
+            content: `<a href="#!/socialAnalysis/topics">话题分析</a>`, 
             preMethods: [], 
             customMethods: ""
         }],
@@ -178,11 +178,11 @@ module.exports = (Router) => {
             if(!query.type) params.type = "ALL";
             return params;
         },
-        flexible_btn : [{
-            content: `<a href="#!/achievements/pay">好友数据分析</a>`, 
-            preMethods: [], 
-            customMethods: ""
-        }],
+        // flexible_btn : [{
+        //     content: `<a href="#!/achievements/pay">好友数据分析</a>`, 
+        //     preMethods: [], 
+        //     customMethods: ""
+        // }],
         filter(data, query, dates) {
             return filter.tradePanelFour(data , query , dates);
         }
