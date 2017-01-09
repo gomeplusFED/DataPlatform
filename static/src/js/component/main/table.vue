@@ -243,7 +243,7 @@
 					}
 				});
 				// 新窗口打开，url转码
-				window.open(encodeURI(`${location.origin}#!/${urlLink}?${resultArray.join('&')}`))
+				window.open(encodeURI(`${location.origin}#!${urlLink}?${resultArray.join('&')}`))
 				// this.$route.router.go(urlLink + '?' + resultArray.join('&'));
 			}
 		},
