@@ -344,8 +344,8 @@ module.exports = (Router) => {
     });
 
     Router = new api(Router, {
-        router: "/videoStatis/videoFour",
-        modelName: ["W"],
+        router: "/videoStatis/videoVersionOne",
+        modelName: [""],
         platform: false,
         paging: [false],
         order: ["-date"],

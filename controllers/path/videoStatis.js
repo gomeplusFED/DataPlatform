@@ -40,7 +40,7 @@ module.exports = {
                 {
                     type : "table",
                     title: "版本统计",
-                    query_api : "/videoStatis/videoFour"
+                    query_api : "/videoStatis/videoVersionOne"
                 }
             ]
         }
