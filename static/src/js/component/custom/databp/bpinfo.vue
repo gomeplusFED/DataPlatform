@@ -226,7 +226,7 @@ var bpinfo = Vue.extend({
 				_this.publicBpStr = data.publicParam;			
 				_this.privateBpStr = data.privateParam;
 				if(data.pointId) {
-					this.loadChart();
+					_this.loadChart();
 				}
 				_this.loading.show = false;
 			}).catch(function(err) {
