@@ -351,11 +351,15 @@ var LimitList = Vue.extend({
 				for (let f in this.pageAll) {
 					let userLimtited = this.limited[f];
 					limitedObj[f] = {};
-					limitAll[f] = !!userLimtited;
 					let secAll = this.secondAll[f];
+					let sAll = true;
 					for (let s of secAll) {
-						limitedObj[f][s] = userLimtited && userLimtited.includes(s);
+						if (!(limitedObj[f][s] = (userLimtited && userLimtited.includes(s))) && sAll) {
+							sAll = false;
+						}
 					}
+					// 仅当二级页面全部选中时，一级页面才被选中
+					limitAll[f] = sAll;
 				}
 				this.limitedObj = limitedObj;
 				this.limitAll = limitAll;
@@ -412,12 +416,17 @@ var LimitList = Vue.extend({
 				for (let f in this.pageAll) {
 					let userExportLimtited = this.exportLimit[f];
 					exportLimitObj[f] = {};
-					exportLimitAll[f] = !!userExportLimtited;
 					let secAll = this.secondAll[f];
+					let sAll = true;
 					for (let s of secAll) {
-						exportLimitObj[f][s] = userExportLimtited && userExportLimtited.includes(s);
+						if (!(exportLimitObj[f][s] = (userExportLimtited && userExportLimtited.includes(s))) && sAll) {
+							sAll = false;
+						}
 					}
+					// 仅当二级页面全部选中时，一级页面才被选中
+					exportLimitAll[f] = sAll;
 				}
+
 				this.exportLimitObj = exportLimitObj;
 				this.exportLimitAll = exportLimitAll;
 			},
