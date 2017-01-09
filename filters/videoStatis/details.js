@@ -246,8 +246,9 @@ module.exports = {
                 num : 0,
                 name : ""
             };
+        console.log(start);
         while(start <= end) {
-            let time = moment(start).format("HH:mm");
+            let time = moment(new Date(start)).format("HH:mm");
             obj[time] = {
                 stop_play_num : 0,
                 rate : 0.00,
