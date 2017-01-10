@@ -21,17 +21,17 @@ module.exports = (Router) => {
         date_picker_data: 1,
         showDayUnit : true,
         excel_export : true,
-        procedure : [[
+        procedure : [
             {
                 find : "params",
-                offset : "offset",
-                limit : "limit",
+                // offset : "offset",
+                // limit : "limit",
                 order : ["category_id_1"],
                 run : ""
-            },{
+            }/*,{
                 count : ""
-            }
-        ]],
+            }*/
+        ],
         params(query , params , data){
             if(query.filter_key2 == "one"){
                 params.category_id_2 = "ALL";
