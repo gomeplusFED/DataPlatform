@@ -177,6 +177,7 @@ module.exports = (Router) => {
         platform: false,
         paging : [true],
         excel_export : true,
+        order : ["-play_num"],
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
@@ -200,7 +201,6 @@ module.exports = (Router) => {
         },
         date_picker_data : 1,
         showDayUnit: true,
-        order: ["-date"],
         sum : ["play_num"],
         filter_select: [{
             title: 'sdk类型：',

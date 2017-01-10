@@ -164,8 +164,8 @@ module.exports = {
             count = data.first.count;
 
         for(let key of source) {
-            key.live_play_startime = moment(key.live_play_startime).format("YYYY-MM-DD HH:mm:ss");
-            key.live_play_endtime = moment(key.live_play_endtime).format("YYYY-MM-DD HH:mm:ss");
+            key.live_play_startime = moment(key.live_play_startime* 1000).format("YYYY-MM-DD HH:mm:ss");
+            key.live_play_endtime = moment(key.live_play_endtime * 1000).format("YYYY-MM-DD HH:mm:ss");
             key.one = util.toFixed(key.first_start_frame_succ, key.play_num);
             key.two = util.toFixed(key.start_frame_succ, key.play_num);
             key.three = util.toFixed(key.stop_play_num, key.play_num);
@@ -255,26 +255,27 @@ module.exports = {
                 live_play_num : 0
             };
             for(let key of source) {
-                console.log(start);
-                console.log(key.live_play_startime.getTime());
-                console.log("===========");
-                if(start <= key.live_play_startime && key.live_play_startime <= start + 1000 * 60 * 5) {
-                    if(stop_play_num.num < key.stop_play_num) {
-                        stop_play_num.name = time;
-                    }
-                    if(live_play_user.num < key.live_play_user) {
-                        live_play_user.name = time;
-                    }
-                    if(live_play_num.num < key.live_play_num) {
-                        live_play_num.name = time;
-                    }
-                    if(rate.num < util.percentage(key.stop_play_num, key.live_play_num)) {
-                        rate.name = time;
-                    }
+                if(start <= key.live_play_startime * 1000 && key.live_play_startime * 1000 < start + 1000 * 60 * 5) {
                     obj[time].stop_play_num = key.stop_play_num;
                     obj[time].live_play_user = key.live_play_user;
                     obj[time].live_play_num = key.live_play_num;
                     obj[time].rate = util.percentage(key.stop_play_num, key.live_play_num);
+                    if(stop_play_num.num < key.stop_play_num) {
+                        stop_play_num.num = key.stop_play_num;
+                        stop_play_num.name = time;
+                    }
+                    if(live_play_user.num < key.live_play_user) {
+                        live_play_user.num = key.live_play_user;
+                        live_play_user.name = time;
+                    }
+                    if(live_play_num.num < key.live_play_num) {
+                        live_play_num.num = key.live_play_num;
+                        live_play_num.name = time;
+                    }
+                    if(rate.num < obj[time].rate) {
+                        rate.num = obj[time].rate;
+                        rate.name = time;
+                    }
                 }
             }
             start += 1000 * 60 * 5;
@@ -287,16 +288,20 @@ module.exports = {
             markArea: {
                 data: [ [{
                     name: '卡顿播放数',
-                    xAxis: stop_play_num.name
+                    xAxis: stop_play_num.name,
+                    value : stop_play_num.num
                 },{
                     name: '卡顿播放率',
-                    xAxis: rate.name
+                    xAxis: rate.name,
+                    value : rate.num
                 },{
                     name: '直播同时在线播放人数',
-                    xAxis: live_play_user.name
+                    xAxis: live_play_user.name,
+                    value : live_play_user.num
                 },{
                     name: '直播同时在线播放次数',
-                    xAxis: live_play_num.name
+                    xAxis: live_play_num.name,
+                    value : live_play_num.num
                 }] ]
             },
             config: { // 配置信息
