@@ -155,17 +155,19 @@ module.exports = (Router) => {
                 return next(new Error(`/videoStatis/videoDetailsOne_excel has error`));
             }
 
-            util.export(ws, [[
-                [1, 1, 2, 1, "直播id", style],
-                [1, 2, 2, 2, "直播名称", style],
-                [1, 3, 2, 3, "直播开始时间", style],
-                [1, 4, 2, 4, "直播结束时间", style],
-                [1, 5, 2, 5, "直播播放用户数", style],
-                [1, 6, 2, 6, "直播播放次数", style],
-                [1, 7, 2, 7, "直播同时在线播放人数(峰值)", style],
-                [1, 8, 2, 8, "直播同时在线播放次数(峰值)", style],
+            const col = ["直播id",
+                //"直播名称",
+                "直播开始时间", "直播结束时间", "直播播放用户数",
+                "直播播放次数", "直播同时在线播放人数(峰值)", "直播同时在线播放次数(峰值)"];
+
+            const o = [];
+            for(let i = 0,len = col.length; i < len; i++) {
+                o.push([1, i + 1, 2, i + 1, col[i], style]);
+            }
+
+            util.export(ws, [o.concat([
                 [1, 9, 1, 16, "健康播放统计", style],
-                [1, 17, 1, 28, "错误播放统计", style]]].concat(util.excelReport(body.modelData, false)));
+                [1, 17, 1, 28, "错误播放统计", style]])].concat(util.excelReport(body.modelData, false)));
             wb.write("Report.xlsx", res);
         });
     });
