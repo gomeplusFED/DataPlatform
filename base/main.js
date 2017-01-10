@@ -103,7 +103,9 @@ function api(Router, options) {
         //是否支持图转表
         toggle : false,
         //是否页面显示表名
-        debug : true
+        debug : true,
+        //是否取消30天限制
+        cancelDateLimit : false
     }, options);
 
     utils.mixin(this, defaultOption);
@@ -204,7 +206,8 @@ api.prototype = {
                 date_picker: {
                     show: this.date_picker,
                     defaultData: this.date_picker_data,
-                    showDayUnit : this.showDayUnit
+                    showDayUnit : this.showDayUnit,
+                    cancelDateLimit : this.cancelDateLimit
                 },
                 drop_down: {
                     platform: this.platform,
