@@ -188,7 +188,7 @@ var Chart = Vue.extend({
 				}
 			});
 		},
-		rinseData: function(chartType, data, map, config) {
+		rinseData: function(chartType, data, map, config, markArea) {
 			var options = $.extend(true, {}, chartDataModel);
 			var xAxis = [];
 			var series = [];
@@ -217,6 +217,11 @@ var Chart = Vue.extend({
 				}
 				if (chartType === 'funnel') {
 					_curr = Object.assign(funnelDefaultSeries, _currentObj);
+				}
+				if (chartType === 'line') {
+					if (markArea) {
+						_curr.markArea = markArea;
+					}
 				}
 				series.push(_curr);
 			}
@@ -341,7 +346,7 @@ var Chart = Vue.extend({
 								_this.shouldHalfWidth[domIndex] = true;
 								_this.shouldHalfWidth[domIndex + 1] = true;
 							}
-							var chartOptions = _this.rinseData(item.type, item.data, item.map, item.config);
+							var chartOptions = _this.rinseData(item.type, item.data, item.map, item.config, item.markArea);
 							setTimeout(function() {
 								if (chartOptions.series.length && chartOptions.series[0].data.length) {
 									var Chart = echarts.init($('#chart_' + _this.index).find('.chart_con').eq(domIndex)[0]);

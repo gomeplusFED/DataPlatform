@@ -407,7 +407,7 @@ module.exports = (Router) => {
                 }]
             };
 
-            req.models.ads2_videoplay_overview2.find({}, (err, data) => {
+            req.models.ads2_videoplay_overview2.find({day_type: 1}, (err, data) => {
                 if (!err) {
                     for (var key of data) {
                         var obj = {
