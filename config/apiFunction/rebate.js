@@ -1159,12 +1159,12 @@ module.exports = {
             "5" : "5级计划",
             "6" : "6级计划",
         },  param3 = {
-            "1" : "返利层级一",
-            "2" : "返利层级二",
-            "3" : "返利层级三",
-            "4" : "返利层级四",
-            "5" : "返利层级五",
-            "6" : "返利层级六",
+            "1.0" : "返利层级一",
+            "2.0" : "返利层级二",
+            "3.0" : "返利层级三",
+            "4.0" : "返利层级四",
+            "5.0" : "返利层级五",
+            "6.0" : "返利层级六",
         };
 
         source = Deal100(source , ["is_rebate_item_fee" , "is_over_rebate_order_amount"]);
@@ -1193,7 +1193,7 @@ module.exports = {
         }
 
         for(let item of source){
-            if(param2[item.rebate_level]){
+            if(param2[item.rebate_level] && item.level == "ALL"){
                 Result2[param2[item.rebate_level]].value += item[filter_key];
             }
         }
@@ -1210,8 +1210,9 @@ module.exports = {
             Result3[param2[key]] = obj;
         }
 
+        console.log(Result3);
         for(let item of source){
-            if(param2[item.rebate_level]){
+            if(param2[item.rebate_level] && item.level != "ALL"){
                 Result3[param2[item.rebate_level]][item.level] += item[filter_key];
             }
         }
