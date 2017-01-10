@@ -291,6 +291,7 @@ module.exports = (Router) => {
             for(let item of data){
                 Result[item.id] = item.name;
             }
+
             req.models.SocialTopicStatistics.find({
                 category_id : Object.keys(Result),
                 date        : orm.between(query.startTime , query.endTime),
@@ -305,7 +306,7 @@ module.exports = (Router) => {
                 }
 
                 for(let item of result){
-                    newData[item.category_id].value += item[query.filter_key];
+                    newData[Result[item.category_id]].value += item[query.filter_key];
                 }
 
                 let str;
@@ -391,7 +392,7 @@ module.exports = (Router) => {
                     }
 
                     for(let item of result){
-                        newData[item.category_id].value += item[query.filter_key];
+                        newData[CategoryResult[item.category_id]].value += item[query.filter_key];
                     }
 
                     let str;

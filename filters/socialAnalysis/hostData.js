@@ -45,6 +45,7 @@ module.exports = {
         }
 
         for(let key of source) {
+            key.type = key.type.toUpperCase();
             if(obj[key.type]) {
                 obj[key.type].sum_first_groupOwner_num = key.sum_first_groupOwner_num;
                 obj[key.type].sum_attention_groupOwner_num = key.sum_attention_groupOwner_num;

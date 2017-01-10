@@ -239,11 +239,11 @@ module.exports = {
             path : "/socialAnalysis/host",
             display : true,
             defaultData : [
-                {
+                /*{
                     type : "table",
                     title : "圈主数据总览",
                     query_api : "/socialAnalysis/hostOne"
-                },
+                },*/
                 {
                     type : "table",
                     title : "圈主数据统计",

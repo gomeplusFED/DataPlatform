@@ -210,6 +210,7 @@ module.exports = {
         }
 
         for(let key of source) {
+            key.type = key.type.toUpperCase();
             if(obj[key.type]) {
                 obj[key.type].two += key.new_group_num;
                 obj[key.type].three += key.new_join_group_num;
@@ -267,6 +268,7 @@ module.exports = {
         for(let key of source){
             var date = util.getDate(key.date);
             newData[date].value += key[query.filter_key];
+            key.date = util.getDate(key.date);
         }
 
         if(query.main_show_type_filter == "table"){
