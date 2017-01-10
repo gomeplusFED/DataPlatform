@@ -19,6 +19,7 @@ module.exports = (Router) => {
         order : ["-date"],
         global_platform : global_platform.day,
         control_table_col : true,
+        cancelDateLimit : true,
         //excel_export : true,
         flexible_btn : [{
             content: '<a href="javascript:void(0)">数据导出</a>',
@@ -110,6 +111,7 @@ module.exports = (Router) => {
         order : ["-date"],
         global_platform : global_platform.week,
         control_table_col : true,
+        cancelDateLimit : true,
         excel_export : true,
         flexible_btn : [{
             content: '<a href="javascript:void(0)">数据导出</a>',
@@ -128,6 +130,7 @@ module.exports = (Router) => {
     Router = new main(Router, {
         router : "/socialAnalysis/dataTableMonthDataRebateOne",
         platform : false,
+        cancelDateLimit : true,
         modelName : ["ReportRebateSumHistory"],
         order : ["-date"],
         global_platform : global_platform.month,
