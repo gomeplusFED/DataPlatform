@@ -47,6 +47,7 @@ module.exports = {
         }
 
         for(let key of source) {
+            key.type = key.type.toUpperCase();
             let type = key.type;
             if(obj[type]) {
                 obj[type].new_topic_num = key.sum_new_topic_num;
