@@ -1307,15 +1307,19 @@
     },
     "1482222517054": {
         "modelName": [
-            "ads2_new_rebate_order_plantype_level_sum"
+            "ads2_new_rebate_order_plantype_level_sum",
+            "ads2_new_rebate_order_muiltiple_trend",
+            "TypeFlow"
         ],
         "date_picker": true,
         "order": [],
         "platform": false,
         "router": "/rebate/shop_Three",
         "names": "返利层级分布",
-        "filter": "rebate_platformBase_03_f",
+        "filter": "rebate_shop_03_f",
         "params": "rebate_shop_03",
+        "secondParams" : "rebate_shop_03_param2",
+        "thirdParams"  : "rebate_shop_03_param3",
         "fixedParams": "rebate_platformAll_02_fixed",
         "level_select": true,
         "level_select_url": "/api/categories",

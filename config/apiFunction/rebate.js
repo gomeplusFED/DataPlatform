@@ -1136,6 +1136,109 @@ module.exports = {
         params.plan_type = 3;
         return params;
     },
+    rebate_shop_03_param2(query , params , sendData){
+        params.plan_type = 3;
+        return params;
+    },
+    rebate_shop_03_param3(query , params , sendData){
+        return { type_code:3 };
+    },
+    rebate_shop_03_f(data , query , dates){
+
+        let source = data.first.data[0],
+            second = data.second.data[0],
+            third  = data.third.data[0],
+            filter_key  = query.filter_key,
+            Result1 = {} , Result2 = {} , Result3 = {};
+
+        let param1 = {},  param2 = {
+            "1" : "1级计划",
+            "2" : "2级计划",
+            "3" : "3级计划",
+            "4" : "4级计划",
+            "5" : "5级计划",
+            "6" : "6级计划",
+        },  param3 = {
+            "1" : "返利层级一",
+            "2" : "返利层级二",
+            "3" : "返利层级三",
+            "4" : "返利层级四",
+            "5" : "返利层级五",
+            "6" : "返利层级六",
+        };
+
+        source = Deal100(source , ["is_rebate_item_fee" , "is_over_rebate_order_amount"]);
+        second = Deal100(second , ["is_rebate_item_fee" , "is_over_rebate_order_amount"]);
+
+        for(let item of third){
+            param1[item.flow_code] = item.flow_name;
+        }
+
+        //init data1.
+        for(let key in param1){
+            Result1[param1[key]] = {value:0};
+        }
+
+        for(let item of second){
+            if(param1[item.rebate_type]){
+             Result1[param1[item.rebate_type]].value += item[filter_key];
+            }
+        }
+
+
+
+        //init data2.
+        for(let key in param2){
+            Result2[param2[key]] = {value:0};
+        }
+
+        for(let item of source){
+            if(param2[item.rebate_level]){
+                Result2[param2[item.rebate_level]].value += item[filter_key];
+            }
+        }
+
+        //init data3.
+        for(let key in param2){
+            let obj = {};
+            for(let one in param3){
+                if(one > key){
+                    continue;
+                }
+                obj[one] = 0;
+            }
+            Result3[param2[key]] = obj;
+        }
+
+        for(let item of source){
+            if(param2[item.rebate_level]){
+                Result3[param2[item.rebate_level]][item.level] += item[filter_key];
+            }
+        }
+           
+        return [{
+            type : "pie",
+            map : {value:"返利类型占比"},
+            data : Result1,
+            config: { // 配置信息
+                stack: false  // 图的堆叠
+            }
+        }, {
+            type : "pie",
+            map : {value:"返利层级占比"},
+            data : Result2,
+            config: { // 配置信息
+                stack: false  // 图的堆叠
+            }
+        }, {
+            type : "bar",
+            map : param3,
+            data : Result3,
+            config: { // 配置信息
+                stack: true  // 图的堆叠
+            }
+        }];
+    },
 
     //商家返利汇总 ---- 商家返利TOP50
     rebate_shop_04(query , params , sendData){
