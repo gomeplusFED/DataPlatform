@@ -164,8 +164,8 @@ module.exports = {
             count = data.first.count;
 
         for(let key of source) {
-            key.live_play_startime = moment(key.live_play_startime).format("YYYY/MM/DD HH:mm");
-            key.live_play_endtime = moment(key.live_play_endtime).format("YYYY/MM/DD HH:mm");
+            key.live_play_startime = moment(key.live_play_startime).format("YYYY-MM-DD HH:mm:ss");
+            key.live_play_endtime = moment(key.live_play_endtime).format("YYYY-MM-DD HH:mm:ss");
             key.one = util.toFixed(key.first_start_frame_succ, key.play_num);
             key.two = util.toFixed(key.start_frame_succ, key.play_num);
             key.three = util.toFixed(key.stop_play_num, key.play_num);
@@ -246,7 +246,6 @@ module.exports = {
                 num : 0,
                 name : ""
             };
-        console.log(start);
         while(start <= end) {
             let time = moment(new Date(start)).format("HH:mm");
             obj[time] = {
@@ -256,6 +255,9 @@ module.exports = {
                 live_play_num : 0
             };
             for(let key of source) {
+                console.log(start);
+                console.log(key.live_play_startime.getTime());
+                console.log("===========");
                 if(start <= key.live_play_startime && key.live_play_startime <= start + 1000 * 60 * 5) {
                     if(stop_play_num.num < key.stop_play_num) {
                         stop_play_num.name = time;
