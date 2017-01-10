@@ -318,11 +318,7 @@ module.exports = {
             let cols = ['port_succ', 'start_frame_succ', 'stop_play_num', 'play_fluent']
             data2 = [
                 {
-                    index: '数值',
-                    port_succ: source.port_succ,
-                    start_frame_succ: source.start_frame_succ,
-                    stop_play_num: source.stop_play_num,
-                    play_fluent: source.play_fluent,
+                    index: '数值'
                 },
                 {
                     index: '概率',
@@ -332,7 +328,8 @@ module.exports = {
                 }
             ]
             cols.forEach(col => {
-                data2[1][col] = util.toFixedLength(source[col], source.play_num, 4)
+                data2[0][col] = source[col] || 0
+                data2[1][col] = source[col] ? util.toFixedLength(source[col], source.play_num, 4) : '--'
                 data2[2][col] = Chain(source[col], source[col+'_pre'])
             })
         }
@@ -341,13 +338,7 @@ module.exports = {
             let cols = ['port_io_failed', 'port_data_failed', 'port_overtime', 'play_failed', 'play_error', 'improper_play']
             data3 = [
                {
-                    index: '数值',
-                    port_io_failed: source.port_io_failed,
-                    port_data_failed: source.port_data_failed,
-                    port_overtime: source.port_overtime,
-                    play_failed: source.play_failed,
-                    play_error: source.play_error,
-                    improper_play: source.improper_play,
+                    index: '数值'
                 },
                  {
                     index: '概率',
@@ -357,7 +348,8 @@ module.exports = {
                 }
             ]
             cols.forEach(col => {
-                data3[1][col] = util.toFixedLength(source[col], source.play_num, 4)
+                data3[0][col] = source.port_io_failed || 0
+                data3[1][col] = source[col] ? util.toFixedLength(source[col], source.play_num, 4) : '--'
                 data3[2][col] = Chain(source[col], source[col+'_pre'])
             })
         }
