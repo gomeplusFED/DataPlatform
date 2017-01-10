@@ -16,7 +16,7 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/socialAnalysis/tableOne",
         modelName : ["GroupReport", "SocialCategory"],
-        paging : [true, false],
+        // paging : [true, false],
         platform : false,
         date_picker_data: 1,
         showDayUnit : true,

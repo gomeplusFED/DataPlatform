@@ -214,11 +214,14 @@ module.exports = {
             source[i].person_topic_num = key.person_topic_num || 0;
             source[i].person_friends_num = key.person_friends_num || 0;
             source[i].person_funs_num = key.person_funs_num || 0;
-            source[i].person_funs_num = key.person_funs_num || 0;
-            source[i].weiding = 0;
+            source[i].weiding = key.weiding || 0;
             source[i].daren_flag = daren_flag[source[i].daren_flag] || "";
             newData.push(source[i]);
         }
+
+
+
+        console.log(123 , newData[0]);
         return util.toTable([newData], data.rows, data.cols, [count]);
     }
 };

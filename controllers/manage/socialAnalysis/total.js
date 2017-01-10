@@ -145,7 +145,7 @@ module.exports = (Router) => {
                 }
 
                 for(let item of result){
-                    newData[item.category_id].value += item[query.filter_key];
+                    newData[Result[item.category_id]].value += item[query.filter_key];
                 }
 
                 let str;
