@@ -502,74 +502,76 @@ module.exports = (Router) => {
                     type: "string"
                 }, {
                     caption: "播放用户数",
-                    type: "string"
+                    type: "string",
+                    help: "直播视频播放用户数"
                 }, {
                     caption: "播放次数",
-                    type: "number"
+                    type: "number",
+                    help: "直播视频播放次数"
                 },
 
                 //健康播放统计
                 {
-                    caption: "play接口成功数",
-                    type: "number"
+                    caption: "健康播放统计",
+                    type: "string"
                 },  {
-                    caption: "play接口成功率",
+                    caption: "",
                     type: "string"
                 },{
-                    caption: "首帧成功数",
+                    caption: "",
                     type: "number"
                 }, {
-                    caption: "首帧成功率",
+                    caption: "",
                     type: "string"
                 },{
-                    caption: "卡顿播放次数",
+                    caption: "",
                     type: "number"
                 },{
-                    caption: "卡顿播放率",
+                    caption: "",
                     type: "string"
                 }, {
-                    caption: "播放流畅数",
+                    caption: "",
                     type: "number"
                 }, {
-                    caption: "播放流畅率",
+                    caption: "",
                     type: "string"
                 },
                 //错误播放统计
                 {
-                    caption: "play接口IO错误数",
-                    type: "number",
-                }, {
-                    caption: "play接口IO错误率",
+                    caption: "错误播放统计",
                     type: "string",
                 }, {
-                    caption: "play接口数据错误数",
-                    type: "number",
-                }, {
-                    caption: "play接口数据错误率",
+                    caption: "",
                     type: "string",
                 }, {
-                    caption: "play接口超时数",
+                    caption: "",
+                    type: "number",
+                }, {
+                    caption: "",
+                    type: "string",
+                }, {
+                    caption: "",
                     type: "number",
                 },{
-                    caption: "play接口超时率",
+                    caption: "",
                     type: "string",
                 }, {
-                    caption: "播放失败数",
+                    caption: "",
                     type: "number",
                 },{
-                    caption: "播放失败率",
+                    caption: "",
                     type: "string",
                 }, {
-                    caption: "视频错误数",
+                    caption: "",
                     type: "number",
                 },{
-                    caption: "视频错误率",
+                    caption: "",
                     type: "string",
                 }, {
-                    caption: "非正常播放数",
+                    caption: "",
                     type: "number",
                 }, {
-                    caption: "非正常播放率",
+                    caption: "",
                     type: "string",
                 }
             ]
@@ -597,7 +599,7 @@ module.exports = (Router) => {
             }
         ],*/
         filter(data, query, dates) {
-            return filter.videoFour(data, query, dates);
+            return filter.videoVersionOne(data, query, dates);
         }
     });
 
