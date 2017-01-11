@@ -160,8 +160,14 @@
 		},
 		props:['loading'],
 		computed: {
-			baseIndex: function () {
+			baseIndex () {
 				return (this.paginationConf.currentPage - 1) * this.paginationConf.itemsPerPage + 1;
+			},
+			startTime() {
+				return (this.argvs.startTime + ' 00:00:00');
+			},
+			endTime() {
+				return (this.argvs.endTime + ' 23:59:59');
 			}
 		},
 		data: function() {
@@ -232,8 +238,8 @@
 					// page从0开始
 					page: this.paginationConf.currentPage - 1,
 					size: this.paginationConf.itemsPerPage,
-					startTime: this.argvs.startTime + ' 00:00:00',
-					endTime: this.argvs.endTime + ' 23:59:59'
+					startTime: this.startTime,
+					endTime: this.endTime
 				});
 				api.getHeatList(this.searchParam).then((res) => {
 					this.dataList = res.data;
@@ -280,10 +286,12 @@
 				this.query();
 			},
 			detail(item) {
+				let startTime = this.startTime;
+				let endTime = this.endTime;
 				// fetch detail data
-				api.getHeatDetail(item).then((data) => {
+				api.getHeatDetail({...item,startTime, endTime}).then((data) => {
 					// show modal
-					this.trend.show = window.location.href.startsWith('http://localhost');
+					this.trend.show = true;
 					// build chart option
 					let xdata = [];
 					let pvdata = [];
