@@ -34,9 +34,18 @@ module.exports = {
 
             console.log(Object.keys(config));
             for(let key of source) {
-                // console.log(config[key.category_id_1] , key.category_id_1);
+                /*console.log(config[key.category_id_1] , key.category_id_1);
                 key.category_id_2 = config[key.category_id_1]["cell"][key.category_id_2];
-                key.category_id_1 = config[key.category_id_1].name;
+                key.category_id_1 = config[key.category_id_1].name;*/
+
+
+                if(config[key.category_id_1]){
+                    key.category_id_2 = config[key.category_id_1]["cell"][key.category_id_2];
+                    key.category_id_1 = config[key.category_id_1].name;
+                }else{
+                    console.log(key.category_id_1);
+                }
+                
             }
 
             rows.push(["category_id_1", "category_id_2", "new_group_num",

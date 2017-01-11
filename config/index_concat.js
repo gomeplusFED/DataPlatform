@@ -15,7 +15,7 @@ const Jsons = fs.readdirSync(path.join(__dirname , "./apiConfig"));
 const Functions = fs.readdirSync(path.join(__dirname , "./apiFunction"));
 let AllFn = {};
 let FnProperty = ["filter" , "params" , "secondParams" , "thirdParams" , "fourthParams" ,
-    "fixedParams" , "selectFilter", "global_platform_filter"];
+    "fixedParams" , "selectFilter", "global_platform_filter", "singleFn"];
 
 
 //获取所有函数
@@ -28,6 +28,7 @@ for(let item of Functions){
         AllFn[names] = require(path.join(__dirname , "./apiFunction/" , item));
     }
 }
+
 
 
 //配置
@@ -50,7 +51,12 @@ for(let item of Jsons){
         }
 
         let FUN = (Router) => {
-            Router = new api(Router , obj);
+            if(obj.singleApi){
+                Router.get(obj.router + "_json" , obj.singleFn(obj));
+            }else{
+                Router = new api(Router , obj);
+            }
+            
             return Router;
         };
 
