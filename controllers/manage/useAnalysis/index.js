@@ -6,7 +6,27 @@
 var api = require("../../../base/main"),
     help = require("../../../base/help"),
     config = require("../../../utils/config.json"),
-    filter = require("../../../filters/useAnalysis");
+    filter = require("../../../filters/useAnalysis"),
+    global_platform = {
+        show: true,
+        key: 'type',
+        list: [{
+            key: 'ios',
+            name: 'IOS'
+        }, {
+            key: 'android',
+            name: 'Android'
+        }, {
+            key: 'app',
+            name: 'APP'
+        }, {
+            key: 'pc',
+            name: 'PC'
+        }, {
+            key: 'm',
+            name: 'H5'
+        }]
+    };
 
 module.exports = (Router) => {
     const procedure = [
@@ -26,26 +46,7 @@ module.exports = (Router) => {
         router : "/useAnalysis/useTimeOne",
         modelName : ["UserCompose"],
         platform : false,
-        global_platform : {
-            show: true,
-            key: 'type',
-            list: [{
-                key: 'ios',
-                name: 'IOS'
-            }, {
-                key: 'android',
-                name: 'Android'
-            }, {
-                key: 'app',
-                name: 'APP'
-            }, {
-                key: 'pc',
-                name: 'PC'
-            }, {
-                key: 'm',
-                name: 'H5'
-            }]
-        },
+        global_platform : global_platform,
         flexible_btn: [{
             content: '<a href="javascript:void(0)" help_url="/useAnalysis/useTime/help_json">帮助</a>',
             preMethods: ["show_help"],
@@ -54,7 +55,7 @@ module.exports = (Router) => {
         procedure : procedure,
         params(query, params) {
             params.use_type = 1;
-            params.type = query.type || 'ios';
+            params.type = query.type || this.global_platform.list[0].key;
             return params;
         },
         filter(data, filter_key, dates) {
@@ -66,9 +67,10 @@ module.exports = (Router) => {
         router : "/useAnalysis/useTimeTwo",
         modelName : ["UserCompose"],
         platform : false,
+        global_platform : global_platform,
         params(query, params) {
             params.use_type = 1;
-            params.type = query.type || 'ios';
+            params.type = query.type || this.global_platform.list[0].key;
             return params;
         },
         excel_export : true,
@@ -104,9 +106,10 @@ module.exports = (Router) => {
         router : "/useAnalysis/useTimeThree",
         modelName : ["UserCompose"],
         platform : false,
+        global_platform : global_platform,
         params(query, params) {
             params.use_type = 4;
-            params.type = query.type || 'ios';
+            params.type = query.type || this.global_platform.list[0].key;
             return params;
         },
         procedure : procedure,
@@ -123,9 +126,10 @@ module.exports = (Router) => {
         router : "/useAnalysis/useTimeFour",
         modelName : ["UserCompose"],
         platform : false,
+        global_platform : global_platform,
         params(query, params) {
             params.use_type = 4;
-            params.type = query.type || 'ios';
+            params.type = query.type || this.global_platform.list[0].key;
             return params;
         },
         excel_export : true,

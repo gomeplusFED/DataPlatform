@@ -10,6 +10,7 @@ module.exports = {
             name: "渠道列表",
             path: "/channelAnalysis",
             display: true,
+            id     : "00205",
             defaultData: [{
                 type: "chart",
                 title: "TOP 10渠道",
@@ -26,6 +27,7 @@ module.exports = {
             name: "渠道列表",
             path: "/channelAnalysis/operating",
             display: true,
+            id     : "00204",
             defaultData: [{
                 type: "table",
                 title: "渠道统计",

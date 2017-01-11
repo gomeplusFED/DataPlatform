@@ -8,39 +8,11 @@
             "-date"
         ],
         "platform": false,
-        "sum" : ["error_num"],
-        "paging":["true"],
         "router": "/performance/error_One",
         "toggle": {
             "show": true
         },
-        "global_platform": {
-            "show": true,
-            "key": "type",
-            "name": "平台切换",
-            "list": [
-                {
-                    "key": "PC",
-                    "name": "PC"
-                },
-                {
-                    "key": "IOS",
-                    "name": "IOS"
-                },
-                {
-                    "key": "Android",
-                    "name": "Android"
-                },
-                {
-                    "key": "WAP",
-                    "name": "WAP"
-                },
-                {
-                    "key": "H5",
-                    "name": "H5"
-                }
-            ]
-        },
+        "global_platform_filter" : "performance_02_f_f",
         "rows": [
             [
                 "date",
@@ -82,8 +54,7 @@
         "order": [
             "-date"
         ],
-        "sum" : ["error_num"],
-        "paging":[true],
+        "global_platform_filter" : "performance_02_f_f",
         "platform": false,
         "router": "/performance/error_Two",
         "rows": [

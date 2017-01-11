@@ -4,7 +4,27 @@
  * @fileoverview 留存分析
  */
 var api = require("../../../base/main"),
-    filter = require("../../../filters/retainedAnalysis");
+    filter = require("../../../filters/retainedAnalysis"),
+    global_platform = {
+        show: true,
+        key: 'type',
+        list: [{
+            key: 'ios',
+            name: 'IOS'
+        }, {
+            key: 'android',
+            name: 'Android'
+        }, {
+            key: 'all',
+            name: 'APP'
+        }, {
+            key: 'pc',
+            name: 'PC'
+        }, {
+            key: 'h5',
+            name: 'H5'
+        }]
+    };
 
 module.exports = (Router) => {
 
@@ -28,36 +48,18 @@ module.exports = (Router) => {
         modelName : ["UserKeepResult"],
         date_picker : false,
         params(query, params) {
-            params.type = query.type || "ios";
+            params.type = query.type || this.global_platform.list[0].key;
             if(query.type === "all") {
                 params.type = ["android", "ios"];
             }
 
              return params;
         },
-        global_platform : {
-            show: true,
-            key: 'type',
-            list: [{
-                key: 'ios',
-                name: 'IOS'
-            }, {
-                key: 'android',
-                name: 'Android'
-            }, {
-                key: 'all',
-                name: 'APP'
-            }, {
-                key: 'pc',
-                name: 'PC'
-            }, {
-                key: 'h5',
-                name: 'H5'
-            }]
-        },
+        global_platform : global_platform,
+        global_platform_types : ["ios", "android", "all", "pc", "h5"],
         filter(data, query, dates) {
             return filter.retainedOne(data, query, dates);
-        },
+        }
     });
 
     Router = new api(Router,{
@@ -65,8 +67,10 @@ module.exports = (Router) => {
         platform : false,
         modelName : ["UserKeepResult"],
         date_picker : false,
+        global_platform : global_platform,
+        global_platform_types : ["ios", "android", "all", "pc", "h5"],
         params(query, params) {
-            params.type = query.type || "ios";
+            params.type = query.type || this.global_platform.list[0].key;
 
              return params;
         },

@@ -93,7 +93,7 @@ var LimitList = Vue.extend({
 			platformPermission1: {},
 			platformPermission2: {},
 			platformPermission3: {},
-			platformType: ['IOS', 'Android', 'APP', 'PC', 'WAP站']
+			platformType: ['IOS', 'Android', 'APP', 'PC', 'H5']
 		};
 	},
 	props: ['id', 'limited', 'exportLimit', 'subPages', 'type'],
@@ -351,11 +351,15 @@ var LimitList = Vue.extend({
 				for (let f in this.pageAll) {
 					let userLimtited = this.limited[f];
 					limitedObj[f] = {};
-					limitAll[f] = !!userLimtited;
 					let secAll = this.secondAll[f];
+					let sAll = true;
 					for (let s of secAll) {
-						limitedObj[f][s] = userLimtited && userLimtited.includes(s);
+						if (!(limitedObj[f][s] = (userLimtited && userLimtited.includes(s))) && sAll) {
+							sAll = false;
+						}
 					}
+					// 仅当二级页面全部选中时，一级页面才被选中
+					limitAll[f] = sAll;
 				}
 				this.limitedObj = limitedObj;
 				this.limitAll = limitAll;
@@ -375,6 +379,9 @@ var LimitList = Vue.extend({
 							this.platformPermission3[key][key2][key3] = (val && val[key3]) || '00000'
 						}
 					}
+				}
+				for (let key in this.platformPermission1) {
+					this.$emit('checkboxChange2', {k1: key}, this.platformPermission1[key]);
 				}
 			},
 			deep: true
@@ -409,12 +416,17 @@ var LimitList = Vue.extend({
 				for (let f in this.pageAll) {
 					let userExportLimtited = this.exportLimit[f];
 					exportLimitObj[f] = {};
-					exportLimitAll[f] = !!userExportLimtited;
 					let secAll = this.secondAll[f];
+					let sAll = true;
 					for (let s of secAll) {
-						exportLimitObj[f][s] = userExportLimtited && userExportLimtited.includes(s);
+						if (!(exportLimitObj[f][s] = (userExportLimtited && userExportLimtited.includes(s))) && sAll) {
+							sAll = false;
+						}
 					}
+					// 仅当二级页面全部选中时，一级页面才被选中
+					exportLimitAll[f] = sAll;
 				}
+
 				this.exportLimitObj = exportLimitObj;
 				this.exportLimitAll = exportLimitAll;
 			},
@@ -443,17 +455,23 @@ var LimitList = Vue.extend({
 		}
 	},
 	events: {
-		checkboxChange1(obj, val) {
+		checkboxChange1(obj, val, index) {
 			// 更改2级目录
 			let k1 = obj.k1;
 			let permission2 = this.platformPermission2[k1];
 			if (permission2) {
 				for (let item in permission2) {
-					permission2[item] = val
+					if (index === -1) {
+						permission2[item] = val
+					} else {
+						let temp = permission2[item].split('')
+						temp[index] = val[index]
+						permission2[item] = temp.join('')
+					}
 				}
 			}
 		},
-		checkboxChange2(obj, val) {
+		checkboxChange2(obj, val, index) {
 			// 改为不更改3级目录
 			// let permission3 = this.platformPermission3[obj.k1];
 			// if (permission3) {
@@ -480,7 +498,7 @@ var LimitList = Vue.extend({
 					}
 				}
 				// 赋值1级目录
-				this.platformPermission1[obj.k1] = all.join('');
+				this.$set(`platformPermission1[${obj.k1}]`, all.join(''))
 			}
 		},
 		checkboxChange3(obj, val) {

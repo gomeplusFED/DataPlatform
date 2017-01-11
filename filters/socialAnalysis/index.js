@@ -210,6 +210,7 @@ module.exports = {
         }
 
         for(let key of source) {
+            key.type = key.type.toUpperCase();
             if(obj[key.type]) {
                 obj[key.type].two += key.new_group_num;
                 obj[key.type].three += key.new_join_group_num;
@@ -267,7 +268,27 @@ module.exports = {
         for(let key of source){
             var date = util.getDate(key.date);
             newData[date].value += key[query.filter_key];
+            key.date = util.getDate(key.date);
         }
+
+        if(query.main_show_type_filter == "table"){
+            data.rows[0] = Object.keys(filter_name);
+            data.rows[0].unshift("date");
+            data.cols[0] = [];
+            for(let key in filter_name){
+                let obj = {
+                    "caption" : filter_name[key],
+                    "type" : "number"
+                }
+                data.cols[0].push(obj);
+            }
+            data.cols[0].unshift({
+                "caption":"日期",
+                "type"   :"date"
+            });
+            return util.toTable([source], data.rows, data.cols);
+        }
+
 
         return [{
             type : type,

@@ -42,8 +42,8 @@ module.exports = function(Router) {
         }
         userInfo.limited =  JSON.parse(userInfo.limited);
         userInfo.export =  JSON.parse(userInfo.export);
-        userInfo.sub_pages =  JSON.parse(userInfo.sub_pages);
-        userInfo.type =  JSON.parse(userInfo.type);
+        userInfo.sub_pages =  JSON.parse(userInfo.sub_pages || "{}");
+        userInfo.type =  JSON.parse(userInfo.type || "{}");
         req.sessionOptions.maxAge = new Date(Date.now() + maxAge);
         req.session.userInfo = userInfo;
         req.session.isLogin = true;
@@ -87,8 +87,10 @@ module.exports = function(Router) {
                                 username : "superAdmin",
                                 role : "超级管理员",
                                 status : 1,
-                                limited : '{"0":[0,1,2]}',
-                                is_admin : 99
+                                limited : '{"0":["0","1","2"]}',
+                                is_admin : 99,
+                                sub_pages : "{}",
+                                type : "{}"
                             }, (err, data) => {
                                 if(!err) {
                                     saveLogin(req, res, remember, email, data);
@@ -192,7 +194,9 @@ module.exports = function(Router) {
                                                         department : department,
                                                         status : 1,
                                                         date : new Date().getTime(),
-                                                        is_admin : 0
+                                                        is_admin : 0,
+                                                        sub_pages : "{}",
+                                                        type : "{}"
                                                     }, function(err, ret) {
                                                         if (err) {
                                                             unbind(client, next);

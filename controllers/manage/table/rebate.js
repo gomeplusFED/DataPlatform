@@ -16,6 +16,7 @@ module.exports = (Router) => {
     Router = new main(Router, {
         router : "/socialAnalysis/rebateOne",
         platform : false,
+        cancelDateLimit : true,
         modelName : ["ReportRebatePlanRebateTypeTotalSummary", "ReportRebatePlanRebateTypeTotalDaily", "TypeFlow"],
         date_picker_data : 1,
         global_platform : {
@@ -75,6 +76,7 @@ module.exports = (Router) => {
     Router = new main(Router, {
         router : "/socialAnalysis/rebateNewOne",
         platform : false,
+        cancelDateLimit : true,
         modelName : ["ReportRebatePlanRebateTypeSummary", "ReportRebatePlanRebateTypeDaily", "TypeFlow"],
         date_picker_data : 1,
         showDayUnit : true,

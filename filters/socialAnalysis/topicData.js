@@ -32,6 +32,9 @@ module.exports = {
         for(let key of array) {
             obj[key] = {
                 new_topic_num : 0,
+                "new_pv" : 0,
+                "is_item_topic_num" : 0,
+                "is_vedio_topic_num" : 0,
                 delete_topic_num : 0,
                 new_topic_reply_num : 0,
                 new_topic_reply_user_num : 0,
@@ -44,9 +47,15 @@ module.exports = {
         }
 
         for(let key of source) {
+            key.type = key.type.toUpperCase();
             let type = key.type;
             if(obj[type]) {
                 obj[type].new_topic_num = key.sum_new_topic_num;
+
+                obj[type].new_pv = key.sum_new_pv;
+                obj[type].is_item_topic_num = key.sum_is_item_topic_num;
+                obj[type].is_vedio_topic_num = key.sum_is_vedio_topic_num;
+
                 obj[type].delete_topic_num = key.sum_delete_topic_num;
                 obj[type].new_topic_reply_num = key.sum_new_topic_reply_num;
                 obj[type].new_topic_reply_user_num = key.sum_new_topic_reply_user_num;
@@ -58,6 +67,11 @@ module.exports = {
             }
 
             obj["总计"].new_topic_num += key.sum_new_topic_num;
+
+            obj["总计"].new_pv += key.sum_new_pv;
+            obj["总计"].is_item_topic_num += key.sum_is_item_topic_num;
+            obj["总计"].is_vedio_topic_num += key.sum_is_vedio_topic_num;
+
             obj["总计"].delete_topic_num += key.sum_delete_topic_num;
             obj["总计"].new_topic_reply_num += key.sum_new_topic_reply_num;
             obj["总计"].new_topic_reply_user_num += key.sum_new_topic_reply_user_num;
@@ -73,6 +87,11 @@ module.exports = {
             newData.push({
                 type : key,
                 new_topic_num : item.new_topic_num,
+
+                "new_pv" : item.new_pv,
+                "is_item_topic_num" : item.is_item_topic_num,
+                "is_vedio_topic_num" : item.is_vedio_topic_num,
+
                 delete_topic_num : item.delete_topic_num,
                 new_topic_reply_num : item.new_topic_reply_num,
                 new_topic_reply_user_num : item.new_topic_reply_user_num,
@@ -86,11 +105,14 @@ module.exports = {
 
         return util.toTable([newData], data.rows, data.cols);
     },
-    topicsThree(data, filter_key, dates) {
+    topicsThree(data, query, dates) {
+        let filter_key = query.filter_key;
         var source = data.first.data[0],
             type = "line",
             filter_name = {
                 "new_topic_num" : "新增话题数",
+                "is_item_topic_num" : "新增带商品话题数",
+                "is_vedio_topic_num" : "新增带视频话题数",
                 "delete_topic_num" : "删除话题数",
                 "new_topic_reply_num" : "新增回复数",
                 "delete_topic_reply_num" : "删除回复数",
@@ -112,6 +134,28 @@ module.exports = {
         for(let key of source) {
             let date = util.getDate(key.date);
             newData[date].value = key["sum_" + filter_key];
+            key[date] = date;
+        }
+
+        if(query.main_show_type_filter == "table"){
+            data.rows[0] = [];
+            data.cols[0] = [];
+
+            data.rows[0] = Object.keys(filter_name);
+            data.rows[0].unshift("date");
+
+            for(let key in filter_name){
+                data.cols[0].push({
+                    "caption" : filter_name[key],
+                    "type"    : "number"
+                })
+            }
+            data.cols[0].unshift({
+                "caption" : "日期",
+                "type"    : "date"
+            });
+
+            return util.toTable([source] , data.rows , data.cols)
         }
 
         return [{

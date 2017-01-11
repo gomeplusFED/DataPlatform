@@ -5,6 +5,98 @@
  */
 
 module.exports = {
+    panel(){
+        return {
+            name : "社交面板",
+            path : "/socialAnalysis/panel",
+            display: true,
+            id   : "00209",
+            subPages : [{
+                id : "72",
+                url : "/socialAnalysis/group",
+                name : "圈子分析"
+            }, {
+                id : "73",
+                url : "/socialAnalysis/topics",
+                name : "话题分析"
+            }, {
+                id : "00320",
+                url : "/socialAnalysis/topicDeal",
+                name : "话题交易"
+            }],
+            defaultData : [
+                {
+                    title: "",
+                    query_api : "/achievements/tradePanelZero"
+                },
+                {
+                    type : "table",
+                    title : "圈子汇总",
+                    query_api : "/socialAnalysis/panelOne"
+                },
+                {
+                    type : "table",
+                    title : "话题汇总",
+                    query_api : "/socialAnalysis/panelTwo"
+                },
+                {
+                    type : "table",
+                    title : "话题交易汇总",
+                    query_api : "/socialAnalysis/panelThree"
+                },
+                // {
+                //     type : "table",
+                //     title : "好友关系汇总",
+                //     query_api : "/socialAnalysis/panelFour"
+                // },
+                // {
+                //     type : "table",
+                //     title : "兴趣点汇总",
+                //     query_api : "/socialAnalysis/panelFive"
+                // }
+            ]
+        }
+    },
+    topicDeal(){
+        return {
+            name : "话题交易",
+            path : "/socialAnalysis/topicDeal",
+            display:true,
+            id   : "00320",
+            defaultData : [
+                {
+                    type : "chart",
+                    title: "带商品的话题数据统计",
+                    query_api:"/socialAnalysis/topicDeal_One"
+                },
+                {
+                    type : "chart",
+                    title: "带商品的话题数据统计",
+                    query_api:"/socialAnalysis/topicDeal_Two"
+                }
+            ]
+        }
+    },
+    total(){
+        return {
+            name : "累计数据",
+            path : "/socialAnalysis/total",
+            display:true,
+            id   : "00210",
+            defaultData : [
+                {
+                    type : "table",
+                    title: "社交数据总览",
+                    query_api: "/socialAnalysis/totalOne"
+                },
+                {
+                    type : "chart",
+                    title: "话题数据一级分布",
+                    query_api: "/socialAnalysis/totalTwo"
+                }
+            ]
+        }
+    },
     group() {
         return {
             id : 72,
@@ -12,11 +104,11 @@ module.exports = {
             path : "/socialAnalysis/group",
             display : true,
             defaultData : [    
-                {
+                /*{
                     type : "table",
                     title : "圈子数据总览",
                     query_api : "/socialAnalysis/groupSix"
-                },
+                },*/
                 {
                     type: "table",
                     title:"圈子数据统计",
@@ -50,6 +142,7 @@ module.exports = {
             name : "单条圈子数据",
             path : "/socialAnalysis/groupDetail",
             display : true,
+            id   : "00212",
             defaultData : [
                 {
                     type : "table",
@@ -81,11 +174,11 @@ module.exports = {
             path : "/socialAnalysis/topics",
             display : true,
             defaultData : [
-                {
-                    type : "table",
-                    title : "话题数据总览",
-                    query_api : "/socialAnalysis/topicsOne"
-                },
+                // {
+                //     type : "table",
+                //     title : "话题数据总览",
+                //     query_api : "/socialAnalysis/topicsOne"
+                // },
                 {
                     type : "table",
                     title : "话题数据统计",
@@ -119,6 +212,7 @@ module.exports = {
             name : "单条话题数据",
             path : "/socialAnalysis/topicsDetail",
             display : true,
+            id   : "00213",
             defaultData : [
                 {
                     type : "table",
@@ -145,11 +239,11 @@ module.exports = {
             path : "/socialAnalysis/host",
             display : true,
             defaultData : [
-                {
+                /*{
                     type : "table",
                     title : "圈主数据总览",
                     query_api : "/socialAnalysis/hostOne"
-                },
+                },*/
                 {
                     type : "table",
                     title : "圈主数据统计",

@@ -1,4 +1,3 @@
-
 /**
  * 返利分析 模块功能函数文件
 */
@@ -8,6 +7,31 @@ let util = require("../../utils"),
     orm  = require("orm"),
     _ = require("lodash");
 
+//金额 字段 全部/100.
+// let Deal100 = (arr) => {
+//     let HasColums = ["is_rebate_fee" , "is_rebate_item_fee" , "is_rebate_back_merchandise_amount" , "is_over_rebate_order_amount" , "expect_rebate_amount" , "cancel_rebate_amount" , "cancel_is_rebate_fee" , "history_is_rebate_fee" , "history_is_rebate_item_fee" , "history_is_rebate_back_merchandise_amount" , "history_is_over_rebate_order_amount" , "history_expect_rebate_amount" , "history_cancel_rebate_amount" , "history_cancel_is_rebate_fee" , "fee" , "item_fee" , "back_merchandise_amount" , ]
+// };
+
+let Deal100 = (arr , columns) => {
+    if(arr instanceof Array){
+        for(let item of arr){
+            for(let key of columns){
+                if(item[key]){
+                    item[key] = item[key] / 100;
+                }
+            }
+        } 
+    }else{
+        for(let key of columns){
+            if(arr[key]){
+                arr[key] = arr[key] / 100;
+            }
+        }
+    }
+
+    return arr;
+}
+
 module.exports = {
     //返利统计
     rebate_total_01(query , params , sendData){
@@ -16,6 +40,7 @@ module.exports = {
     },
     rebate_total_01_f(data, query, dates){
         let source = data.first.data[0];
+        source = Deal100(source , ["history_expect_rebate_amount" , "history_cancel_is_rebate_fee" , "history_is_over_rebate_order_amount" , "history_cancel_rebate_amount"]);
         return util.toTable([source], data.rows, data.cols);
     },
     //返利总览
@@ -35,6 +60,8 @@ module.exports = {
                 }
             }
         }
+
+        Result = Deal100(Result , ["expect_rebate_amount" , "cancel_rebate_amount" , "is_over_rebate_order_amount"]);
 
         return util.toTable([[Result]], data.rows, data.cols);
     },
@@ -60,12 +87,14 @@ module.exports = {
 
         for(let item of source){
             item.date = util.getDate(item.date);
+            item = Deal100(item , ["expect_rebate_amount" , "cancel_rebate_amount" , "is_over_rebate_order_amount"]);
             if(result[item.date]){
                 result[item.date] = item;
             }
         }
 
         if(query.main_show_type_filter == "table"){
+            source = Deal100(item , ["expect_rebate_amount" , "cancel_rebate_amount" , "is_over_rebate_order_amount"]);
             return util.toTable([source], data.rows, data.cols);
         }else{
             return [{
@@ -104,13 +133,21 @@ module.exports = {
             };
 
         for(let item of source){
+            item = Deal100(item , ["expect_rebate_amount" , "is_over_rebate_order_amount"]);
             if(item.plan_type == 3){
                 //商家
                 newData["商家返利"].value += item.expect_rebate_amount;
                 newData2["商家返利"].value += item.is_over_rebate_order_amount;
+
+                newData["商家返利"].value = util.numberLeave(newData["商家返利"].value , 2);
+                newData2["商家返利"].value = util.numberLeave(newData2["商家返利"].value , 2);
             }else{
                 newData["平台返利"].value += item.expect_rebate_amount;
                 newData2["平台返利"].value += item.is_over_rebate_order_amount;
+
+                newData["平台返利"].value = util.numberLeave(newData["平台返利"].value , 2);
+                newData2["平台返利"].value = util.numberLeave(newData2["平台返利"].value , 2);
+
             }
         }
        
@@ -142,6 +179,7 @@ module.exports = {
 
     //返利功能详情
     rebate_total_05(query , params , sendData){
+        params.rebate_type = orm.gt(-1);
         return params;
     },
     rebate_total_05_second(query , params , sendData){
@@ -159,6 +197,8 @@ module.exports = {
                 }
             }
         }
+
+        source = Deal100(source , ["expect_rebate_amount" , "cancel_rebate_amount" , "is_over_rebate_order_amount"]);
         return util.toTable([source], data.rows, data.cols);
     },
 
@@ -169,7 +209,9 @@ module.exports = {
     rebate_platformAll_01_f(data, query, dates){
         let source = data.first.data[0];
         let Rows  = util.megerArray([] , data.rows);
-        let ThisOne = {} , AllOne = {};
+        let ThisOne = {
+            "expect_rebate_amount":0
+        } , AllOne = {};
 
         //整理数据
         for(let item of source){
@@ -193,18 +235,22 @@ module.exports = {
             }
         }
 
-        if(Object.keys(ThisOne).length == 0){
+        if(Object.keys(ThisOne).length <= 3){
             //all
             ThisOne = AllOne;
         }
+
+        // for(let key of data.rows[1]){
+        //     ThisOne[key] = 0;
+        // }
 
         //拼装数据
         //表一
         let Table_1_row1 = {},Table_1_row2 = {};
         for(let key of data.rows[0]){
             if(key == "Blank") continue;
-            Table_1_row1[key] = ThisOne[key];
-            Table_1_row2[key] = util.toFixed( ThisOne[key] , AllOne[key]);
+            Table_1_row1[key] = ThisOne[key] || 0;
+            Table_1_row2[key] = util.toFixed( ThisOne[key] || 0 , AllOne[key] || 0);
         }
         Table_1_row1["Blank"] = "返利订单";
         Table_1_row2["Blank"] = "总占比";
@@ -213,12 +259,15 @@ module.exports = {
         let Table_3_row1 = {},Table_3_row2 = {};
         for(let key of data.rows[2]){
             if(key == "Blank") continue;
-            Table_3_row1[key] = ThisOne[key];
-            Table_3_row2[key] = util.toFixed( ThisOne[key] , AllOne[key]);
+            Table_3_row1[key] = ThisOne[key] || 0;
+            Table_3_row2[key] = util.toFixed( ThisOne[key] || 0 , AllOne[key] || 0);
         }
         Table_3_row1["Blank"] = "返利订单";
         Table_3_row2["Blank"] = "返利退货订单占比";
 
+        Table_1_row1 = Deal100(Table_1_row1 , ["is_rebate_fee"]);
+        ThisOne      = Deal100(ThisOne , ["expect_rebate_amount" , "cancel_rebate_amount" , "is_over_rebate_order_amount"]);
+        Table_3_row1 = Deal100(Table_3_row1 , ["is_rebate_back_merchandise_amount"]);
            
         return util.toTable([[Table_1_row1 , Table_1_row2] , [ThisOne] , [Table_3_row1 , Table_3_row2]], data.rows, data.cols);
     },
@@ -229,13 +278,16 @@ module.exports = {
         query.category_id_4 = "ALL";
         let category_id = query.category_id;
         delete query.category_id;
-        if(!category_id){
+        if(!category_id && category_id == "all"){
             cb(null , query);
         }else{
             req.models.ConfCategories.find({
                 id : category_id
             } , 1 , (err , data)=>{
                 if(err) cb(err);
+                if(data.length == 0){
+                    return cb(null , query);
+                }
                 data = data[0];
                 switch(data.level + 1){
                     case 1:
@@ -262,13 +314,16 @@ module.exports = {
         query.category_id_4 = "ALL";
         let category_id = query.category_id;
         delete query.category_id;
-        if(!category_id){
+        if(!category_id && category_id == "all"){
             cb(null , query);
         }else{
             req.models.ConfCategories.find({
                 id : category_id
             } , 1 , (err , data)=>{
                 if(err) cb(err);
+                if(data.length == 0){
+                    return cb(null , query);
+                }
                 data = data[0];
                 switch(data.level + 1){
                     case 1:
@@ -314,6 +369,7 @@ module.exports = {
         let colum = query.filter_key;
         for(let item of source){
             item.date = util.getDate(item.date);
+            item = Deal100(item , ["is_rebate_fee"]);
             if(Result[item.date][item.plan_type] != undefined){
                 Result[item.date][item.plan_type] += item[colum];
             }else{
@@ -369,6 +425,7 @@ module.exports = {
         }
 
         for(let item of firstSource){
+            item = Deal100(item , ["is_rebate_item_fee" , "is_over_rebate_order_amount"]);
             if(param1[item.plan_type]){
                  Result1[param1[item.plan_type]].value += item[filter_key];
             }
@@ -380,8 +437,9 @@ module.exports = {
         }
 
         for(let item of secondSource){
-            if(param2[item.rebate_level]){
-                Result2[param2[item.rebate_level]].value += item[filter_key];
+            item = Deal100(item , ["is_rebate_item_fee" , "is_over_rebate_order_amount"]);
+            if(param2[item.rebate_level] && item.level == "all"){
+                Result2[param2[item.rebate_level]].value = item[filter_key];
             }
         }
 
@@ -389,12 +447,16 @@ module.exports = {
         for(let key in param2){
             let obj = {};
             for(let one in param3){
+                if(one > key){
+                    continue;
+                }
                 obj[one] = 0;
             }
             Result3[param2[key]] = obj;
         }
 
         for(let item of secondSource){
+            item = Deal100(item , ["is_rebate_item_fee" , "is_over_rebate_order_amount"]);
             if(param2[item.rebate_level]){
                 Result3[param2[item.rebate_level]][item.level] += item[filter_key];
             }
@@ -402,14 +464,14 @@ module.exports = {
            
         return [{
             type : "pie",
-            map : {value:"0"},
+            map : {value:"返利类型占比"},
             data : Result1,
             config: { // 配置信息
                 stack: false  // 图的堆叠
             }
         }, {
             type : "pie",
-            map : {value:"0"},
+            map : {value:"返利层级占比"},
             data : Result2,
             config: { // 配置信息
                 stack: false  // 图的堆叠
@@ -446,11 +508,15 @@ module.exports = {
             }
         }
 
+
+        query.page = query.page || 1;
         source.map((item , index) => {
             item.Number = (query.page - 1)*20 + index + 1;
             item.plan_type_Translate = TypeName[item.plan_type];
             item.rebate_type_Translate = FlowName[item.rebate_type];
         });
+
+        source = Deal100(source , ["expect_rebate_amount","is_over_rebate_order_amount"]);
         
         return util.toTable([source] , data.rows, data.cols);
     },
@@ -532,6 +598,20 @@ module.exports = {
             }
         }
 
+        // "unique_is_rebate_user_num",
+        // "expect_rebate_user_num",
+        
+
+
+
+        Row = Deal100(Row , [
+            "expect_rebate_amount",
+            "cancel_rebate_amount",
+            "is_rebate_fee",
+            "is_over_rebate_order_amount",
+            "is_rebate_back_merchandise_amount"
+        ]);
+
         return util.toTable([[Row] , [Row]], data.rows, data.cols);
     },
 
@@ -552,6 +632,7 @@ module.exports = {
 
         for(let item of source){
             item.date = util.getDate(item.date);
+            item = Deal100(item , ["is_over_rebate_order_amount"]);
             if(item.rebate_type == "1"){
                 Result[item.date]["1"] = item[filter_key];
             }else{
@@ -586,7 +667,7 @@ module.exports = {
 
         let param1 = {
             "1" : "分享购买",
-            "2" : "邀请好友-购买返利"
+            "2" : "分销购买"
         },  param2 = {
             "1" : "1级计划",
             "2" : "2级计划",
@@ -602,6 +683,8 @@ module.exports = {
             "5" : "返利层级五",
             "6" : "返利层级六",
         };
+
+        source = Deal100(source , ["is_rebate_item_fee" , "is_over_rebate_order_amount"]);
 
         //init data1.
         for(let key in param1){
@@ -629,6 +712,9 @@ module.exports = {
         for(let key in param2){
             let obj = {};
             for(let one in param3){
+                if(one > key){
+                    continue;
+                }
                 obj[one] = 0;
             }
             Result3[param2[key]] = obj;
@@ -642,14 +728,14 @@ module.exports = {
            
         return [{
             type : "pie",
-            map : {value:"0"},
+            map : {value:"返利类型占比"},
             data : Result1,
             config: { // 配置信息
                 stack: false  // 图的堆叠
             }
         }, {
             type : "pie",
-            map : {value:"0"},
+            map : {value:"返利层级占比"},
             data : Result2,
             config: { // 配置信息
                 stack: false  // 图的堆叠
@@ -678,14 +764,16 @@ module.exports = {
             "11" : "固定返利"
         };
 
+        source = Deal100(source , ["is_rebate_item_fee" , "is_over_rebate_order_amount"]);
+
         //init data1.
         for(let key in param1){
             Result1[param1[key]] = {value:0};
         }
 
         for(let item of source){
-            if(param1[item.plan_type]){
-                Result1[param1[item.plan_type]].value += item[filter_key];
+            if(param1[item.rebate_type]){
+                Result1[param1[item.rebate_type]].value += item[filter_key];
             }
         }
 
@@ -696,14 +784,14 @@ module.exports = {
         }
 
         for(let item of source){
-            if(param1[item.rebate_level]){
-                Result3[param1[item.rebate_level]].value += item[filter_key];
+            if(param1[item.rebate_type]){
+                Result3[param1[item.rebate_type]].value += item[filter_key];
             }
         }
            
         return [{
             type : "pie",
-            map : {value:"0"},
+            map : {value:"返利类型占比"},
             data : Result1,
             config: { // 配置信息
                 stack: false  // 图的堆叠
@@ -727,6 +815,8 @@ module.exports = {
         let source = data.first.data[0],
             filter_key = query.filter_key,
             Result = {};
+
+        source = Deal100(source , ["is_over_rebate_order_amount"]);
 
         for(let date of dates){
             Result[date] = {"1":0}
@@ -760,6 +850,8 @@ module.exports = {
             filter_key  = query.filter_key,
             Result1 = {} , Result2 = {} , Result3 = {};
 
+        source = Deal100(source , ["is_rebate_item_fee" , "is_over_rebate_order_amount"]);
+
         let param2 = {
             "1" : "1级计划",
             "2" : "2级计划",
@@ -781,8 +873,8 @@ module.exports = {
         }
 
         for(let item of source){
-            if(param2[item.rebate_level]){
-                Result2[param2[item.rebate_level]].value += item[filter_key];
+            if(param2[item.level]){
+                Result2[param2[item.level]].value += item[filter_key];
             }
         }
 
@@ -790,6 +882,9 @@ module.exports = {
         for(let key in param2){
             let obj = {};
             for(let one in param3){
+                if(one > key){
+                    continue;
+                }
                 obj[one] = 0;
             }
             Result3[param2[key]] = obj;
@@ -803,7 +898,7 @@ module.exports = {
            
         return [{
             type : "pie",
-            map : {value:"0"},
+            map : {value:"返利层级分布"},
             data : Result2,
             config: { // 配置信息
                 stack: false  // 图的堆叠
@@ -833,6 +928,8 @@ module.exports = {
             "is_over_rebate_invite_friend_amount" : sum[3] || 0
         }
         obj.regist_lv = util.toFixed(sum[2] , sum[4] || 0);
+
+        obj = Deal100(obj , ["is_over_rebate_invite_friend_amount"]);
         return util.toTable([[obj]], data.rows, data.cols);
     },
 
@@ -850,6 +947,8 @@ module.exports = {
             "unique_rebate_invite_shop_success_num" : sum[2] || 0,
             "is_over_rebate_invite_shop_amount" : sum[3] || 0
         }
+
+        obj = Deal100(obj , ["is_over_rebate_invite_shop_amount"]);
         obj.regist_lv = util.toFixed(sum[2] , sum[4] || 0);
         return util.toTable([[obj]], data.rows, data.cols);
     },
@@ -863,6 +962,8 @@ module.exports = {
         let source = data.first.data[0],
             filter_key = query.filter_key,
             Result = {};
+
+        source = Deal100(source , ["is_over_rebate_invite_amount"]);
 
         for(let date of dates){
             Result[date] = {
@@ -972,6 +1073,10 @@ module.exports = {
         Table_3_row1["Blank"] = "返利订单";
         Table_3_row2["Blank"] = "返利退货订单占比";
 
+
+        Table_1_row1 = Deal100(Table_1_row1 , ["is_rebate_fee"]);
+        ThisOne      = Deal100(ThisOne , ["expect_rebate_amount" , "cancel_rebate_amount" , "is_over_rebate_order_amount" , "plat_rebate_order_amount"]);
+        Table_3_row1 = Deal100(Table_3_row1 , ["is_rebate_back_merchandise_amount"]);
            
         return util.toTable([[Table_1_row1 , Table_1_row2] , [ThisOne] , [Table_3_row1 , Table_3_row2]], data.rows, data.cols);
     },
@@ -992,6 +1097,8 @@ module.exports = {
             second = data.second.data[0],
             map = {}, Result = {};
 
+        source = Deal100(source , ["is_rebate_fee"]);
+
         for(let item of second){
             map[item.flow_code] = item.flow_name;
         }
@@ -1007,8 +1114,7 @@ module.exports = {
         let colum = query.filter_key;
         for(let item of source){
             item.date = util.getDate(item.date);
-
-            if(Result[item.date][item.rebate_type]){
+            if(Result[item.date][item.rebate_type] != undefined){
                 Result[item.date][item.rebate_type] += item[colum];
             }
         }
@@ -1030,6 +1136,109 @@ module.exports = {
         params.plan_type = 3;
         return params;
     },
+    rebate_shop_03_param2(query , params , sendData){
+        params.plan_type = 3;
+        return params;
+    },
+    rebate_shop_03_param3(query , params , sendData){
+        return { type_code:3 };
+    },
+    rebate_shop_03_f(data , query , dates){
+
+        let source = data.first.data[0],
+            second = data.second.data[0],
+            third  = data.third.data[0],
+            filter_key  = query.filter_key,
+            Result1 = {} , Result2 = {} , Result3 = {};
+
+        let param1 = {},  param2 = {
+            "1" : "1级计划",
+            "2" : "2级计划",
+            "3" : "3级计划",
+            "4" : "4级计划",
+            "5" : "5级计划",
+            "6" : "6级计划",
+        },  param3 = {
+            "1" : "返利层级一",
+            "2" : "返利层级二",
+            "3" : "返利层级三",
+            "4" : "返利层级四",
+            "5" : "返利层级五",
+            "6" : "返利层级六",
+        };
+
+        source = Deal100(source , ["is_rebate_item_fee" , "is_over_rebate_order_amount"]);
+        second = Deal100(second , ["is_rebate_item_fee" , "is_over_rebate_order_amount"]);
+
+        for(let item of third){
+            param1[item.flow_code] = item.flow_name;
+        }
+
+        //init data1.
+        for(let key in param1){
+            Result1[param1[key]] = {value:0};
+        }
+
+        for(let item of second){
+            if(param1[item.rebate_type]){
+             Result1[param1[item.rebate_type]].value += item[filter_key];
+            }
+        }
+
+
+
+        //init data2.
+        for(let key in param2){
+            Result2[param2[key]] = {value:0};
+        }
+
+        for(let item of source){
+            if(param2[item.rebate_level]){
+                Result2[param2[item.rebate_level]].value += item[filter_key];
+            }
+        }
+
+        //init data3.
+        for(let key in param2){
+            let obj = {};
+            for(let one in param3){
+                if(one > key){
+                    continue;
+                }
+                obj[one] = 0;
+            }
+            Result3[param2[key]] = obj;
+        }
+
+        for(let item of source){
+            if(param2[item.rebate_level]){
+                Result3[param2[item.rebate_level]][item.level] += item[filter_key];
+            }
+        }
+           
+        return [{
+            type : "pie",
+            map : {value:"返利类型占比"},
+            data : Result1,
+            config: { // 配置信息
+                stack: false  // 图的堆叠
+            }
+        }, {
+            type : "pie",
+            map : {value:"返利层级占比"},
+            data : Result2,
+            config: { // 配置信息
+                stack: false  // 图的堆叠
+            }
+        }, {
+            type : "bar",
+            map : param3,
+            data : Result3,
+            config: { // 配置信息
+                stack: true  // 图的堆叠
+            }
+        }];
+    },
 
     //商家返利汇总 ---- 商家返利TOP50
     rebate_shop_04(query , params , sendData){
@@ -1043,9 +1252,17 @@ module.exports = {
         let source = data.first.data[0],
             count  = data.first.count;
         count = count > 50 ? 50 : count;
+
+        query.page = query.page || 1;
+        query.limit = query.limit || 1;
         source.map((item , index) => {
             item.Number = (query.page - 1) * query.limit + index + 1;
         });
+
+        source = Deal100(source , ["is_rebate_fee",
+                "expect_rebate_amount",
+                "is_over_rebate_order_amount",
+                "plat_rebate_order_amount"]);
 
         return util.toTable([source], data.rows, data.cols , count);
     },
@@ -1070,11 +1287,15 @@ module.exports = {
             Translate[item.flow_code] = item.flow_name;
         });
 
+        query.page = query.page || 1;
+        query.limit = query.limit || 1;
         source.map((item , index) => {
             item.Number = (query.page - 1) * query.limit + index + 1;
             item.Return_lv = util.toFixed( item.is_rebate_back_merchandise_num , item.is_rebate_merchandise_num );
             item.rebate_type = Translate[item.rebate_type];
         });
+
+        source = Deal100(source , ["expect_rebate_amount" , "is_over_rebate_order_amount"]);
 
         return util.toTable([source], data.rows, data.cols , count);
     },
@@ -1084,9 +1305,9 @@ module.exports = {
 
         if(query.search_key){
             if(query.search_key / 1){
-                query.plan_id = query.search_key;
+                params.merchant_id = query.search_key;
             }else{
-                query.plan_name = query.search_key;
+                params.shop_name = orm.like("%" + query.search_key + "%");
             }
 
             delete params.search_key;

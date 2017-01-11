@@ -69,6 +69,16 @@ module.exports = (Router) => {
                     }
 
                     if(params.limited) {
+                        let l = JSON.parse(params.limited);
+                        let u = JSON.parse(data[0].limited);
+                        if(req.session.userInfo.username !== "superAdmin") {
+                            if(u && (!u[0])) {
+                                if(l["0"]) {
+                                    delete l["0"];
+                                }
+                            }
+                        }
+                        params.limited = JSON.stringify(l);
                         if(params.limited !== data[0].limited) {
                             content.push(username + "权限被修改");
                         }
@@ -175,18 +185,33 @@ module.exports = (Router) => {
         const xl = require("excel4node");
         const wb = new xl.Workbook();
         const ws = wb.addWorksheet("用户权限");
+        const wss = wb.addWorksheet("权限");
         let obj = {};
+        let NewData = [];
         for(let key in config) {
             if(config[key].display) {
                 obj[key] = {
+                    id : key,
                     name : config[key].name,
                     cell : {}
                 };
                 config[key].path.forEach((item, index) => {
+                    NewData.push({
+                        one : config[key].name,
+                        o : key,
+                        two : item.name,
+                        t : index
+                    });
                     obj[key].cell[index] = item.name;
                 });
             }
         }
+
+        util.export(wss, util.arrayToArray([{
+            cols : [{caption : "一级页面"},{caption : "一级id"},{caption : "二级页面"},{caption:"二级id"}],
+            rows : ["one", "o", "two", "t"],
+            data : NewData
+        }]));
         req.models.User2.find({
             is_admin : orm.lt(99),
             status : 1
@@ -214,13 +239,68 @@ module.exports = (Router) => {
                         role,
                         remark,
                         one : "",
+                        id : "",
                         two : "",
                         three : ""
                     });
                 } else {
                     for(let k of list) {
-                        if(limited[k] && exports[k]) {
-                            if(limited[k].length >= exports[k].length) {
+                        if(k != "16") {
+                            if(limited[k] && exports[k]) {
+                                const l = _.uniq(limited[k].concat(exports[k]));
+                                for(let j of l) {
+                                    const o = {
+                                        name,
+                                        username,
+                                        email,
+                                        department,
+                                        role,
+                                        remark,
+                                        one : obj[k].name,
+                                        id : k,
+                                        two : "",
+                                        three : ""
+                                    };
+                                    if(limited[k].indexOf(j) !== -1) {
+                                        o.two = obj[k].cell[j] || "";
+                                    }
+                                    if(exports[k].indexOf(j) !== -1) {
+                                        o.three = obj[k].cell[j] || "";
+                                    }
+                                    arr.push(o);
+                                }
+                                //if(limited[k].length >= exports[k].length) {
+                                //    limited[k].forEach((item, index) => {
+                                //        arr.push({
+                                //            name,
+                                //            username,
+                                //            email,
+                                //            department,
+                                //            role,
+                                //            remark,
+                                //            one : obj[k].name,
+                                //            id : k,
+                                //            two : obj[k].cell[item] || "",
+                                //            three : obj[k].cell[exports[index]] || ""
+                                //        });
+                                //    });
+                                //} else {
+                                //    exports[k].forEach((item, index) => {
+                                //        arr.push({
+                                //            name,
+                                //            username,
+                                //            email,
+                                //            department,
+                                //            role,
+                                //            remark,
+                                //            one : obj[k].name,
+                                //            id : k,
+                                //            two : obj[k].cell[limited[index]] || "",
+                                //            three : obj[k].cell[item] || ""
+                                //        });
+                                //    });
+                                //}
+                            } else if(limited[k]) {
                                 limited[k].forEach((item, index) => {
                                     arr.push({
                                         name,
@@ -230,11 +310,12 @@ module.exports = (Router) => {
                                         role,
                                         remark,
                                         one : obj[k].name,
+                                        id : k,
                                         two : obj[k].cell[item] || "",
-                                        three : obj[k].cell[exports[index]] || ""
+                                        three : ""
                                     });
                                 });
-                            } else {
+                            } else if(exports[k]) {
                                 exports[k].forEach((item, index) => {
                                     arr.push({
                                         name,
@@ -244,39 +325,12 @@ module.exports = (Router) => {
                                         role,
                                         remark,
                                         one : obj[k].name,
-                                        two : obj[k].cell[limited[index]] || "",
+                                        id : k,
+                                        two : "",
                                         three : obj[k].cell[item] || ""
                                     });
                                 });
                             }
-                        } else if(limited[k]) {
-                            limited[k].forEach((item, index) => {
-                                arr.push({
-                                    name,
-                                    username,
-                                    email,
-                                    department,
-                                    role,
-                                    remark,
-                                    one : obj[k].name,
-                                    two : obj[k].cell[item] || "",
-                                    three : ""
-                                });
-                            });
-                        } else if(exports[k]) {
-                            exports[k].forEach((item, index) => {
-                                arr.push({
-                                    name,
-                                    username,
-                                    email,
-                                    department,
-                                    role,
-                                    remark,
-                                    one : obj[k].name,
-                                    two : "",
-                                    three : obj[k].cell[item] || ""
-                                });
-                            });
                         }
                     }
                 }
@@ -289,13 +343,71 @@ module.exports = (Router) => {
                     {caption : "角色"},
                     {caption : "备注"},
                     {caption : "一级页面"},
+                    {caption : "一级ID"},
                     {caption : "菜单权限"},
                     {caption : "下载权限"}],
-                rows : ["name", "username", "email", "department", "role", "remark", "one", "two", "three"],
+                rows : ["name", "username", "email", "department", "role", "remark", "one", "id", "two", "three"],
                 data : arr
             }]);
             util.export(ws, newData);
             wb.write("report.xlsx", res);
+        });
+    });
+
+    Router.get("/users/delete", (req, res, next) => {
+        var params = req.query;
+        req.models.User2.find({
+            id : params.id
+        }, (err, data) => {
+            if(!err) {
+                if(data.length) {
+                    data[0].status = 0;
+                    data[0].is_admin = 250;
+                    data[0].save((err) => {
+                        if(!err) {
+                            var log = {
+                                username : req.session.userInfo.username,
+                                date : new Date().getTime(),
+                                ip : util.getClientIp(req),
+                                content : `${data[0].username}被删除`
+                            };
+                            req.models.Log.create(log, (err, data) => {
+                                if(!err) {
+                                    res.json({
+                                        code : 200,
+                                        success : true,
+                                        msg : "删除成功"
+                                    })
+                                } else {
+                                    res.json({
+                                        code : 400,
+                                        success : false,
+                                        msg : "删除失败"
+                                    })
+                                }
+                            });
+                        } else {
+                            res.json({
+                                code : 400,
+                                success : false,
+                                msg : "删除失败"
+                            });
+                        }
+                    });
+                } else {
+                    res.json({
+                        code : 400,
+                        success : false,
+                        msg : "无该用户，无法删除"
+                    });
+                }
+            } else {
+                res.json({
+                    code : 400,
+                    success : false,
+                    msg : "删除失败"
+                });
+            }
         });
     });
 

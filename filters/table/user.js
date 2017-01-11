@@ -75,8 +75,8 @@ const rowsWeek = [
     ["date", "new_reg_num", "one", "reg_num", "aaccount", "app_new_act", "app_new_reg", "two", "app_auser",
         "three",
         //"four",
-        "app_pv", "six", "five", "app_ip", "pc_new_visit", "pc_new_reg", "seven", "pc_visit",
-        "pc_pv", "pc_ip", "eight", "one_one", "wap_new_visit", "wap_new_reg", "one_two", "wap_visit",
+        "app_pv", "five", "app_ip", "six", "pc_new_visit", "pc_new_reg", "seven", "pc_visit",
+        "eight", "pc_pv", "pc_ip", "one_one", "wap_new_visit", "wap_new_reg", "one_two", "wap_visit",
         "one_three", "wap_pv", "wap_ip", "one_four"]
 ];
 const colsWeek = [

@@ -16,6 +16,7 @@ module.exports = (Router) => {
     Router = new main(Router, {
         router : "/socialAnalysis/dataTableDayUserOne",
         platform : false,
+        cancelDateLimit : true,
         modelName : ["UserAnalysisUsersReport"],
         order : ["-date"],
         global_platform : global_platform.day,
@@ -137,6 +138,7 @@ module.exports = (Router) => {
         platform : false,
         modelName : ["UserAnalysisUsersReport"],
         order : ["-date"],
+        cancelDateLimit : true,
         global_platform : global_platform.week,
         //control_table_col : true,
         //excel_export : true,
@@ -207,6 +209,7 @@ module.exports = (Router) => {
         platform : false,
         modelName : ["UserAnalysisUsersReport"],
         order : ["-date"],
+        cancelDateLimit : true,
         global_platform : global_platform.month,
         //control_table_col : true,
         //excel_export : true,

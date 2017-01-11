@@ -27,17 +27,17 @@ const Config = {
             className: "fa fa-user fa-fw",
             href: "#",
             path: [{
-                id : 0,
+                id: "0",
                 name: "帐号列表",
                 path: "/user/account",
                 display: true
             }, {
-                id : 1,
+                id : "1",
                 name: "角色列表",
                 path: "/user/role",
                 display: true
             }, {
-                id : 2,
+                id : "2",
                 name: "系统日志",
                 path: "/user/log",
                 display: true
@@ -91,10 +91,11 @@ const Config = {
             className: "fa  fa-laptop fa-fw",
             href: "#",
             path: [
-                obj.channelAnalysis.apk(),
-                obj.channelAnalysis.market()
+                obj.channelAnalysis.market(),
+                obj.channelAnalysis.apk()
             ],
             routers: [
+                obj.channelAnalysis.channelOperating(),
                 obj.channelAnalysis.marketOperating(),
                 obj.channelAnalysis.apkOperating()
             ]
@@ -134,6 +135,7 @@ const Config = {
                 obj.terminal.provinces()
             ]
         },
+        "22" : ConfigAdd["22"],
         "9": {
             name: "分享收藏",
             display: true,
@@ -200,6 +202,7 @@ const Config = {
                 obj.marketingAnalysis.operating()
             ]
         },
+        "15" : ConfigAdd["15"],
         // "15": {
         //     name: "平台返利汇总",
         //     display: true,
@@ -215,30 +218,33 @@ const Config = {
         //     ],
         //     routers: []
         // },
-        "16": {
-            name: "商家返利汇总",
-            display: true,
-            className: "fa fa-desktop fa-fw",
-            href: "#",
-            path: [
-                obj.businessRebate.all(),
-                obj.businessRebate.plan()
-            ],
-            routers: []
-        },
+        // "16": {
+        //     name: "商家返利汇总",
+        //     display: true,
+        //     className: "fa fa-desktop fa-fw",
+        //     href: "#",
+        //     path: [
+        //         obj.businessRebate.all(),
+        //         obj.businessRebate.plan()
+        //     ],
+        //     routers: []
+        // },
         "17": {
             name: "社交分析",
             display: true,
             className: "fa  fa-laptop fa-fw",
             href: "#",
             path: [
+                obj.socialAnalysis.panel(),
+                obj.socialAnalysis.total(),
                 obj.socialAnalysis.group(),
                 obj.socialAnalysis.topics(),
                 obj.socialAnalysis.groupHost()
             ],
             routers: [
                 obj.socialAnalysis.groupDetail(),
-                obj.socialAnalysis.topicsDetail()
+                obj.socialAnalysis.topicsDetail(),
+                obj.socialAnalysis.topicDeal()
             ]
         },
         "18": {
@@ -248,7 +254,13 @@ const Config = {
             href: "#",
             path: [
                 obj.videoStatis.video(),
-                obj.videoStatis.videoEdition()
+                obj.videoStatis.videoEdition(),
+                obj.videoStatis.videoKpi(),
+                obj.videoStatis.videoDetails()
+            ],
+            routers : [
+                obj.videoStatis.videoDetailsTwo(),
+                obj.videoStatis.videoDetailsOperating()
             ]
         },
         "19": {
@@ -285,6 +297,7 @@ const Config = {
                 obj.databp.bpmanage(),
                 obj.databp.bpstats(),
                 obj.databp.spread()
+
             ]
         },
         "29": {
@@ -304,10 +317,12 @@ const Config = {
             href: "#",
             path: [
                 obj.table.table(),
+                obj.table.topic(),
                 obj.table.data_table_day(),
                 obj.table.data_table_week(),
                 obj.table.data_table_month(),
-                obj.table.rebate_total()
+                obj.table.rebate_total(),
+                obj.table.data_table_shopflow()
             ],
             routers : [
                 obj.table.rebate_total_new(),
@@ -328,11 +343,24 @@ const Config = {
                 obj.table.data_table_month_dataRebate()
             ]
         }
+        // "1001": {
+        //     name: "数据导出",
+        //     display: true,
+        //     className: "fa  fa-database fa-fw",
+        //     href: "#",
+        //     path: [
+        //         obj.dataExport.shopflow()
+        //     ]
+        // }
     }
 };
 
 for(let key in ConfigAdd){
-    if(Config.limit[key]) throw Error("config.js key 重复定义，请检查代码");
+    if(Config.limit[key]) {
+        if(Config.limit[key] !== ConfigAdd[key]) {
+            throw Error("config.js key 重复定义，请检查代码");
+        }
+    }
     Config.limit[key] = ConfigAdd[key];
 }
 

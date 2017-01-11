@@ -11,11 +11,6 @@ module.exports = {
             name : "实时概况",
             path : "/realTime",
             display : true,
-            subPages : [{
-                id : 53,
-                url : "/dataOverview/app",
-                name : "数据概览"
-            }],
             defaultData : [
                 {
                     type : "table",

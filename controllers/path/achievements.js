@@ -10,6 +10,7 @@ module.exports = {
             name : "店铺分析",
             path : "/achievements/shop",
             display : true,
+            id   : "00203",
             defaultData : [
                 {
                     type : "chart",
@@ -37,7 +38,7 @@ module.exports = {
     shopOverview(){
         return {
             id : 31,
-            name : "店铺总览",
+            name : "店铺运营分析",
             path : "/achievements/shopOverview",
             display : true,
             defaultData : [
@@ -72,7 +73,7 @@ module.exports = {
     shopRun(){
         return {
             id : 32,
-            name : "店铺运营分析",
+            name : "店铺交易分析",
             path : "/achievements/shopRun",
             display : true,
             defaultData : [
@@ -185,10 +186,6 @@ module.exports = {
             display : true,
             defaultData : [
                 {
-                    type : "chart",
-                    query_api : "/achievements/tradeZero"
-                },
-                {
                     type : "table",
                     title : "交易总览",
                     query_api : "/achievements/tradeOne"
@@ -217,26 +214,14 @@ module.exports = {
             name : "交易面板",
             path : "/achievements/tradePanel",
             display : true,
-            subPages : [{
-                id : 35,
-                url : "/achievements/trade",
-                name : "交易分析"
-            }, {
+            subPages : [ {
                 id : 39,
                 url : "/achievements/order",
                 name : "订单分析"
             }, {
-                id : 34,
-                url : "/achievements/productSale",
-                name : "商品分析"
-            }, {
                 id : 40,
                 url : "/achievements/pay",
                 name : "支付分析"
-            }, {
-                id : 47,
-                url : "/coupon",
-                name : "优惠劵分析"
             }],
             defaultData : [
                 {
@@ -279,7 +264,7 @@ module.exports = {
     vshop() {
         return {
             id : 37,
-            name : "美店店铺商品",
+            name : "美店运营分析",
             path : "/achievements/vshop",
             display : true,
             defaultData : [
@@ -314,7 +299,7 @@ module.exports = {
     vtrade() {
         return {
             id : 38,
-            name : "美店交易",
+            name : "美店交易分析",
             path : "/achievements/vtrade",
             display : true,
             defaultData : [
@@ -357,10 +342,6 @@ module.exports = {
             defaultData : [
                 {
                     type : "chart",
-                    query_api : "/achievements/orderZero"
-                },
-                {
-                    type : "chart",
                     title : "订单趋势",
                     query_api : "/achievements/orderOne"
                 },
@@ -386,10 +367,6 @@ module.exports = {
             path : "/achievements/pay",
             display : true,
             defaultData : [
-                {
-                    type : "chart",
-                    query_api : "/achievements/payZero"
-                },
                 {
                     type : "chart",
                     title : "支付趋势",

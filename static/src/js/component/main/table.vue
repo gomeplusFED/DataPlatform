@@ -242,8 +242,9 @@
 						resultArray.push(item + '=' + this.resultArgvs[item]);
 					}
 				});
-
-				this.$route.router.go(urlLink + '?' + resultArray.join('&'));
+				// 新窗口打开，url转码
+				window.open(encodeURI(`${location.origin}#!${urlLink}?${resultArray.join('&')}`))
+				// this.$route.router.go(urlLink + '?' + resultArray.join('&'));
 			}
 		},
 		generatorTable: function() {

@@ -20,6 +20,21 @@ module.exports = {
             ]
         };
     },
+    topic(){
+        return {
+            id: 00234,
+            name: "话题报表",
+            path: "/socialAnalysis/topic",
+            display: true,
+            defaultData : [
+                {
+                    type : "table",
+                    title: "热门话题排行TOP100",
+                    query_api : "/socialAnalysis/topic_ReportOne"
+                }
+            ]
+        }
+    },
     rebate_total() {
         return {
             id : 76,
@@ -337,5 +352,20 @@ module.exports = {
                 }
             ]
         };
+    },
+    data_table_shopflow() {
+        return {
+            id: 1001,
+            name : "O2M店铺流量交易",
+            path : "/dataExport/shopFlow",
+            display : true,
+            defaultData : [
+                {
+                    type : "table",
+                    title : "O2M店铺流量交易",
+                    query_api : "/dataExport/shopFlowOne"
+                }
+            ]
+        }
     }
 };

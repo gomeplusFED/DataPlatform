@@ -45,6 +45,7 @@ module.exports = {
         }
 
         for(let key of source) {
+            key.type = key.type.toUpperCase();
             if(obj[key.type]) {
                 obj[key.type].sum_first_groupOwner_num = key.sum_first_groupOwner_num;
                 obj[key.type].sum_attention_groupOwner_num = key.sum_attention_groupOwner_num;
@@ -213,11 +214,14 @@ module.exports = {
             source[i].person_topic_num = key.person_topic_num || 0;
             source[i].person_friends_num = key.person_friends_num || 0;
             source[i].person_funs_num = key.person_funs_num || 0;
-            source[i].person_funs_num = key.person_funs_num || 0;
-            source[i].weiding = 0;
+            source[i].weiding = key.weiding || 0;
             source[i].daren_flag = daren_flag[source[i].daren_flag] || "";
             newData.push(source[i]);
         }
+
+
+
+        console.log(123 , newData[0]);
         return util.toTable([newData], data.rows, data.cols, [count]);
     }
 };

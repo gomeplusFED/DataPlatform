@@ -14,7 +14,9 @@ var utils = require("../utils"),
     orm = require("orm"),
     sqlLogRunTime = require("./sqlLogRunTime"),
     cacheTime = 1,
-    platformPermission = require('../utils/platformPermission');
+    platformPermission = require('../utils/platformPermission'),
+    models = require("../models2/Modules"),
+    _ = require("lodash");
 
 let eventproxy = require("eventproxy");
 
@@ -99,7 +101,11 @@ function api(Router, options) {
         //全局模块
         global_platform: {show: false},
         //是否支持图转表
-        toggle : false
+        toggle : false,
+        //是否页面显示表名
+        debug : true,
+        //是否取消30天限制
+        cancelDateLimit : false
     }, options);
 
     utils.mixin(this, defaultOption);
@@ -119,11 +125,12 @@ api.prototype = {
         if (this.global_platform && this.global_platform.show) {
             this.global_platform = platformPermission(
                 req.url,
-                JSON.parse(req.session.userInfo.type || '{}'),
+                req.session.userInfo.type || '{}',
                 this.global_platform,
                 this.global_platform_types
-            )
+            );
         }
+        this.global_platform_filter && this.global_platform_filter(req);
 
         //无参数时，返回组件信息
         if(Object.keys(query).length === 0) {
@@ -183,6 +190,8 @@ api.prototype = {
         if(query.startTime === undefined && query.endTime === undefined) {
             return true;
         } else {
+            query.startTime = decodeURI(query.startTime);
+            query.endTime = decodeURI(query.endTime);
             if (!validator.isDate(query.startTime) && !validator.isDate(query.endTime)) {
                 next(new Error("startTime参数出错或者endTime参数出错"));
                 return false;
@@ -191,7 +200,7 @@ api.prototype = {
         }
     },
     _render(res, sendData, type) {
-        res[type]({
+        const render = {
             code: 200,
             modelData: sendData,
             components: {
@@ -199,7 +208,8 @@ api.prototype = {
                 date_picker: {
                     show: this.date_picker,
                     defaultData: this.date_picker_data,
-                    showDayUnit : this.showDayUnit
+                    showDayUnit : this.showDayUnit,
+                    cancelDateLimit : this.cancelDateLimit
                 },
                 drop_down: {
                     platform: this.platform,
@@ -220,7 +230,21 @@ api.prototype = {
                 global_plataform : this.global_platform,
                 toggle: this.toggle
             }
-        });
+        };
+        if(this.debug) {
+            let modelName = this.modelName;
+            let _modelName = [];
+            for(let name of modelName) {
+                for(let model in models) {
+                    if(models[model].modelName === name) {
+                        _modelName.push(model);
+                    }
+                }
+            }
+            render.modelName = _.uniq(_modelName).join(";  ");
+        }
+
+        res[type](render);
     },
     _checkParams(next, query, params, cacheData) {
         var errObj = {},

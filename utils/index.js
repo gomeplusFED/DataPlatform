@@ -2,6 +2,8 @@ var path = require('path');
 var config = require('./config.json');
 const validator = require('validator');
 const request = require("request");
+const Assist = require("./assist");
+const moment = require("moment");
 const style = {
     border : {
         left : {
@@ -29,6 +31,10 @@ const header = {
         fgColor: '#FFFF33'
     }
 };
+
+for(let key in Assist){
+    exports[key] = Assist[key];
+}
 
 exports.unique = function(data) {
     data = data || [];
@@ -209,6 +215,10 @@ exports.toFixed = function(one, two) {
     return (one / (Math.ceil(two) === 0 ? 1 : two) * 100).toFixed(2) + "%";
 };
 
+exports.toFixedLength = function(one, two, length=4) {
+    return (one / (Math.ceil(two) === 0 ? 1 : two) * 100).toFixed(length) + "%"
+}
+
 exports.percentage = function(one, two) {
     return (one / (two === 0 ? 1 : two) * 100).toFixed(2);
 };
@@ -279,6 +289,37 @@ exports.times = function(startTime, endTime, day_type) {
                 new Date(new Date(year, month, 1).getTime() - 24 * 60 * 60 * 1000).getDate()) {
                 month++;
                 array.push(exports.getDate(new Date(start)));
+                start = new Date(year, month, 1).getTime() - 24 * 60 * 60 * 1000;
+            } else {
+                start = new Date(year, month, 1).getTime() - 24 * 60 * 60 * 1000;
+            }
+        }
+    }
+    return array;
+};
+
+exports.timesTwo = function(startTime, endTime, day_type) {
+    var start = new Date(startTime).getTime(),
+        end = new Date(endTime).getTime(),
+        year = new Date(start).getFullYear(),
+        month = new Date(start).getMonth() + 1,
+        array = [];
+    while(start <= end) {
+        if(day_type === '1') {
+            array.push(moment(new Date(start)).format("YYYY-MM-DD"));
+            start = start + 24 * 60 * 60 * 1000;
+        } else if(day_type === '2') {
+            if(new Date(start).getDay() === 0) {
+                array.push(moment(new Date(start)).format("YYYY-MM-DD"));
+                start = start + 7 * 24 * 60 * 60 * 1000;
+            } else {
+                start = start + 24 * 60 * 60 * 1000;
+            }
+        } else if(day_type === '3') {
+            if(new Date(start).getDate() ===
+                new Date(new Date(year, month, 1).getTime() - 24 * 60 * 60 * 1000).getDate()) {
+                month++;
+                array.push(moment(new Date(start)).format("YYYY-MM-DD"));
                 start = new Date(year, month, 1).getTime() - 24 * 60 * 60 * 1000;
             } else {
                 start = new Date(year, month, 1).getTime() - 24 * 60 * 60 * 1000;
@@ -668,27 +709,31 @@ exports.excelReport = (modelData, useCol=true) => {
             let a = [];
             if(validator.isDate(key.date) || key.date === "近30天平均") {
                 for(let row of rows) {
-                    a.push(key[row]);
+                    if(row !== "operating") {
+                        a.push(key[row]);
+                    }
                 }
             } else {
                 for(let row of rows) {
-                    const d = key[row];
-                    if(typeof d === "string") {
-                        if(+d.replace("%", "") >= 0 && d !== "--") {
-                            a.push({
-                                name : "↑" +d,
-                                style : up
-                            });
-                        } else if(+d.replace("%", "") <= 0 && d !== "--") {
-                            a.push({
-                                name : "↓" + d,
-                                style : down
-                            });
+                    if(row !== "operating") {
+                        const d = key[row];
+                        if(typeof d === "string") {
+                            if(+d.replace("%", "") >= 0 && d !== "--") {
+                                a.push({
+                                    name : "↑" +d,
+                                    style : up
+                                });
+                            } else if(+d.replace("%", "") <= 0 && d !== "--") {
+                                a.push({
+                                    name : "↓" + d,
+                                    style : down
+                                });
+                            } else {
+                                a.push(d);
+                            }
                         } else {
                             a.push(d);
                         }
-                    } else {
-                        a.push(d);
                     }
                 }
             }
@@ -711,4 +756,52 @@ exports.megerArray = (result = [] , arr) => {
         }
     }
     return result;
+};
+
+exports.globalPlatform = (type, filter_select) => {
+    let all = true;
+    let ios = filter_select[0].groups[0],
+        and = filter_select[0].groups[1],
+        pc = filter_select[0].groups[2],
+        h5 = filter_select[0].groups[3];
+    const select = {
+        title : filter_select[0].title,
+        filter_key : filter_select[0].filter_key,
+        groups : []
+    };
+    if(type[0] == "1") {
+        select.groups.push(ios);
+    } else {
+        all = false;
+    }
+    if(type[1] == "1") {
+        select.groups.push(and);
+    } else {
+        all = false;
+    }
+    if(type[3] == "1") {
+        select.groups.push(pc);
+    } else {
+        all = false;
+    }
+    if(type[4] == "1") {
+        select.groups.push(h5);
+    } else {
+        all = false;
+    }
+
+    if(all) {
+        select.groups = [{
+            key: 'all',
+            value: '全部'
+        }].concat(select.groups);
+    }
+
+    let arr = [];
+    arr.push(select);
+    for(let i = 1; i < filter_select.length; i++) {
+        arr.push(filter_select[i]);
+    }
+
+    return arr;
 };

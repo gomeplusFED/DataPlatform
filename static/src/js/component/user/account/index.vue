@@ -46,8 +46,9 @@
 									<td>
 										<ul>
 											<li v-show="item.status"><a @click="showLimitList(item.id, item.limited, item.export, item.sub_pages, item.type)" class="btn btn-default" href="javascript:void(0)">权限修改<i class="fa fa-pencil-square-o"></i></a></li>
-											<li v-show="item.status"><a @click="forbidden(item.id, item.email)" class="btn btn-default" href="javascript:void(0)">禁用<i class="fa fa-remove"></i></a></li>
+											<li v-show="item.status"><a @click="forbidden(item.id, item.email)" class="btn btn-default" href="javascript:void(0)">禁用<i class="fa fa-ban"></i></a></li>
 											<li v-show="!item.status"><a @click="startUsing(item.id, item.email)" class="btn btn-default" href="javascript:void(0)">启用<i class="fa fa-check-square-o"></i></a></li>
+											<li><a @click="deleteUser(item.id, item.email)" class="btn btn-danger" href="javascript:void(0)">删除<i class="fa fa-trash"></i></a></li>
 										</ul>
 									</td>
 								</tr>
@@ -388,10 +389,10 @@ var User = Vue.extend({
 							Vue.set(_this.roleList[item], 'checked', true);
 						}
 					}
-					_this.limited = JSON.parse(_this.userListData[index].limited);
-					_this.subPages = JSON.parse(_this.userListData[index].sub_pages || '{}');
-					_this.exportLimit = JSON.parse(_this.userListData[index].export);
-					_this.type = JSON.parse(_this.userListData[index].type || '{}');
+					_this.limited = JSON.parse(_this.userListData[index].limited || '{}') || {};
+					_this.subPages = JSON.parse(_this.userListData[index].sub_pages || '{}') || {};
+					_this.exportLimit = JSON.parse(_this.userListData[index].export  || '{}') || {};
+					_this.type = JSON.parse(_this.userListData[index].type || '{}') || {};
 				}
 			});
 		},
@@ -402,10 +403,10 @@ var User = Vue.extend({
 			_this.modal.title = '修改权限';
 			_this.modal.type = 'limitList';
 			_this.id = id;
-			_this.exportLimit = JSON.parse(exportLimit);
-			_this.limited = JSON.parse(limited);
-			_this.subPages = JSON.parse(subPages);
-			_this.type = JSON.parse(type || '{}');
+			_this.exportLimit = JSON.parse(exportLimit || '{}') || {};
+			_this.limited = JSON.parse(limited || '{}') || {};
+			_this.subPages = JSON.parse(subPages || '{}') || {};
+			_this.type = JSON.parse(type || '{}') || {};
 		},
 		apply: function() {
 			var _this = this;
@@ -420,10 +421,10 @@ var User = Vue.extend({
 					if (_this.roleList[item]['checked'] && !utils.isInArry(_this.roleList[item]['name'], currentUserRoleNameArr)) {
 						let roleObj = _this.roleList[item];
 						let obj1 = roleObj['limited'] ? JSON.parse(roleObj['limited']) : {};
-						let roleSubPages = roleObj['sub_pages'] ? JSON.parse(roleObj['sub_pages']) : {};
+						let roleSubPages = roleObj['sub_pages'] ? JSON.parse(roleObj['sub_pages']) : null;
 						for (let k in obj1) {
 							if (!resultLimited[k]) {
-								resultLimited[k] = obj1[k];
+								resultLimited[k] = obj1[k] || [];
 							}
 							let _currentArr = resultLimited[k].concat(obj1[k]);
 							resultLimited[k] = utils.uniqueArray(_currentArr);
@@ -431,24 +432,27 @@ var User = Vue.extend({
 								return a - b;
 							});
 							// 处理三级页面
-							let roleSubs = roleSubPages[k];
-							let userSubs = resultSubPages[k];
-							let limiteds = resultLimited[k];
-							if (!userSubs) {
-								resultSubPages[k] = roleSubs;
-							} else {
-								for(let l of limiteds) {
-									let _current = userSubs[l].concat(roleSubs[l]);
-									userSubs[l] = utils.uniqueArray(_current);
+							let roleSubs;
+							if (roleSubPages && (roleSubs = roleSubPages[k])) {
+								let userSubs = resultSubPages[k];
+								let limiteds = resultLimited[k];
+								if (!userSubs) {
+									resultSubPages[k] = roleSubs;
+								} else {
+									for(let l of limiteds) {
+										if (Array.isArray(roleSubs[l])) {
+											let _current = (userSubs[l] || []).concat(roleSubs[l]);
+											userSubs[l] = utils.uniqueArray(_current);
+										}
+									}
 								}
 							}
-
 						}
 
-						var obj2 = JSON.parse(_this.roleList[item]['export']);
+						var obj2 = JSON.parse(_this.roleList[item]['export']) || {};
 						for (let k in obj2) {
 							if (!resultExportLimited[k]) {
-								resultExportLimited[k] = obj2[k];
+								resultExportLimited[k] = obj2[k] || [];
 							}
 							let _currentArr = resultExportLimited[k].concat(obj2[k]);
 							resultExportLimited[k] = utils.uniqueArray(_currentArr);
@@ -483,7 +487,7 @@ var User = Vue.extend({
 				let roleCheckedList = _this.roleList.filter(r => r.checked)
 				if (roleCheckedList) {
 					roleCheckedList.forEach(x => {
-						let roleType = JSON.parse(x.type || '{}')
+						let roleType = JSON.parse(x.type || '{}') || {}
 						for(let key in roleType) {
 							if (roleType[key] !== '00000') {
 								let arrRole =  roleType[key].split('').filter(x => x === '1')
@@ -663,7 +667,37 @@ var User = Vue.extend({
 					});
 				}
 			});
-		}
+		},
+		deleteUser: function(id, email) {
+			var _this = this;
+			actions.confirm(store, {
+				show: true,
+				msg: '是否删除账户 ' + email + '？',
+				apply: function() {
+					$.ajax({
+						url: '/users/delete?id=' + id,
+						type: 'get',
+						success: function(data) {
+							if (!data.success) {
+								actions.alert(store, {
+									show: true,
+									msg: data.msg,
+									type: 'danger'
+								});
+								return;
+							}
+							actions.alert(store, {
+								show: true,
+								msg: '删除成功',
+								type: 'success'
+							});
+							_this.createTableBySearchStr();
+							_this.modal.show = false;
+						}
+					});
+				}
+			});
+		},
 	},
 	watch: {
 		searchStr: {

@@ -302,6 +302,7 @@ var Account = Vue.extend({
 				}
 			},
 			userListData: [],
+			cachedUserListData: [],
             checkedRecords: [],
             checkedAllRecords_status : false,
             opBtnDisable: true,
@@ -321,7 +322,7 @@ var Account = Vue.extend({
 			modifyExportLimited: {}
 		}
 	},
-	props: ['modal', 'loading'],
+	props: ['modal', 'loading', 'type'],
 	components: {
 		'm-pagination': Pagination
 	},
@@ -358,26 +359,39 @@ var Account = Vue.extend({
 				success: function(data){
 					_this.paginationConf.totalItems = data.count;
 					_this.userListData = data.data;
+					_this.checkedRecords_listener();
+					_this.cachedUserListData = _this.cachedUserListData.concat(data.data || []);
 					_this.loading.show = false;
 				}
 			})
 		},
         checkedRecords_listener () {
             this.opBtnDisable          = this.checkedRecords.length > 0 ? false : true;
-            this.checkedAllRecords_status = this.checkedRecords.length === this.userListData.length ? true : false;
+            this.checkedAllRecords_status = this.userListData.every(x => this.checkedRecords.includes(x.id.toString()));
         },
         checkedAllRecords_listener () {
             this.opBtnDisable          = this.checkedAllRecords_status;
             this.checkedAllRecords_status = !this.checkedAllRecords_status;
             $('.ckbox').prop('checked', this.checkedAllRecords_status);
             if(this.checkedAllRecords_status) {
-                this.checkedRecords = this.userListData.map(function(item){
-                    return item.id.toString();
-                });
+            	for(let item of this.userListData) {
+            		let id = item.id.toString();
+            		if(!this.checkedRecords.includes(id)) {
+            			this.checkedRecords.push(id);
+            		}
+            	}
+                // this.checkedRecords = this.userListData.map(function(item){
+                //     return item.id.toString();
+                // });
             } else {
-                this.checkedRecords = [];
+            	for(let item of this.userListData) {
+            		let id = item.id.toString();
+            		let index;
+            		if((index = this.checkedRecords.findIndex(x => x === id)) !== -1) {
+            				this.checkedRecords.splice(index,1);
+            		}
+            	}
             }
-
         },
         updateLimited(email = false) {
         	let _this = this;
@@ -387,12 +401,34 @@ var Account = Vue.extend({
         	let updateTasks = [];
         	let roleSubPages = _this.modal.subPages ? JSON.parse(_this.modal.subPages) : {};
         	for(let userid of _this.checkedRecords) {
-        		let useritem = _this.userListData.find(x => x.id.toString() === userid);
 
+        		let useritem = _this.cachedUserListData.find(x => x.id.toString() === userid);
+				let ismodified = false;
+
+				// 平台权限合并
+				let type = JSON.parse(useritem.type || '{}');
+				for(let key of Object.keys(_this.type)) {
+					let item = _this.type[key]
+					if (item.indexOf('1') > -1) {
+						let item2 = (type[key] || '00000').split('')
+						item.split('').forEach((x, i) => {
+							if (x === '1') {
+								item2[i] = '1'
+							}
+						})
+						type[key] = item2.join('')
+					}
+				}
+				let typeStr = JSON.stringify(type)
+				if (typeStr !== useritem.type) {
+					ismodified = true
+					useritem.type = typeStr
+				}
+				
         		let userLimited = (useritem && useritem.limited) ? JSON.parse(useritem.limited) : {};
         		let userExportLimited = (useritem && useritem.export) ? JSON.parse(useritem.export) : {};
         		let usersub_pages = (useritem && useritem.sub_pages) ? JSON.parse(useritem.sub_pages) : {};
-        		let ismodified = false;
+        		
 	        	for (let key in roleLimited) {
 	        		let ul = userLimited[key] || [];
 	        		let rl = roleLimited[key] || [];
@@ -438,10 +474,11 @@ var Account = Vue.extend({
 								id: useritem.id,
 								limited: modifyLimited,
 								export: modifyExportLimited,
-								sub_pages: modifySubPages
+								sub_pages: modifySubPages,
+								type: useritem.type
 							},
 							success: function(data){
-								if(!data.success){
+								if(!data.success && data.msg !== '请修改后再提交'){
 									reject({
 										name: useritem.name,
 										msg: data.msg});
@@ -500,6 +537,8 @@ var Account = Vue.extend({
 					}
 					return true;
         		}).catch((err) => {
+
+        			_this.loading.show = false;
         			let msg = '更新失败:' + `${err.name}---${err.msg}`;
 					actions.alert(store, {
 						show: true,

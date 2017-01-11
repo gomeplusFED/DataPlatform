@@ -67,9 +67,10 @@ module.exports = (Router) => {
                 date : new Date().getTime(),
                 limited : body.limited || "{}",
                 sub_pages: body.sub_pages || "{}",
-                export : body.export | "{}",
+                export : body.export || "{}",
                 status : 1,
-                remark : body.remark
+                remark : body.remark,
+                type: body.type
             };
         if(body.name) {
             _uniq(req, {name: body.name}, (err, data) => {

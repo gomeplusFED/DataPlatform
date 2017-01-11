@@ -15,6 +15,7 @@ module.exports = (Router) => {
     Router = new main(Router, {
         router : "/socialAnalysis/dataTableDayVshopOne",
         platform : false,
+        cancelDateLimit : true,
         modelName : ["VshopReport"],
         order : ["-date"],
         global_platform : global_platform.day,
@@ -27,7 +28,7 @@ module.exports = (Router) => {
         params(query, params) {
             params.day_type = 1;
             const now = new Date();
-            const date = util.times(query.startTime, query.endTime, "1");
+            const date = util.timesTwo(query.startTime, query.endTime, "1");
             date.push(moment(now - 24 * 60 * 60 * 1000).format("YYYY-MM-DD"));
             date.push(moment(now - 2 * 24 * 60 * 60 * 1000).format("YYYY-MM-DD"));
             params.date = date;
@@ -105,6 +106,7 @@ module.exports = (Router) => {
     Router = new main(Router, {
         router : "/socialAnalysis/dataTableWeekVshopOne",
         platform : false,
+        cancelDateLimit : true,
         modelName : ["VshopReport"],
         order : ["-date"],
         global_platform : global_platform.week,
@@ -127,6 +129,7 @@ module.exports = (Router) => {
     Router = new main(Router, {
         router : "/socialAnalysis/dataTableMonthVshopOne",
         platform : false,
+        cancelDateLimit : true,
         modelName : ["VshopReport"],
         order : ["-date"],
         global_platform : global_platform.month,

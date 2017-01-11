@@ -5,7 +5,27 @@
  */
 var api = require("../../../base/main"),
     num = [ '1-2个', '3-5个', '6-9个', '10-19个', '20-30个', '31-99个', '100+个' ],
-    filter = require("../../../filters/useAnalysis/accessPageNum");
+    filter = require("../../../filters/useAnalysis/accessPageNum"),
+    global_platform = {
+        show: true,
+        key: 'type',
+        list: [{
+            key: 'ios',
+            name: 'IOS'
+        }, {
+            key: 'android',
+            name: 'Android'
+        }, {
+            key: 'app',
+            name: 'APP'
+        }, {
+            key: 'pc',
+            name: 'PC'
+        }, {
+            key: 'm',
+            name: 'H5'
+        }]
+    };
 
 module.exports = (Router) => {
     const procedure = [
@@ -22,31 +42,12 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/useAnalysis/accessPageNumOne",
         modelName : ["UserCompose"],
-        global_platform : {
-            show: true,
-            key: 'type',
-            list: [{
-                key: 'ios',
-                name: 'IOS'
-            }, {
-                key: 'android',
-                name: 'Android'
-            }, {
-                key: 'app',
-                name: 'APP'
-            }, {
-                key: 'pc',
-                name: 'PC'
-            }, {
-                key: 'm',
-                name: 'H5'
-            }]
-        },
+        global_platform : global_platform,
         platform : false,
         procedure : procedure,
         params(query, params) {
             params.use_type = 3;
-            params.type = query.type || 'ios';
+            params.type = query.type || this.global_platform.list[0].key;
             return params;
         },
         filter(data) {
@@ -60,9 +61,10 @@ module.exports = (Router) => {
         excel_export : true,
         platform : false,
         procedure : procedure,
+        global_platform : global_platform,
         params(query, params) {
             params.use_type = 3;
-            params.type = query.type || 'ios';
+            params.type = query.type || this.global_platform.list[0].key;
             return params;
         },
         flexible_btn : [{

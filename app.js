@@ -21,9 +21,13 @@ var redisConfig = require("./db/config.json").redis;
 var cluster = new redis.Cluster(redisInfo[redisConfig]);
 global.cluster = cluster;
 var routers = require('./routers');
+var log4js       = require("./log");
+
+
+
 
 orm.settings.set("connection.pool", true);
-// orm.settings.set("connection.debug", true);
+orm.settings.set("connection.debug", true);
 Object.keys(config).forEach(function(key) {
     app.locals[key] = config[key];
 });
@@ -31,6 +35,10 @@ Object.keys(config).forEach(function(key) {
 // 测试使用 
 // var logger = require("morgan");
 // app.use(logger('dev'));
+
+/* 日志配置，启用 */
+log4js.configure();
+app.use(log4js.useLog());
 
 app.use(function(req, res, next) {
     if (req.headers['user-agent'].indexOf('Chrome') === -1) {

@@ -14,57 +14,63 @@ var api = require("../../../base/main"),
 module.exports = (Router) => {
     
     //圈子数据总揽
-    Router = new api(Router,{
-        router : "/socialAnalysis/groupSix",
-        modelName : ["Statistics"],
-        platform : false,
-        date_picker : false,
-        //date_picker_data: 1,
-        params() {
-            var now = new Date(new Date() - 24 * 60 * 60 *1000),
-                date = util.getDate(now);
+    // Router = new api(Router,{
+    //     router : "/socialAnalysis/groupSix",
+    //     modelName : ["Statistics"],
+    //     platform : false,
+    //     date_picker : false,
+    //     //date_picker_data: 1,
+    //     params() {
+    //         var now = new Date(new Date() - 24 * 60 * 60 *1000),
+    //             date = util.getDate(now);
 
-            return {
-                date : orm.between(date + " 00:00:00", date + " 23:59:59"),
-                key : ["group_num" , "group_persons_num" , "all_topic_num" , "del_group_num"]
-            }
-        },
-        filter(data, filter_key, dates) {
-            return filter.groupSix(data);
-        },
-        rows: [
-            ["group_num", "group_persons_num",
-                //"three",
-            "all_topic_num", "del_group_num"]
-        ],
-        cols: [
-            [{
-                caption: "累计圈子数",
-                type: "number",
-                help: "圈子总数"
-            }, {
-                caption: "累计入圈用户数",
-                type: "number",
-                help: "入圈用户数去重"
-            //}, {
-            //    caption: "用户入圈率",
-            //    type: "number",
-            //    help: "累计入圈用户数/注册用户数"
-            }, {
-                caption: "累计话题数",
-                type: "number"
-            }, {
-                caption: "累计解散圈子数",
-                type: "number"
-            }]
-        ]
-    });
+    //         return {
+    //             date : orm.between(date + " 00:00:00", date + " 23:59:59"),
+    //             key : ["group_num" , "group_persons_num" , "all_topic_num" , "del_group_num"]
+    //         }
+    //     },
+    //     filter(data, filter_key, dates) {
+    //         return filter.groupSix(data);
+    //     },
+    //     rows: [
+    //         ["group_num", "group_persons_num",
+    //             //"three",
+    //         "all_topic_num", "del_group_num"]
+    //     ],
+    //     cols: [
+    //         [{
+    //             caption: "累计圈子数",
+    //             type: "number",
+    //             help: "圈子总数"
+    //         }, {
+    //             caption: "累计入圈用户数",
+    //             type: "number",
+    //             help: "入圈用户数去重"
+    //         //}, {
+    //         //    caption: "用户入圈率",
+    //         //    type: "number",
+    //         //    help: "累计入圈用户数/注册用户数"
+    //         }, {
+    //             caption: "累计话题数",
+    //             type: "number"
+    //         }, {
+    //             caption: "累计解散圈子数",
+    //             type: "number"
+    //         }]
+    //     ]
+    // });
 
     //圈子数据统计
     Router = new api(Router,{
         router : "/socialAnalysis/groupSeven",
         modelName : ["GroupStatistics"],
         platform : false,
+        excel_export : true,
+        paging : [true],
+        flexible_btn:[{
+             content: '<a href="javascript:void(0)">导出</a>',
+            preMethods: ["excel_export"]
+        }],
         params(query, params) {
             params.category_id = "ALL";
             return params;
@@ -116,6 +122,10 @@ module.exports = (Router) => {
         level_select : true,
         level_select_name : "category_id",
         level_select_url : "/api/socialAnalysisCategories",
+        toggle : {
+            show : true
+        },
+        order : ["-date"],
         params(query, params) {
             params.category_id = query.category_id || "ALL";
             if(params.category_id === "all") {
@@ -124,22 +134,22 @@ module.exports = (Router) => {
             return params;
         },
         filter_select : [{
-        //    title: "平台选择",
-        //    filter_key : 'type',
-        //    groups: [{
-        //        key: ['APP','WAP','PC'],
-        //        value: '全部平台'
-        //    },{
-        //        key: 'APP',
-        //        value: 'APP'
-        //    },{
-        //        key: 'WAP',
-        //        value: 'WAP'
-        //    },{
-        //        key: 'PC',
-        //        value: 'PC'
-        //    }]
-        //},{
+           title: "平台选择",
+           filter_key : 'type',
+           groups: [{
+               key: ['APP','WAP','PC'],
+               value: '全部平台'
+           },{
+               key: 'APP',
+               value: 'APP'
+           },{
+               key: 'WAP',
+               value: 'WAP'
+           },{
+               key: 'PC',
+               value: 'PC'
+           }]
+        },{
             title: '指标',
             filter_key : 'filter_key',
             groups: [{
@@ -194,23 +204,23 @@ module.exports = (Router) => {
             });
         },
         filter_select: [
-            //{
-            //    title: "平台选择",
-            //    filter_key : 'type',
-            //    groups: [{
-            //        key: ['APP','WAP','PC'],
-            //        value: '全部平台'
-            //    },{
-            //        key: 'APP',
-            //        value: 'APP'
-            //    },{
-            //        key: 'WAP',
-            //        value: 'WAP'
-            //    },{
-            //        key: 'PC',
-            //        value: 'PC'
-            //    }]
-            //},
+            {
+               title: "平台选择",
+               filter_key : 'type',
+               groups: [{
+                   key: ['APP','WAP','PC'],
+                   value: '全部平台'
+               },{
+                   key: 'APP',
+                   value: 'APP'
+               },{
+                   key: 'WAP',
+                   value: 'WAP'
+               },{
+                   key: 'PC',
+                   value: 'PC'
+               }]
+            },
             {
                 title: '指标选择',
                 filter_key: 'filter_key',
@@ -288,23 +298,23 @@ module.exports = (Router) => {
             });
         },
         filter_select: [
-            //{
-            //    title: "平台选择",
-            //    filter_key : 'type',
-            //    groups: [{
-            //        key: ['APP','WAP','PC'],
-            //        value: '全部平台'
-            //    },{
-            //        key: 'APP',
-            //        value: 'APP'
-            //    },{
-            //        key: 'WAP',
-            //        value: 'WAP'
-            //    },{
-            //        key: 'PC',
-            //        value: 'PC'
-            //    }]
-            //},
+            {
+               title: "平台选择",
+               filter_key : 'type',
+               groups: [{
+                   key: ['APP','WAP','PC'],
+                   value: '全部平台'
+               },{
+                   key: 'APP',
+                   value: 'APP'
+               },{
+                   key: 'WAP',
+                   value: 'WAP'
+               },{
+                   key: 'PC',
+                   value: 'PC'
+               }]
+            },
             {
                 title: "指标选择",
                 filter_key : "filter_key2",
@@ -336,7 +346,7 @@ module.exports = (Router) => {
         platform : false,
         paging : [true, false],
         control_table_col : true,
-        order  : ["-new_group_topic_num"],
+        order  : ["-involve_group_user_num"],
         excel_export : true,
         procedure : [false, {
             find : "params"
@@ -377,15 +387,15 @@ module.exports = (Router) => {
             return filter.groupEleven(data , query);
         },
         rows: [
-            [ "top", "group_name", "group_id", "category_id_1",
-                "category_id_2", "creater_flag", "group_owner_id",
-                "group_owner_name", "new_group_user_num", "group_person_num",
+            [ "top", "group_name", "group_id", /*"category_id_1",
+                "category_id_2",*/ "creater_flag", /*"group_owner_id",
+                "group_owner_name", "new_group_user_num",*/ "group_person_num",
                 "new_quit_group_num", "involve_group_user_num",
                 "new_group_topic_num", "group_topic_num", "new_group_share_num",
-                "topic_praise_num", "topic_collect_num", "new_group_topic_like_num",
+                "topic_praise_num"/*, "topic_collect_num", "new_group_topic_like_num",
                 "new_group_topic_save_num", "new_group_topic_share_num",
                 "new_group_topic_reply_num", "new_group_topic_reply_user_num",
-                "reply_num", "operating"]
+                "reply_num"*/, "operating"]
         ],
         cols: [
             [{
@@ -395,16 +405,16 @@ module.exports = (Router) => {
                 caption : "圈子名称",
                 type : "string",
                 help : "圈子的名称"
-            }, {
+            }, /*{
                 caption : "圈子ID",
                 type : "string"
             }, {
                 caption : "一级分类",
                 type : "string"
-            }, {
+            }, */{
                 caption : "二级分类",
                 type : "string"
-            },{
+            },/*{
                 caption : "是否达人创建",
                 type : "string"
             },{
@@ -413,7 +423,7 @@ module.exports = (Router) => {
             },{
                 caption : "圈主名称",
                 type : "string"
-            }, {
+            }, */{
                 caption : "新增成员数",
                 type : "number"
             }, {
@@ -435,7 +445,7 @@ module.exports = (Router) => {
             }, {
                 caption : "圈子新增分享数",
                 type : "number"
-            }, {
+            }, /*{
                 caption : "话题累计点赞数",
                 type : "number"
             }, {
@@ -459,29 +469,29 @@ module.exports = (Router) => {
             }, {
                 caption : "累计话题回复次数",
                 type : "number"
-            }, {
+            }, */{
                 caption : "话题"
             }]
+        ],
+        filter_select : [
+           {
+               title: "平台选择",
+               filter_key : 'type',
+               groups: [{
+                   key: ['APP','WAP','PC'],
+                   value: '全部平台'
+               },{
+                   key: 'APP',
+                   value: 'APP'
+               },{
+                   key: 'WAP',
+                   value: 'WAP'
+               },{
+                   key: 'PC',
+                   value: 'PC'
+               }]
+           }
         ]
-        //filter_select : [
-        //    {
-        //        title: "平台选择",
-        //        filter_key : 'type',
-        //        groups: [{
-        //            key: ['APP','WAP','PC'],
-        //            value: '全部平台'
-        //        },{
-        //            key: 'APP',
-        //            value: 'APP'
-        //        },{
-        //            key: 'WAP',
-        //            value: 'WAP'
-        //        },{
-        //            key: 'PC',
-        //            value: 'PC'
-        //        }]
-        //    }
-        //]
 
     });
 

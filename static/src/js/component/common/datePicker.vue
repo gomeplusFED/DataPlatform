@@ -102,7 +102,7 @@ var DateCom = Vue.extend({
                     "showDayUnit": this.pageComponentsData[this.componentType].showDayUnit ? true : false
                 }
                 // 取消日期限制
-                if(this.cancelDateLimit) {
+                if(this.cancelDateLimit || this.pageComponentsData[this.componentType].cancelDateLimit) {
                     options.dateLimit = null;
                 }
                 if(this.customOption) {
