@@ -1414,6 +1414,8 @@
             "ads2_new_rebate_order_shop_info"
         ],
         "date_picker": true,
+        "showDayUnit" : true,
+        "date_picker_data" : 1,
         "order": [
             "-unique_is_rebate_order_num"
         ],
