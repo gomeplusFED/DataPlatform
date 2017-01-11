@@ -1307,8 +1307,6 @@ module.exports = {
                     code: 200,
                     components: {
                         date_picker:{
-                            show: true, 
-                            defaultData: 7,
                             name : "startTime",
                             endname: "endTime",
                             cancelDateLimit : false,
