@@ -1250,6 +1250,8 @@ module.exports = {
         params.plan_name = "ALL";
         params.rebate_level = "ALL";
         params.rebate_type = "ALL";
+        params.plan_id = "ALL";
+        params.unique_plan_id_num = orm.gt(0);
         return params;
     },
     rebate_shop_04_f(data, query, dates){
@@ -1280,6 +1282,9 @@ module.exports = {
             req.models.ads2_new_rebate_order_shop_info.find({
                 date        : orm.between(query.startTime , query.endTime),
                 day_type    : query.day_type,
+                rebate_type : orm.not_in(["ALL"]),
+                plan_id     : orm.not_in(["ALL"]),
+                unique_plan_id_num : orm.gt(0)
             } , {
                 limit       : query.limit / 1 || 20,
                 offset      : query.limit * (query.page - 1) / 1 || 0,
@@ -1343,6 +1348,10 @@ module.exports = {
             count  = data[1],
             second = data[2];
         count = count > 50 ? 50 : count || 1;
+
+        if(query.page == 3){
+            source.splice(10 , source.length - 1);
+        }
 
         let Translate = {};
         second.map((item , index) => {
