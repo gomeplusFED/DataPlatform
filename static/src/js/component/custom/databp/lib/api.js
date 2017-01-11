@@ -149,8 +149,8 @@ var api = {
 			});
 		});
 	},
-	restoreBp(id) {
-		return buildAjax('/restore', {pointId: id}, 'put').catch(errHandler).then(function(res) {
+	restoreBp({pointId, type}) {
+		return buildAjax('/restore', {pointId, type}, 'put').catch(errHandler).then(function(res) {
 			actions.alert(store, {
 				show: true,
 				msg: '恢复成功',
