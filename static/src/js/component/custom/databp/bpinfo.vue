@@ -306,7 +306,6 @@ var bpinfo = Vue.extend({
 				endTime: this.argvs.endTime + ' 23:59:59'
 			}, this.config);
 			api.getHeatDetail(conf).then((data) => {
-				console.log(data);
 				// build chart option
 				let xdata = [];
 				let pvdata = [];

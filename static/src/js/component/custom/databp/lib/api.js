@@ -214,7 +214,7 @@ var api = {
 			if (res && (data = res.data) && (data = data.result) && (data.length)) {
 				return data;
 			} else {
-				return Promise.reject('获取的热力趋势信息为空');
+				return [];
 			}
 		}).catch(errHandler);
 	},
