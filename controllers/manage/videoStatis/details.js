@@ -171,8 +171,8 @@ module.exports = (Router) => {
             }
 
             util.export(ws, [o.concat([
-                [1, 9, 1, 16, "健康播放统计", style],
-                [1, 17, 1, 28, "错误播放统计", style]])].concat(util.excelReport(body.modelData, false)));
+                [1, 8, 1, 15, "健康播放统计", style],
+                [1, 16, 1, 27, "错误播放统计", style]])].concat(util.excelReport(body.modelData, false)));
             wb.write("Report.xlsx", res);
         });
     });
