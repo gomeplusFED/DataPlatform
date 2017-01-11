@@ -49,6 +49,9 @@
 						</div>
 					</div> 
 					<div id="tab_bpdata" class="tab-pane fade">
+<!-- 						<div class="date_picker">                
+							<m-date :index="1" :page-components-data="pageComponentsData" :component-type="'date_picker'" :argvs.sync='argvs' :custom-option = "datepickerOption"></m-date>
+						</div> -->
 						<div v-if="trend.chartOption" class="bp-chart" v-echarts="trend.chartOption"></div>
 					</div> 
 				</div>
@@ -105,6 +108,14 @@ var defaultChartOption = {
 var bpinfo = Vue.extend({
 	data: function() {
 		return {
+			argvs: {
+				endTime: utils.formatDate(new Date(), 'yyyy-MM-dd'),
+				startTime: utils.formatDate((() => {
+					let date = new Date();
+					date.setDate(date.getDate() - 7);
+					return date;
+				})(), 'yyyy-MM-dd')
+			},
 			dragpos: {},
 			draggable: true,
 			userInfo: null,
@@ -225,7 +236,7 @@ var bpinfo = Vue.extend({
 				// show the config window
 				_this.publicBpStr = data.publicParam;			
 				_this.privateBpStr = data.privateParam;
-				if(data.pointId) {
+				if(data.pointId != null) {
 					_this.loadChart();
 				}
 				_this.loading.show = false;
@@ -289,7 +300,13 @@ var bpinfo = Vue.extend({
 		},
 		loadChart(ev) {
 			// fetch detail data
-			api.getHeatDetail(this.config).then((data) => {
+			// 暂时七天数据
+			let conf = Object.assign({
+				startTime: this.argvs.startTime + ' 00:00:00',
+				endTime: this.argvs.endTime + ' 23:59:59'
+			}, this.config);
+			api.getHeatDetail(conf).then((data) => {
+				console.log(data);
 				// build chart option
 				let xdata = [];
 				let pvdata = [];
