@@ -7,6 +7,8 @@ let util = require("../../utils"),
     orm  = require("orm"),
     _ = require("lodash");
 
+let eventproxy = require("eventproxy");
+
 //金额 字段 全部/100.
 // let Deal100 = (arr) => {
 //     let HasColums = ["is_rebate_fee" , "is_rebate_item_fee" , "is_rebate_back_merchandise_amount" , "is_over_rebate_order_amount" , "expect_rebate_amount" , "cancel_rebate_amount" , "cancel_is_rebate_fee" , "history_is_rebate_fee" , "history_is_rebate_item_fee" , "history_is_rebate_back_merchandise_amount" , "history_is_over_rebate_order_amount" , "history_expect_rebate_amount" , "history_cancel_rebate_amount" , "history_cancel_is_rebate_fee" , "fee" , "item_fee" , "back_merchandise_amount" , ]
@@ -438,8 +440,8 @@ module.exports = {
 
         for(let item of secondSource){
             item = Deal100(item , ["is_rebate_item_fee" , "is_over_rebate_order_amount"]);
-            if(param2[item.rebate_level] && item.level == "all"){
-                Result2[param2[item.rebate_level]].value = item[filter_key];
+            if(param2[item.rebate_level] && item.level == "ALL"){
+                Result2[param2[item.rebate_level]].value += item[filter_key];
             }
         }
 
@@ -457,7 +459,7 @@ module.exports = {
 
         for(let item of secondSource){
             item = Deal100(item , ["is_rebate_item_fee" , "is_over_rebate_order_amount"]);
-            if(param2[item.rebate_level]){
+            if(param2[item.rebate_level] && Result3[param2[item.rebate_level]][item.level]){
                 Result3[param2[item.rebate_level]][item.level] += item[filter_key];
             }
         }
@@ -496,6 +498,7 @@ module.exports = {
     },
     rebate_platformAll_04_f(data, query, dates){
         let source = data.first.data[0],
+            count  = data.first.count || 1,
             second = data.second.data[0];
 
         let TypeName = {} , FlowName = {};
@@ -514,11 +517,12 @@ module.exports = {
             item.Number = (query.page - 1)*20 + index + 1;
             item.plan_type_Translate = TypeName[item.plan_type];
             item.rebate_type_Translate = FlowName[item.rebate_type];
+            item["新增返利订单占比"] = util.toFixed( item.unique_is_rebate_order_num , item.unique_order_num || 0 );
         });
 
-        source = Deal100(source , ["expect_rebate_amount","is_over_rebate_order_amount"]);
+        source = Deal100(source , ["expect_rebate_amount","is_over_rebate_order_amount" , "is_rebate_fee" , "cancel_rebate_amount"]);
         
-        return util.toTable([source] , data.rows, data.cols);
+        return util.toTable([source] , data.rows, data.cols , [count]);
     },
     rebate_platformAll_04_selectFilter(req , cb){
         req.models.TypeFlow.find({
@@ -1202,15 +1206,14 @@ module.exports = {
         for(let key in param2){
             let obj = {};
             for(let one in param3){
-                if(one > key){
-                    continue;
-                }
+                // if(one > key){
+                //     continue;
+                // }
                 obj[one] = 0;
             }
             Result3[param2[key]] = obj;
         }
 
-        console.log(Result3);
         for(let item of source){
             if(param2[item.rebate_level] && item.level != "ALL"){
                 Result3[param2[item.rebate_level]][item.level] += item[filter_key];
@@ -1269,6 +1272,67 @@ module.exports = {
     },
 
 
+    rebate_shop_05_api(obj){
+        return (req , res , next)=>{
+            let query = req.query;
+            let ep = new eventproxy();
+
+            req.models.ads2_new_rebate_order_shop_info.find({
+                date        : orm.between(query.startTime , query.endTime),
+                day_type    : query.day_type,
+            } , {
+                limit       : query.limit / 1 || 20,
+                offset      : query.limit * (query.page - 1) / 1 || 0,
+                order       : ["-unique_is_rebate_order_num"]
+            } , (err , data) => {
+                ep.emit("one"  , data);
+            });
+
+            req.models.ads2_new_rebate_order_shop_info.find({
+                date        : orm.between(query.startTime , query.endTime),
+                day_type    : query.day_type,
+            }).count((err , data) => {
+                ep.emit("two" , data);
+            });
+            
+            req.models.TypeFlow.find({
+                type_code : 3
+            } , (err , data)=>{
+                ep.emit("three" , data);
+            });
+
+            ep.all("one" , "two" , "three" , (one , two , three) =>{
+                let ss = module.exports.rebate_shop_05_f([one , two , three] , query , obj);
+                res.json({
+                    code: 200,
+                    components: {
+                        date_picker:{
+                            show: true, 
+                            defaultData: 7,
+                            name : "startTime",
+                            endname: "endTime",
+                            cancelDateLimit : false,
+                            defaultData     : 1,
+                            show            : true,
+                            showDayUnit     : true
+                        },
+                        "control_table_col": {
+                            show : true
+                        },
+                        "flexible_btn": [
+                            {
+                                "content": "<a href='#!/rebate/shopPlan'>更多</a>",
+                                "preMethods": [],
+                                "customMethods": ""
+                            }
+                        ],
+                        filter_select : []
+                    },
+                    modelData: ss,
+                });
+            });            
+        }
+    },
     rebate_shop_05(query , params , sendData){
         // params.plan_type = "ALL";
         // params.plan_name = "ALL";
@@ -1276,12 +1340,11 @@ module.exports = {
         // params.rebate_type = "ALL";
         return params;
     },
-    rebate_shop_05_f(data, query, dates){
-        let source = data.first.data[0],
-            count  = data.first.count,
-            second = data.second.data[0];
-
-        count = count > 50 ? 50 : count;
+    rebate_shop_05_f(data, query, Obj){
+        let source = data[0],
+            count  = data[1],
+            second = data[2];
+        count = count > 50 ? 50 : count || 1;
 
         let Translate = {};
         second.map((item , index) => {
@@ -1293,12 +1356,15 @@ module.exports = {
         source.map((item , index) => {
             item.Number = (query.page - 1) * query.limit + index + 1;
             item.Return_lv = util.toFixed( item.is_rebate_back_merchandise_num , item.is_rebate_merchandise_num );
+            item["新增订单占比"] = util.toFixed( item.unique_is_rebate_order_num , item.unique_order_num || 0 );
+            item["新增订单金额占比"] = util.toFixed( item.is_rebate_fee , item.fee || 0 );
+
             item.rebate_type = Translate[item.rebate_type];
         });
 
-        source = Deal100(source , ["expect_rebate_amount" , "is_over_rebate_order_amount"]);
+        source = Deal100(source , ["expect_rebate_amount" , "is_over_rebate_order_amount" , "cancel_rebate_amount" , "is_rebate_fee"]);
 
-        return util.toTable([source], data.rows, data.cols , count);
+        return util.toTable([source], Obj.rows, Obj.cols , [count]);
     },
 
 
