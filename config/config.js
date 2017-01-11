@@ -254,7 +254,13 @@ const Config = {
             href: "#",
             path: [
                 obj.videoStatis.video(),
-                obj.videoStatis.videoEdition()
+                obj.videoStatis.videoEdition(),
+                obj.videoStatis.videoKpi(),
+                obj.videoStatis.videoDetails()
+            ],
+            routers : [
+                obj.videoStatis.videoDetailsTwo(),
+                obj.videoStatis.videoDetailsOperating()
             ]
         },
         "19": {

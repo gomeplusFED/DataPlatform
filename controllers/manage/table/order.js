@@ -15,6 +15,7 @@ module.exports = (Router) => {
     Router = new main(Router, {
         router : "/socialAnalysis/dataTableDayOrderOne",
         platform : false,
+        cancelDateLimit : true,
         modelName : ["OrderData"],
         order : ["-date"],
         params(query, params) {
@@ -105,6 +106,7 @@ module.exports = (Router) => {
     Router = new main(Router, {
         router : "/socialAnalysis/dataTableWeekOrderOne",
         platform : false,
+        cancelDateLimit : true,
         modelName : ["OrderData"],
         order : ["-date"],
         params(query, params) {
@@ -126,6 +128,7 @@ module.exports = (Router) => {
     Router = new main(Router, {
         router : "/socialAnalysis/dataTableMonthOrderOne",
         platform : false,
+        cancelDateLimit : true,
         modelName : ["OrderData"],
         order : ["-date"],
         params(query, params) {

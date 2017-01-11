@@ -127,8 +127,8 @@ module.exports = (Router) => {
 
             for(let key in Translate){
                 Return[Translate[key]] = {
-                    "0" : 10,
-                    "1" : 20
+                    "0" : 0,
+                    "1" : 0
                 }
             }
 

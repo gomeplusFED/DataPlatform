@@ -15,6 +15,7 @@ module.exports = (Router) => {
     Router = new main(Router, {
         router : "/socialAnalysis/dataTableDayVshopOne",
         platform : false,
+        cancelDateLimit : true,
         modelName : ["VshopReport"],
         order : ["-date"],
         global_platform : global_platform.day,
@@ -105,6 +106,7 @@ module.exports = (Router) => {
     Router = new main(Router, {
         router : "/socialAnalysis/dataTableWeekVshopOne",
         platform : false,
+        cancelDateLimit : true,
         modelName : ["VshopReport"],
         order : ["-date"],
         global_platform : global_platform.week,
@@ -127,6 +129,7 @@ module.exports = (Router) => {
     Router = new main(Router, {
         router : "/socialAnalysis/dataTableMonthVshopOne",
         platform : false,
+        cancelDateLimit : true,
         modelName : ["VshopReport"],
         order : ["-date"],
         global_platform : global_platform.month,

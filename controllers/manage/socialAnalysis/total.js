@@ -121,6 +121,9 @@ module.exports = (Router) => {
         key: 'new_topic_share_num',
         value: '分享'
     }];
+
+
+    
     Router.get("/socialAnalysis/totalTwo_json" , (req , res , next)=>{
         let query = req.query;
         req.models.SocialCategory.find({pid:""} , (err , data) => {
@@ -142,7 +145,7 @@ module.exports = (Router) => {
                 }
 
                 for(let item of result){
-                    newData[item.category_id].value += item[query.filter_key];
+                    newData[Result[item.category_id]].value += item[query.filter_key];
                 }
 
                 let str;

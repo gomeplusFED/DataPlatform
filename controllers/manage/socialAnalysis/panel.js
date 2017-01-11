@@ -70,7 +70,7 @@ module.exports = (Router) => {
     //话题汇总
     Router = new api(Router, {
         router : "/socialAnalysis/panelTwo",
-        modelName : ["GroupStatistics"],
+        modelName : ["SocialTopicStatistics"],
         platform : false,
         date_picker : false,
         params(query , params , sendData){
@@ -93,7 +93,7 @@ module.exports = (Router) => {
     //话题交易汇总
     Router = new api(Router, {
         router : "/socialAnalysis/panelThree",
-        modelName : ["GroupStatistics"],
+        modelName : ["SocialTopicStatistics"],
         platform : false,
         date_picker : false,
         rows: [
@@ -116,7 +116,7 @@ module.exports = (Router) => {
     //话题交易汇总---补充
     Router = new api(Router, {
         router : "/socialAnalysis/panelThree_add",
-        modelName : ["GroupStatistics"],
+        modelName : ["SocialTopicStatistics"],
         platform : false,
         date_picker : false,
         toggel : true,
