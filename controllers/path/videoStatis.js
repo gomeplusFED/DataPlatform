@@ -39,8 +39,78 @@ module.exports = {
             defaultData : [
                 {
                     type : "table",
-                    title: "多端统计",
-                    query_api : "/videoStatis/videoFour"
+                    title: "版本统计",
+                    query_api : "/videoStatis/videoVersionOne"
+                }
+            ]
+        }
+    },
+    videoKpi() {
+        return {
+            id: 1002,
+            name : "视频播放KPI",
+            path : "/videoStatis/videokpi",
+            display : true,
+            defaultData : [
+                {
+                    type : "table",
+                    title: "指标概览 (12/14)",
+                    query_api : "/videoStatis/videoKpiOne"
+                },
+                {
+                    type : "chart",
+                    title: "指标趋势",
+                    query_api : "/videoStatis/videoKpiTwo"
+                },
+                {
+                    type : "table",
+                    title: "数据明细",
+                    query_api : "/videoStatis/videokpiThree"
+                }
+            ]
+        }
+    },
+    videoDetails() {
+        return {
+            id: 200,
+            name : "视频明细",
+            path : "/videoStatis/videoDetails",
+            display : true,
+            defaultData : [
+                {
+                    type : "table",
+                    title: "视频明细",
+                    query_api : "/videoStatis/videoDetailsOne"
+                }
+            ]
+        }
+    },
+    videoDetailsOperating() {
+        return {
+            id: 202,
+            name : "视频明细",
+            path : "/videoStatis/videoDetailsOperating",
+            display : true,
+            defaultData : [
+                {
+                    type : "chart",
+                    title: "趋势",
+                    query_api : "/videoStatis/videoDetailsOperatingOne"
+                }
+            ]
+        }
+    },
+    videoDetailsTwo() {
+        return {
+            id: 201,
+            name : "视频明细",
+            path : "/videoStatis/videoDetailsDian",
+            display : true,
+            defaultData : [
+                {
+                    type : "table",
+                    title: "视频明细",
+                    query_api : "/videoStatis/videoDetailsDianOne"
                 }
             ]
         }

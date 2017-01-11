@@ -166,6 +166,13 @@ module.exports = {
     },
     ads2_soc_group_topic : {
         modelName : "ads2_soc_group_topic"
+    },
+    //视频
+    ads2_videoplay_overview2 : {
+        modelName : "ads2_videoplay_overview2"
+    },
+    ads2_livevideo_overview2 : {
+        modelName : "ads2_livevideo_overview2"
     }
 };
 

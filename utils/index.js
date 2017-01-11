@@ -215,6 +215,10 @@ exports.toFixed = function(one, two) {
     return (one / (Math.ceil(two) === 0 ? 1 : two) * 100).toFixed(2) + "%";
 };
 
+exports.toFixedLength = function(one, two, length=4) {
+    return (one / (Math.ceil(two) === 0 ? 1 : two) * 100).toFixed(length) + "%"
+}
+
 exports.percentage = function(one, two) {
     return (one / (two === 0 ? 1 : two) * 100).toFixed(2);
 };
@@ -705,27 +709,31 @@ exports.excelReport = (modelData, useCol=true) => {
             let a = [];
             if(validator.isDate(key.date) || key.date === "近30天平均") {
                 for(let row of rows) {
-                    a.push(key[row]);
+                    if(row !== "operating") {
+                        a.push(key[row]);
+                    }
                 }
             } else {
                 for(let row of rows) {
-                    const d = key[row];
-                    if(typeof d === "string") {
-                        if(+d.replace("%", "") >= 0 && d !== "--") {
-                            a.push({
-                                name : "↑" +d,
-                                style : up
-                            });
-                        } else if(+d.replace("%", "") <= 0 && d !== "--") {
-                            a.push({
-                                name : "↓" + d,
-                                style : down
-                            });
+                    if(row !== "operating") {
+                        const d = key[row];
+                        if(typeof d === "string") {
+                            if(+d.replace("%", "") >= 0 && d !== "--") {
+                                a.push({
+                                    name : "↑" +d,
+                                    style : up
+                                });
+                            } else if(+d.replace("%", "") <= 0 && d !== "--") {
+                                a.push({
+                                    name : "↓" + d,
+                                    style : down
+                                });
+                            } else {
+                                a.push(d);
+                            }
                         } else {
                             a.push(d);
                         }
-                    } else {
-                        a.push(d);
                     }
                 }
             }
