@@ -8,6 +8,7 @@ const filter = require("../../../filters/videoStatis/details"),
     request = require("request"),
     orm = require("orm"),
     moment = require("moment"),
+    help = require("../../../base/help"),
     util = require("../../../utils");
 
 module.exports = (Router) => {
@@ -21,6 +22,10 @@ module.exports = (Router) => {
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
+        },{
+            content: '<a href="javascript:void(0)" help_url="/videoStatis/videoDetailsOne/help_json">帮助</a>',
+            preMethods: ["show_help"],
+            customMethods: ''
         }],
         global_platform : {
             show: true,
@@ -166,8 +171,8 @@ module.exports = (Router) => {
             }
 
             util.export(ws, [o.concat([
-                [1, 9, 1, 16, "健康播放统计", style],
-                [1, 17, 1, 28, "错误播放统计", style]])].concat(util.excelReport(body.modelData, false)));
+                [1, 8, 1, 15, "健康播放统计", style],
+                [1, 16, 1, 27, "错误播放统计", style]])].concat(util.excelReport(body.modelData, false)));
             wb.write("Report.xlsx", res);
         });
     });
@@ -230,6 +235,61 @@ module.exports = (Router) => {
         filter(data, query) {
             return filter.Two(data, query.page);
         }
+    });
+
+    Router = new help(Router, {
+        router : "/videoStatis/videoDetailsOne/help",
+        rows : [
+            ["name", "help"]
+        ],
+        cols : [[
+            {
+                "caption" : "指标",
+                "type" : "string"
+            }, {
+                "caption" : "注释",
+                "type" : "string"
+            }
+        ]],
+        data : [
+            {
+                name : "播放用户数",
+                help : "直播视频播放用户数"
+            },{
+                name : "播放次数",
+                help : "直播视频播放次数"
+            },{
+                name : "play接口成功数 / 率",
+                help : "直播视频请求play接口成功 / play接口成功数率≥0"
+            },{
+                name : "首帧成功数 / 率",
+                help : "直播视频获取首帧成功  /  首帧成功率≥0"
+            },{
+                name : "卡顿播放次数 / 率",
+                help : "直播视频出现卡顿  /  卡顿播放率≥0"
+            },{
+                name : "播放流畅数 / 率",
+                help : "一次没有卡的直播视频  /  播放流畅率≤1"
+            },{
+                name : "play接口IO错误数 / 率",
+                help : "直播视频play接口io错误  /  play接口IO错误率≤1"
+            },{
+                name : "play接口数据错误数 / 率",
+                help : "直播视频play接口数据错误  /  play接口数据错误率≤1"
+            },{
+                name : "play接口超时数 / 率",
+                help : "直播视频play接口超时  /  play接口超时率≤1"
+            },{
+                name : "播放失败数 / 率",
+                help : "播放视频渲染失败的直播视频  /  播放失败率≥0"
+            },{
+                name : "直播视频错误数 / 率",
+                help : "出现错误等级error的直播视频  /  直播视频错误率≥0"
+            },{
+                name : "非正常播放数 / 率",
+                help : "出现错误等级warn的直播视频  /  非正常播放率≥0"
+            }
+        ]
     });
 
     return Router;
