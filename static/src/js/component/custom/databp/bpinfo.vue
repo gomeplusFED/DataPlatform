@@ -302,12 +302,8 @@ var bpinfo = Vue.extend({
 		loadChart(ev) {
 			// fetch detail data
 			// 暂时七天数据
-			let conf = Object.assign({
-				startTime: this.argvs.startTime + ' 00:00:00',
-				endTime: this.argvs.endTime + ' 23:59:59'
-			}, this.config);
-			console.log(conf);
-			api.getHeatDetail(conf).then((data) => {
+			let {startTime, endTime} = this.argvs;
+			api.getHeatDetail({...this.config, startTime: startTime + ' 00:00:00', endTime: endTime + ' 23:59:59'}).then((data) => {
 				// build chart option
 				let xdata = [];
 				let pvdata = [];
