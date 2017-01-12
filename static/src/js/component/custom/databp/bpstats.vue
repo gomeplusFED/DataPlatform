@@ -119,7 +119,7 @@
 	var store = require('store');
 	var actions = require('actions');
 	var Pagination = require('common/pagination.vue');
-	var api = require('./mock/api.js');
+	var api = require('./lib/api.js');
 	var utils = require('utils');
 	var defaultChartOption = {
 	    tooltip: {
