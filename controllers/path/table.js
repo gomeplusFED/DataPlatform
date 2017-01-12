@@ -22,7 +22,7 @@ module.exports = {
     },
     topic(){
         return {
-            id: 00234,
+            id: "00234",
             name: "话题报表",
             path: "/socialAnalysis/topic",
             display: true,
