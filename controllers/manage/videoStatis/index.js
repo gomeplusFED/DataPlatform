@@ -731,13 +731,13 @@ module.exports = (Router) => {
                     type: "string"
                 },
                 {
-                    caption: "play接口IO错误数"
+                    caption: "接口IO错误数"
                 },
                 {
-                    caption: "play接口数据错误数"
+                    caption: "接口数据错误数"
                 },
                 {
-                    caption: "play接口超时数"
+                    caption: "接口超时数"
                 },
                 {
                     caption: "播放失败数"
