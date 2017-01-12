@@ -7,7 +7,7 @@
 		</div>
 		<div class='form-group'>
 			<label>平台</label>
-			<select v-model="bpConfig.platform">
+			<select class="form-control" v-model="bpConfig.platform">
 				<option value='PC'>PC</option>
 				<option value='H5'>H5</option>
 			</select>
@@ -241,7 +241,7 @@
 	padding-bottom: 10px;
 }
 .form-inline .form-group {
-	margin-right: 40px;
+	margin-right: 20px;
 }
 .form-inline input {
 	width: 350px;

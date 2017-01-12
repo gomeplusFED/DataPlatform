@@ -1,9 +1,9 @@
 <template>
 <div class="heatmap">
 	<div class="extendNav">
-		<div class='form-group data-type'>
+		<div class='form-group'>
 			<label>数据</label>
-			<select v-model="datatype" :disabled="!show">
+			<select class="form-control data-type" v-model="datatype" :disabled="!show">
 				<option v-for="type of dataTypes" value="{{type.name}}">{{type.name}}</option>
 			</select>
 		 </div>
@@ -275,6 +275,10 @@
 }
 .heatmap .extendNav > * {
 	display: inline-block;
-	margin-right: 20px;
+	margin-right: 15px;
+}
+.heatmap .extendNav .data-type {
+    display: inline-block;
+    width: 70px;
 }
 </style>
