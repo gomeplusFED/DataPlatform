@@ -374,7 +374,7 @@ module.exports = {
                 }
             ]
             cols.forEach(col => {
-                data3[0][col] = source.port_io_failed || 0
+                data3[0][col] = source[col] || 0
                 data3[1][col] = source[col] ? util.toFixedLength(source[col], source.play_num, 4) : '--'
                 data3[2][col] = Chain(source[col], source[col+'_pre'])
             })
