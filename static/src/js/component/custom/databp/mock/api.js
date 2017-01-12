@@ -36,7 +36,7 @@ var api = {
             "code": "200",
             "data": {
                 "result": {
-                    "pointId": 0,
+                    "pointId": 2,
                     "matchUrlId": 27,
                     "pointName": "",
                     "pageUrl": "",
@@ -300,7 +300,7 @@ var api = {
                     "selector": "<div/>2",
                     "pointName": "埋点2",
                     "pointParam": "uid=1",
-                    "pv": 1478239758000,
+                    "pv": 0,
                     "uv": 1478239758000,
                     "platform": "H5",
                     "type": "block",
@@ -322,7 +322,7 @@ var api = {
                     "selector": "<div/>2",
                     "pointName": "埋点2",
                     "pointParam": "uid=1",
-                    "pv": 1478239758000,
+                    "pv": 0,
                     "uv": 1478239758000,
                     "platform": "H5",
                     "type": "block",
@@ -460,6 +460,7 @@ var api = {
         }).catch(errHandler);
     },
     getHeatDetail(data) {
+        let hasdata = (data.pv !== 0);
     	function genObj() {
     		return {
                 "pv": Math.ceil(Math.random()*1000),
@@ -470,7 +471,7 @@ var api = {
     	let result = [];
     	let len = Math.ceil(Math.random()*50);
     	for(let i =0;i< len;i++) {
-    		result.push(genObj());
+    		hasdata && result.push(genObj());
     	}
         return Promise.resolve({
             "msg": "成功",
