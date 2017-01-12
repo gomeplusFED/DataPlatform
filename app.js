@@ -27,7 +27,7 @@ var log4js       = require("./log");
 
 
 orm.settings.set("connection.pool", true);
-orm.settings.set("connection.debug", true);
+// orm.settings.set("connection.debug", true);
 Object.keys(config).forEach(function(key) {
     app.locals[key] = config[key];
 });
