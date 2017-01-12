@@ -316,7 +316,8 @@
 				});
 			},
 			heatmap(item) {
-				let {pageUrl, platform} = item;
+				let {pageUrl} = item;
+				let platform = this.searchParam.platform;
 				this.$router.go({
 					path: '/databp/heatmap',
 					query: {pageUrl, platform}
