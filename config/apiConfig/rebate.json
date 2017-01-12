@@ -1203,7 +1203,8 @@
     },
     "1482211894279": {
         "modelName": [
-            "ads2_new_rebate_order_trend"
+            "ads2_new_rebate_order_trend",
+            "ads2_new_rebate_order_overview"
         ],
         "date_picker": true,
         "order": [],
@@ -1212,6 +1213,7 @@
         "names": "商家设置返利总览",
         "filter": "rebate_shop_01_f",
         "params": "rebate_shop_01",
+        "secondParams" : "rebate_shop_01_second",
         "rows": [
             [
                 "Blank",
@@ -1505,7 +1507,6 @@
         "paging": [
             true
         ],
-        "secondParams": "rebate_shopPlan_01_second",
         "flexible_btn": [
             {
                 "content": "<a href='#!/rebate/shopPlan'>更多</a>",
@@ -1513,8 +1514,6 @@
                 "customMethods": ""
             }
         ],
-        "filter": "rebate_shop_05_f",
-        "params": "rebate_shop_05",
         "rows": [
             [
                 "Number",
@@ -1652,7 +1651,7 @@
             }
         ],
         "selectFilter": "rebate_shopPlan_SelectFilter",
-        "filter": "rebate_shop_05_f",
+        "filter": "rebate_shop_plan_01_f",
         "params": "rebate_shopPlan_01",
         "secondParams": "rebate_shopPlan_01_second",
         "control_table_col": true,
