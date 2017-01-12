@@ -187,8 +187,8 @@
 				sum: {pv: '', uv: ''},
 				argvs: {
 					// 注意此时时间选取控件尚未初始化
-					endTime: datepickerOption.startDate,
-					startTime: datepickerOption.endDate
+					endTime: datepickerOption.endDate,
+					startTime: datepickerOption.startDate
 				},
 				trend: {
 					show: false,
