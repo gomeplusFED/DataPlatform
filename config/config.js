@@ -253,7 +253,6 @@ const Config = {
             className: "fa  fa-laptop fa-fw",
             href: "#",
             path: [
-                obj.videoStatis.video(),
                 obj.videoStatis.videoEdition(),
                 obj.videoStatis.videoKpi(),
                 obj.videoStatis.videoDetails()
