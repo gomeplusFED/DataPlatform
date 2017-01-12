@@ -107,6 +107,7 @@ renderApi.prototype = {
                         let banSubPages = subPages.filter(x => !userSubs.includes(x.id.toString()));
                         page[path.path] = {
                             id: path.id.toString(),
+                            router: false,
                             f_id: key,
                             pageTitle : path.name,
                             banSubPages,
@@ -117,7 +118,8 @@ renderApi.prototype = {
                 if(limit.routers) {
                     for(var k of limit.routers) {
                         page[k.path] = {
-                            id: k.id,
+                            id: k.id && k.id.toString(),
+                            router: true,
                             f_id: key,
                             pageTitle : k.name,
                             defaultData : k.defaultData

@@ -52,7 +52,8 @@ var Btns = Vue.extend({
         excel_export: function(ev){
             var key = window.location.hash.replace('#!','').replace(/(\?.*)/, '');
             let userexport;
-            if((userexport = window.allPageConfig.userInfo.export[window.allPageConfig.page[key].f_id]) && userexport.includes(window.allPageConfig.page[key].id)) {
+            let pageconfig = window.allPageConfig.page[key];
+            if(pageconfig.router ||  ((userexport = window.allPageConfig.userInfo.export[pageconfig.f_id]) && userexport.includes(pageconfig.id))) {
                 // 有权限
             } else {
                 actions.alert(store, {
