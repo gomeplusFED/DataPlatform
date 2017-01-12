@@ -171,6 +171,15 @@
 			}
 		},
 		data: function() {
+			let datepickerOption = {
+					startDate: utils.formatDate((() => {
+						let date = new Date();
+						date.setDate(date.getDate() - 7);
+						return date;
+					})(), 'yyyy-MM-dd'),
+					endDate: utils.formatDate(new Date(), 'yyyy-MM-dd'),
+					opens: 'right'
+			};
 			return {
 				index: 1,
 				noData: false,
@@ -178,12 +187,8 @@
 				sum: {pv: -1, uv: -1},
 				argvs: {
 					// 注意此时时间选取控件尚未初始化
-					startTime: utils.formatDate(new Date(), 'yyyy-MM-dd'),
-					endTime: utils.formatDate((() => {
-						let date = new Date();
-						date.setDate(date.getDate() - 7);
-						return date;
-					})(), 'yyyy-MM-dd')
+					endTime: datepickerOption.startDate,
+					startTime: datepickerOption.endDate
 				},
 				trend: {
 					show: false,
@@ -199,9 +204,7 @@
 						this.query();
 					}
 				},
-				datepickerOption: {
-					opens: 'right'
-				},
+				datepickerOption,
 				pageComponentsData: {
 					date_picker: {
 						show: true,
