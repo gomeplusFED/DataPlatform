@@ -495,8 +495,8 @@ module.exports = {
             port_overtime_ratio: 'play接口超时率',
             play_failed: '播放失败数',
             play_failed_ratio: '播放失败率',
-            play_error: '视频错误数',
-            play_error_ratio: '视频错误率',
+            play_error: '点播视频错误数',
+            play_error_ratio: '点播视频错误率',
             improper_play: '非正常播放数',
             improper_play_ratio: '非正常播放率'
         }]
