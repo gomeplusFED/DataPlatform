@@ -301,7 +301,7 @@
                 },
                 {
                     "key": "5",
-                    "name": "邀请商户分析返利",
+                    "name": "邀请商户分享返利",
                     "url": "/#!/rebate/invitation?plan_type=5"
                 }
             ]
@@ -684,7 +684,7 @@
                 },
                 {
                     "key": "5",
-                    "name": "邀请商户分析返利",
+                    "name": "邀请商户分享返利",
                     "url": "/#!/rebate/invitation?plan_type=5"
                 }
             ]
