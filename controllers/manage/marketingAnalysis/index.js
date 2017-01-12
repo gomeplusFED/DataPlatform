@@ -521,7 +521,7 @@ module.exports = (Router) => {
         }
 
         if(channels.length === 0) {
-            for(let i = 0; i < +hour + 1; i++) {
+            for(let i = 0; i < 24; i++) {
                 if(i >= 10) {
                     data[`${i}:00-${i+1}:00`] = {
                         now : await (_find(`${key + date.now + i}:${end}`)) || 0,
@@ -537,7 +537,7 @@ module.exports = (Router) => {
         } else {
             if(end === "counts" || end === "amount") {
                 for(let channel of channels) {
-                    for(let i = 0; i < +hour + 1; i++) {
+                    for(let i = 0; i < 24; i++) {
                         if(i >= 10) {
                             if(data[`${i}:00-${i+1}:00`]) {
                                 data[`${i}:00-${i+1}:00`].now +=
@@ -567,7 +567,7 @@ module.exports = (Router) => {
                 }
             } else {
                 for(let channel of channels) {
-                    for(let i = 0; i < +hour + 1; i++) {
+                    for(let i = 0; i < 24; i++) {
                         if(i >= 10) {
                             if(data[`${i}:00-${i+1}:00`]) {
                                 data[`${i}:00-${i+1}:00`].now +=
