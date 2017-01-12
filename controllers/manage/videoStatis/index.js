@@ -502,7 +502,7 @@ module.exports = (Router) => {
                     type: "string"
                 }, {
                     caption: "播放用户数",
-                    type: "string",
+                    type: "number",
                     help: "直播视频播放用户数"
                 }, {
                     caption: "播放次数",
@@ -519,19 +519,19 @@ module.exports = (Router) => {
                     type: "string"
                 },{
                     caption: "",
-                    type: "number"
+                    type: "string"
                 }, {
                     caption: "",
                     type: "string"
                 },{
                     caption: "",
-                    type: "number"
+                    type: "string"
                 },{
                     caption: "",
                     type: "string"
                 }, {
                     caption: "",
-                    type: "number"
+                    type: "string"
                 }, {
                     caption: "",
                     type: "string"
@@ -545,31 +545,31 @@ module.exports = (Router) => {
                     type: "string",
                 }, {
                     caption: "",
-                    type: "number",
+                    type: "string",
                 }, {
                     caption: "",
                     type: "string",
                 }, {
                     caption: "",
-                    type: "number",
+                    type: "string",
                 },{
                     caption: "",
                     type: "string",
                 }, {
                     caption: "",
-                    type: "number",
+                    type: "string",
                 },{
                     caption: "",
                     type: "string",
                 }, {
                     caption: "",
-                    type: "number",
+                    type: "string",
                 },{
                     caption: "",
                     type: "string",
                 }, {
                     caption: "",
-                    type: "number",
+                    type: "string`",
                 }, {
                     caption: "",
                     type: "string",
@@ -918,52 +918,70 @@ module.exports = (Router) => {
                 type: "string"
             },
             {
-                caption: ""
+                caption: "",
+                type: "string"
             },
             {
-                caption: ""
+                caption: "",
+                type: "string"
             },
             {
-                caption: ""
+                caption: "",
+                type: "string"
             },
             {
-                caption: ""
+                caption: "",
+                type: "string"
             },
             {
-                caption: ""
+                caption: "",
+                type: "string"
             },
             {
-                caption: ""
+                caption: "",
+                type: "string"
             },
             {
-                caption: ""
+                caption: "",
+                type: "string"
             },
             // 错误播放统计
             {
                 caption: "错误播放统计",
                 type: "string"
             }, {
-                caption: ""
+                caption: "",
+                type: "string"
             }, {
-                caption: ""
+                caption: "",
+                type: "string"
             }, {
-                caption: ""
+                caption: "",
+                type: "string"
             }, {
-                caption: ""
+                caption: "",
+                type: "string"
             }, {
-                caption: ""
+                caption: "",
+                type: "string"
             }, {
-                caption: ""
+                caption: "",
+                type: "string"
             }, {
-                caption: ""
+                caption: "",
+                type: "string"
             }, {
-                caption: ""
+                caption: "",
+                type: "string"
             }, {
-                caption: ""
+                caption: "",
+                type: "string"
             }, {
-                caption: ""
+                caption: "",
+                type: "string"
             }, {
-                caption: ""
+                caption: "",
+                type: "string"
             },
         ]]
     });

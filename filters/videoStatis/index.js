@@ -269,6 +269,7 @@ module.exports = {
 
             for (let key of RowsOther) {
                 item[key + "_ratio"] = util.toFixedLength(item[key], item.play_num, 4);
+                item[key] = item[key].toString();
             }
 
             if (!ArrObj[item.date][item.sdk_type]) ArrObj[item.date][item.sdk_type] = [];
@@ -505,6 +506,7 @@ module.exports = {
             x.date = moment(x.date).format('MM月DD日')
             cols.forEach(col => {
                 x[col+'_ratio'] =  util.toFixedLength(x[col], x.play_num, 4)
+                x[col] = x[col].toString()
             })
 
             data2.push(x)
