@@ -27,7 +27,7 @@ module.exports = (Router) => {
             params.day_type = 1;
             params.ver = 0;
             params.channel = 0;
-            params.type = "all"; 
+            params.type = "ALL"; 
             return params;
         },
         thirdParams(query , params , sendData){
@@ -137,7 +137,7 @@ module.exports = (Router) => {
                 day_type    : query.day_type,
                 ver         : 0,
                 channel     : 0,
-                type        : "all"
+                type        : "ALL"
             } , (err , result)=>{
                 let newData = {};
                 for(let key in Result){

@@ -387,15 +387,15 @@ module.exports = (Router) => {
             return filter.groupEleven(data , query);
         },
         rows: [
-            [ "top", "group_name", "group_id", /*"category_id_1",
-                "category_id_2",*/ "creater_flag", /*"group_owner_id",
-                "group_owner_name", "new_group_user_num",*/ "group_person_num",
+            [ "top", "group_name", "group_id", "category_id_1",
+                "category_id_2", "creater_flag", "group_owner_id",
+                "group_owner_name", "new_group_user_num", "group_person_num",
                 "new_quit_group_num", "involve_group_user_num",
                 "new_group_topic_num", "group_topic_num", "new_group_share_num",
-                "topic_praise_num"/*, "topic_collect_num", "new_group_topic_like_num",
+                "topic_praise_num", "topic_collect_num", "new_group_topic_like_num",
                 "new_group_topic_save_num", "new_group_topic_share_num",
                 "new_group_topic_reply_num", "new_group_topic_reply_user_num",
-                "reply_num"*/, "operating"]
+                "reply_num", "operating"]
         ],
         cols: [
             [{
@@ -405,16 +405,16 @@ module.exports = (Router) => {
                 caption : "圈子名称",
                 type : "string",
                 help : "圈子的名称"
-            }, /*{
+            }, {
                 caption : "圈子ID",
                 type : "string"
             }, {
                 caption : "一级分类",
                 type : "string"
-            }, */{
+            }, {
                 caption : "二级分类",
                 type : "string"
-            },/*{
+            },{
                 caption : "是否达人创建",
                 type : "string"
             },{
@@ -423,7 +423,7 @@ module.exports = (Router) => {
             },{
                 caption : "圈主名称",
                 type : "string"
-            }, */{
+            }, {
                 caption : "新增成员数",
                 type : "number"
             }, {
@@ -445,7 +445,7 @@ module.exports = (Router) => {
             }, {
                 caption : "圈子新增分享数",
                 type : "number"
-            }, /*{
+            }, {
                 caption : "话题累计点赞数",
                 type : "number"
             }, {
@@ -469,7 +469,7 @@ module.exports = (Router) => {
             }, {
                 caption : "累计话题回复次数",
                 type : "number"
-            }, */{
+            }, {
                 caption : "话题"
             }]
         ],

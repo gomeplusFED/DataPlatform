@@ -498,6 +498,8 @@
             "TypeFlow"
         ],
         "date_picker": true,
+        "showDayUnit":true,
+        "date_picker_data":1,
         "order": [],
         "platform": false,
         "router": "/rebate/platformAll_Four",

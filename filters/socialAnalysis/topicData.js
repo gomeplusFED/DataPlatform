@@ -134,7 +134,7 @@ module.exports = {
         for(let key of source) {
             let date = util.getDate(key.date);
             newData[date].value = key["sum_" + filter_key];
-            key[date] = date;
+            key.date = date;
         }
 
         if(query.main_show_type_filter == "table"){
