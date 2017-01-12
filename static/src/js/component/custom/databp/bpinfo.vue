@@ -52,7 +52,7 @@
 <!-- 						<div class="date_picker">                
 							<m-date :index="1" :page-components-data="pageComponentsData" :component-type="'date_picker'" :argvs.sync='argvs' :custom-option = "datepickerOption"></m-date>
 						</div> -->
-						<div v-if="trend.chartOption" class="bp-chart" v-echarts="trend.chartOption"></div>
+						<div v-if="trend.chartOption && trend.chartOption.xAxis.data.length > 0" class="bp-chart" v-echarts="trend.chartOption"></div>
 						<div v-show="!trend.chartOption || trend.chartOption.xAxis.data.length === 0" class="nodata all_center bp-chart">
 							<img src="/dist/img/nodata.png">
 						</div>

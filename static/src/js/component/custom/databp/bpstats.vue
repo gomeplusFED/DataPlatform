@@ -80,8 +80,7 @@
                 </div>
                 <div class="modal-body tab-content">
                 	<div id="tab_chart" class="tab-pane active in">
-
-                		<div v-if="trend.show || trend.chartOption" v-show="trend.chartOption && trend.chartOption.xAxis.data.length" class="trend-chart" v-echarts="trend.chartOption">
+                		<div v-if="trend.show || (trend.chartOption && trend.chartOption.xAxis.data.length)" v-show="trend.chartOption && trend.chartOption.xAxis.data.length" class="trend-chart" v-echarts="trend.chartOption">
 						</div>
 						<div v-show="trend.chartOption && trend.chartOption.xAxis.data.length === 0" class="nodata all_center">
 							<img src="/dist/img/nodata.png">
@@ -120,7 +119,7 @@
 	var store = require('store');
 	var actions = require('actions');
 	var Pagination = require('common/pagination.vue');
-	var api = require('./lib/api.js');
+	var api = require('./mock/api.js');
 	var utils = require('utils');
 	var defaultChartOption = {
 	    tooltip: {
