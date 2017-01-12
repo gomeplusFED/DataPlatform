@@ -80,12 +80,18 @@
                 </div>
                 <div class="modal-body tab-content">
                 	<div id="tab_chart" class="tab-pane active in">
-                		<div v-if="trend.show || trend.chartOption" class="trend-chart" v-echarts="trend.chartOption"></div>
+
+                		<div v-if="trend.show || trend.chartOption" v-show="trend.chartOption && trend.chartOption.xAxis.data.length" class="trend-chart" v-echarts="trend.chartOption">
+						</div>
+						<div v-show="trend.chartOption && trend.chartOption.xAxis.data.length === 0" class="nodata all_center">
+							<img src="/dist/img/nodata.png">
+							<span>暂无数据</span>
+						</div>
                 	</div>
                 	<div id="tab_table" class="tab-pane fade">
                 		<table class="table table-hover trend-table">
                 			<thead>
-                				<tr>
+                				<tr >
                 					<th>日期</th>
                 					<th>PV</th>
                 					<th>UV</th>
@@ -97,6 +103,7 @@
             						<td>{{item.pv}}</td>
             						<td>{{item.uv}}</td>
             					</tr>
+            					<tr v-if="trend.data.length === 0"><td colspan="3">暂无数据</td></tr>
             				</tbody>
                 		</table>
                 	</div>
@@ -346,6 +353,13 @@
 	.modal-body {
 		height: 450px;
 	}
+	.nodata {
+		top: 40%;
+	}
+	.nodata span{
+		display: block;
+	    text-align: center;
+	}
 	.trend-chart {
 		width:100%;
 		height:410px;
@@ -366,6 +380,9 @@
 		border: 1px solid #d6d6d6 !important;
 		border-top: 1px solid #d6d6d6;
 		font-weight: normal;
+	}
+	.trend-table th:first-child, .trend-table td:first-child {
+		width: 40%;
 	}
 	.bp-container {
 		height: 100% !important;
