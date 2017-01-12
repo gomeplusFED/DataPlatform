@@ -28,7 +28,7 @@
 			</li>
 			<li style="height:30px;">
 				<label><input type="checkbox" v-model="showSum"></input>总计</label>
-				<input v-show="showSum" class="form-control inp inpW1" type="text" placeholder="" value="PV : {{sum.pv || '-'}}   UV : {{sum.uv || '-'}}" disabled>
+				<input v-show="showSum" class="form-control inp inpW1" type="text" placeholder="" value="PV : {{sum.pv || '  '}}   UV : {{sum.uv || '  '}}" disabled>
 			</li>
 		</ul> 
 	</div>
@@ -184,7 +184,7 @@
 				index: 1,
 				noData: false,
 				showSum: false,
-				sum: {pv: -1, uv: -1},
+				sum: {pv: '', uv: ''},
 				argvs: {
 					// 注意此时时间选取控件尚未初始化
 					endTime: datepickerOption.startDate,
@@ -331,8 +331,8 @@
 							this.sum = data;
 						});
 					} else {
-						this.sum.pv = -1;
-						this.sum.uv = -1;
+						this.sum.pv = '';
+						this.sum.uv = '';
 					}
 				}  
 			}
