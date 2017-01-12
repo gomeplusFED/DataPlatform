@@ -314,7 +314,7 @@ module.exports = (Router) => {
                         var one = [],
                             two = [];
                         if(key === "user") {
-                            for(var i = 0; i < +hour + 1; i++) {
+                            for(var i = 0; i < 24; i++) {
                                 if(i >= 10) {
                                     one.push(await (_find(
                                         start + type[params.type] + "reg:" + date + i + ":" + key
@@ -332,7 +332,7 @@ module.exports = (Router) => {
                                 }
                             }
                         } else {
-                            for(var i = 0; i < +hour + 1; i++) {
+                            for(var i = 0; i < 24; i++) {
                                 if(i >= 10) {
                                     one.push(await (_find(
                                         start + type[params.type] + date + i + ":" + key

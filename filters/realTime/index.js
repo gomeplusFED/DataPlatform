@@ -163,7 +163,7 @@ module.exports = {
                 two : "对比"
             };
 
-        for(var i = 0; i < +hour + 1; i++) {
+        for(var i = 0; i < 24; i++) {
             newData[i + ":00-" + (i + 1) + ":00"] = {
                 one : 0,
                 two : 0
@@ -172,7 +172,7 @@ module.exports = {
 
         if(option.length > 1) {
             if(option[0] === "newuser" && option[1] === "uv") {
-                for(var i = 0; i < +hour + 1; i++) {
+                for(var i = 0; i < 24; i++) {
                     if(data["0"][option[0]][i] &&
                         data["0"][option[1]][i]) {
                         newData[i + ":00-" + (i + 1) + ":00"].one =
@@ -191,7 +191,7 @@ module.exports = {
                     }
                 }
             } else {
-                for(var i = 0; i < +hour + 1; i++) {
+                for(var i = 0; i < 24; i++) {
                     if(data["0"][option[0]][i] &&
                         data["0"][option[1]][i]) {
                         newData[i + ":00-" + (i + 1) + ":00"].one =
@@ -211,7 +211,7 @@ module.exports = {
                 }
             }
         } else {
-            for(var i = 0; i < +hour + 1; i++) {
+            for(var i = 0; i < 24; i++) {
                 if(data["0"][option[0]][i]) {
                     newData[i + ":00-" + (i + 1) + ":00"].one =
                         data["0"][option[0]][i];
