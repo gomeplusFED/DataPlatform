@@ -237,7 +237,7 @@ module.exports = {
         return util.toTable([source], data.rows, data.cols);
     },
 
-    videoFour(data, query, dates) {
+    videoVersionOne(data, query, dates) {
         var source = data.first.data,
             count = data.first.count;
 
@@ -262,13 +262,14 @@ module.exports = {
 
         for (let item of source) {
             //过滤版本为ALL的数据
-            if (item.ver == "ALL") {
-                continue;
-            }
+            // if (item.ver == "ALL") {
+            //     continue;
+            // }
             item.date = util.getDate(item.date);
 
             for (let key of RowsOther) {
-                item[key + "_ratio"] = util.toFixedLength(item[key], item.play_num) + "%";
+                item[key + "_ratio"] = util.toFixedLength(item[key], item.play_num, 4);
+                item[key] = item[key].toString();
             }
 
             if (!ArrObj[item.date][item.sdk_type]) ArrObj[item.date][item.sdk_type] = [];
@@ -276,7 +277,33 @@ module.exports = {
         }
 
         //重新排序
-        var EndArr = [];
+        var EndArr = [{
+            date: "",
+            sdk_type: "",
+            ver: "",
+            play_user: "",
+            play_num: "",
+            port_succ: 'play接口成功数',
+            port_succ_ratio: 'play接口成功率',
+            start_frame_succ: '首帧成功数',
+            start_frame_succ_ratio: '首帧成功率',
+            stop_play_num: '卡顿播放次数',
+            stop_play_num_ratio: '卡顿播放次率',
+            play_fluent: '播放流畅数',
+            play_fluent_ratio: '播放流畅率',
+            port_io_failed: 'play接口IO错误数',
+            port_io_failed_ratio: 'play接口IO错误率',
+            port_data_failed: 'play接口数据错误数',
+            port_data_failed_ratio: 'play接口数据错误率',
+            port_overtime: 'play接口超时数',
+            port_overtime_ratio: 'play接口超时率',
+            play_failed: '播放失败数',
+            play_failed_ratio: '播放失败率',
+            play_error: '视频错误数',
+            play_error_ratio: '视频错误率',
+            improper_play: '非正常播放数',
+            improper_play_ratio: '非正常播放率'
+        }];
         for (var date in ArrObj) {
             for (var key in ArrObj[date]) {
                 for (let item of ArrObj[date][key]) {
@@ -348,7 +375,7 @@ module.exports = {
                 }
             ]
             cols.forEach(col => {
-                data3[0][col] = source.port_io_failed || 0
+                data3[0][col] = source[col] || 0
                 data3[1][col] = source[col] ? util.toFixedLength(source[col], source.play_num, 4) : '--'
                 data3[2][col] = Chain(source[col], source[col+'_pre'])
             })
@@ -458,7 +485,7 @@ module.exports = {
             start_frame_succ: '首帧成功数',
             start_frame_succ_ratio: '首帧成功率',
             stop_play_num: '卡顿播放次数',
-            stop_play_num_ratio: '卡顿播放次率',
+            stop_play_num_ratio: '卡顿播放率',
             play_fluent: '播放流畅数',
             play_fluent_ratio: '播放流畅率',
             port_io_failed: 'play接口IO错误数',
@@ -469,8 +496,8 @@ module.exports = {
             port_overtime_ratio: 'play接口超时率',
             play_failed: '播放失败数',
             play_failed_ratio: '播放失败率',
-            play_error: '视频错误数',
-            play_error_ratio: '视频错误率',
+            play_error: '点播视频错误数',
+            play_error_ratio: '点播视频错误率',
             improper_play: '非正常播放数',
             improper_play_ratio: '非正常播放率'
         }]
@@ -479,6 +506,7 @@ module.exports = {
             x.date = moment(x.date).format('MM月DD日')
             cols.forEach(col => {
                 x[col+'_ratio'] =  util.toFixedLength(x[col], x.play_num, 4)
+                x[col] = x[col].toString()
             })
 
             data2.push(x)
