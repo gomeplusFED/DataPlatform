@@ -480,7 +480,7 @@ module.exports = {
 
         for(let item of secondSource){
             item = Deal100(item , ["is_rebate_item_fee" , "is_over_rebate_order_amount"]);
-            if(param2[item.rebate_level] && Result3[param2[item.rebate_level]][item.level]){
+            if(param2[item.rebate_level] && item.level != "ALL"){
                 Result3[param2[item.rebate_level]][item.level] += item[filter_key];
             }
         }
@@ -643,7 +643,18 @@ module.exports = {
     //平台基础返利 ---- 返利订单趋势
     rebate_platformBase_02(query , params , sendData){
         // params.plan_type = 1;
-        params.rebate_type = [1,2];
+
+        switch(params.plan_type){
+            case 1:
+                params.rebate_type = [1,2];
+            break;
+            case 2:
+                params.rebate_type = [1,2];
+            break;
+            case 6:
+                params.rebate_type = [11,12];
+        }
+
         return params;
     },
     rebate_platformBase_02_f(data, query, dates){
@@ -651,27 +662,41 @@ module.exports = {
             filter_key = query.filter_key,
             Result = {};
 
+        let typeFlow = {
+            "1" : {
+                "1" : "分享购买", 
+                "2" : "邀请好友-购买返利"
+            },
+            "2" : {
+                "1" : "分享购买",
+                "2" : "邀请好友-购买返利"
+            },
+            "6" : {
+                "11" : "单项单级返利-固定返利",
+                "12" : "单项单级返利-比例返利"
+            }
+        };
+        let using = typeFlow[query.plan_type];
+
         for(let date of dates){
-            Result[date] = {"1":0 , "2":0}
+            Result[date] = {};
+            for(let key in using){
+                Result[date][key] = 0;
+            }
         }
 
         for(let item of source){
             item.date = util.getDate(item.date);
             item = Deal100(item , ["is_over_rebate_order_amount"]);
-            if(item.rebate_type == "1"){
-                Result[item.date]["1"] = item[filter_key];
-            }else{
-                Result[item.date]["2"] = item[filter_key];
+
+            if(Result[item.date][item.rebate_type] != undefined){
+                Result[item.date][item.rebate_type] += item[filter_key];
             }
         }
-
         
         return [{
             type : "line",
-            map : {
-                "1" : "分享购买",
-                "2" : "邀请好友-购买返利"
-            },
+            map : using,
             data : Result,
             config: { // 配置信息
                 stack: false  // 图的堆叠
@@ -728,7 +753,7 @@ module.exports = {
         }
 
         for(let item of source){
-            if(param2[item.rebate_level]){
+            if(param2[item.rebate_level] && item.level == "ALL"){
                 Result2[param2[item.rebate_level]].value += item[filter_key];
             }
         }
@@ -746,7 +771,7 @@ module.exports = {
         }
 
         for(let item of source){
-            if(param2[item.rebate_level]){
+            if(param2[item.rebate_level] && item.level != "ALL"){
                 Result3[param2[item.rebate_level]][item.level] += item[filter_key];
             }
         }
@@ -1316,7 +1341,7 @@ module.exports = {
             item.is_rebate_fee = item.is_rebate_fee + " / " + item.fee;
         }
 
-        return util.toTable([source], data.rows, data.cols , count);
+        return util.toTable([source], data.rows, data.cols , [count]);
     },
 
 
