@@ -1063,7 +1063,9 @@ module.exports = {
         ];
 
         let Rows  = util.megerArray([] , [data.rows , Table_Row1 , Table_Row3]);
+        let RowsAll = util.megerArray([] , [Table_Row1 , Table_Row3]);
         let ThisOne = {"expect_rebate_amount":0};
+        let AllOne  = {};
 
         //整理数据
         for(let item of source){
@@ -1079,13 +1081,26 @@ module.exports = {
             }
         }
 
+        for(let item of second){
+            for(let key of RowsAll){
+                if(key == "Blank"){
+                    continue;
+                }
+                if(AllOne[key]){
+                    AllOne[key] += item[key];
+                }else{
+                    AllOne[key] = item[key];
+                }
+            }
+        }
+
         //拼装数据
         //表一
         let Table_1_row1 = Object.assign({} , ThisOne),
             Table_1_row2 = {};
         data.rows[0].map((item , index) => {
             if(item != "Blank"){
-                Table_1_row2[item] = util.toFixed( ThisOne[item] || 0 , ThisOne[Table_Row1[index]] || 0 );
+                Table_1_row2[item] = util.toFixed( ThisOne[item] || 0 , AllOne[Table_Row1[index]] || 0 );
             } 
         });
         Table_1_row1["Blank"] = "返利订单";
@@ -1095,7 +1110,7 @@ module.exports = {
         let Table_3_row1 = Object.assign({} , ThisOne) ,Table_3_row2 = {};
         data.rows[2].map((item , index) => {
             if(item != "Blank"){
-                Table_3_row2[item] = util.toFixed( ThisOne[item] || 0 , ThisOne[Table_Row3[index]] || 0 );
+                Table_3_row2[item] = util.toFixed( ThisOne[item] || 0 , AllOne[Table_Row3[index]] || 0 );
             } 
         });
         Table_3_row1["Blank"] = "返利订单";
@@ -1293,6 +1308,11 @@ module.exports = {
                 "expect_rebate_amount",
                 "is_over_rebate_order_amount",
                 "plat_rebate_order_amount"]);
+
+        for(let item of source){
+            item.unique_is_rebate_order_num = item.unique_is_rebate_order_num + " / " + item.unique_order_num;
+            item.is_rebate_fee = item.is_rebate_fee + " / " + item.fee;
+        }
 
         return util.toTable([source], data.rows, data.cols , count);
     },
