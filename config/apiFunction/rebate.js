@@ -210,7 +210,9 @@ module.exports = {
     },
     rebate_platformAll_01_f(data, query, dates){
         let source = data.first.data[0];
-        let Rows  = util.megerArray([] , data.rows);
+        let DealArr1 = [null , "unique_order_num" , "fee" , "unique_shop_num" , "unique_user_num" , "merchandise_num" , "cancel_order_num"];
+        let DealArr3 = [null , "unique_back_merchandise_num" , "back_merchandise_num" , "unique_back_user_num" , "back_merchandise_amount"];
+        let Rows  = util.megerArray([] , [data.rows , DealArr1 , DealArr3]);
         let ThisOne = {
             "expect_rebate_amount":0
         } , AllOne = {};
@@ -248,7 +250,7 @@ module.exports = {
 
         //拼装数据
         //表一
-        let DealArr1 = [null , "unique_order_num" , "fee" , "unique_shop_num" , "unique_user_num" , "merchandise_num" , "cancel_order_num"];
+        
 
         let Table_1_row1 = {},Table_1_row2 = {};
         /*for(let key of data.rows[0]){
@@ -269,7 +271,7 @@ module.exports = {
 
 
         //表三
-        let DealArr3 = [null , "unique_back_merchandise_num" , "back_merchandise_num" , "unique_back_user_num" , "back_merchandise_amount"];
+        
 
         let Table_3_row1 = {},Table_3_row2 = {};
         /*for(let key of data.rows[2]){
