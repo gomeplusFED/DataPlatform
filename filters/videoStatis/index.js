@@ -485,7 +485,7 @@ module.exports = {
             start_frame_succ: '首帧成功数',
             start_frame_succ_ratio: '首帧成功率',
             stop_play_num: '卡顿播放次数',
-            stop_play_num_ratio: '卡顿播放次率',
+            stop_play_num_ratio: '卡顿播放率',
             play_fluent: '播放流畅数',
             play_fluent_ratio: '播放流畅率',
             port_io_failed: 'play接口IO错误数',
