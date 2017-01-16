@@ -28,7 +28,7 @@
 			</li>
 			<li style="height:30px;">
 				<label><input type="checkbox" v-model="showSum"></input>总计</label>
-				<input v-show="showSum" class="form-control inp inpW1" type="text" placeholder="" value="PV : {{sum.pv || '  '}}   UV : {{sum.uv || '  '}}" disabled>
+				<input v-show="showSum" class="form-control inp inpW1" type="text" placeholder="" value="PV : {{sum.pv == null ? '  ' : sum.pv}}   UV : {{sum.uv == null ? '  ' : sum.uv}}" disabled>
 			</li>
 		</ul> 
 	</div>
