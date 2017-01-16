@@ -49,6 +49,7 @@
 					<th >序号</th>
 					<th >埋点名称</th>
 					<th >事件</th>
+					<th >是否模块</th>
 					<th >页面URL</th>
 					<th >匹配模式</th>
 					<th >埋点参数</th>
@@ -62,9 +63,10 @@
 					<td>{{i + baseIndex}}</td>
 					<td>{{item.pointName}}</td>
 					<td>单击</td>
+					<td title="{{item.type}}">{{item.type === 'block' ? '是' : '否'}}</td>
 					<td title="{{item.pageUrl}}"><a @click="heatmap(item)">{{item.pageUrl}}</a></td>
-					<td title="{{item.pattern}}">{{item.pattern}}</td>
-					<td title="{{item.pointParam}}">{{item.pointParam}}</td>
+					<td title="{{item.pattern}}">{{item.pattern || '-'}}</td>
+					<td title="{{item.pointParam}}">{{item.pointParam || '-'}}</td>
 					<td title="{{item.userInfo?(item.userInfo.department + item.userInfo.email) : '--'}}">{{item.userInfo.name || '--'}}</td>
 					<td>{{item.updateTime |Date 'yyyy-MM-dd hh:mm:ss'}}</td>
 					<td><a @click="edit(item)">修改</a>&nbsp<a v-if="item.isActive === '1'" @click="del(item)">删除</a><a v-else @click="restore(item)">恢复</a></td>
@@ -355,13 +357,13 @@
 	.ntable tr th:first-child {
 		width: 5%
 	}
-	.ntable tr th:nth-child(4) {
+	.ntable tr th:nth-child(5) {
 		width: 300px;
 	}
-	.ntable tr th:nth-child(5) {
+	.ntable tr th:nth-child(6) {
 		width: 200px;
 	}
-	.ntable tr th:nth-child(7) {
+	.ntable tr th:nth-child(8) {
 		width: 80px;
 	}
 	.ntable tr td {
