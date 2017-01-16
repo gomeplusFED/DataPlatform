@@ -341,22 +341,38 @@ var bpinfo = Vue.extend({
 			var _this = this;
 			var existKeys = {};
 			var allbps = [..._this.publicBp, ..._this.privateBp];
-			let illegal = /[=&]/;
+			let emptyCount = 0;
+			let illegalRE = /[=&]/;
+			let emptyRE = /^\s*$/;
 			for(let a of allbps) {
-				if (existKeys[a[0]]) {
-					$popover('请检查重复key');
-					return false;
-				} else {
-					if(/^\s*$/.test(a[0])) {
+				let _key = a[0];
+				let _val = a[1];
+				if(emptyRE.test(_key)) {
+					if (emptyRE.test(_val)) {
+						// key value都为空，则不做验证
+						emptyCount++;
+						continue;
+					} else {
 						$popover('key不能为空');
 						return false;
 					}
-					if(illegal.test(a[0]) || illegal.test(a[1])) {
-						$popover('含有非法字符，请检查');
-						return false;
-					}
-					existKeys[a[0]] = 1;
+				} else if (emptyRE.test(_val)) {
+					$popover('value不能为空');
+					return false;
 				}
+				if (existKeys[_key]) {
+					$popover('请检查重复key');
+					return false;
+				}
+				if(illegalRE.test(_key) || illegalRE.test(_val)) {
+					$popover('含有非法字符，请检查');
+					return false;
+				}
+				existKeys[_key] = 1;
+			}
+			if(emptyCount === allbps.length) {
+				$popover('请至少设置一组参数');
+				return false;
 			}
 			_this.config.publicParam = _this.publicBpStr;
 			_this.config.privateParam = _this.privateBpStr;
