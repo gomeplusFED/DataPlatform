@@ -70,41 +70,38 @@ var Vue = require('Vue');
 var api = require('./lib/api.js');
 var utils = require('utils');
 var defaultChartOption = {
-    tooltip: {
-        trigger: 'axis'
-    },
-    legend: {
-    	show: true,
-    	bottom: 0,
-        data:['PV', 'UV']
-    },
-    grid: {
-    	top: 10,
-        left: '3%',
-        right: '4%',
-        bottom: '10%',
-        containLabel: true
-    },
-    xAxis: {
-        type: 'category',
-        boundaryGap: false,
-        data: []
-    },
-    yAxis: {
-        type: 'value'
-    },
-    series: [
-        {
-            name:'PV',
-            type:'line',
-            data:[]
-        },
-        {
-            name:'UV',
-            type:'line',
-            data:[]
-        }
-    ]
+	tooltip: {
+		trigger: 'axis'
+	},
+	legend: {
+		show: true,
+		bottom: 0,
+		data: ['PV', 'UV']
+	},
+	grid: {
+		top: 10,
+		left: '3%',
+		right: '4%',
+		bottom: '10%',
+		containLabel: true
+	},
+	xAxis: {
+		type: 'category',
+		boundaryGap: false,
+		data: []
+	},
+	yAxis: {
+		type: 'value'
+	},
+	series: [{
+		name: 'PV',
+		type: 'line',
+		data: []
+	}, {
+		name: 'UV',
+		type: 'line',
+		data: []
+	}]
 };
 
 
@@ -129,7 +126,7 @@ var bpinfo = Vue.extend({
 				platform: 'PC',
 				type: '',
 				pageUrl: '',
-				selector:'',
+				selector: '',
 				privateParam: '',
 				publicParam: ''
 			},
@@ -147,14 +144,18 @@ var bpinfo = Vue.extend({
 				input: null,
 				item: null
 			},
-			publicBp: [['','']],
-			privateBp: [['','']],
+			publicBp: [
+				['', '']
+			],
+			privateBp: [
+				['', '']
+			],
 			trend: {
 				chartOption: null
 			}
 		}
 	},
-	computed:  {
+	computed: {
 		publicBpStr: {
 			get() {
 				return this.publicBp.filter(function(a) {
@@ -165,7 +166,9 @@ var bpinfo = Vue.extend({
 			},
 			set(newValue) {
 				if (!newValue) {
-					this.publicBp = [['','']];
+					this.publicBp = [
+						['', '']
+					];
 					return;
 				}
 				var _this = this;
@@ -173,7 +176,7 @@ var bpinfo = Vue.extend({
 				var pairs = newValue.split('&');
 				pairs.forEach(function(p) {
 					var pa = p.split('=');
-					if( pa.length === 2 ){
+					if (pa.length === 2) {
 						_this.publicBp.push([pa[0], pa[1]]);
 					}
 				});
@@ -189,7 +192,9 @@ var bpinfo = Vue.extend({
 			},
 			set(newValue) {
 				if (!newValue) {
-					this.privateBp = [['','']];
+					this.privateBp = [
+						['', '']
+					];
 					return;
 				}
 				var _this = this;
@@ -197,22 +202,32 @@ var bpinfo = Vue.extend({
 				var pairs = newValue.split('&');
 				pairs.forEach(function(p) {
 					var pa = p.split('=');
-					if( pa.length === 2 ){
+					if (pa.length === 2) {
 						_this.privateBp.push([pa[0], pa[1]]);
 					}
 				});
 			}
 		}
 	},
-	props:['loading', 'bpConfig'],
+	props: ['loading', 'bpConfig'],
 	created() {
-		this.$watch('bpConfig.trigger', function (val) {
+		this.$watch('bpConfig.trigger', function(val) {
 			if (this.bpConfig.show) {
 				this.init();
 			}
 		});
-		let {name, username, email, department} = window.allPageConfig.userInfo;
-		this.userInfo = {name, username, email, department};
+		let {
+			name,
+			username,
+			email,
+			department
+		} = window.allPageConfig.userInfo;
+		this.userInfo = {
+			name,
+			username,
+			email,
+			department
+		};
 	},
 	methods: {
 		setDraggable(val) {
@@ -230,17 +245,17 @@ var bpinfo = Vue.extend({
 			api.getBp(_this.bpConfig).then(function(data) {
 				let keys = Object.keys(data);
 				for (let key of keys) {
-					if(data[key] === '') {
+					if (data[key] === '') {
 						_this.config[key] = _this.bpConfig[key];
 					} else {
 						_this.config[key] = data[key];
 					}
 				}
 				// show the config window
-				_this.publicBpStr = data.publicParam;			
+				_this.publicBpStr = data.publicParam;
 				_this.privateBpStr = data.privateParam;
 				// point Id 为0时， 表示无该点信息
-				if(data.pointId) {
+				if (data.pointId) {
 					_this.loadChart();
 				}
 				_this.loading.show = false;
@@ -248,7 +263,6 @@ var bpinfo = Vue.extend({
 				console.log(err);
 				_this.loading.show = false;
 			});
-			
 		},
 		hide() {
 			this.bpConfig.show = false;
@@ -259,7 +273,7 @@ var bpinfo = Vue.extend({
 			if (this.selectpos.show === false || (e.target && this.selected.input !== e.target)) {
 				let offset = $(e.target).position();
 				this.selectpos.top = `calc(${offset.top}px + ${this.infopos.top} + 30px)`;
-				if(this.infopos.left === 'inherit') {
+				if (this.infopos.left === 'inherit') {
 					this.selectpos.right = `120px`;
 				} else {
 					this.selectpos.left = `calc(${offset.left}px + ${this.infopos.left})`;
@@ -276,8 +290,8 @@ var bpinfo = Vue.extend({
 			this.selectpos.show = false;
 		},
 		dragstart(e) {
-			e.dataTransfer.effectAllowed = "move";  //移动效果
-			e.dataTransfer.setData("text", '');  //附加数据，　没有这一项，firefox中无法移动
+			e.dataTransfer.effectAllowed = "move"; //移动效果
+			e.dataTransfer.setData("text", ''); //附加数据，　没有这一项，firefox中无法移动
 			this.dragpos.x = e.offsetX || e.clientX - $(e.target).offset().left;
 			this.dragpos.y = e.offsetY || e.clientY - $(e.target).offset().top;
 			this.mask = true;
@@ -285,16 +299,16 @@ var bpinfo = Vue.extend({
 		draging(e) {
 			let newx = e.clientX - this.dragpos.x;
 			let newy = e.clientY - this.dragpos.y;
-			if(newx > 0 && newy > 0) {
+			if (newx > 0 && newy > 0) {
 				this.infopos.left = newx + 'px';
 				this.infopos.top = newy + 'px';
 			}
 		},
 		drop(e) {
-			e.preventDefault() || e.stopPropagation(); 
+			e.preventDefault() || e.stopPropagation();
 		},
-		warning(e){
-			if(e.path[0].className === 'mask') {
+		warning(e) {
+			if (e.path[0].className === 'mask') {
 				actions.alert(store, {
 					show: true,
 					msg: '请关闭埋点窗口后操作',
@@ -305,13 +319,19 @@ var bpinfo = Vue.extend({
 		loadChart(ev) {
 			// fetch detail data
 			// 暂时七天数据
-			let {startTime, endTime} = this.argvs;
-			api.getHeatDetail({...this.config, startTime: startTime + ' 00:00:00', endTime: endTime + ' 23:59:59'}).then((data) => {
+			let {
+				startTime,
+				endTime
+			} = this.argvs;
+			api.getHeatDetail({...this.config,
+				startTime: startTime + ' 00:00:00',
+				endTime: endTime + ' 23:59:59'
+			}).then((data) => {
 				// build chart option
 				let xdata = [];
 				let pvdata = [];
 				let uvdata = [];
-				for(let item of data) {
+				for (let item of data) {
 					// parse the date to string
 					item.date = utils.formatDate(new Date(item.date), 'yyyy-MM-dd');
 					xdata.push(item.date);
@@ -331,10 +351,12 @@ var bpinfo = Vue.extend({
 				$save.popover({
 					content
 				});
-				setTimeout(function () { $save.popover("destroy"); }, 1000);
+				setTimeout(function() {
+					$save.popover("destroy");
+				}, 1000);
 				$save.popover('show');
 			}
-			if(this.config.pointName === '' || this.config.pointName == null) {
+			if (this.config.pointName === '' || this.config.pointName == null) {
 				$popover('请输入名称');
 				return false;
 			}
@@ -344,10 +366,10 @@ var bpinfo = Vue.extend({
 			let emptyCount = 0;
 			let illegalRE = /[=&]/;
 			let emptyRE = /^\s*$/;
-			for(let a of allbps) {
+			for (let a of allbps) {
 				let _key = a[0];
 				let _val = a[1];
-				if(emptyRE.test(_key)) {
+				if (emptyRE.test(_key)) {
 					if (emptyRE.test(_val)) {
 						// key value都为空，则不做验证
 						emptyCount++;
@@ -364,13 +386,13 @@ var bpinfo = Vue.extend({
 					$popover('请检查重复key');
 					return false;
 				}
-				if(illegalRE.test(_key) || illegalRE.test(_val)) {
+				if (illegalRE.test(_key) || illegalRE.test(_val)) {
 					$popover('含有非法字符，请检查');
 					return false;
 				}
 				existKeys[_key] = 1;
 			}
-			if(emptyCount === allbps.length) {
+			if (emptyCount === allbps.length) {
 				$popover('请至少设置一组参数');
 				return false;
 			}
