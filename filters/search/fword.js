@@ -13,18 +13,21 @@ module.exports = {
     wordOne(data , query , dates){
         let source = data.first.data[0];
         let newData= {
-            "逛逛首页搜索框" : {
+            "主搜" : {
                 value : 0
             },
-            "分类页搜索框" : {
+            "精品小店" : {
                 value : 0
             },
-            "便宜好货页搜索框" : {
+            "便宜好货" : {
                 value : 0
             }
         };
+        if (query.type === 'h5') {
+            delete newData['精品小店']
+        }
         for(let item of source){
-            if(item.search_position == "ALL" || item.search_position == "精品小店页搜索框"){
+            if(item.search_position == "ALL"){
                 continue;
             }
 
@@ -32,6 +35,32 @@ module.exports = {
                 newData[item.search_position].value += item.search_num;
             }else{
                 newData[item.search_position] = {
+                    value : item.search_num
+                }
+            }
+        }
+
+        let source2 = data.second.data[0];
+        let newData2= {
+            "直接输入" : {
+                value : 0
+            },
+            "搜索历史" : {
+                value : 0
+            },
+            "下拉推荐" : {
+                value : 0
+            }
+        };
+        for(let item of source2){
+            if(item.search_source == "ALL"){
+                continue;
+            }
+
+            if(newData2[item.search_source]){
+                newData2[item.search_source].value += item.search_num;
+            }else{
+                newData2[item.search_source] = {
                     value : item.search_num
                 }
             }
@@ -47,42 +76,12 @@ module.exports = {
                 stack: false, // 图的堆叠
                 categoryY : false //柱状图竖着
             }
-        }];
-    },
-
-    wordTwo(data , query , dates){
-        let source = data.first.data[0];
-        let newData= {
-            "直接输入" : {
-                value : 0
-            },
-            "历史记录" : {
-                value : 0
-            },
-            "下拉推荐" : {
-                value : 0
-            }
-        };
-        for(let item of source){
-            if(item.search_source == "ALL"){
-                continue;
-            }
-
-            if(newData[item.search_source]){
-                newData[item.search_source].value += item.search_num;
-            }else{
-                newData[item.search_source] = {
-                    value : item.search_num
-                }
-            }
-        }
-
-        return [{
+        }, {
             type : "pie",
             map : {
                 value: "商品搜索关键词分析-来源占比"
             },
-            data : newData,
+            data : newData2,
             config: { // 配置信息
                 stack: false, // 图的堆叠
                 categoryY : false //柱状图竖着
@@ -90,29 +89,38 @@ module.exports = {
         }];
     },
 
-    wordThree(data , query , dates){
+    wordTwo(data , query , dates){
 
         let source = data.first.data[0];
         let Result = [];
+        let start = (-query.page - 1) * -query.limit;
+        let count = 0;
         for(let item of source){
-            if(!item.search_result_uv){
-                item.uv_lv = "0.00%";
-            }else{
-                item.uv_lv = utils.toFixed(item.search_order_uv / item.search_result_uv , 0);
-            }
-
-            if(!item.search_prodet_ipv_uv){
-                item.ipv_lv = "0.00%";
-            }else{
-                item.ipv_lv = utils.toFixed(item.search_order_uv / item.search_prodet_ipv_uv , 0);
-            }
-
-            if(!item.search_exposure_product_num){
-                item.ctr_lv = "0.00%";
-            }else{
-                item.ctr_lv = utils.toFixed(item.search_prodet_ipv / item.search_exposure_product_num , 0);
-            }
-           
+            // 搜索排名
+            item.rank = start + (++count);
+            // 点击次数转化率=IPV/PV
+            item.ipv_ratio = utils.toFixed(item.search_prodet_ipv, search_result_pv);
+            // 点击人数转化率=IPV_UV/UV
+            item.ipv_uv_uv_ratio = utils.toFixed(item.search_prodet_ipv_uv, item.search_result_uv);
+            // 下单转化率=下单UV/UV
+            item.order_uv_uv_ratio = utils.toFixed(item.search_order_uv, item.search_result_uv);
+            // IPV-下单转化率=下单UV/IPV_UV
+            item.order_uv_ipv_ui_ratio = utils.toFixed(item.search_order_uv, item.search_prodet_ipv_uv);
+            // 支付转化率=支付UV/UV
+            item.order_uv_pay_uv_ratio = utils.toFixed(item.search_order_uv_pay, item.search_result_uv);
+            // IPV-支付转化率 = 支付UV/IPV_UV
+            item.order_uv_pay_ipv_uv_ratio = utils.toFixed(item.search_order_uv_pay, item.search_prodet_ipv_uv);
+            // 下单-支付转化率=支付UV/下单UV
+            item.order_uv_pay_order_uv_ratio = utils.toFixed(item.search_order_uv_pay, item.search_order_uv);
+             // 下单商品-支付转化率=支付商品数/下单商品数
+            item.order_com_pay_order_com_ratio = utils.toFixed(item.search_order_com_pay, item.search_order_com);
+            // CTR=IPV/曝光商品数
+            item.ipv_exposure_product_num_ratio = utils.toFixed(item.search_prodet_ipv_uv, item.search_exposure_product_num);
+            // 客单价=支付金额/支付UV
+            item.order_sum_pay_order_uv_pay_ratio = utils.toFixed(item.search_order_sum_pay, item.search_order_uv_pay);
+            // 笔单价=支付金额/支付订单数
+            item.order_sum_pay_order_spu_pay_ratio = utils.toFixed(item.search_order_sum_pay, item.search_order_spu_pay);
+            // Date
             item.date = utils.getDate(item.date);
 
             Result.push(item);
