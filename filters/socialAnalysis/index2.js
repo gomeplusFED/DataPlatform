@@ -63,7 +63,7 @@ module.exports = {
             newData.push(obj);
         }
 
-        console.log(newData);
+        // console.log(newData);
 
         /* 写入查询的值 */
         for(let item of source){
@@ -145,6 +145,7 @@ module.exports = {
         var config = {};
 
         for(let item of source){
+            item.topic_create_time = util.getDate(item.topic_create_time)
             ids.push(item.topic_id);
             newData.push(item);
         }

@@ -32,7 +32,6 @@ module.exports = {
             }
 
 
-            console.log(Object.keys(config));
             for(let key of source) {
                 /*console.log(config[key.category_id_1] , key.category_id_1);
                 key.category_id_2 = config[key.category_id_1]["cell"][key.category_id_2];
