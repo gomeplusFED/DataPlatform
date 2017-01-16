@@ -158,37 +158,45 @@ UTILS._cssPathStep = function(node, optimized, isTargetNode)
     var needsNthChild = false;
     var ownIndex = -1;
     var siblings = parent.children;
+    var siblingsNodeNames = [];
     for (var i = 0; (ownIndex === -1 || !needsNthChild) && i < siblings.length; ++i) {
         var sibling = siblings[i];
+        var siblingName = sibling.nodeName.toLowerCase();
+        siblingsNodeNames.push(siblingName);
+
         if (sibling === node) {
             ownIndex = i;
             continue;
         }
         if (needsNthChild)
             continue;
-        if (sibling.nodeName.toLowerCase() !== nodeName.toLowerCase())
-            continue;
 
-        needsClassNames = true;
-        var ownClassNames = prefixedOwnClassNamesArray;
-        var ownClassNameCount = 0;
-        for (var name in ownClassNames)
-            ++ownClassNameCount;
-        if (ownClassNameCount === 0) {
-            needsNthChild = true;
+        if (siblingName !== nodeName.toLowerCase()) {
             continue;
+        } else {
+            needsNthChild = true;
         }
-        var siblingClassNamesArray = prefixedElementClassNames(sibling);
-        for (var j = 0; j < siblingClassNamesArray.length; ++j) {
-            var siblingClass = siblingClassNamesArray[j];
-            if (ownClassNames.indexOf(siblingClass))
-                continue;
-            delete ownClassNames[siblingClass];
-            if (!--ownClassNameCount) {
-                needsNthChild = true;
-                break;
-            }
-        }
+
+        // needsClassNames = true;
+        // var ownClassNames = prefixedOwnClassNamesArray;
+        // var ownClassNameCount = 0;
+        // for (var name in ownClassNames)
+        //     ++ownClassNameCount;
+        // if (ownClassNameCount === 0) {
+        //     needsNthChild = true;
+        //     continue;
+        // }
+        // var siblingClassNamesArray = prefixedElementClassNames(sibling);
+        // for (var j = 0; j < siblingClassNamesArray.length; ++j) {
+        //     var siblingClass = siblingClassNamesArray[j];
+        //     if (ownClassNames.indexOf(siblingClass))
+        //         continue;
+        //     delete ownClassNames[siblingClass];
+        //     if (!--ownClassNameCount) {
+        //         needsNthChild = true;
+        //         break;
+        //     }
+        // }
     }
 
     var result = nodeName.toLowerCase();
@@ -196,17 +204,18 @@ UTILS._cssPathStep = function(node, optimized, isTargetNode)
         result += "[type=\"" + node.getAttribute("type") + "\"]";
     if (needsNthChild) {
     	// for IE8  replcae nth-child with +
-    	var tmpres = result + ":first-child";
-    	for (var i = 0;i < ownIndex;i++) {
-    		tmpres += '+' + result;
+    	var tmpres = siblingsNodeNames[0] + ":first-child";
+    	for (var i = 1; i <= ownIndex; i++) {
+    		tmpres += '+' + siblingsNodeNames[i];
     	}
     	result = tmpres;
         // result += ":nth-child(" + (ownIndex + 1) + ")";
-    } else if (needsClassNames) {
-        for (var prefixedName in prefixedOwnClassNamesArray)
-        // for (var prefixedName in prefixedOwnClassNamesArray.keySet())
-            result += "." + escapeIdentifierIfNeeded(prefixedOwnClassNamesArray[prefixedName].substr(1));
-    }
+    } 
+    // else if (needsClassNames) {
+    //     for (var prefixedName in prefixedOwnClassNamesArray)
+    //     // for (var prefixedName in prefixedOwnClassNamesArray.keySet())
+    //         result += "." + escapeIdentifierIfNeeded(prefixedOwnClassNamesArray[prefixedName].substr(1));
+    // }
 
     return new UTILS.DOMNodePathStep(result, false);
 }
