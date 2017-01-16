@@ -805,3 +805,7 @@ exports.globalPlatform = (type, filter_select) => {
 
     return arr;
 };
+
+exports.moment = (date) => {
+    return moment(date).format("YYYY-MM-DD");
+};
