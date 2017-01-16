@@ -742,8 +742,10 @@ module.exports = {
         }
 
         for(let item of source){
-            if(param1[item.plan_type]){
+            if(param1[item.plan_type] && item.level == "ALL"){
              Result1[param1[item.plan_type]].value += item[filter_key];
+
+             Result1[param1[item.plan_type]].value = util.numberLeave( Result1[param1[item.plan_type]].value , 2 );
             }
         }
 
@@ -755,6 +757,8 @@ module.exports = {
         for(let item of source){
             if(param2[item.rebate_level] && item.level == "ALL"){
                 Result2[param2[item.rebate_level]].value += item[filter_key];
+
+                Result2[param2[item.rebate_level]].value = util.numberLeave( Result2[param2[item.rebate_level]].value , 2 );
             }
         }
 
@@ -773,6 +777,7 @@ module.exports = {
         for(let item of source){
             if(param2[item.rebate_level] && item.level != "ALL"){
                 Result3[param2[item.rebate_level]][item.level] += item[filter_key];
+                Result3[param2[item.rebate_level]][item.level] = util.numberLeave( Result3[param2[item.rebate_level]][item.level] , 2 );
             }
         }
            

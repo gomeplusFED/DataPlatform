@@ -268,7 +268,7 @@ module.exports = {
             item.date = util.getDate(item.date);
 
             for (let key of RowsOther) {
-                item[key + "_ratio"] = util.toFixedLength(item[key], item.play_num, 4);
+                item[key + "_ratio"] = util.toFixedLength(item[key], item.play_num, 2);
                 item[key] = item[key].toString();
             }
 
@@ -356,7 +356,7 @@ module.exports = {
             ]
             cols.forEach(col => {
                 data2[0][col] = source[col] || 0
-                data2[1][col] = source[col] ? util.toFixedLength(source[col], source.play_num, 4) : '--'
+                data2[1][col] = source[col] ? util.toFixedLength(source[col], source.play_num, 2) : '--'
                 data2[2][col] = Chain(source[col], source[col+'_pre'])
             })
         }
@@ -376,7 +376,7 @@ module.exports = {
             ]
             cols.forEach(col => {
                 data3[0][col] = source[col] || 0
-                data3[1][col] = source[col] ? util.toFixedLength(source[col], source.play_num, 4) : '--'
+                data3[1][col] = source[col] ? util.toFixedLength(source[col], source.play_num, 2) : '--'
                 data3[2][col] = Chain(source[col], source[col+'_pre'])
             })
         }
@@ -505,7 +505,7 @@ module.exports = {
         source.forEach(x => {
             x.date = moment(x.date).format('MM月DD日')
             cols.forEach(col => {
-                x[col+'_ratio'] =  util.toFixedLength(x[col], x.play_num, 4)
+                x[col+'_ratio'] =  util.toFixedLength(x[col], x.play_num, 2)
                 x[col] = x[col].toString()
             })
 
