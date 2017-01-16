@@ -41,6 +41,7 @@
 					<th>事件</th>
 					<th>是否模块</th>
 					<th>页面URL</th>
+					<th>埋点参数</th>
 					<th>PV</th>
 					<th>UV</th>
 					<th>详情</th>
@@ -53,6 +54,7 @@
 					<td>单击</td>
 					<td title="{{item.type}}">{{item.type === 'block' ? '是' : '否'}}</td>
 					<td title="{{item.pageUrl}}"><a @click="heatmap(item)">{{item.pageUrl}}</a></td>
+					<td title="{{item.pointParam}}">{{item.pointParam || '-'}}</td>
 					<td title="{{item.PV}}">{{item.pv || '-'}}</td>
 					<td title="{{item.UV}}">{{item.uv || '-'}}</td>
 					<td><a @click="detail(item)">趋势</a></td>
@@ -98,9 +100,9 @@
                 			</thead>
             				<tbody>
             					<tr v-for="item of trend.data">
-            						<td>{{item.date}}</td>
-            						<td>{{item.pv}}</td>
-            						<td>{{item.uv}}</td>
+            						<td>{{item.date || '-'}}</td>
+            						<td>{{item.pv || '-'}}</td>
+            						<td>{{item.uv || '-'}}</td>
             					</tr>
             					<tr v-if="trend.data.length === 0"><td colspan="3">暂无数据</td></tr>
             				</tbody>
@@ -502,7 +504,7 @@
 	.ntable tr th:nth-child(5) {
 		width: 250px;
 	}
-	.ntable tr th:nth-child(8) {
+	.ntable tr th:nth-child(9) {
 		width: 80px;
 	}
 	.ntable tr td {

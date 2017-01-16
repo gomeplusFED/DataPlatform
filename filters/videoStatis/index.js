@@ -269,6 +269,7 @@ module.exports = {
 
             for (let key of RowsOther) {
                 item[key + "_ratio"] = util.toFixedLength(item[key], item.play_num, 4);
+                item[key] = item[key].toString();
             }
 
             if (!ArrObj[item.date][item.sdk_type]) ArrObj[item.date][item.sdk_type] = [];
@@ -374,7 +375,7 @@ module.exports = {
                 }
             ]
             cols.forEach(col => {
-                data3[0][col] = source.port_io_failed || 0
+                data3[0][col] = source[col] || 0
                 data3[1][col] = source[col] ? util.toFixedLength(source[col], source.play_num, 4) : '--'
                 data3[2][col] = Chain(source[col], source[col+'_pre'])
             })
@@ -484,7 +485,7 @@ module.exports = {
             start_frame_succ: '首帧成功数',
             start_frame_succ_ratio: '首帧成功率',
             stop_play_num: '卡顿播放次数',
-            stop_play_num_ratio: '卡顿播放次率',
+            stop_play_num_ratio: '卡顿播放率',
             play_fluent: '播放流畅数',
             play_fluent_ratio: '播放流畅率',
             port_io_failed: 'play接口IO错误数',
@@ -505,6 +506,7 @@ module.exports = {
             x.date = moment(x.date).format('MM月DD日')
             cols.forEach(col => {
                 x[col+'_ratio'] =  util.toFixedLength(x[col], x.play_num, 4)
+                x[col] = x[col].toString()
             })
 
             data2.push(x)

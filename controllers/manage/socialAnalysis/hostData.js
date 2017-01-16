@@ -332,7 +332,6 @@ module.exports = (Router) => {
                 "new_group_num",
                 "weiding",
                 "new_attention_num",
-                "person_funs_num",
                 "new_cancel_attention_num"]
         ],
         cols: [
@@ -376,9 +375,6 @@ module.exports = (Router) => {
             }, {
                 caption: "新增关注次数",
                 type: "number"
-            }, {
-               caption: "累计关注次数",
-               type: "number"
             }, {
                 caption: "新增取关次数",
                 type: "number"

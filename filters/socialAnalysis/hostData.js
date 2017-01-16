@@ -219,9 +219,6 @@ module.exports = {
             newData.push(source[i]);
         }
 
-
-
-        console.log(123 , newData[0]);
         return util.toTable([newData], data.rows, data.cols, [count]);
     }
 };

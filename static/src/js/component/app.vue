@@ -98,7 +98,7 @@
 				}
 
 				$('[href="#!' + url + '"]').parent().parent().parent().addClass('active');
-				$('[href="#!' + url + '"]').parent().parent().addClass('in').attr('aria-expanded', true);
+				$('[href="#!' + url + '"]').parent().parent().addClass('in').attr('aria-expanded', true).css('height', 'auto');
 				$('[href="#!' + url + '"]').focus();
 				$('#side-menu a').removeClass('active');
 				$('[href="#!' + url + '"]').addClass('active');

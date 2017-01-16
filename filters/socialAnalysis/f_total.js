@@ -19,6 +19,7 @@ module.exports = {
         }
 
         for(let item of source){
+            console.log(item);
             if(Result[item.key]){
                 Result[item.key] = item.value;
             }

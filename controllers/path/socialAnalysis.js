@@ -103,6 +103,11 @@ module.exports = {
             name : "圈子数据",
             path : "/socialAnalysis/group",
             display : true,
+            subPages : [{
+                id : "00212",
+                url : "/socialAnalysis/groupDetail",
+                name : "圈子详情"
+            }],
             defaultData : [    
                 /*{
                     type : "table",

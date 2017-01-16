@@ -502,7 +502,7 @@ module.exports = (Router) => {
                     type: "string"
                 }, {
                     caption: "播放用户数",
-                    type: "string",
+                    type: "number",
                     help: "直播视频播放用户数"
                 }, {
                     caption: "播放次数",
@@ -519,19 +519,19 @@ module.exports = (Router) => {
                     type: "string"
                 },{
                     caption: "",
-                    type: "number"
+                    type: "string"
                 }, {
                     caption: "",
                     type: "string"
                 },{
                     caption: "",
-                    type: "number"
+                    type: "string"
                 },{
                     caption: "",
                     type: "string"
                 }, {
                     caption: "",
-                    type: "number"
+                    type: "string"
                 }, {
                     caption: "",
                     type: "string"
@@ -545,31 +545,31 @@ module.exports = (Router) => {
                     type: "string",
                 }, {
                     caption: "",
-                    type: "number",
+                    type: "string",
                 }, {
                     caption: "",
                     type: "string",
                 }, {
                     caption: "",
-                    type: "number",
+                    type: "string",
                 },{
                     caption: "",
                     type: "string",
                 }, {
                     caption: "",
-                    type: "number",
+                    type: "string",
                 },{
                     caption: "",
                     type: "string",
                 }, {
                     caption: "",
-                    type: "number",
+                    type: "string",
                 },{
                     caption: "",
                     type: "string",
                 }, {
                     caption: "",
-                    type: "number",
+                    type: "string`",
                 }, {
                     caption: "",
                     type: "string",
@@ -645,7 +645,7 @@ module.exports = (Router) => {
             }
             sql = `SELECT 
                     sum(a.play_num) as play_num, sum(a.port_succ) as port_succ, sum(a.start_frame_succ) as start_frame_succ, sum(a.stop_play_num) as stop_play_num, sum(a.play_fluent) as play_fluent,
-                    b.port_succ as port_succ_pre, b.start_frame_succ as start_frame_succ_pre, b.stop_play_num as stop_play_num_pre, b.play_fluent as play_fluent_pre
+                    sum(b.port_succ) as port_succ_pre, sum(b.start_frame_succ) as start_frame_succ_pre, sum(b.stop_play_num) as stop_play_num_pre, sum(b.play_fluent) as play_fluent_pre
                         FROM ${tablename} a
                          LEFT JOIN ${tablename} b 
                         on a.day_type = b.day_type and b.date = DATE_ADD(a.date,INTERVAL -1 ${date_type_list[query.day_type || 1]})
@@ -666,8 +666,8 @@ module.exports = (Router) => {
                 tablename = query.type === 'livevideo' ? 'ads2_livevideo_overview2' : 'ads2_videoplay_overview2'
             }
             sql = `SELECT 
-                    a.play_num, sum(a.port_io_failed) as port_io_failed, sum(a.port_data_failed) as port_data_failed, sum(a.port_overtime) as port_overtime, sum(a.port_overtime) as port_overtime, sum(a.play_failed) as play_failed, sum(a.play_error) as play_error, sum(a.improper_play) as improper_play,
-                    b.port_io_failed as port_io_failed_pre, b.port_data_failed as port_data_failed_pre, b.port_overtime as port_overtime_pre, b.port_overtime as port_overtime_pre, b.play_failed as play_failed_pre, b.play_error as play_error_pre, b.improper_play as improper_play_pre
+                    sum(a.play_num) as play_num, sum(a.port_io_failed) as port_io_failed, sum(a.port_data_failed) as port_data_failed, sum(a.port_overtime) as port_overtime, sum(a.port_overtime) as port_overtime, sum(a.play_failed) as play_failed, sum(a.play_error) as play_error, sum(a.improper_play) as improper_play,
+                    sum(b.port_io_failed) as port_io_failed_pre, sum(b.port_data_failed) as port_data_failed_pre, sum(b.port_overtime) as port_overtime_pre, sum(b.port_overtime) as port_overtime_pre, sum(b.play_failed) as play_failed_pre, sum(b.play_error) as play_error_pre, sum(b.improper_play) as improper_play_pre
                         FROM ${tablename} a
                          LEFT JOIN ${tablename} b 
                         on a.day_type = b.day_type and b.date = DATE_ADD(a.date,INTERVAL -1 ${date_type_list[query.day_type || 1]})
@@ -918,52 +918,70 @@ module.exports = (Router) => {
                 type: "string"
             },
             {
-                caption: ""
+                caption: "",
+                type: "string"
             },
             {
-                caption: ""
+                caption: "",
+                type: "string"
             },
             {
-                caption: ""
+                caption: "",
+                type: "string"
             },
             {
-                caption: ""
+                caption: "",
+                type: "string"
             },
             {
-                caption: ""
+                caption: "",
+                type: "string"
             },
             {
-                caption: ""
+                caption: "",
+                type: "string"
             },
             {
-                caption: ""
+                caption: "",
+                type: "string"
             },
             // 错误播放统计
             {
                 caption: "错误播放统计",
                 type: "string"
             }, {
-                caption: ""
+                caption: "",
+                type: "string"
             }, {
-                caption: ""
+                caption: "",
+                type: "string"
             }, {
-                caption: ""
+                caption: "",
+                type: "string"
             }, {
-                caption: ""
+                caption: "",
+                type: "string"
             }, {
-                caption: ""
+                caption: "",
+                type: "string"
             }, {
-                caption: ""
+                caption: "",
+                type: "string"
             }, {
-                caption: ""
+                caption: "",
+                type: "string"
             }, {
-                caption: ""
+                caption: "",
+                type: "string"
             }, {
-                caption: ""
+                caption: "",
+                type: "string"
             }, {
-                caption: ""
+                caption: "",
+                type: "string"
             }, {
-                caption: ""
+                caption: "",
+                type: "string"
             },
         ]]
     });
