@@ -327,12 +327,15 @@ var bpinfo = Vue.extend({
 		},
 		save(ev) {
 			let $save = $(ev.target);
-			if(this.config.pointName === '' || this.config.pointName == null) {
+			let $popover = function(content) {
 				$save.popover({
-					content: '请输入名称'
+					content
 				});
 				setTimeout(function () { $save.popover("destroy"); }, 1000);
 				$save.popover('show');
+			}
+			if(this.config.pointName === '' || this.config.pointName == null) {
+				$popover('请输入名称');
 				return false;
 			}
 			var _this = this;
@@ -341,19 +344,15 @@ var bpinfo = Vue.extend({
 			let illegal = /[=&]/;
 			for(let a of allbps) {
 				if (existKeys[a[0]]) {
-					$save.popover({
-						content: '请检查重复key'
-					});
-					$save.popover('show');
-					setTimeout(function () { $save.popover("destroy"); }, 1000);
+					$popover('请检查重复key');
 					return false;
 				} else {
+					if(/^\s*$/.test(a[0])) {
+						$popover('key不能为空');
+						return false;
+					}
 					if(illegal.test(a[0]) || illegal.test(a[1])) {
-						$save.popover({
-							content: '含有非法字符，请检查'
-						});
-						$save.popover('show');
-						setTimeout(function () { $save.popover("destroy"); }, 1000);
+						$popover('含有非法字符，请检查');
 						return false;
 					}
 					existKeys[a[0]] = 1;
