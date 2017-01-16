@@ -17,7 +17,7 @@ module.exports = {
             config = {},
             rows = [],
             cols = [],
-            merge = util.mergeCell(source, ["category_id_1"]);
+            merge = util.mergeCell(source, ["category_id_1" , "category_id_2"]);
 
         if(filter_key === "social") {
             for(let key of secondSource) {

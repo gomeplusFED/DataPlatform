@@ -16,7 +16,6 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/socialAnalysis/tableOne",
         modelName : ["GroupReport", "SocialCategory"],
-        // paging : [true, false],
         platform : false,
         date_picker_data: 1,
         showDayUnit : true,
@@ -24,13 +23,9 @@ module.exports = (Router) => {
         procedure : [
             {
                 find : "params",
-                // offset : "offset",
-                // limit : "limit",
-                order : ["category_id_1"],
+                order : ["category_id_1" , "category_id_2"],
                 run : ""
-            }/*,{
-                count : ""
-            }*/
+            }
         ],
         params(query , params , data){
             if(query.filter_key2 == "one"){
@@ -38,6 +33,7 @@ module.exports = (Router) => {
             }else{
                 params.category_id_2 = orm.not_in(["ALL"]);
             }
+            params.date = "2017-1-9";
 
             return params;
         },
@@ -45,7 +41,6 @@ module.exports = (Router) => {
             if(query.filter_key2 == "one"){
                 return {"pid":""}
             }else{
-                console.log(123);
                 return {};
             }
         },
@@ -121,8 +116,16 @@ module.exports = (Router) => {
             get : ""
         }, false],
         firstSql(query, params, isCount) {
-            let keys = [query.startTime, query.endTime, query.day_type];
-            let where = ["date BETWEEN ? AND ?", "day_type=?"];
+            let type;
+            if(query.type instanceof Array){
+                type = query.type;
+            }else{
+                type = [query.type];
+            }
+
+
+            let keys = [query.startTime, query.endTime, query.day_type , type];
+            let where = ["date BETWEEN ? AND ?", "day_type=?" , "type IN ?"];
             if(query.topic_id) {
                 keys.push(query.topic_id);
                 where.push("topic_id=?");

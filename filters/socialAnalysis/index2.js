@@ -63,10 +63,12 @@ module.exports = {
             newData.push(obj);
         }
 
+        console.log(newData);
+
         /* 写入查询的值 */
         for(let item of source){
             var num;
-            switch(item.type){
+            switch(item.type.toUpperCase()){
                 case "APP":
                     num = 0;
                     break;
@@ -79,9 +81,7 @@ module.exports = {
             }
             for(var key in item){
                 if(key == "type") continue;
-                if(newData[num] && newData[num][key]) {
-                    newData[num][key] += item[key];
-                }
+                newData[num][key] += item[key];
                 newData[3][key] += item[key];
             }
         }

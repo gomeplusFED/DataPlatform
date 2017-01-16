@@ -19,9 +19,8 @@ module.exports = {
         }
 
         for(let item of source){
-            console.log(item);
-            if(Result[item.key]){
-                Result[item.key] = item.value;
+            if(Result[item.key] != undefined){
+                Result[item.key] += item.value;
             }
         }
 
