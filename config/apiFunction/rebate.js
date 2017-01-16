@@ -742,7 +742,7 @@ module.exports = {
         }
 
         for(let item of source){
-            if(param1[item.plan_type]){
+            if(param1[item.plan_type] && item.level == "ALL"){
              Result1[param1[item.plan_type]].value += item[filter_key];
             }
         }
