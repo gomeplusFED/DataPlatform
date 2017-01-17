@@ -180,7 +180,9 @@
 						e.preventDefault();
 					});
 					$body.bind('dragend', function(e){
-						$(e.target).hide();
+						let $target = $(e.target);
+						$target.parent().attr('draggable', 'true');
+						$(e.target).css('visibility','hidden');
 				    });
 					$body.mouseover(
 						function(e) {
