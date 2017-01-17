@@ -173,6 +173,14 @@ UTILS._cssPathStep = function(node, optimized, isTargetNode)
 
         if (siblingName !== nodeName.toLowerCase()) {
             continue;
+            // ignore .wrap
+        } else if (parent.nodeName.toLowerCase() !== 'body') {
+            needsNthChild = true;
+            continue;
+        }
+
+        if (siblingName !== nodeName.toLowerCase()) {
+            continue;
         } else {
             needsNthChild = true;
         }
