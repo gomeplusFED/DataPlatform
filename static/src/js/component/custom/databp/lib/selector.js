@@ -173,30 +173,32 @@ UTILS._cssPathStep = function(node, optimized, isTargetNode)
 
         if (siblingName !== nodeName.toLowerCase()) {
             continue;
-        } else {
+            // ignore .wrap
+        } else if (parent.nodeName.toLowerCase() !== 'body') {
             needsNthChild = true;
+            continue;
         }
 
-        // needsClassNames = true;
-        // var ownClassNames = prefixedOwnClassNamesArray;
-        // var ownClassNameCount = 0;
-        // for (var name in ownClassNames)
-        //     ++ownClassNameCount;
-        // if (ownClassNameCount === 0) {
-        //     needsNthChild = true;
-        //     continue;
-        // }
-        // var siblingClassNamesArray = prefixedElementClassNames(sibling);
-        // for (var j = 0; j < siblingClassNamesArray.length; ++j) {
-        //     var siblingClass = siblingClassNamesArray[j];
-        //     if (ownClassNames.indexOf(siblingClass))
-        //         continue;
-        //     delete ownClassNames[siblingClass];
-        //     if (!--ownClassNameCount) {
-        //         needsNthChild = true;
-        //         break;
-        //     }
-        // }
+        needsClassNames = true;
+        var ownClassNames = prefixedOwnClassNamesArray;
+        var ownClassNameCount = 0;
+        for (var name in ownClassNames)
+            ++ownClassNameCount;
+        if (ownClassNameCount === 0) {
+            needsNthChild = true;
+            continue;
+        }
+        var siblingClassNamesArray = prefixedElementClassNames(sibling);
+        for (var j = 0; j < siblingClassNamesArray.length; ++j) {
+            var siblingClass = siblingClassNamesArray[j];
+            if (ownClassNames.indexOf(siblingClass))
+                continue;
+            delete ownClassNames[siblingClass];
+            if (!--ownClassNameCount) {
+                needsNthChild = true;
+                break;
+            }
+        }
     }
 
     var result = nodeName.toLowerCase();
@@ -210,12 +212,11 @@ UTILS._cssPathStep = function(node, optimized, isTargetNode)
     	}
     	result = tmpres;
         // result += ":nth-child(" + (ownIndex + 1) + ")";
-    } 
-    // else if (needsClassNames) {
-    //     for (var prefixedName in prefixedOwnClassNamesArray)
-    //     // for (var prefixedName in prefixedOwnClassNamesArray.keySet())
-    //         result += "." + escapeIdentifierIfNeeded(prefixedOwnClassNamesArray[prefixedName].substr(1));
-    // }
+    } else if (needsClassNames) {
+        for (var prefixedName in prefixedOwnClassNamesArray)
+        // for (var prefixedName in prefixedOwnClassNamesArray.keySet())
+            result += "." + escapeIdentifierIfNeeded(prefixedOwnClassNamesArray[prefixedName].substr(1));
+    }
 
     return new UTILS.DOMNodePathStep(result, false);
 }
