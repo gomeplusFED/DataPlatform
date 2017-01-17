@@ -138,6 +138,23 @@
 							}
 							$target.addClass('bphover');
 							hovered.push($target);
+							let elemtop = $target.offset().top - 10;
+							let maxtop = $iframe.height() - $($iframewin).height();
+							if(elemtop >  maxtop) {
+								$body.animate({
+				                    scrollTop: maxtop
+				                }, 2000);
+								$('html body').animate({
+				                    scrollTop: elemtop - maxtop
+				                }, 2000);
+							} else {
+								$body.animate({
+				                    scrollTop: elemtop
+				                }, 2000);
+								$('html body').animate({
+				                    scrollTop: 0
+				                }, 2000);
+							}
 						}
 					}
 					$body.bind('contextmenu', function(e) {
