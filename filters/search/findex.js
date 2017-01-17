@@ -14,7 +14,7 @@ function Computer(obj, obj2, rows){
             if(row !== "date") {
                 obj[row] = obj[row] || 0;
                 obj2[row] = obj2[row] || 0;
-                if(validator.isNumber(obj[row]) || validator.isNumber(obj2[row])) {
+                if(typeof obj[row] === "number" || typeof obj2[row] === "number") {
                     o[row] = util.toFixed(
                         obj[row] - obj2[row],
                         obj2[row]
@@ -38,7 +38,7 @@ function Computer(obj, obj2, rows){
 module.exports = {
     indexOne(data , query){
         const start = query.startTime;
-        const date = util.moment(start - 24 * 60 * 60 * 1000);
+        const date = util.moment(new Date(start) - 24 * 60 * 60 * 1000);
         const source = data.first.data[0];
         let obj = {};
         let obj2 = {};
@@ -80,7 +80,7 @@ module.exports = {
         obj2.date = obj2.date || date;
         const newData = [obj, obj2, gap];
 
-        return utils.toTable([newData, newData, newData], data.rows, data.cols);
+        return util.toTable([newData, newData, newData, newData], data.rows, data.cols);
     },
 
     indexTwo(data , query , dates){
