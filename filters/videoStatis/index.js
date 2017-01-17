@@ -9,8 +9,11 @@ var util = require("../../utils"),
 
 /* 环比计算 , 昨天－前天  ／  前天 */
 function Chain(lastday, beforeLastday) {
-    if (lastday == 0 || beforeLastday == 0 || !beforeLastday) {
-            return '--';
+    if (lastday == 0) {
+            return '0%';
+    }
+    if (!beforeLastday) {
+        return '--';
     }
 
     var num = (lastday - beforeLastday) / beforeLastday;
