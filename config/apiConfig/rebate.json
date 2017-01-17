@@ -529,7 +529,6 @@
                 "rebate_level",
                 "unique_is_rebate_shop_num",
                 "unique_is_rebate_merchandise_num",
-                "unique_is_rebate_order_num",
                 "unique_expect_rebate_user_num",
                 "expect_rebate_amount",
                 "is_over_rebate_order_amount",
@@ -580,10 +579,6 @@
                     "caption": "参与商品数",
                     "type": "number",
                     "help": "订单中带返利的商品数（按返利功能去重）"
-                },
-                {
-                    "caption": "新增订单数",
-                    "type": "number"
                 },
                 {
                     "caption": "获利用户数",
