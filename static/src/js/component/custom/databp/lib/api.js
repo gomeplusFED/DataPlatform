@@ -134,8 +134,8 @@ var api = {
 		});
 	},
 	// {pointId, matchUrlId}
-	deleteBp({pointId, type, unique_point}) {
-		return buildAjax(`/point?pointId=${pointId}&type=${type}&unique_point=${unique_point}`, null, 'delete').then(function(res) {
+	deleteBp({pointId, type, uniquePoint}) {
+		return buildAjax(`/point?pointId=${pointId}&type=${type}&uniquePoint=${uniquePoint}`, null, 'delete').then(function(res) {
 			if(res.code !== '200' || res.iserror !== '0') {
 				return Promise.reject('删除失败：' + res.msg);
 			}
@@ -148,8 +148,8 @@ var api = {
 			});
 		});
 	},
-	restoreBp({pointId, type, unique_point}) {
-		return buildAjax('/restore', {pointId, type, unique_point}, 'put').catch(errHandler).then(function(res) {
+	restoreBp({pointId, type, uniquePoint}) {
+		return buildAjax('/restore', {pointId, type, uniquePoint}, 'put').catch(errHandler).then(function(res) {
 			actions.alert(store, {
 				show: true,
 				msg: '恢复成功',
