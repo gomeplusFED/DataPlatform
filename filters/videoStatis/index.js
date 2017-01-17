@@ -9,11 +9,8 @@ var util = require("../../utils"),
 
 /* 环比计算 , 昨天－前天  ／  前天 */
 function Chain(lastday, beforeLastday) {
-    if (lastday == 0 || beforeLastday == 0) {
-        return '0%';
-    }
-    if (!beforeLastday) {
-        return '--';
+    if (lastday == 0 || beforeLastday == 0 || !beforeLastday) {
+            return '--';
     }
 
     var num = (lastday - beforeLastday) / beforeLastday;
@@ -356,7 +353,7 @@ module.exports = {
             ]
             cols.forEach(col => {
                 data2[0][col] = source[col] || 0
-                data2[1][col] = source[col] ? util.toFixedLength(source[col], source.play_num, 2) : '--'
+                data2[1][col] = util.toFixedLength(source[col], source.play_num, 2)
                 data2[2][col] = Chain(source[col], source[col+'_pre'])
             })
         }
@@ -376,7 +373,7 @@ module.exports = {
             ]
             cols.forEach(col => {
                 data3[0][col] = source[col] || 0
-                data3[1][col] = source[col] ? util.toFixedLength(source[col], source.play_num, 2) : '--'
+                data3[1][col] = util.toFixedLength(source[col], source.play_num, 2)
                 data3[2][col] = Chain(source[col], source[col+'_pre'])
             })
         }
