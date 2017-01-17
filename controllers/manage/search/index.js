@@ -42,8 +42,8 @@ module.exports = (Router)=>{
         params : function(query , params , sendData){
             const date = [];
             const start = query.startTime;
-            date.push(util.moment(start));
-            date.push(util.moment(start - 24 * 60 * 60 * 1000));
+            date.push(utils.moment(start));
+            date.push(utils.moment(start - 24 * 60 * 60 * 1000));
             params.date = date;
             params.search_keyword = "ALL";
             return params;

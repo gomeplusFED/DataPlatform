@@ -3,7 +3,8 @@
  * @date 20160921
  * @fileoverview 商品搜索 api 对应的数据整理函数
  */
-var utils = require("../../utils");
+var util = require("../../utils");
+const validator = require("validator");
 
 /* 统一计算 */
 function Computer(obj, obj2, rows){
@@ -13,7 +14,7 @@ function Computer(obj, obj2, rows){
             if(row !== "date") {
                 obj[row] = obj[row] || 0;
                 obj2[row] = obj2[row] || 0;
-                if(isNumber(obj[row]) || isNumber(obj2[row])) {
+                if(validator.isNumber(obj[row]) || validator.isNumber(obj2[row])) {
                     o[row] = util.toFixed(
                         obj[row] - obj2[row],
                         obj2[row]
