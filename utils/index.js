@@ -216,7 +216,7 @@ exports.toFixed = function(one, two) {
 };
 
 exports.toFixedLength = function(one, two, length=4) {
-    if (!one) {
+    if (!two) {
         return '--'
     }
     return (one / (Math.ceil(two) === 0 ? 1 : two) * 100).toFixed(length) + "%"
