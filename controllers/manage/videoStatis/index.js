@@ -366,6 +366,11 @@ module.exports = (Router) => {
                 name: '直播'
             }]
         },
+        params: function (query, params) {
+            params.sdk_type = 'ALL';
+            params.ver = 'ALL';
+            return params;
+        },
         firstSql(query, params, isCount) {
             let date_type_list = ['', 'DAY', 'WEEK', 'MONTH']
             let config = ["date BETWEEN ? AND ?", "day_type=?"],
@@ -377,12 +382,12 @@ module.exports = (Router) => {
                 tablename = query.type === 'livevideo' ? 'ads2_livevideo_overview2' : 'ads2_videoplay_overview2'
             }
 
-            if (query.ver && query.ver!=='ALL') {
+            if (query.ver) {
                 config.push('ver=?')
                 param.push(query.ver)
             }
 
-            if (query.sdk_type && query.sdk_type!=='ALL') {
+            if (query.sdk_type) {
                 config.push('sdk_type = ?')
                 param.push(query.sdk_type)
             }
@@ -841,6 +846,7 @@ module.exports = (Router) => {
             return filter.videoKpiThree(data, query, dates);
         },
         params: function (query, params) {
+            params.sdk_type = 'ALL'
             return params;
         },
         firstSql(query, params, isCount) {
