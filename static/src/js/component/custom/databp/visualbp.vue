@@ -179,6 +179,9 @@
 						// actions.databp(store, _this.bpConfig);
 						e.preventDefault();
 					});
+					$body.bind('dragend', function(e){
+						$(e.target).hide();
+				    });
 					$body.mouseover(
 						function(e) {
 							for (var i in hovered) {
