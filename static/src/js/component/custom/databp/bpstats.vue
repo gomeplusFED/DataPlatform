@@ -15,8 +15,8 @@
 				<label>是否模块</label>
 				<select class="form-control inp inpW2" v-model="searchParam.type">
 					<option value=''>全部</option>
-					<option value='0'>模块</option>
-					<option value='0'>单点</option>
+					<option value='block'>模块</option>
+					<option value='point'>单点</option>
 				</select>
 			</li>
 			<li>
