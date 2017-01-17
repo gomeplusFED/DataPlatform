@@ -6,15 +6,80 @@
 var utils = require("../../utils");
 
 /* 统一计算 */
-function Computer(){
+function Computer(obj, obj2, rows){
+    let o = {};
+    for(let key of rows) {
+        for(let row of key) {
+            if(row !== "date") {
+                obj[row] = obj[row] || 0;
+                obj2[row] = obj2[row] || 0;
+                if(isNumber(obj[row]) || isNumber(obj2[row])) {
+                    o[row] = util.toFixed(
+                        obj[row] - obj2[row],
+                        obj2[row]
+                    );
+                } else {
+                    let one = +obj[row].replace("%", "");
+                    let two = +obj2[row].replace("%", "");
+                    o[row] = util.toFixed(
+                        one - two,
+                        two
+                    );
+                }
+            }
+        }
+    }
+    o.date = "GAP";
 
+    return o;
 }
 
 module.exports = {
     indexOne(data , query){
         const start = query.startTime;
+        const date = util.moment(start - 24 * 60 * 60 * 1000);
         const source = data.first.data[0];
-        return utils.toTable([Result , Result], data.rows, data.cols);
+        let obj = {};
+        let obj2 = {};
+
+        for(let key of source) {
+            key.date = util.moment(key.date);
+            //点击次数转化率
+            key.one_one = util.toFixed(key.search_prodet_ipv, key.search_result_pv);
+            //点击人数转化率
+            key.one_two = util.toFixed(key.search_prodet_ipv_uv, key.search_result_uv);
+            //下单转化率
+            key.two_one = util.toFixed(key.search_order_uv, key.search_result_uv);
+            //IPV-下单转化率
+            key.two_two = util.toFixed(key.search_order_uv, key.search_prodet_ipv_uv);
+            //支付转化率
+            key.three_one = util.toFixed(key.search_order_uv_pay, key.search_result_uv);
+            //IPV-支付转化率
+            key.three_two = util.toFixed(key.search_order_uv_pay, key.search_prodet_ipv_uv);
+            //下单-支付转化率
+            key.four_one = util.toFixed(key.search_order_uv_pay, key.search_order_uv);
+            //下单商品-支付转化率
+            key.four.two = util.toFixed(key.search_order_com_pay, key.search_order_com);
+            //CTR
+            key.four_three = util.toFixed(key.search_prodet_ipv, key.search_exposure_product_num);
+            //客单价
+            key.four_four = util.division(key.search_order_sum_pay, key.search_order_uv_pay);
+            //笔单价
+            key.four_five = util.division(key.search_order_sum_pay, key.search_order_spu_pay);
+            if(key.date === start ) {
+                obj = key;
+            } else {
+                obj2 = key;
+            }
+        }
+
+        let gap = Computer(obj, obj2, data.rows);
+
+        obj.date = obj.date || start;
+        obj2.date = obj2.date || date;
+        const newData = [obj, obj2, gap];
+
+        return utils.toTable([newData, newData, newData], data.rows, data.cols);
     },
 
     indexTwo(data , query , dates){
