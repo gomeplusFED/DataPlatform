@@ -275,6 +275,44 @@
             }
         ]
     },
+    "20": {
+        "name": "IM分析",
+        "display": true,
+        "className": "fa  fa-laptop fa-fw",
+        "filename": "im",
+        "href": "#",
+        "path": [
+            {
+                "name": "实时分析",
+                "path": "/IM/realtime",
+                "display": true,
+                "id": "i7jp2j",
+                "defaultData": [
+                    {
+                        "type": "table",
+                        "title": "数据总览",
+                        "query_api": "/IM/realtime_One",
+                        "mark": 1484622259443
+                    }
+                ]
+            },
+            {
+                "name": "使用分析",
+                "path": "/IM/using",
+                "display": true,
+                "id": "5uvard",
+                "defaultData": [
+                    {
+                        "type": "table",
+                        "title": "数据总览",
+                        "query_api": "/IM/using_one",
+                        "mark": 1484636208559
+                    }
+                ]
+            }
+        ],
+        "routers": []
+    },
     "22": {
         "name": "性能分析",
         "display": true,

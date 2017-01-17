@@ -273,19 +273,19 @@ const Config = {
                 obj.search.searchRecommend()
             ]
         },
-        "20": {
-            name: "IM使用",
-            display: true,
-            className: "fa  fa-laptop fa-fw",
-            href: "#",
-            path: [
-                obj.IM.Index()
-            ],
-            routers: [
-                obj.IM.Event(),
-                obj.IM.FaceDownload()
-            ]
-        },
+        // "20": {
+        //     name: "IM使用",
+        //     display: true,
+        //     className: "fa  fa-laptop fa-fw",
+        //     href: "#",
+        //     path: [
+        //         obj.IM.Index()
+        //     ],
+        //     routers: [
+        //         obj.IM.Event(),
+        //         obj.IM.FaceDownload()
+        //     ]
+        // },
         "21": {
             name: "数据埋点",
             display: true,
