@@ -241,6 +241,12 @@ module.exports = {
         var source = data.first.data,
             count = data.first.count;
 
+        if (dates) {
+            dates = dates.sort((a, b) => {
+                return new Date(b).valueOf() - new Date(a).valueOf()
+            })
+        }
+
         var RowsOther = [
             "port_succ",
             "start_frame_succ",
