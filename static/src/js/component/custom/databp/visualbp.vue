@@ -116,7 +116,13 @@
 
 				// 修正重定向
 				let $iframewin = iframenode.contentWindow;
-				_this.bpConfig.pageUrl = $iframewin.$pageUrl;
+				let _newurl= $iframewin.$pageUrl;
+				// 修复最后无/
+				if(_newurl.match(/^https:\/\/[^\/]+?\//)) {
+					_this.bpConfig.pageUrl = _newurl;
+				} else {
+					_this.bpConfig.pageUrl = _newurl + '/';
+				}
 				_this.bpConfig.platform = $iframewin.$platform;
 
 
