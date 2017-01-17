@@ -44,8 +44,11 @@ module.exports = (Router) => {
         //     cb(null, utils.globalPlatform(req.session.userInfo.type["69"], TypeObj));
         // },
         params(query, params){
-            if (params.type && params.type.toLowerCase() === 'all') {
-               delete params.type
+            // if (params.type && params.type.toLowerCase() === 'all') {
+            //    delete params.type
+            // }
+            if (!params.type) {
+                params.type = 'ALL'
             }
             return params;
         },
@@ -65,8 +68,11 @@ module.exports = (Router) => {
         params(query, params) {
             params.search_keyword = orm.not_in(["ALL"]);
 
-            if (params.type && params.type.toLowerCase() === 'all') {
-               delete params.type
+            // if (params.type && params.type.toLowerCase() === 'all') {
+            //    delete params.type
+            // }
+            if (!params.type) {
+                params.type = 'ALL'
             }
 
             return params;
