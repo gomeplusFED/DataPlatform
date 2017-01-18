@@ -13,6 +13,19 @@ let eventproxy = require("eventproxy");
 module.exports = (Router) => {
    
     //社交数据总览
+
+//     select `key`,sum(`value`) as value from tbl_soc_statistics
+// where date='2017-01-17' and `key` in
+// (
+//                 "group_num",
+//                 "group_persons_num",
+//                 "del_group_num",
+//                 "all_topic_num",
+//                 "topic_reply_num",
+//                 "topic_praise_num",
+//                 "topic_collect_num"
+// )
+// group by `key`;
     Router.get("/socialAnalysis/totalOne_json" , (req , res , next)=>{
         let query = req.query;
         let ep = new eventproxy();
