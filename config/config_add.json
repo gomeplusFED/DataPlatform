@@ -307,6 +307,18 @@
                         "title": "数据总览",
                         "query_api": "/IM/using_one",
                         "mark": 1484636208559
+                    },
+                    {
+                        "type": "chart",
+                        "title": "数据趋势",
+                        "query_api": "/IM/using_Two",
+                        "mark": 1484706492749
+                    },
+                    {
+                        "type": "chart",
+                        "title": "IM使用情况",
+                        "query_api": "/IM/using_Three",
+                        "mark": 1484721268810
                     }
                 ]
             }

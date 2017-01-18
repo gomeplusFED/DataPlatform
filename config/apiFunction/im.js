@@ -145,7 +145,7 @@ module.exports = {
                         useObj = Tobj2;
                     }
 
-                    for(let key of useObj){
+                    for(let key in useObj){
                         if(item[key]){
                             useObj[key] = item[key];
                         }
@@ -172,21 +172,218 @@ module.exports = {
                 });
             });
         }
+    },
+
+
+    //使用分析-数据趋势
+    im_using_two_api(Obj){
+        let Component = {
+            date_picker:{
+                name : "startTime",
+                endname: "endTime",
+                defaultData     : 7,
+                show            : true,
+            },
+            toggle : {
+                show : true
+            },
+            filter_select : [
+                {
+                    title: '指标',
+                    filter_key: 'message_type',
+                    groups : [
+                        {
+                            key: "number",
+                            value: '发消息数'
+                        },
+                        {
+                            key: "human",
+                            value: '发消息人数'
+                        }
+                    ]
+                }
+            ]
+        };
+        let Text = [
+            "日期",
+            "总发消息数",
+            "总发消息人数",
+            "单发消息数",
+            "单发消息人数",
+            "群发消息数",
+            "群发消息人数"
+        ];
+        return (req , res , next) => {
+            let query = req.query;
+            if(!query.startTime){
+                res.json({
+                    code: 200,
+                    components: Component,
+                    modelData: [],
+                });
+                return;
+            }
+            let dates = util.times(query.startTime, query.endTime, "1");
+            
+            req.models.ImDetail.find({
+                date : orm.between(query.startTime , query.endTime),
+                day_type: query.day_type
+            } , (err , data) => {
+                let map;
+                if(query.message_type == "number"){
+                    map = {
+                        "single_mess_pv" : "单聊",
+                        "group_mess_pv"  : "群聊"
+                    }
+                }else{
+                    map = {
+                        "single_mess_uv" : "单聊",
+                        "group_mess_uv"  : "群聊"
+                    }
+                }
+                let Result = util.ChartData(dates , Object.keys(map));
+                //加载数据
+                for(let item of data){
+                    item.date = util.getDate(item.date);
+                    if(Result[item.date]){
+                        for(let key in map){
+                            Result[item.date][key] += item[key];
+                        }
+                    }
+                }
+
+                let DATA = [{
+                    type : "bar",
+                    map : map,
+                    data : Result,
+                    config: { // 配置信息
+                        stack: true,  // 图的堆叠
+                        categoryY : true
+                    }
+                }];
+
+                if(query.main_show_type_filter == "table"){
+                    let obj = {};
+                    Obj.rows[0].map((item , index) => {
+                        obj[item] = Text[index];
+                    });
+                    data.unshift(obj);
+                    DATA = util.toTable([data] , Obj.rows , Obj.cols);
+                }
+
+                res.json({
+                    code: 200,
+                    components: Component,
+                    modelData: DATA,
+                });
+            });
+                
+        }
+    },
+
+    //使用分析--IM使用情况
+    im_using_three_api(OBJ){
+        let Component = {
+            date_picker:{
+                name : "startTime",
+                endname: "endTime",
+                defaultData     : 7,
+                show            : true,
+            },
+            toggle : {
+                show : true
+            },
+            filter_select : []
+        };
+        let Text = [
+            "日期",
+            "总发消息数",
+            "总发消息人数",
+            "单发消息数",
+            "单发消息人数",
+            "群发消息数",
+            "群发消息人数"
+        ];
+        return (req , res , next) => {
+            let query = req.query;
+            if(!query.startTime){
+                res.json({
+                    code: 200,
+                    components: Component,
+                    modelData: [],
+                });
+                return;
+            }
+            let dates = util.times(query.startTime , query.endTime, "1");
+            
+            req.models.ImDetail.find({
+                date : orm.between(query.startTime , query.endTime),
+                day_type: query.day_type
+            } , (err , data) => {
+                // "IM使用占比",
+                // "新增使用占比",
+                // "群活跃度",
+                // "设置免打扰次数",
+                // "表情下载次数"
+                let Arr1 = ["IM使用占比" , "新增使用占比", "群活跃度"];
+                let map = {
+                    "IM使用占比" : "IM使用占比",
+                    "新增使用占比": "新增使用占比",
+                    "群活跃度"   : "群活跃度",
+                    "set_group_shield_pv" : "设置免打扰次数",
+                    "face_load_pv" : "表情下载次数"
+                };
+                let Result = util.ChartData(dates , Object.keys(map));
+                // 加载数据
+                for(let item of data){
+                    item.date = util.getDate(item.date);
+                    if(Result[item.date]){
+                        let Useobj = Result[item.date];
+                        for(let key in map){
+                            switch(key){
+                                case "IM使用占比":
+                                Useobj[key] = util.numberLeave( item.total_mess_uv / (item.app_dau || 1) , 2 );
+                                break;
+                                case "新增使用占比":
+                                 Useobj[key] = util.numberLeave( item.im_register_users / (item.register_users || 1) , 2 );
+                                break;
+                                case "群活跃度":
+                                 Useobj[key] = util.numberLeave( item.group_mess_pv / (item.group_member_count || 1) , 2 );
+                                break;
+                                default:
+                                Useobj[key] += item[key];
+                            }
+                        }
+                    }
+                }
+
+                let DATA = [{
+                    type : "line",
+                    map : map,
+                    data : Result,
+                    config: { // 配置信息
+                        stack: false,  // 图的堆叠
+                        categoryY : false
+                    }
+                }];
+
+                if(query.main_show_type_filter == "table"){
+                    let obj = {};
+                    Obj.rows[0].map((item , index) => {
+                        obj[item] = Text[index];
+                    });
+                    data.unshift(obj);
+                    DATA = util.toTable([data] , Obj.rows , Obj.cols);
+                }
+
+                res.json({
+                    code: 200,
+                    components: Component,
+                    modelData: DATA,
+                });
+            });
+        }
     }
 
-    //使用分析，数据总览
-    // im_using_one_api(obj){
-    //     return (req , res , next) => {
-            // let query = req.query;
-
-            // let date = util.beforeDate(query.startTime , query.day_type , 2);
-            // console.log(date);
-            /*req.models.ImDetail.find({
-                date        : orm.between(query.startTime , query.endTime),
-                day_type    : query.day_type,
-            });*/
-
-            
-    //     }
-    // }
+   
 }

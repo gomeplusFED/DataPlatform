@@ -18,7 +18,7 @@
         "names": "数据总览",
         "singleApi": true,
         "singleFn": "im_using_one_api",
-        "rows" : [
+        "rows": [
             [
                 "Date",
                 "total_mess_pv",
@@ -28,7 +28,6 @@
                 "android_mess_pv",
                 "android_mess_uv"
             ],
-
             [
                 "Date",
                 "total_mess_pv",
@@ -44,68 +43,150 @@
                 "face_load_pv"
             ]
         ],
-        "cols" : [
-            [{
-                "caption" : "",
-                "type"    : "date"
-            }, {
-                "caption" : "总计发消息数",
-                "type"    : "number"
-            }, {
-                "caption" : "总计发消息人数",
-                "type"    : "number"
-            }, {
-                "caption" : "ios发消息数",
-                "type"    : "string"
-            }, {
-                "caption" : "ios发消息人数",
-                "type"    : "number"
-            }, {
-                "caption" : "Android发消息数",
-                "type"    : "number"
-            }, {
-                "caption" : "Android发消息人数",
-                "type"    : "number"
-            }]
-            ,
-
-            [{
-                "caption" : "",
-                "type"    : "date"
-            }, {
-                "caption" : "总计",
-                "type"    : "number"
-            }, {
-                "caption" : "",
-                "type"    : "number"
-            }, {
-                "caption" : "单聊",
-                "type"    : "number"
-            }, {
-                "caption" : "",
-                "type"    : "number"
-            }, {
-                "caption" : "群聊",
-                "type"    : "number"
-            }, {
-                "caption" : "",
-                "type"    : "number"
-            }, {
-                "caption" : "使用情况",
-                "type"    : "number"
-            }, {
-                "caption" : "",
-                "type"    : "number"
-            }, {
-                "caption" : "",
-                "type"    : "number"
-            }, {
-                "caption" : "其他",
-                "type"    : "number"
-            }, {
-                "caption" : "",
-                "type"    : "number"
-            }]
+        "cols": [
+            [
+                {
+                    "caption": "",
+                    "type": "date"
+                },
+                {
+                    "caption": "总计发消息数",
+                    "type": "number"
+                },
+                {
+                    "caption": "总计发消息人数",
+                    "type": "number"
+                },
+                {
+                    "caption": "ios发消息数",
+                    "type": "string"
+                },
+                {
+                    "caption": "ios发消息人数",
+                    "type": "number"
+                },
+                {
+                    "caption": "Android发消息数",
+                    "type": "number"
+                },
+                {
+                    "caption": "Android发消息人数",
+                    "type": "number"
+                }
+            ],
+            [
+                {
+                    "caption": "",
+                    "type": "date"
+                },
+                {
+                    "caption": "总计",
+                    "type": "number"
+                },
+                {
+                    "caption": "",
+                    "type": "number"
+                },
+                {
+                    "caption": "单聊",
+                    "type": "number"
+                },
+                {
+                    "caption": "",
+                    "type": "number"
+                },
+                {
+                    "caption": "群聊",
+                    "type": "number"
+                },
+                {
+                    "caption": "",
+                    "type": "number"
+                },
+                {
+                    "caption": "使用情况",
+                    "type": "number"
+                },
+                {
+                    "caption": "",
+                    "type": "number"
+                },
+                {
+                    "caption": "",
+                    "type": "number"
+                },
+                {
+                    "caption": "其他",
+                    "type": "number"
+                },
+                {
+                    "caption": "",
+                    "type": "number"
+                }
+            ]
         ]
+    },
+    "1484706492749": {
+        "modelName": [],
+        "date_picker": true,
+        "order": [],
+        "platform": false,
+        "router": "/IM/using_Two",
+        "names": "数据趋势",
+        "singleApi": true,
+        "singleFn": "im_using_two_api",
+        "rows": [
+            [
+                "date",
+                "total_mess_pv",
+                "total_mess_uv",
+                "single_mess_pv",
+                "single_mess_uv",
+                "group_mess_pv",
+                "group_mess_uv"
+            ]
+        ],
+        "cols": [
+            [
+                {
+                    "caption": "",
+                    "type": "date"
+                },
+                {
+                    "caption": "总计",
+                    "type": "number"
+                },
+                {
+                    "caption": "",
+                    "type": "number"
+                },
+                {
+                    "caption": "单聊",
+                    "type": "number"
+                },
+                {
+                    "caption": "",
+                    "type": "number"
+                },
+                {
+                    "caption": "群聊",
+                    "type": "number"
+                },
+                {
+                    "caption": "",
+                    "type": "number"
+                }
+            ]
+        ]
+    },
+    "1484721268810": {
+        "modelName": [],
+        "date_picker": false,
+        "order": [],
+        "platform": false,
+        "router": "/IM/using_Three",
+        "names": "IM使用情况",
+        "singleApi": true,
+        "singleFn": "im_using_three_api"
     }
 }
