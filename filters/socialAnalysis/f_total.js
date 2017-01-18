@@ -7,13 +7,82 @@
 var util = require("../../utils"),
     moment = require("moment");
 
+
+let rows = [
+            [
+                "group_num",
+                "group_persons_num",
+                "userin_lv",
+                "del_group_num",
+                "all_topic_num",
+                "topic_reply_num"
+            ],
+            [
+                "reply_lv",
+                "topic_praise_num",
+                "累计点赞用户数",
+                "topic_collect_num",
+                "累计收藏用户数",
+                "累计选择兴趣点人数"
+            ],
+            [
+                "累计邀请好友注册成功人数"
+            ]
+        ],
+    cols = [
+            [{
+                caption: "累计圈子数",
+                type: "number"
+            }, {
+                caption: "累计入圈用户数",
+                type: "number"
+            }, {
+                caption: "用户入圈率",
+                type: "number"
+            }, {
+                caption: "累计解散圈子数",
+                type: "number"
+            }, {
+                caption: "累计话题数",
+                type: "number"
+            }, {
+                caption: "累计回复次数",
+                type: "number"
+            }],
+            [{
+                caption: "话题回复率",
+                type: "number"
+            }, {
+                caption: "累计点赞数",
+                type: "number"
+            }, {
+                caption: "累计点赞用户数",
+                type: "number"
+            }, {
+                caption: "累计收藏数",
+                type: "number"
+            }, {
+                caption: "累计收藏用户数",
+                type: "number"
+            }, {
+                caption: "累计选择兴趣点人数",
+                type: "number"
+            }],
+            [{
+                caption: "累计邀请好友注册成功人数",
+                type : "number"
+            }]
+        ];
+
+
+
 module.exports = {
 
     totalOne(data , query , dates) {
-        let source = data.first.data[0],
-            second = data.second.data[0],
-            third  = data.third.data[0];
-        let Rows = util.megerArray([] , data.rows), Result = {};
+        let source = data[0],
+            second = data[1],
+            third  = data[2];
+        let Rows = util.megerArray([] , rows), Result = {};
         for(let key of Rows){
             Result[key] = 0;
         }
@@ -37,7 +106,7 @@ module.exports = {
         Result.userin_lv = util.toFixed( Result.group_persons_num , registeruserallcount );
         Result.reply_lv = util.toFixed( replytopicallcount , Result.all_topic_num );
 
-        return util.toTable([[Result],[Result],[Result]], data.rows, data.cols , null , [true , true , true]);
+        return util.toTable([[Result],[Result],[Result]], rows, cols , null , [true , true , true]);
     },
 
     totalTwo(data , query , dates) {
