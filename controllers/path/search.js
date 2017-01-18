@@ -16,11 +16,11 @@ module.exports = {
                     type : "table",
                     title: "商品搜索大盘指标",
                     query_api : "/search/indexOne"
-                //},
-                //{
-                //    type : "chart",
-                //    title: "商品搜索大盘趋势图",
-                //    query_api : "/search/indexTwo"
+                },
+                {
+                    type : "chart",
+                    title: "商品搜索大盘趋势图",
+                    query_api : "/search/indexTwo"
                 }
             ]
         }

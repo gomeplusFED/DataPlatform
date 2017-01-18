@@ -45,6 +45,7 @@ module.exports = {
 
         for(let key of source) {
             key.date = util.moment(key.date);
+            key.search_order_sum_pay = (key.search_order_sum_pay / 100).toFixed(2);
             //点击次数转化率
             key.one_one = util.toFixed(key.search_prodet_ipv, key.search_result_pv);
             //点击人数转化率
@@ -74,6 +75,31 @@ module.exports = {
             }
         }
 
+        obj.search_order_sum_pay = obj.search_order_sum_pay || "0.00";
+        obj2.search_order_sum_pay = obj2.search_order_sum_pay || "0.00";
+        obj.one_one = obj.one_one || "0.00%";
+        obj.one_two = obj.one_two || "0.00%";
+        obj.two_one = obj.two_one || "0.00%";
+        obj.two_two = obj.two_two || "0.00%";
+        obj.three_one = obj.three_one || "0.00%";
+        obj.three_two = obj.three_two || "0.00%";
+        obj.four_one = obj.four_one || "0.00%";
+        obj.four_two = obj.four_two || "0.00%";
+        obj.four_three = obj.four_three || "0.00%";
+        obj.four_four = obj.four_four || "0.00";
+        obj.four_five = obj.four_five || "0.00";
+        obj2.one_one = obj2.one_one || "0.00%";
+        obj2.one_two = obj2.one_two || "0.00%";
+        obj2.two_one = obj2.two_one || "0.00%";
+        obj2.two_two = obj2.two_two || "0.00%";
+        obj2.three_one = obj2.three_one || "0.00%";
+        obj2.three_two = obj2.three_two || "0.00%";
+        obj2.four_one = obj2.four_one || "0.00%";
+        obj2.four_two = obj2.four_two || "0.00%";
+        obj2.four_three = obj2.four_three || "0.00%";
+        obj2.four_four = obj2.four_four || "0.00";
+        obj2.four_five = obj2.four_five || "0.00";
+
         let gap = Computer(obj, obj2, data.rows);
 
         obj.date = obj.date || start;
@@ -83,110 +109,22 @@ module.exports = {
         return util.toTable([newData, newData, newData, newData], data.rows, data.cols);
     },
 
-    indexTwo(data , query , dates){
+    indexTwo(data, dates){
         let source = data.first.data[0];
-        let keys = ["search_result_pv", "search_result_uv", "search_prodet_ipv" , "search_prodet_ipv_uv",
-            "search_avg_turnpage",
-            "search_avg_respage_staytime",
-            "search_avg_prodeta_staytime",
-            "search_order_sum" , "search_order_uv", "search_order_spu" , "5_ipv_uv_lv" , "6_uv_lv" , "7_ipv_lv" , "8_ctr"
-            ];
-
-        let Values = [
-            {
-                caption : "PV",
-                type    : "number",
-                help    : "搜索结果页浏览量"
-            }, {
-                caption : "UV",
-                type    : "number",
-                help    : "搜索的独立访客数(搜索结果页)"
-            }, {
-                caption : "IPV",
-                type    : "number",
-                help    : "搜索引导的商品详情页的浏览次数"
-            }, {
-                caption : "IPV_UV",
-                type    : "number",
-                help    : "搜索引导的商品详情页的访问用户数"
-            }, {
-                caption : "平均翻页数",
-                type    : "number",
-                help    : "PV维度，去掉搜索无结果和异常情况"
-            }, {
-                caption : "平均停留时长(s)/页",
-                type    : "number",
-                help    : "PV维度，去掉搜索无结果和异常情况(未加载出结果页)"
-            }, {
-                caption : "平均停留时长(s)/商品详情页",
-                type    : "number",
-                help    : "IPV维度，去掉异常情况(未加载出商品)"
-            },
-
-
-            {
-                caption : "GMV/成交金额",
-                type    : "number",
-                help    : "搜索引导的直接成交额(立即购买、加购、收藏)" 
-            }, {
-                caption : "成交UV",
-                type    : "number",
-                help    : "有搜索引导成交记录的用户数"
-            }, {
-                caption : "成交笔数",
-                type    : "number",
-                help    : "搜索引导成交的子订单总数" 
-            }, {
-                caption : "IPV_UV转化率",
-                type    : "number",
-                help    : "来国美+搜索的UV，点击了搜索结果的用户占比",
-                comment : "5_ipv_uv_lv"
-            }, {
-                caption : "UV成交转化率",
-                type    : "number",
-                help    : "来国美+搜索的UV，最终通过搜索结果成交的用户占比",
-                comment : "6_uv_lv"
-            }, {
-                caption : "IPV-成交转化率",
-                type    : "number",
-                help    : "来国美+搜索的UV，通过点击搜索结果的IPV成交的用户占比",
-                comment : "7_ipv_lv"
-            }, {
-                caption : "CTR",
-                type    : "number",
-                help    : "搜索产生的IPV占搜索展示的商品总数的比例",
-                comment : "8_ctr"
-            }
-
-        ];
+        const type = "line";
         let map = {};
         let newData = {};
-
-        for(let i=0;i<keys.length;i++){
-            map[keys[i]] = Values[i].caption;
-        }
-
-        for(let date of dates){
-            let obj = {};
-            newData[date] = obj;
-            for(let key of keys){
-                obj[key] = 0;
-            }
-        }
-
-        for(let item of source){
-            item.date = utils.getDate(item.date);
-            //补全没有的字段
-            item["5_ipv_uv_lv"] = utils.numberLeave( item.search_prodet_ipv_uv / item.search_result_uv  , 3);
-            item["6_uv_lv"] = utils.numberLeave( item.search_order_uv / item.search_result_uv  , 3);
-            item["7_ipv_lv"] = utils.numberLeave( item.search_order_uv / item.search_prodet_ipv_uv  , 3);
-            item["8_ctr"] = utils.numberLeave( item.search_prodet_ipv / item.search_exposure_product_num  , 3);
-
-            newData[item.date] = item;
-        }
+        const keys = [
+            ["search_result_pv", "search_result_uv", "search_prodet_ipv", "search_prodet_ipv_uv",
+                "search_order_uv", "search_order_uv_pay"],
+            ["one", "search_order_spu", "search_order_com", "search_order_total", "search_order_sum_pay",
+                "search_order_spu_pay", "search_order_com_pay", "search_order_total_pay"],
+            ["two", "three", "four", "five", "six", "seven", "night", "eight", "ten",
+                "search_avg_turnpage", "one_one", "one_two"]
+        ];
 
         return [{
-            type : "line",
+            type : type,
             map : map,
             data : newData,
             config: { // 配置信息

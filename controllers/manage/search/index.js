@@ -34,7 +34,7 @@ module.exports = (Router)=>{
     //商品搜索大盘指标
     Router = new api(Router , {
         router : "/search/indexOne",
-        modelName : ["SearchAnalyse"],
+        modelName : ["SearchAnalyseNew"],
         platform : false,
         date_picker_data : 1,
         // showDayUnit: true,
@@ -198,7 +198,7 @@ module.exports = (Router)=>{
     //商品搜索大盘指标趋势图
     Router = new api(Router , {
         router : "/search/indexTwo",
-        modelName : ["SearchAnalyse"],
+        modelName : ["SearchAnalyseNew"],
         platform : false,
         order : ["-date"],
         params : function(query , params , sendData){
@@ -208,8 +208,8 @@ module.exports = (Router)=>{
         selectFilter(req, cb) {
             cb(null, utils.globalPlatform(req.session.userInfo.type["68"], filter_select));
         },
-        filter (data , query , dates){
-            return filter.indexTwo(data , query , dates);
+        filter (data, query){
+            return filter.indexTwo(data, utils.timesTwo(query.startTime, query.endTime, "1"));
         }
     });
 
