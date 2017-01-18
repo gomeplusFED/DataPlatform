@@ -107,6 +107,8 @@ var DateCom = Vue.extend({
                 }
                 if(this.customOption) {
                     Object.assign(options, this.customOption);
+                    this.argvs.endTime = options.endDate;
+                    this.argvs.startTime = options.startDate;
                 }
                 $('#datePicker_' + this.index).find('input').daterangepicker(options);
                 $('#datePicker_' + this.index).find('input').on('cancel.daterangepicker',function(ev, picker){
