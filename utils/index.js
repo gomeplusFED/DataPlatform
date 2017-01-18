@@ -220,7 +220,7 @@ exports.toFixedLength = function(one, two, length=4) {
 }
 
 exports.percentage = function(one, two) {
-    return (one / (two === 0 ? 1 : two) * 100).toFixed(2);
+    return (one / (Math.ceil(two) === 0 ? 1 : two) * 100).toFixed(2);
 };
 
 exports.toRound = function(one, two) {
