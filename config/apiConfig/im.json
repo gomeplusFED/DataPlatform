@@ -187,6 +187,45 @@
         "router": "/IM/using_Three",
         "names": "IM使用情况",
         "singleApi": true,
-        "singleFn": "im_using_three_api"
+        "singleFn": "im_using_three_api",
+        "rows": [
+            [
+                "date",
+                "total_mess_pv",
+                "total_mess_uv",
+                "single_mess_pv",
+                "single_mess_uv",
+                "group_mess_pv",
+                "group_mess_uv"
+            ]
+        ],
+        "cols": [
+            [
+                {
+                    "caption": "",
+                    "type": "date"
+                },
+                {
+                    "caption": "使用情况",
+                    "type": "number"
+                },
+                {
+                    "caption": "",
+                    "type": "number"
+                },
+                {
+                    "caption": "",
+                    "type": "number"
+                },
+                {
+                    "caption": "其他",
+                    "type": "number"
+                },
+                {
+                    "caption": "",
+                    "type": "number"
+                }
+            ]
+        ]
     }
 }

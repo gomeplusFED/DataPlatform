@@ -367,14 +367,14 @@ module.exports = {
                     }
                 }];
 
-                if(query.main_show_type_filter == "table"){
-                    let obj = {};
-                    Obj.rows[0].map((item , index) => {
-                        obj[item] = Text[index];
-                    });
-                    data.unshift(obj);
-                    DATA = util.toTable([data] , Obj.rows , Obj.cols);
-                }
+                // if(query.main_show_type_filter == "table"){
+                //     let obj = {};
+                //     Obj.rows[0].map((item , index) => {
+                //         obj[item] = Text[index];
+                //     });
+                //     data.unshift(obj);
+                //     DATA = util.toTable([data] , Obj.rows , Obj.cols);
+                // }
 
                 res.json({
                     code: 200,
