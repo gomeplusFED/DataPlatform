@@ -13,6 +13,19 @@ let eventproxy = require("eventproxy");
 module.exports = (Router) => {
    
     //社交数据总览
+
+//     select `key`,sum(`value`) as value from tbl_soc_statistics
+// where date='2017-01-17' and `key` in
+// (
+//                 "group_num",
+//                 "group_persons_num",
+//                 "del_group_num",
+//                 "all_topic_num",
+//                 "topic_reply_num",
+//                 "topic_praise_num",
+//                 "topic_collect_num"
+// )
+// group by `key`;
     Router.get("/socialAnalysis/totalOne_json" , (req , res , next)=>{
         let query = req.query;
         let ep = new eventproxy();
@@ -35,9 +48,21 @@ module.exports = (Router) => {
             return;
         }
 
-        req.models.Statistics.find({
-            date        : date,
-        } , (err , data) => {
+        // req.models.Statistics.find({
+        //     date        : date,
+        // } , (err , data) => {
+        //     ep.emit("one"  , data);
+        // });
+
+        let keys = ["group_num",
+                "group_persons_num",
+                "del_group_num",
+                "all_topic_num",
+                "topic_reply_num",
+                "topic_praise_num",
+                "topic_collect_num"];
+        req.models.db1.driver.execQuery("select `key`,sum(`value`) as value from tbl_soc_statistics where date=? and `key` in ? group by `key`" , [date , keys] , (err , data)=>{
+            // console.log(data);
             ep.emit("one"  , data);
         });
 
