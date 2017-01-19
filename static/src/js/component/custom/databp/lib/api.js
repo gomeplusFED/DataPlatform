@@ -205,7 +205,7 @@ var api = {
 		}).catch(errHandler);
 	},
 	getHeatDetail(data) {
-		return buildAjax('/pointHeatList/detail', filterArgs(data, ['pageUrl', 'platform', 'pointId', 'startTime', 'endTime', 'pattern', 'isActive', 'type'])).then(function(res) {
+		return buildAjax('/pointHeatList/detail', filterArgs(data, ['pageUrl', 'platform', 'pointId', 'startTime', 'endTime', 'pattern', 'uniquePoint', 'isActive', 'type'])).then(function(res) {
 			if(res.code !== '200' || res.iserror !== '0') {
 				return Promise.reject('获取热力趋势信息失败：' + res.msg);
 			}
