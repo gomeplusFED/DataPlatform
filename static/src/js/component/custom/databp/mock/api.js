@@ -135,23 +135,23 @@ var api = {
                 "result": [{
                     "id": 50,
                     "pageUrl": "https://mall.gomeplus.com/item/2016-11042.html",
-                    "selector": "<div/>2",
-                    "pointName": "埋点2",
+                    "selector": "html > body > div.footer > div:first-child > dl:first-child+dl > dt:first-child+dd > a",
+                    "pointName": "社会",
                     "pointParam": "uid=1",
                     "createTime": 1478239758000,
                     "updateTime": 1478239758000,
-                    "platform": "H5",
+                    "platform": "PC",
                     "isActive": "1",
                     "uniquePoint": "1"
                 }, {
                     "id": 50,
-                    "pageUrl": "https://mall.gomeplus.com/item/2016-11042.html",
-                    "selector": "<div/>2",
-                    "pointName": "埋点2",
+                    "pageUrl": "https://www.gomeplus.com/",
+                    "selector": "html > body > div.wrap-box > div:first-child > div:first-child+div > ul > li:first-child+li > div > div:first-child+div+div > a",
+                    "pointName": "wanbiao",
                     "pointParam": "uid=1",
                     "createTime": 1478239758000,
                     "updateTime": 1478239758000,
-                    "platform": "H5",
+                    "platform": "PC",
                     "isActive": "1",
                     "uniquePoint": "1"
                 }, {

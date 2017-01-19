@@ -61,18 +61,18 @@
 			<tbody> 
 				<tr v-for="(i, item) in dataList">
 					<td>{{i + baseIndex}}</td>
-					<td>{{item.pointName}}</td>
+					<td title="{{item.pointName}}">{{item.pointName}}</td>
 					<td>单击</td>
 					<td title="{{item.type}}">{{item.type === 'block' ? '是' : '否'}}</td>
 					<td title="{{item.pageUrl}}"><a @click="heatmap(item)">{{item.pageUrl}}</a></td>
 					<td title="{{item.pattern}}">{{item.pattern || '-'}}</td>
 					<td title="{{item.pointParam}}">{{item.pointParam || '-'}}</td>
 					<td title="{{item.userInfo?(item.userInfo.department + item.userInfo.email) : '--'}}">{{item.userInfo.name || '--'}}</td>
-					<td>{{item.updateTime |Date 'yyyy-MM-dd hh:mm:ss'}}</td>
-					<td><a @click="edit(item)">修改</a>&nbsp<a v-if="item.isActive === '1'" @click="del(item)">删除</a><a v-else @click="restore(item)">恢复</a></td>
+					<td title="{{item.updateTime |Date 'yyyy-MM-dd hh:mm:ss'}}">{{item.updateTime |Date 'yyyy-MM-dd hh:mm:ss'}}</td>
+					<td><a v-if="item.uniquePoint !== '2'" @click="edit(item)">修改</a>&nbsp<a v-if="item.isActive === '1'" @click="del(item)">删除</a><a v-else @click="restore(item)">恢复</a></td>
 				</tr>
 				<tr v-show="noData">
-					 <td colspan="7">暂无数据</td>
+					 <td colspan="10">暂无数据</td>
 				 </tr>
 			</tbody>
 		</table>

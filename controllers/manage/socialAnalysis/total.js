@@ -8,100 +8,126 @@ var api = require("../../../base/main"),
     filter = require("../../../filters/socialAnalysis/f_total"),
     util = require("../../../utils"),
     orm  = require("orm");
+let eventproxy = require("eventproxy");
 
 module.exports = (Router) => {
    
     //社交数据总览
-    Router = new api(Router, {
-        router : "/socialAnalysis/totalOne",
-        modelName : ["Statistics" , "ads2_soc_group" , "ads2_soc_group_topic"],
-        platform : false,
-        date_picker : false,
-        params(query , params , sendData){
-            params.date = util.beforeDate(new Date() , 2)[1];
-            delete params.day_type;
-            return params;
-        },
-        secondParams(query , params , sendData){
 
-            params.day_type = 1;
-            params.ver = 0;
-            params.channel = 0;
-            params.type = "ALL"; 
-            return params;
-        },
-        thirdParams(query , params , sendData){
-            return params;
-        },
-        filter(data, query, dates) {
-            return filter.totalOne(data , query , dates);
-        },
-        rows: [
-            [
-                "group_num",
+//     select `key`,sum(`value`) as value from tbl_soc_statistics
+// where date='2017-01-17' and `key` in
+// (
+//                 "group_num",
+//                 "group_persons_num",
+//                 "del_group_num",
+//                 "all_topic_num",
+//                 "topic_reply_num",
+//                 "topic_praise_num",
+//                 "topic_collect_num"
+// )
+// group by `key`;
+    Router.get("/socialAnalysis/totalOne_json" , (req , res , next)=>{
+        let query = req.query;
+        let ep = new eventproxy();
+        let date = util.beforeDate(new Date() , 2)[1];
+
+        if(Object.keys(query).length == 0){
+            res.json({
+                code: 200,
+                components: {
+                    date_picker:{
+                        show: false, 
+                    },
+                    drop_down:{
+                        channel : false
+                    },
+                    filter_select : []
+                },
+                modelData: [],
+            });
+            return;
+        }
+
+        // req.models.Statistics.find({
+        //     date        : date,
+        // } , (err , data) => {
+        //     ep.emit("one"  , data);
+        // });
+
+        let keys = ["group_num",
                 "group_persons_num",
-                "userin_lv",
                 "del_group_num",
                 "all_topic_num",
-                "topic_reply_num"
-            ],
-            [
-                "reply_lv",
+                "topic_reply_num",
                 "topic_praise_num",
-                "累计点赞用户数",
-                "topic_collect_num",
-                "累计收藏用户数",
-                "累计选择兴趣点人数"
-            ],
-            [
-                "累计邀请好友注册成功人数"
-            ]
-        ],
-        cols: [
-            [{
-                caption: "累计圈子数",
-                type: "number"
-            }, {
-                caption: "累计入圈用户数",
-                type: "number"
-            }, {
-                caption: "用户入圈率",
-                type: "number"
-            }, {
-                caption: "累计解散圈子数",
-                type: "number"
-            }, {
-                caption: "累计话题数",
-                type: "number"
-            }, {
-                caption: "累计回复次数",
-                type: "number"
-            }],
-            [{
-                caption: "话题回复率",
-                type: "number"
-            }, {
-                caption: "累计点赞数",
-                type: "number"
-            }, {
-                caption: "累计点赞用户数",
-                type: "number"
-            }, {
-                caption: "累计收藏数",
-                type: "number"
-            }, {
-                caption: "累计收藏用户数",
-                type: "number"
-            }, {
-                caption: "累计选择兴趣点人数",
-                type: "number"
-            }],
-            [{
-                caption: "累计邀请好友注册成功人数",
-                type : "number"
-            }]
-        ]
+                "topic_collect_num"];
+        req.models.db1.driver.execQuery("select `key`,sum(`value`) as value from tbl_soc_statistics where date=? and `key` in ? group by `key`" , [date , keys] , (err , data)=>{
+            // console.log(data);
+            ep.emit("one"  , data);
+        });
+
+        let Condition = {
+            date        : date,
+            day_type    : query.day_type || 1,
+            ver         : 0,
+            channel     : 0,
+            type        : "ALL"
+        };
+
+        req.models.ads2_soc_group.find(Condition , (err , data) => {
+            ep.emit("two" , data);
+        });
+        
+        req.models.ads2_soc_group_topic.find(Condition , (err , data)=>{
+            ep.emit("three" , data);
+        });
+
+        ep.all("one" , "two" , "three" , (one , two , three) =>{
+            let ss = filter.totalOne([one , two , three] , query);
+            res.json({
+                code: 200,
+                components: {
+                    date_picker:{
+                        show: false, 
+                        defaultData: 7,
+                        name : "startTime",
+                        endname: "endTime"
+                    },
+                    filter_select : []
+                },
+                modelData: ss,
+            });
+        }); 
     });
+
+
+
+    // Router = new api(Router, {
+    //     router : "/socialAnalysis/totalOne",
+    //     modelName : ["Statistics" , "ads2_soc_group" , "ads2_soc_group_topic"],
+    //     platform : false,
+    //     date_picker : false,
+    //     params(query , params , sendData){
+    //         params.date = util.beforeDate(new Date() , 2)[1];
+    //         delete params.day_type;
+    //         return params;
+    //     },
+    //     secondParams(query , params , sendData){
+
+    //         params.day_type = 1;
+    //         params.ver = 0;
+    //         params.channel = 0;
+    //         params.type = "ALL"; 
+    //         return params;
+    //     },
+    //     thirdParams(query , params , sendData){
+    //         return params;
+    //     },
+    //     filter(data, query, dates) {
+    //         return filter.totalOne(data , query , dates);
+    //     },
+        
+    // });
 
 
 

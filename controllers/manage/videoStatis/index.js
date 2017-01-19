@@ -366,6 +366,11 @@ module.exports = (Router) => {
                 name: '直播'
             }]
         },
+        params: function (query, params) {
+            params.sdk_type = 'ALL';
+            params.ver = 'ALL';
+            return params;
+        },
         firstSql(query, params, isCount) {
             let date_type_list = ['', 'DAY', 'WEEK', 'MONTH']
             let config = ["date BETWEEN ? AND ?", "day_type=?"],
@@ -377,12 +382,12 @@ module.exports = (Router) => {
                 tablename = query.type === 'livevideo' ? 'ads2_livevideo_overview2' : 'ads2_videoplay_overview2'
             }
 
-            if (query.ver && query.ver!=='ALL') {
+            if (query.ver) {
                 config.push('ver=?')
                 param.push(query.ver)
             }
 
-            if (query.sdk_type && query.sdk_type!=='ALL') {
+            if (query.sdk_type) {
                 config.push('sdk_type = ?')
                 param.push(query.sdk_type)
             }
@@ -615,8 +620,8 @@ module.exports = (Router) => {
         },
         firstSql(query, params, isCount) {
             let date_type_list = ['', 'DAY', 'WEEK', 'MONTH']
-            let config = ["date BETWEEN ? AND ?", "day_type=?"],
-                param = [query.startTime, query.endTime, query.day_type || 1],
+            let config = ["date BETWEEN ? AND ?", "day_type=?", "sdk_type=?"],
+                param = [query.startTime, query.endTime, query.day_type || 1, "ALL"],
                 sql = '',
                 tablename = 'ads2_videoplay_overview2';
 
@@ -624,7 +629,7 @@ module.exports = (Router) => {
                 tablename = query.type === 'livevideo' ? 'ads2_livevideo_overview2' : 'ads2_videoplay_overview2'
             }
 
-            sql = `SELECT sum(play_user) as play_user, sum(play_num) as play_num
+            sql = `SELECT play_user, play_num
                 FROM ${tablename} 
                 WHERE ${config.join(" AND ")}`;
 
@@ -635,8 +640,8 @@ module.exports = (Router) => {
         },
         secondSql(query, params, isCount) {
             let date_type_list = ['', 'DAY', 'WEEK', 'MONTH']
-            let config = ["a.date BETWEEN ? AND ?", "a.day_type=?"],
-                param = [query.startTime, query.endTime, query.day_type || 1],
+            let config = ["a.date BETWEEN ? AND ?", "a.day_type=?", "a.sdk_type=?"],
+                param = [query.startTime, query.endTime, query.day_type || 1, "ALL"],
                 sql = '',
                 tablename = 'ads2_videoplay_overview2';
 
@@ -644,11 +649,11 @@ module.exports = (Router) => {
                 tablename = query.type === 'livevideo' ? 'ads2_livevideo_overview2' : 'ads2_videoplay_overview2'
             }
             sql = `SELECT 
-                    sum(a.play_num) as play_num, sum(a.port_succ) as port_succ, sum(a.start_frame_succ) as start_frame_succ, sum(a.stop_play_num) as stop_play_num, sum(a.play_fluent) as play_fluent,
-                    sum(b.port_succ) as port_succ_pre, sum(b.start_frame_succ) as start_frame_succ_pre, sum(b.stop_play_num) as stop_play_num_pre, sum(b.play_fluent) as play_fluent_pre
+                    a.play_num as play_num, a.port_succ as port_succ, a.start_frame_succ as start_frame_succ, a.stop_play_num as stop_play_num, a.play_fluent as play_fluent,
+                    b.port_succ as port_succ_pre, b.start_frame_succ as start_frame_succ_pre, b.stop_play_num as stop_play_num_pre, b.play_fluent as play_fluent_pre
                         FROM ${tablename} a
                          LEFT JOIN ${tablename} b 
-                        on a.day_type = b.day_type and b.date = DATE_ADD(a.date,INTERVAL -1 ${date_type_list[query.day_type || 1]})
+                        on a.day_type = b.day_type and b.sdk_type='ALL' and b.date = DATE_ADD(a.date,INTERVAL -1 ${date_type_list[query.day_type || 1]})
                         WHERE ${config.join(" AND ")}`;
             return {
                 sql: sql,
@@ -657,8 +662,8 @@ module.exports = (Router) => {
         },
         thirdSql(query, params, isCount) {
             let date_type_list = ['', 'DAY', 'WEEK', 'MONTH']
-            let config = ["a.date BETWEEN ? AND ?", "a.day_type=?"],
-                param = [query.startTime, query.endTime, query.day_type || 1],
+            let config = ["a.date BETWEEN ? AND ?", "a.day_type=?", "a.sdk_type=?"],
+                param = [query.startTime, query.endTime, query.day_type || 1, "ALL"],
                 sql = '',
                 tablename = 'ads2_videoplay_overview2';
 
@@ -666,11 +671,11 @@ module.exports = (Router) => {
                 tablename = query.type === 'livevideo' ? 'ads2_livevideo_overview2' : 'ads2_videoplay_overview2'
             }
             sql = `SELECT 
-                    sum(a.play_num) as play_num, sum(a.port_io_failed) as port_io_failed, sum(a.port_data_failed) as port_data_failed, sum(a.port_overtime) as port_overtime, sum(a.port_overtime) as port_overtime, sum(a.play_failed) as play_failed, sum(a.play_error) as play_error, sum(a.improper_play) as improper_play,
-                    sum(b.port_io_failed) as port_io_failed_pre, sum(b.port_data_failed) as port_data_failed_pre, sum(b.port_overtime) as port_overtime_pre, sum(b.port_overtime) as port_overtime_pre, sum(b.play_failed) as play_failed_pre, sum(b.play_error) as play_error_pre, sum(b.improper_play) as improper_play_pre
+                    a.play_num as play_num, a.port_io_failed as port_io_failed, a.port_data_failed as port_data_failed, a.port_overtime as port_overtime, a.port_overtime as port_overtime, a.play_failed as play_failed, a.play_error as play_error, a.improper_play as improper_play,
+                    b.port_io_failed as port_io_failed_pre, b.port_data_failed as port_data_failed_pre, b.port_overtime as port_overtime_pre, b.port_overtime as port_overtime_pre, b.play_failed as play_failed_pre, b.play_error as play_error_pre, b.improper_play as improper_play_pre
                         FROM ${tablename} a
                          LEFT JOIN ${tablename} b 
-                        on a.day_type = b.day_type and b.date = DATE_ADD(a.date,INTERVAL -1 ${date_type_list[query.day_type || 1]})
+                        on a.day_type = b.day_type and b.sdk_type='ALL' and b.date = DATE_ADD(a.date,INTERVAL -1 ${date_type_list[query.day_type || 1]})
                         WHERE ${config.join(" AND ")}`;
             return {
                 sql: sql,
@@ -841,25 +846,26 @@ module.exports = (Router) => {
             return filter.videoKpiThree(data, query, dates);
         },
         params: function (query, params) {
+            params.sdk_type = 'ALL'
             return params;
         },
         firstSql(query, params, isCount) {
-            let config = ["date BETWEEN ? AND ?", "day_type=?"],
-                param = [query.startTime, query.endTime, query.day_type || 1],
+            let config = ["date BETWEEN ? AND ?", "day_type=?", "ver=?"],
+                param = [query.startTime, query.endTime, query.day_type || 1, 'ALL'],
                 tablename = 'ads2_videoplay_overview2';
 
             if (query.type) {
                 tablename = query.type === 'livevideo' ? 'ads2_livevideo_overview2' : 'ads2_videoplay_overview2'
             }
 
-            if (query.sdk_app_type && query.sdk_app_type !== 'ALL') {
+            if (query.sdk_type) {
                 config.push('sdk_type = ?')
-                param.push(query.sdk_app_type)
+                param.push(query.sdk_type)
             }
 
             let sql = `SELECT 
-            date, sum(play_user) as play_user, sum(play_num) as play_num, sum(port_succ) as port_succ, sum(start_frame_succ) as start_frame_succ, sum(stop_play_num) as stop_play_num, sum(play_fluent) as play_fluent,
-            sum(port_io_failed) as port_io_failed, sum(port_data_failed) as port_data_failed, sum(port_overtime) as port_overtime, sum(port_overtime) as port_overtime, sum(play_failed) as play_failed, sum(play_error) as play_error, sum(improper_play) as improper_play
+            date, play_user as play_user, play_num as play_num, port_succ as port_succ, start_frame_succ as start_frame_succ, stop_play_num as stop_play_num, play_fluent as play_fluent,
+            port_io_failed as port_io_failed, port_data_failed as port_data_failed, port_overtime as port_overtime, port_overtime as port_overtime, play_failed as play_failed, play_error as play_error, improper_play as improper_play
                     FROM ${tablename}
                     WHERE ${config.join(" AND ")} group by date order by date desc`;
 
@@ -871,7 +877,7 @@ module.exports = (Router) => {
         filter_select: [
             {
                 title: "SDK选择",
-                filter_key: "sdk_app_type",
+                filter_key: "sdk_type",
                 groups: [
                     {
                         key: "ALL",

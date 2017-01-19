@@ -33,7 +33,7 @@ module.exports = (Router) => {
             }else{
                 params.category_id_2 = orm.not_in(["ALL"]);
             }
-            params.date = "2017-1-9";
+            // params.date = "2017-1-9";
 
             return params;
         },

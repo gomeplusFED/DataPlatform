@@ -134,9 +134,8 @@ var api = {
 		});
 	},
 	// {pointId, matchUrlId}
-	deleteBp({pointId, type}) {
-
-		return buildAjax(`/point?pointId=${pointId}&type=${type}`, null, 'delete').then(function(res) {
+	deleteBp({pointId, type, uniquePoint}) {
+		return buildAjax(`/point?pointId=${pointId}&type=${type}&uniquePoint=${uniquePoint}`, null, 'delete').then(function(res) {
 			if(res.code !== '200' || res.iserror !== '0') {
 				return Promise.reject('删除失败：' + res.msg);
 			}
@@ -149,8 +148,8 @@ var api = {
 			});
 		});
 	},
-	restoreBp({pointId, type}) {
-		return buildAjax('/restore', {pointId, type}, 'put').catch(errHandler).then(function(res) {
+	restoreBp({pointId, type, uniquePoint}) {
+		return buildAjax('/restore', {pointId, type, uniquePoint}, 'put').catch(errHandler).then(function(res) {
 			actions.alert(store, {
 				show: true,
 				msg: '恢复成功',
@@ -206,7 +205,7 @@ var api = {
 		}).catch(errHandler);
 	},
 	getHeatDetail(data) {
-		return buildAjax('/pointHeatList/detail', filterArgs(data, ['pageUrl', 'platform', 'pointId', 'startTime', 'endTime', 'pattern', 'isActive', 'type'])).then(function(res) {
+		return buildAjax('/pointHeatList/detail', filterArgs(data, ['pageUrl', 'platform', 'pointId', 'startTime', 'endTime', 'pattern', 'uniquePoint', 'isActive', 'type'])).then(function(res) {
 			if(res.code !== '200' || res.iserror !== '0') {
 				return Promise.reject('获取热力趋势信息失败：' + res.msg);
 			}
@@ -219,7 +218,7 @@ var api = {
 		}).catch(errHandler);
 	},
 	getHeatData(data){
-		return buildAjax('/heat', filterArgs(data, ['pageUrl', 'dateTime'])).then(function(res) {
+		return buildAjax('/heat', filterArgs(data, ['platform', 'pageUrl', 'dateTime'])).then(function(res) {
 			if(res.code !== '200' || res.iserror !== '0') {
 				return Promise.reject('获取埋点信息失败：' + res.msg);
 			}
@@ -227,7 +226,7 @@ var api = {
 			if (res && (data = res.data) && (data = data.result) && data.length) {
 				return data;
 			} else {
-				return Promise.reject('获取的热点信息为空');
+				return Promise.reject('暂无热点信息');
 			}
 		}).catch(errHandler);
 	}
