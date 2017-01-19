@@ -144,7 +144,7 @@
 							}
 							$target.addClass('bphover');
 							hovered.push($target);
-							let elemtop = $target.offset().top - 10;
+							let elemtop = $target.offset().top - 30;
 							let maxtop = $iframe.height() - $($iframewin).height();
 							if(elemtop >  maxtop) {
 								$body.animate({
