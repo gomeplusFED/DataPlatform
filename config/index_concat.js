@@ -15,7 +15,7 @@ const Jsons = fs.readdirSync(path.join(__dirname , "./apiConfig"));
 const Functions = fs.readdirSync(path.join(__dirname , "./apiFunction"));
 let AllFn = {};
 let FnProperty = ["filter" , "params" , "secondParams" , "thirdParams" , "fourthParams" ,
-    "fixedParams" , "selectFilter", "global_platform_filter", "singleFn"];
+    "fixedParams" , "selectFilter", "global_platform_filter", "singleFn" , "singleFn_excel"];
 
 
 //获取所有函数
@@ -53,6 +53,9 @@ for(let item of Jsons){
         let FUN = (Router) => {
             if(obj.singleApi){
                 Router.get(obj.router + "_json" , obj.singleFn(obj));
+                if(obj.singleApi_excel){
+                    Router.get(obj.router + "_excel" , obj.singleFn_excel(obj));
+                }
             }else{
                 Router = new api(Router , obj);
             }

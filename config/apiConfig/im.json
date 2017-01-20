@@ -191,12 +191,11 @@
         "rows": [
             [
                 "date",
-                "total_mess_pv",
-                "total_mess_uv",
-                "single_mess_pv",
-                "single_mess_uv",
-                "group_mess_pv",
-                "group_mess_uv"
+                "IM使用占比",
+                "新增使用占比",
+                "群活跃度",
+                "set_group_shield_pv",
+                "face_load_pv"
             ]
         ],
         "cols": [
@@ -224,6 +223,94 @@
                 {
                     "caption": "",
                     "type": "number"
+                }
+            ]
+        ]
+    },
+    "1484810139571": {
+        "modelName": [],
+        "date_picker": false,
+        "order": [],
+        "platform": false,
+        "router": "/IM/using_Four",
+        "names": "IM带来的交易",
+        "singleApi": true,
+        "singleFn": "im_using_four_api",
+        "rows": [
+            [
+                "A",
+                "B",
+                "C",
+                "D",
+                "E",
+                "F"
+            ]
+        ],
+        "cols": [
+            [
+                {
+                    "caption": "",
+                    "type": "string"
+                },
+                {
+                    "caption": "下单人数",
+                    "type": "number"
+                },
+                {
+                    "caption": "支付人数",
+                    "type": "number"
+                },
+                {
+                    "caption": "新增订单量",
+                    "type": "number"
+                },
+                {
+                    "caption": "支付订单量",
+                    "type": "number"
+                },
+                {
+                    "caption": "支付金额",
+                    "type": "number"
+                }
+            ]
+        ]
+    },
+    "1484895412110": {
+        "modelName": [],
+        "date_picker": false,
+        "order": [],
+        "platform": false,
+        "router": "/IM/using_Five",
+        "names": "圈子群活跃排行Top100",
+        "singleApi": true,
+        "singleApi_excel" : true,
+        "singleFn": "im_using_five_api",
+        "singleFn_excel" : "im_using_five_api_excel",
+        "rows": [
+            [
+                "group_name",
+                "group_member_count",
+                "group_mess_pv",
+                "群活跃度"
+            ]
+        ],
+        "cols": [
+            [
+                {
+                    "caption": "群名称",
+                    "type": "string"
+                },
+                {
+                    "caption": "群成员数",
+                    "type": "number"
+                },
+                {
+                    "caption": "群消息数",
+                    "type": "number"
+                },
+                {
+                    "caption": "群活跃度",
+                    "type": "string"
                 }
             ]
         ]

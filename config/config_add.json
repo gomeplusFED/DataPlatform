@@ -319,6 +319,18 @@
                         "title": "IM使用情况",
                         "query_api": "/IM/using_Three",
                         "mark": 1484721268810
+                    },
+                    {
+                        "type": "chart",
+                        "title": "IM带来的交易",
+                        "query_api": "/IM/using_Four",
+                        "mark": 1484810139571
+                    },
+                    {
+                        "type": "table",
+                        "title": "圈子群活跃排行Top100",
+                        "query_api": "/IM/using_Five",
+                        "mark": 1484895412110
                     }
                 ]
             }

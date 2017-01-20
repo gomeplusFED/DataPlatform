@@ -7,6 +7,9 @@ let util = require("../../utils"),
     moment = require("moment"),
     orm  = require("orm"),
     _ = require("lodash");
+let eventproxy = require("eventproxy"),
+    excelExport = require('../../utils/excelExport'),
+    nodeExcel = require('excel-export');
 
 // let cluster = global.cluster;
 // cluster.get("message:app:0112:notdisturb:count" , (err , result)=>{
@@ -27,6 +30,20 @@ let util = require("../../utils"),
 //     }
 // });
 // 
+
+
+let Component_Using = {
+    date_picker:{
+        name : "startTime",
+        endname: "endTime",
+        defaultData     : 7,
+        show            : true,
+    },
+    toggle : {
+        show : true
+    },
+    filter_select : []
+}
 
 
 
@@ -283,27 +300,7 @@ module.exports = {
 
     //使用分析--IM使用情况
     im_using_three_api(OBJ){
-        let Component = {
-            date_picker:{
-                name : "startTime",
-                endname: "endTime",
-                defaultData     : 7,
-                show            : true,
-            },
-            toggle : {
-                show : true
-            },
-            filter_select : []
-        };
-        let Text = [
-            "日期",
-            "总发消息数",
-            "总发消息人数",
-            "单发消息数",
-            "单发消息人数",
-            "群发消息数",
-            "群发消息人数"
-        ];
+        let Component = Component_Using;
         return (req , res , next) => {
             let query = req.query;
             if(!query.startTime){
@@ -320,11 +317,6 @@ module.exports = {
                 date : orm.between(query.startTime , query.endTime),
                 day_type: query.day_type
             } , (err , data) => {
-                // "IM使用占比",
-                // "新增使用占比",
-                // "群活跃度",
-                // "设置免打扰次数",
-                // "表情下载次数"
                 let Arr1 = ["IM使用占比" , "新增使用占比", "群活跃度"];
                 let map = {
                     "IM使用占比" : "IM使用占比",
@@ -367,14 +359,36 @@ module.exports = {
                     }
                 }];
 
-                // if(query.main_show_type_filter == "table"){
-                //     let obj = {};
-                //     Obj.rows[0].map((item , index) => {
-                //         obj[item] = Text[index];
-                //     });
-                //     data.unshift(obj);
-                //     DATA = util.toTable([data] , Obj.rows , Obj.cols);
-                // }
+                if(query.main_show_type_filter == "table"){
+                    let TextObj = {},Text = [
+                        "日期",
+                        "IM使用占比",
+                        "新增使用占比",
+                        "群活跃度",
+                        "设置免打扰次数",
+                        "表情下载次数"
+                    ] , arr2 = ["IM使用占比",
+                        "新增使用占比",
+                        "群活跃度"];
+                    OBJ.rows[0].map((item , index) => {
+                        TextObj[item] = Text[index];
+                    });
+                    let TableData = [TextObj];
+
+                    for(let key in Result){
+                        let obj = {};
+                        obj = Result[key];
+                        obj["date"] = key;
+                        for(let names in obj){
+                            if(arr2.includes(names)){
+                                obj[names] = util.toFixed(obj[names] , 0);
+                            }
+                        }
+                        TableData.push(obj);
+                    }
+
+                    DATA = util.toTable([TableData] , OBJ.rows , OBJ.cols);
+                }
 
                 res.json({
                     code: 200,
@@ -383,7 +397,250 @@ module.exports = {
                 });
             });
         }
-    }
+    },
 
-   
+
+    //使用分析--IM带来的交易
+    im_using_four_api(OBJ){
+        let Component = Component_Using;
+        let ArrSum = [
+            "order_users",
+            "order_times",
+            "paid_users",
+            "paid_times",
+            "paid_amount",
+            "im_order_users",
+            "im_order_times",
+            "im_paid_users",
+            "im_paid_times",
+            "im_paid_amount",
+            "im_group_order_users",
+            "im_group_order_times",
+            "im_group_paid_users",
+            "im_group_paid_times",
+            "im_group_paid_amount",
+            "im_single_order_users",
+            "im_single_paid_users"
+        ];
+        return (req , res , next) => {
+            let query = req.query;
+            if(!query.startTime){
+                res.json({
+                    code: 200,
+                    components: Component,
+                    modelData: [],
+                });
+                return;
+            }
+            let dates = util.times(query.startTime , query.endTime, "1");
+            let SQL = req.models.ads2_im_bring_transaction.aggregate();
+            for(let item of ArrSum){
+                SQL.sum(item);
+            }
+            let SqlResult = {};
+            let Deal100Columns = ["paid_amount" , "im_paid_amount" , "im_group_paid_amount"]
+            SQL.get((...values)=>{
+                if(values[0]){
+                    next(values[0]);
+                    return;
+                }
+                values.splice(0,1);
+                for(let i=0;i<values.length;i++){
+                    
+                    if(Deal100Columns.includes(ArrSum[i])){
+                        SqlResult[ArrSum[i]] = (values[i] || 0) / 100;
+                    }else{
+                        SqlResult[ArrSum[i]] = values[i] || 0;
+                    }
+                }
+
+                let map = {
+                    "not_im" : "非IM交易",
+                    "im"     : "IM交易"
+                }
+                let Result = util.ChartData(["下单人数" , "支付人数" , "新增订单量" , "支付订单量" , "支付金额"] , Object.keys(map));
+                Result["下单人数"].im = SqlResult["im_order_users"];
+                Result["下单人数"].not_im = SqlResult["order_users"] - SqlResult["im_order_users"];
+                Result["支付人数"].im = SqlResult["im_paid_users"];
+                Result["支付人数"].not_im = SqlResult["paid_users"] - SqlResult["im_paid_users"];
+                Result["新增订单量"].im = SqlResult["im_order_times"];
+                Result["新增订单量"].not_im = SqlResult["order_times"] - SqlResult["im_order_times"];
+                Result["支付订单量"].im = SqlResult["im_paid_times"];
+                Result["支付订单量"].not_im = SqlResult["paid_times"] - SqlResult["im_paid_times"];
+                Result["支付金额"].im = SqlResult["im_paid_amount"];
+                Result["支付金额"].not_im = SqlResult["paid_amount"] - SqlResult["im_paid_amount"];
+
+                let DATA = [{
+                    type : "bar",
+                    map : map,
+                    data : Result,
+                    config: { // 配置信息
+                        stack: true,  // 图的堆叠
+                        categoryY : false
+                    }
+                }];
+
+                if(query.main_show_type_filter == "table"){
+                    let TableData = [] , Tobj1 = {} , Tobj2 = {} , Tobj3 = {} , Tobj4 = {} , Tobj5 = {};
+                    for(let i=0;i<5;i++){
+                        let obj = {};
+                        for(let key of OBJ.rows[0]){
+                            obj[key] = 0;
+                        }
+                        TableData.push(obj);
+                    }
+
+                    TableData[0].A = "IM-总交易";
+                    TableData[0].B = SqlResult["im_order_users"];
+                    TableData[0].C = SqlResult["im_paid_users"];
+                    TableData[0].D = SqlResult["im_order_times"];
+                    TableData[0].E = SqlResult["im_paid_times"];
+                    TableData[0].F = SqlResult["im_paid_amount"];
+
+                    TableData[1].A = "IM-群聊交易";
+                    TableData[1].B = SqlResult["im_group_order_users"];
+                    TableData[1].C = SqlResult["im_group_paid_users"];
+                    TableData[1].D = SqlResult["im_group_order_times"];
+                    TableData[1].E = SqlResult["im_group_paid_times"];
+                    TableData[1].F = SqlResult["im_group_paid_amount"];
+
+                    TableData[2].A = "IM-单聊交易";
+                    TableData[2].B = SqlResult["im_single_order_users"];
+                    TableData[2].C = SqlResult["im_single_paid_users"];
+                    TableData[2].D = SqlResult["im_order_times"] - SqlResult["im_group_order_times"];
+                    TableData[2].E = SqlResult["im_paid_times"] - SqlResult["im_group_paid_times"];
+                    TableData[2].F = SqlResult["im_paid_amount"] - SqlResult["im_group_paid_amount"];                    
+
+                    TableData[3].A = "平台-总交易";
+                    TableData[3].B = SqlResult["order_users"];
+                    TableData[3].C = SqlResult["paid_users"];
+                    TableData[3].D = SqlResult["order_times"];
+                    TableData[3].E = SqlResult["paid_times"];
+                    TableData[3].F = SqlResult["paid_amount"];
+
+                    TableData[4].A = "IM交易占比";
+                    TableData[4].B = util.toFixed( SqlResult["im_order_users"] , SqlResult["order_users"] );
+                    TableData[4].C = util.toFixed( SqlResult["im_paid_users"] , SqlResult["paid_users"] );
+                    TableData[4].D = util.toFixed( SqlResult["im_order_times"] , SqlResult["order_times"] );
+                    TableData[4].E = util.toFixed( SqlResult["im_paid_times"] , SqlResult["paid_times"] );
+                    TableData[4].F = util.toFixed( SqlResult["im_paid_amount"] , SqlResult["paid_amount"] );
+                    DATA = util.toTable([TableData] , OBJ.rows , OBJ .cols);
+                }
+
+
+                res.json({
+                    code: 200,
+                    components: Component,
+                    modelData: DATA,
+                });
+            });
+        }
+    },
+
+
+    //ImGroupActive
+    im_using_five_api(OBJ){
+        let Component = {
+            date_picker:{
+                defaultData : 1,
+                show        : true,
+                showDayUnit : true
+            },
+            flexible_btn : [
+                {
+                    content: `<a href="javascript:void(0)">导出</a>`, 
+                    preMethods: ["excel_export"]
+                }
+            ],
+            filter_select : []
+        };
+        return (req , res , next) => {
+            let query = req.query;
+            if(!query.startTime){
+                res.json({
+                    code: 200,
+                    components: Component,
+                    modelData: [],
+                });
+                return;
+            }
+
+            let ep = new eventproxy();
+            req.models.ImGroupActive.count({
+                date : orm.between(query.startTime , query.endTime),
+                day_type: query.day_type
+            } , (err , data)=>{
+                if(err) next(err);
+                ep.emit("one" , data);
+            });
+            
+            req.models.ImGroupActive.find({
+                date : orm.between(query.startTime , query.endTime),
+                day_type: query.day_type
+            } , {
+                limit : query.limit / 1 || 20,
+                offset: (query.page - 1)*query.limit
+            } , (err , data) => {
+                if(err){
+                    next(err);
+                    return;
+                }
+                ep.emit("two" , data);
+            });
+
+            ep.all("one" , "two" , (one , two)=>{
+                for(let item of two){
+                    item["群活跃度"] = util.toFixed(item.group_mess_pv , item.group_member_count);
+                }
+                DATA = util.toTable([two] , OBJ.rows , OBJ.cols , [one]);
+
+                res.json({
+                    code: 200,
+                    components: Component,
+                    modelData: DATA,
+                });
+            });
+                
+        }
+    },
+
+    im_using_five_api_excel(OBJ){
+        return (req , res , next) => {
+            let query = req.query;
+            let Condition = {};
+            if(query.to && query.from){
+                Condition.offset = --query.from;
+                Condition.limit  = query.to - query.from;
+            }
+            if(query.limit && query.page){
+                Condition.limit = query.limit;
+                Condition.offset= (query.page - 1)*query.limit;
+            }
+
+            req.models.ImGroupActive.find({
+                date : orm.between(query.startTime , query.endTime),
+                day_type: query.day_type
+            } , Condition , (err , data) => {
+                if(err){
+                    next(err);
+                    return;
+                }
+
+                for(let item of data){
+                    item["群活跃度"] = util.toFixed(item.group_mess_pv , item.group_member_count);
+                }
+
+                let conf = excelExport.analysisExcel([{
+                    data : data,
+                    rows : OBJ.rows[0],
+                    cols : OBJ.cols[0]
+                }]),
+                    result = nodeExcel.execute(conf);
+
+                res.setHeader('Content-Type', 'application/vnd.openxmlformats');
+                res.setHeader("Content-Disposition", "attachment; filename=" + "Report.xlsx");
+                res.end(result, 'binary');
+            });
+        };
+    }
 }

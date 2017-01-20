@@ -27,7 +27,7 @@ var log4js       = require("./log");
 
 
 orm.settings.set("connection.pool", true);
-orm.settings.set("connection.debug", true);
+// orm.settings.set("connection.debug", true);
 Object.keys(config).forEach(function(key) {
     app.locals[key] = config[key];
 });
@@ -104,9 +104,12 @@ app.use((err, req, res, next) => {
     }
 });
 
-app.use((req, res, next) => {
-    res.redirect("/");
-});
+if(process.env.NODE_ENV != "development"){
+    app.use((req, res, next) => {
+        res.redirect("/");
+    });
+}
+    
 
 app.listen(7879 , function(){
     console.log("启动成功" , new Date().toLocaleTimeString());
