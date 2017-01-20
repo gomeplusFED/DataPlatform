@@ -167,17 +167,14 @@ module.exports = (Router) => {
     //商品搜索大盘指标趋势图
     Router = new api(Router, {
         router: "/search/recommendTwo",
-        modelName : ["SearchRecommend"],
+        modelName : ["RecommendAnalyseNew"],
         platform: false,
         order: ["-date"],
-        params: function(query, params, sendData) {
-            return params;
-        },
         selectFilter(req, cb) {
             cb(null, utils.globalPlatform(req.session.userInfo.type["70"], [TypeObj]));
         },
-        filter(data, query, dates) {
-            return filter.recommendTwo(data, query, dates);
+        filter(data, query) {
+            return filter.recommendTwo(data, utils.timesTwo(query.startTime, query.endTime, "1"));
         }
     });
 

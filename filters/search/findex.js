@@ -168,8 +168,8 @@ module.exports = {
 
         for(let key of source) {
             key.date = util.moment(key.date);
-            key.search_order_sum_pay = key.search_order_sum_pay.toFixed(2);
-            key.search_order_sum = key.search_order_sum.toFixed(2);
+            key.search_order_sum_pay = (key.search_order_sum_pay / 100).toFixed(2);
+            key.search_order_sum = (key.search_order_sum / 100).toFixed(2);
             key.search_avg_turnpage = Math.ceil(key.search_avg_turnpage);
             //下单-支付转化率
             key.two = util.percentage(key.search_order_uv_pay, key.search_order_uv);
@@ -194,7 +194,9 @@ module.exports = {
             //点击人数转化率
             key.one_two = util.percentage(key.search_prodet_ipv_uv, key.search_result_uv);
 
-            newData[key.date] = key;
+            if(newData[key.date]) {
+                newData[key.date] = key;
+            }
         }
 
         return [{

@@ -56,11 +56,11 @@ module.exports = {
                     type : "table",
                     title: "商品推荐大盘指标",
                     query_api : "/search/recommendOne"
-                //},
-                //{
-                //    type : "chart",
-                //    title: "商品搜索推荐大盘指标趋势图",
-                //    query_api : "/search/recommendTwo"
+                },
+                {
+                   type : "chart",
+                   title: "商品搜索推荐大盘指标趋势图",
+                   query_api : "/search/recommendTwo"
                 }
             ]
         }
