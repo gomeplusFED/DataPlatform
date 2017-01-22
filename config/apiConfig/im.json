@@ -283,9 +283,9 @@
         "router": "/IM/using_Five",
         "names": "圈子群活跃排行Top100",
         "singleApi": true,
-        "singleApi_excel" : true,
+        "singleApi_excel": true,
         "singleFn": "im_using_five_api",
-        "singleFn_excel" : "im_using_five_api_excel",
+        "singleFn_excel": "im_using_five_api_excel",
         "rows": [
             [
                 "group_name",
@@ -311,6 +311,115 @@
                 {
                     "caption": "群活跃度",
                     "type": "string"
+                }
+            ]
+        ]
+    },
+    "1485055907953": {
+        "modelName": [],
+        "date_picker": false,
+        "order": [],
+        "platform": false,
+        "router": "/IM/message_One",
+        "names": "消息类型统计列表",
+        "singleApi": true,
+        "singleFn": "im_message_one_api",
+        "rows": [
+            [
+                "message_event_name",
+                "click_pv",
+                "click_uv",
+                "人均发消息数",
+                "消息数占比"
+            ]
+        ],
+        "cols": [
+            [
+                {
+                    "caption": "消息类型",
+                    "type": "string"
+                },
+                {
+                    "caption": "发消息数",
+                    "type": "number"
+                },
+                {
+                    "caption": "发消息人数",
+                    "type": "number"
+                },
+                {
+                    "caption": "人均发消息数",
+                    "type": "number"
+                },
+                {
+                    "caption": "消息数占比",
+                    "type": "string"
+                }
+            ]
+        ]
+    },
+    "1485068113438": {
+        "modelName": [],
+        "date_picker": false,
+        "order": [],
+        "platform": false,
+        "router": "/IM/message_Three",
+        "names": "客服消息统计",
+        "singleApi": true,
+        "singleFn": "im_message_three_api",
+        "rows": [
+            [
+                "msg_type_name",
+                "msg_times",
+                "msg_users"
+            ]
+        ],
+        "cols": [
+            [
+                {
+                    "caption": "消息类别",
+                    "type": "string"
+                },
+                {
+                    "caption": "发消息数",
+                    "type": "number"
+                },
+                {
+                    "caption": "发消息人数",
+                    "type": "number"
+                }
+            ]
+        ]
+    },
+    "1485069189047": {
+        "modelName": [],
+        "date_picker": false,
+        "order": [],
+        "platform": false,
+        "router": "/IM/message_Four",
+        "names": "表情下载",
+        "singleApi": true,
+        "singleFn": "im_message_four_api",
+        "rows": [
+            [
+                "face_id",
+                "load_uv",
+                "load_pv"
+            ]
+        ],
+        "cols": [
+            [
+                {
+                    "caption": "表情名称",
+                    "type": "string"
+                },
+                {
+                    "caption": "下载人数",
+                    "type": "number"
+                },
+                {
+                    "caption": "下载次数",
+                    "type": "number"
                 }
             ]
         ]

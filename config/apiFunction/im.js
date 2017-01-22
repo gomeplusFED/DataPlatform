@@ -642,5 +642,157 @@ module.exports = {
                 res.end(result, 'binary');
             });
         };
+    },
+
+
+
+    im_message_one_api(OBJ){
+        let Component = {
+            date_picker:{
+                defaultData : 7,
+                show        : true
+            },
+            toggle : {
+                show : true
+            },
+            filter_select : []
+        };
+        return (req , res , next) => {
+            let query = req.query;
+            if(Object.keys(query).length == 0){
+                res.json({
+                    code: 200,
+                    components: Component,
+                    modelData: [],
+                });
+                return;
+            }
+
+            let ep = new eventproxy();
+            let condition = {
+                date : orm.between(query.startTime , query.endTime),
+                day_type: query.day_type
+            };
+            req.models.ImEvent.aggregate( condition ).sum("click_pv").get((...values)=>{
+                if(values[0]){
+                    next(values[0]);
+                    return;
+                }
+                ep.emit("one" , values);
+            });
+
+            req.models.db1.driver.execQuery(`select message_event_name,sum(click_pv) as click_pv ,sum(click_uv) as click_uv from ads2_im_event_mess where date BETWEEN ? AND ? AND day_type = ? group by message_event_name` , [query.startTime , query.endTime , query.day_type] , (err , data) => {
+                if(err){
+                    next(err);
+                    return;
+                }
+                ep.emit("two" , data);
+            });
+            ep.all("one" , "two" , (ONE , TWO) => {
+                let map = {
+                    "value" : "消息类型"
+                }
+                let Result = {};
+                for(let item of TWO){
+                    if(Result[item.message_event_name]){
+                        Result[item.message_event_name].value += item.click_pv;
+                    }else{
+                        Result[item.message_event_name] = { value : item.click_pv };
+                    }
+                }
+                let DATA = [{
+                    type : "pie",
+                    map : map,
+                    data : Result,
+                    config: { // 配置信息
+                        stack: false,  // 图的堆叠
+                        categoryY : false
+                    }
+                }];
+
+                if(query.main_show_type_filter == "table"){
+                    for(let item of TWO){
+                        item["人均发消息数"] = util.numberLeave( item.click_pv / (item.click_uv || 1) , 2 );
+                        item["消息数占比"]   = util.toFixed( item.click_pv , ONE[1] );
+                    }
+                    DATA = util.toTable([TWO] , OBJ.rows , OBJ.cols);
+                }
+
+                res.json({
+                    code: 200,
+                    components: Component,
+                    modelData: DATA,
+                });
+            });
+        }
+    },
+
+    im_message_three_api(OBJ){
+        let Component = {
+            date_picker:{
+                defaultData : 7,
+                show        : true
+            },
+            filter_select : []
+        };
+        return (req , res , next) => {
+            let query = req.query;
+            if(Object.keys(query).length == 0){
+                res.json({
+                    code: 200,
+                    components: Component,
+                    modelData: [],
+                });
+                return;
+            }
+            req.models.db1.driver.execQuery(`select msg_type_name,sum(msg_times) as msg_times ,sum(msg_users) as msg_users from ads2_im_customerservice_msg where date BETWEEN ? AND ? AND day_type = ? group by msg_type_name` , [query.startTime , query.endTime , query.day_type] , (err , data) => {
+                if(err){
+                    next(err);
+                    return;
+                }
+                DATA = util.toTable([data] , OBJ.rows , OBJ.cols);
+
+                res.json({
+                    code: 200,
+                    components: Component,
+                    modelData: DATA,
+                });
+            });
+        }
+    },
+
+
+    im_message_four_api(OBJ){
+        let Component = {
+            date_picker:{
+                defaultData : 7,
+                show        : true
+            },
+            filter_select : []
+        };
+        return (req , res , next) => {
+            let query = req.query;
+            if(Object.keys(query).length == 0){
+                res.json({
+                    code: 200,
+                    components: Component,
+                    modelData: [],
+                });
+                return;
+            }
+            req.models.db1.driver.execQuery(`select face_id,sum(load_uv) as load_uv ,sum(load_pv) as load_pv from ads2_im_face_load where date BETWEEN ? AND ? AND day_type = ? group by face_id` , [query.startTime , query.endTime , query.day_type] , (err , data) => {
+                if(err){
+                    next(err);
+                    return;
+                }
+                DATA = util.toTable([data] , OBJ.rows , OBJ.cols);
+
+                res.json({
+                    code: 200,
+                    components: Component,
+                    modelData: DATA,
+                });
+            });
+        }
     }
 }

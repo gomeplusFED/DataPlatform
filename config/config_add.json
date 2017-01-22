@@ -333,6 +333,32 @@
                         "mark": 1484895412110
                     }
                 ]
+            },
+            {
+                "name": "消息类型分析",
+                "path": "/IM/message",
+                "display": true,
+                "id": "1fiht3",
+                "defaultData": [
+                    {
+                        "type": "chart",
+                        "title": "消息类型统计列表",
+                        "query_api": "/IM/message_One",
+                        "mark": 1485055907953
+                    },
+                    {
+                        "type": "table",
+                        "title": "客服消息统计",
+                        "query_api": "/IM/message_Three",
+                        "mark": 1485068113438
+                    },
+                    {
+                        "type": "table",
+                        "title": "表情下载",
+                        "query_api": "/IM/message_Four",
+                        "mark": 1485069189047
+                    }
+                ]
             }
         ],
         "routers": []

@@ -178,6 +178,9 @@ module.exports = {
     //IM 
     ads2_im_bring_transaction : {
         modelName : "ads2_im_bring_transaction"
+    },
+    ads2_im_customerservice_msg : {
+        modelName : "ads2_im_customerservice_msg"
     }
 };
 
