@@ -4,10 +4,11 @@
  * @fileoverview 商品,销售分析
  * @二次开发 ，20160905 ， Mr.He
  */
-var api = require("../../../base/main"),
+var api    = require("../../../base/main"),
     filter = require("../../../filters/achievements/productSale"),
     utils  = require("../../../utils"),
-    orm = require("orm");
+    orm    = require("orm");
+
 /*
     categories function
 */
@@ -30,31 +31,22 @@ function CategoryDeal(query , level){
         case 4:
             query.category_id_4 = query.category_id;
             break;
+        default : break;
     }
     try{
         delete query.category_id;
     }catch(e){
         console.log(e);
     };
-    
     return query;
 }
 
 function GetLevel(req , query , cb){
     req.models.ConfCategories.find({
-        pid : query.category_id
-    } , 1 , (err , data)=>{
+        id : query.category_id
+    }, (err , data)=>{
         if(err) cb(err);
-        if(data.length == 0 || !data){
-            req.models.ConfCategories.find({
-                id : query.category_id
-            } , 1 , (err , data)=>{
-                if(err) cb(err);
-                cb(null , CategoryDeal(query , data[0].level));
-            });
-        }else{
-            cb(null , CategoryDeal(query , data[0].level));
-        }
+        cb(null , CategoryDeal(query , data[0].level));
     });
 }
 
@@ -370,29 +362,23 @@ module.exports = (Router) => {
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
-        paging : [true , false],
-        global_platform_filter(req) {
-            this.global_platform = globalPlatform(req.session.userInfo.type["34"]);
-        },
-        selectFilter(req, cb) {
-            const filter_select = [
-                {
-                    title : "类型",
-                    filter_key : "filter_key22",
-                    groups: [{
-                        key: "0",
-                        value: "流量"
-                    },{
-                        key: "1",
-                        value: "销售"
-                    },{
-                        key: "2",
-                        value: "分享"
-                    }]
-                }
-            ];
-            cb(null, filter_select);
-        },
+        paging : [true],
+        filter_select : [
+            {
+                title : "类型",
+                filter_key : "filter_key22",
+                groups: [{
+                    key: "product_acc_pv",
+                    value: "流量"
+                },{
+                    key: "order_commodity_num",
+                    value: "销售"
+                },{
+                    key: "share_commodity_num",
+                    value: "分享"
+                }]
+            }
+        ],
         fixedParams(req , query , cb){
             if(!query.type){
                 query.type = this.global_platform.list[0].key;
@@ -405,42 +391,74 @@ module.exports = (Router) => {
             }
         },
         firstSql(query , params , isCount){
-            var num = query.filter_key22 / 1 || 0,
-                arrParam = [],
-                list = ["product_acc_pv", "order_commodity_num", "share_commodity_num"];
+            var arrParam = [];
+            arrParam.push(query.startTime);
+            arrParam.push(query.category_id_1);
+            arrParam.push(query.category_id_2);
+            arrParam.push(query.category_id_3);
+            arrParam.push(query.category_id_4);
+            arrParam.push(query.type);
 
-            arrParam[0] = utils.getDate(params.date.from) + " 00:00:00",
-            arrParam[1] = utils.getDate(params.date.to) + " 23:59:59",
-            arrParam[2] = params.category_id_1,
-            arrParam[3] = params.category_id_2,
-            arrParam[4] = params.category_id_3,
-            arrParam[5] = params.category_id_4,
-            arrParam[6] = params.type;            
-            // arrParam[7] = list[num];
-            
-            if(params.page && params.limit){
-                arrParam[7] = (params.page-1)*params.limit;
-                arrParam[8] = params.limit / 1;
-            }else{
-                arrParam[7] = params.from / 1;
-                arrParam[8] = params.to / 1;
-            }
-            
             if(isCount){
                 //统计总数
-                let sql = `SELECT COUNT(*) count ,SUM(product_acc_pv) product_acc_pv,
-                SUM(product_acc_uv) product_acc_uv,
-                SUM(shop_pay_price) shop_pay_price FROM ads2_itm_run_top WHERE date BETWEEN ? AND ? AND day_type = 1 AND category_id_1 = ? AND category_id_2 = ? AND category_id_3 = ? AND category_id_4 = ? AND type = ?`;
+                let sql = `SELECT
+                    COUNT(*) count ,
+                    SUM(product_acc_pv) product_acc_pv,
+                    SUM(product_acc_uv) product_acc_uv,
+                    SUM(shop_pay_price) shop_pay_price
+                FROM
+                    ads2_itm_run_top
+                WHERE
+                    date = ?
+                AND
+                    day_type = ${query.day_type}
+                AND
+                    category_id_1 = ?
+                AND
+                    category_id_2 = ?
+                AND
+                    category_id_3 = ?
+                AND
+                    category_id_4 = ?
+                AND
+                    type = ?`;
                 return {
                     sql : sql,
                     params : arrParam
                 }
-            }
-            let sql = `SELECT * FROM ads2_itm_run_top WHERE DATE BETWEEN ? AND ? AND day_type = 1 AND category_id_1 = ? AND category_id_2 = ? AND category_id_3 = ? AND category_id_4 = ? AND type = ? ORDER BY `+list[num]+` DESC LIMIT ?,?`;
+            } else{
+                if(params.from && params.to){
+                    arrParam.push(+params.from);
+                    arrParam.push(+params.to);
+                }else{
+                    arrParam.push((params.page - 1) * params.limit);
+                    arrParam.push(+params.limit);
+                }
+                let sql = `SELECT
+                    *
+                FROM
+                    ads2_itm_run_top
+                WHERE
+                    date = ?
+                AND
+                    day_type = ${query.day_type}
+                AND
+                    category_id_1 = ?
+                AND
+                    category_id_2 = ?
+                AND
+                    category_id_3 = ?
+                AND
+                    category_id_4 = ?
+                AND
+                    type = ?
+                ORDER BY ${query.filter_key22} DESC
+                LIMIT ?,?`;
 
-            return {
-                sql : sql,
-                params : arrParam
+                return {
+                    sql : sql,
+                    params : arrParam
+                };
             }
         },
         /*secondSql(query , params , isCount){

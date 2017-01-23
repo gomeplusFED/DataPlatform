@@ -10,8 +10,12 @@ module.exports = {
         let filter_key = query.filter_key,
             filter_key2= query.filter_key2;
         var source = data.first.data[0],
+<<<<<<< .merge_file_vMRnkL
             // source2= [].concat(source),
             count = data.first.count,
+=======
+            //count = data.first.count,
+>>>>>>> .merge_file_uWfxOD
             secondSource = data.second.data[0],
             // secondSource2= [].concat(secondSource),
             config = {},
@@ -81,6 +85,7 @@ module.exports = {
             }]);
         }
 
+<<<<<<< .merge_file_vMRnkL
 
         if(query.filter_key2 == "one"){
             rows[0].splice(1,1);
@@ -94,5 +99,11 @@ module.exports = {
         }
 
         
+=======
+        return util.toTable([source], rows, cols, {
+            //count : [count],
+            config : [merge]
+        });
+>>>>>>> .merge_file_uWfxOD
     }
 };

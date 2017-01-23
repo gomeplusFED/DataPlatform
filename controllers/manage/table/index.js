@@ -16,7 +16,11 @@ module.exports = (Router) => {
     Router = new api(Router,{
         router : "/socialAnalysis/tableOne",
         modelName : ["GroupReport", "SocialCategory"],
+<<<<<<< .merge_file_rcyAxk
         // paging : [true, false],
+=======
+        //paging : [true, false],
+>>>>>>> .merge_file_Q6BAE4
         platform : false,
         date_picker_data: 1,
         showDayUnit : true,
@@ -24,6 +28,7 @@ module.exports = (Router) => {
         procedure : [
             {
                 find : "params",
+<<<<<<< .merge_file_rcyAxk
                 // offset : "offset",
                 // limit : "limit",
                 order : ["category_id_1"],
@@ -41,6 +46,12 @@ module.exports = (Router) => {
 
             return params;
         },
+=======
+                order : ["category_id_1"],
+                run : ""
+            }
+        ],
+>>>>>>> .merge_file_Q6BAE4
         secondParams(query, params, data) {
             if(query.filter_key2 == "one"){
                 return {"pid":""}

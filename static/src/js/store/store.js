@@ -9,6 +9,18 @@ var state = {
         msg: '提示信息',
         type: 'info'
     },
+<<<<<<< .merge_file_hdixoT
+=======
+    bpConfig: {
+        show: false,
+        trigger: false,
+        privateParam: '',
+        publicParam: '',
+        pageUrl: '',
+        selector: '',
+        platform: ''
+    },
+>>>>>>> .merge_file_FLYkok
     modalTableData: {
         show: false,
         title: '弹窗表格',
@@ -50,6 +62,19 @@ mutations.ALERT = function(state, params) {
     state.alertConfig.type = params.type || 'info';  // info/warning/success/danger
 }
 
+<<<<<<< .merge_file_hdixoT
+=======
+mutations.DATABP = function(state, params) {
+    state.bpConfig.show = params.show;
+    state.bpConfig.trigger = !state.bpConfig.trigger;
+    state.bpConfig.privateParam = params.privateParam;
+    state.bpConfig.publicParam = params.publicParam;
+    state.bpConfig.pageUrl = params.pageUrl;
+    state.bpConfig.selector = params.selector;
+    state.bpConfig.platform = params.platform;
+}
+
+>>>>>>> .merge_file_FLYkok
 mutations.HIDEALERT = function(state) {
     state.alertConfig.show = false;
 }

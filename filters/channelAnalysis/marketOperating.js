@@ -14,7 +14,11 @@ module.exports = {
             map = {};
 
         for(let item of second) {
+<<<<<<< .merge_file_3Sgy8M
             map[item.channel_id] = item.channel_name;
+=======
+            map[`${item.channel_type_code}${item.channel_code}`] = item.channel_name;
+>>>>>>> .merge_file_iZNAKZ
         }
 
         for(let date of dates) {
