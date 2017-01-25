@@ -201,11 +201,7 @@ module.exports = (Router) => {
     });
 
     Router = Router.get("/custom/channel", (req, res, next) => {
-<<<<<<< .merge_file_80tNVI
-        req.models.Channel.find({}).order("channel_id").run((err, data) => {
-=======
         req.models.Channel.find({}, [ "channel_id", "A" ], (err, data) => {
->>>>>>> .merge_file_ezgvlN
             if(err) {
                 next(err);
             } else {

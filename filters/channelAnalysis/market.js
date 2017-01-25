@@ -14,21 +14,13 @@ module.exports = {
             map = {};
 
         for(let item of second) {
-<<<<<<< .merge_file_4YbgrL
             map[item.channel_id] = item.channel_name;
-=======
-            map[`${item.channel_type_code}${item.channel_code}`] = item.channel_name;
->>>>>>> .merge_file_VK8jn5
         }
 
         for(let date of dates) {
             newData[date] = {};
             for(let item of second) {
-<<<<<<< .merge_file_4YbgrL
                 newData[date][item.channel_id] = 0;
-=======
-                newData[date][`${item.channel_type_code}${item.channel_code}`] = 0;
->>>>>>> .merge_file_VK8jn5
             }
         }
 
@@ -53,11 +45,7 @@ module.exports = {
             config = {};
 
         for(let item of second) {
-<<<<<<< .merge_file_4YbgrL
             config[item.channel_id] = item.channel_name;
-=======
-            config[`${item.channel_type_code}${item.channel_code}`] = item.channel_name;
->>>>>>> .merge_file_VK8jn5
         }
 
         for(let i = 0; i < source.length; i++) {
