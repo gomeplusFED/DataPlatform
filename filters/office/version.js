@@ -11,23 +11,33 @@ module.exports = {
         const source = data.first.data,
             versions = _.uniq(_.pluck(source, "versions")),
             type = "line",
-            markOne = [],
-            markTwo = [],
+            markArea = [],
             newData = {};
         let map = {};
 
         for(let date of dates) {
             newData[date] = {};
+            let mark = [];
             if(new Date(date).getDay() === 0) {
-                markTwo.push({
+                mark.push({
                     name: '周日',
                     xAxis: date
                 });
+                mark.push({
+                    xAxis: date
+                });
             } else if(new Date(date).getDay() === 6) {
-                markOne.push({
+                mark.push({
                     name: '周六',
                     xAxis: date
                 });
+                mark.push({
+                    xAxis: date
+                });
+            }
+
+            if(mark.length) {
+                markArea.push(mark);
             }
 
             for(let version of versions) {
@@ -46,7 +56,7 @@ module.exports = {
             map : map,
             data : newData,
             markArea: {
-                data: [ markOne, markTwo ]
+                data: markArea
             },
             config: { // 配置信息
                 stack: false,  // 图的堆叠,

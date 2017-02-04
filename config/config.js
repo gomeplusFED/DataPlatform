@@ -307,6 +307,10 @@ const Config = {
             path: [
                 obj.office.index(),
                 obj.office.version(),
+                obj.office.terminal(),
+            ],
+            routers : [
+                obj.office.terminalOther()
             ]
         },
         "29": {

@@ -51,4 +51,42 @@ module.exports = {
             ]
         }
     },
+    terminal(){
+        return {
+            id : 303,
+            name : "终端属性",
+            path : "/office/terminal",
+            display : true,
+            defaultData : [
+                {
+                    type : "chart",
+                    title: "Top10",
+                    query_api : "/office/terminalOne"
+                },{
+                    type : "table",
+                    title: "数据明细",
+                    query_api : "/office/terminalTwo"
+                }
+            ]
+        }
+    },
+    terminalOther(){
+        return {
+            id : 304,
+            name : "终端属性",
+            path : "/office/terminalOther",
+            display : true,
+            defaultData : [
+                {
+                    type : "chart",
+                    title: "Top10",
+                    query_api : "/office/terminalOtherOne"
+                },{
+                    type : "table",
+                    title: "数据明细",
+                    query_api : "/office/terminalOtherTwo"
+                }
+            ]
+        }
+    },
 };
