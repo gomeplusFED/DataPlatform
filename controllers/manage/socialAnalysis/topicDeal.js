@@ -135,6 +135,9 @@ module.exports = (Router) => {
             for(let item of data){
                 for(let key in Translate){
                     Return[Translate[key]][item.is_ordered_topic] += item[key];
+                    if(key == "paid_amount"){
+                        Return[Translate[key]][item.is_ordered_topic] = Return[Translate[key]][item.is_ordered_topic] / 100;
+                    }
                 }
             }
 
