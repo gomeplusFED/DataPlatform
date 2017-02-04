@@ -19,7 +19,6 @@ module.exports = (Router) => {
     Router.get('/databp/html', (req, res, next) => {
         
         let url = req.query.url;
-
         let options = {
             credentials: 'include',
             // agent,
@@ -140,7 +139,6 @@ module.exports = (Router) => {
         delete newheaders['origin'];
         // console.log(newheaders);
         body = JSON.stringify(body);
-        console.log(newurl);
         fetch(newurl, {
             method,
             headers: newheaders,
@@ -155,6 +153,38 @@ module.exports = (Router) => {
             console.log(err);
         });
     })
-
+    Router.get('/databp/js', (req, res, next) => {
+        let sess = req.session.databp;
+        let { query, headers} = req;
+        let method = 'get';
+        let newurl = query.url;
+        let host = newurl.match(/https?:\/\/(.+?)\//)[1];
+        let newheaders = {
+            host,
+            'referer': sess.url,
+            'origin': ''
+        }
+        let keys = Object.keys(headers);
+        for(let key of keys) {
+            if (newheaders[key] == null) {
+                newheaders[key] = headers[key];
+            }
+        }
+        delete newheaders['origin'];
+        fetch(newurl, {
+            method,
+            headers: newheaders,
+            credentials: 'include'
+        })
+        .then(function(result) {
+            return result.text();
+        }).then(function(js) {
+            // 改变关于location的脚本
+            js = js && js.replace(/\.assign\(([^,]+?)\)/g, '.$assign($1)');
+            res.send(js);
+        }).catch(function(err) {
+            console.log(err);
+        });
+    })
     return Router;
 };

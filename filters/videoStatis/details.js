@@ -291,17 +291,25 @@ module.exports = {
                     xAxis: stop_play_num.name,
                     value : stop_play_num.num
                 },{
+                    xAxis: stop_play_num.name
+                }],[{
                     name: '卡顿播放率',
                     xAxis: rate.name,
                     value : rate.num
-                },{
+                }, {
+                    xAxis: rate.name
+                }],[{
                     name: '直播同时在线播放人数',
                     xAxis: live_play_user.name,
                     value : live_play_user.num
                 },{
+                    xAxis: live_play_user.name
+                }],[{
                     name: '直播同时在线播放次数',
                     xAxis: live_play_num.name,
                     value : live_play_num.num
+                },{
+                    xAxis: live_play_num.name
                 }] ]
             },
             config: { // 配置信息

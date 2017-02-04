@@ -118,10 +118,11 @@
 				let $iframewin = iframenode.contentWindow;
 				let _newurl= $iframewin.$pageUrl;
 				// 修复最后无/
-				if(_newurl.match(/^https:\/\/[^\/]+?\//)) {
+				let host;
+				if((host = _newurl.match(/^https:\/\/[^\/]+?\//)) && (host = host[0])) {
 					_this.bpConfig.pageUrl = _newurl;
 				} else {
-					_this.bpConfig.pageUrl = _newurl + '/';
+					host = _this.bpConfig.pageUrl = _newurl + '/';
 				}
 				_this.bpConfig.platform = $iframewin.$platform;
 
@@ -212,9 +213,17 @@
 					let $target = $(e.target);
 					let href = $target.attr('href') || $target.parents('a').attr('href');
 					if (href && href.indexOf('javascript') === -1) {
-						_this.bpConfig.pageUrl = href;
+						if (/https?:\/\//.test(href)) {
+							// do noting
+							_this.bpConfig.pageUrl = href;
+						} else {
+							if (href.startsWith('/')) {
+								_this.bpConfig.pageUrl = host + href.slice(1);
+							} else {
+								_this.bpConfig.pageUrl = _this.bpConfig.pageUrl.replace(/\/$/, '') + '/' + href;
+							}
+						}
 						_this.searchClick();
-
 					}
 					return false;
 				});

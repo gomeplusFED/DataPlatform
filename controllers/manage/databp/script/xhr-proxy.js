@@ -8,6 +8,17 @@
     window.$pageUrl = pageUrl;
     window.$platform = platform;
     
+    window.location.$assign = function(url) {
+        let newurl;
+        if (/https?:\/\//.test(url)) {
+            // do noting
+            newurl = url;
+        } else {
+            newurl = '/databp/html?m='+ platform + '&url=' + encodeURIComponent(pageUrl.replace(/\/$/, '') + '/' + url.replace(/^\//, ''));
+        }
+        window.location.assign(newurl);
+    }
+
 
     var open = XMLHttpRequest.prototype.open;
     XMLHttpRequest.prototype.open = function(method, url, async, user, password) {
@@ -17,7 +28,11 @@
             args.push(arguments[i]);
         }
         if (/https?:\/\//.test(url)) {
-            args[1] = url;
+            if(url.match(/\.js\??/)) {
+                args[1] = `/databp/js?url=${encodeURIComponent(url)}`;
+            } else {
+                args[1] = url;
+            }
         } else {
             args[1] = '/databp/ajax' + url;
         }

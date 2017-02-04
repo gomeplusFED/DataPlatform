@@ -74,7 +74,7 @@ module.exports = (Router) => {
             type        : "ALL"
         };
 
-        req.models.ads2_soc_group.find(Condition , (err , data) => {
+        req.models.tbl_rt_group.find(Condition , (err , data) => {
             ep.emit("two" , data);
         });
         

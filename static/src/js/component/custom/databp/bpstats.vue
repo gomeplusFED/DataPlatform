@@ -53,7 +53,7 @@
 					<td>{{item.pointName}}</td>
 					<td>单击</td>
 					<td title="{{item.type}}">{{item.type === 'block' ? '是' : '否'}}</td>
-					<td title="{{item.pageUrl}}"><a @click="heatmap(item)">{{item.pageUrl}}</a></td>
+					<td title="{{item.pageUrl}}"><a v-if="item.uniquePoint !== '2'" @click="heatmap(item)">{{item.pageUrl}}</a></td>
 					<td title="{{item.pointParam}}">{{item.pointParam || '-'}}</td>
 					<td title="{{item.PV}}">{{item.pv || '-'}}</td>
 					<td title="{{item.UV}}">{{item.uv || '-'}}</td>

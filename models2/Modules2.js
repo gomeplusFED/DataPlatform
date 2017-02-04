@@ -167,6 +167,9 @@ module.exports = {
     ads2_soc_group_topic : {
         modelName : "ads2_soc_group_topic"
     },
+    tbl_rt_group : {
+        modelName : "tbl_rt_group"
+    },
     //视频
     ads2_videoplay_overview2 : {
         modelName : "ads2_videoplay_overview2"

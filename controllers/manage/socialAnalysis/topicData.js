@@ -189,7 +189,7 @@ module.exports = (Router) => {
                title: '平台选择',
                filter_key: 'type',
                groups: [{
-                   key: ['APP','WAP','PC'],
+                   key: 'ALL',
                    value: '全部平台'
                },{
                    key: 'APP',
@@ -269,7 +269,7 @@ module.exports = (Router) => {
         title: "平台选择",
         filter_key : 'type',
         groups: [{
-           key: ['APP','WAP','PC'],
+           key: 'ALL',
            value: '全部平台'
         },{
            key: 'APP',
