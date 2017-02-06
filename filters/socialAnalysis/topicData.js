@@ -155,6 +155,10 @@ module.exports = {
                 "type"    : "date"
             });
 
+            for(let i=1;i<data.rows[0].length;i++){
+                data.rows[0][i] = "sum_" + data.rows[0][i]; 
+            }
+
             return util.toTable([source] , data.rows , data.cols)
         }
 
