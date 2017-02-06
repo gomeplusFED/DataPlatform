@@ -6,203 +6,202 @@
 var utils = require("../../utils");
 
 /* 统一计算 */
-function Computer(key , son , mother , obj1 , obj2){
-    if(!obj1[son] || !obj1[mother]){
-        obj1[key] = 0;
-    }else{
-        obj1[key] = utils.toFixed(obj1[son] / obj1[mother] , 0);
+function Computer(obj, obj2, rows){
+    let o = {};
+    for(let key of rows) {
+        for(let row of key) {
+            if(row !== "date") {
+                obj[row] = obj[row] || 0;
+                obj2[row] = obj2[row] || 0;
+                if(typeof obj[row] === "number" || typeof obj2[row] === "number") {
+                    o[row] = utils.toFixed(
+                        obj[row] - obj2[row],
+                        obj2[row]
+                    );
+                } else {
+                    let one = +obj[row].replace("%", "");
+                    let two = +obj2[row].replace("%", "");
+                    o[row] = utils.toFixed(
+                        one - two,
+                        two
+                    );
+                }
+            }
+        }
     }
-    
-    if(!obj2[son] || !obj2[mother]){
-        obj2[key] = 0;
-    }else{
-        obj2[key] = utils.toFixed(obj2[son] / obj2[mother] , 0);
-    }
+    o.date = "GAP";
+
+    return o;
 }
 
 module.exports = {
-    recommendOne(data , query , dates){
-        //需要输出两个一样的数组，每个数组包涵三条数据，每条数据包括两个表的所有字段
-
-        let keys = data.rows[0].concat(data.rows[1]);
-        let DataSource = data.first.data[0];
-        let source = [null , null];
-
-        for(let item of DataSource){
-            var ss = query.date.indexOf(utils.getDate(item.date));
-            source[ss] = item;
-        }
-
-
-        if(!source[0]){
-            source[0] = {};
-            for(let key of keys){
-                source[0][key] = 0;
-            }
-            source[0].date = query.date[0];
-        }
-        if(!source[1]){
-            source[1] = {};
-            for(let key of keys){
-                source[1][key] = 0;
-            }
-            source[1].date = query.date[1];
-        }
-
-        let Result = [source[0] , source[1]];
-
-        for(let key of keys){
-            switch(key){
-                case "date":
-                    source[0].date = utils.beforeDate(source[0].date , 1)[0];
-                    source[1].date = utils.beforeDate(source[1].date , 1)[0];
-                    break;
-                case "ipv_uv_lv":
-                    Computer(key , "recommend_prodet_ipv_uv" , "recommend_result_uv" , source[0] ,source[1]);
-                    break;
-                case "uv_lv":
-                    Computer(key , "recommend_order_uv" , "recommend_result_uv" , source[0] ,source[1]);
-                    break;
-                case "ipv_lv":
-                    Computer(key , "recommend_order_uv" , "recommend_prodet_ipv_uv" , source[0] ,source[1]);
-                    break;
-                case "ctr_lv":
-                    Computer(key , "recommend_prodet_ipv" , "recommend_exposure_product_num" , source[0] ,source[1]);
-                    break;
-            }
-        }
-
+    recommendOne(data, query){
+        const source = data.first.data[0];
+        const start = query.startTime;
+        const date = utils.moment(new Date(start) - 24 * 60 * 60 * 1000);
         let obj = {};
-        let Reg = /\%/ig;
-        for(let key of keys){
-            if(key == "date"){
-                obj.date = "GAP";
-                continue;
-            }
+        let obj2 = {};
 
-            let num = source[0][key];
-            let num1= source[1][key];
-            if(typeof num == "string"){
-                num = num.replace(Reg , "") / 1;
+        for(let key of source) {
+            key.date = utils.moment(key.date);
+            key.recommend_order_sum = (key.recommend_order_sum / 100).toFixed(2);
+            key.recommend_order_sum_pay = (key.recommend_order_sum_pay / 100).toFixed(2);
+            //点击次数转化率
+            key.one_one = utils.toFixed(key.recommend_prodet_ipv, key.recommend_result_pv);
+            //点击人数转化率
+            key.one_two = utils.toFixed(key.recommend_prodet_ipv_uv, key.recommend_result_uv);
+            //下单转化率
+            key.two_one = utils.toFixed(key.recommend_order_uv, key.recommend_result_uv);
+            //IPV-下单转化率
+            key.two_two = utils.toFixed(key.recommend_order_uv, key.recommend_prodet_ipv_uv);
+            //支付转化率
+            key.three_one = utils.toFixed(key.recommend_order_uv_pay, key.recommend_result_uv);
+            //IPV-支付转化率
+            key.three_one = utils.toFixed(key.recommend_order_uv_pay, key.recommend_prodet_ipv_uv);
+            //下单-支付转化率
+            key.four_one = utils.toFixed(key.recommend_order_uv_pay, key.recommend_order_uv);
+            //下单商品-支付转化率
+            key.four_two = utils.toFixed(key.recommend_order_com_pay, key.recommend_order_com);
+            //客单价
+            key.four_three = utils.division(key.recommend_order_sum_pay, key.recommend_order_uv_pay);
+            //笔单价
+            key.four_four = utils.division(key.recommend_order_sum_pay, key.recommend_order_spu_pay);
+            if(key.date === start) {
+                obj = key;
+            } else {
+                obj2 = key;
             }
-            if(typeof num1 == "string"){
-                num1 = num1.replace(Reg , "") / 1;
-            }
-
-            if(num1 == 0){
-                obj[key] = (num - num1) / 1;
-            }else{
-                obj[key] = (num - num1) / num1;
-            }
-            
-            obj[key] = utils.toFixed(obj[key] , 0);
         }
 
-        Result.push(obj);
-        return utils.toTable([Result , Result], data.rows, data.cols);
+        obj.recommend_order_sum = obj.recommend_order_sum || "0.00";
+        obj2.recommend_order_sum = obj2.recommend_order_sum || "0.00";
+        obj.recommend_order_sum_pay = obj.recommend_order_sum_pay || "0.00";
+        obj2.recommend_order_sum_pay = obj2.recommend_order_sum_pay || "0.00";
+        obj.one_one = obj.one_one || "0.00%";
+        obj2.one_one = obj2.one_one || "0.00%";
+        obj.one_two = obj.one_two || "0.00%";
+        obj2.one_two = obj2.one_two || "0.00%";
+        obj.two_one = obj.two_one || "0.00%";
+        obj2.two_one = obj2.two_one || "0.00%";
+        obj.two_two = obj.two_two || "0.00%";
+        obj2.two_two = obj2.two_two || "0.00%";
+        obj.three_one = obj.three_one || "0.00%";
+        obj2.three_one = obj2.three_one || "0.00%";
+        obj.three_two = obj.three_two || "0.00%";
+        obj2.three_two = obj2.three_two || "0.00%";
+        obj.four_one = obj.four_one || "0.00%";
+        obj2.four_one = obj2.four_one || "0.00%";
+        obj.four_two = obj.four_two || "0.00%";
+        obj2.four_two = obj2.four_two || "0.00%";
+        obj.four_three = obj.four_three || "0.00";
+        obj2.four_three = obj2.four_three || "0.00";
+        obj.four_four = obj.four_four || "0.00";
+        obj2.four_four = obj2.four_four || "0.00";
+
+        const gap = Computer(obj, obj2, data.rows);
+        obj.date = obj.date || start;
+        obj2.date = obj2.date || date;
+        const newData = [obj, obj2, gap];
+
+        return utils.toTable([newData, newData, newData, newData], data.rows, data.cols);
     },
 
-    recommendTwo(data , query , dates){
-        let source = data.first.data[0];
-        let keys = [
-                "recommend_result_pv",
-                "recommend_result_uv",
-                "recommend_prodet_ipv",
-                "recommend_prodet_ipv_uv",
-                "recommend_exposure_product_num",
-                "recommend_order_sum",
-                "recommend_order_uv",
-                "recommend_order_spu",
-                "ipv_uv_lv",
-                "uv_lv",
-                "ipv_lv",
-                "ctr_lv"
-            ];
+    recommendTwo(data, dates){
+        const source = data.first.data[0];
+        const type = "line";
+        const mapOne = {
+            recommend_result_pv : "PV",
+            recommend_result_uv : "UV",
+            recommend_prodet_ipv : "IPV",
+            recommend_prodet_ipv_uv : "IPV_UV",
+            recommend_order_uv : "下单UV",
+            recommend_order_uv_pay : "支付UV"
+        };
+        const mapTwo = {
+            recommend_order_sum : "GMV",
+            recommend_order_spu : "下单订单数",
+            recommend_order_com : "下单商品数",
+            recommend_order_total : "下单件数",
+            recommend_order_sum_pay : "支付金额",
+            recommend_order_spu_pay : "支付订单数",
+            recommend_order_com_pay : "支付商品数",
+            recommend_order_total_pay : "支付件数"
+        };
+        const mapThree = {
+            one : "下单-支付转化率",
+            two : "下单商品-支付转化率",
+            three : "下单转化率",
+            four : "IPV-下单转化率",
+            five : "支付转化率",
+            six : "IPV-支付转化率",
+            seven : "客单价",
+            eight : "笔单价",
+            night : "点击人数转化率",
+            ten : "点击人数转化率"
+        };
+        const newData = {};
 
-        let Values = [
-            {
-                caption: "PV",
-                type: "number",
-                help: "推荐位所在页面的浏览量"
-            }, {
-                caption: "UV",
-                type: "number",
-                help: "推荐位所在页面的浏览用户数"
-            }, {
-                caption: "IPV",
-                type: "number",
-                help: "推荐位引导的商品详情页的浏览次数"
-            }, {
-                caption: "IPV_UV",
-                type: "number",
-                help: "推荐位引导的商品详情页的访问账号数"
-            }, {
-                caption: "曝光商品数",
-                type: "number",
-                help: "推荐位商品曝光数量(按用户浏览计算,不按加载计算)"
-            }, {
-                caption: "GMV",
-                type: "number",
-                help: "推荐引导的直接成交额"
-            }, {
-                caption: "成交UV",
-                type: "number",
-                help: "推荐引导成交记录的账号数"
-            }, {
-                caption: "成交笔数",
-                type: "number",
-                help: "推荐引导成交的子订单总数"
-            }, {
-                caption: "IPV_UV转化率",
-                type: "number",
-                help: "页面UV中，点击了推荐的账号占比",
-                comment: "ipv_uv_lv"
-            }, {
-                caption: "UV成交转化率",
-                type: "number",
-                help: "成交的账号数占推荐位页面UV的比例",
-                comment: "uv_lv"
-            }, {
-                caption: "IPV-成交转化率",
-                type: "number",
-                help: "成交的账户数占IPV_UV的比例",
-                comment: "ipv_lv"
-            }, {
-                caption: "CTR",
-                type: "number",
-                help: "页面PV中,点击了推荐次数占比",
-                comment: "ctr_lv"
+        for(let date of dates) {
+            newData[date] = {};
+            for(let key in mapOne) {
+                newData[date][key] = 0;
             }
-        ];
-        let map = {};
-        let newData = {};
-
-        for(let i=0;i<keys.length;i++){
-            map[keys[i]] = Values[i].caption;
-        }
-
-        for(let date of dates){
-            let obj = {};
-            newData[date] = obj;
-            for(let key of keys){
-                obj[key] = 0;
+            for(let key in mapTwo) {
+                newData[date][key] = 0;
+            }
+            for(let key in mapThree) {
+                newData[date][key] = 0;
             }
         }
 
-        for(let item of source){
-            item.date = utils.getDate(item.date);
-            //补全没有的字段
-            item["ipv_uv_lv"] = utils.numberLeave( item.recommend_prodet_ipv_uv / item.recommend_result_uv  , 3);
-            item["uv_lv"] = utils.numberLeave( item.recommend_order_uv / item.recommend_result_uv  , 3);
-            item["ipv_lv"] = utils.numberLeave( item.recommend_order_uv / item.recommend_prodet_ipv_uv  , 3);
-            item["ctr_lv"] = utils.numberLeave( item.recommend_prodet_ipv / item.recommend_exposure_product_num  , 3);
-
-            newData[item.date] = item;
+        for(let key of source) {
+            key.date = utils.moment(key.date);
+            key.recommend_order_sum = (key.recommend_order_sum / 100).toFixed(2);
+            key.recommend_order_sum_pay = (key.recommend_order_sum_pay / 100).toFixed(2);
+            //下单-支付转化率
+            key.one = utils.percentage(key.recommend_order_uv_pay, key.recommend_order_uv);
+            //下单商品-支付转化率
+            key.two = utils.percentage(key.recommend_order_com_pay, key.recommend_order_com);
+            //下单转化率
+            key.three = utils.percentage(key.recommend_order_uv, key.recommend_result_uv);
+            //IPV-下单转化率
+            key.four = utils.percentage(key.recommend_order_uv, key.recommend_prodet_ipv_uv);
+            //支付转化率
+            key.five = utils.percentage(key.recommend_order_uv_pay, key.recommend_result_uv);
+            //IPV-支付转化率
+            key.six = utils.percentage(key.recommend_order_uv_pay, key.recommend_prodet_ipv_uv);
+            //客单价
+            key.seven = utils.division(key.recommend_order_sum_pay, key.recommend_order_uv_pay);
+            //笔单价
+            key.eight = utils.division(key.recommend_order_sum_pay, key.recommend_order_spu_pay);
+            //点击人数转化率
+            key.night = utils.percentage(key.recommend_prodet_ipv, key.recommend_result_pv);
+            //点击人数转化率
+            key.ten = utils.percentage(key.recommend_prodet_ipv_uv, key.recommend_result_uv);
+            if(newData[key.date]) {
+                newData[key.date] = key;
+            }
         }
 
         return [{
-            type : "line",
-            map : map,
+            type : type,
+            map : mapOne,
+            data : newData,
+            config: { // 配置信息
+                stack: false, // 图的堆叠
+                categoryY : false //柱状图竖着
+            }
+        },{
+            type : type,
+            map : mapTwo,
+            data : newData,
+            config: { // 配置信息
+                stack: false, // 图的堆叠
+                categoryY : false //柱状图竖着
+            }
+        },{
+            type : type,
+            map : mapThree,
             data : newData,
             config: { // 配置信息
                 stack: false, // 图的堆叠

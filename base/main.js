@@ -19,6 +19,7 @@ var utils = require("../utils"),
     _ = require("lodash");
 
 let eventproxy = require("eventproxy");
+const env = require("../db/config.json").db;
 
 function api(Router, options) {
     var defaultOption = utils.mixin({
@@ -103,7 +104,7 @@ function api(Router, options) {
         //是否支持图转表
         toggle : false,
         //是否页面显示表名
-        debug : true,
+        debug : env !== "pro",
         //是否取消30天限制
         cancelDateLimit : false
     }, options);

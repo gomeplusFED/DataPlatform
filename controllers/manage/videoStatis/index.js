@@ -367,8 +367,7 @@ module.exports = (Router) => {
             }]
         },
         params: function (query, params) {
-            params.sdk_type = 'ALL';
-            params.ver = 'ALL';
+            
             return params;
         },
         firstSql(query, params, isCount) {
@@ -382,19 +381,20 @@ module.exports = (Router) => {
                 tablename = query.type === 'livevideo' ? 'ads2_livevideo_overview2' : 'ads2_videoplay_overview2'
             }
 
-            if (query.ver) {
+            if (query.ver && query.ver !== 'ALL') {
                 config.push('ver=?')
                 param.push(query.ver)
             }
 
-            if (query.sdk_type) {
+            if (query.sdk_type && query.sdk_type !== 'ALL') {
                 config.push('sdk_type = ?')
                 param.push(query.sdk_type)
             }
 
             sql = `SELECT *
                 FROM ${tablename} 
-                WHERE day_type=1 and ${config.join(" AND ")} group by date,sdk_type order by date desc`;
+                WHERE day_type=1 and sdk_type != 'ALL' and ver != 'ALL' 
+                and ${config.join(" AND ")} group by date,sdk_type order by date desc`;
 
             return {
                 sql: sql,
