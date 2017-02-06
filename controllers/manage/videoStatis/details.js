@@ -46,6 +46,7 @@ module.exports = (Router) => {
         },
         params(query, params) {
             params.live_play_id = params.live_play_id ? orm.like(`%${params.live_play_id ||""}%`) : orm.not_in(["all"]);
+            params.ver = "all";
 
             return params;
         },
@@ -114,6 +115,7 @@ module.exports = (Router) => {
                 moment(new Date(query.startTime)).format("YYYY-MM-DD"),
                 moment(new Date(query.endTime)).format("YYYY-MM-DD")
             );
+            params.ver = "all";
 
             return params;
         },
@@ -213,6 +215,7 @@ module.exports = (Router) => {
         },
         params(query, params) {
             params.play_id = params.play_id ? params.play_id : orm.not_in(["all"]);
+            params.ver = "all";
 
             return params;
         },
