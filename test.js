@@ -23,12 +23,12 @@
 
 
 var redis = require("ioredis");
-var redisInfo = require("./db/redis.json");
-var redisConfig = require("./db/config.json").redis;
-var cluster = new redis.Cluster(redisInfo[redisConfig]);
+var redisInfo = require("./db/redis.json");   //info
+var redisConfig = require("./db/config.json").redis;  // test or dev , test
+var cluster = new redis.Cluster(redisInfo[redisConfig]); 
 
 cluster.on("connect" , (...data)=>{
-    console.log("redis connect" , data);
+    console.log("redis connect");
 });
 
 var key = "message:app:011210:notdisturb:count";

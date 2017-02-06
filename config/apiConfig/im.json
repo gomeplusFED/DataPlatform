@@ -10,7 +10,7 @@
         "singleFn": "im_realtime_one_api",
         "rows": [
             [
-                "Date",
+                "date",
                 "1",
                 "2",
                 "3",
@@ -63,6 +63,39 @@
                 {
                     "caption": "",
                     "type": "number"
+                }
+            ]
+        ]
+    },
+    "1486359199771": {
+        "modelName": [],
+        "date_picker": false,
+        "order": [],
+        "platform": false,
+        "router": "/IM/realtime_Two",
+        "names": "实时趋势",
+        "singleApi": true,
+        "singleFn": "im_realtime_two_api",
+        "rows" : [
+            [
+                "Date",
+                "today",
+                "comparison"
+            ]
+        ],
+        "cols" : [
+            [
+                {
+                    "caption" : "",
+                    "type"    : "string"
+                },
+                {
+                    "caption" : "今日",
+                    "type"    : "number"
+                },
+                {
+                    "caption" : "对比",
+                    "type"    : "number"
                 }
             ]
         ]

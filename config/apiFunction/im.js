@@ -11,7 +11,7 @@ let eventproxy = require("eventproxy"),
     excelExport = require('../../utils/excelExport'),
     nodeExcel = require('excel-export');
 
-// let cluster = global.cluster;
+let cluster = global.cluster;
 // cluster.get("message:app:0112:notdisturb:count" , (err , result)=>{
 //     console.log(23333);
 //     if(err){
@@ -30,6 +30,7 @@ let eventproxy = require("eventproxy"),
 //     }
 // });
 // 
+
 
 
 let Component_Using = {
@@ -57,7 +58,10 @@ module.exports = {
                 defaultData     : 7,
                 show            : false,
             },
-            filter_select : []
+            filter_select : [],
+            drop_down : {
+                channel : false,
+            }
         };
         let Text = [
             "",
@@ -72,9 +76,28 @@ module.exports = {
             "表情下载次数"
         ];
         return (req , res , next) => {
-            let DATA = [];
+            let row0 = {"date" : ""} , row1 = {"date" : "今日"} , row2 = {"date" : "昨日"} , row3 = {"date" : "占比"} , Result = [row0 , row1 , row2 , row3];
+            for(let i=1;i<obj.rows[0].length;i++){
+                row0[i] = Text[i];
+                row1[i] = 0;
+                row2[i] = 0;
+                row3[i] = 0;
+            }
 
+            if(Object.keys(req.query) == 0){
+                res.json({
+                    code: 200,
+                    components: Component,
+                    modelData: [],
+                });
+                return;
+            }
 
+            let date = moment(new Date()).format("MMDD"),
+        zDate = moment(new Date - 24 * 60 * 60 * 1000).format("MMDD");
+            
+
+            let DATA = util.toTable([Result] , obj.rows , obj.cols);
             res.json({
                 code: 200,
                 components: Component,
@@ -83,6 +106,87 @@ module.exports = {
         }
     },
 
+    im_realtime_two_api(Obj){
+        let Component = {
+            date_picker:{
+                name : "startTime",
+                endname: "endTime",
+                defaultData     : 7,
+                show            : false,
+            },
+            drop_down : {
+                channel : false,
+            },
+            toggle : {
+                show : true
+            },
+            filter_select : [
+                {
+                    title: '数据指标',
+                    filter_key: 'message_type',
+                    groups : [
+                        {
+                            key: "all",
+                            value: '总计发消息数'
+                        },
+                        {
+                            key: "single",
+                            value: '单聊发消息数'
+                        },
+                        {
+                            key: "total",
+                            value: '群聊发消息数'
+                        }
+                    ]
+                },
+                {
+                    title: '对比时段',
+                    filter_key: 'type',
+                    groups : [
+                        {
+                            key: "day",
+                            value: '前一日'
+                        },
+                        {
+                            key: "week",
+                            value: '上周同期'
+                        }
+                    ]
+                }
+            ]
+        };
+        return (req , res , next) => {
+            let query = req.query;
+            if(!query.startTime){
+                res.json({
+                    code: 200,
+                    components: Component,
+                    modelData: [],
+                });
+                return;
+            }
+
+            let DATA = [{
+                type : "line",
+                map : {
+                    "today" : "今日",
+                    "comparison" : "对比"
+                },
+                data : {},
+                config: { // 配置信息
+                    stack: false,  // 图的堆叠
+                    categoryY : true
+                }
+            }];
+            
+            res.json({
+                code: 200,
+                components: Component,
+                modelData: DATA,
+            });
+                
+        }
+    },
     
     im_using_one_api(obj){
         let Component = {

@@ -293,6 +293,12 @@
                         "title": "数据总览",
                         "query_api": "/IM/realtime_One",
                         "mark": 1484622259443
+                    },
+                    {
+                        "type": "chart",
+                        "title": "实时趋势",
+                        "query_api": "/IM/realtime_Two",
+                        "mark": 1486359199771
                     }
                 ]
             },
