@@ -34,109 +34,171 @@ module.exports = (Router)=>{
     //商品搜索大盘指标
     Router = new api(Router , {
         router : "/search/indexOne",
-        modelName : ["SearchAnalyse"],
+        modelName : ["SearchAnalyseNew"],
         platform : false,
         date_picker_data : 1,
         // showDayUnit: true,
         order : ["-date"],
-        params : function(query , params , sendData){            
-            let date = utils.beforeDate(params.date.from , 2 , params.day_type);
+        params : function(query , params , sendData){
+            const date = [];
+            const start = query.startTime;
+            date.push(utils.moment(start));
+            date.push(utils.moment(start - 24 * 60 * 60 * 1000));
             params.date = date;
             params.search_keyword = "ALL";
-            query.date = date;
             return params;
         },
         selectFilter(req, cb) {
             cb(null, utils.globalPlatform(req.session.userInfo.type["68"], filter_select));
         },
         rows : [
-            ["date", "search_result_pv", "search_result_uv", "search_prodet_ipv" , "search_prodet_ipv_uv",
-            "search_avg_turnpage",
-            "search_avg_respage_staytime",
-            "search_avg_prodeta_staytime"
-            ],
-
-            ["date" , "search_order_sum" , "search_order_uv", "search_order_spu" , "5_ipv_uv_lv" , "6_uv_lv" , "7_ipv_lv" , "8_ctr"]
+            ["date", "search_result_pv", "search_result_uv", "search_prodet_ipv", "search_prodet_ipv_uv",
+                "search_avg_turnpage", "one_one", "one_two"],
+            ["date", "search_order_sum", "search_order_uv", "search_order_spu", "search_order_com",
+                "search_order_total", "tow_one", "two_two"],
+            ["date", "search_order_sum_pay", "search_order_uv_pay", "search_order_spu_pay", "search_order_com_pay",
+                "search_order_total_pay", "three_one", "three_two"],
+            ["date", "four_one", "four_two", "four_three", "four_four", "four_five"]
         ],
         cols : [
-            [{
-                caption : "日期",
-                type    : "string"
-            }, {
-                caption : "PV",
-                type    : "number",
-                help    : "搜索结果页浏览量"
-            }, {
-                caption : "UV",
-                type    : "number",
-                help    : "搜索的独立访客数(搜索结果页)"
-            }, {
-                caption : "IPV",
-                type    : "number",
-                help    : "搜索引导的商品详情页的浏览次数"
-            }, {
-                caption : "IPV_UV",
-                type    : "number",
-                help    : "搜索引导的商品详情页的访问用户数"
-            }, {
-                caption : "平均翻页数",
-                type    : "number",
-                help    : "PV维度，去掉搜索无结果和异常情况"
-            }, {
-                caption : "平均停留时长(s)/页",
-                type    : "number",
-                help    : "PV维度，去掉搜索无结果和异常情况(未加载出结果页)"
-            }, {
-                caption : "平均停留时长(s)/商品详情页",
-                type    : "number",
-                help    : "IPV维度，去掉异常情况(未加载出商品)"
-            }],
-            [{
-                caption : "日期",
-                type    : "string",
-            }, {
-                caption : "GMV/成交金额",
-                type    : "number",
-                help    : "搜索引导的直接成交额(立即购买、加购、收藏)" 
-            }, {
-                caption : "成交UV",
-                type    : "number",
-                help    : "有搜索引导成交记录的用户数"
-            }, {
-                caption : "成交笔数",
-                type    : "number",
-                help    : "搜索引导成交的子订单总数" 
-            }, {
-                caption : "IPV_UV转化率",
-                type    : "number",
-                help    : "来国美+搜索的UV，点击了搜索结果的用户占比",
-                comment : "5_ipv_uv_lv"
-            }, {
-                caption : "UV成交转化率",
-                type    : "number",
-                help    : "来国美+搜索的UV，最终通过搜索结果成交的用户占比",
-                comment : "6_uv_lv"
-            }, {
-                caption : "IPV-成交转化率",
-                type    : "number",
-                help    : "来国美+搜索的UV，通过点击搜索结果的IPV成交的用户占比",
-                comment : "7_ipv_lv"
-            }, {
-                caption : "CTR",
-                type    : "number",
-                help    : "搜索产生的IPV占搜索展示的商品总数的比例",
-                comment : "8_ctr"
-            }]
+            [
+                {
+                    caption : "日期",
+                    type : "string"
+                },{
+                    caption : "PV",
+                    type : "string",
+                    help : "搜索结果页浏览量"
+                },{
+                    caption : "UV",
+                    type : "string",
+                    help : "搜索的用户数"
+                },{
+                    caption : "IPV",
+                    type : "string",
+                    help : "搜索引导的商品详情页的浏览次数"
+                },{
+                    caption : "IPV_UV",
+                    type : "string",
+                    help : "搜索引导的商品详情页的访问用户数"
+                },{
+                    caption : "平均翻页数",
+                    type : "string",
+                    help : "PV维度，去掉搜索无结果和异常情况"
+                },{
+                    caption : "点击次数转化率",
+                    type : "string",
+                    help : "点击搜索结果的次数占搜索结果页浏览量的比例"
+                },{
+                    caption : "点击人数转化率",
+                    type : "string",
+                    help : "搜索的UV，点击了搜索结果的用户占比"
+                }
+            ],
+            [
+                {
+                    caption : "日期",
+                    type : "string"
+                },{
+                    caption : "GMV",
+                    type : "string",
+                    help : "搜索引导的下单商品售价（来源包括搜索引导的立刻购买、加购、收藏）"
+                },{
+                    caption : "下单UV",
+                    type : "string",
+                    help : "搜索引导下单的用户数（user_id）"
+                },{
+                    caption : "下单订单数",
+                    type : "string",
+                    help : "搜索引导下单的子订单总数（order_id）"
+                },{
+                    caption : "下单商品数",
+                    type : "string",
+                    help : "搜索引导下单的商品总数（item）"
+                },{
+                    caption : "下单件数",
+                    type : "string",
+                    help : "搜索引导的商品被买家拍下的累计件数（sku）"
+                },{
+                    caption : "下单转化率",
+                    type : "string",
+                    help : "搜索引导的UV，转化为下单用户的比例"
+                },{
+                    caption : "IPV-下单转化率",
+                    type : "string",
+                    help : "点击搜索结果的UV，转化为下单用户的比例"
+                }
+            ],
+            [
+                {
+                    caption : "日期",
+                    type : "string"
+                },{
+                    caption : "支付金额",
+                    type : "string",
+                    help : "搜索引导的支付商品售价（来源包括搜索引导的立刻购买、加购、收藏）"
+                },{
+                    caption : "支付UV",
+                    type : "string",
+                    help : "搜索引导支付的用户数（user_id）"
+                },{
+                    caption : "支付订单数",
+                    type : "string",
+                    help : "搜索引导的支付订单总数（order_id）"
+                },{
+                    caption : "支付商品数",
+                    type : "string",
+                    help : "搜索引导的支付商品总数（item）"
+                },{
+                    caption : "支付件数",
+                    type : "string",
+                    help : "搜索引导买家完成支付的商品数量（sku）"
+                },{
+                    caption : "支付转化率",
+                    type : "string",
+                    help : "搜索引导的UV，转化为支付用户的比例"
+                },{
+                    caption : "IPV-支付转化率",
+                    type : "string",
+                    help : "点击搜索结果的UV，转化为支付用户的比例"
+                }
+            ],
+            [
+                {
+                    caption : "日期",
+                    type : "string"
+                },{
+                    caption : "下单-支付转化率",
+                    type : "string",
+                    help : "支付用户占下单用户的比例"
+                },{
+                    caption : "下单商品-支付转化率",
+                    type : "string",
+                    help : "支付商品数占下单商品数的比例"
+                },{
+                    caption : "CTR",
+                    type : "string",
+                    help : "搜索产生的IPV占搜索展示的商品总数的比例"
+                },{
+                    caption : "客单价",
+                    type : "string",
+                    help : "平均每个支付买家的支付金额"
+                },{
+                    caption : "笔单价",
+                    type : "string",
+                    help : "平均每笔订单的支付金额"
+                }
+            ]
         ],
         filter (data , query , dates){
-            return filter.indexOne(data , query , dates);
+            return filter.indexOne(data , query);
         }
     });
 
     //商品搜索大盘指标趋势图
     Router = new api(Router , {
         router : "/search/indexTwo",
-        modelName : ["SearchAnalyse"],
+        modelName : ["SearchAnalyseNew"],
         platform : false,
         order : ["-date"],
         params : function(query , params , sendData){
@@ -146,8 +208,8 @@ module.exports = (Router)=>{
         selectFilter(req, cb) {
             cb(null, utils.globalPlatform(req.session.userInfo.type["68"], filter_select));
         },
-        filter (data , query , dates){
-            return filter.indexTwo(data , query , dates);
+        filter (data, query){
+            return filter.indexTwo(data, utils.timesTwo(query.startTime, query.endTime, "1"));
         }
     });
 

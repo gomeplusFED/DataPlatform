@@ -38,14 +38,9 @@ module.exports = {
                     query_api : "/search/WordOne"
                 },
                 {
-                    type : "chart",
-                    title: "商品搜索关键词分析-来源占比",
-                    query_api : "/search/WordTwo"
-                },
-                {
                     type : "table",
                     title: "商品搜索关键词top100分析",
-                    query_api : "/search/WordThree"
+                    query_api : "/search/WordTwo"
                 }
             ]
         }
@@ -63,9 +58,9 @@ module.exports = {
                     query_api : "/search/recommendOne"
                 },
                 {
-                    type : "chart",
-                    title: "商品搜索推荐大盘指标趋势图",
-                    query_api : "/search/recommendTwo"
+                   type : "chart",
+                   title: "商品搜索推荐大盘指标趋势图",
+                   query_api : "/search/recommendTwo"
                 }
             ]
         }

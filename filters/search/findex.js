@@ -3,213 +3,221 @@
  * @date 20160921
  * @fileoverview 商品搜索 api 对应的数据整理函数
  */
-var utils = require("../../utils");
+var util = require("../../utils");
+const validator = require("validator");
 
 /* 统一计算 */
-function Computer(key , son , mother , obj1 , obj2){
-    if(!obj1[son] || !obj1[mother]){
-        obj1[key] = 0;
-    }else{
-        obj1[key] = utils.toFixed(obj1[son] / obj1[mother] , 0);
+function Computer(obj, obj2, rows){
+    let o = {};
+    for(let key of rows) {
+        for(let row of key) {
+            if(row !== "date") {
+                obj[row] = obj[row] || 0;
+                obj2[row] = obj2[row] || 0;
+                if(typeof obj[row] === "number" || typeof obj2[row] === "number") {
+                    o[row] = util.toFixed(
+                        obj[row] - obj2[row],
+                        obj2[row]
+                    );
+                } else {
+                    let one = +obj[row].replace("%", "");
+                    let two = +obj2[row].replace("%", "");
+                    o[row] = util.toFixed(
+                        one - two,
+                        two
+                    );
+                }
+            }
+        }
     }
-    
-    if(!obj2[son] || !obj2[mother]){
-        obj2[key] = 0;
-    }else{
-        obj2[key] = utils.toFixed(obj2[son] / obj2[mother] , 0);
-    }
+    o.date = "GAP";
+
+    return o;
 }
 
 module.exports = {
-    indexOne(data , query , dates){
-        //需要输出两个一样的数组，每个数组包涵三条数据，每条数据包括两个表的所有字段
-
-        let keys = data.rows[0].concat(data.rows[1]);
-        let DataSource = data.first.data[0];
-        let source = [null , null];
-
-        for(let item of DataSource){
-            var ss = query.date.indexOf(utils.getDate(item.date));
-            source[ss] = item;
-        }
-
-        if(!source[0]){
-            source[0] = {};
-            for(let key of keys){
-                source[0][key] = 0;
-            }
-            source[0].date = query.date[0];
-        }
-        if(!source[1]){
-            source[1] = {};
-            for(let key of keys){
-                source[1][key] = 0;
-            }
-            source[1].date = query.date[1];
-        }
-
-        let Result = [source[0] , source[1]];
-
-        for(let key of keys){
-            switch(key){
-                case "date":
-                    source[0].date = utils.beforeDate(source[0].date , 1)[0];
-                    source[1].date = utils.beforeDate(source[1].date , 1)[0];
-                    break;
-                case "5_ipv_uv_lv":
-                    Computer(key , "search_prodet_ipv_uv" , "search_result_uv" , source[0] ,source[1]);
-                    break;
-                case "6_uv_lv":
-                    Computer(key , "search_order_uv" , "search_result_uv" , source[0] ,source[1]);
-                    break;
-                case "7_ipv_lv":
-                    Computer(key , "search_order_uv" , "search_prodet_ipv_uv" , source[0] ,source[1]);
-                    break;
-                case "8_ctr":
-                    Computer(key , "search_prodet_ipv" , "search_exposure_product_num" , source[0] ,source[1]);
-                    break;
-            }
-        }
-
+    indexOne(data , query){
+        const start = query.startTime;
+        const date = util.moment(new Date(start) - 24 * 60 * 60 * 1000);
+        const source = data.first.data[0];
         let obj = {};
-        let Reg = /\%/ig;
-        for(let key of keys){
-            if(key == "date"){
-                obj.date = "GAP";
-                continue;
-            }
+        let obj2 = {};
 
-            let num = source[0][key];
-            let num1= source[1][key];
-            if(typeof num == "string"){
-                num = num.replace(Reg , "") / 1;
+        for(let key of source) {
+            key.date = util.moment(key.date);
+            key.search_order_sum_pay = (key.search_order_sum_pay / 100).toFixed(2);
+            key.search_order_sum = (key.search_order_sum / 100).toFixed(2);
+            key.search_avg_turnpage = Math.ceil(key.search_avg_turnpage);
+            //点击次数转化率
+            key.one_one = util.toFixed(key.search_prodet_ipv, key.search_result_pv);
+            //点击人数转化率
+            key.one_two = util.toFixed(key.search_prodet_ipv_uv, key.search_result_uv);
+            //下单转化率
+            key.two_one = util.toFixed(key.search_order_uv, key.search_result_uv);
+            //IPV-下单转化率
+            key.two_two = util.toFixed(key.search_order_uv, key.search_prodet_ipv_uv);
+            //支付转化率
+            key.three_one = util.toFixed(key.search_order_uv_pay, key.search_result_uv);
+            //IPV-支付转化率
+            key.three_two = util.toFixed(key.search_order_uv_pay, key.search_prodet_ipv_uv);
+            //下单-支付转化率
+            key.four_one = util.toFixed(key.search_order_uv_pay, key.search_order_uv);
+            //下单商品-支付转化率
+            key.four_two = util.toFixed(key.search_order_com_pay, key.search_order_com);
+            //CTR
+            key.four_three = util.toFixed(key.search_prodet_ipv, key.search_exposure_product_num);
+            //客单价
+            key.four_four = util.division(key.search_order_sum_pay, key.search_order_uv_pay);
+            //笔单价
+            key.four_five = util.division(key.search_order_sum_pay, key.search_order_spu_pay);
+            if(key.date === start ) {
+                obj = key;
+            } else {
+                obj2 = key;
             }
-            if(typeof num1 == "string"){
-                num1 = num1.replace(Reg , "") / 1;
-            }
-
-            if(num1 == 0){
-                obj[key] = (num - num1) / 1;
-            }else{
-                obj[key] = (num - num1) / num1;
-            }
-
-            if(!obj[key]){
-                obj[key] = "0";
-            }
-            
-            obj[key] = utils.toFixed(obj[key] , 0);
         }
 
-        Result.push(obj);
-        return utils.toTable([Result , Result], data.rows, data.cols);
+        obj.search_order_sum_pay = obj.search_order_sum_pay || "0.00";
+        obj2.search_order_sum_pay = obj2.search_order_sum_pay || "0.00";
+        obj.search_order_sum = obj.search_order_sum || "0.00";
+        obj2.search_order_sum = obj2.search_order_sum || "0.00";
+        obj.one_one = obj.one_one || "0.00%";
+        obj.one_two = obj.one_two || "0.00%";
+        obj.two_one = obj.two_one || "0.00%";
+        obj.two_two = obj.two_two || "0.00%";
+        obj.three_one = obj.three_one || "0.00%";
+        obj.three_two = obj.three_two || "0.00%";
+        obj.four_one = obj.four_one || "0.00%";
+        obj.four_two = obj.four_two || "0.00%";
+        obj.four_three = obj.four_three || "0.00%";
+        obj.four_four = obj.four_four || "0.00";
+        obj.four_five = obj.four_five || "0.00";
+        obj2.one_one = obj2.one_one || "0.00%";
+        obj2.one_two = obj2.one_two || "0.00%";
+        obj2.two_one = obj2.two_one || "0.00%";
+        obj2.two_two = obj2.two_two || "0.00%";
+        obj2.three_one = obj2.three_one || "0.00%";
+        obj2.three_two = obj2.three_two || "0.00%";
+        obj2.four_one = obj2.four_one || "0.00%";
+        obj2.four_two = obj2.four_two || "0.00%";
+        obj2.four_three = obj2.four_three || "0.00%";
+        obj2.four_four = obj2.four_four || "0.00";
+        obj2.four_five = obj2.four_five || "0.00";
+
+        let gap = Computer(obj, obj2, data.rows);
+
+        obj.date = obj.date || start;
+        obj2.date = obj2.date || date;
+        const newData = [obj, obj2, gap];
+
+        return util.toTable([newData, newData, newData, newData], data.rows, data.cols);
     },
-
-    indexTwo(data , query , dates){
+    indexTwo(data, dates){
         let source = data.first.data[0];
-        let keys = ["search_result_pv", "search_result_uv", "search_prodet_ipv" , "search_prodet_ipv_uv",
-            "search_avg_turnpage",
-            "search_avg_respage_staytime",
-            "search_avg_prodeta_staytime",
-            "search_order_sum" , "search_order_uv", "search_order_spu" , "5_ipv_uv_lv" , "6_uv_lv" , "7_ipv_lv" , "8_ctr"
-            ];
-
-        let Values = [
-            {
-                caption : "PV",
-                type    : "number",
-                help    : "搜索结果页浏览量"
-            }, {
-                caption : "UV",
-                type    : "number",
-                help    : "搜索的独立访客数(搜索结果页)"
-            }, {
-                caption : "IPV",
-                type    : "number",
-                help    : "搜索引导的商品详情页的浏览次数"
-            }, {
-                caption : "IPV_UV",
-                type    : "number",
-                help    : "搜索引导的商品详情页的访问用户数"
-            }, {
-                caption : "平均翻页数",
-                type    : "number",
-                help    : "PV维度，去掉搜索无结果和异常情况"
-            }, {
-                caption : "平均停留时长(s)/页",
-                type    : "number",
-                help    : "PV维度，去掉搜索无结果和异常情况(未加载出结果页)"
-            }, {
-                caption : "平均停留时长(s)/商品详情页",
-                type    : "number",
-                help    : "IPV维度，去掉异常情况(未加载出商品)"
-            },
-
-
-            {
-                caption : "GMV/成交金额",
-                type    : "number",
-                help    : "搜索引导的直接成交额(立即购买、加购、收藏)" 
-            }, {
-                caption : "成交UV",
-                type    : "number",
-                help    : "有搜索引导成交记录的用户数"
-            }, {
-                caption : "成交笔数",
-                type    : "number",
-                help    : "搜索引导成交的子订单总数" 
-            }, {
-                caption : "IPV_UV转化率",
-                type    : "number",
-                help    : "来国美+搜索的UV，点击了搜索结果的用户占比",
-                comment : "5_ipv_uv_lv"
-            }, {
-                caption : "UV成交转化率",
-                type    : "number",
-                help    : "来国美+搜索的UV，最终通过搜索结果成交的用户占比",
-                comment : "6_uv_lv"
-            }, {
-                caption : "IPV-成交转化率",
-                type    : "number",
-                help    : "来国美+搜索的UV，通过点击搜索结果的IPV成交的用户占比",
-                comment : "7_ipv_lv"
-            }, {
-                caption : "CTR",
-                type    : "number",
-                help    : "搜索产生的IPV占搜索展示的商品总数的比例",
-                comment : "8_ctr"
-            }
-
-        ];
-        let map = {};
+        const type = "line";
+        const mapOne = {
+            search_result_pv : "PV",
+            search_result_uv : "UV",
+            search_prodet_ipv : "IPV",
+            search_prodet_ipv_uv : "IPV_UV",
+            search_order_uv : "下单UV",
+            search_order_uv_pay : "支付UV"
+        };
+        const mapTwo = {
+            one : "GMV",
+            search_order_spu : "下单订单数",
+            search_order_com : "下单商品数",
+            search_order_total : "下单件数",
+            search_order_sum_pay : "支付金额",
+            search_order_spu_pay : "支付订单数",
+            search_order_com_pay : "支付商品数",
+            search_order_total_pay : "支付件数"
+        };
+        const mapThree = {
+            two : "下单-支付转化率(%)",
+            three : "下单商品-支付转化率(%)",
+            four : "下单转化率(%)",
+            five : "IPV-下单转化率(%)",
+            six : "支付转化率(%)",
+            seven : "IPV-支付转化率(%)",
+            night : "CTR(%)",
+            eight : "客单价",
+            ten : "笔单价",
+            search_avg_turnpage : "平均翻页数",
+            one_one : "点击次数转化率(%)",
+            one_two : "点击人数转化率(%)"
+        };
         let newData = {};
+        const keys = [
+            ["search_result_pv", "search_result_uv", "search_prodet_ipv", "search_prodet_ipv_uv",
+                "search_order_uv", "search_order_uv_pay"],
+            ["search_order_sum", "search_order_spu", "search_order_com", "search_order_total", "search_order_sum_pay",
+                "search_order_spu_pay", "search_order_com_pay", "search_order_total_pay"],
+            ["two", "three", "four", "five", "six", "seven", "night", "eight", "ten",
+                "search_avg_turnpage", "one_one", "one_two"]
+        ];
 
-        for(let i=0;i<keys.length;i++){
-            map[keys[i]] = Values[i].caption;
-        }
-
-        for(let date of dates){
-            let obj = {};
-            newData[date] = obj;
-            for(let key of keys){
-                obj[key] = 0;
+        for(let date of dates) {
+            newData[date] = {};
+            for(let key of keys) {
+                for(let k of key) {
+                    newData[date][k] = 0;
+                }
             }
         }
 
-        for(let item of source){
-            item.date = utils.getDate(item.date);
-            //补全没有的字段
-            item["5_ipv_uv_lv"] = utils.numberLeave( item.search_prodet_ipv_uv / item.search_result_uv  , 3);
-            item["6_uv_lv"] = utils.numberLeave( item.search_order_uv / item.search_result_uv  , 3);
-            item["7_ipv_lv"] = utils.numberLeave( item.search_order_uv / item.search_prodet_ipv_uv  , 3);
-            item["8_ctr"] = utils.numberLeave( item.search_prodet_ipv / item.search_exposure_product_num  , 3);
+        for(let key of source) {
+            key.date = util.moment(key.date);
+            key.search_order_sum_pay = (key.search_order_sum_pay / 100).toFixed(2);
+            key.search_order_sum = (key.search_order_sum / 100).toFixed(2);
+            key.search_avg_turnpage = Math.ceil(key.search_avg_turnpage);
+            //下单-支付转化率
+            key.two = util.percentage(key.search_order_uv_pay, key.search_order_uv);
+            //下单商品-支付转化率
+            key.three = util.percentage(key.search_order_com_pay, key.search_order_com);
+            //下单转化率
+            key.four = util.percentage(key.search_order_uv, key.search_result_uv);
+            //IPV-下单转化率
+            key.five = util.percentage(key.search_order_uv, key.search_prodet_ipv_uv);
+            //支付转化率
+            key.six = util.percentage(key.search_order_uv_pay, key.search_result_uv);
+            //IPV-支付转化率
+            key.seven = util.percentage(key.search_order_uv_pay, key.search_prodet_ipv_uv);
+            //CTR
+            key.night = util.percentage(key.search_prodet_ipv, key.search_exposure_product_num);
+            //客单价
+            key.eight = util.division(key.search_order_sum_pay, key.search_order_uv_pay);
+            //笔单价
+            key.ten = util.division(key.search_order_sum_pay, key.search_order_spu_pay);
+            //点击次数转化率
+            key.one_one = util.percentage(key.search_prodet_ipv, key.search_result_pv);
+            //点击人数转化率
+            key.one_two = util.percentage(key.search_prodet_ipv_uv, key.search_result_uv);
 
-            newData[item.date] = item;
+            if(newData[key.date]) {
+                newData[key.date] = key;
+            }
         }
 
         return [{
-            type : "line",
-            map : map,
+            type : type,
+            map : mapOne,
+            data : newData,
+            config: { // 配置信息
+                stack: false, // 图的堆叠
+                categoryY : false //柱状图竖着
+            }
+        },{
+            type : type,
+            map : mapTwo,
+            data : newData,
+            config: { // 配置信息
+                stack: false, // 图的堆叠
+                categoryY : false //柱状图竖着
+            }
+        },{
+            type : type,
+            map : mapThree,
             data : newData,
             config: { // 配置信息
                 stack: false, // 图的堆叠
@@ -217,4 +225,4 @@ module.exports = {
             }
         }];
     }
-}
+};
