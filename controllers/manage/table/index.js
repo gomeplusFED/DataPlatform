@@ -124,8 +124,8 @@ module.exports = (Router) => {
             }
 
 
-            let keys = [query.startTime, query.endTime, query.day_type , type];
-            let where = ["date BETWEEN ? AND ?", "day_type=?" , "type IN ?"];
+            let keys = [query.startTime, query.endTime, query.day_type];
+            let where = ["date BETWEEN ? AND ?", "day_type=?" , "type='ALL'"];
             if(query.topic_id) {
                 keys.push(query.topic_id);
                 where.push("topic_id=?");
