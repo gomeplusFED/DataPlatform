@@ -57,6 +57,7 @@ module.exports = (Router) => {
         }],
         params(query , params , sendData){
             if(!query.type) params.type = "ALL";
+            params.category_id = "ALL";
             return params;
         },
         filter(data, query, dates) {
