@@ -45,7 +45,7 @@ module.exports = (Router) => {
             key : "live_play_id"
         },
         params(query, params) {
-            params.live_play_id = orm.like(`%${params.live_play_id ||""}%`);
+            params.live_play_id = params.live_play_id ? orm.like(`%${params.live_play_id ||""}%`) : orm.not_in(["all"]);
 
             return params;
         },
@@ -210,6 +210,11 @@ module.exports = (Router) => {
             show : true,
             title : "请输入视频ID",
             key : "play_id"
+        },
+        params(query, params) {
+            params.play_id = params.play_id ? params.play_id : orm.not_in(["all"]);
+
+            return params;
         },
         date_picker_data : 1,
         showDayUnit: true,
