@@ -393,7 +393,8 @@ module.exports = (Router) => {
 
             sql = `SELECT *
                 FROM ${tablename} 
-                WHERE day_type=1 and ${config.join(" AND ")} group by date,sdk_type order by date desc`;
+                WHERE day_type=1 and sdk_type != 'ALL' and ver != 'ALL' 
+                and ${config.join(" AND ")} group by date,sdk_type order by date desc`;
 
             return {
                 sql: sql,
