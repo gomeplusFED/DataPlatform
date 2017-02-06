@@ -7,7 +7,65 @@
         "router": "/IM/realtime_One",
         "names": "数据总览",
         "singleApi": true,
-        "singleFn": "im_realtime_one_api"
+        "singleFn": "im_realtime_one_api",
+        "rows": [
+            [
+                "Date",
+                "one",
+                "two",
+                "three",
+                "four",
+                "five",
+                "six",
+                "seven_IM",
+                "eight",
+                "nine"
+            ]
+        ],
+        "cols": [
+            [
+                {
+                    "caption": "",
+                    "type": "date"
+                },
+                {
+                    "caption": "总计",
+                    "type": "number"
+                },
+                {
+                    "caption": "",
+                    "type": "number"
+                },
+                {
+                    "caption": "单聊",
+                    "type": "string"
+                },
+                {
+                    "caption": "",
+                    "type": "number"
+                },
+                {
+                    "caption": "群聊",
+                    "type": "number"
+                },
+                {
+                    "caption": "",
+                    "type": "number"
+                },
+                {
+                    "caption": "使用情况",
+                    "type": "number"
+                },
+                {
+                    "caption": "其它",
+                    "type": "number"
+                },
+                {
+                    "caption": "",
+                    "type": "number"
+                }
+            ]
+        ]
     },
     "1484636208559": {
         "modelName": [],
