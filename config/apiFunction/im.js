@@ -49,9 +49,37 @@ let Component_Using = {
 
 module.exports = {
     im_realtime_one_api(obj){
+        let Component = {
+            date_picker:{
+                name : "startTime",
+                endname: "endTime",
+                cancelDateLimit : false,
+                defaultData     : 7,
+                show            : false,
+            },
+            filter_select : []
+        };
+        let Text = [
+            "",
+            "总发消息数",
+            "总发消息人数",
+            "单发消息数",
+            "单发消息人数",
+            "群发消息数",
+            "群发消息人数",
+            "IM使用占比",
+            "设置免打扰",
+            "表情下载次数"
+        ];
         return (req , res , next) => {
+            let DATA = [];
 
-            res.send("ok");
+
+            res.json({
+                code: 200,
+                components: Component,
+                modelData: DATA,
+            });
         }
     },
 
