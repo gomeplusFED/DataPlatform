@@ -308,6 +308,7 @@ const Config = {
                 obj.office.index(),
                 obj.office.version(),
                 obj.office.terminal(),
+                obj.office.date(),
             ],
             routers : [
                 obj.office.terminalOther()

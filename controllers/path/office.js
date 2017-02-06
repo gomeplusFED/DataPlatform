@@ -89,4 +89,26 @@ module.exports = {
             ]
         }
     },
+    date(){
+        return {
+            id : 305,
+            name : "时段分析",
+            path : "/office/date",
+            display : true,
+            defaultData : [
+                {
+                    type : "chart",
+                    query_api : "/office/dateZero"
+                // },{
+                //     type : "chart",
+                //     title: "时段详情(在线人数)",
+                //     query_api : "/office/dateOne"
+                // },{
+                //     type : "table",
+                //     title: "详情(在线人数)",
+                //     query_api : "/office/dateTwo"
+                }
+            ]
+        }
+    },
 };
