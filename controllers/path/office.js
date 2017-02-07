@@ -111,4 +111,27 @@ module.exports = {
             ]
         }
     },
+    fun(){
+        return {
+            id : 306,
+            name : "功能分析",
+            path : "/office/fun",
+            display : true,
+            defaultData : [
+                {
+                    type : "chart",
+                    title : "通讯录功能",
+                    query_api : "/office/funOne"
+                },{
+                    type : "chart",
+                    title: "设置功能",
+                    query_api : "/office/funTwo"
+                },{
+                    type : "chart",
+                    title: "审批功能",
+                    query_api : "/office/funThree"
+                }
+            ]
+        }
+    },
 };
