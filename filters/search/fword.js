@@ -95,6 +95,8 @@ module.exports = {
         let start = query.from ? query.from - 1 : (query.page - 1) * query.limit;
         let count = 0;
         for(let item of source){
+            key.search_order_sum = (key.search_order_sum / 100).toFixed(2);
+            key.search_order_sum_pay = (key.search_order_sum_pay / 100).toFixed(2);
             // 搜索排名
             item.rank = start + (++count);
             // 点击次数转化率=IPV/PV
@@ -116,9 +118,9 @@ module.exports = {
             // CTR=IPV/曝光商品数
             item.ipv_exposure_product_num_ratio = utils.toFixed(item.search_prodet_ipv_uv, item.search_exposure_product_num);
             // 客单价=支付金额/支付UV
-            item.order_sum_pay_order_uv_pay_ratio = utils.toFixed(item.search_order_sum_pay, item.search_order_uv_pay);
+            item.order_sum_pay_order_uv_pay_ratio = utils.division(item.search_order_sum_pay, item.search_order_uv_pay);
             // 笔单价=支付金额/支付订单数
-            item.order_sum_pay_order_spu_pay_ratio = utils.toFixed(item.search_order_sum_pay, item.search_order_spu_pay);
+            item.order_sum_pay_order_spu_pay_ratio = utils.division(item.search_order_sum_pay, item.search_order_spu_pay);
             // Date
             item.date = utils.getDate(item.date);
 
