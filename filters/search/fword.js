@@ -99,7 +99,7 @@ module.exports = {
             // 搜索排名
             item.rank = start + (++count);
             // 点击次数转化率=IPV/PV
-            item.ipv_ratio = utils.toFixed(item.search_prodet_ipv, item.search_result_pv);
+            item.ipv_pv_ratio = utils.toFixed(item.search_prodet_ipv, item.search_result_pv);
             // 点击人数转化率=IPV_UV/UV
             item.ipv_uv_uv_ratio = utils.toFixed(item.search_prodet_ipv_uv, item.search_result_uv);
             // 下单转化率=下单UV/UV
