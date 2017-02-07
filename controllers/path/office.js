@@ -103,10 +103,10 @@ module.exports = {
                     type : "chart",
                     title: "时段详情(在线人数)",
                     query_api : "/office/dateOne"
-                // },{
-                //     type : "table",
-                //     title: "详情(在线人数)",
-                //     query_api : "/office/dateTwo"
+                },{
+                    type : "table",
+                    title: "详情(在线人数)",
+                    query_api : "/office/dateTwo"
                 }
             ]
         }
