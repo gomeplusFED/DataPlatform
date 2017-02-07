@@ -90,10 +90,9 @@ module.exports = {
     },
 
     wordTwo(data , query , dates){
-
         let source = data.first.data[0];
         let Result = [];
-        let start = query.from - 1 || (query.page - 1) * query.limit;
+        let start = query.from ? query.from - 1 : (query.page - 1) * query.limit;
         let count = 0;
         for(let item of source){
             // 搜索排名
