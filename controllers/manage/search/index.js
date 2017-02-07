@@ -41,7 +41,7 @@ module.exports = (Router)=>{
         order : ["-date"],
         params : function(query , params , sendData){
             const date = [];
-            const start = query.startTime;
+            const start = new Date(query.startTime);
             date.push(utils.moment(start));
             date.push(utils.moment(start - 24 * 60 * 60 * 1000));
             params.date = date;
