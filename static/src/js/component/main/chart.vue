@@ -226,10 +226,10 @@ var Chart = Vue.extend({
 				series.push(_curr);
 			}
 
-			if (legend.length > 10 || chartType === 'pie') {
-				options.legend.orient = 'vertical';
-				options.legend.left = 0;
-			}
+			// if (legend.length > 10 || chartType === 'pie') {
+			// 	options.legend.orient = 'vertical';
+			// 	options.legend.left = 0;
+			// }
 			options.legend.data = legend;
 			options.xAxis.data = xAxis;
 			options.series = series;
