@@ -60,7 +60,7 @@
 					<td><a @click="detail(item)">趋势</a></td>
 				</tr>
 				<tr v-show="noData">
-					 <td colspan="8">暂无数据</td>
+					 <td colspan="9">暂无数据</td>
 				 </tr>
 			</tbody>
 		</table>
