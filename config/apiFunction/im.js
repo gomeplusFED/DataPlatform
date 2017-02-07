@@ -30,7 +30,19 @@ let cluster = global.cluster;
 //     }
 // });
 // 
-
+var redisGet = (keys) => {
+    return new Promise((resolve, reject) => {
+        cluster.pipeline([
+            keys
+        ]).exec((err, data) => {
+            if(err) {
+                reject(err);
+            } else {
+                resolve(data);
+            }
+        });
+    });
+};
 
 
 let Component_Using = {
@@ -94,8 +106,30 @@ module.exports = {
             }
 
             let date = moment(new Date()).format("MMDD"),
-        zDate = moment(new Date - 24 * 60 * 60 * 1000).format("MMDD");
-            
+                zDate = moment(new Date - 24 * 60 * 60 * 1000).format("MMDD");
+            redisGet([
+                //总计发消息人数
+                ['get' , 'message:total:' + date + ':uv'],
+
+                //单聊
+                ['get' , 'message:single:'+ date +':pv'],
+                ['get' , 'message:single:'+ date +':uv'],
+
+                //群聊
+                ['get' , 'message:group:' + date +":uv"],
+                ['get' , 'message:group:' + date +":pv"],
+
+                //app登录人数，用于计算IM占比
+                ['get' , 'message:login:' + date +':uv'],
+
+                //设置免打扰
+                ['get' , 'message:app:'   + date +':notdisturb:count'],
+
+                //表情下载次数
+                ['get' , 'message:app:'   + date +':faceload:count']
+            ]).then((data)=>{
+                console.log(data);
+            });
 
             let DATA = util.toTable([Result] , obj.rows , obj.cols);
             res.json({
