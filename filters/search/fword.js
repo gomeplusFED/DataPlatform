@@ -95,8 +95,8 @@ module.exports = {
         let start = query.from ? query.from - 1 : (query.page - 1) * query.limit;
         let count = 0;
         for(let item of source){
-            key.search_order_sum = (key.search_order_sum / 100).toFixed(2);
-            key.search_order_sum_pay = (key.search_order_sum_pay / 100).toFixed(2);
+            item.search_order_sum = (item.search_order_sum / 100).toFixed(2);
+            item.search_order_sum_pay = (item.search_order_sum_pay / 100).toFixed(2);
             // 搜索排名
             item.rank = start + (++count);
             // 点击次数转化率=IPV/PV
