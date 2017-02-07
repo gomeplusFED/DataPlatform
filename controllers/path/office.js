@@ -99,10 +99,10 @@ module.exports = {
                 {
                     type : "chart",
                     query_api : "/office/dateZero"
-                // },{
-                //     type : "chart",
-                //     title: "时段详情(在线人数)",
-                //     query_api : "/office/dateOne"
+                },{
+                    type : "chart",
+                    title: "时段详情(在线人数)",
+                    query_api : "/office/dateOne"
                 // },{
                 //     type : "table",
                 //     title: "详情(在线人数)",

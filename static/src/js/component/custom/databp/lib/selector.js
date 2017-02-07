@@ -158,16 +158,26 @@ UTILS._cssPathStep = function(node, optimized, isTargetNode)
     var needsNthChild = false;
     var ownIndex = -1;
     var siblings = parent.children;
+    var siblingsNodeNames = [];
     for (var i = 0; (ownIndex === -1 || !needsNthChild) && i < siblings.length; ++i) {
         var sibling = siblings[i];
+        var siblingName = sibling.nodeName.toLowerCase();
+        siblingsNodeNames.push(siblingName);
+
         if (sibling === node) {
             ownIndex = i;
             continue;
         }
         if (needsNthChild)
             continue;
-        if (sibling.nodeName.toLowerCase() !== nodeName.toLowerCase())
+
+        if (siblingName !== nodeName.toLowerCase()) {
             continue;
+            // ignore .wrap
+        } else if (parent.nodeName.toLowerCase() !== 'body') {
+            needsNthChild = true;
+            continue;
+        }
 
         needsClassNames = true;
         var ownClassNames = prefixedOwnClassNamesArray;
@@ -196,9 +206,9 @@ UTILS._cssPathStep = function(node, optimized, isTargetNode)
         result += "[type=\"" + node.getAttribute("type") + "\"]";
     if (needsNthChild) {
     	// for IE8  replcae nth-child with +
-    	var tmpres = result + ":first-child";
-    	for (var i = 0;i < ownIndex;i++) {
-    		tmpres += '+' + result;
+    	var tmpres = siblingsNodeNames[0] + ":first-child";
+    	for (var i = 1; i <= ownIndex; i++) {
+    		tmpres += '+' + siblingsNodeNames[i];
     	}
     	result = tmpres;
         // result += ":nth-child(" + (ownIndex + 1) + ")";

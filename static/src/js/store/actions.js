@@ -7,13 +7,6 @@ actions.alert = function(store, params) {
     }, 2500);
 }
 
-<<<<<<< .merge_file_t6ktLC
-=======
-actions.databp = function(store, params) {
-    store.dispatch('DATABP', params);
-}
-
->>>>>>> .merge_file_mwt8uk
 actions.modalTable = function(store, params) {
     store.dispatch('MODALTABLE', params);
 }

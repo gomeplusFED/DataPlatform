@@ -116,7 +116,14 @@
 
 				// 修正重定向
 				let $iframewin = iframenode.contentWindow;
-				_this.bpConfig.pageUrl = $iframewin.$pageUrl;
+				let _newurl= $iframewin.$pageUrl;
+				// 修复最后无/
+				let host;
+				if((host = _newurl.match(/^https:\/\/[^\/]+?\//)) && (host = host[0])) {
+					_this.bpConfig.pageUrl = _newurl;
+				} else {
+					host = _this.bpConfig.pageUrl = _newurl + '/';
+				}
 				_this.bpConfig.platform = $iframewin.$platform;
 
 
@@ -138,6 +145,23 @@
 							}
 							$target.addClass('bphover');
 							hovered.push($target);
+							let elemtop = $target.offset().top - 30;
+							let maxtop = $iframe.height() - $($iframewin).height();
+							if(elemtop >  maxtop) {
+								$body.animate({
+				                    scrollTop: maxtop
+				                }, 2000);
+								$('html body').animate({
+				                    scrollTop: elemtop - maxtop
+				                }, 2000);
+							} else {
+								$body.animate({
+				                    scrollTop: elemtop
+				                }, 2000);
+								$('html body').animate({
+				                    scrollTop: 0
+				                }, 2000);
+							}
 						}
 					}
 					$body.bind('contextmenu', function(e) {
@@ -162,6 +186,11 @@
 						// actions.databp(store, _this.bpConfig);
 						e.preventDefault();
 					});
+					$body.bind('dragend', function(e){
+						let $target = $(e.target);
+						$target.parent().attr('draggable', 'true');
+						$(e.target).css('visibility','hidden');
+				    });
 					$body.mouseover(
 						function(e) {
 							for (var i in hovered) {
@@ -184,9 +213,17 @@
 					let $target = $(e.target);
 					let href = $target.attr('href') || $target.parents('a').attr('href');
 					if (href && href.indexOf('javascript') === -1) {
-						_this.bpConfig.pageUrl = href;
+						if (/https?:\/\//.test(href)) {
+							// do noting
+							_this.bpConfig.pageUrl = href;
+						} else {
+							if (href.startsWith('/')) {
+								_this.bpConfig.pageUrl = host + href.slice(1);
+							} else {
+								_this.bpConfig.pageUrl = _this.bpConfig.pageUrl.replace(/\/$/, '') + '/' + href;
+							}
+						}
 						_this.searchClick();
-
 					}
 					return false;
 				});

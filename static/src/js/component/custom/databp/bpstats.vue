@@ -15,8 +15,8 @@
 				<label>是否模块</label>
 				<select class="form-control inp inpW2" v-model="searchParam.type">
 					<option value=''>全部</option>
-					<option value='0'>模块</option>
-					<option value='0'>单点</option>
+					<option value='block'>模块</option>
+					<option value='point'>单点</option>
 				</select>
 			</li>
 			<li>
@@ -28,7 +28,7 @@
 			</li>
 			<li style="height:30px;">
 				<label><input type="checkbox" v-model="showSum"></input>总计</label>
-				<input v-show="showSum" class="form-control inp inpW1" type="text" placeholder="" value="PV : {{sum.pv || '  '}}   UV : {{sum.uv || '  '}}" disabled>
+				<input v-show="showSum" class="form-control inp inpW1" type="text" placeholder="" value="PV : {{sum.pv == null ? '  ' : sum.pv}}   UV : {{sum.uv == null ? '  ' : sum.uv}}" disabled>
 			</li>
 		</ul> 
 	</div>
@@ -53,7 +53,7 @@
 					<td>{{item.pointName}}</td>
 					<td>单击</td>
 					<td title="{{item.type}}">{{item.type === 'block' ? '是' : '否'}}</td>
-					<td title="{{item.pageUrl}}"><a @click="heatmap(item)">{{item.pageUrl}}</a></td>
+					<td title="{{item.pageUrl}}"><a v-if="item.uniquePoint !== '2'" @click="heatmap(item)">{{item.pageUrl}}</a></td>
 					<td title="{{item.pointParam}}">{{item.pointParam || '-'}}</td>
 					<td title="{{item.PV}}">{{item.pv || '-'}}</td>
 					<td title="{{item.UV}}">{{item.uv || '-'}}</td>
