@@ -746,7 +746,7 @@ module.exports = {
                 ep.emit("one" , data);
             });
             
-            req.models.ImGroupActive.find({
+            /*req.models.ImGroupActive.find({
                 date : orm.between(query.startTime , query.endTime),
                 day_type: query.day_type
             } , {
@@ -758,11 +758,21 @@ module.exports = {
                     return;
                 }
                 ep.emit("two" , data);
+            });*/
+
+
+            req.models.db1.driver.execQuery(`select group_name , group_member_count , group_mess_pv , (group_mess_pv / group_member_count)  as "Man" from ads2_im_group_active_top where date BETWEEN ? AND ? AND day_type = ? order by Man desc limit 20 offset ?` , [query.startTime , query.endTime , query.day_type , (query.page - 1)*query.limit] , (err , data) => {
+                if(err){
+                    next(err);
+                    return;
+                }
+                ep.emit("two" , data);
             });
+
 
             ep.all("one" , "two" , (one , two)=>{
                 for(let item of two){
-                    item["群活跃度"] = util.toFixed(item.group_mess_pv , item.group_member_count);
+                    item["群活跃度"] = util.toFixed(item.Man , 0);
                 }
                 DATA = util.toTable([two] , OBJ.rows , OBJ.cols , [one]);
 
