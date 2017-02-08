@@ -679,9 +679,9 @@ module.exports = {
                     TableData[2].A = "IM-单聊交易";
                     TableData[2].B = SqlResult["im_single_order_users"];
                     TableData[2].C = SqlResult["im_single_paid_users"];
-                    TableData[2].D = SqlResult["im_order_times"] - SqlResult["im_group_order_times"];
-                    TableData[2].E = SqlResult["im_paid_times"] - SqlResult["im_group_paid_times"];
-                    TableData[2].F = SqlResult["im_paid_amount"] - SqlResult["im_group_paid_amount"];                    
+                    TableData[2].D = util.toRound( SqlResult["im_order_times"] - SqlResult["im_group_order_times"] , 0);
+                    TableData[2].E = util.toRound( SqlResult["im_paid_times"] - SqlResult["im_group_paid_times"] , 0);
+                    TableData[2].F = util.toRound( SqlResult["im_paid_amount"] - SqlResult["im_group_paid_amount"] , 0);                    
 
                     TableData[3].A = "平台-总交易";
                     TableData[3].B = SqlResult["order_users"];
