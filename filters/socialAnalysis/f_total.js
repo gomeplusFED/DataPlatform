@@ -97,7 +97,7 @@ module.exports = {
             replytopicallcount   = 0;
 
         if(second.length > 0){
-            registeruserallcount = second[0].registeruserallcount || 0;
+            registeruserallcount = second[0].register_user_all_count || 0;
         }
         if(third.length > 0){
             replytopicallcount = third[0].replytopicallcount || 0;
