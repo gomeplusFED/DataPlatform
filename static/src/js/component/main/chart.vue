@@ -170,6 +170,7 @@ var Chart = Vue.extend({
 				type: 'get',
 				data: _this.resultArgvs,
 				timeout: 5000,
+				async: false,
 				success: function(data) {
 					if (data.iserro) {
 						actions.alert(store, {
