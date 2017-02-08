@@ -156,7 +156,6 @@
 					url: this.currentData.query_api + '_json',
 					type: 'get',
 					data: _this.resultArgvs,
-					async: false,
 					timeout: 5000,
 					success: function(data) {
 						if (data.iserro) {
