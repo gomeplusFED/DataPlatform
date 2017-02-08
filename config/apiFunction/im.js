@@ -799,7 +799,7 @@ module.exports = {
                 Condition.offset= (query.page - 1)*query.limit;
             }
 
-            req.models.ImGroupActive.find({
+            /*req.models.ImGroupActive.find({
                 date : orm.between(query.startTime , query.endTime),
                 day_type: query.day_type
             } , Condition , (err , data) => {
@@ -810,6 +810,28 @@ module.exports = {
 
                 for(let item of data){
                     item["群活跃度"] = util.toFixed(item.group_mess_pv , item.group_member_count);
+                }
+
+                let conf = excelExport.analysisExcel([{
+                    data : data,
+                    rows : OBJ.rows[0],
+                    cols : OBJ.cols[0]
+                }]),
+                    result = nodeExcel.execute(conf);
+
+                res.setHeader('Content-Type', 'application/vnd.openxmlformats');
+                res.setHeader("Content-Disposition", "attachment; filename=" + "Report.xlsx");
+                res.end(result, 'binary');
+            });*/
+
+
+            req.models.db1.driver.execQuery(`select group_name , group_member_count , group_mess_pv , (group_mess_pv / group_member_count)  as "Man" from ads2_im_group_active_top where date BETWEEN ? AND ? AND day_type = ? order by Man desc limit ? offset ?` , [query.startTime , query.endTime , query.day_type , Condition.limit , Condition.offset] , (err , data) => {
+                if(err){
+                    next(err);
+                    return;
+                }
+                for(let item of data){
+                    item["群活跃度"] = util.toFixed(item.Man , 0);
                 }
 
                 let conf = excelExport.analysisExcel([{
