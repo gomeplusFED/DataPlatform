@@ -28,15 +28,101 @@ module.exports = (Router) => {
 
     //通讯录功能
     Router = new main(Router , {
-        router : "/office/versionOne",
-        modelName : ["ads2_company_oa_version_analysis"],
+        router : "/office/funOne",
+        modelName : ["ads2_company_oa_function_analysis"],
         platform : false,
         global_platform : global_platform,
         toggle : {
             show : true
         },
-        filter (data, query){
-            return filter.one(data, query, utils.timesTwo(query.startTime, query.endTime, "1"));
+        excel_export : true,
+        flexible_btn : [{
+            content: '<a href="javascript:void(0)">导出</a>',
+            preMethods: ['excel_export']
+        }],
+        params(query, params) {
+            params.approval_name = "all";
+            params.wm = params.wm || this.global_platform.list[0].key;
+
+            return params;
+        },
+        filter (data, query, dates, type){
+            return filter.one(data, query, utils.timesTwo(query.startTime, query.endTime, "1"), type);
+        }
+    });
+
+    //设置功能
+    Router = new main(Router , {
+        router : "/office/funTwo",
+        modelName : ["ads2_company_oa_function_analysis"],
+        platform : false,
+        global_platform : global_platform,
+        toggle : {
+            show : true
+        },
+        excel_export : true,
+        flexible_btn : [{
+            content: '<a href="javascript:void(0)">导出</a>',
+            preMethods: ['excel_export']
+        }],
+        params(query, params) {
+            params.approval_name = "all";
+            params.wm = params.wm || this.global_platform.list[0].key;
+
+            return params;
+        },
+        filter (data, query, dates, type){
+            return filter.two(data, query, utils.timesTwo(query.startTime, query.endTime, "1"), type);
+        }
+    });
+
+    //审批功能
+    Router = new main(Router , {
+        router : "/office/funThree",
+        modelName : ["ads2_company_oa_function_analysis"],
+        platform : false,
+        global_platform : global_platform,
+        toggle : {
+            show : true
+        },
+        excel_export : true,
+        flexible_btn : [{
+            content: '<a href="javascript:void(0)">导出</a>',
+            preMethods: ['excel_export']
+        }],
+        params(query, params) {
+            params.approval_name = "all";
+            params.wm = params.wm || this.global_platform.list[0].key;
+
+            return params;
+        },
+        filter (data, query, dates, type){
+            return filter.three(data, query, utils.timesTwo(query.startTime, query.endTime, "1"), type);
+        }
+    });
+
+    //审批
+    Router = new main(Router , {
+        router : "/office/funThree",
+        modelName : ["ads2_company_oa_function_analysis"],
+        platform : false,
+        global_platform : global_platform,
+        toggle : {
+            show : true
+        },
+        excel_export : true,
+        flexible_btn : [{
+            content: '<a href="javascript:void(0)">导出</a>',
+            preMethods: ['excel_export']
+        }],
+        params(query, params) {
+            params.approval_name = "all";
+            params.wm = params.wm || this.global_platform.list[0].key;
+
+            return params;
+        },
+        filter (data, query, dates, type){
+            return filter.three(data, query, utils.timesTwo(query.startTime, query.endTime, "1"), type);
         }
     });
 

@@ -134,4 +134,19 @@ module.exports = {
             ]
         }
     },
+    funOperating(){
+        return {
+            id : 307,
+            name : "审批单详情",
+            path : "/office/funOperating",
+            display : true,
+            defaultData : [
+                {
+                    type : "table",
+                    title : "审批类型详情",
+                    query_api : "/office/funOperatingOne"
+                }
+            ]
+        }
+    },
 };
