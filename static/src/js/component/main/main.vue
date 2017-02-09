@@ -125,7 +125,7 @@ var Main = Vue.extend({
 				_this.debug =  data.modelName;
 
 				if (_this.isnoComponent(data.components)) {
-					// Vue.set(_this.argvs, 'forceChange', true);
+					Vue.set(_this.argvs, 'forceChange', true);
 					_this.count = 0;
 				}
 
@@ -148,7 +148,7 @@ var Main = Vue.extend({
 			}
 		});
 		eventBus.$on('platformChange', (plataform, key) => {
-			if (_this.argvs[key] && _this.argvs[key] !== plataform) {
+			if (_this.argvs[key] !== plataform) {
 				Vue.set(_this.argvs, key, plataform);
 			}
 		});
