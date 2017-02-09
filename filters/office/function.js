@@ -19,8 +19,8 @@ module.exports = {
             let newData = {};
             for(let date of dates) {
                 newData[date] = {
-                    value : 0,
-                    value2 : 0
+                    view_organization : 0,
+                    view_search : 0
                 };
             }
             for(let key of source) {
@@ -75,8 +75,8 @@ module.exports = {
             let newData = {};
             for(let date of dates) {
                 newData[date] = {
-                    value : 0,
-                    value2 : 0
+                    advice_feedback : 0,
+                    advice_commit : 0
                 };
             }
             for(let key of source) {
@@ -140,8 +140,10 @@ module.exports = {
             let newData = {};
             for(let date of dates) {
                 newData[date] = {
-                    value : 0,
-                    value2 : 0
+                    approval_commit : 0,
+                    approval_agree : 0,
+                    approval_refuse : 0,
+                    approval_cancel : 0
                 };
             }
             for(let key of source) {
@@ -199,10 +201,38 @@ module.exports = {
             ]];
             for(let key of source) {
                 key.date = utils.moment(key.date);
-                key.operating = `<button class='btn btn-default' url_link='/office/funOperating' url_fixed_params='{"startTime": "${key.date}","endTime": "${key.date}"}'>查看详细<<</button>`;
+                key.operating = `<button class='btn btn-default' url_link='/office/funOperating' url_fixed_params='{}'>查看详细<<</button>`;
             }
 
             return utils.toTable([source], rows, cols);
         }
     },
+    operating(data) {
+        const source = data.first.data;
+        const rows = [["approval_name", "approval_commit", "approval_agree", "approval_refuse", "approval_cancel"]];
+        const cols = [[
+            {
+                caption : "审批种类",
+                type : "string"
+            },{
+                caption : "提交审批数",
+                type : "number",
+                help : "提交成功的审批数"
+            },{
+                caption : "审批同意数",
+                type : "number",
+                help : "审批同意成功的次数"
+            },{
+                caption : "审批拒绝数",
+                type : "number",
+                help : "审批拒绝成功的次数"
+            },{
+                caption : "审批撤销数",
+                type : "number",
+                help : "审批撤销成功的次数"
+            }
+        ]];
+
+        return utils.toTable([source], rows, cols);
+    }
 };

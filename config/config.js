@@ -310,9 +310,11 @@ const Config = {
                 obj.office.terminal(),
                 obj.office.date(),
                 obj.office.fun(),
+                obj.office.error()
             ],
             routers : [
-                obj.office.terminalOther()
+                obj.office.terminalOther(),
+                obj.office.funOperating()
             ]
         },
         "29": {

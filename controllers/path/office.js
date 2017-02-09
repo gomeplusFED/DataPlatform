@@ -117,6 +117,11 @@ module.exports = {
             name : "功能分析",
             path : "/office/fun",
             display : true,
+            // subPages : [ {
+            //     id : 307,
+            //     url : "/office/funOperating",
+            //     name : "审批单详情"
+            // }],
             defaultData : [
                 {
                     type : "chart",
@@ -146,6 +151,25 @@ module.exports = {
                     title : "审批类型详情",
                     query_api : "/office/funOperatingOne"
                 }
+            ]
+        }
+    },
+    error(){
+        return {
+            id : 308,
+            name : "错误分析",
+            path : "/office/error",
+            display : true,
+            defaultData : [
+                {
+                    type : "chart",
+                    title : "错误趋势",
+                    query_api : "/office/errorOne"
+                // },{
+                //     type : "table",
+                //     title : "错误列表",
+                //     query_api : "/office/errorTwo"
+                },
             ]
         }
     },
