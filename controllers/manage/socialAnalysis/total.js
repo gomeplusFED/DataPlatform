@@ -71,7 +71,7 @@ module.exports = (Router) => {
             day_type    : query.day_type || 1,
             ver         : 0,
             channel     : 0,
-            type        : "ALL"
+            type        : 0
         };
 
         req.models.tbl_rt_group.find(Condition , (err , data) => {
