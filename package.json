@@ -20,7 +20,6 @@
     "babel-runtime": "^6.6.1",
     "body-parser": "1.14.1",
     "commander": "^2.9.0",
-    "connect-redis": "^3.2.0",
     "cookie-session": "2.0.0-alpha.1",
     "echarts": "3.2.2",
     "ejs": "2.3.4",
