@@ -6,7 +6,6 @@
 var ldap = require('ldapjs');
 var config = require('../config');
 var lodash = require('lodash');
-
 var username = 'LDAP_SysDevDept';
 var password = '3m4>9kj9+@-du!p3';
 var ldapurl = 'ldap://10.69.100.4';

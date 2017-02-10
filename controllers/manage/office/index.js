@@ -1,0 +1,183 @@
+/**
+ * @author yanglei
+ * @date 2017-01-23
+ * @fileoverview
+ */
+const filter = require("../../../filters/office"),
+    utils = require("../../../utils"),
+    main = require("../../../base/main"),
+    global_platform = {
+        show: true,
+        key: 'wm',
+        list: [{
+            key: 'ios',
+            name: 'IOS'
+        }, {
+            key: 'android',
+            name: 'Android'
+        }, {
+            key: 'app',
+            name: 'APP'
+        }, {
+            key: 'pc',
+            name: 'PC'
+        }]
+    };
+
+module.exports = (Router) => {
+    //整体数据
+    Router = new main(Router , {
+        router : "/office/indexOne",
+        modelName : ["ads2_company_oa_overview"],
+        platform : false,
+        date_picker : false,
+        global_platform : global_platform,
+        params : function(query , params , sendData){
+            const date = [];
+            const now = new Date();
+            date.push(utils.moment(now - 24 * 60 * 60 * 1000));
+            date.push(utils.moment(now - 2 * 24 * 60 * 60 * 1000));
+            params.date = date;
+            params.wm = params.wm || this.global_platform.list[0].key;
+            query.wm = params.wm;
+            return params;
+        },
+        filter (data, query){
+            return filter.indexOne(data, query);
+        }
+    });
+    //整体数据趋势
+    Router = new main(Router , {
+        router : "/office/indexTwo",
+        modelName : ["ads2_company_oa_overview"],
+        platform : false,
+        global_platform : global_platform,
+        params : function(query , params , sendData){
+            params.wm = params.wm || this.global_platform.list[0].key;
+            return params;
+        },
+        filter_select: [{
+            title: '',
+            filter_key : 'filter_key',
+            groups: [{
+                key: 'user',
+                value: '活跃用户构成'
+            }, {
+                key: 'start',
+                value: '启动次数'
+            }, {
+                key: 'error',
+                value: '错误次数'
+            }]
+        }],
+        filter (data, query){
+            return filter.indexTwo(data, query.filter_key, utils.timesTwo(query.startTime, query.endTime, "1"));
+        }
+    });
+    //整体数据明细
+    Router = new main(Router , {
+        router : "/office/indexThree",
+        modelName : ["ads2_company_oa_overview"],
+        platform : false,
+        global_platform : global_platform,
+        order : ["-date"],
+        excel_export : true,
+        paging : [true],
+        flexible_btn : [{
+            content: '<a href="javascript:void(0)">导出</a>',
+            preMethods: ['excel_export']
+        }],
+        params : function(query , params , sendData){
+            params.wm = params.wm || this.global_platform.list[0].key;
+            return params;
+        },
+        filter (data){
+            return filter.indexThree(data);
+        },
+        rows : [
+            ["date", "new_user", "active_user", "rate", "operate_user", "error_num", "error_user"]
+        ],
+        cols : [
+            [
+                {
+                    caption : "时间",
+                    type : "string"
+                },{
+                    caption : "新增账号",
+                    type : "number",
+                    help : "新激活的用户数据"
+                },{
+                    caption : "活跃用户",
+                    type : "number",
+                    help : "登录用户数"
+                },{
+                    caption : "新用户占比",
+                    type : "string",
+                    help : "新增账号/活跃用户*100%"
+                },{
+                    caption : "操作用户",
+                    type : "number",
+                    help : "登录后有操作行为的用户数"
+                },{
+                    caption : "错误次数",
+                    type : "number",
+                    help : "发生的错误总次数"
+                },{
+                    caption : "影响用户数",
+                    type : "number",
+                    help : "出现错误的用户数，去重"
+                }
+            ]
+        ]
+    });
+    //TOP版本
+    Router = new main(Router , {
+        router : "/office/indexFour",
+        modelName : ["ads2_company_oa_overview"],
+        platform : false,
+        date_picker : false,
+        global_platform : global_platform,
+        firstSql(query, params) {
+            const sql = `SELECT 
+                * 
+            FROM 
+                ads2_company_oa_version_analysis
+            WHERE
+                date = '${utils.moment(new  Date() - 24 * 60 * 60 * 1000)}' 
+            AND
+                day_type=1 
+            AND
+                wm='${params.wm || this.global_platform.list[0].key}'
+            ORDER BY ${query.filter_key} DESC`;
+
+            return {
+                sql : sql,
+                params : []
+            };
+        },
+        filter_select: [{
+            title: '',
+            filter_key : 'filter_key',
+            groups: [{
+                key: 'new_user',
+                value: '新增账户'
+            }, {
+                key: 'active_user',
+                value: '活跃用户'
+            }, {
+                key: 'start_num',
+                value: '启动次数'
+            }]
+        }],
+        flexible_btn: [{
+            content: '<a href="#!/office/version">查看更多</a>',
+            preMethods: [],
+            customMethods: ''
+        }],
+        filter (data, query){
+            return filter.indexFour(data, query.filter_key);
+        }
+    });
+
+    return Router;
+};

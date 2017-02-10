@@ -299,6 +299,24 @@ const Config = {
 
             ]
         },
+        "25": {
+            name: "美办数据",
+            display: true,
+            className: "fa  fa-laptop fa-fw",
+            href: "#",
+            path: [
+                obj.office.index(),
+                obj.office.version(),
+                obj.office.terminal(),
+                obj.office.date(),
+                obj.office.fun(),
+                obj.office.error()
+            ],
+            routers : [
+                obj.office.terminalOther(),
+                obj.office.funOperating()
+            ]
+        },
         "29": {
             name: "营销管理后台",
             display: true,
