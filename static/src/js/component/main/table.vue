@@ -139,7 +139,7 @@
 		},
 		props: ['initData', 'currentData', 'loading', 'index', 'resultArgvs', 'pageComponentsData'],
 		methods: {
-			fetchData: function(cb, errcb) {
+			fetchData: function(cb, errcb, abortcb) {
 				var _this = this;
 				if (_this.resultArgvs.forceChange) {
 					delete _this.resultArgvs.forceChange;
@@ -151,8 +151,11 @@
 					limit: this.paginationConf.itemsPerPage,
 					page: this.paginationConf.currentPage
 				});
-
-				$.ajax({
+			if (this.xhr) {
+				this.xhr.abort();
+			}
+			
+			this.xhr = $.ajax({
 					url: this.currentData.query_api + '_json',
 					type: 'get',
 					data: _this.resultArgvs,
@@ -171,6 +174,9 @@
 					error: function(jqXHR, status, errorThrown) {
 						if (status === 'timeout') {
 							errcb && errcb();
+						}
+						if (status === 'abort') {
+							abortcb && abortcb();
 						}
 					}
 				});
@@ -285,6 +291,11 @@
 						msg: '查询超时',
 						type: 'danger'
 					});
+				}, function() {
+						_this.loading.noLoaded -= 1;
+						if (_this.loading.noLoaded === 0) {
+							_this.loading.show = false;
+						}
 				});
 			}
 		},

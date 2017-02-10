@@ -148,7 +148,9 @@ var Main = Vue.extend({
 			}
 		});
 		eventBus.$on('platformChange', (plataform, key) => {
-			Vue.set(_this.argvs, key, plataform);
+			if (_this.argvs[key] !== plataform) {
+				Vue.set(_this.argvs, key, plataform);
+			}
 		});
 	},
 	methods: {

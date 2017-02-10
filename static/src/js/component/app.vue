@@ -88,6 +88,9 @@
 		},
 		route: {
 			data: function(transition) {
+				if (transition.from.path && transition.to.path.split('?')[0] === transition.from.path.split('?')[0]) {
+					return;
+				}
 				var url = this.$route.path.replace(/(\?.*)/, '');
 
 				if (!window.allPageConfig.page[url]) {
@@ -109,7 +112,7 @@
 				this.banSubPages = currentPageDefaultData.banSubPages || [];
 
 				var query_api = currentPageDefaultData.defaultData[0].query_api;
-
+				
 				if(query_api.lastIndexOf('Zero') === query_api.length-4) {
 					$.ajax({
 						url: query_api + '_json',
