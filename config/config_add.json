@@ -275,6 +275,100 @@
             }
         ]
     },
+    "20": {
+        "name": "IM分析",
+        "display": true,
+        "className": "fa  fa-laptop fa-fw",
+        "filename": "im",
+        "href": "#",
+        "path": [
+            {
+                "name": "实时分析",
+                "path": "/IM/realtime",
+                "display": true,
+                "id": "i7jp2j",
+                "defaultData": [
+                    {
+                        "type": "table",
+                        "title": "数据总览",
+                        "query_api": "/IM/realtime_One",
+                        "mark": 1484622259443
+                    },
+                    {
+                        "type": "chart",
+                        "title": "实时趋势",
+                        "query_api": "/IM/realtime_Two",
+                        "mark": 1486359199771
+                    }
+                ]
+            },
+            {
+                "name": "使用分析",
+                "path": "/IM/using",
+                "display": true,
+                "id": "5uvard",
+                "defaultData": [
+                    {
+                        "type": "table",
+                        "title": "数据总览",
+                        "query_api": "/IM/using_one",
+                        "mark": 1484636208559
+                    },
+                    {
+                        "type": "chart",
+                        "title": "数据趋势",
+                        "query_api": "/IM/using_Two",
+                        "mark": 1484706492749
+                    },
+                    {
+                        "type": "chart",
+                        "title": "IM使用情况",
+                        "query_api": "/IM/using_Three",
+                        "mark": 1484721268810
+                    },
+                    {
+                        "type": "chart",
+                        "title": "IM带来的交易",
+                        "query_api": "/IM/using_Four",
+                        "mark": 1484810139571
+                    },
+                    {
+                        "type": "table",
+                        "title": "圈子群活跃排行Top100",
+                        "query_api": "/IM/using_Five",
+                        "mark": 1484895412110
+                    }
+                ]
+            },
+            {
+                "name": "消息类型分析",
+                "path": "/IM/message",
+                "display": true,
+                "id": "1fiht3",
+                "defaultData": [
+                    {
+                        "type": "chart",
+                        "title": "消息类型统计列表",
+                        "query_api": "/IM/message_One",
+                        "mark": 1485055907953
+                    },
+                    {
+                        "type": "table",
+                        "title": "客服消息统计",
+                        "query_api": "/IM/message_Three",
+                        "mark": 1485068113438
+                    },
+                    {
+                        "type": "table",
+                        "title": "表情下载",
+                        "query_api": "/IM/message_Four",
+                        "mark": 1485069189047
+                    }
+                ]
+            }
+        ],
+        "routers": []
+    },
     "22": {
         "name": "性能分析",
         "display": true,

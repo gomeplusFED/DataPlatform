@@ -176,6 +176,14 @@ module.exports = {
     },
     ads2_livevideo_overview2 : {
         modelName : "ads2_livevideo_overview2"
+    },
+
+    //IM 
+    ads2_im_bring_transaction : {
+        modelName : "ads2_im_bring_transaction"
+    },
+    ads2_im_customerservice_msg : {
+        modelName : "ads2_im_customerservice_msg"
     }
 };
 
