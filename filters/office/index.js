@@ -7,7 +7,7 @@ const utils = require("../../utils");
 
 module.exports = {
     indexOne(data, query) {
-        let source = data.first.data[0],
+        let source = data.first.data,
             date = utils.moment(new Date() - 24 * 60 * 60 * 1000),
             type = query.wm,
             rows = [
@@ -140,7 +140,7 @@ module.exports = {
         }];
     },
     indexThree(data) {
-        const source = data.first.data[0];
+        const source = data.first.data;
         const count = data.first.count;
 
         for(let key of source) {
