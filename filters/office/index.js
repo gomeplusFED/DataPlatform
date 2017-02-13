@@ -61,7 +61,7 @@ module.exports = {
         for(let key of source) {
             key.date = utils.moment(key.date);
             key.new_active_user_total = key.new_active_user + key.old_active_user;
-            key.start_num_peruser = Math.ceil(key.start_num_peruser);
+            key.start_num_peruser = key.start_num_peruser.toFixed(2);
             if(date === key.date) {
                 obj = key;
             } else {
