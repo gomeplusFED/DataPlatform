@@ -129,7 +129,10 @@ module.exports = (Router) => {
         router : "/office/indexTwo",
         modelName : ["ads2_company_oa_overview"],
         platform : false,
-        global_platform : global_platform,
+        // global_platform : global_platform,
+        global_platform_filter(req) {
+            this.global_platform = globalPlatform(req.session.userInfo.type["301"]);
+        },
         params : function(query , params , sendData){
             params.wm = params.wm || this.global_platform.list[0].key;
             return params;
@@ -157,7 +160,10 @@ module.exports = (Router) => {
         router : "/office/indexThree",
         modelName : ["ads2_company_oa_overview"],
         platform : false,
-        global_platform : global_platform,
+        // global_platform : global_platform,
+        global_platform_filter(req) {
+            this.global_platform = globalPlatform(req.session.userInfo.type["301"]);
+        },
         order : ["-date"],
         excel_export : true,
         paging : [true],
@@ -242,7 +248,10 @@ module.exports = (Router) => {
         modelName : ["ads2_company_oa_version_analysis"],
         platform : false,
         date_picker : false,
-        global_platform : global_platform,
+        // global_platform : global_platform,
+        global_platform_filter(req) {
+            this.global_platform = globalPlatform(req.session.userInfo.type["301"]);
+        },
         firstSql(query, params) {
             const wm = params.wm || this.global_platform.list[0].key;
             if(wm === "ALL") {
