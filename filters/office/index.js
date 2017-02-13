@@ -11,7 +11,7 @@ module.exports = {
             date = utils.moment(new Date() - 24 * 60 * 60 * 1000),
             type = query.wm,
             rows = [
-                ["date", "new_user", "new_active_user_total", "operate_user", "start_num",
+                ["date", "new_user", "total_active_user", "operate_user", "start_num",
                     "start_num_peruser", "error_num", "error_user", "total_user"]
             ],
             cols = [[
@@ -156,7 +156,7 @@ module.exports = {
         const type = "pie";
         const filter_name = {
             new_user : "新增账户",
-            active_user : "活跃用户",
+            total_active_user : "活跃用户",
             start_num : "启动次数"
         };
         const map = {
