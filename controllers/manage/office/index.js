@@ -239,7 +239,7 @@ module.exports = (Router) => {
     //TOP版本
     Router = new main(Router , {
         router : "/office/indexFour",
-        modelName : ["ads2_company_oa_overview"],
+        modelName : ["ads2_company_oa_version_analysis"],
         platform : false,
         date_picker : false,
         global_platform : global_platform,
