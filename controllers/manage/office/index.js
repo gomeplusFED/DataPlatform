@@ -257,6 +257,11 @@ module.exports = (Router) => {
                 AND
                     day_type=1
                 ORDER BY ${query.filter_key} DESC`;
+
+                return {
+                    sql : sql,
+                    params : []
+                };
             }
             const sql = `SELECT 
                 * 
