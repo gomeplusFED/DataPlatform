@@ -268,7 +268,7 @@ module.exports = (Router) => {
                 key: 'new_user',
                 value: '新增账户'
             }, {
-                key: 'total_active_user',
+                key: 'active_user',
                 value: '活跃用户'
             }, {
                 key: 'start_num',
