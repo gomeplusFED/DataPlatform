@@ -254,35 +254,15 @@ module.exports = (Router) => {
         },
         firstSql(query, params) {
             const wm = params.wm || this.global_platform.list[0].key;
-            if(wm === "ALL") {
-                const sql = `SELECT 
-                    * 
-                FROM 
-                    (select SUM(new_user) new_user, SUM(active_user) active_user, SUM(start_num) start_num from ads2_company_oa_version_analysis where 
-                        date = '${utils.moment(new  Date() - 24 * 60 * 60 * 1000)}' 
-                        AND day_type=1 group by date) a
-                WHERE
-                    date = '${utils.moment(new  Date() - 24 * 60 * 60 * 1000)}' 
-                AND
-                    day_type=1
-                ORDER BY ${query.filter_key} DESC`;
-
-                return {
-                    sql : sql,
-                    params : []
-                };
-            }
             const sql = `SELECT 
-                * 
+                versions, SUM(new_user) new_user, SUM(active_user) active_user, SUM(start_num) 
             FROM 
                 ads2_company_oa_version_analysis
             WHERE
                 date = '${utils.moment(new  Date() - 24 * 60 * 60 * 1000)}' 
             AND
-                day_type=1 
-            AND
-                wm='${wm}'
-            ORDER BY ${query.filter_key} DESC`;
+                day_type=1 ${wm === 'ALL' ? "" : "wm='" + wm + "' "}
+            group by versions ORDER BY ${query.filter_key} DESC`;
 
             return {
                 sql : sql,
