@@ -11,38 +11,28 @@ let eventproxy = require("eventproxy"),
     excelExport = require('../../utils/excelExport'),
     nodeExcel = require('excel-export');
 
-let cluster = global.cluster;
-// cluster.get("message:app:0112:notdisturb:count" , (err , result)=>{
-//     console.log(23333);
-//     if(err){
-//         console.log(err);
-//     }
-//     console.log(result);
-// })
+let cluster = global.cluster , 
+    async = require('asyncawait/async'),
+    await = require('asyncawait/await');
 
-// cluster.pipeline([
-//     "message:app:0112:notdisturb:count"
-// ]).exec((err, data) => {
-//     if(err) {
-//         console.log(err);
-//     } else {
-//         console.log(data);
-//     }
-// });
-// 
-var redisGet = (keys) => {
-    return new Promise((resolve, reject) => {
-        cluster.pipeline([
-            keys
-        ]).exec((err, data) => {
-            if(err) {
-                reject(err);
-            } else {
-                resolve(data);
-            }
-        });
+let RedisGet = (obj) => {
+    let keys = Object.keys(obj);
+    return new Promise((resolve , reject) => {
+        let ep = new eventproxy();
+
+        for(let item of keys){
+            cluster.get(obj[item] , (err , result)=>{
+                obj[item] = result || 0;
+                ep.emit(item , result);
+            });
+        }
+
+        ep.all(keys , (...values)=>{
+            resolve(obj);
+        })
     });
-};
+}
+
 
 
 let Component_Using = {
@@ -88,12 +78,12 @@ module.exports = {
             "表情下载次数"
         ];
         return (req , res , next) => {
-            let row0 = {"date" : ""} , row1 = {"date" : "今日"} , row2 = {"date" : "昨日"} , row3 = {"date" : "占比"} , Result = [row0 , row1 , row2 , row3];
+            let row0 = {"date" : ""} , row1 = {} , row2 = {} , row3 = {"date" : "占比"} , Result = [row0 , row1 , row2 , row3];
             for(let i=1;i<obj.rows[0].length;i++){
-                row0[i] = Text[i];
-                row1[i] = 0;
-                row2[i] = 0;
-                row3[i] = 0;
+                row0[obj.rows[0][i]] = Text[i];
+                row1[obj.rows[0][i]] = 0;
+                row2[obj.rows[0][i]] = 0;
+                row3[obj.rows[0][i]] = 0;
             }
 
             if(Object.keys(req.query) == 0){
@@ -107,36 +97,58 @@ module.exports = {
 
             let date = moment(new Date()).format("MMDD"),
                 zDate = moment(new Date - 24 * 60 * 60 * 1000).format("MMDD");
-            redisGet([
-                //总计发消息人数
-                ['get' , 'message:total:' + date + ':uv'],
 
-                //单聊
-                ['get' , 'message:single:'+ date +':pv'],
-                ['get' , 'message:single:'+ date +':uv'],
+            let Obj = {
+                "total-uv"  : 'message:total:' + date + ':uv',
+                "single-pv" : 'message:single:'+ date +':pv',
+                "single-uv" : 'message:single:'+ date +':uv',
+                "group-uv"  : 'message:group:' + date +":uv",
+                "group-pv"  : 'message:group:' + date +":pv",
+                "login-uv"  : 'message:login:' + date +':uv',
+                "notdisturb": 'message:app:'   + date +':notdisturb:count',
+                "faceload"  : 'message:app:'   + date +':faceload:count'
+            }, Obj2 = {
+                "total-uv"  : 'message:total:' + zDate + ':uv',
+                "single-pv" : 'message:single:'+ zDate +':pv',
+                "single-uv" : 'message:single:'+ zDate +':uv',
+                "group-uv"  : 'message:group:' + zDate +":uv",
+                "group-pv"  : 'message:group:' + zDate +":pv",
+                "login-uv"  : 'message:login:' + zDate +':uv',
+                "notdisturb": 'message:app:'   + zDate +':notdisturb:count',
+                "faceload"  : 'message:app:'   + zDate +':faceload:count'
+            };
 
-                //群聊
-                ['get' , 'message:group:' + date +":uv"],
-                ['get' , 'message:group:' + date +":pv"],
+            async (function(){
+                let Result1 = await (RedisGet(Obj));
+                let Result2 = await (RedisGet(Obj2));
+                Result1.date = "今日";
+                Result2.date = "昨日";
 
-                //app登录人数，用于计算IM占比
-                ['get' , 'message:login:' + date +':uv'],
+                Result1.total_message = Result1["single-pv"] + Result1["group-pv"];
+                Result1["IM占比"] = Result1["total-uv"] / Result1["login-uv"];
 
-                //设置免打扰
-                ['get' , 'message:app:'   + date +':notdisturb:count'],
 
-                //表情下载次数
-                ['get' , 'message:app:'   + date +':faceload:count']
-            ]).then((data)=>{
-                console.log(data);
-            });
+                Result2.total_message = Result2["single-pv"] + Result2["group-pv"];
+                Result2["IM占比"] = Result2["total-uv"] / Result2["login-uv"];
 
-            let DATA = util.toTable([Result] , obj.rows , obj.cols);
-            res.json({
-                code: 200,
-                components: Component,
-                modelData: DATA,
-            });
+                let Row3 = {"date" : "占比"};
+                for(let key in Result1){
+                    if(key == "date") continue;
+
+                    Row3[key] = util.toFixed(Result1[key] , Result2[key]);
+                }
+
+                Result1["IM占比"] = util.toFixed(Result1["IM占比"] , 0);
+                Result2["IM占比"] = util.toFixed(Result2["IM占比"] , 0);
+
+
+                let DATA = util.toTable([[row0 , Result1 , Result2 , Row3]] , obj.rows , obj.cols);
+                res.json({
+                    code: 200,
+                    components: Component,
+                    modelData: DATA,
+                });
+            })();
         }
     },
 
@@ -160,7 +172,7 @@ module.exports = {
                     filter_key: 'message_type',
                     groups : [
                         {
-                            key: "all",
+                            key: "total",
                             value: '总计发消息数'
                         },
                         {
@@ -168,7 +180,7 @@ module.exports = {
                             value: '单聊发消息数'
                         },
                         {
-                            key: "total",
+                            key: "group",
                             value: '群聊发消息数'
                         }
                     ]
@@ -200,31 +212,92 @@ module.exports = {
                 return;
             }
 
+            // hour_log：代表的是按小时统计的，格式为MMddHH；例如：011210
 
+            // "message:single:"+hour_log+":pv"
 
-            
+            // "message:group:"+hour_log+":pv"
+            let key;
+            if(query.message_type == "single"){
+                key = ["message:single:**:pv"];
+            }else if(query.message_type == "group"){
+                key = ["message:group:**:pv"];
+            }else{
+                key = ["message:single:**:pv" , "message:group:**:pv"]
+            };
 
-            
+            let dates = [moment(new Date()).format("MMDD")];
+            if(query.type == "day"){
+                dates.push(moment(new Date() - 24 * 60 * 60 * 1000).format("MMDD"));
+            }else{
+                dates.push(moment(new Date() - 24 * 60 * 60 * 1000 * 7).format("MMDD"));
+            }
 
-            let DATA = [{
-                type : "line",
-                map : {
-                    "today" : "今日",
-                    "comparison" : "对比"
-                },
-                data : {},
-                config: { // 配置信息
-                    stack: false,  // 图的堆叠
-                    categoryY : true
+            let Result = {} , Obj = {} , Obj2 = {} , Obj3 = {} , Obj4 = {};
+            for(let i=1;i<=24;i++){
+                // 默认数据
+                let str = i-1 + ":00-" + i + ":00";
+                Result[str] = {
+                    today : 0,
+                    comparison : 0
+                };
+
+                let str2 = "";
+                if(i<10){
+                    str2 = "0" + i;
+                }else{
+                    str2 += i;
                 }
-            }];
-            
-            res.json({
-                code: 200,
-                components: Component,
-                modelData: DATA,
-            });
+
+                Obj[str] = key[0].replace(/\*{2}/g , dates[0] + str2);
+                Obj2[str] = key[0].replace(/\*{2}/g , dates[1] + str2);
+
+                if(key[1]){
+                    Obj3[str] = key[1].replace(/\*{2}/g , dates[0] + str2);
+                    Obj4[str] = key[1].replace(/\*{2}/g , dates[1] + str2);
+                }
+            }
+
+            async (function(){
+                let Result1 = await (RedisGet(Obj));
+                let Result2 = await (RedisGet(Obj2));
+
+                let Result3 , Result4;
+                if(key[1]){
+                    Result3 = await (RedisGet(Obj3));
+                    Result4 = await (RedisGet(Obj4));
+                }
+
+
+                for(let key in Result){
+                    if(key[1]){
+                        Result[key].today = Result1[key] + Result3[key];
+                        Result[key].comparison = Result2[key] + Result4[key];
+                    }else{
+                        Result[key].today = Result1[key];
+                        Result[key].comparison = Result2[key];
+                    }
+                }
+
+                let DATA = [{
+                    type : "line",
+                    map : {
+                        "today" : "今日",
+                        "comparison" : "对比"
+                    },
+                    data : Result,
+                    config: { // 配置信息
+                        stack: false,  // 图的堆叠
+                        categoryY : false
+                    }
+                }];
                 
+                res.json({
+                    code: 200,
+                    components: Component,
+                    modelData: DATA,
+                });
+            })();
         }
     },
     

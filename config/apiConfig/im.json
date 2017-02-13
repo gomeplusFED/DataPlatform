@@ -11,15 +11,15 @@
         "rows": [
             [
                 "date",
-                "1",
-                "2",
-                "3",
-                "4",
-                "5",
-                "6",
-                "7",
-                "8",
-                "9"
+                "total_message",
+                "total-uv",
+                "single-pv",
+                "single-uv",
+                "group-pv",
+                "group-uv",
+                "IM占比",
+                "notdisturb",
+                "faceload"
             ]
         ],
         "cols": [
