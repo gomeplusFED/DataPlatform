@@ -103,7 +103,7 @@ module.exports = (Router) => {
                 SUM(total_user) total_user
                 from ads2_company_oa_overview where
                 date between '${utils.moment(now - 2 * 24 * 60 * 60 * 1000)}' and '${utils.moment(now - 24 * 60 * 60 * 1000)}' 
-                and ${boo ? "wm='" + wm + "' and " : ""} and day_type=1 group by date`;
+                and ${boo ? "wm='" + wm + "' and " : ""} day_type=1 group by date`;
 
             return {
                 sql : sql,
@@ -183,7 +183,7 @@ module.exports = (Router) => {
                 SUM(total_user) total_user
                 from ads2_company_oa_overview where
                 date between '${query.startTime}' and '${query.endTime}' 
-                and ${boo ? "wm='" + wm + "' and " : ""} and day_type=1 group by date limit ?,?`;
+                and ${boo ? "wm='" + wm + "' and " : ""} day_type=1 group by date limit ?,?`;
             const page = query.page - 1 || 0,
                 offset = query.from || (page * query.limit),
                 limit = query.to || query.limit || 0;
