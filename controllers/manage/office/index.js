@@ -147,7 +147,7 @@ module.exports = (Router) => {
             return filter.indexThree(data);
         },
         rows : [
-            ["date", "new_user", "active_user", "rate", "operate_user", "error_num", "error_user"]
+            ["date", "new_user", "total_active_user", "rate", "operate_user", "error_num", "error_user"]
         ],
         cols : [
             [
@@ -214,7 +214,7 @@ module.exports = (Router) => {
                 key: 'new_user',
                 value: '新增账户'
             }, {
-                key: 'active_user',
+                key: 'total_active_user',
                 value: '活跃用户'
             }, {
                 key: 'start_num',
