@@ -244,6 +244,20 @@ module.exports = (Router) => {
         date_picker : false,
         global_platform : global_platform,
         firstSql(query, params) {
+            const wm = params.wm || this.global_platform.list[0].key;
+            if(wm === "ALL") {
+                const sql = `SELECT 
+                    * 
+                FROM 
+                    (select SUM(new_user) new_user, SUM(active_user) active_user, SUM(start_num) start_num from ads2_company_oa_version_analysis where 
+                        date = '${utils.moment(new  Date() - 24 * 60 * 60 * 1000)}' 
+                        AND day_type=1 group by date) a
+                WHERE
+                    date = '${utils.moment(new  Date() - 24 * 60 * 60 * 1000)}' 
+                AND
+                    day_type=1
+                ORDER BY ${query.filter_key} DESC`;
+            }
             const sql = `SELECT 
                 * 
             FROM 
@@ -253,7 +267,7 @@ module.exports = (Router) => {
             AND
                 day_type=1 
             AND
-                wm='${params.wm || this.global_platform.list[0].key}'
+                wm='${wm}'
             ORDER BY ${query.filter_key} DESC`;
 
             return {
