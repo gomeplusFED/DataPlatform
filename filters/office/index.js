@@ -47,7 +47,7 @@ module.exports = {
         let obj = {},
             obj2 = {};
 
-        if(type != "pc") {
+        if(type == "pc") {
             cols[0][4] = {
                 caption : "访问次数",
                 help : "访问官网次数，关闭浏览器或关闭网址视为启动结束"
