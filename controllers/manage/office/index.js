@@ -24,6 +24,55 @@ const filter = require("../../../filters/office"),
         }]
     };
 
+function globalPlatform(type) {
+    let all = true;
+    let global_platform = {
+        show: true,
+        key : "wm",
+        // name : "平台选择",
+        list : []
+    };
+    if(type[0] == "1") {
+        global_platform.list.push({
+            key: "ios",
+            name: "IOS"
+        });
+    } else {
+        all = false;
+    }
+    if(type[1] == "1") {
+        global_platform.list.push({
+            key: "android",
+            name: "Android"
+        });
+    } else {
+        all = false;
+    }
+    if(type[2] == "1") {
+        global_platform.list.push({
+            key: "app",
+            name: "APP"
+        });
+    } else {
+        all = false;
+    }
+    if(type[3] == "1") {
+        global_platform.list.push({
+            key: "pc",
+            name: "PC"
+        });
+    } else {
+        all = false;
+    }
+    if(all) {
+        global_platform.list = [{
+            key: "ALL",
+            name: "全部平台"
+        }].concat(global_platform.list);
+    }
+    return global_platform;
+}
+
 module.exports = (Router) => {
     //整体数据
     Router = new main(Router , {
@@ -31,7 +80,10 @@ module.exports = (Router) => {
         modelName : ["ads2_company_oa_overview"],
         platform : false,
         date_picker : false,
-        global_platform : global_platform,
+        // global_platform : global_platform,
+        global_platform_filter(req) {
+            this.global_platform = globalPlatform(req.session.userInfo.type["301"]);
+        },
         params : function(query , params , sendData){
             const date = [];
             const now = new Date();
