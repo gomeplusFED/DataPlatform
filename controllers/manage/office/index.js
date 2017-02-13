@@ -84,16 +84,42 @@ module.exports = (Router) => {
         global_platform_filter(req) {
             this.global_platform = globalPlatform(req.session.userInfo.type["301"]);
         },
-        params : function(query , params , sendData){
-            const date = [];
+        firstSql(query, params) {
             const now = new Date();
-            date.push(utils.moment(now - 24 * 60 * 60 * 1000));
-            date.push(utils.moment(now - 2 * 24 * 60 * 60 * 1000));
-            params.date = date;
-            params.wm = params.wm || this.global_platform.list[0].key;
-            query.wm = params.wm;
-            return params;
+            let boo = true;
+            const wm = params.wm || this.global_platform.list[0].key;
+            if(wm === "ALL") {
+                boo = false;
+            }
+            const sql = `select 
+                date,
+                SUM(new_user) new_user, 
+                SUM(total_active_user) total_active_user,
+                SUM(operate_user) operate_user,
+                SUM(start_num) start_num,
+                SUM(start_num_peruser) start_num_peruser,
+                SUM(error_num) error_num,
+                SUM(error_user) error_user,
+                SUM(total_user) total_user
+                from ads2_company_oa_overview where
+                date between '${utils.moment(now - 2 * 24 * 60 * 60 * 1000)}' and '${utils.moment(now - 24 * 60 * 60 * 1000)}' 
+                and ${boo ? "wm='" + wm + "' and " : ""} and day_type=1 group by date`;
+
+            return {
+                sql : sql,
+                params : []
+            };
         },
+        // params : function(query , params , sendData){
+        //     const date = [];
+        //     const now = new Date();
+        //     date.push(utils.moment(now - 24 * 60 * 60 * 1000));
+        //     date.push(utils.moment(now - 2 * 24 * 60 * 60 * 1000));
+        //     params.date = date;
+        //     params.wm = params.wm || this.global_platform.list[0].key;
+        //     query.wm = params.wm;
+        //     return params;
+        // },
         filter (data, query){
             return filter.indexOne(data, query);
         }
@@ -139,10 +165,38 @@ module.exports = (Router) => {
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
-        params : function(query , params , sendData){
-            params.wm = params.wm || this.global_platform.list[0].key;
-            return params;
+        firstSql(query, params) {
+            let boo = true;
+            const wm = params.wm || this.global_platform.list[0].key;
+            if(wm === "ALL") {
+                boo = false;
+            }
+            const sql = `select 
+                date,
+                SUM(new_user) new_user, 
+                SUM(total_active_user) total_active_user,
+                SUM(operate_user) operate_user,
+                SUM(start_num) start_num,
+                SUM(start_num_peruser) start_num_peruser,
+                SUM(error_num) error_num,
+                SUM(error_user) error_user,
+                SUM(total_user) total_user
+                from ads2_company_oa_overview where
+                date between '${query.startTime}' and '${query.endTime}' 
+                and ${boo ? "wm='" + wm + "' and " : ""} and day_type=1 group by date limit ?,?`;
+            const page = query.page - 1 || 0,
+                offset = query.from || (page * query.limit),
+                limit = query.to || query.limit || 0;
+
+            return {
+                sql : sql,
+                params : [+offset, +limit]
+            };
         },
+        // params : function(query , params , sendData){
+        //     params.wm = params.wm || this.global_platform.list[0].key;
+        //     return params;
+        // },
         filter (data){
             return filter.indexThree(data);
         },

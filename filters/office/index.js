@@ -107,7 +107,7 @@ module.exports = {
         for(let key of source) {
             key.date = utils.moment(key.date);
             for(let k in newData[key.date]) {
-                newData[key.date][k] = key[k];
+                newData[key.date][k] = key[k] + newData[key.date][k] || 0;
             }
         }
 
@@ -145,8 +145,7 @@ module.exports = {
 
         for(let key of source) {
             key.date = utils.moment(key.date);
-            key.active_user = key.new_active_user + key.old_active_user;
-            key.rate = utils.toFixed(key.new_user, key.active_user);
+            key.rate = utils.toFixed(key.new_user, key.total_active_user);
         }
 
         return utils.toTable([source], data.rows, data.cols, [count]);
