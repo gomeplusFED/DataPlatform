@@ -155,7 +155,7 @@ module.exports = {
         const type = "pie";
         const filter_name = {
             new_user : "新增账户",
-            total_active_user : "活跃用户",
+            active_user : "活跃用户",
             start_num : "启动次数"
         };
         const map = {
