@@ -25,17 +25,52 @@
 var redis = require("ioredis");
 var redisInfo = require("./db/redis.json");   //info
 var redisConfig = require("./db/config.json").redis;  // test or dev , test
-var cluster = new redis.Cluster(redisInfo[redisConfig]); 
+// var cluster = new redis.Cluster(redisInfo[redisConfig]); 
 
-cluster.on("connect" , (...data)=>{
-    console.log("redis connect");
+// cluster.on("connect" , (...data)=>{
+//     console.log("redis connect");
+// });
+
+// var key = "message:app:011210:notdisturb:count";
+// cluster.get(key, (err, data) => {
+//     if(err) {
+//         console.log(err);
+//     } else {
+//         console.log(data);
+//     }
+// })
+
+
+let moment = require("moment");
+
+let date = moment(new Date()).format("MMDD"),
+    zDate = moment(new Date() - 24 * 60 * 60 * 1000).format("MMDD");
+
+console.log(date , zDate);
+
+
+let eventproxy = require("eventproxy");
+
+let ep = new eventproxy();
+
+
+setTimeout(()=>{
+    ep.emit("one" , ["one" , "one"])
+} , 1000);
+
+
+setTimeout(()=>{
+    ep.emit("two" , ["two" , "two"])
+} , 1200);
+
+
+setTimeout(()=>{
+    ep.emit("three" , ["three" , "three"])
+} , 2000);
+
+
+ep.all(["one" , "two" , "three"] , function(...values){
+    console.log(values);
 });
 
-var key = "message:app:011210:notdisturb:count";
-cluster.get(key, (err, data) => {
-    if(err) {
-        console.log(err);
-    } else {
-        console.log(data);
-    }
-})
+

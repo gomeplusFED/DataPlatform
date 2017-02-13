@@ -257,7 +257,7 @@ module.exports = {
     },
     topicsSix(data, query) {
         var source = data.first.data,
-            count = data.first.count[0].count > 100 ? 100 : data.first.count[0].count,
+            count = data.first.count[0].count,
             orderSource = data.second.data[0],
             thirdSource = data.third.data[0],
             page = query.page || 1,

@@ -29,7 +29,7 @@ module.exports = {
             defaultData : [
                 {
                     type : "table",
-                    title: "热门话题排行TOP100",
+                    title: "热门话题排行",
                     query_api : "/socialAnalysis/topic_ReportOne"
                 }
             ]
