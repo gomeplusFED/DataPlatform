@@ -76,6 +76,7 @@ module.exports = (Router) => {
         date_picker : false,
         params(query , params , sendData){
             if(!query.type) params.type = "ALL";
+            params.category_id = "ALL";
             return params;
         },
         flexible_btn : [{
