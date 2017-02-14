@@ -97,6 +97,9 @@ module.exports = (Router) => {
                             return `${p1}="${host}/${p2}"`;
                         }
                     });
+                    // 移除统计脚本
+                    html = html.replace(/<script.+?uba-sdk.+?<\/script>/, '');
+
                     // 添加自定义脚本
                     let proxytext = `<script>${xhrProxy}('${url}', '${platform}');</script>`;
                     html = html.replace('<head>', '<head>' + proxytext);
