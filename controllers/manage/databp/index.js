@@ -12,7 +12,7 @@ var https = require('https');
 var xhrProxy = fs.readFileSync(path.resolve(__dirname,'./script/xhr-proxy.js'), {encoding: 'utf8'});
 
 
-
+var databpStorage = {};
 
 module.exports = (Router) => {
 
@@ -98,7 +98,7 @@ module.exports = (Router) => {
                 // 添加自定义脚本
                 let proxytext = `<script>${xhrProxy}('${url}', '${platform}');</script>`;
                 html = html.replace('<head>', '<head>' + proxytext);
-                req.session.databp = databpSess;
+                databpStorage[req.session.userInfo.id] = databpSess;
                 res.end(html);
             }).catch(function(e) {
                 console.log(e);
@@ -113,7 +113,7 @@ module.exports = (Router) => {
 
     });
     Router.all('/databp/ajax/*', (req, res, next) => {
-        let sess = req.session.databp;
+        let sess = databpStorage[req.session.userInfo.id];
         let {method, url, query, body, headers} = req;
         let host = sess.host;
         let newurl = url.replace('/databp/ajax', host);
@@ -154,7 +154,7 @@ module.exports = (Router) => {
         });
     })
     Router.get('/databp/js', (req, res, next) => {
-        let sess = req.session.databp;
+        let sess = databpStorage[req.session.userInfo.id];
         let { query, headers} = req;
         let method = 'get';
         let newurl = query.url;
