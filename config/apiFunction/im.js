@@ -303,13 +303,13 @@ module.exports = {
                 }
 
 
-                for(let key in Result){
+                for(let keys in Result){
                     if(key[1]){
-                        Result[key].today = Result1[key] / 1 + Result3[key] / 1;
-                        Result[key].comparison = Result2[key] / 1 + Result4[key] / 1;
+                        Result[keys].today = Result1[keys] / 1 + Result3[keys] / 1;
+                        Result[keys].comparison = Result2[keys] / 1 + Result4[keys] / 1;
                     }else{
-                        Result[key].today = Result1[key] / 1;
-                        Result[key].comparison = Result2[key] / 1;
+                        Result[keys].today = Result1[keys] / 1;
+                        Result[keys].comparison = Result2[keys] / 1;
                     }
                 }
                 
