@@ -58,7 +58,7 @@ module.exports = (Router) => {
             return params;
         },
         filter (data, query, dates, type){
-            ret.one(data, query, utils.timesTwo(query.startTime, query.endTime, "1"), type);
+            filter.one(data, query, utils.timesTwo(query.startTime, query.endTime, "1"), type);
         }
     });
 
