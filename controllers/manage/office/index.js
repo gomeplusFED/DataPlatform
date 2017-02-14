@@ -100,7 +100,7 @@ module.exports = (Router) => {
                 SUM(start_num_peruser) start_num_peruser,
                 SUM(error_num) error_num,
                 SUM(error_user) error_user,
-                SUM(total_user) total_user
+                SUM(total_user) total_user 
                 from ads2_company_oa_overview where
                 date between '${utils.moment(now - 2 * 24 * 60 * 60 * 1000)}' and '${utils.moment(now - 24 * 60 * 60 * 1000)}' 
                 and ${boo ? "wm='" + wm + "' and " : ""} day_type=1 group by date`;
@@ -261,7 +261,7 @@ module.exports = (Router) => {
             WHERE
                 date = '${utils.moment(new  Date() - 24 * 60 * 60 * 1000)}' 
             AND
-                day_type=1 ${wm === 'ALL' ? "" : "wm='" + wm + "' "}
+                day_type=1 ${wm === 'ALL' ? "" : "and wm='" + wm + "' "}
             group by versions ORDER BY ${query.filter_key} DESC`;
 
             return {
