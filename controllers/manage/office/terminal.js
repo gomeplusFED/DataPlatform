@@ -35,7 +35,7 @@ module.exports = (Router) => {
             AND
                 day_type=1
             AND
-                wm='客户端'
+                wm='app'
             AND
                 ${query.filter_type} IN (
                 SELECT ${query.filter_type} FROM (SELECT ${query.filter_type} FROM (SELECT 
@@ -47,7 +47,7 @@ module.exports = (Router) => {
                 AND
                     day_type=1
                 AND
-                    wm='客户端'
+                    wm='app'
                 GROUP BY ${query.filter_type}
                 ORDER BY ${query.filter_key} DESC) a LIMIT 0,10) b)`;
 
@@ -92,14 +92,14 @@ module.exports = (Router) => {
         platform : false,
         firstSql(query, params, isCount) {
             if(isCount) {
-                let sql = `select COUNT(*) count, SUM(new_user) new_user, SUM(operate_user) operate_user FROM (SELECT SUM(new_user) new_user, SUM(operate_user) operate_user FROM ads2_company_oa_terminal_analysis WHERE date BETWEEN '${query.startTime}' AND '${query.endTime}' AND day_type=1 and wm='客户端' GROUP BY ${query.filter_type}) a`;
+                let sql = `select COUNT(*) count, SUM(new_user) new_user, SUM(operate_user) operate_user FROM (SELECT SUM(new_user) new_user, SUM(operate_user) operate_user FROM ads2_company_oa_terminal_analysis WHERE date BETWEEN '${query.startTime}' AND '${query.endTime}' AND day_type=1 and wm='app' GROUP BY ${query.filter_type}) a`;
 
                 return {
                     sql : sql,
                     params : []
                 };
             } else {
-                let sql = `SELECT SUM(new_user) new_user, SUM(active_user) active_user, SUM(operate_user) operate_user, SUM(start_num) start_num, phone_type, phone_os FROM ads2_company_oa_terminal_analysis where date between '${query.startTime}' and '${query.endTime}' and day_type=1 and wm='客户端' GROUP BY ${query.filter_type} LIMIT ?,?`,
+                let sql = `SELECT SUM(new_user) new_user, SUM(active_user) active_user, SUM(operate_user) operate_user, SUM(start_num) start_num, phone_type, phone_os FROM ads2_company_oa_terminal_analysis where date between '${query.startTime}' and '${query.endTime}' and day_type=1 and wm='app' GROUP BY ${query.filter_type} LIMIT ?,?`,
                     page = query.page - 1 || 0,
                     offset = query.from || (page * query.limit),
                     limit = query.to || query.limit || 0;
@@ -158,7 +158,7 @@ module.exports = (Router) => {
             AND
                 day_type=1
             AND
-                wm='浏览器'
+                wm='web'
             AND
                 phone_type IN (
                 SELECT phone_type FROM (SELECT phone_type FROM (SELECT 
@@ -170,7 +170,7 @@ module.exports = (Router) => {
                 AND
                     day_type=1
                 AND
-                    wm='浏览器'
+                    wm='web'
                 GROUP BY phone_type
                 ORDER BY ${query.filter_key} DESC) a LIMIT 0,10) b)`;
 
@@ -205,14 +205,14 @@ module.exports = (Router) => {
         platform : false,
         firstSql(query, params, isCount) {
             if(isCount) {
-                let sql = `select COUNT(*) count, SUM(new_user) new_user, SUM(operate_user) operate_user FROM (SELECT SUM(new_user) new_user, SUM(operate_user) operate_user FROM ads2_company_oa_terminal_analysis WHERE date BETWEEN '${query.startTime}' AND '${query.endTime}' AND day_type=1 and wm='浏览器' GROUP BY phone_type) a`;
+                let sql = `select COUNT(*) count, SUM(new_user) new_user, SUM(operate_user) operate_user FROM (SELECT SUM(new_user) new_user, SUM(operate_user) operate_user FROM ads2_company_oa_terminal_analysis WHERE date BETWEEN '${query.startTime}' AND '${query.endTime}' AND day_type=1 and wm='web' GROUP BY phone_type) a`;
 
                 return {
                     sql : sql,
                     params : []
                 };
             } else {
-                let sql = `SELECT SUM(new_user) new_user, SUM(active_user) active_user, SUM(operate_user) operate_user, SUM(start_num) start_num, phone_type FROM ads2_company_oa_terminal_analysis where date between '${query.startTime}' and '${query.endTime}' and day_type=1 and wm='浏览器' GROUP BY phone_type LIMIT ?,?`,
+                let sql = `SELECT SUM(new_user) new_user, SUM(active_user) active_user, SUM(operate_user) operate_user, SUM(start_num) start_num, phone_type FROM ads2_company_oa_terminal_analysis where date between '${query.startTime}' and '${query.endTime}' and day_type=1 and wm='web' GROUP BY phone_type LIMIT ?,?`,
                     page = query.page - 1 || 0,
                     offset = query.from || (page * query.limit),
                     limit = query.to || query.limit || 0;
