@@ -255,7 +255,7 @@ module.exports = (Router) => {
         firstSql(query, params) {
             const wm = params.wm || this.global_platform.list[0].key;
             const sql = `SELECT 
-                versions, SUM(new_user) new_user, SUM(active_user) active_user, SUM(start_num) 
+                versions, SUM(new_user) new_user, SUM(active_user) active_user, SUM(start_num) start_num 
             FROM 
                 ads2_company_oa_version_analysis
             WHERE
