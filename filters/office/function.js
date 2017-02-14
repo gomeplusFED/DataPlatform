@@ -113,7 +113,7 @@ module.exports = {
                 {
                     caption : "提交率",
                     type : "string",
-                    help : "意见反馈打开数/意见反馈提交数"
+                    help : "意见反馈提交数/意见反馈打开数"
                 }
             ]];
             for(let key of source) {
