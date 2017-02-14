@@ -99,7 +99,7 @@ module.exports = (Router) => {
                     params : []
                 };
             } else {
-                let sql = `SELECT SUM(new_user) new_user, SUM(active_user) active_user, SUM(operate_user) operate_user, SUM(start_num) start_num, phone_type, phone_os FROM ads2_company_oa_terminal_analysis where date between '${query.startTime}' and '${query.endTime}' and day_type=1 and wm='app' GROUP BY ${query.filter_type} LIMIT ?,?`,
+                let sql = `SELECT SUM(new_user) new_user, SUM(active_user) active_user, SUM(operate_user) operate_user, SUM(start_num) start_num, phone_type, phone_os,operate_user_total  FROM ads2_company_oa_terminal_analysis where date between '${query.startTime}' and '${query.endTime}' and day_type=1 and wm='app' GROUP BY ${query.filter_type} LIMIT ?,?`,
                     page = query.page - 1 || 0,
                     offset = query.from || (page * query.limit),
                     limit = query.to || query.limit || 0;
@@ -212,7 +212,7 @@ module.exports = (Router) => {
                     params : []
                 };
             } else {
-                let sql = `SELECT SUM(new_user) new_user, SUM(active_user) active_user, SUM(operate_user) operate_user, SUM(start_num) start_num, phone_type FROM ads2_company_oa_terminal_analysis where date between '${query.startTime}' and '${query.endTime}' and day_type=1 and wm='web' GROUP BY phone_type LIMIT ?,?`,
+                let sql = `SELECT SUM(new_user) new_user, SUM(active_user) active_user, SUM(operate_user) operate_user, SUM(start_num) start_num, phone_type, operate_user_total FROM ads2_company_oa_terminal_analysis where date between '${query.startTime}' and '${query.endTime}' and day_type=1 and wm='web' GROUP BY phone_type LIMIT ?,?`,
                     page = query.page - 1 || 0,
                     offset = query.from || (page * query.limit),
                     limit = query.to || query.limit || 0;

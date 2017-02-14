@@ -105,7 +105,7 @@ module.exports = {
 
         for(let key of source) {
             key.rate = utils.toFixed(key.new_user, count.new_user || 0);
-            key.rate_one = utils.toFixed(key.operate_user, count.operate_user || 0);
+            key.rate_one = utils.toFixed(key.operate_user, key.operate_user_total || 0);
         }
 
         return utils.toTable([source], [rows.concat(row)], [cols.concat(col)], [count.count]);
