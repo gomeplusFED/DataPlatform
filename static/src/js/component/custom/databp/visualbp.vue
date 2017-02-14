@@ -212,7 +212,7 @@
 				$body.click(function(e) {
 					let $target = $(e.target);
 					let href = $target.attr('href') || $target.parents('a').attr('href');
-					if (href && href.indexOf('javascript') === -1) {
+					if (href && !(/javascript|##/.test(href))) {
 						if (/https?:\/\//.test(href)) {
 							// do noting
 							_this.bpConfig.pageUrl = href;
