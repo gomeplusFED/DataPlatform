@@ -124,11 +124,11 @@ module.exports = {
                 Result1.date = "今日";
                 Result2.date = "昨日";
 
-                Result1.total_message = Result1["single-pv"] + Result1["group-pv"];
+                Result1.total_message = Result1["single-pv"] / 1 + Result1["group-pv"] / 1;
                 Result1["IM占比"] = Result1["total-uv"] / Result1["login-uv"];
 
 
-                Result2.total_message = Result2["single-pv"] + Result2["group-pv"];
+                Result2.total_message = Result2["single-pv"] / 1 + Result2["group-pv"] / 1;
                 Result2["IM占比"] = Result2["total-uv"] / Result2["login-uv"];
 
                 let Row3 = {"date" : "占比"};
