@@ -63,8 +63,9 @@ module.exports = (Router) => {
                 origin: trunk,
                 host
             };
-        }).then(() => fetch(url, options)
+        }).then(() => fetch(encodeURI(url), options)
             .then(function (result) {
+                // console.log(result);
                 let rawcookie = result.headers;
                 if ((rawcookie = rawcookie._headers) && (rawcookie = rawcookie['set-cookie'])) {
                     rawcookie = rawcookie.toString();
@@ -160,7 +161,7 @@ module.exports = (Router) => {
             });
     })
     Router.get('/databp/js', (req, res, next) => {
-        let sess = databpStorage[req.session.userInfo.id];
+        let sess = databpStorage[req.session.userInfo.id] || {};
         let {
             query,
             headers
@@ -173,6 +174,7 @@ module.exports = (Router) => {
             'referer': sess.url,
             'origin': ''
         }
+        
         let keys = Object.keys(headers);
         for (let key of keys) {
             if (newheaders[key] == null) {
@@ -180,6 +182,7 @@ module.exports = (Router) => {
             }
         }
         delete newheaders['origin'];
+        delete newheaders['cookie'];
         fetch(newurl, {
                 method,
                 headers: newheaders,
