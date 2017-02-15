@@ -43,13 +43,14 @@ module.exports = function(Router) {
         userInfo.export =  JSON.parse(userInfo.export);
         userInfo.sub_pages =  JSON.parse(userInfo.sub_pages || "{}");
         userInfo.type =  JSON.parse(userInfo.type || "{}");
-        req.sessionOptions.maxAge = new Date(Date.now() + maxAge);
+        req.session.cookie.maxAge = new Date(Date.now() + maxAge);
+        // req.sessionOptions.maxAge = new Date(Date.now() + maxAge);
         req.session.userInfo = userInfo;
         req.session.isLogin = true;
     }
 
     Router.post('/logout', function(req, res) {
-        req.session = null;
+        req.session.destroy();
         res.redirect('/login');
     });
 

@@ -5,7 +5,9 @@
  */
 var ejs = require('ejs');
 var express = require('express');
-var session = require('cookie-session');
+// var session = require('cookie-session');
+var session = require("express-session");
+var cookieParse = require("cookie-parser");
 var lactate = require('lactate');
 var config = require('./config/config');
 var bodyParser = require('body-parser');
@@ -61,9 +63,12 @@ app.use(bodyParser.json());
 
 app.set('trust proxy', 1);
 
+app.use(cookieParse());
 app.use(session({
     name: 'DataPlatform',
-    secret: 'DataPlatform'
+    secret: 'DataPlatform',
+    resave : true,
+    saveUninitialized : true
 }));
 
 app.use(flash);
