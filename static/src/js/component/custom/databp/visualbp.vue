@@ -210,24 +210,31 @@
 				}
 
 				$body.click(function(e) {
+					
 					let $target = $(e.target);
 					let href = $target.attr('href') || $target.parents('a').attr('href');
-					if (href && !(/javascript|##/.test(href))) {
-						if (/https?:\/\//.test(href)) {
+					if(href) {
+						if (/#/.test(href)) {
+							// 有锚点,防止跳转
+							return false;
+						} else if (/javascript/.test(href)){
+							// 内联脚本 正常执行
+
+						} else if (/https?:\/\//.test(href)) {
 							// do noting
 							_this.bpConfig.pageUrl = href;
+							_this.searchClick();
+							return false;
 						} else {
 							if (href.startsWith('/')) {
 								_this.bpConfig.pageUrl = host + href.slice(1);
 							} else {
 								_this.bpConfig.pageUrl = _this.bpConfig.pageUrl.replace(/\/$/, '') + '/' + href;
 							}
+							_this.searchClick();
+							return false;
 						}
-						_this.searchClick();
-					} else {
-						return false;
 					}
-					return false;
 				});
 
 			},
@@ -251,7 +258,7 @@
 			},
 			search(forceloading = false) {
 				this.loading.show = true;
-				var newiframe_url = '/databp/html?m='+this.bpConfig.platform+'&url=' + this.bpConfig.pageUrl;
+				var newiframe_url = '/databp/html?m='+this.bpConfig.platform+'&url=' + encodeURIComponent(this.bpConfig.pageUrl);
 				if (newiframe_url === this.iframe_url && !forceloading) {
 					this.loading.show = false;
 					this.$dispatch('search_clicked', this.bpConfig);
