@@ -200,9 +200,9 @@ module.exports = (Router) => {
                         one : config[key].name,
                         o : key,
                         two : item.name,
-                        t : index
+                        t : item.id
                     });
-                    obj[key].cell[index] = item.name;
+                    obj[key].cell[item.id] = item.name;
                 });
             }
         }
