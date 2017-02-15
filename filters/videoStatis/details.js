@@ -272,7 +272,7 @@ module.exports = {
                         live_play_num.num = key.live_play_num;
                         live_play_num.name = time;
                     }
-                    if(rate.num < obj[time].rate) {
+                    if(rate.num < +obj[time].rate) {
                         rate.num = obj[time].rate;
                         rate.name = time;
                     }
