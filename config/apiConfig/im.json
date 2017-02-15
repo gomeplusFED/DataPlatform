@@ -78,7 +78,7 @@
         "singleFn": "im_realtime_two_api",
         "rows" : [
             [
-                "Date",
+                "Time",
                 "today",
                 "comparison"
             ]

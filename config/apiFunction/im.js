@@ -22,7 +22,7 @@ let RedisGet = (obj) => {
 
         for(let item of keys){
             cluster.get(obj[item] , (err , result)=>{
-                obj[item] = result || 0;
+                obj[item] = (result || 0) / 1;
                 ep.emit(item , result);
             });
         }
@@ -105,8 +105,8 @@ module.exports = {
                 "group-uv"  : 'message:group:' + date +":uv",
                 "group-pv"  : 'message:group:' + date +":pv",
                 "login-uv"  : 'message:login:' + date +':uv',
-                "notdisturb": 'message:app:'   + date +':notdisturb:count',
-                "faceload"  : 'message:app:'   + date +':faceload:count'
+                "notdisturb": 'abc',
+                "faceload"  : 'abc'
             }, Obj2 = {
                 "total-uv"  : 'message:total:' + zDate + ':uv',
                 "single-pv" : 'message:single:'+ zDate +':pv',
@@ -114,13 +114,47 @@ module.exports = {
                 "group-uv"  : 'message:group:' + zDate +":uv",
                 "group-pv"  : 'message:group:' + zDate +":pv",
                 "login-uv"  : 'message:login:' + zDate +':uv',
-                "notdisturb": 'message:app:'   + zDate +':notdisturb:count',
-                "faceload"  : 'message:app:'   + zDate +':faceload:count'
+                "notdisturb": 'abc',
+                "faceload"  : 'abc'
             };
+
+            //处理特别的 设置免打扰次数 表情下载次数
+            let notdisturb = {} , faceload = {};
+            for(let i=0;i<24;i++){
+                let str = '';
+                if(i<10){
+                    str = '0' + i;
+                }else{
+                    str += i;
+                }
+                notdisturb["today_" + i] = 'message:app:' + date + str +':notdisturb:count';
+                notdisturb["last_" + i]  = 'message:app:' + zDate + str +':notdisturb:count';
+                faceload["today_" + i] = 'message:app:' + date + str +':faceload:count';
+                faceload["last_" + i]  = 'message:app:' + zDate + str +':faceload:count';
+            }
 
             async (function(){
                 let Result1 = await (RedisGet(Obj));
                 let Result2 = await (RedisGet(Obj2));
+
+                //设置免打扰次数   表情下载次数
+
+                let Notdisturb1 = await (RedisGet(notdisturb));
+                let Faceload1   = await (RedisGet(faceload));
+
+                let Reg = /today/ig;
+                for(let keys in Notdisturb1){
+                    if(Reg.test(keys)){
+                        Result1.notdisturb += Notdisturb1[keys] / 1;
+                        Result1.faceload   += Faceload1[keys] / 1;
+                    }else{
+                        Result2.notdisturb += Notdisturb1[keys] / 1;
+                        Result2.faceload   += Faceload1[keys] / 1;
+                    }
+                }
+
+
+
                 Result1.date = "今日";
                 Result2.date = "昨日";
 
@@ -152,7 +186,7 @@ module.exports = {
         }
     },
 
-    im_realtime_two_api(Obj){
+    im_realtime_two_api(OBJ){
         let Component = {
             date_picker:{
                 name : "startTime",
@@ -234,9 +268,9 @@ module.exports = {
             }
 
             let Result = {} , Obj = {} , Obj2 = {} , Obj3 = {} , Obj4 = {};
-            for(let i=1;i<=24;i++){
+            for(let i=0;i<24;i++){
                 // 默认数据
-                let str = i-1 + ":00-" + i + ":00";
+                let str = i + ":00-" + (i+1) + ":00";
                 Result[str] = {
                     today : 0,
                     comparison : 0
@@ -269,16 +303,16 @@ module.exports = {
                 }
 
 
-                for(let key in Result){
+                for(let keys in Result){
                     if(key[1]){
-                        Result[key].today = Result1[key] + Result3[key];
-                        Result[key].comparison = Result2[key] + Result4[key];
+                        Result[keys].today = Result1[keys] / 1 + Result3[keys] / 1;
+                        Result[keys].comparison = Result2[keys] / 1 + Result4[keys] / 1;
                     }else{
-                        Result[key].today = Result1[key];
-                        Result[key].comparison = Result2[key];
+                        Result[keys].today = Result1[keys] / 1;
+                        Result[keys].comparison = Result2[keys] / 1;
                     }
                 }
-
+                
                 let DATA = [{
                     type : "line",
                     map : {
@@ -291,6 +325,20 @@ module.exports = {
                         categoryY : false
                     }
                 }];
+                
+                if(query.main_show_type_filter == "table"){
+                    let TableArr = [];
+                    for(let key_r in Result){
+                        let obj = {
+                            "Time" : key_r,
+                            "today": Result[key_r].today,
+                            "comparison": Result[key_r].comparison
+                        }
+                        TableArr.push(obj);
+                    }
+                    DATA = util.toTable([TableArr] , OBJ.rows , OBJ.cols);
+                }
+
                 
                 res.json({
                     code: 200,

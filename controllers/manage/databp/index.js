@@ -9,15 +9,17 @@ var fs = require('fs');
 var path = require('path');
 var querystring = require('querystring');
 var https = require('https');
-var xhrProxy = fs.readFileSync(path.resolve(__dirname,'./script/xhr-proxy.js'), {encoding: 'utf8'});
+var xhrProxy = fs.readFileSync(path.resolve(__dirname, './script/xhr-proxy.js'), {
+    encoding: 'utf8'
+});
 
 
-
+var databpStorage = {};
 
 module.exports = (Router) => {
 
     Router.get('/databp/html', (req, res, next) => {
-        
+
         let url = req.query.url;
         let options = {
             credentials: 'include',
@@ -29,7 +31,7 @@ module.exports = (Router) => {
             }
         };
         let platform = req.query.m;
-        let mobile = (platform === 'H5'? true:false);
+        let mobile = (platform === 'H5' ? true : false);
         let mobileProc = Promise.resolve(true);
         let relocation;
         if (mobile || (/\/\/m\./.test(url) && !mobile)) {
@@ -39,11 +41,11 @@ module.exports = (Router) => {
             }
             options.redirect = 'manual';
             // 先请求一次，探查真实地址
-            mobileProc = fetch(url, options).then(function(result) {
+            mobileProc = fetch(url, options).then(function (result) {
                 // console.log(result.headers);
-                if((relocation = result.headers._headers) && (relocation = relocation.location) && (relocation = relocation[0]) && (relocation !== url)) {
+                if ((relocation = result.headers._headers) && (relocation = relocation.location) && (relocation = relocation[0]) && (relocation !== url)) {
                     url = relocation;
-                    if(!mobile) {
+                    if (!mobile) {
                         platform = 'PC';
                     }
                 }
@@ -56,14 +58,14 @@ module.exports = (Router) => {
         mobileProc.then(() => {
             trunk = url.replace(/\/[^\/]*?$/, '');
             host = trunk.replace(/([^\/:\s])\/.*$/, '$1');
-            databpSess =  {
+            databpSess = {
                 url,
                 origin: trunk,
                 host
             };
-        }).then(() =>{
-            fetch(url, options)
-            .then(function(result) {
+        }).then(() => fetch(encodeURI(url), options)
+            .then(function (result) {
+                // console.log(result);
                 let rawcookie = result.headers;
                 if ((rawcookie = rawcookie._headers) && (rawcookie = rawcookie['set-cookie'])) {
                     rawcookie = rawcookie.toString();
@@ -76,18 +78,18 @@ module.exports = (Router) => {
                 }
 
                 return result.text();
-            }).then(function(body) {
+            }).then(function (body) {
                 let html = body;
                 // 移动端移除头部script，防止iframe无法正常渲染
                 if (mobile) {
-                    html = html.replace(/^[\s\S]+?(<!DOCTYPE)/mi, function(m, p1) {
+                    html = html.replace(/^[\s\S]+?(<!DOCTYPE)/mi, function (m, p1) {
                         return p1;
                     });
                 }
                 // 转化静态标签的src和href，使其可以正常访问
 
-                html = html.replace(/(href|src)\s*=\s*"\s*((?!http|\/\/|javascript).+?)\s*"/g, function(m, p1, p2) {
-                    if(p2.indexOf('.') === 0) {
+                html = html.replace(/(href|src)\s*=\s*"\s*((?!http|\/\/|javascript).+?)\s*"/g, function (m, p1, p2) {
+                    if (p2.indexOf('.') === 0) {
                         return `${p1}="${trunk}/${p2}"`;
                     } else if (p2.indexOf('/') === 0) {
                         return `${p1}="${host}${p2}"`;
@@ -95,96 +97,106 @@ module.exports = (Router) => {
                         return `${p1}="${host}/${p2}"`;
                     }
                 });
+                // 移除统计脚本
+                html = html.replace(/<script.+?uba-sdk.+?<\/script>/, '');
+
                 // 添加自定义脚本
                 let proxytext = `<script>${xhrProxy}('${url}', '${platform}');</script>`;
                 html = html.replace('<head>', '<head>' + proxytext);
-                req.session.databp = databpSess;
+                databpStorage[req.session.userInfo.id] = databpSess;
                 res.end(html);
-            }).catch(function(e) {
-                console.log(e);
-                res.end(e.toString());
-                // next(e);
-            });
+            })
+        ).catch(function (e) {
+            console.log(e);
+            res.end(e.toString());
+            // next(e);
         });
-
-        
-
-        // res.end('error');
 
     });
     Router.all('/databp/ajax/*', (req, res, next) => {
-        let sess = req.session.databp;
-        let {method, url, query, body, headers} = req;
+        let sess = databpStorage[req.session.userInfo.id];
+        let {
+            method,
+            url,
+            query,
+            body,
+            headers
+        } = req;
         let host = sess.host;
         let newurl = url.replace('/databp/ajax', host);
         let newheaders = {
-            'cookie': sess.cookie.join(' ').slice(0 , -1),
+            'cookie': sess.cookie.join(' ').slice(0, -1),
             'host': host.replace(/https?:\/\//, ''),
-            'referer': sess.url,
-            'origin': ''
+            'referer': encodeURI(sess.url),
+            'origin': null
         }
-        sess.cookie.some((x,i) => {
-            if(x.includes('content_ctag')) {
-                newheaders['content-type-ctag'] = x.split('content_ctag=')[1].slice(0 , -1);
+        sess.cookie.some((x, i) => {
+            if (x.includes('content_ctag')) {
+                newheaders['content-type-ctag'] = x.split('content_ctag=')[1].slice(0, -1);
                 return true;
             }
             return false;
         });
         let keys = Object.keys(headers);
-        for(let key of keys) {
+        for (let key of keys) {
             if (newheaders[key] == null) {
                 newheaders[key] = headers[key];
             }
         }
         delete newheaders['origin'];
-        // console.log(newheaders);
-        body = JSON.stringify(body);
+        for (let key in body) {
+            let oldval = body[key]
+            body[key] = encodeURI(oldval);
+        }
+        if (newheaders['content-type'] && newheaders['content-type'].indexOf('x-www-form-urlencoded') > -1) {
+            let qstr = '';
+            for (let key in body) {
+                qstr += `${key}=${body[key]}&`
+            }
+            body = qstr.slice(0, -1);
+        } else {
+            body = JSON.stringify(body);
+        }
+        
         fetch(newurl, {
-            method,
-            headers: newheaders,
-            body,
-            credentials: 'include'
-        })
-        .then(function(result) {
-            return result.text();
-        }).then(function(json) {
-            res.send(json);
-        }).catch(function(err) {
-            console.log(err);
-        });
+                method,
+                headers: newheaders,
+                body,
+                credentials: 'include'
+            })
+            .then(function (result) {
+                return result.text();
+            }).then(function (json) {
+                res.send(json);
+            }).catch(function (err) {
+                console.log(err);
+            });
     })
     Router.get('/databp/js', (req, res, next) => {
-        let sess = req.session.databp;
-        let { query, headers} = req;
+        let sess = databpStorage[req.session.userInfo.id] || {};
+        let {
+            query
+        } = req;
         let method = 'get';
         let newurl = query.url;
         let host = newurl.match(/https?:\/\/(.+?)\//)[1];
         let newheaders = {
-            host,
-            'referer': sess.url,
-            'origin': ''
+            host
         }
-        let keys = Object.keys(headers);
-        for(let key of keys) {
-            if (newheaders[key] == null) {
-                newheaders[key] = headers[key];
-            }
-        }
-        delete newheaders['origin'];
         fetch(newurl, {
-            method,
-            headers: newheaders,
-            credentials: 'include'
-        })
-        .then(function(result) {
-            return result.text();
-        }).then(function(js) {
-            // 改变关于location的脚本
-            js = js && js.replace(/\.assign\(([^,]+?)\)/g, '.$assign($1)');
-            res.send(js);
-        }).catch(function(err) {
-            console.log(err);
-        });
+                method,
+                headers: newheaders,
+                credentials: 'include'
+            })
+            .then(function (result) {
+                return result.text();
+            }).then(function (js) {
+                // 改变关于location的脚本
+                js = js && js.replace(/\.assign\(([^,]+?)\)/g, '.$assign($1)');
+                res.send(js);
+            }).catch(function (err) {
+                console.log(err);
+            });
     })
     return Router;
 };
