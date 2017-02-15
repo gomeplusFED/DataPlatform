@@ -63,53 +63,52 @@ module.exports = (Router) => {
                 origin: trunk,
                 host
             };
-        }).then(() => {
-            fetch(url, options)
-                .then(function (result) {
-                    let rawcookie = result.headers;
-                    if ((rawcookie = rawcookie._headers) && (rawcookie = rawcookie['set-cookie'])) {
-                        rawcookie = rawcookie.toString();
-                        let cookie = rawcookie.match(/(mx_pc_gomeplusid|mx_wap_gomeplusid|content_ctag|mx_pc_code_total)=.+?;/g);
-                        if (cookie) {
-                            databpSess.cookie = cookie;
-                        } else {
-                            databpSess.cookie = [];
-                        }
+        }).then(() => fetch(url, options)
+            .then(function (result) {
+                let rawcookie = result.headers;
+                if ((rawcookie = rawcookie._headers) && (rawcookie = rawcookie['set-cookie'])) {
+                    rawcookie = rawcookie.toString();
+                    let cookie = rawcookie.match(/(mx_pc_gomeplusid|mx_wap_gomeplusid|content_ctag|mx_pc_code_total)=.+?;/g);
+                    if (cookie) {
+                        databpSess.cookie = cookie;
+                    } else {
+                        databpSess.cookie = [];
                     }
+                }
 
-                    return result.text();
-                }).then(function (body) {
-                    let html = body;
-                    // 移动端移除头部script，防止iframe无法正常渲染
-                    if (mobile) {
-                        html = html.replace(/^[\s\S]+?(<!DOCTYPE)/mi, function (m, p1) {
-                            return p1;
-                        });
-                    }
-                    // 转化静态标签的src和href，使其可以正常访问
-
-                    html = html.replace(/(href|src)\s*=\s*"\s*((?!http|\/\/|javascript).+?)\s*"/g, function (m, p1, p2) {
-                        if (p2.indexOf('.') === 0) {
-                            return `${p1}="${trunk}/${p2}"`;
-                        } else if (p2.indexOf('/') === 0) {
-                            return `${p1}="${host}${p2}"`;
-                        } else {
-                            return `${p1}="${host}/${p2}"`;
-                        }
+                return result.text();
+            }).then(function (body) {
+                let html = body;
+                // 移动端移除头部script，防止iframe无法正常渲染
+                if (mobile) {
+                    html = html.replace(/^[\s\S]+?(<!DOCTYPE)/mi, function (m, p1) {
+                        return p1;
                     });
-                    // 移除统计脚本
-                    html = html.replace(/<script.+?uba-sdk.+?<\/script>/, '');
+                }
+                // 转化静态标签的src和href，使其可以正常访问
 
-                    // 添加自定义脚本
-                    let proxytext = `<script>${xhrProxy}('${url}', '${platform}');</script>`;
-                    html = html.replace('<head>', '<head>' + proxytext);
-                    databpStorage[req.session.userInfo.id] = databpSess;
-                    res.end(html);
-                }).catch(function (e) {
-                    console.log(e);
-                    res.end(e.toString());
-                    // next(e);
+                html = html.replace(/(href|src)\s*=\s*"\s*((?!http|\/\/|javascript).+?)\s*"/g, function (m, p1, p2) {
+                    if (p2.indexOf('.') === 0) {
+                        return `${p1}="${trunk}/${p2}"`;
+                    } else if (p2.indexOf('/') === 0) {
+                        return `${p1}="${host}${p2}"`;
+                    } else {
+                        return `${p1}="${host}/${p2}"`;
+                    }
                 });
+                // 移除统计脚本
+                html = html.replace(/<script.+?uba-sdk.+?<\/script>/, '');
+
+                // 添加自定义脚本
+                let proxytext = `<script>${xhrProxy}('${url}', '${platform}');</script>`;
+                html = html.replace('<head>', '<head>' + proxytext);
+                databpStorage[req.session.userInfo.id] = databpSess;
+                res.end(html);
+            })
+        ).catch(function (e) {
+            console.log(e);
+            res.end(e.toString());
+            // next(e);
         });
 
     });
