@@ -43,6 +43,7 @@
 		data: function() {
 			return {
 				iframe_url: '',
+				deadtimer: null,
 				iframe_node: null,
 				bpConfig: {
 					show: false,
@@ -258,6 +259,7 @@
 			},
 			search(forceloading = false) {
 				this.loading.show = true;
+				this.deadtimer && clearTimeout(this.deadtimer);
 				var newiframe_url = '/databp/html?m='+this.bpConfig.platform+'&url=' + encodeURIComponent(this.bpConfig.pageUrl);
 				if (newiframe_url === this.iframe_url && !forceloading) {
 					this.loading.show = false;
@@ -265,7 +267,7 @@
 					
 				}
 				this.iframe_url = newiframe_url;
-				setTimeout(() => {
+				this.deadtimer = setTimeout(() => {
 					if(this.loading.show) {
 						if (window.stop) {
 						    window.stop();
