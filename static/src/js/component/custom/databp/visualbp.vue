@@ -260,7 +260,11 @@
 			search(forceloading = false) {
 				this.loading.show = true;
 				this.deadtimer && clearTimeout(this.deadtimer);
-				var newiframe_url = '/databp/html?m='+this.bpConfig.platform+'&url=' + encodeURIComponent(this.bpConfig.pageUrl);
+				let rawurl = this.bpConfig.pageUrl;
+				var newiframe_url = '/databp/html?m='+this.bpConfig.platform+'&url=' + encodeURIComponent(rawurl);
+				let rawquery = rawurl.split('?')[1];
+				rawquery && (newiframe_url += '&' + rawquery);
+				
 				if (newiframe_url === this.iframe_url && !forceloading) {
 					this.loading.show = false;
 					this.$dispatch('search_clicked', this.bpConfig);

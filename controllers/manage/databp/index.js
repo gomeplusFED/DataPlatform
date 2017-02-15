@@ -127,8 +127,8 @@ module.exports = (Router) => {
         let newheaders = {
             'cookie': sess.cookie.join(' ').slice(0, -1),
             'host': host.replace(/https?:\/\//, ''),
-            'referer': sess.url,
-            'origin': ''
+            'referer': encodeURI(sess.url),
+            'origin': null
         }
         sess.cookie.some((x, i) => {
             if (x.includes('content_ctag')) {
@@ -144,8 +144,20 @@ module.exports = (Router) => {
             }
         }
         delete newheaders['origin'];
-        // console.log(newheaders);
-        body = JSON.stringify(body);
+        for (let key in body) {
+            let oldval = body[key]
+            body[key] = encodeURI(oldval);
+        }
+        if (newheaders['content-type'] && newheaders['content-type'].indexOf('x-www-form-urlencoded') > -1) {
+            let qstr = '';
+            for (let key in body) {
+                qstr += `${key}=${body[key]}&`
+            }
+            body = qstr.slice(0, -1);
+        } else {
+            body = JSON.stringify(body);
+        }
+        
         fetch(newurl, {
                 method,
                 headers: newheaders,
@@ -163,26 +175,14 @@ module.exports = (Router) => {
     Router.get('/databp/js', (req, res, next) => {
         let sess = databpStorage[req.session.userInfo.id] || {};
         let {
-            query,
-            headers
+            query
         } = req;
         let method = 'get';
         let newurl = query.url;
         let host = newurl.match(/https?:\/\/(.+?)\//)[1];
         let newheaders = {
-            host,
-            'referer': sess.url,
-            'origin': ''
+            host
         }
-        
-        let keys = Object.keys(headers);
-        for (let key of keys) {
-            if (newheaders[key] == null) {
-                newheaders[key] = headers[key];
-            }
-        }
-        delete newheaders['origin'];
-        delete newheaders['cookie'];
         fetch(newurl, {
                 method,
                 headers: newheaders,
