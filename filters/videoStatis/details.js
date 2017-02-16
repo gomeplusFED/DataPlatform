@@ -229,9 +229,9 @@ module.exports = {
             },
             obj = {};
 
-        let time = moment(new Date(start)).format("HH:mm");
         let start = new Date(query.startTime).getTime(),
             end = new Date(query.endTime).getTime(),
+            time = moment(new Date(start)).format("HH:mm"),
             stop_play_num = {
                 num : 0,
                 name : time
