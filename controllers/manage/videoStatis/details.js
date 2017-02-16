@@ -247,9 +247,9 @@ module.exports = (Router) => {
                 });
             }
 
-            util.export(ws, [
+            util.export(ws, [[
                 [1, 1, 1, 1, `直播id: ${query.live_play_id}`, style],
-                [1, 2, 1, 2, `sdk类型: ${query.sdk_type}`, style]].concat(util.excelReport([{
+                [1, 2, 1, 2, `sdk类型: ${query.sdk_type}`, style]]].concat(util.excelReport([{
                     data : newData,
                     rows : rows,
                     cols : cols
