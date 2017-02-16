@@ -231,24 +231,25 @@ module.exports = {
 
         let start = new Date(query.startTime).getTime(),
             end = new Date(query.endTime).getTime(),
-            time = moment(new Date(start)).format("HH:mm"),
+            date = moment(new Date(start)).format("HH:mm"),
             stop_play_num = {
                 num : 0,
-                name : time
+                name : date
             },
             rate = {
                 num : 0,
-                name : time
+                name : date
             },
             live_play_user = {
                 num : 0,
-                name : time
+                name : date
             },
             live_play_num = {
                 num : 0,
-                name : time
+                name : date
             };
         while(start <= end) {
+            let time = moment(new Date(start)).format("HH:mm");
             obj[time] = {
                 stop_play_num : 0,
                 rate : 0.00,
@@ -330,7 +331,7 @@ module.exports = {
                 live_play_id : query.live_play_id,
                 name : "卡顿播放率",
                 date : rate.name,
-                value : rate.num
+                value : rate.num + "%"
             }, {
                 live_play_id : query.live_play_id,
                 name : "直播同时在线播放人数",

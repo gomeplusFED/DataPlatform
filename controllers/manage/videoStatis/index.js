@@ -517,71 +517,71 @@ module.exports = (Router) => {
 
                 //健康播放统计
                 {
-                    caption: "健康播放统计",
+                    caption: "play接口成功数",
                     type: "string"
                 },  {
-                    caption: "",
+                    caption: "play接口成功率",
                     type: "string"
                 },{
-                    caption: "",
+                    caption: "首帧成功数",
                     type: "string"
                 }, {
-                    caption: "",
+                    caption: "首帧成功率",
                     type: "string"
                 },{
-                    caption: "",
+                    caption: "卡顿播放次数",
                     type: "string"
                 },{
-                    caption: "",
+                    caption: "卡顿播放次率",
                     type: "string"
                 }, {
-                    caption: "",
+                    caption: "播放流畅数",
                     type: "string"
                 }, {
-                    caption: "",
+                    caption: "播放流畅率",
                     type: "string"
                 },
                 //错误播放统计
                 {
-                    caption: "错误播放统计",
+                    caption: "play接口IO错误数",
                     type: "string",
                 }, {
-                    caption: "",
+                    caption: "play接口IO错误率",
                     type: "string",
                 }, {
-                    caption: "",
+                    caption: "play接口数据错误数",
                     type: "string",
                 }, {
-                    caption: "",
+                    caption: "play接口数据错误率",
                     type: "string",
                 }, {
-                    caption: "",
+                    caption: "play接口超时数",
                     type: "string",
                 },{
-                    caption: "",
+                    caption: "play接口超时率",
                     type: "string",
                 }, {
-                    caption: "",
+                    caption: "播放失败数",
                     type: "string",
                 },{
-                    caption: "",
+                    caption: "播放失败率",
                     type: "string",
                 }, {
-                    caption: "",
+                    caption: "视频错误数",
                     type: "string",
                 },{
-                    caption: "",
+                    caption: "视频错误率",
                     type: "string",
                 }, {
-                    caption: "",
+                    caption: "非正常播放数",
                     type: "string`",
                 }, {
-                    caption: "",
+                    caption: "非正常播放率",
                     type: "string",
                 }
             ]
         ],
-        control_table_col: false,
+        control_table_col: true,
         /*filter_select : [
             {
                 title : "指标",
@@ -836,7 +836,7 @@ module.exports = (Router) => {
         router: "/videoStatis/videoKpiThree",
         modelName: ["VideoPlay"],
         platform: false,
-        control_table_col: false,
+        control_table_col: true,
         excel_export: true,
         flexible_btn: [{
             content: '<a href="javascript:void(0)">导出</a>',
@@ -920,73 +920,73 @@ module.exports = (Router) => {
             },
             // 健康播放统计
             {
-                caption: "健康播放统计",
+                caption: "play接口成功数",
                 type: "string"
             },
             {
-                caption: "",
+                caption: "play接口成功率",
                 type: "string"
             },
             {
-                caption: "",
+                caption: "首帧成功数",
                 type: "string"
             },
             {
-                caption: "",
+                caption: "首帧成功率",
                 type: "string"
             },
             {
-                caption: "",
+                caption: "卡顿播放次数",
                 type: "string"
             },
             {
-                caption: "",
+                caption: "卡顿播放率",
                 type: "string"
             },
             {
-                caption: "",
+                caption: "播放流畅数",
                 type: "string"
             },
             {
-                caption: "",
+                caption: "播放流畅率",
                 type: "string"
             },
             // 错误播放统计
             {
-                caption: "错误播放统计",
+                caption: "play接口IO错误数",
                 type: "string"
             }, {
-                caption: "",
+                caption: "play接口IO错误率",
                 type: "string"
             }, {
-                caption: "",
+                caption: "play接口数据错误数",
                 type: "string"
             }, {
-                caption: "",
+                caption: "play接口数据错误率",
                 type: "string"
             }, {
-                caption: "",
+                caption: "play接口超时数",
                 type: "string"
             }, {
-                caption: "",
+                caption: "play接口超时率",
                 type: "string"
             }, {
-                caption: "",
+                caption: "播放失败数",
                 type: "string"
             }, {
-                caption: "",
+                caption: "播放失败率",
                 type: "string"
             }, {
-                caption: "",
+                caption: "点播视频错误数",
                 type: "string"
             }, {
-                caption: "",
+                caption: "点播视频错误率",
                 type: "string"
             }, {
-                caption: "",
+                caption: "非正常播放数",
                 type: "string"
             }, {
-                caption: "",
+                caption: "非正常播放率",
                 type: "string"
             },
         ]]
