@@ -282,32 +282,68 @@ module.exports = {
             start += 1000 * 60 * 5;
         }
 
-        return [{
-            type : type,
-            map : map,
-            data : obj,
-            markArea: {
-                data: [ [{
-                    name: '卡顿播放数',
-                    xAxis: stop_play_num.name,
-                    value : stop_play_num.num
-                },{
-                    name: '卡顿播放率',
-                    xAxis: rate.name,
-                    value : rate.num
-                },{
-                    name: '直播同时在线播放人数',
-                    xAxis: live_play_user.name,
-                    value : live_play_user.num
-                },{
-                    name: '直播同时在线播放次数',
-                    xAxis: live_play_num.name,
-                    value : live_play_num.num
-                }] ]
-            },
-            config: { // 配置信息
-                stack: false  // 图的堆叠
-            }
-        }];
+        if(query.main_show_type_filter !== "table") {
+            return [{
+                type : type,
+                map : map,
+                data : obj,
+                // markArea: {
+                //     data: [ [{
+                //         name: '卡顿播放数',
+                //         xAxis: stop_play_num.name,
+                //         value : stop_play_num.num
+                //     },{
+                //         name: '卡顿播放率',
+                //         xAxis: rate.name,
+                //         value : rate.num
+                //     },{
+                //         name: '直播同时在线播放人数',
+                //         xAxis: live_play_user.name,
+                //         value : live_play_user.num
+                //     },{
+                //         name: '直播同时在线播放次数',
+                //         xAxis: live_play_num.name,
+                //         value : live_play_num.num
+                //     }] ]
+                // },
+                config: { // 配置信息
+                    stack: false  // 图的堆叠
+                }
+            }];
+        } else {
+            const rows = [["live_play_id", "name", "date", "value"]];
+            const cols = [[{
+                caption : "直播id"
+            },{
+                caption : "指标名称"
+            }, {
+                caption : "峰值时间点"
+            }, {
+                caption : "峰值"
+            }]];
+            const newData = [{
+                live_play_id : query.live_play_id,
+                name : "卡顿播放数",
+                date : stop_play_num.name,
+                value : stop_play_num.num
+            }, {
+                live_play_id : query.live_play_id,
+                name : "卡顿播放率",
+                date : rate.name,
+                value : rate.num
+            }, {
+                live_play_id : query.live_play_id,
+                name : "直播同时在线播放人数",
+                date : live_play_user.name,
+                value : live_play_user.num
+            }, {
+                live_play_id : query.live_play_id,
+                name : "直播同时在线播放次数",
+                date : live_play_num.name,
+                value : live_play_num.num
+            }];
+
+            return util.toTable([newData], rows, cols);
+        }
     }
 };
