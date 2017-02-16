@@ -283,33 +283,34 @@ module.exports = {
         }
 
         //重新排序
-        var EndArr = [{
-            date: "",
-            sdk_type: "",
-            ver: "",
-            play_user: "",
-            play_num: "",
-            port_succ: 'play接口成功数',
-            port_succ_ratio: 'play接口成功率',
-            start_frame_succ: '首帧成功数',
-            start_frame_succ_ratio: '首帧成功率',
-            stop_play_num: '卡顿播放次数',
-            stop_play_num_ratio: '卡顿播放次率',
-            play_fluent: '播放流畅数',
-            play_fluent_ratio: '播放流畅率',
-            port_io_failed: 'play接口IO错误数',
-            port_io_failed_ratio: 'play接口IO错误率',
-            port_data_failed: 'play接口数据错误数',
-            port_data_failed_ratio: 'play接口数据错误率',
-            port_overtime: 'play接口超时数',
-            port_overtime_ratio: 'play接口超时率',
-            play_failed: '播放失败数',
-            play_failed_ratio: '播放失败率',
-            play_error: '视频错误数',
-            play_error_ratio: '视频错误率',
-            improper_play: '非正常播放数',
-            improper_play_ratio: '非正常播放率'
-        }];
+        // var EndArr = [{
+        //     date: "",
+        //     sdk_type: "",
+        //     ver: "",
+        //     play_user: "",
+        //     play_num: "",
+        //     port_succ: 'play接口成功数',
+        //     port_succ_ratio: 'play接口成功率',
+        //     start_frame_succ: '首帧成功数',
+        //     start_frame_succ_ratio: '首帧成功率',
+        //     stop_play_num: '卡顿播放次数',
+        //     stop_play_num_ratio: '卡顿播放次率',
+        //     play_fluent: '播放流畅数',
+        //     play_fluent_ratio: '播放流畅率',
+        //     port_io_failed: 'play接口IO错误数',
+        //     port_io_failed_ratio: 'play接口IO错误率',
+        //     port_data_failed: 'play接口数据错误数',
+        //     port_data_failed_ratio: 'play接口数据错误率',
+        //     port_overtime: 'play接口超时数',
+        //     port_overtime_ratio: 'play接口超时率',
+        //     play_failed: '播放失败数',
+        //     play_failed_ratio: '播放失败率',
+        //     play_error: '视频错误数',
+        //     play_error_ratio: '视频错误率',
+        //     improper_play: '非正常播放数',
+        //     improper_play_ratio: '非正常播放率'
+        // }];
+        var EndArr = [];
         for (var date in ArrObj) {
             for (var key in ArrObj[date]) {
                 for (let item of ArrObj[date][key]) {
@@ -482,31 +483,32 @@ module.exports = {
         let source = data.first.data,
             count = data.first.count;
 
-        let data2 = [{
-            date: "",
-            play_user: "",
-            play_num: "",
-            port_succ: 'play接口成功数',
-            port_succ_ratio: 'play接口成功率',
-            start_frame_succ: '首帧成功数',
-            start_frame_succ_ratio: '首帧成功率',
-            stop_play_num: '卡顿播放次数',
-            stop_play_num_ratio: '卡顿播放率',
-            play_fluent: '播放流畅数',
-            play_fluent_ratio: '播放流畅率',
-            port_io_failed: 'play接口IO错误数',
-            port_io_failed_ratio: 'play接口IO错误率',
-            port_data_failed: 'play接口数据错误数',
-            port_data_failed_ratio: 'play接口数据错误率',
-            port_overtime: 'play接口超时数',
-            port_overtime_ratio: 'play接口超时率',
-            play_failed: '播放失败数',
-            play_failed_ratio: '播放失败率',
-            play_error: '点播视频错误数',
-            play_error_ratio: '点播视频错误率',
-            improper_play: '非正常播放数',
-            improper_play_ratio: '非正常播放率'
-        }]
+        // let data2 = [{
+        //     date: "",
+        //     play_user: "",
+        //     play_num: "",
+        //     port_succ: 'play接口成功数',
+        //     port_succ_ratio: 'play接口成功率',
+        //     start_frame_succ: '首帧成功数',
+        //     start_frame_succ_ratio: '首帧成功率',
+        //     stop_play_num: '卡顿播放次数',
+        //     stop_play_num_ratio: '卡顿播放率',
+        //     play_fluent: '播放流畅数',
+        //     play_fluent_ratio: '播放流畅率',
+        //     port_io_failed: 'play接口IO错误数',
+        //     port_io_failed_ratio: 'play接口IO错误率',
+        //     port_data_failed: 'play接口数据错误数',
+        //     port_data_failed_ratio: 'play接口数据错误率',
+        //     port_overtime: 'play接口超时数',
+        //     port_overtime_ratio: 'play接口超时率',
+        //     play_failed: '播放失败数',
+        //     play_failed_ratio: '播放失败率',
+        //     play_error: '点播视频错误数',
+        //     play_error_ratio: '点播视频错误率',
+        //     improper_play: '非正常播放数',
+        //     improper_play_ratio: '非正常播放率'
+        // }]
+        let data2 = [];
         let cols = ['port_succ', 'start_frame_succ', 'stop_play_num', 'play_fluent', 'port_io_failed', 'port_data_failed', 'port_overtime', 'play_failed', 'play_error', 'improper_play']
         source.forEach(x => {
             x.date = moment(x.date).format('MM月DD日')
