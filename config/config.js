@@ -255,10 +255,10 @@ const Config = {
             path: [
                 obj.videoStatis.videoEdition(),
                 obj.videoStatis.videoKpi(),
-                obj.videoStatis.videoDetails()
+                obj.videoStatis.videoDetails(),
+                obj.videoStatis.videoDetailsTwo()
             ],
             routers : [
-                obj.videoStatis.videoDetailsTwo(),
                 obj.videoStatis.videoDetailsOperating()
             ]
         },

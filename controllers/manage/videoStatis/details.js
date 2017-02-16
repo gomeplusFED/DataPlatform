@@ -19,6 +19,7 @@ module.exports = (Router) => {
         modelName: ["LivevideoDetail2"],
         platform: false,
         paging : [true],
+        control_table_col : true,
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
@@ -27,18 +28,18 @@ module.exports = (Router) => {
             preMethods: ["show_help"],
             customMethods: ''
         }],
-        global_platform : {
-            show: true,
-            key: 'type',
-            name : "",
-            list: [{
-                name: '直播',
-                url : "#!/videoStatis/videoDetails"
-            }, {
-                name: '点播',
-                url : "#!/videoStatis/videoDetailsDian"
-            }]
-        },
+        // global_platform : {
+        //     show: true,
+        //     key: 'type',
+        //     name : "",
+        //     list: [{
+        //         name: '直播',
+        //         url : "#!/videoStatis/videoDetails"
+        //     }, {
+        //         name: '点播',
+        //         url : "#!/videoStatis/videoDetailsDian"
+        //     }]
+        // },
         search : {
             show : true,
             title : "请输入视频ID",
@@ -86,7 +87,14 @@ module.exports = (Router) => {
         modelName: ["LivevideoTrend2"],
         platform: false,
         //showDayUnit: true,
+        toggle : {
+            show : true
+        },
         date_picker : false,
+        flexible_btn : [{
+            content: '<a href="javascript:void(0)">导出</a>',
+            preMethods: ['excel_export']
+        }],
         filter_select: [{
             title: 'sdk类型：',
             filter_key : 'sdk_type',
@@ -177,9 +185,75 @@ module.exports = (Router) => {
                 o.push([1, i + 1, 2, i + 1, col[i], style]);
             }
 
-            util.export(ws, [o.concat([
-                [1, 8, 1, 15, "健康播放统计", style],
-                [1, 16, 1, 27, "错误播放统计", style]])].concat(util.excelReport(body.modelData, false)));
+            // util.export(ws, [o.concat([
+            //     [1, 8, 1, 15, "健康播放统计", style],
+            //     [1, 16, 1, 27, "错误播放统计", style]])].concat(util.excelReport(body.modelData)));
+            util.export(ws, util.excelReport(body.modelData));
+            wb.write("Report.xlsx", res);
+        });
+    });
+
+    Router.get("/videoStatis/videoDetailsOperatingOne_excel", (req, res, next) => {
+        const query = req.query;
+        const xl = require("excel4node");
+        const wb = new xl.Workbook();
+        const style = {
+            font : {
+                bold : true
+            },
+            alignment : {
+                horizontal : "center"
+            },
+            fill : {
+                type: 'pattern',
+                patternType: 'solid',
+                fgColor: '#FFFF33'
+            }
+        };
+        let url = `http://localhost:7879/videoStatis/videoDetailsOperatingOne_json?startTime=${query.startTime}&endTime=${query.endTime}&day_type=1&sdk_type=${query.sdk_type}`;
+        if(query.live_play_id) {
+            url += "&live_play_id=" + query.live_play_id;
+        }
+        const ws = wb.addWorksheet("视频明细");
+        request({
+            url : url,
+            headers : req.headers
+        }, (err, response, body) => {
+            body = JSON.parse(body);
+            if(body.iserro) {
+                return next(new Error(`/videoStatis/videoDetailsOperatingOne_json has error`));
+            }
+            const rows = ["date", "one", "two", "three", "four"];
+            const cols = [{
+                caption : "时间点"
+            }, {
+                caption : "卡顿播放数"
+            }, {
+                caption : "卡顿播放率"
+            }, {
+                caption : "直播同时在线播放人数"
+            }, {
+                caption : "直播同时在线播放次数"
+            }];
+            const newData = [];
+            const data = body.modelData[0].data;
+            for(let key in data) {
+                newData.push({
+                    date : key,
+                    one : data[key].stop_play_num,
+                    two : data[key].rate + "%",
+                    three : data[key].live_play_user,
+                    four : data[key].live_play_num
+                });
+            }
+
+            util.export(ws, [
+                [1, 1, 1, 1, `直播id: ${query.live_play_id}`, style],
+                [1, 2, 1, 2, `sdk类型: ${query.sdk_type}`, style]].concat(util.excelReport([{
+                    data : newData,
+                    rows : rows,
+                    cols : cols
+                }])));
             wb.write("Report.xlsx", res);
         });
     });

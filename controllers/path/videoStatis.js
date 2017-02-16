@@ -73,9 +73,14 @@ module.exports = {
     videoDetails() {
         return {
             id: 200,
-            name : "视频明细",
+            name : "视频明细-直播",
             path : "/videoStatis/videoDetails",
             display : true,
+            subPages : [ {
+                id : 202,
+                url : "/videoStatis/videoDetailsOperating",
+                name : "视频明细"
+            }],
             defaultData : [
                 {
                     type : "table",
@@ -103,7 +108,7 @@ module.exports = {
     videoDetailsTwo() {
         return {
             id: 201,
-            name : "视频明细",
+            name : "视频明细-点播",
             path : "/videoStatis/videoDetailsDian",
             display : true,
             defaultData : [

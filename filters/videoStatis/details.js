@@ -66,63 +66,64 @@ const util = require("../../utils"),
     ],
     cols = [
         [{
-            caption : ""
+            caption : "直播id"
         //},{
         //    caption : ""
         },{
-            caption : ""
+            caption : "直播开始时间"
         },{
-            caption : ""
+            caption : "直播结束时间"
         },{
-            caption : ""
+            caption : "直播播放用户数"
         },{
-            caption : ""
+            caption : "直播播放次数"
         },{
-            caption : ""
+            caption : "直播同时在线播放人数(峰值)"
         },{
-            caption : ""
+            caption : "直播同时在线播放次数(峰值)"
         },{
-            caption : "健康播放统计"
+            caption : "首次首帧成功数"
         },{
-            caption : ""
+            caption : "首次首帧成功率"
         },{
-            caption : ""
+            caption : "首帧成功数"
         },{
-            caption : ""
+            caption : "首帧成功率"
         },{
-            caption : ""
+            caption : "卡顿播放数(峰值)"
         },{
-            caption : ""
+            caption : "卡顿播放率"
         },{
-            caption : ""
+            caption : "播放流畅数"
         },{
-            caption : ""
+            caption : "播放流畅率"
         },{
-            caption : "错误播放统计"
+            caption : "play接口IO错误数"
         },{
-            caption : ""
+            caption : "play接口IO错误率"
         },{
-            caption : ""
+            caption : "play接口数据错误数"
         },{
-            caption : ""
+            caption : "play接口数据错误率"
         },{
-            caption : ""
+            caption : "play接口超时数"
         },{
-            caption : ""
+            caption : "play接口超时率"
         },{
-            caption : ""
+            caption : "播放失败数"
         },{
-            caption : ""
+            caption : "播放失败率"
         },{
-            caption : ""
+            caption : "直播视频错误数"
         },{
-            caption : ""
+            caption : "直播视频错误率"
         },{
-            caption : ""
+            caption : "非正常播放数"
         },{
-            caption : ""
+            caption : "非正常播放率"
         },{
-            caption : ""
+            caption : "趋势",
+            noShow : true
         }]
     ],
     row = {
@@ -180,7 +181,7 @@ module.exports = {
                 `<button class='btn btn-default' url_link='/videoStatis/videoDetailsOperating' url_fixed_params='{"live_play_id": "${key.live_play_id}","startTime" : "${key.live_play_startime}", "endTime" : "${key.live_play_endtime}"}'>详细>></button>`;
         }
 
-        return util.toTable([[row].concat(source)], rows, cols, [count]);
+        return util.toTable([source], rows, cols, [count]);
     },
     Two(data, page) {
         const source = data.first.data[0],
@@ -281,40 +282,68 @@ module.exports = {
             start += 1000 * 60 * 5;
         }
 
-        return [{
-            type : type,
-            map : map,
-            data : obj,
-            markArea: {
-                data: [ [{
-                    name: '卡顿播放数',
-                    xAxis: stop_play_num.name,
-                    value : stop_play_num.num
-                },{
-                    xAxis: stop_play_num.name
-                }],[{
-                    name: '卡顿播放率',
-                    xAxis: rate.name,
-                    value : rate.num
-                }, {
-                    xAxis: rate.name
-                }],[{
-                    name: '直播同时在线播放人数',
-                    xAxis: live_play_user.name,
-                    value : live_play_user.num
-                },{
-                    xAxis: live_play_user.name
-                }],[{
-                    name: '直播同时在线播放次数',
-                    xAxis: live_play_num.name,
-                    value : live_play_num.num
-                },{
-                    xAxis: live_play_num.name
-                }] ]
-            },
-            config: { // 配置信息
-                stack: false  // 图的堆叠
-            }
-        }];
+        if(query.main_show_type_filter !== "table") {
+            return [{
+                type : type,
+                map : map,
+                data : obj,
+                // markArea: {
+                //     data: [ [{
+                //         name: '卡顿播放数',
+                //         xAxis: stop_play_num.name,
+                //         value : stop_play_num.num
+                //     },{
+                //         name: '卡顿播放率',
+                //         xAxis: rate.name,
+                //         value : rate.num
+                //     },{
+                //         name: '直播同时在线播放人数',
+                //         xAxis: live_play_user.name,
+                //         value : live_play_user.num
+                //     },{
+                //         name: '直播同时在线播放次数',
+                //         xAxis: live_play_num.name,
+                //         value : live_play_num.num
+                //     }] ]
+                // },
+                config: { // 配置信息
+                    stack: false  // 图的堆叠
+                }
+            }];
+        } else {
+            const rows = [["live_play_id", "name", "date", "value"]];
+            const cols = [[{
+                caption : "直播id"
+            },{
+                caption : "指标名称"
+            }, {
+                caption : "峰值时间点"
+            }, {
+                caption : "峰值"
+            }]];
+            const newData = [{
+                live_play_id : query.live_play_id,
+                name : "卡顿播放数",
+                date : stop_play_num.name,
+                value : stop_play_num.num
+            }, {
+                live_play_id : query.live_play_id,
+                name : "卡顿播放率",
+                date : rate.name,
+                value : rate.num
+            }, {
+                live_play_id : query.live_play_id,
+                name : "直播同时在线播放人数",
+                date : live_play_user.name,
+                value : live_play_user.num
+            }, {
+                live_play_id : query.live_play_id,
+                name : "直播同时在线播放次数",
+                date : live_play_num.name,
+                value : live_play_num.num
+            }];
+
+            return util.toTable([newData], rows, cols);
+        }
     }
 };
