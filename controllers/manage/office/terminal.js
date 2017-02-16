@@ -190,7 +190,7 @@ module.exports = (Router) => {
                 value : "活跃用户"
             }, {
                 key : "start_num",
-                value : "启动次数"
+                value : "访问次数"
             }]
         }],
         filter (data, query){
