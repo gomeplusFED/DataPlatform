@@ -76,11 +76,6 @@ module.exports = {
             name : "视频明细-直播",
             path : "/videoStatis/videoDetails",
             display : true,
-            subPages : [ {
-                id : 202,
-                url : "/videoStatis/videoDetailsOperating",
-                name : "视频明细"
-            }],
             defaultData : [
                 {
                     type : "table",
