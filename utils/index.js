@@ -669,10 +669,12 @@ exports.excelReport = (modelData, useCol=true) => {
         const arr = [];
         if(useCol) {
             for(let col of cols) {
-                arr.push({
-                    name : col.caption,
-                    style : header
-                });
+                if(!col.noShow) {
+                    arr.push({
+                        name : col.caption,
+                        style : header
+                    });
+                }
             }
             newData.push(arr);
         }

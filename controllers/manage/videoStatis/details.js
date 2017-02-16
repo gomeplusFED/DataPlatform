@@ -19,6 +19,7 @@ module.exports = (Router) => {
         modelName: ["LivevideoDetail2"],
         platform: false,
         paging : [true],
+        control_table_col : true,
         flexible_btn : [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
@@ -27,18 +28,18 @@ module.exports = (Router) => {
             preMethods: ["show_help"],
             customMethods: ''
         }],
-        global_platform : {
-            show: true,
-            key: 'type',
-            name : "",
-            list: [{
-                name: '直播',
-                url : "#!/videoStatis/videoDetails"
-            }, {
-                name: '点播',
-                url : "#!/videoStatis/videoDetailsDian"
-            }]
-        },
+        // global_platform : {
+        //     show: true,
+        //     key: 'type',
+        //     name : "",
+        //     list: [{
+        //         name: '直播',
+        //         url : "#!/videoStatis/videoDetails"
+        //     }, {
+        //         name: '点播',
+        //         url : "#!/videoStatis/videoDetailsDian"
+        //     }]
+        // },
         search : {
             show : true,
             title : "请输入视频ID",
@@ -177,9 +178,10 @@ module.exports = (Router) => {
                 o.push([1, i + 1, 2, i + 1, col[i], style]);
             }
 
-            util.export(ws, [o.concat([
-                [1, 8, 1, 15, "健康播放统计", style],
-                [1, 16, 1, 27, "错误播放统计", style]])].concat(util.excelReport(body.modelData, false)));
+            // util.export(ws, [o.concat([
+            //     [1, 8, 1, 15, "健康播放统计", style],
+            //     [1, 16, 1, 27, "错误播放统计", style]])].concat(util.excelReport(body.modelData)));
+            util.export(ws, util.excelReport(body.modelData));
             wb.write("Report.xlsx", res);
         });
     });
