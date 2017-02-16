@@ -229,26 +229,26 @@ module.exports = {
             },
             obj = {};
 
+        let time = moment(new Date(start)).format("HH:mm");
         let start = new Date(query.startTime).getTime(),
             end = new Date(query.endTime).getTime(),
             stop_play_num = {
                 num : 0,
-                name : ""
+                name : time
             },
             rate = {
                 num : 0,
-                name : ""
+                name : time
             },
             live_play_user = {
                 num : 0,
-                name : ""
+                name : time
             },
             live_play_num = {
                 num : 0,
-                name : ""
+                name : time
             };
         while(start <= end) {
-            let time = moment(new Date(start)).format("HH:mm");
             obj[time] = {
                 stop_play_num : 0,
                 rate : 0.00,
