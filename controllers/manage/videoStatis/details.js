@@ -270,18 +270,18 @@ module.exports = (Router) => {
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
-        global_platform : {
-            show: true,
-            key: 'type',
-            name : "",
-            list: [{
-                name: '直播',
-                url : "#!/videoStatis/videoDetails"
-            }, {
-                name: '点播',
-                url : "#!/videoStatis/videoDetailsDian"
-            }]
-        },
+        // global_platform : {
+        //     show: true,
+        //     key: 'type',
+        //     name : "",
+        //     list: [{
+        //         name: '直播',
+        //         url : "#!/videoStatis/videoDetails"
+        //     }, {
+        //         name: '点播',
+        //         url : "#!/videoStatis/videoDetailsDian"
+        //     }]
+        // },
         search : {
             show : true,
             title : "请输入视频ID",
