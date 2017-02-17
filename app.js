@@ -7,6 +7,7 @@ var ejs = require('ejs');
 var express = require('express');
 // var session = require('cookie-session');
 var session = require("express-session");
+var JsonStore = require('express-session-json')(session);
 var cookieParse = require("cookie-parser");
 var lactate = require('lactate');
 var config = require('./config/config');
@@ -68,7 +69,8 @@ app.use(session({
     name: 'DataPlatform',
     secret: 'DataPlatform',
     resave : true,
-    saveUninitialized : true
+    saveUninitialized : true,
+    store : new JsonStore()
 }));
 
 app.use(flash);

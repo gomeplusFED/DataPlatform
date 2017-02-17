@@ -50,7 +50,9 @@ module.exports = function(Router) {
     }
 
     Router.post('/logout', function(req, res) {
-        req.session.destroy();
+        req.session.destroy((err) => {
+            console.log(err);
+        });
         res.redirect('/login');
     });
 

@@ -30,6 +30,7 @@
     "excel4node": "^1.2.1",
     "express": "4.x",
     "express-session": "^1.15.1",
+    "express-session-json": "0.0.8",
     "flashify": "0.1.2",
     "ioredis": "^2.2.0",
     "lactate": "0.13.12",
