@@ -71,9 +71,9 @@ module.exports = (Router) => {
             title : "",
             filter_key : "filter_key",
             groups : [{
-                key : "new_user",
-                value : "新增账号"
-            }, {
+            //     key : "new_user",
+            //     value : "新增账号"
+            // }, {
                 key : "active_user",
                 value : "活跃用户"
             }, {
@@ -184,9 +184,9 @@ module.exports = (Router) => {
             title : "",
             filter_key : "filter_key",
             groups : [{
-                key : "new_user",
-                value : "新增账号"
-            }, {
+            //     key : "new_user",
+            //     value : "新增账号"
+            // }, {
                 key : "active_user",
                 value : "活跃用户"
             }, {
