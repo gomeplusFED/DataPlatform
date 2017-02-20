@@ -87,7 +87,7 @@ module.exports = {
         return utils.toTable([[obj, obj2, o]], rows, cols);
     },
     indexTwo(data, filter_key, dates) {
-        const source = data.first.data[0],
+        const source = data.first.data,
             newData = {};
         let type = "line",
             map = {},
