@@ -133,10 +133,35 @@ module.exports = (Router) => {
         global_platform_filter(req) {
             this.global_platform = globalPlatform(req.session.userInfo.type["301"]);
         },
-        params : function(query , params , sendData){
-            params.wm = params.wm || this.global_platform.list[0].key;
-            return params;
+        firstSql(query, params) {
+            let boo = true;
+            const wm = params.wm || this.global_platform.list[0].key;
+            if(wm === "ALL") {
+                boo = false;
+            }
+            const sql = `select 
+                date,
+                SUM(new_user) new_user, 
+                SUM(total_active_user) total_active_user,
+                SUM(operate_user) operate_user,
+                SUM(start_num) start_num,
+                SUM(start_num_peruser) start_num_peruser,
+                SUM(error_num) error_num,
+                SUM(error_user) error_user,
+                SUM(total_user) total_user
+                from ads2_company_oa_overview where
+                date between '${query.startTime}' and '${query.endTime}' 
+                and ${boo ? "wm='" + wm + "' and " : ""} day_type=1 group by date`;
+
+            return {
+                sql : sql,
+                params : []
+            };
         },
+        // params : function(query , params , sendData){
+        //     params.wm = params.wm || this.global_platform.list[0].key;
+        //     return params;
+        // },
         filter_select: [{
             title: '',
             filter_key : 'filter_key',
