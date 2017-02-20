@@ -142,14 +142,14 @@ function _render(res, sendData, modules) {
         code: 200,
         modelData: sendData,
         components: {
-            flexible_btn: modules.flexible_btn,
+            flexible_btn: modules.flexible_btn || [],
             date_picker: {
                 show: false
             },
             drop_down: {
                 platform: false
             },
-            filter_select: modules.filter_select
+            filter_select: modules.filter_select || []
         }
     })
 }

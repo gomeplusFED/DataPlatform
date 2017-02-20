@@ -27,7 +27,8 @@ module.exports = (Router) => {
         },
         firstSql(query, params) {
             const sql = `SELECT 
-                * 
+                SUM(${query.filter_key}) ${query.filter_key},
+                ${query.filter_type}
             FROM 
                 ads2_company_oa_terminal_analysis
             WHERE
@@ -49,7 +50,7 @@ module.exports = (Router) => {
                 AND
                     wm='app'
                 GROUP BY ${query.filter_type}
-                ORDER BY ${query.filter_key} DESC) a LIMIT 0,10) b)`;
+                ORDER BY ${query.filter_key} DESC) a LIMIT 0,10) b) GROUP BY ${query.filter_type}`;
 
             return {
                 sql : sql,
