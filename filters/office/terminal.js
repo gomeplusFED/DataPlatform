@@ -84,17 +84,17 @@ module.exports = {
                 });
             }
 
-            cols.push({
-                caption : "新增账户",
-                type : "number"
-            });
-            cols.push({
-                caption : "新增账户占比",
-                type : "string"
-            });
+            // cols.push({
+            //     caption : "新增账户",
+            //     type : "number"
+            // });
+            // cols.push({
+            //     caption : "新增账户占比",
+            //     type : "string"
+            // });
             rows.push("phone_type");
-            rows.push("new_user");
-            rows.push("rate");
+            // rows.push("new_user");
+            // rows.push("rate");
         } else {
             cols.push({
                 caption : "操作系统",
