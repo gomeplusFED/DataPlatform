@@ -277,6 +277,7 @@ module.exports = {
                 item[key + "_ratio"] = util.toFixedLength(item[key], item.play_num, 2);
                 item[key] = item[key].toString();
             }
+            item["port_succ_ratio"] = util.toFixedLength(item[key], item.start_load_num, 2);
 
             if (!ArrObj[item.date][item.sdk_type]) ArrObj[item.date][item.sdk_type] = [];
             ArrObj[item.date][item.sdk_type].push(item);
@@ -362,9 +363,9 @@ module.exports = {
                 }
             ]
             cols.forEach(col => {
-                data2[0][col] = source[col] || 0
-                data2[1][col] = util.toFixedLength(source[col], source.play_num, 2)
-                data2[2][col] = Chain(source[col], source[col+'_pre'])
+                data2[0][col] = source[col] || 0;
+                data2[1][col] = util.toFixedLength(source[col], source.play_num, 2);
+                data2[2][col] = Chain(source[col], source[col+'_pre']);
             })
         }
         if (third) {
@@ -513,12 +514,13 @@ module.exports = {
         source.forEach(x => {
             x.date = moment(x.date).format('MM月DD日')
             cols.forEach(col => {
-                x[col+'_ratio'] =  util.toFixedLength(x[col], x.play_num, 2)
-                x[col] = x[col].toString()
-            })
+                x[col+'_ratio'] =  util.toFixedLength(x[col], x.play_num, 2);
+                x[col] = x[col].toString();
+            });
+            x["port_succ_ratio"] = util.toFixedLength(x[col], x.start_load_num, 2);
 
             data2.push(x)
-        })
+        });
 
 
         return util.toTable([data2], data.rows, data.cols, [count]);
