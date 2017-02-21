@@ -761,7 +761,7 @@ module.exports = {
                 Result["支付订单量"].im = SqlResult["im_paid_times"];
                 Result["支付订单量"].not_im = SqlResult["paid_times"] - SqlResult["im_paid_times"];
                 Result["支付金额"].im = SqlResult["im_paid_amount"];
-                Result["支付金额"].not_im = SqlResult["paid_amount"] - SqlResult["im_paid_amount"];
+                Result["支付金额"].not_im = (SqlResult["paid_amount"] - SqlResult["im_paid_amount"]).toFixed(2);
 
                 let DATA = [{
                     type : "bar",
