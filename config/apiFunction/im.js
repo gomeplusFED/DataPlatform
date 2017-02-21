@@ -805,7 +805,7 @@ module.exports = {
                     TableData[2].C = SqlResult["im_single_paid_users"];
                     TableData[2].D = util.round( SqlResult["im_order_times"] - SqlResult["im_group_order_times"] , 0);
                     TableData[2].E = util.round( SqlResult["im_paid_times"] - SqlResult["im_group_paid_times"] , 0);
-                    TableData[2].F = util.round( SqlResult["im_paid_amount"] - SqlResult["im_group_paid_amount"] , 0);
+                    TableData[2].F = util.division( SqlResult["im_paid_amount"] - SqlResult["im_group_paid_amount"] , 0);
 
                     TableData[3].A = "平台-总交易";
                     TableData[3].B = SqlResult["order_users"];
