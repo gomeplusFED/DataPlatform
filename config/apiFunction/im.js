@@ -741,7 +741,7 @@ module.exports = {
                 for(let i=0;i<values.length;i++){
                     
                     if(Deal100Columns.includes(ArrSum[i])){
-                        SqlResult[ArrSum[i]] = (values[i] || 0) / 100;
+                        SqlResult[ArrSum[i]] = ((values[i] || 0) / 100).toFixed(2);
                     }else{
                         SqlResult[ArrSum[i]] = values[i] || 0;
                     }
