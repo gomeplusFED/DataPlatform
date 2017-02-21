@@ -725,8 +725,11 @@ module.exports = {
                 });
                 return;
             }
-            let dates = util.times(query.startTime , query.endTime, "1");
-            let SQL = req.models.ads2_im_bring_transaction.aggregate();
+            // let dates = util.times(query.startTime , query.endTime, "1");
+            let SQL = req.models.ads2_im_bring_transaction.aggregate({
+                date : orm.between(query.startTime, query.endTime),
+                day_type : 1
+            });
             for(let item of ArrSum){
                 SQL.sum(item);
             }

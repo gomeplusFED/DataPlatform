@@ -864,7 +864,7 @@ module.exports = (Router) => {
             }
 
             let sql = `SELECT 
-            date, play_user as play_user, play_num as play_num, port_succ as port_succ, start_frame_succ as start_frame_succ, stop_play_num as stop_play_num, play_fluent as play_fluent,
+            date, play_user as play_user, play_num as play_num, port_succ as port_succ, start_frame_succ as start_frame_succ, stop_play_num as stop_play_num, play_fluent as play_fluent, start_load_num as start_load_num,
             port_io_failed as port_io_failed, port_data_failed as port_data_failed, port_overtime as port_overtime, port_overtime as port_overtime, play_failed as play_failed, play_error as play_error, improper_play as improper_play
                     FROM ${tablename}
                     WHERE ${config.join(" AND ")} group by date order by date desc`;
