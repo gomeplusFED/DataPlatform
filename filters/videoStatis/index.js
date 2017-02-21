@@ -277,7 +277,7 @@ module.exports = {
                 item[key + "_ratio"] = util.toFixedLength(item[key], item.play_num, 2);
                 item[key] = item[key].toString();
             }
-            item["port_succ_ratio"] = util.toFixedLength(item[key], item.start_load_num, 2);
+            item["port_succ_ratio"] = util.toFixedLength(item.port_succ, item.start_load_num, 2);
 
             if (!ArrObj[item.date][item.sdk_type]) ArrObj[item.date][item.sdk_type] = [];
             ArrObj[item.date][item.sdk_type].push(item);
@@ -517,7 +517,7 @@ module.exports = {
                 x[col+'_ratio'] =  util.toFixedLength(x[col], x.play_num, 2);
                 x[col] = x[col].toString();
             });
-            x["port_succ_ratio"] = util.toFixedLength(x[col], x.start_load_num, 2);
+            x["port_succ_ratio"] = util.toFixedLength(x.port_succ, x.start_load_num, 2);
 
             data2.push(x)
         });
