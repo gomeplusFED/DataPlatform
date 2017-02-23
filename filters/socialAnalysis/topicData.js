@@ -266,8 +266,12 @@ module.exports = {
             config = {};
 
         for(let key of orderSource) {
-            config[key.topic_id] = {};
-            config[key.topic_id][key.key] = key.sum_value;
+            if(config[key.topic_id]) {
+                config[key.topic_id][key.key] = key.sum_value;
+            } else {
+                config[key.topic_id] = {};
+                config[key.topic_id][key.key] = key.sum_value;
+            }
         }
 
         for(let key of thirdSource) {
