@@ -12,6 +12,7 @@ var https = require('https');
 var xhrProxy = fs.readFileSync(path.resolve(__dirname, './script/xhr-proxy.js'), {
     encoding: 'utf8'
 });
+var parseCookie = require('./lib/parser.js');
 
 
 var databpStorage = {};
@@ -19,7 +20,7 @@ var databpStorage = {};
 module.exports = (Router) => {
 
     Router.get('/databp/html', (req, res, next) => {
-
+        
         let url = req.query.url;
         let options = {
             credentials: 'include',
@@ -68,12 +69,10 @@ module.exports = (Router) => {
                 // console.log(result);
                 let rawcookie = result.headers;
                 if ((rawcookie = rawcookie._headers) && (rawcookie = rawcookie['set-cookie'])) {
-                    rawcookie = rawcookie.toString();
-                    let cookie = rawcookie.match(/(mx_pc_gomeplusid|mx_wap_gomeplusid|content_ctag|mx_pc_code_total)=.+?;/g);
-                    if (cookie) {
-                        databpSess.cookie = cookie;
-                    } else {
-                        databpSess.cookie = [];
+                    let cookie = parseCookie(rawcookie);
+                    databpSess.cookie = cookie;
+                    for(let c of cookie) {
+                        res.append('Set-Cookie', c + ';');
                     }
                 }
 
@@ -103,6 +102,7 @@ module.exports = (Router) => {
                 // 添加自定义脚本
                 let proxytext = `<script>${xhrProxy}('${url}', '${platform}');</script>`;
                 html = html.replace('<head>', '<head>' + proxytext);
+                // databpSess.oldCookieKeys = parseCookie(req.headers.cookie, true);
                 databpStorage[req.session.userInfo.id] = databpSess;
                 res.end(html);
             })
@@ -114,7 +114,7 @@ module.exports = (Router) => {
 
     });
     Router.all('/databp/ajax/*', (req, res, next) => {
-        let sess = databpStorage[req.session.userInfo.id];
+        let sess = databpStorage[req.session.userInfo.id] || {};
         let {
             method,
             url,
@@ -125,7 +125,7 @@ module.exports = (Router) => {
         let host = sess.host;
         let newurl = url.replace('/databp/ajax', host);
         let newheaders = {
-            'cookie': sess.cookie.join(' ').slice(0, -1),
+            'cookie': headers.cookie.replace(/DataPlatform.*?=.+?;/gi, ''),
             'host': host.replace(/https?:\/\//, ''),
             'referer': encodeURI(sess.url),
             'origin': null
@@ -157,13 +157,13 @@ module.exports = (Router) => {
         } else {
             body = JSON.stringify(body);
         }
-        
-        fetch(newurl, {
-                method,
-                headers: newheaders,
-                body,
-                credentials: 'include'
-            })
+        let option = {
+            method,
+            headers: newheaders,
+            body,
+            credentials: 'include'
+        };
+        fetch(newurl, option)
             .then(function (result) {
                 return result.text();
             }).then(function (json) {
