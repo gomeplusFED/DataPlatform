@@ -437,7 +437,7 @@ module.exports = (Router) => {
         secondParams(query, params, data) {
             var now = new Date().getTime(),
                 date = util.moment(new Date(now - 24 * 60 * 60 * 1000)),
-                topic_ids = _.uniq(_.pluck(data, "topic_id"));
+                topic_ids = _.uniq(_.pluck(data.first.data, "topic_id"));
 
             return {
                 topic_id : topic_ids,
