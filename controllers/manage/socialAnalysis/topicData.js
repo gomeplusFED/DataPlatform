@@ -441,7 +441,7 @@ module.exports = (Router) => {
 
             return {
                 topic_id : topic_ids,
-                date : orm.between(date + " 00:00:00", date + " 23:59:59"),
+                date : date,
                 key : ["topic_reply_num", "topic_praise_num", "topic_subreply_user_num",
                     "topic_reply_user_num", "topic_subreply_num", "topic_collect_num"]
             };
