@@ -449,14 +449,14 @@ module.exports = (Router) => {
         thirdParams(query, params, data) {
             return {};
         },
-        procedure : [false, {
-            aggregate : {
-                value : ["topic_id", "key"]
-            },
-            sum : ["value"],
-            groupBy : ["key"],
-            get : ""
-        }, false],
+        // procedure : [false, {
+        //     aggregate : {
+        //         value : ["topic_id", "key"]
+        //     },
+        //     sum : ["value"],
+        //     groupBy : ["key"],
+        //     get : ""
+        // }, false],
         firstSql(query, params, isCount) {
             let keys = [query.startTime, query.endTime, query.day_type];
             let where = ["date BETWEEN ? AND ?", "day_type=?"];
