@@ -267,10 +267,10 @@ module.exports = {
 
         for(let key of orderSource) {
             if(config[key.topic_id]) {
-                config[key.topic_id][key.key] = key.sum_value;
+                config[key.topic_id][key.key] = key.value;
             } else {
                 config[key.topic_id] = {};
-                config[key.topic_id][key.key] = key.sum_value;
+                config[key.topic_id][key.key] = key.value;
             }
         }
 
