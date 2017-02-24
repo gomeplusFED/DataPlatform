@@ -143,6 +143,8 @@ module.exports = (Router) => {
                 date,
                 SUM(new_user) new_user, 
                 SUM(total_active_user) total_active_user,
+                SUM(new_active_user) new_active_user,
+                SUM(old_active_user) old_active_user,
                 SUM(operate_user) operate_user,
                 SUM(start_num) start_num,
                 SUM(start_num_peruser) start_num_peruser,
