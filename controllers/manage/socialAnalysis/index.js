@@ -350,7 +350,9 @@ module.exports = (Router) => {
         excel_export : true,
         procedure : [false, {
             find : "params"
-        }, false],
+        }, {
+            find : "params"
+        }],
         secondParams(query, params, sendData) {
             return {};
         },
