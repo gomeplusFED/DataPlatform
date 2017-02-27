@@ -416,9 +416,12 @@ module.exports = {
             ThirdData = data.third.data;
 
         for(let key of ThirdData) {
-            let obj = {};
-            obj[key.key] = key.sum_value;
-            config[key.group_id] = obj;
+            if(config[key.group_id]) {
+                config[key.group_id][key.key] = key.value;
+            } else {
+                config[key.group_id] = {};
+                config[key.group_id][key.key] = key.value;
+            }
         }
         //分类名称
         var obj = {};

@@ -350,14 +350,7 @@ module.exports = (Router) => {
         excel_export : true,
         procedure : [false, {
             find : "params"
-        }, {
-            aggregate : {
-                value : ["group_id", "key"]
-            },
-            sum : ["value"],
-            groupBy : ["key"],
-            get : ""
-        }],
+        }, false],
         secondParams(query, params, sendData) {
             return {};
         },
@@ -366,7 +359,7 @@ module.exports = (Router) => {
                 group_id : [],
                 key : ["group_person_num", "group_topic_num", "topic_praise_num",
                     "topic_collect_num", "topic_reply_num", "topic_subreply_num"],
-                date : util.getDate(new Date(new Date() - 24 * 60 * 60 * 1000))
+                date : util.moment(new Date(new Date() - 24 * 60 * 60 * 1000))
             };
             for(let item of sendData.first.data[0]){
                 param.group_id.push(item.group_id);

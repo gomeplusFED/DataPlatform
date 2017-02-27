@@ -83,14 +83,19 @@ module.exports = {
             second = data[1],
             third  = data[2];
         let Rows = util.megerArray([] , rows), Result = {};
-        for(let key of Rows){
-            Result[key] = 0;
-        }
+        // for(let key of Rows){
+        //     Result[key] = 0;
+        // }
 
         for(let item of source){
-            if(Result[item.key] != undefined){
+            if(Result[item.key]) {
                 Result[item.key] += item.value;
+            } else {
+                Result[item.key] = item.value;
             }
+            // if(Result[item.key] != undefined){
+            //     Result[item.key] += item.value;
+            // }
         }
 
         let registeruserallcount = 0,
