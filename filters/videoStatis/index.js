@@ -368,7 +368,8 @@ module.exports = {
                 data2[2][col] = Chain(source[col], source[col+'_pre']);
             })
         }
-        data2[1]["port_succ"] = util.toFixedLength(source["port_succ"], source.start_load_num, 2);
+        console.log(second);
+        data2[1]["port_succ"] = util.toFixedLength(second["port_succ"], second.start_load_num, 2);
         if (third) {
             let source = third
             let cols = ['port_io_failed', 'port_data_failed', 'port_overtime', 'play_failed', 'play_error', 'improper_play']
