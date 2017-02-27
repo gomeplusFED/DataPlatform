@@ -365,10 +365,10 @@ module.exports = {
             cols.forEach(col => {
                 data2[0][col] = source[col] || 0;
                 data2[1][col] = util.toFixedLength(source[col], source.play_num, 2);
-                data2[1]["port_succ"] = util.toFixedLength(source["port_succ"], source.start_load_num, 2);
                 data2[2][col] = Chain(source[col], source[col+'_pre']);
             })
         }
+        data2[1]["port_succ"] = util.toFixedLength(source["port_succ"], source.start_load_num, 2);
         if (third) {
             let source = third
             let cols = ['port_io_failed', 'port_data_failed', 'port_overtime', 'play_failed', 'play_error', 'improper_play']
