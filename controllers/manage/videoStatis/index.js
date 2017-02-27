@@ -649,7 +649,7 @@ module.exports = (Router) => {
                 tablename = query.type === 'livevideo' ? 'ads2_livevideo_overview2' : 'ads2_videoplay_overview2'
             }
             sql = `SELECT 
-                    a.play_num as play_num, a.port_succ as port_succ, a.start_frame_succ as start_frame_succ, a.stop_play_num as stop_play_num, a.play_fluent as play_fluent,
+                    a.play_num as play_num, a.port_succ as port_succ, a.start_frame_succ as start_frame_succ, a.stop_play_num as stop_play_num, a.play_fluent as play_fluent, a.start_load_num as start_load_num,
                     b.port_succ as port_succ_pre, b.start_frame_succ as start_frame_succ_pre, b.stop_play_num as stop_play_num_pre, b.play_fluent as play_fluent_pre
                         FROM ${tablename} a
                          LEFT JOIN ${tablename} b 

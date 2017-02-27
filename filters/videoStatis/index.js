@@ -368,7 +368,6 @@ module.exports = {
                 data2[2][col] = Chain(source[col], source[col+'_pre']);
             })
         }
-        console.log(second);
         data2[1]["port_succ"] = util.toFixedLength(second["port_succ"], second.start_load_num, 2);
         if (third) {
             let source = third
