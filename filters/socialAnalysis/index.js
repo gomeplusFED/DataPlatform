@@ -413,8 +413,9 @@ module.exports = {
                 "0" : "不是",
                 "1" : "是"
             },
-            ThirdData = data.third.data[0];
+            ThirdData = data.third.data;
 
+        console.log(ThirdData);
         for(let key of ThirdData) {
             if(config[key.group_id]) {
                 config[key.group_id][key.key] = key.value;
