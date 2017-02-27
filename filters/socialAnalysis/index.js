@@ -415,10 +415,13 @@ module.exports = {
             },
             ThirdData = data.third.data;
 
-        console.log(ThirdData);
         for(let key of ThirdData) {
             if(config[key.group_id]) {
-                config[key.group_id][key.key] = key.value;
+                if(config[key.group_id][key.key]) {
+                    config[key.group_id][key.key] += key.value;
+                } else {
+                    config[key.group_id][key.key] = key.value;
+                }
             } else {
                 config[key.group_id] = {};
                 config[key.group_id][key.key] = key.value;
