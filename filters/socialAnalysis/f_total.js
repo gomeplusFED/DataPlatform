@@ -87,6 +87,10 @@ module.exports = {
         //     Result[key] = 0;
         // }
 
+        Result["累计点赞用户数"] = 0;
+        Result["累计收藏用户数"] = 0;
+        Result["累计选择兴趣点人数"] = 0;
+        Result["累计邀请好友注册成功人数"] = 0;
         for(let item of source){
             if(Result[item.key]) {
                 Result[item.key] += item.value;
@@ -97,6 +101,8 @@ module.exports = {
             //     Result[item.key] += item.value;
             // }
         }
+        Result.topic_praise_num = Result.topic_praise_num || 0;
+        Result.topic_collect_num = Result.topic_collect_num || 0;
 
         let registeruserallcount = 0,
             replytopicallcount   = 0;
