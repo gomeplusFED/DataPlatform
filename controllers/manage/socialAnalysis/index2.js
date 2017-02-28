@@ -36,7 +36,7 @@ module.exports = (Router) => {
                 "key" : ["group_person_num", "group_topic_num",
                     "topic_praise_num", "topic_collect_num", "topic_reply_num",
                     "topic_subreply_num"],
-                date : util.getDate(new Date(new Date() - 24 * 60 *60 *1000))
+                date : util.moment(new Date(new Date() - 24 * 60 *60 *1000))
             }
         },
         rows: [
@@ -177,6 +177,7 @@ module.exports = (Router) => {
         modelName : [ "SocialGroupDetailList" , "Statistics" ],
         platform : false,
         excel_export : true,
+        order : ["-topic_create_time"],
         flexible_btn:[{
              content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ["excel_export"]
@@ -191,8 +192,8 @@ module.exports = (Router) => {
         }],
         secondParams(query , params , sendData){
             //Statistics,查询时间，固定为昨天
-            var lastday = new Date(+new Date() - 1000*60*60*24),
-                date = util.getDate(lastday);
+            var lastday = new Date(new Date() - 1000*60*60*24),
+                date = util.moment(lastday);
             //Statistics,topic_id数组
             var source = sendData.first.data[0];
             var arr = [];
@@ -201,7 +202,7 @@ module.exports = (Router) => {
             }
 
             return {
-                date : orm.between(date + " 00:00:00", date + " 23:59:59"),
+                date : date,
                 "group_id" : params.group_id,
                 "topic_id" : arr,
                 "key" : ["topic_reply_user_num", "topic_subreply_user_num",

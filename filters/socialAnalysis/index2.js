@@ -148,7 +148,7 @@ module.exports = {
         var config = {};
 
         for(let item of source){
-            item.topic_create_time = util.getDate(item.topic_create_time)
+            item.topic_create_time = util.moment(item.topic_create_time)
             ids.push(item.topic_id);
             newData.push(item);
         }
