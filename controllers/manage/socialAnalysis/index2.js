@@ -191,6 +191,14 @@ module.exports = (Router) => {
             groupBy : ["topic_id", "key"],
             get : ""
         }],
+        firstSql(query, params) {
+            const sql = `select topic_id,topic_create_time,group_name,publisher_name  from ads2_soc_group_detail_list where date between '${query.startTime}' and '${query.endTime}' and group_id='${query.group_id}' and day_type=1 group by topic_id`;
+
+            return {
+                sql : sql,
+                params : []
+            };
+        },
         secondParams(query , params , sendData){
             //Statistics,查询时间，固定为昨天
             var lastday = new Date(new Date() - 1000*60*60*24),
