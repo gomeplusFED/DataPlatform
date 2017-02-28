@@ -204,7 +204,7 @@ module.exports = (Router) => {
             var lastday = new Date(new Date() - 1000*60*60*24),
                 date = util.moment(lastday);
             //Statistics,topic_id数组
-            var source = sendData.first.data[0];
+            var source = sendData.first.data;
             var arr = [];
             for(let item of source){
                 arr.push(item.topic_id);
