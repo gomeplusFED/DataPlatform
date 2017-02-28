@@ -178,6 +178,7 @@ module.exports = (Router) => {
         platform : false,
         excel_export : true,
         order : ["-topic_create_time"],
+        groupBy : ["topic_id"],
         flexible_btn:[{
              content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ["excel_export"]
