@@ -458,8 +458,8 @@ module.exports = (Router) => {
         //     get : ""
         // }, false],
         firstSql(query, params, isCount) {
-            let keys = [query.startTime, query.endTime, query.day_type];
-            let where = ["date BETWEEN ? AND ?", "day_type=?"];
+            let keys = [query.startTime, query.endTime, query.day_type, query.type];
+            let where = ["date BETWEEN ? AND ?", "day_type=?", "type=?"];
             if(query.topic_id) {
                 keys.push(query.topic_id);
                 where.push("topic_id=?");
@@ -490,7 +490,7 @@ module.exports = (Router) => {
                title: '',
                filter_key: 'type',
                groups: [{
-                   key: ['APP', "WAP", "PC"],
+                   key: "ALL",
                    value: '全部'
                }, {
                    key: 'APP',
