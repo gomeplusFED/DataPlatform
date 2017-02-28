@@ -115,7 +115,7 @@ module.exports = {
         }
 
         Result.userin_lv = util.toFixed( Result.group_persons_num , registeruserallcount );
-        Result.reply_lv = util.toFixed( third.new_reply_topic_num , Result.all_topic_num );
+        Result.reply_lv = util.toFixed( third[0].new_reply_topic_num , Result.all_topic_num );
 
         return util.toTable([[Result],[Result],[Result]], rows, cols , null , [true , true , true]);
     },
