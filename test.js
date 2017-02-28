@@ -22,9 +22,9 @@
 // })
 
 
-var redis = require("ioredis");
-var redisInfo = require("./db/redis.json");   //info
-var redisConfig = require("./db/config.json").redis;  // test or dev , test
+// var redis = require("ioredis");
+// var redisInfo = require("./db/redis.json");   //info
+// var redisConfig = require("./db/config.json").redis;  // test or dev , test
 // var cluster = new redis.Cluster(redisInfo[redisConfig]); 
 
 // cluster.on("connect" , (...data)=>{
@@ -41,36 +41,38 @@ var redisConfig = require("./db/config.json").redis;  // test or dev , test
 // })
 
 
-let moment = require("moment");
+// let moment = require("moment");
+//
+// let date = moment(new Date()).format("MMDD"),
+//     zDate = moment(new Date() - 24 * 60 * 60 * 1000).format("MMDD");
+//
+// console.log(date , zDate);
+//
+//
+// let eventproxy = require("eventproxy");
+//
+// let ep = new eventproxy();
+//
+//
+// setTimeout(()=>{
+//     ep.emit("one" , ["one" , "one"])
+// } , 1000);
+//
+//
+// setTimeout(()=>{
+//     ep.emit("two" , ["two" , "two"])
+// } , 1200);
+//
+//
+// setTimeout(()=>{
+//     ep.emit("three" , ["three" , "three"])
+// } , 2000);
+//
+//
+// ep.all(["one" , "two" , "three"] , function(...values){
+//     console.log(values);
+// });
+const md5 = require("md5");
 
-let date = moment(new Date()).format("MMDD"),
-    zDate = moment(new Date() - 24 * 60 * 60 * 1000).format("MMDD");
-
-console.log(date , zDate);
-
-
-let eventproxy = require("eventproxy");
-
-let ep = new eventproxy();
-
-
-setTimeout(()=>{
-    ep.emit("one" , ["one" , "one"])
-} , 1000);
-
-
-setTimeout(()=>{
-    ep.emit("two" , ["two" , "two"])
-} , 1200);
-
-
-setTimeout(()=>{
-    ep.emit("three" , ["three" , "three"])
-} , 2000);
-
-
-ep.all(["one" , "two" , "three"] , function(...values){
-    console.log(values);
-});
-
+console.log(md5("123456pingtai").substr(4,6));
 
