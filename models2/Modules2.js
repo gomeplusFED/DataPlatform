@@ -167,9 +167,6 @@ module.exports = {
     ads2_soc_group_topic : {
         modelName : "ads2_soc_group_topic"
     },
-    ads2_soc_topic_statistics : {
-        modelName : "ads2_soc_topic_statistics"
-    },
     tbl_rt_group : {
         modelName : "tbl_rt_group"
     },
