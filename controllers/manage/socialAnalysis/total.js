@@ -78,7 +78,7 @@ module.exports = (Router) => {
             ep.emit("two" , data);
         });
         
-        req.models.ads2_soc_topic_statistics.find(Condition , (err , data)=>{
+        req.models.SocialTopicStatistics.find(Condition , (err , data)=>{
             ep.emit("three" , data);
         });
 
