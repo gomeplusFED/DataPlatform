@@ -34,7 +34,7 @@
                 args[1] = url;
             }
         } else {
-            args[1] = '/databp/ajax' + url;
+            args[1] = '/databp/ajax' + (url.startsWith('/') ? url : '/' + url);
         }
         // call original open method
         return open.apply(this, args);
