@@ -190,7 +190,7 @@ module.exports = (Router) => {
             get : ""
         }],
         firstSql(query, params) {
-            const sql = `select topic_id,topic_create_time,topic_name,publisher_name  from ads2_soc_group_detail_list where date between '${query.startTime}' and '${query.endTime}' and group_id='${query.group_id}' and day_type=1 group by topic_id order by topic_create_time`;
+            const sql = `select topic_id,topic_create_time,topic_name,publisher_name  from ads2_soc_group_detail_list where date between '${query.startTime}' and '${query.endTime}' and group_id='${query.group_id}' and day_type=1 group by topic_id order by topic_create_time desc`;
 
             return {
                 sql : sql,
