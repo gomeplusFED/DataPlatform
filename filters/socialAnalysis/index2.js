@@ -78,11 +78,14 @@ module.exports = {
                 case "PC":
                     num = 2;
                     break;
+                case "ALL" :
+                    num = 3;
+                    break;
             }
             for(var key in item){
                 if(key == "type") continue;
                 newData[num][key] += item[key];
-                newData[3][key] += item[key];
+                // newData[3][key] += item[key];
             }
         }
 
