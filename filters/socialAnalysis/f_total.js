@@ -83,15 +83,26 @@ module.exports = {
             second = data[1],
             third  = data[2];
         let Rows = util.megerArray([] , rows), Result = {};
-        for(let key of Rows){
-            Result[key] = 0;
-        }
+        // for(let key of Rows){
+        //     Result[key] = 0;
+        // }
 
+        Result["累计点赞用户数"] = 0;
+        Result["累计收藏用户数"] = 0;
+        Result["累计选择兴趣点人数"] = 0;
+        Result["累计邀请好友注册成功人数"] = 0;
         for(let item of source){
-            if(Result[item.key] != undefined){
+            if(Result[item.key]) {
                 Result[item.key] += item.value;
+            } else {
+                Result[item.key] = item.value;
             }
+            // if(Result[item.key] != undefined){
+            //     Result[item.key] += item.value;
+            // }
         }
+        Result.topic_praise_num = Result.topic_praise_num || 0;
+        Result.topic_collect_num = Result.topic_collect_num || 0;
 
         let registeruserallcount = 0,
             replytopicallcount   = 0;
@@ -104,7 +115,7 @@ module.exports = {
         }
 
         Result.userin_lv = util.toFixed( Result.group_persons_num , registeruserallcount );
-        Result.reply_lv = util.toFixed( replytopicallcount , Result.all_topic_num );
+        Result.reply_lv = util.toFixed( third[0].new_reply_topic_num , Result.all_topic_num );
 
         return util.toTable([[Result],[Result],[Result]], rows, cols , null , [true , true , true]);
     },

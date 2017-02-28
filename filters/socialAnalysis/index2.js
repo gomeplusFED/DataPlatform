@@ -78,11 +78,14 @@ module.exports = {
                 case "PC":
                     num = 2;
                     break;
+                case "ALL" :
+                    num = 3;
+                    break;
             }
             for(var key in item){
                 if(key == "type") continue;
                 newData[num][key] += item[key];
-                newData[3][key] += item[key];
+                // newData[3][key] += item[key];
             }
         }
 
@@ -135,7 +138,7 @@ module.exports = {
     },
      groupDetailFour(data, query) {
 
-        var source = data.first.data[0],
+        var source = data.first.data,
             source2 = data.second.data[0],
             count = data.first.count > 100 ? 100 : data.first.count,
             ids = [];
@@ -145,7 +148,7 @@ module.exports = {
         var config = {};
 
         for(let item of source){
-            item.topic_create_time = util.getDate(item.topic_create_time)
+            item.topic_create_time = util.moment(item.topic_create_time)
             ids.push(item.topic_id);
             newData.push(item);
         }
