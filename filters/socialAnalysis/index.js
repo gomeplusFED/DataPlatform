@@ -378,22 +378,22 @@ module.exports = {
             newData = {};
         // var showData = [];
 
-        // for(let cid of group_type){
-        //     for(let item of orderData){
-        //         if(item.id == cid){
-        //             obj[cid] = item.name;
-        //             newData[item.name] = {
-        //                 value : 0
-        //             }
-        //         }
-        //     }
-        // }
-        for(let item of orderData){
-                obj[item.id] = item.name;
-                newData[item.name] = {
-                    value : 0
+        for(let cid of group_type){
+            for(let item of orderData){
+                if(item.id == cid){
+                    obj[cid] = item.name;
+                    newData[item.name] = {
+                        value : 0
+                    }
                 }
+            }
         }
+        // for(let item of orderData){
+        //         obj[item.id] = item.name;
+        //         newData[item.name] = {
+        //             value : 0
+        //         }
+        // }
 
         for(let item of source){
             if(item.category_id in obj){
