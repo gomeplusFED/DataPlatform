@@ -443,8 +443,8 @@ module.exports = {
             item.topic_collect_num = config[item.group_id] ? config[item.group_id].topic_collect_num || 0 : 0;
             item.topic_reply_num = config[item.group_id] ? config[item.group_id].topic_reply_num || 0 : 0;
             item.reply_num =
-                config[item.group_id] ? config[item.group_id].topic_reply_num || 0 : 0 +
-                config[item.group_id] ? config[item.group_id].topic_subreply_num || 0 : 0;
+                (config[item.group_id] ? config[item.group_id].topic_reply_num || 0 : 0) +
+                (config[item.group_id] ? config[item.group_id].topic_subreply_num || 0 : 0);
             item.category_id_1 = obj[item.category_id_1] || null;
             item.category_id_2 = obj[item.category_id_2] || null;
             item.creater_flag = config[item.creater_flag] || null;
