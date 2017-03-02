@@ -14,7 +14,6 @@
 		</div>
 		<label class="showmap"><input type="checkbox" v-model="show"></input>显示热力图</label>
 	</div>
-	<!-- <div class="mask" v-show="show"> </div> -->
 	<visualbp :loading.sync='loading'> </visualbp>
 </div>
 </template>
@@ -53,7 +52,10 @@
 				dom: {
 					iframe: null,
 					body: null,
-					heatdiv: null
+					heatdiv: null,
+					$elems: null,
+					$tip: null,
+					$popover: null
 				},
 				data: [],
 				argvs: {},
@@ -114,28 +116,36 @@
 		},
 		methods: {
 			init(config) {
-				// let data =[{
-				// 	"pageUrl": "https://www-pre.gomeplus.com/",
-				// 	"selector": "body > div.wrap-box > div.circle-index-list.clearfix > div:nth-child(2) > div:nth-child(1) > div > div.list-img > a > img",
-				// 	"pv": 5336,
-				// 	"uv": 824
-				// }, {
-				// 	"pageUrl": "https://www-pre.gomeplus.com/",
-				// 	"selector": "body > div.wrap-box > div.circle-index-list.clearfix > div:nth-child(3) > div:nth-child(1) > div > div.list-title > p > a",
-				// 	"pv": 15336,
-				// 	"uv": 1824
-				// }, {
-				// 	"pageUrl": "https://www-pre.gomeplus.com/",
-				// 	"selector": "body > div.gome-about.gome-wrap > div.public-container > main > div.left-menu > ul > li:first-child + li +li > a",
-				// 	"pv": 19336,
-				// 	"uv": 1924
-				// }];
-				// this.data = data;
-				// this.generateCanvas(data);
-				// return Promise.resolve();
 				return api.getHeatData(config).then((data) => {
 					this.data = data;
 					this.generateCanvas(data);
+					this.showTip();
+				});
+			},
+			showTip() {
+				let $allElem = this.dom.$elems;
+				let $popover = this.dom.$popover;
+				let $tip = this.dom.$tip;
+				let wait = false;
+				let _x;
+				let _y;
+				$allElem.mousemove(function(e) {
+					_x = e.pageX + 12;
+					_y = e.pageY + 12;
+					if(!wait) {
+					// throttle
+					setTimeout(() => {
+							$tip.html(this.getAttribute('heat-data'));
+							$popover.css('left', _x);
+							$popover.css('top', _y);
+							$popover.show();
+							wait = false;
+						}, 200);
+					wait = true;
+				}
+				});
+				$allElem.mouseleave((e) => {
+					$popover.hide();
 				});
 			},
 			destroyCanvas() {
@@ -155,24 +165,24 @@
 				_this.dom.body = $body;
 				_this.dom.heatdiv = $heatdiv;
 
-				data = data.map(x => {return {$elem: $iframe.find(x.selector), ...x}}).filter(x => x.$elem.length);
+				data = data.map(x => ({$elem: $iframe.find(x.selector), ...x})).filter(x => x.$elem.length);
 
 				if (data.length === 0) {
 					this.show = false;
 					return;
 				}
 
-
 				let docheight = $iframe.height();
 				let docwidth = $iframe.width();
-				heatdiv.style = `overflow:hidden;z-index:900;position:absolute;height:${docheight}px;width:${docwidth}px;top:0;left:0;`;
+				heatdiv.style = `overflow:hidden;z-index:900;position:absolute;height:${docheight}px;width:${docwidth}px;top:0;left:0;pointer-events:none;`;
 				$body.append(heatdiv);
 
 					// inject popover
-				let $tip = $('<p id="heatmaptip" style="text-align: left"></p>');
-				let $popover = $(`<div style="z-index:1200;overflow:hidden;display:none;position:absolute;border:0px solid rgb(51,51,51);transition:left 0.4s,top 0.4s;border-radius:4px;color:rgb(255,255,255);padding:5px;background-color:rgba(0,0,0,0.7);width: 500px">
-				    </div>`);
+				let $tip = $('<p id="heatmaptip" style="text-align: left;"></p>');
+				let $popover = $(`<div style="z-index:1200;overflow:hidden;display:none;position:absolute;border:0px solid rgb(51,51,51);transition:left 0.4s,top 0.4s;border-radius:4px;color:rgb(255,255,255);padding:5px;background-color:rgba(0,0,0,0.7);transition: all 0.5s"></div>`);
 				$popover.append($tip);
+				this.dom.$popover = $popover;
+				this.dom.$tip = $tip;
 				$heatdiv.append($popover);
 				
 				for(let type of _this.dataTypes) {
@@ -184,7 +194,6 @@
 					}
 					// 处理数据
 					let canvasData = [];
-					let eventData = [];
 					for (let x of data) {
 						let $elem = x.$elem;
 						let _offset = $elem.offset();
@@ -193,35 +202,16 @@
 						let _centerX = _offset.left + _width / 2;
 						let _centerY = _offset.top + _height / 2;
 						canvasData.push([_centerX, _centerY, x[name] * type.p]);
-						eventData.push({_centerX, _centerY, ...x});
 					}
 					let _canvas = new Heatmap(_this.option).getCanvas(canvasData,
                         docwidth, docheight);
 					_canvas.style.display = 'none';
 					heatdiv.appendChild(_canvas);
 					let lastres;
-					// bind event
-					$(_canvas).mousemove((e) => {
-						let _x = e.pageX + 12;
-						let _y = e.pageY + 12;
-						let res = eventData.filter(p => {
-							return Math.abs(p._centerX - _x) <= 26 && Math.abs(p._centerY - _y) <= 26;
- 						});
- 						if (res.length > 0) {
- 							let item = res[0];
- 							if(lastres !== item) {
- 								$tip.html(`名称：${item.pointName || '--'}<br>选择器：${item.selector || '--'}<br>${name}：${item[name]}`);
- 							}
- 							$popover.css('left', _x);
- 							$popover.css('top', _y);
- 							$popover.show();
- 						} else {
- 							$popover.hide();
- 						}
-					    
-					});
 					_this.canvas[name] = _canvas;
 				}
+				// bind event
+				this.dom.$elems = data.reduce((acu,cur) => acu.add(cur.$elem.attr('heat-data', `名称：${cur.pointName || '--'}<br>pv：${cur.pv}<br>日uv：${cur.uv}`)), $());
 				_this.switchCanvas();
 				_this.show = true;
 			},
@@ -256,16 +246,6 @@
 	module.exports = heatmap;
 </script>
 <style>
-.heatmap .mask {
-	position: absolute;
-	margin-top: 60px;
-	width: 100%;
-	height: 100%;
-	top: 0;
-	z-index: 1000;
-	cursor: auto;
-/*	background: rgba(255,255,255,0.1);*/
-}
 .heatmap #search {
 	float: right;
 }
