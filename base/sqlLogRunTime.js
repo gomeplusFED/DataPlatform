@@ -23,7 +23,7 @@ module.exports = {
         let log = `[${moment(new Date()).format("YYYY-MM-DD HH:mm:ss")}]  modelName:${name}   ${(end - start)/1000}s`;
         if(this.existFile()) {
             let fd = fs.openSync(logPath, "a+");
-            fs.writeSync(fd, `\r${log}`);
+            fs.writeSync(fd, `\r\n${log}`);
         } else {
             fs.writeFileSync(logPath, log);
         }
