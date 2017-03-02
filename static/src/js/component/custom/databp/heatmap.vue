@@ -129,23 +129,34 @@
 				let wait = false;
 				let _x;
 				let _y;
+				let _element;
+				let _text;
+				
+				let setPopover = (text) => {
+					$tip.html(text);
+					$popover.css('left', _x);
+					$popover.css('top', _y);
+					$popover.show();
+					wait = false;
+				}
 				$allElem.mousemove(function(e) {
 					_x = e.pageX + 12;
 					_y = e.pageY + 12;
-					if(!wait) {
-					// throttle
-					setTimeout(() => {
-							$tip.html(this.getAttribute('heat-data'));
-							$popover.css('left', _x);
-							$popover.css('top', _y);
-							$popover.show();
-							wait = false;
-						}, 200);
-					wait = true;
-				}
+					if (_element !== this) {
+						setPopover(_text = this.getAttribute('heat-data'));
+					} else {
+						if(!wait) {
+							// throttle
+							setTimeout(() => {
+									setPopover(_text);
+								}, 200);
+							wait = true;
+						}
+					}
 				});
 				$allElem.mouseleave((e) => {
 					$popover.hide();
+					_element = null;
 				});
 			},
 			destroyCanvas() {
