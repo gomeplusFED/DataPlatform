@@ -43,13 +43,13 @@ Object.keys(config).forEach(function(key) {
 log4js.configure();
 app.use(log4js.useLog());
 
-app.use(function(req, res, next) {
-    if (req.headers['user-agent'].indexOf('Chrome') === -1) {
-        res.send('请使用谷歌浏览器');
-    } else {
-        next();
-    }
-});
+// app.use(function(req, res, next) {
+//     if (req.headers['user-agent'].indexOf('Chrome') === -1) {
+//         res.send('请使用谷歌浏览器');
+//     } else {
+//         next();
+//     }
+// });
 
 app.engine('html', ejs.renderFile);
 app.set('view engine', 'html');
