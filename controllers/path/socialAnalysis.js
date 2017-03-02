@@ -39,11 +39,12 @@ module.exports = {
                     title : "话题汇总",
                     query_api : "/socialAnalysis/panelTwo"
                 },
-                {
-                    type : "table",
-                    title : "话题交易汇总",
-                    query_api : "/socialAnalysis/panelThree"
-                },
+                //TODO 改动
+                // {
+                //     type : "table",
+                //     title : "话题交易汇总",
+                //     query_api : "/socialAnalysis/panelThree"
+                // },
                 // {
                 //     type : "table",
                 //     title : "好友关系汇总",

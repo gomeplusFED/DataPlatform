@@ -376,17 +376,23 @@ module.exports = {
             };
         var obj = {},
             newData = {};
-        var showData = [];
+        // var showData = [];
 
-        for(let cid of group_type){
-            for(let item of orderData){
-                if(item.id == cid){
-                    obj[cid] = item.name;
-                    newData[item.name] = {
-                        value : 0
-                    }
+        // for(let cid of group_type){
+        //     for(let item of orderData){
+        //         if(item.id == cid){
+        //             obj[cid] = item.name;
+        //             newData[item.name] = {
+        //                 value : 0
+        //             }
+        //         }
+        //     }
+        // }
+        for(let item of orderData){
+                obj[item.id] = item.name;
+                newData[item.name] = {
+                    value : 0
                 }
-            }
         }
 
         for(let item of source){
@@ -436,15 +442,16 @@ module.exports = {
         var i = 1;
         for(let item of source){
             item.top = (page - 1) * 20 + i;
-            item.group_person_num = config[item.group_id] ? config[item.group_id].group_person_num || 0 : 0;
-            item.group_topic_num = config[item.group_id] ? config[item.group_id].group_topic_num || 0 : 0;
-            item.topic_subreply_num = config[item.group_id] ? config[item.group_id].topic_subreply_num || 0 : 0;
-            item.topic_praise_num = config[item.group_id] ? config[item.group_id].topic_praise_num || 0 : 0;
-            item.topic_collect_num = config[item.group_id] ? config[item.group_id].topic_collect_num || 0 : 0;
-            item.topic_reply_num = config[item.group_id] ? config[item.group_id].topic_reply_num || 0 : 0;
+            let config_obj = config[item.group_id] || {};
+            item.group_person_num = config_obj.group_person_num || 0;
+            item.group_topic_num = config_obj.group_topic_num || 0;
+            item.topic_subreply_num = config_obj.topic_subreply_num || 0;
+            item.topic_praise_num = config_obj.topic_praise_num || 0;
+            item.topic_collect_num = config_obj.topic_collect_num || 0;
+            item.topic_reply_num = config_obj.topic_reply_num || 0;
             item.reply_num =
-                (config[item.group_id] ? config[item.group_id].topic_reply_num || 0 : 0) +
-                (config[item.group_id] ? config[item.group_id].topic_subreply_num || 0 : 0);
+                (config_obj.topic_reply_num || 0) +
+                (config_obj.topic_subreply_num || 0);
             item.category_id_1 = obj[item.category_id_1] || null;
             item.category_id_2 = obj[item.category_id_2] || null;
             item.creater_flag = config[item.creater_flag] || null;

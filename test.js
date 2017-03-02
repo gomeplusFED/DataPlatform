@@ -74,5 +74,5 @@
 // });
 const md5 = require("md5");
 
-console.log(md5("123456pingtai").substr(4,6));
+console.log(md5("148835962479pingtai").substr(4,6));
 

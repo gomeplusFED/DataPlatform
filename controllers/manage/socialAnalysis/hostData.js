@@ -94,7 +94,8 @@ module.exports = (Router) => {
         },
         rows: [
             ["type", "sum_first_groupOwner_num", "rate", "sum_new_groupOwner_num",
-                "sum_attention_groupOwner_num", "sum_cancel_attention_groupOwner_num"]
+                // "sum_attention_groupOwner_num", "sum_cancel_attention_groupOwner_num"
+            ]
         ],
         cols: [
             [{
@@ -111,12 +112,12 @@ module.exports = (Router) => {
                 caption: "新增圈主数",
                 type: "number",
                 help : "首次建立圈子的圈主数"
-            }, {
-                caption: "关注次数",
-                type: "number"
-            }, {
-                caption: "取关次数",
-                type: "number"
+            // }, {
+            //     caption: "关注次数",
+            //     type: "number"
+            // }, {
+            //     caption: "取关次数",
+            //     type: "number"
             }]
         ]
     });
@@ -170,12 +171,12 @@ module.exports = (Router) => {
             },{
                 key: 'sum_new_groupOwner_num',
                 value: '新增圈主数'
-            },{
-                key: 'sum_attention_groupOwner_num',
-                value: '关注次数'
-            },{
-                key: 'sum_cancel_attention_groupOwner_num',
-                value: '取关次数'
+            // },{
+            //     key: 'sum_attention_groupOwner_num',
+            //     value: '关注次数'
+            // },{
+            //     key: 'sum_cancel_attention_groupOwner_num',
+            //     value: '取关次数'
             }]
         }],
         filter(data, query, dates, type) {
@@ -331,8 +332,9 @@ module.exports = (Router) => {
                 "new_invite_friends_num", "person_friends_num", "new_fans_num", "person_funs_num" ,
                 "new_group_num",
                 "weiding",
-                "new_attention_num",
-                "new_cancel_attention_num"]
+                // "new_attention_num",
+                // "new_cancel_attention_num"
+            ]
         ],
         cols: [
             [{
@@ -372,12 +374,12 @@ module.exports = (Router) => {
                caption: "当前圈子数",
                type: "number",
                help : "此圈主下圈子数"
-            }, {
-                caption: "新增关注次数",
-                type: "number"
-            }, {
-                caption: "新增取关次数",
-                type: "number"
+            // }, {
+            //     caption: "新增关注次数",
+            //     type: "number"
+            // }, {
+            //     caption: "新增取关次数",
+            //     type: "number"
             }]
         ]
     });
