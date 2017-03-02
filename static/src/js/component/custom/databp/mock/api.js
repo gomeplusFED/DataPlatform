@@ -2,7 +2,7 @@ var store = require('store');
 var actions = require('actions');
 
 function extractResult(res) {
-    return new Promise(function(s, j) {
+    return new Promise(function (s, j) {
         if (res.code !== '200' || res.iserror !== '0') {
             j('获取埋点信息失败：' + res.msg);
         }
@@ -269,7 +269,7 @@ var api = {
             "code": "200",
             "msg": "",
             "iserror": "0"
-        }).then(function(res) {
+        }).then(function (res) {
             if (res.code !== '200' || res.iserror !== '0') {
                 return Promise.reject('获取埋点信息失败：' + res.msg);
             }
@@ -431,7 +431,7 @@ var api = {
             "code": "200",
             "msg": "",
             "iserror": "0"
-        }).then(function(res) {
+        }).then(function (res) {
             if (res.code !== '200' || res.iserror !== '0') {
                 return Promise.reject('获取热力列表信息失败：' + res.msg);
             }
@@ -447,7 +447,7 @@ var api = {
         }).catch(errHandler);
     },
     getHeatSum(data) {
-        return buildAjax('/pointHeatList/total', filterArgs(data, ['pageUrl', 'platform', 'pointName', 'page', 'size', 'startTime', 'endTime', 'pattern', 'isActive', 'type'])).then(function(res) {
+        return buildAjax('/pointHeatList/total', filterArgs(data, ['pageUrl', 'platform', 'pointName', 'page', 'size', 'startTime', 'endTime', 'pattern', 'isActive', 'type'])).then(function (res) {
             if (res.code !== '200' || res.iserror !== '0') {
                 return Promise.reject('获取热力总计信息失败：' + res.msg);
             }
@@ -459,20 +459,82 @@ var api = {
             }
         }).catch(errHandler);
     },
+    getHeatData() {
+        return Promise.resolve({
+            "data": {
+                "total": 5,
+                "result": [{
+                    "pageUrl": "https://www.gomeplus.com/",
+                    "selector": "html > body > div:first-child > div:first-child+div > div > div:first-child+div > a:first-child",
+                    "pv": 29,
+                    "uv": 28,
+                    "pointId": 0,
+                    "pointName": "首页注册",
+                    "dateTime": "2017-03-01"
+                }, {
+                    "pageUrl": "https://www.gomeplus.com/",
+                    "selector": "html > body > div:first-child > div:first-child > div > h1:first-child+div > em",
+                    "pv": 50,
+                    "uv": 23,
+                    "pointId": 0,
+                    "pointName": "搜索按钮",
+                    "dateTime": "2017-03-01"
+                }, {
+                    "pageUrl": "https://www.gomeplus.com/",
+                    "selector": "html > body > div.banner > div > div:first-child > ul > li:first-child+li+li+li+li+li+li > a",
+                    "pv": 12,
+                    "uv": 11,
+                    "pointId": 0,
+                    "pointName": "sy_banner",
+                    "dateTime": "2017-03-01"
+                }, {
+                    "pageUrl": "https://www.gomeplus.com/",
+                    "selector": "html > body > div.banner > div > div:first-child > ul > li:first-child+li > a",
+                    "pv": 17,
+                    "uv": 15,
+                    "pointId": 0,
+                    "pointName": "sy_banner1",
+                    "dateTime": "2017-03-01"
+                }, {
+                    "pageUrl": "https://www.gomeplus.com/",
+                    "selector": "html > body > div.banner > div > div:first-child > ul > li:first-child+li+li > a",
+                    "pv": 5,
+                    "uv": 5,
+                    "pointId": 0,
+                    "pointName": "sy_banner2",
+                    "dateTime": "2017-03-01"
+                }]
+            },
+            "code": "200",
+            "msg": "SUCCESS",
+            "iserror": "0"
+        }).then(function (res) {
+            if (res.code !== '200' || res.iserror !== '0') {
+                return Promise.reject('获取埋点信息失败：' + res.msg);
+            }
+            var data;
+            if (res && (data = res.data) && (data = data.result) && data.length) {
+                return data;
+            } else {
+                return Promise.reject('暂无热点信息');
+            }
+        }).catch(errHandler);
+    },
     getHeatDetail(data) {
         let hasdata = (data.pv !== 0);
-    	function genObj() {
-    		return {
-                "pv": Math.ceil(Math.random()*1000),
-                "uv": Math.ceil(Math.random()*1000),
-                "date": 1483459200000 + Math.ceil(Math.random()*10000000000)
+
+        function genObj() {
+            return {
+                "pv": Math.ceil(Math.random() * 1000),
+                "uv": Math.ceil(Math.random() * 1000),
+                "date": 1483459200000 + Math.ceil(Math.random() * 10000000000)
             }
-    	}
-    	let result = [];
-    	let len = Math.ceil(Math.random()*50);
-    	for(let i =0;i< len;i++) {
-    		hasdata && result.push(genObj());
-    	}
+        }
+        let result = [];
+        let len = Math.ceil(Math.random() * 50);
+        for (let i = 0; i < len; i++) {
+            hasdata && result.push(genObj());
+        }
         return Promise.resolve({
             "msg": "成功",
             "code": "200",
@@ -481,7 +543,7 @@ var api = {
                 "total": 2
             },
             "iserror": "0"
-        }).then(function(res) {
+        }).then(function (res) {
             if (res.code !== '200' || res.iserror !== '0') {
                 return Promise.reject('获取热力趋势信息失败：' + res.msg);
             }
