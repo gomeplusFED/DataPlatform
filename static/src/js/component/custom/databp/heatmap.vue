@@ -42,7 +42,7 @@
 		props:['loading'],
 		data: function() {
 			return {
-				show: false,
+				show: true,
 				// 防止热力图无限扩大设置的最大值
 				// 最大不透明度为1
 				maxVal: 1,
@@ -256,6 +256,8 @@
 				
 				// bind event
 				this.dom.$elems = data.reduce((acu,cur) => acu.add(cur.$elem.attr('heat-data', `名称：${cur.pointName || '--'}<br>pv：${cur.pv}<br>日uv：${cur.uv}`)), $());
+				this.data.forEach(x => x.$elem.addClass(`heatmap-${x.uid}`));
+				this.switchCanvas(this.datatype);
 				_this.show = true;
 			},
 			cutCanvas(ctx, data, extraData) {
