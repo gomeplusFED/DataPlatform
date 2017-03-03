@@ -240,7 +240,6 @@
 					let _canvas = heatmapFactory.getCanvas(canvasData,
                         docwidth, docheight);
 
-					
 					let ctx = _canvas.getContext('2d');
 					//
 					// 切分canvas
