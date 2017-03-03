@@ -482,24 +482,24 @@ var api = {
                 }, {
                     "pageUrl": "https://www.gomeplus.com/",
                     "selector": "html > body > div.banner > div > div:first-child > ul > li:first-child+li+li+li+li+li+li > a",
-                    "pv": 12,
-                    "uv": 11,
+                    "pv": 122,
+                    "uv": 131,
                     "pointId": 0,
                     "pointName": "sy_banner",
                     "dateTime": "2017-03-01"
                 }, {
                     "pageUrl": "https://www.gomeplus.com/",
                     "selector": "html > body > div.banner > div > div:first-child > ul > li:first-child+li > a",
-                    "pv": 17,
-                    "uv": 15,
+                    "pv": 71,
+                    "uv": 95,
                     "pointId": 0,
                     "pointName": "sy_banner1",
                     "dateTime": "2017-03-01"
                 }, {
                     "pageUrl": "https://www.gomeplus.com/",
                     "selector": "html > body > div.banner > div > div:first-child > ul > li:first-child+li+li > a",
-                    "pv": 5,
-                    "uv": 5,
+                    "pv": 115,
+                    "uv": 125,
                     "pointId": 0,
                     "pointName": "sy_banner2",
                     "dateTime": "2017-03-01"
