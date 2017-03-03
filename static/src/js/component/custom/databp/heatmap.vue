@@ -42,7 +42,7 @@
 		props:['loading'],
 		data: function() {
 			return {
-				show: true,
+				show: false,
 				// 防止热力图无限扩大设置的最大值
 				// 最大不透明度为1
 				maxVal: 1,
@@ -95,7 +95,7 @@
 				this.init(heatconfig).then(() => {
 					let body = this.dom.body[0];
 					utils.observeDOMInserted(body, (mutations) => {
-						if(mutations[0].target !== body && mutations[0].target.id !== 'heatmaptip') {
+						if(mutations[0].target !== body && !mutations[0].target.id.includes('heatmap')) {
 							this.dom.heatdiv.remove();
 							// 延迟一下，使浏览器先render完毕
 							setTimeout(() => {
@@ -181,6 +181,7 @@
 				this.dom.heatdiv = $heatdiv;
 
 				let styleNode = document.createElement('style');
+				styleNode.id = 'heatmapstyle';
 				this.dom.body.append(styleNode);
 				this.dom.styleNode = $(styleNode);
 
@@ -241,7 +242,6 @@
                         docwidth, docheight);
 
 					let ctx = _canvas.getContext('2d');
-					//
 					// 切分canvas
 					let heatmapStyle = this.cutCanvas(ctx, normalData, extraData);
 					
@@ -256,8 +256,6 @@
 				
 				// bind event
 				this.dom.$elems = data.reduce((acu,cur) => acu.add(cur.$elem.attr('heat-data', `名称：${cur.pointName || '--'}<br>pv：${cur.pv}<br>日uv：${cur.uv}`)), $());
-				_this.switchCanvas();
-				data.forEach(x => x.$elem.addClass(`heatmap-${x.uid}`));
 				_this.show = true;
 			},
 			cutCanvas(ctx, data, extraData) {
@@ -341,9 +339,11 @@
 				handler(val) {
 					if(val) {
 						this.dom.heatdiv.show();
+						this.data.forEach(x => x.$elem.addClass(`heatmap-${x.uid}`));
 						this.switchCanvas(this.datatype);
 					} else {
 						this.dom.heatdiv.hide();
+						this.data.forEach(x => x.$elem.removeClass(`heatmap-${x.uid}`));
 					}
 				}   
 			},
