@@ -233,7 +233,11 @@
 							return false;
 						} else {
 							if (href.startsWith('/')) {
-								_this.bpConfig.pageUrl = host + href.slice(1);
+								if (href.startsWith('//')) {
+									_this.bpConfig.pageUrl = host.match(/https?:/)[0] + href;
+								} else {
+									_this.bpConfig.pageUrl = host + href.slice(1);
+								}
 							} else {
 								_this.bpConfig.pageUrl = _this.bpConfig.pageUrl.replace(/\/$/, '') + '/' + href;
 							}
