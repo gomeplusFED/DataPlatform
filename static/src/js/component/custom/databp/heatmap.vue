@@ -20,6 +20,7 @@
 <script>
 	const Vue = require('Vue');
 	const $ = require('jQuery');
+	require('lib/jquery.actual.js');
 	const utils = require('utils');
 	const api = require('./mock/api.js');
 	var DatePicker = require('../../common/datePicker.vue');
@@ -66,6 +67,7 @@
 					$popover: null
 				},
 				data: [],
+				rawData: [],
 				argvs: {},
 				pageComponentsData: {
 					date_picker: {
@@ -99,7 +101,7 @@
 							this.dom.heatdiv.remove();
 							// 延迟一下，使浏览器先render完毕
 							setTimeout(() => {
-								this.generateCanvas(this.data);
+								this.generateCanvas(this.rawData);
 							}, 10);
 						}
 					});
@@ -120,12 +122,16 @@
 			init(config) {
 				return api.getHeatData(config).then((data) => {
 					// this.data = data;
+					this.rawData = data;
 					this.generateCanvas(data);
 					this.showTip();
 				});
 			},
 			showTip() {
 				let $allElem = this.dom.$elems;
+				if (!$allElem) {
+					return;
+				}
 				let $popover = this.dom.$popover;
 				let $tip = this.dom.$tip;
 				let wait = false;
@@ -174,6 +180,7 @@
 			generateCanvas(data) {
 				let _this = this;
 				let $iframe = this.dom.iframe = $('iframe').contents();
+				// let iframedoc = $iframe[0];
 				let $body = this.dom.body = $iframe.find('body');
 				let heatdiv = document.createElement("div");
 				heatdiv.id = 'heatdiv';
@@ -189,6 +196,8 @@
 					let $elem = $iframe.find(x.selector);
 					if($elem.length === 0) {
 						return null;
+					} else {
+						$elem = $elem.first();
 					}
 					let _offset = $elem.offset();
 					let _width = $elem.outerWidth();
@@ -208,7 +217,7 @@
 				let outRangeData = [];
 				let normalData = [];
 				for(let x of data) {
-					if (x._centerX > 0 &&  x._centerX < docwidth && x._centerY > 0 && x._centerY < docheight) {
+					if ((x.$elem.css('display') !== 'hidden') && x._centerX > 0 &&  x._centerX < docwidth && x._centerY > 0 && x._centerY < docheight) {
 						normalData.push(x);
 					} else {
 						outRangeData.push(x);
@@ -266,8 +275,8 @@
 				for (let x of data) {
 					let _width = x._width;
 					let _height = x.$elem.css('display').includes('inline') ? x.$elem.parent().outerHeight() : x._height;
-					let cutWidth = minD > x._width ? minD: _width;
-					let cutHeight = minD > x._height ? minD: _height;
+					let cutWidth = _width || minD;
+					let cutHeight = _height || minD;
 					let cutOffsetX = cutWidth / 2;
 					let cutOffsetY = cutHeight / 2;
 					let cutX = x._centerX - cutOffsetX;
@@ -298,10 +307,11 @@
 
 				}
 				for (let x of extraData) {
-					let _width = x._width;
-					let _height = x.$elem.css('display').includes('inline') ? x.$elem.parent().outerHeight() : x._height;
-					let cutWidth = minD > x._width ? minD: _width;
-					let cutHeight = minD > x._height ? minD: _height;
+					let _width = x._width || x.$elem.actual( 'outerWidth' );
+					let _height = x.$elem.css('display').includes('inline') ? x.$elem.parent().actual('outerHeight') : (x._height || x.$elem.actual('outerHeight'));
+					// 直接按照预设半径生成
+					let cutWidth = minD;
+					let cutHeight = minD;
 					let cutOffsetX = cutWidth / 2;
 					let cutOffsetY = cutHeight / 2;
 					let __canvas = heatmapFactory.getCanvas([[cutWidth / 2, cutHeight / 2, x.heatmap]],
