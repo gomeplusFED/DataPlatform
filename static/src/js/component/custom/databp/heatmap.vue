@@ -20,9 +20,8 @@
 <script>
 	const Vue = require('Vue');
 	const $ = require('jQuery');
-	require('lib/jquery.actual.js');
 	const utils = require('utils');
-	const api = require('./mock/api.js');
+	const api = require('./lib/api.js');
 	var DatePicker = require('../../common/datePicker.vue');
 	const visualbp = require('./visualbp.vue');
 	const Heatmap = require('./lib/heatmap.js');
