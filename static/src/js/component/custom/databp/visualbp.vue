@@ -58,6 +58,11 @@
 		},
 		ready() {
 			this.iframe_node = document.getElementById('iframenode');
+			window.onbeforeunload = function(e) {
+				var dialogText = `请选择"留下"`;
+				e.returnValue = dialogText;
+				return dialogText;
+			};
 		},
 		route: {
 	        activate: function (transition) {
