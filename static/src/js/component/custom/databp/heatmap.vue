@@ -61,7 +61,8 @@
 					iframe: null,
 					body: null,
 					heatdiv: null,
-					styleNode: null,
+					width: null,
+					height: null,
 					$elems: null,
 					$tip: null,
 					$popover: null
@@ -98,10 +99,14 @@
 					let body = this.dom.body[0];
 					utils.observeDOMInserted(body, (mutations) => {
 						if(mutations[0].target !== body && !mutations[0].target.id.includes('heatmap')) {
-							this.dom.heatdiv.remove();
+							// this.dom.heatdiv.remove();
 							// 延迟一下，使浏览器先render完毕
 							setTimeout(() => {
-								this.generateCanvas(this.rawData);
+								if(this.dom.iframe.height() !== this.dom.height || this.dom.iframe.width() !== this.dom.width) {
+									this.destroyCanvas();
+									this.generateCanvas(this.rawData);
+								}
+								this.showTip();
 							}, 10);
 						}
 					});
@@ -125,10 +130,13 @@
 					this.rawData = data;
 					this.generateCanvas(data);
 					this.showTip();
+					window.requestAnimationFrame(this.freshCanvas);
 				});
 			},
 			showTip() {
-				let $allElem = this.dom.$elems;
+				// bind event
+				this.dom.$elems && this.dom.$elems.off();
+				let $allElem = this.dom.$elems = this.data.filter(x => x.$elem).reduce((acu,cur) => acu.add(cur.$elem.attr('heat-data', `名称：${cur.pointName || '--'}<br>pv：${cur.pv}<br>日uv：${cur.uv}`)), $());
 				if (!$allElem) {
 					return;
 				}
@@ -167,17 +175,62 @@
 					_element = null;
 				});
 			},
+			trimData(data) {
+				let $iframe = this.dom.iframe;
+				return data.map((x, i) => {
+					let $elem = x.$elem || $iframe.find(x.selector);
+					if($elem.length) {
+						$elem = $elem.first();
+					} else {
+						return {...this.rawData[i]};
+					}
+					let _offset = $elem.offset();
+
+					let _left = _offset.left;
+					let _top = _offset.top;
+					if ($elem.is(":visible") && (_left + _top) > 0) {
+						let _width = $elem.outerWidth();
+						let _height = $elem.outerHeight();
+						let _centerX = _left + _width / 2;
+						let _centerY = _top + _height / 2;
+						return ({...x, $elem, _width, _height, _centerX, _centerY});
+					} else {
+						return ({...this.rawData[i], $elem});
+					}
+					
+					});
+			},
+			freshCanvas() {
+				let newdata = this.trimData(this.data);
+				let needkeep = [];
+				let needupdate = [];
+				for(let i = 0,len= newdata.length;i<len;i++) {
+					let x0 = this.data[i];
+					let x1 = newdata[i];
+					if ((x0._centerX === x1._centerX) && (x0._centerY === x1._centerY)) {
+						needkeep.push(x0);
+					} else {
+						needupdate.push(x1)
+					}
+				}
+				let type = this.dataTypes.find(x => x.name === this.datatype);
+				let canvas = this.resultData[type.name].canvas;
+				if(needupdate.length > 0) {
+					needupdate = needupdate.filter(x => x._centerX);
+					needkeep = needkeep.filter(x => x._centerX);
+					let field = '_' + type.name;
+					heatmapFactory.refreshCanvas(canvas, needkeep.map(x => [x._centerX, x._centerY, x[field]]), needupdate.map(x => [x._centerX, x._centerY, x[field]]));
+				}
+				this.data = newdata;
+				window.requestAnimationFrame(this.freshCanvas);
+			},
 			destroyCanvas() {
 				if (this.dom.heatdiv) {
 					this.dom.heatdiv.remove();
 					this.dom.heatdiv = null;
 				}
-				if (this.dom.styleNode) {
-					this.dom.styleNode.remove();
-					this.dom.styleNode = null;
-				}
 			},
-			generateCanvas(data) {
+			generateCanvas(data = this.rawData) {
 				let _this = this;
 				let $iframe = this.dom.iframe = $('iframe').contents();
 				// let iframedoc = $iframe[0];
@@ -187,42 +240,15 @@
 				let $heatdiv = $(heatdiv);
 				this.dom.heatdiv = $heatdiv;
 
-				let styleNode = document.createElement('style');
-				styleNode.id = 'heatmapstyle';
-				this.dom.body.append(styleNode);
-				this.dom.styleNode = $(styleNode);
-
-				this.data = data = data.map((x, i) => {
-					let $elem = $iframe.find(x.selector);
-					if($elem.length === 0) {
-						return null;
-					} else {
-						$elem = $elem.first();
-					}
-					let _offset = $elem.offset();
-					let _width = $elem.outerWidth();
-					let _height = $elem.outerHeight();
-					let _centerX = _offset.left + _width / 2;
-					let _centerY = _offset.top + _height / 2;
-					return ({$elem,_width, _height, _centerX, _centerY,  ...x, uid: i});
-					}).filter(Boolean);
+				data = this.trimData(this.rawData);
 				
-				// 
 				if (data.length === 0) {
 					this.show = false;
 					return;
 				}
-				let docheight = $iframe.height();
-				let docwidth = $iframe.width();
-				let outRangeData = [];
-				let normalData = [];
-				for(let x of data) {
-					if ((x.$elem.css('display') !== 'hidden') && x._centerX > 0 &&  x._centerX < docwidth && x._centerY > 0 && x._centerY < docheight) {
-						normalData.push(x);
-					} else {
-						outRangeData.push(x);
-					}
-				}
+				let docheight = this.dom.height = $iframe.height();
+				let docwidth = this.dom.width = $iframe.width();
+				let normalData = data.filter(x => x._centerX);
 
 				heatdiv.style = `overflow:hidden;z-index:1100;position:absolute;height:${docheight}px;width:${docwidth}px;top:0;left:0;pointer-events:none;`;
 				$body.append(heatdiv);
@@ -243,103 +269,30 @@
 						type.p = this.maxVal/max;
 					}
 					// 处理数据
+					for(let x of data) {
+						x['_' + name] = x[name] * type.p;
+					}
 					
-					let canvasData = normalData.map(x => [x._centerX, x._centerY, x[name] * type.p]);
-					let extraData = outRangeData.map(x => ({heatmap: x[name] * type.p, ...x}));
+					let canvasData = normalData.map(x => [x._centerX, x._centerY, x['_' + name]]);
 
 					let _canvas = heatmapFactory.getCanvas(canvasData,
                         docwidth, docheight);
-
-					let ctx = _canvas.getContext('2d');
-					// 切分canvas
-					let heatmapStyle = this.cutCanvas(ctx, normalData, extraData);
-					
 					_canvas.style.display = 'none';
 					heatdiv.appendChild(_canvas);
 					_this.resultData[name] = {
-						canvas: _canvas,
-						heatmapStyle
+						canvas: _canvas
 					};
 					
 				}
-				
-				// bind event
-				this.dom.$elems = data.reduce((acu,cur) => acu.add(cur.$elem.attr('heat-data', `名称：${cur.pointName || '--'}<br>pv：${cur.pv}<br>日uv：${cur.uv}`)), $());
-				this.data.forEach(x => x.$elem.addClass(`heatmap-${x.uid}`));
+				this.data = data;
 				this.switchCanvas(this.datatype);
 				_this.show = true;
-			},
-			cutCanvas(ctx, data, extraData) {
-				let heatmapStyle = '';
-				let minD = Heatmap.DEFAULT_D || 0;
-				for (let x of data) {
-					let _width = x._width;
-					let _height = x.$elem.css('display').includes('inline') ? x.$elem.parent().outerHeight() : x._height;
-					let cutWidth = _width || minD;
-					let cutHeight = _height || minD;
-					let cutOffsetX = cutWidth / 2;
-					let cutOffsetY = cutHeight / 2;
-					let cutX = x._centerX - cutOffsetX;
-					let cutY = x._centerY - cutOffsetY;
-					let _imageData = ctx.getImageData(cutX, cutY, cutWidth, cutHeight);
-					// 将该区域换成透明的
-					ctx.putImageData(ctx.createImageData(_imageData), cutX, cutY);
-					// 转为base64
-					let __canvas = document.createElement('canvas');
-						__canvas.width = cutWidth;
-					__canvas.height = cutHeight;
-					let __ctx = __canvas.getContext('2d');
-					__ctx.putImageData(_imageData, 0, 0);
-					let imgdata = __canvas.toDataURL();
-					// 将其置为元素内容
-					heatmapStyle += `.heatmap-${x.uid}:before {
-						content: url(${imgdata});
-						float: left;
-						width: 0;
-						height: 0;
-						border: none;
-						position: relative;
-						z-index: 1000;
-						left: ${-(cutOffsetX - _width / 2)}px;
-						top: ${-(cutOffsetY - _height / 2)}px;
-					}`;
-					// x.$elem.parents().css('z-index', '900');
-
-				}
-				for (let x of extraData) {
-					let _width = x._width || x.$elem.actual( 'outerWidth' );
-					let _height = x.$elem.css('display').includes('inline') ? x.$elem.parent().actual('outerHeight') : (x._height || x.$elem.actual('outerHeight'));
-					// 直接按照预设半径生成
-					let cutWidth = minD;
-					let cutHeight = minD;
-					let cutOffsetX = cutWidth / 2;
-					let cutOffsetY = cutHeight / 2;
-					let __canvas = heatmapFactory.getCanvas([[cutWidth / 2, cutHeight / 2, x.heatmap]],
-                        cutWidth, cutHeight);
-					let imgdata = __canvas.toDataURL();
-					// 将其置为元素内容
-					heatmapStyle += `.heatmap-${x.uid}:before {
-						content: url(${imgdata});
-						float: left;
-						width: 0;
-						height: 0;
-						border: none;
-						position: relative;
-						z-index: 1000;
-						left: ${-(cutOffsetX - _width / 2)}px;
-						top: ${-(cutOffsetY - _height / 2)}px;
-					}`;
-					
-				}
-				
-				return heatmapStyle;
 			},
 			switchCanvas(type = this.datatype) {
 				for(let t in this.resultData) {
 					let data = this.resultData[t];
 					if (t === type) {
 						data.canvas.style.display = 'block';
-						this.dom.styleNode.html(data.heatmapStyle);
 					} else {
 						data.canvas.style.display = 'none';
 					}
@@ -351,11 +304,9 @@
 				handler(val) {
 					if(val) {
 						this.dom.heatdiv.show();
-						this.data.forEach(x => x.$elem.addClass(`heatmap-${x.uid}`));
 						this.switchCanvas(this.datatype);
 					} else {
 						this.dom.heatdiv.hide();
-						this.data.forEach(x => x.$elem.removeClass(`heatmap-${x.uid}`));
 					}
 				}   
 			},
