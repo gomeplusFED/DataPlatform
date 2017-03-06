@@ -69,6 +69,7 @@ var webpackConfig = {
         extensions: ['', '.js', '.json', '.scss'],
         alias: {
             'Vue': pwd + '/src/js/lib/vue.min.js',
+            'lib': pwd + '/src/js/lib/',
             'jQuery': pwd + '/src/js/lib/jquery.min.js',
             '$': pwd + '/src/js/lib/jquery.min.js',
             'utils': pwd + '/src/js/utils/index.js',

@@ -497,7 +497,7 @@ var api = {
                     "dateTime": "2017-03-01"
                 }, {
                     "pageUrl": "https://www.gomeplus.com/",
-                    "selector": "html > body > div.banner > div > div:first-child > ul > li:first-child+li+li > a",
+                    "selector": "#fullcategory-content-box > div:nth-child(1) > ul > div.list > a:nth-child(1)",
                     "pv": 115,
                     "uv": 125,
                     "pointId": 0,
