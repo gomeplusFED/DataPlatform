@@ -12,7 +12,8 @@
 				<option value='H5'>H5</option>
 			</select>
 		 </div>
-		<button id="search" @click='searchClick' type='button' class='btn ent-btn-blue search-btn btn-primary' data-toggle="popover"   data-content="请输入正确的url">检索页面</button>
+		<slot name="extend-nav"></slot>
+		<button id="search" @click='searchClick' type='button' class='btn btn-primary' data-toggle="popover"   data-content="请输入正确的url">检索页面</button>
 	</form>
 		<!-- nav -->
 	<div id='container' class='main'>
@@ -300,6 +301,9 @@
 .form-inline {
 	border-bottom: 1px solid #eee;
 	padding-bottom: 10px;
+	display: flex;
+	flex-flow: row wrap;
+  	align-content: flex-start;
 }
 .form-inline .form-group {
 	margin-right: 20px;

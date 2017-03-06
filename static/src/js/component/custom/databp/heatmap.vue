@@ -1,27 +1,30 @@
 <template>
 <div class="heatmap">
-	<div class="extendNav">
-		<div class='form-group'>
-			<label>数据</label>
-			<select class="form-control data-type" v-model="datatype" :disabled="!show">
-				<option v-for="type of dataTypes" value="{{type.name}}">{{type.name}}</option>
-			</select>
-		 </div>
 
-		<div class="form-group date_picker">
-			<label>截止日期</label>             
-			<m-date :index="index" :page-components-data="pageComponentsData" :component-type="'date_picker'" :argvs.sync='argvs' diasbled></m-date>
+	<visualbp :loading.sync='loading'>
+		<div slot="extend-nav" class="extendNav">
+			<div class='form-group'>
+				<label>数据</label>
+				<select class="form-control data-type" v-model="datatype" :disabled="!show">
+					<option v-for="type of dataTypes" value="{{type.name}}">{{type.name}}</option>
+				</select>
+			</div>
+
+			<div class="form-group date_picker">
+				<label>截止日期</label>             
+				<m-date :index="index" :page-components-data="pageComponentsData" :component-type="'date_picker'" :argvs.sync='argvs' diasbled></m-date>
+			</div>
+			<label class="showmap"><input type="checkbox" v-model="show"></input>显示热力图</label>
 		</div>
-		<label class="showmap"><input type="checkbox" v-model="show"></input>显示热力图</label>
-	</div>
-	<visualbp :loading.sync='loading'> </visualbp>
+	
+	 </visualbp>
 </div>
 </template>
 <script>
 	const Vue = require('Vue');
 	const $ = require('jQuery');
 	const utils = require('utils');
-	const api = require('./lib/api.js');
+	const api = require('./mock/api.js');
 	var DatePicker = require('../../common/datePicker.vue');
 	const visualbp = require('./visualbp.vue');
 	const Heatmap = require('./lib/heatmap.js');
@@ -322,10 +325,7 @@
 .heatmap #search {
 	float: right;
 }
-.heatmap .extendNav {
-	position: absolute;
-	left: 570px;
-}
+
 .heatmap .extendNav > * {
 	display: inline-block;
 	margin-right: 15px;
@@ -333,5 +333,8 @@
 .heatmap .extendNav .data-type {
     display: inline-block;
     width: 70px;
+}
+.heatmap .extendNav .date_picker input {
+	max-width: 120px;
 }
 </style>
