@@ -16,6 +16,29 @@
 			</div>
 			<label class="showmap"><input type="checkbox" v-model="show"></input>显示热力图</label>
 		</div>
+
+		<div slot="data-table">
+			<table class="table table-hover">
+				<thead>
+					<tr >
+						<th>时间</th>
+						<th>日UV</th>
+						<th>PV</th>
+						<th>点击量</th>
+						<th>点击率</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>{{'-'}}</td>
+						<td>{{'-'}}</td>
+						<td>{{'-'}}</td>
+						<td>{{'-'}}</td>
+						<td>{{'-'}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 	
 	 </visualbp>
 </div>
@@ -336,5 +359,10 @@
 }
 .heatmap .extendNav .date_picker input {
 	max-width: 120px;
+}
+
+.heatmap table{
+	border: 1px solid #d6d6d6;
+    font-size: 12px;
 }
 </style>

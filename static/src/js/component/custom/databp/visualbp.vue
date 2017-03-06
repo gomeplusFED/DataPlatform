@@ -15,7 +15,7 @@
 		<slot name="extend-nav"></slot>
 		<button id="search" @click='searchClick' type='button' class='btn btn-primary' data-toggle="popover"   data-content="请输入正确的url">检索页面</button>
 	</form>
-		<!-- nav -->
+	<slot name="data-table"></slot>
 	<div id='container' class='main'>
 		<div class='tabpanel_content' style='width: 100%; height: 1000px;'>
 			<div class='html_content' style='z-index: 2;'>
