@@ -59,19 +59,21 @@
 		},
 		ready() {
 			this.iframe_node = document.getElementById('iframenode');
-			window.onbeforeunload = function(e) {
-				var dialogText = `请选择"留下"`;
-				e.returnValue = dialogText;
-				return dialogText;
-			};
 		},
 		route: {
 	        activate: function (transition) {
 	        	this.activate(this.$route.query);
+				// 防止iframe脚本替换父窗口的地址
+				window.onbeforeunload = function(e) {
+					var dialogText = `请选择"留下"`;
+					e.returnValue = dialogText;
+					return dialogText;
+				};
 				return Promise.resolve(true);
 	        },
 	        deactivate: function() {
 	        	this.bpConfig.show = false;
+				window.onbeforeunload = null;
 	        	// actions.databp(store, {show: false});
 	        }
     	},
