@@ -133,19 +133,27 @@ Heatmap.prototype = {
             return _cache[key] || (_cache[key] = ctx.getImageData(x - r, y - r, d, d));
         })
     },
-    refreshCanvas: function (canvas, resData, data) {
+    refreshCanvas: function (canvas, data, dx, dy, width, height) {
         if (canvas == null) return;
         var ctx = canvas.getContext('2d');
-        let oldData = this.getCanvasData(ctx, resData);
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
         var brush = this._getBrush();
         var gradient = this._getGradient();
         var r = BRUSH_SIZE + this.option.blurSize;
+        dx = Math.floor(dx ? (dx - r) : 0);
+        dy = Math.floor(dy ? (dy - r) : 0);
+        width = Math.ceil(width ? (width + 2 * r) : canvas.width);
+        height = Math.ceil(height ? (height + 2 * r) : canvas.height);
+        ctx.clearRect(dx, dy, width, height);
+        var maxX = dx + width;
+        var maxY = dy + height;
         var len = data.length;
         for (var i = 0; i < len; ++i) {
             var p = data[i];
             var x = p[0];
             var y = p[1];
+            if (x < dx || y < dy || x > maxX || y > maxY) {
+                continue;
+            }
             var value = p[2];
             // calculate alpha using value
             var alpha = Math.min(1, Math.max(value * this.option.valueScale ||
@@ -157,7 +165,7 @@ Heatmap.prototype = {
         }
 
         // colorize the canvas using alpha value and set with gradient
-        var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        var imageData = ctx.getImageData(dx, dy, width, height);
         var pixels = imageData.data;
         var len = pixels.length / 4;
         while (len--) {
@@ -170,13 +178,7 @@ Heatmap.prototype = {
             pixels[id] *= this.option.opacity;
             pixels[id] = pixels[id] > 50 ? pixels[id] : 50; // alpha
         }
-        ctx.putImageData(imageData, 0, 0);
-        resData.forEach(function (p, i) {
-            var x = p[0];
-            var y = p[1];
-            ctx.putImageData(oldData[i], x - r, y - r);
-        })
-        
+        ctx.putImageData(imageData, dx, dy);
         return canvas;
     },
 

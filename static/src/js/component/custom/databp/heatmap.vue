@@ -229,6 +229,7 @@
 				let newdata = this.trimData(this.data);
 				let needkeep = [];
 				let needupdate = [];
+				let needupdatePre = [];
 				for(let i = 0,len= newdata.length;i<len;i++) {
 					let x0 = this.data[i];
 					let x1 = newdata[i];
@@ -236,15 +237,29 @@
 						needkeep.push(x0);
 					} else {
 						needupdate.push(x1)
+						needupdatePre.push(x0);
 					}
 				}
 				let type = this.dataTypes.find(x => x.name === this.datatype);
 				let canvas = this.resultData[type.name].canvas;
 				if(needupdate.length > 0) {
-					needupdate = needupdate.filter(x => x._centerX);
-					needkeep = needkeep.filter(x => x._centerX);
+					let filterFunc = (arr) => arr.filter(x => (x._centerX && x._centerX < canvas.width && x._centerY < canvas.height));
+					needupdate = filterFunc(needupdate);
+					needupdatePre = filterFunc(needupdatePre);
+					needkeep = filterFunc(needkeep);
 					let field = '_' + type.name;
-					heatmapFactory.refreshCanvas(canvas, needkeep.map(x => [x._centerX, x._centerY, x[field]]), needupdate.map(x => [x._centerX, x._centerY, x[field]]));
+					if (needupdate.length === 0) {
+						heatmapFactory.refreshCanvas(canvas, needkeep.map(x => [x._centerX, x._centerY, x[field]]));
+					} else {
+						let all = [...needupdatePre, ...needupdate];
+						let xseries = all.map(x => x._centerX);
+						let yseries = all.map(x => x._centerY);
+						let maxX = Math.max(...xseries);
+						let minX = Math.min(...xseries);
+						let maxY = Math.max(...xseries);
+						let minY = Math.min(...yseries);
+						heatmapFactory.refreshCanvas(canvas, [...needupdate, ...needkeep].map(x => [x._centerX, x._centerY, x[field]]), minX, minY, maxX - minX, maxY - minY);
+					}
 				}
 				this.data = newdata;
 				window.requestAnimationFrame(this.freshCanvas);
