@@ -81,6 +81,9 @@ router.map({
 			},
 			'/heatmap': {
 				component: require('./component/custom/databp/heatmap.vue')
+			},
+			'/autoupdate': {
+				component: require('./component/custom/databp/autoupdate.vue')
 			}
 		}
 	}
