@@ -303,17 +303,19 @@
 				
 				for(let type of _this.dataTypes) {
 					let name = type.name;
-					let vals = data.map(x => x[name]);
+					let vals = this.rawData.map(x => x[name]);
 					let max = Math.max(...vals);
 					if (max > this.maxVal) {
 						type.p = this.maxVal/max;
 					}
+					let field = '_' + name;
 					// 处理数据
-					for(let x of data) {
-						x['_' + name] = x[name] * type.p;
-					}
+					this.rawData.forEach((x, i) => {
+						x[field] = x[name] * type.p;
+						data[i][field] = x[field];
+					})
 					
-					let canvasData = normalData.map(x => [x._centerX, x._centerY, x['_' + name]]);
+					let canvasData = normalData.map(x => [x._centerX, x._centerY, x[field]]);
 
 					let _canvas = heatmapFactory.getCanvas(canvasData,
                         docwidth, docheight);
