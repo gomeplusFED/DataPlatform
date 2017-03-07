@@ -225,6 +225,9 @@
 					
 					});
 			},
+			filterFunc(arr, canvas) {
+				return arr.filter(x => (x._centerX && x._centerX < canvas.width && x._centerY < canvas.height));
+			},
 			freshCanvas() {
 				let newdata = this.trimData(this.data);
 				let needkeep = [];
@@ -243,7 +246,7 @@
 				let type = this.dataTypes.find(x => x.name === this.datatype);
 				let canvas = this.resultData[type.name].canvas;
 				if(needupdate.length > 0) {
-					let filterFunc = (arr) => arr.filter(x => (x._centerX && x._centerX < canvas.width && x._centerY < canvas.height));
+					let filterFunc = (arr) => this.filterFunc(arr, canvas);
 					needupdate = filterFunc(needupdate);
 					needupdatePre = filterFunc(needupdatePre);
 					needkeep = filterFunc(needkeep);
@@ -259,10 +262,16 @@
 						let maxY = Math.max(...xseries);
 						let minY = Math.min(...yseries);
 						heatmapFactory.refreshCanvas(canvas, [...needupdate, ...needkeep].map(x => [x._centerX, x._centerY, x[field]]), minX, minY, maxX - minX, maxY - minY);
+						all = null;
+						xseries = null;
+						yseries = null;
 					}
 				}
 				this.data = newdata;
-				window.requestAnimationFrame(this.freshCanvas);
+				needupdate = null;
+				needupdatePre = null;
+				needkeep = null;
+				return window.requestAnimationFrame(this.freshCanvas);
 			},
 			destroyCanvas() {
 				if (this.dom.heatdiv) {
