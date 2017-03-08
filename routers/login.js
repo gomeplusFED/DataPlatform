@@ -17,7 +17,7 @@ var superAdminInfo = {
 
 module.exports = function(Router) {
 
-    Router.get('/login', function(req, res) {
+    Router.get('/register', function(req, res) {
         if (req.session.isLogin) {
             res.redirect('/');
         } else {
@@ -228,31 +228,39 @@ module.exports = function(Router) {
 
     Router.get(/^((?!\/dist).)*$/, function(req, res, next) {
         const query = req.query;
-        if (req.session.isLogin) {
-            /*用户输入浏览器地址栏URL路由权限控制*/
-            next();
-        } else {
-            if(query.filter_bi_time && query.filter_bi_key) {
-                const massage = md5(`${query.filter_bi_time}pingtai`);
-                if(massage.substr(4, 6) === query.filter_bi_key) {
-                    req.models.User2.find({
-                        username : "hexisen"
-                    }, (err, data) => {
-                        if(err) {
-                            next(err);
-                        } else {
-                            const userInfo = data[0];
-                            userInfo.isBi = true;
-                            saveLogin(req, res, false, "", userInfo);
-                            return next();
-                        }
-                    });
-                }
-            } else {
-                var form = req.protocol + '://' + req.get('host') + req.originalUrl;
-                res.redirect('/login?from=' + encodeURIComponent(form));
+        if(query.filter_bi_time && query.filter_bi_key) {
+            if (req.session.userInfo.isBi) {
+                /*用户输入浏览器地址栏URL路由权限控制*/
+                return next();
             }
+            const massage = md5(`${query.filter_bi_time}pingtai`);
+            if(massage.substr(4, 6) === query.filter_bi_key) {
+                req.models.User2.find({
+                    username : "hexisen"
+                }, (err, data) => {
+                    if(err) {
+                        next(err);
+                    } else {
+                        const userInfo = data[0];
+                        userInfo.isBi = true;
+                        saveLogin(req, res, false, "", userInfo);
+                        return next();
+                    }
+                });
+            }
+        } else {
+            if (req.session.isLogin) {
+                /*用户输入浏览器地址栏URL路由权限控制*/
+                return next();
+            }
+            // var form = req.protocol + '://' + req.get('host') + req.originalUrl;
+            res.redirect("http://bigdata.ds.gome.com.cn/");
+            // res.redirect('/login?from=' + encodeURIComponent(form));
         }
+        // if (req.session.isLogin) {
+        //     /*用户输入浏览器地址栏URL路由权限控制*/
+        //     next();
+        // }
     });
 
     return Router;

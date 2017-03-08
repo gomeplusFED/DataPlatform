@@ -592,7 +592,10 @@ module.exports = {
         let rows = [];
         let cols = [];
         for(let i = 0, len = data.rows[0].length; i < len; i++) {
-            if(i != 6 || len < 10) {
+            if(i != 6 && len < 10) {
+                rows.push(data.rows[0][i]);
+                cols.push(data.cols[0][i]);
+            } else if(i != 7 && len > 10) {
                 rows.push(data.rows[0][i]);
                 cols.push(data.cols[0][i]);
             }

@@ -464,7 +464,7 @@
         "filter": "rebate_platformAll_03_f",
         "params": "rebate_platformAll_03",
         "fixedParams": "rebate_platformAll_02_fixed",
-        "level_select": true,
+        "level_select": false,
         "level_select_url": "/api/categories",
         "level_select_name": "category_id",
         "filter_select": [
@@ -868,7 +868,7 @@
         "filter": "rebate_single_03_f",
         "params": "rebate_single_03",
         "fixedParams": "rebate_platformAll_02_fixed",
-        "level_select": true,
+        "level_select": false,
         "level_select_url": "/api/categories",
         "level_select_name": "category_id",
         "filter_select": [
@@ -930,7 +930,7 @@
                     },
                     {
                         "key": "cancel_is_rebate_order_num",
-                        "value": "取消订单数"
+                        "value": "取消配送单数"
                     }
                 ]
             }
@@ -1262,7 +1262,7 @@
                     "help": "所有订单中带返利活动商品的总件数(SKU)"
                 },
                 {
-                    "caption": "取消订单数",
+                    "caption": "取消配送单数",
                     "type": "number",
                     "help": "已取消的返利订单数"
                 }
@@ -1357,7 +1357,7 @@
                     },
                     {
                         "key": "cancel_is_rebate_order_num",
-                        "value": "取消订单数"
+                        "value": "取消配送单数"
                     }
                 ]
             }
@@ -1603,7 +1603,7 @@
                     "type": "number"
                 },
                 {
-                    "caption": "取消订单数",
+                    "caption": "取消配送单数",
                     "type": "number"
                 },
                 {
@@ -1743,7 +1743,7 @@
                     "type" : "number"
                 },
                 {
-                    "caption" : "取消订单数",
+                    "caption" : "取消配送单数",
                     "type" : "number"
                 },
                 {
