@@ -301,11 +301,12 @@
 </script>
 <style scoped>
 .form-inline {
-	border-bottom: 1px solid #eee;
-	padding-bottom: 10px;
 	display: flex;
 	flex-flow: row wrap;
   	align-content: flex-start;
+}
+.form-inline > * {
+	margin-bottom: 10px;
 }
 .form-inline .form-group {
 	margin-right: 20px;
