@@ -1,21 +1,26 @@
 <template>
 <div class="heatmap">
 
-	<visualbp :loading.sync='loading'>
-		<div slot="extend-nav" class="extendNav">
-			<div class='form-group'>
-				<label>数据</label>
+	<visualbp :loading.sync='loading' v-ref:visual>
+			<div slot="extend-nav" class='form-group inpW1'>
+				<label>快照版本</label>
+				<select class="form-control data-type" v-model="version">
+					<option v-for="t of versions" >{{t.version}} - {{t.dateTime}}</option>
+				</select>
+			</div>
+			<div slot="extend-nav" class='form-group'>
+				<label>显示指标</label>
 				<select class="form-control data-type" v-model="datatype" :disabled="!show">
 					<option v-for="type of dataTypes" value="{{type.name}}">{{type.name}}</option>
 				</select>
 			</div>
+			<div slot="extend-nav" class="form-group">
+				<label>截止日期</label>                     
+				<m-date :index="index" :page-components-data="pageComponentsData" :component-type="'date_picker'" :argvs.sync='argvs' :custom-option = "datepickerOption"></m-date>
 
-			<div class="form-group date_picker">
-				<label>截止日期</label>             
-				<m-date :index="index" :page-components-data="pageComponentsData" :component-type="'date_picker'" :argvs.sync='argvs' diasbled></m-date>
 			</div>
-			<label class="showmap"><input type="checkbox" v-model="show"></input>显示热力图</label>
-		</div>
+			<label class="showmap" slot="extend-nav"><input type="checkbox" v-model="show"></input>显示热力图</label>
+			<button slot="extend-nav" type='button' class='btn btn-primary export'>导出</button>
 
 		<div slot="data-table">
 			<table class="table table-hover">
@@ -47,7 +52,7 @@
 	const Vue = require('Vue');
 	const $ = require('jQuery');
 	const utils = require('utils');
-	const api = require('./mock/api.js');
+	const api = require('./api');
 	var DatePicker = require('../../common/datePicker.vue');
 	const visualbp = require('./visualbp.vue');
 	const Heatmap = require('./lib/heatmap.js');
@@ -67,8 +72,18 @@
 		},
 		props:['loading'],
 		data: function() {
+			let datepickerOption = {
+					startDate: utils.formatDate((() => {
+						let date = new Date();
+						date.setDate(date.getDate() - 7);
+						return date;
+					})(), 'yyyy-MM-dd'),
+					endDate: utils.formatDate(new Date(), 'yyyy-MM-dd'),
+					opens: 'right'
+			};
 			return {
 				show: true,
+				datepickerOption,
 				// 防止热力图无限扩大设置的最大值
 				// 最大不透明度为1
 				maxVal: 1,
@@ -81,6 +96,16 @@
 					name: 'uv',
 					p: 1
 				}],
+				versions: [
+				{
+					version: '1.1',
+					dateTime: '2012-03-11'
+
+				}, {
+					version: '1.2',
+					dateTime: '2012-03-11'
+				}],
+				version: '',
 				datatype: 'pv',
 				dom: {
 					iframe: null,
@@ -94,11 +119,15 @@
 				},
 				data: [],
 				rawData: [],
-				argvs: {},
+				argvs: {
+					// 注意此时时间选取控件尚未初始化
+					endTime: datepickerOption.endDate,
+					startTime: datepickerOption.startDate
+				},
 				pageComponentsData: {
 					date_picker: {
 						show: true,
-						defaultData: 1,
+						defaultData: 90,
 						showDayUnit:true
 					},
 					trigger: true
@@ -115,7 +144,9 @@
 		},
 		ready() {
 			this.pageComponentsData.trigger = !this.pageComponentsData.trigger;
-			// window.JQ = $;
+			api.getHeatVersions(this.$refs.visual.bpConfig).then((res) => {
+				this.versions = res;
+			});
 		},
 		events: {
 			'visualbp_loaded': function (config) {
@@ -372,19 +403,33 @@
 </script>
 <style>
 .heatmap #search {
-	float: right;
+    margin-left: 20%;
+    margin-right: 15px;
 }
 
-.heatmap .extendNav > * {
+.heatmap .export {
+	order: 1;
+}
+.heatmap .showmap {
+	margin-top: 5px;
+}
+.heatmap * [slot="extend-nav"] {
 	display: inline-block;
 	margin-right: 15px;
+	margin-bottom: 10px;
+}
+.heatmap .inpW1 {
+	width: 250px;
+}
+.heatmap .inpW1 select {
+	min-width: 190px;
 }
 .heatmap .extendNav .data-type {
     display: inline-block;
     width: 70px;
 }
-.heatmap .extendNav .date_picker input {
-	max-width: 120px;
+.heatmap .date_picker input {
+	min-width: 210px;
 }
 
 .heatmap table{
