@@ -64,7 +64,9 @@ module.exports = (Router) => {
             return filter.tradePanelOne(data , query , dates);
         },
         rows: [
-            ["new_group_num" , "new_join_group_num" , "new_group_user_num" , "quit_group_user", "groupHomepage_uv", "shoppingHomepage_uv"]
+            ["new_group_num" , "new_join_group_num" , "new_group_user_num" , "quit_group_user", "groupHomepage_uv"
+                // , "shoppingHomepage_uv"
+            ]
         ]
     });
 

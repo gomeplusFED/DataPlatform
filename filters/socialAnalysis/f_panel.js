@@ -29,9 +29,6 @@ module.exports = {
             }, {
                 caption: "",
                 type: "number"
-            }, {
-                caption: "",
-                type: "number"
             }]
         ];
 
