@@ -4,7 +4,7 @@ var $ = require('jQuery');
 var { filterArgs, buildAjax, extractResult, errHandler } = require('./common');
 
 
-var api = [require('./heatmap'), require('./bpstats')].reduce((pre, cur) => Object.assign(pre, cur));
+var api = [require('./heatmap'), require('./bpstats'), require('./autoupdate')].reduce((pre, cur) => Object.assign(pre, cur));
 
 Object.assign(api, {
 	// {pageUrl, selector, platform, pointId, matchUrlId}
