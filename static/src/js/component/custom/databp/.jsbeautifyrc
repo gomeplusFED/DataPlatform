@@ -1,0 +1,22 @@
+{
+    "brace_style": "collapse,preserve-inline", 
+    "break_chained_methods": false,
+    "end_with_newline": true,
+    "eol": "\n",
+    "eval_code": false,
+    "indent_char": "    ",
+    "indent_level": 0,
+    "indent_size": 1,
+    "indent_with_tabs": true,
+    "jslint_happy": false,
+    "keep_array_indentation": false,
+    "keep_function_indentation": false,
+    "max_preserve_newlines": 1,
+    "preserve_newlines": true,
+    "space_after_anon_function": false,
+    "space_before_conditional": true,
+    "unescape_strings": false,
+    "wrap_attributes": "auto",
+    "wrap_attributes_indent_size": 1,
+    "wrap_line_length": 0
+}
