@@ -2,18 +2,20 @@ var store = require('store');
 var actions = require('actions');
 var $ = require('jQuery');
 const baseurl = window.location.href.startsWith('http://bi.intra') ?
-	'http://api.point.bi.pro.gomeplus.com/bomber-pie' : 'http://api.point.bi.pro.gomeplus.com/bomber-pie'
+	'http://api.point.bi.pro.gomeplus.com/bomber-pie' : 'http://10.69.205.26:9090/mock/5816ffd7881ccce602ab3d23'
 // 请求失败 重试一次
 const RETRY_TIMES = 2;
 $.support.cors = true;
 export function filterArgs(data, args) {
 	var newdata = {};
-	for (var key of args) {
-		// 不允许空字符串
-		if (data[key] != null && data[key] !== '') {
-			newdata[key] = data[key];
-		}
-	}
+    if (data != null) {
+        for (var key of args) {
+            // 不允许空字符串
+            if (data[key] != null && data[key] !== '') {
+                newdata[key] = data[key];
+            }
+        }
+    }
 	return newdata;
 }
 export function buildAjax(url, data, type = 'get') {
