@@ -83,9 +83,9 @@ module.exports = {
             second = data[1],
             third  = data[2];
         let Rows = util.megerArray([] , rows), Result = {};
-        // for(let key of Rows){
-        //     Result[key] = 0;
-        // }
+        for(let key of Rows){
+            Result[key] = 0;
+        }
 
         Result["累计点赞用户数"] = 0;
         Result["累计收藏用户数"] = 0;

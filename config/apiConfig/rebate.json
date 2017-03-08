@@ -361,7 +361,7 @@
                     "type": "number"
                 },
                 {
-                    "caption": "取消订单数",
+                    "caption": "取消配送单数",
                     "type": "number"
                 }
             ],
@@ -446,7 +446,7 @@
                     },
                     {
                         "key": "cancel_is_rebate_order_num",
-                        "value": "取消订单数"
+                        "value": "取消配送单数"
                     }
                 ]
             }
@@ -636,7 +636,7 @@
                     "type": "number"
                 },
                 {
-                    "caption": "取消返利订单数",
+                    "caption": "取消返利配送单数",
                     "type": "number"
                 }
             ]
@@ -718,7 +718,7 @@
                     "type": "number"
                 },
                 {
-                    "caption": "取消订单数",
+                    "caption": "取消配送单数",
                     "type": "number"
                 },
                 {
@@ -811,7 +811,7 @@
                     },
                     {
                         "key": "cancel_is_rebate_order_num",
-                        "value": "取消订单数"
+                        "value": "取消配送单数"
                     }
                 ]
             }
@@ -1185,9 +1185,8 @@
                     "type": "number"
                 },
                 {
-                    "caption": "用户注册成功数",
-                    "type": "number",
-                    "help": "(商户入驻成功数)"
+                    "caption": "用户注册成功数(商户入驻成功数)",
+                    "type": "number"
                 },
                 {
                     "caption": "返利到账金额",

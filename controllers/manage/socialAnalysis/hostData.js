@@ -329,7 +329,7 @@ module.exports = (Router) => {
         }],
         rows: [
             [ "top", "groupOwner_name", "groupOwner_id", "daren_flag", "person_topic_num",
-                "new_invite_friends_num", "person_friends_num", "new_fans_num", "person_funs_num" ,
+                // "new_invite_friends_num", "person_friends_num", "new_fans_num", "person_funs_num" ,
                 "new_group_num",
                 "weiding",
                 // "new_attention_num",
@@ -353,20 +353,20 @@ module.exports = (Router) => {
                 caption: "累计发布话题数",
                 type: "number"
             }, {
-                caption: "新增邀请好友数",
-                type: "number"
-            }, {
-                caption: "累计好友数",
-                type: "number"
-            }, {
-                caption: "新增粉丝数",
-                type: "number",
-                help : "圈主本时间区间新关注粉丝数（第一次关注时间不在此时间区，不+1）"
-            },{
-                caption: "当前粉丝数",
-                type: "number",
-                help : "当前累计的关注粉丝数"
-            }, {
+            //     caption: "新增邀请好友数",
+            //     type: "number"
+            // }, {
+            //     caption: "累计好友数",
+            //     type: "number"
+            // }, {
+            //     caption: "新增粉丝数",
+            //     type: "number",
+            //     help : "圈主本时间区间新关注粉丝数（第一次关注时间不在此时间区，不+1）"
+            // },{
+            //     caption: "当前粉丝数",
+            //     type: "number",
+            //     help : "当前累计的关注粉丝数"
+            // }, {
                 caption: "新增圈子数",
                 type: "number",
                 help : "圈主新建圈子数"

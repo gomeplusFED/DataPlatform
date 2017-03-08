@@ -26,6 +26,12 @@ module.exports = {
             }, {
                 caption: "",
                 type: "number"
+            }, {
+                caption: "",
+                type: "number"
+            }, {
+                caption: "",
+                type: "number"
             }]
         ];
 
@@ -45,7 +51,9 @@ module.exports = {
             "new_group_num" : "新增圈子数 : " + result.new_group_num,
             "new_join_group_num"  : "新增加圈次数 : " + result.new_join_group_num,
             "new_group_user_num"   : "新增加圈人数 : " + result.new_group_user_num,
-            "quit_group_user"   : "新增退圈人数 : " + result.quit_group_user
+            "quit_group_user"   : "新增退圈人数 : " + result.quit_group_user,
+            "groupHomepage_uv"   : "圈子首页UV : " + result.groupHomepage_uv,
+            "shoppingHomepage_uv"   : "逛逛首页UV : " + result.shoppingHomepage_uv
         }
 
         return util.toTable([[OneData]], data.rows, Cols , null , [true]);
