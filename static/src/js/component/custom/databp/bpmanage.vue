@@ -89,7 +89,7 @@
 	var store = require('store');
 	var actions = require('actions');
 	var Pagination = require('common/pagination.vue');
-	var api = require('./lib/api.js');
+	var api = require('./api');
 	var utils = require('utils');
 	
 	var databp = Vue.extend({

@@ -30,7 +30,7 @@
 	var Vue = require('Vue');
 	var $ = require('jQuery');
 	var getSelector = require('./lib/selector.js').getSelector;
-	var api = require('./lib/api.js');
+	var api = require('./api');
 	var Alert = require('common/alert.vue');
 	var bpInfo = require('./bpinfo.vue');
 	
@@ -59,16 +59,16 @@
 		},
 		ready() {
 			this.iframe_node = document.getElementById('iframenode');
+			window.onbeforeunload = (e) => true;
+		},
+		beforeDestroy() {
+			window.onbeforeunload = null;
 		},
 		route: {
 	        activate: function (transition) {
-	        	this.activate(this.$route.query);
 				// 防止iframe脚本替换父窗口的地址
-				window.onbeforeunload = function(e) {
-					var dialogText = `请选择"留下"`;
-					e.returnValue = dialogText;
-					return dialogText;
-				};
+				window.onbeforeunload = (e) => true;
+	        	this.activate(this.$route.query);
 				return Promise.resolve(true);
 	        },
 	        deactivate: function() {

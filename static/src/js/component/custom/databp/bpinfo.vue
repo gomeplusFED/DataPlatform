@@ -67,7 +67,7 @@
 
 <script>
 var Vue = require('Vue');
-var api = require('./lib/api.js');
+var api = require('./api');
 var utils = require('utils');
 var defaultChartOption = {
 	tooltip: {
