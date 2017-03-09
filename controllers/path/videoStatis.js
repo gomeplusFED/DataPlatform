@@ -54,7 +54,7 @@ module.exports = {
             defaultData : [
                 {
                     type : "table",
-                    title: "指标概览 (12/14)",
+                    title: "指标概览",
                     query_api : "/videoStatis/videoKpiOne"
                 },
                 {
