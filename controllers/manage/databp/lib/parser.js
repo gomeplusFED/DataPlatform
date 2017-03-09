@@ -53,7 +53,7 @@ function _parse(str, storeKey = false) {
 }
 
 let escapeRegExp = (function () {
-    matchRegex = /[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g;
+    let matchRegex = /[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g;
     return function (str) {
         return str.replace(matchRegex, "\\$&");
     }

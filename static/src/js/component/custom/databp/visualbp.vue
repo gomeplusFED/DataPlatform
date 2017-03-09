@@ -12,9 +12,10 @@
 				<option value='H5'>H5</option>
 			</select>
 		 </div>
-		<button id="search" @click='searchClick' type='button' class='btn ent-btn-blue search-btn btn-primary' data-toggle="popover"   data-content="请输入正确的url">检索页面</button>
+		<slot name="extend-nav"></slot>
+		<button id="search" @click='searchClick' type='button' class='btn btn-primary' data-toggle="popover"   data-content="请输入正确的url">检索页面</button>
 	</form>
-		<!-- nav -->
+	<slot name="data-table"></slot>
 	<div id='container' class='main'>
 		<div class='tabpanel_content' style='width: 100%; height: 1000px;'>
 			<div class='html_content' style='z-index: 2;'>
@@ -29,7 +30,7 @@
 	var Vue = require('Vue');
 	var $ = require('jQuery');
 	var getSelector = require('./lib/selector.js').getSelector;
-	var api = require('./lib/api.js');
+	var api = require('./api');
 	var Alert = require('common/alert.vue');
 	var bpInfo = require('./bpinfo.vue');
 	
@@ -58,14 +59,21 @@
 		},
 		ready() {
 			this.iframe_node = document.getElementById('iframenode');
+			window.onbeforeunload = (e) => true;
+		},
+		beforeDestroy() {
+			window.onbeforeunload = null;
 		},
 		route: {
 	        activate: function (transition) {
+				// 防止iframe脚本替换父窗口的地址
+				window.onbeforeunload = (e) => true;
 	        	this.activate(this.$route.query);
 				return Promise.resolve(true);
 	        },
 	        deactivate: function() {
 	        	this.bpConfig.show = false;
+				window.onbeforeunload = null;
 	        	// actions.databp(store, {show: false});
 	        }
     	},
@@ -228,7 +236,11 @@
 							return false;
 						} else {
 							if (href.startsWith('/')) {
-								_this.bpConfig.pageUrl = host + href.slice(1);
+								if (href.startsWith('//')) {
+									_this.bpConfig.pageUrl = host.match(/https?:/)[0] + href;
+								} else {
+									_this.bpConfig.pageUrl = host + href.slice(1);
+								}
 							} else {
 								_this.bpConfig.pageUrl = _this.bpConfig.pageUrl.replace(/\/$/, '') + '/' + href;
 							}
@@ -289,8 +301,12 @@
 </script>
 <style scoped>
 .form-inline {
-	border-bottom: 1px solid #eee;
-	padding-bottom: 10px;
+	display: flex;
+	flex-flow: row wrap;
+  	align-content: flex-start;
+}
+.form-inline > * {
+	margin-bottom: 10px;
 }
 .form-inline .form-group {
 	margin-right: 20px;
