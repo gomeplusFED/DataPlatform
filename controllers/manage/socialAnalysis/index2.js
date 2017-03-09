@@ -224,7 +224,7 @@ module.exports = (Router) => {
         cols: [
             [{
                 caption: "话题创建日期",
-                type: "date"
+                type: "string"
             },{
                 caption: "话题名称",
                 type: "string"

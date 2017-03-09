@@ -330,7 +330,7 @@ module.exports = {
 
     videoKpiOne(data, query, dates) {
         let one = data.first.data[0],
-            second = data.second.data[0],
+            second = data.second.data[0] || {},
             third = data.third.data[0],
             count1 = data.first.count,
             count2 = data.second.count,
@@ -364,11 +364,11 @@ module.exports = {
             ]
             cols.forEach(col => {
                 data2[0][col] = source[col] || 0;
-                data2[1][col] = util.toFixedLength(source[col], source.play_num, 2);
-                data2[2][col] = Chain(source[col], source[col+'_pre']);
+                data2[1][col] = util.toFixedLength(source[col] || 0, source.play_num || 0, 2);
+                data2[2][col] = Chain(source[col] || 0, source[col+'_pre'] || 0);
             })
         }
-        data2[1]["port_succ"] = util.toFixedLength(second["port_succ"], second.start_load_num, 2);
+        data2[1]["port_succ"] = util.toFixedLength(second["port_succ"] || 0, second.start_load_num || 0 , 2);
         if (third) {
             let source = third
             let cols = ['port_io_failed', 'port_data_failed', 'port_overtime', 'play_failed', 'play_error', 'improper_play']

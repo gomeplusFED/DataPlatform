@@ -106,7 +106,7 @@ function api(Router, options) {
         //是否页面显示表名
         debug : env !== "pro",
         //是否取消30天限制
-        cancelDateLimit : false
+        cancelDateLimit : true
     }, options);
 
     utils.mixin(this, defaultOption);

@@ -8,7 +8,12 @@ var config = require('../config');
 var lodash = require('lodash');
 var username = 'LDAP_SysDevDept';
 var password = '3m4>9kj9+@-du!p3';
+const env = require("../db/config.json").db;
 var ldapurl = 'ldap://10.69.100.4';
+const login = {
+    "test" : "http://10.58.56.172:8080/dataApp",
+    "pro" : "http://bigdata.ds.gome.com.cn/"
+};
 const md5 = require("md5");
 var superAdminInfo = {
     username: "superAdmin",
@@ -229,7 +234,7 @@ module.exports = function(Router) {
     Router.get(/^((?!\/dist).)*$/, function(req, res, next) {
         const query = req.query;
         if(query.filter_bi_time && query.filter_bi_key) {
-            if (req.session.userInfo.isBi) {
+            if (req.session.userInfo && req.session.userInfo.isBi) {
                 /*用户输入浏览器地址栏URL路由权限控制*/
                 return next();
             }
@@ -254,7 +259,7 @@ module.exports = function(Router) {
                 return next();
             }
             // var form = req.protocol + '://' + req.get('host') + req.originalUrl;
-            res.redirect("http://bigdata.ds.gome.com.cn/");
+            res.redirect(env === "pro" ? login.pro : login.test);
             // res.redirect('/login?from=' + encodeURIComponent(form));
         }
         // if (req.session.isLogin) {

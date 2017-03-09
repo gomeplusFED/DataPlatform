@@ -54,11 +54,11 @@ module.exports = (Router) => {
         //showDayUnit: true,
         order: ["-date"],
         filter_select: [{
-            title: 'sdk类型：',
+            title: 'sdk类型',
             filter_key : 'sdk_type',
             groups: [{
                 key: "ALL",
-                value: 'ALL'
+                value: '全部SDK'
             }, {
                 key: 'android',
                 value: 'Android'
@@ -96,11 +96,11 @@ module.exports = (Router) => {
             preMethods: ['excel_export']
         }],
         filter_select: [{
-            title: 'sdk类型：',
+            title: 'sdk类型',
             filter_key : 'sdk_type',
             groups: [{
                 key: "ALL",
-                value: 'ALL'
+                value: '全部SDK'
             }, {
                 key: 'android',
                 value: 'Android'
@@ -297,11 +297,11 @@ module.exports = (Router) => {
         showDayUnit: true,
         sum : ["play_num"],
         filter_select: [{
-            title: 'sdk类型：',
+            title: 'sdk类型',
             filter_key : 'sdk_type',
             groups: [{
                 key: "ALL",
-                value: 'ALL'
+                value: '全部SDK'
             }, {
                 key: 'android',
                 value: 'Android'

@@ -105,7 +105,7 @@ module.exports = (Router) => {
                 help: "新增入圈用户数去重"
             }, {
                 caption: "新增用户入圈率",
-                type: "number",
+                type: "string",
                 help: "=首次入圈用户数/新增注册人数"
             }, {
                 caption: "新增解散圈子数",

@@ -1543,7 +1543,7 @@
                     "type": "string"
                 },
                 {
-                    "caption": "商家名称",
+                    "caption": "商家ID",
                     "type": "string"
                 },
                 {
@@ -1686,7 +1686,7 @@
                     "type": "string"
                 },
                 {
-                    "caption": "商家名称",
+                    "caption": "商家ID",
                     "type": "string"
                 },
                 {
