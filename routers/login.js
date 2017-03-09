@@ -23,9 +23,12 @@ var superAdminInfo = {
 module.exports = function(Router) {
 
     Router.get('/register', function(req, res) {
-        if (req.session.isLogin) {
+        if (req.session.isLogin && !req.session.userInfo.isBi) {
             res.redirect('/');
         } else {
+            req.session.destroy((err) => {
+                console.log(err);
+            });
             res.render('login/login', {
                 from: req.query.from
             });
@@ -254,9 +257,11 @@ module.exports = function(Router) {
                 });
             }
         } else {
-            if (req.session.isLogin) {
+            if (req.session.isLogin && req.session.userInfo && !req.session.userInfo.isBi) {
                 /*用户输入浏览器地址栏URL路由权限控制*/
                 return next();
+            } else if(req.session.userInfo && req.session.userInfo.isBi) {
+                return res.redirect("/register");
             }
             // var form = req.protocol + '://' + req.get('host') + req.originalUrl;
             res.redirect(env === "pro" ? login.pro : login.test);
