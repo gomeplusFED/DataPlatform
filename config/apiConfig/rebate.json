@@ -271,7 +271,7 @@
         "filter": "rebate_platformAll_01_f",
         "params": "rebate_platformAll_01",
         "fixedParams": "rebate_platformAll_01_fixed",
-        "level_select": true,
+        "level_select": false,
         "level_select_url": "/api/categories",
         "level_select_name": "category_id",
         "global_platform": {
@@ -361,7 +361,7 @@
                     "type": "number"
                 },
                 {
-                    "caption": "取消订单数",
+                    "caption": "取消配送单数",
                     "type": "number"
                 }
             ],
@@ -424,7 +424,7 @@
         "filter": "rebate_platformAll_02_f",
         "params": "rebate_platformAll_02",
         "fixedParams": "rebate_platformAll_02_fixed",
-        "level_select": true,
+        "level_select": false,
         "level_select_url": "/api/categories",
         "level_select_name": "category_id",
         "filter_select": [
@@ -437,8 +437,8 @@
                         "value": "订单数"
                     },
                     {
-                        "key": "is_rebate_fee",
-                        "value": "订单总金额"
+                        "key": "is_rebate_item_fee",
+                        "value": "商品总金额"
                     },
                     {
                         "key": "is_rebate_merchandise_num",
@@ -446,7 +446,7 @@
                     },
                     {
                         "key": "cancel_is_rebate_order_num",
-                        "value": "取消订单数"
+                        "value": "取消配送单数"
                     }
                 ]
             }
@@ -464,7 +464,7 @@
         "filter": "rebate_platformAll_03_f",
         "params": "rebate_platformAll_03",
         "fixedParams": "rebate_platformAll_02_fixed",
-        "level_select": true,
+        "level_select": false,
         "level_select_url": "/api/categories",
         "level_select_name": "category_id",
         "filter_select": [
@@ -636,7 +636,7 @@
                     "type": "number"
                 },
                 {
-                    "caption": "取消返利订单数",
+                    "caption": "取消返利配送单数",
                     "type": "number"
                 }
             ]
@@ -718,7 +718,7 @@
                     "type": "number"
                 },
                 {
-                    "caption": "取消订单数",
+                    "caption": "取消配送单数",
                     "type": "number"
                 },
                 {
@@ -789,7 +789,7 @@
         "filter": "rebate_platformBase_02_f",
         "params": "rebate_platformBase_02",
         "fixedParams": "rebate_platformAll_02_fixed",
-        "level_select": true,
+        "level_select": false,
         "level_select_url": "/api/categories",
         "level_select_name": "category_id",
         "filter_select": [
@@ -802,8 +802,8 @@
                         "value": "订单数"
                     },
                     {
-                        "key": "is_over_rebate_order_amount",
-                        "value": "订单总金额"
+                        "key": "is_rebate_item_fee",
+                        "value": "商品总金额"
                     },
                     {
                         "key": "is_rebate_merchandise_num",
@@ -811,7 +811,7 @@
                     },
                     {
                         "key": "cancel_is_rebate_order_num",
-                        "value": "取消订单数"
+                        "value": "取消配送单数"
                     }
                 ]
             }
@@ -828,7 +828,7 @@
         "filter": "rebate_platformBase_03_f",
         "params": "rebate_platformBase_03",
         "fixedParams": "rebate_platformAll_02_fixed",
-        "level_select": true,
+        "level_select": false,
         "level_select_url": "/api/categories",
         "level_select_name": "category_id",
         "filter_select": [
@@ -868,7 +868,7 @@
         "filter": "rebate_single_03_f",
         "params": "rebate_single_03",
         "fixedParams": "rebate_platformAll_02_fixed",
-        "level_select": true,
+        "level_select": false,
         "level_select_url": "/api/categories",
         "level_select_name": "category_id",
         "filter_select": [
@@ -908,7 +908,7 @@
         "filter": "rebate_invitation_01_f",
         "params": "rebate_invitation_01",
         "fixedParams": "rebate_platformAll_02_fixed",
-        "level_select": true,
+        "level_select": false,
         "level_select_url": "/api/categories",
         "level_select_name": "category_id",
         "filter_select": [
@@ -921,8 +921,8 @@
                         "value": "订单数"
                     },
                     {
-                        "key": "is_over_rebate_order_amount",
-                        "value": "订单总金额"
+                        "key": "is_rebate_item_fee",
+                        "value": "商品总金额"
                     },
                     {
                         "key": "is_rebate_merchandise_num",
@@ -930,7 +930,7 @@
                     },
                     {
                         "key": "cancel_is_rebate_order_num",
-                        "value": "取消订单数"
+                        "value": "取消配送单数"
                     }
                 ]
             }
@@ -948,7 +948,7 @@
         "filter": "rebate_invitation_02_f",
         "params": "rebate_invitation_02",
         "fixedParams": "rebate_platformAll_02_fixed",
-        "level_select": true,
+        "level_select": false,
         "level_select_url": "/api/categories",
         "level_select_name": "category_id",
         "filter_select": [
@@ -1185,9 +1185,8 @@
                     "type": "number"
                 },
                 {
-                    "caption": "用户注册成功数",
-                    "type": "number",
-                    "help": "(商户入驻成功数)"
+                    "caption": "用户注册成功数(商户入驻成功数)",
+                    "type": "number"
                 },
                 {
                     "caption": "返利到账金额",
@@ -1263,7 +1262,7 @@
                     "help": "所有订单中带返利活动商品的总件数(SKU)"
                 },
                 {
-                    "caption": "取消订单数",
+                    "caption": "取消配送单数",
                     "type": "number",
                     "help": "已取消的返利订单数"
                 }
@@ -1336,7 +1335,7 @@
         "params": "rebate_shop_02",
         "secondParams": "rebate_shop_02_second",
         "fixedParams": "rebate_platformAll_02_fixed",
-        "level_select": true,
+        "level_select": false,
         "level_select_url": "/api/categories",
         "level_select_name": "category_id",
         "filter_select": [
@@ -1349,8 +1348,8 @@
                         "value": "订单数"
                     },
                     {
-                        "key": "is_rebate_fee",
-                        "value": "订单总金额"
+                        "key": "is_rebate_item_fee",
+                        "value": "商品总金额"
                     },
                     {
                         "key": "is_rebate_merchandise_num",
@@ -1358,7 +1357,7 @@
                     },
                     {
                         "key": "cancel_is_rebate_order_num",
-                        "value": "取消订单数"
+                        "value": "取消配送单数"
                     }
                 ]
             }
@@ -1380,7 +1379,7 @@
         "secondParams": "rebate_shop_03_param2",
         "thirdParams": "rebate_shop_03_param3",
         "fixedParams": "rebate_platformAll_02_fixed",
-        "level_select": true,
+        "level_select": false,
         "level_select_url": "/api/categories",
         "level_select_name": "category_id",
         "filter_select": [
@@ -1604,7 +1603,7 @@
                     "type": "number"
                 },
                 {
-                    "caption": "取消订单数",
+                    "caption": "取消配送单数",
                     "type": "number"
                 },
                 {
@@ -1665,7 +1664,15 @@
                 "unique_is_rebate_order_num",
                 "expect_rebate_amount",
                 "is_over_rebate_order_amount",
-                "Return_lv"
+                "Return_lv",
+                "validscope_time",
+                "is_rebate_merchandise_num",
+                "unique_is_rebate_user_num",
+                "rate",
+                "is_rebate_item_fee",
+                "expect_rebate_user_num",
+                "cancel_is_rebate_order_num",
+                "cancel_rebate_amount"
             ]
         ],
         "cols": [
@@ -1710,6 +1717,38 @@
                     "caption": "退货率",
                     "type": "string",
                     "help": "统计周期内，退货商品件数/销售商品总件数，统计时间为订单生成时间"
+                },
+                {
+                    "caption" : "有效期",
+                    "type" : "string"
+                },
+                {
+                    "caption" : "参与商品件数",
+                    "type" : "number"
+                },
+                {
+                    "caption" : "购买用户数",
+                    "type" : "number"
+                },
+                {
+                    "caption" : "新增订单占比",
+                    "type" : "string"
+                },
+                {
+                    "caption" : "新增商品总金额",
+                    "type" : "number"
+                },
+                {
+                    "caption" : "预计获利人次",
+                    "type" : "number"
+                },
+                {
+                    "caption" : "取消配送单数",
+                    "type" : "number"
+                },
+                {
+                    "caption" : "已取消返利金额",
+                    "type" : "number"
                 }
             ]
         ]

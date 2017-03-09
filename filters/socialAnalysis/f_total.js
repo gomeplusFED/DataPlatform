@@ -20,13 +20,13 @@ let rows = [
             [
                 "reply_lv",
                 "topic_praise_num",
-                "累计点赞用户数",
+                // "累计点赞用户数",
                 "topic_collect_num",
-                "累计收藏用户数",
-                "累计选择兴趣点人数"
-            ],
-            [
-                "累计邀请好友注册成功人数"
+                // "累计收藏用户数",
+                // "累计选择兴趣点人数"
+            // ],
+            // [
+            //     "累计邀请好友注册成功人数"
             ]
         ],
     cols = [
@@ -55,22 +55,22 @@ let rows = [
             }, {
                 caption: "累计点赞数",
                 type: "number"
-            }, {
-                caption: "累计点赞用户数",
-                type: "number"
+            // }, {
+            //     caption: "累计点赞用户数",
+            //     type: "number"
             }, {
                 caption: "累计收藏数",
                 type: "number"
-            }, {
-                caption: "累计收藏用户数",
-                type: "number"
-            }, {
-                caption: "累计选择兴趣点人数",
-                type: "number"
-            }],
-            [{
-                caption: "累计邀请好友注册成功人数",
-                type : "number"
+            // }, {
+            //     caption: "累计收藏用户数",
+            //     type: "number"
+            // }, {
+            //     caption: "累计选择兴趣点人数",
+            //     type: "number"
+            // }],
+            // [{
+            //     caption: "累计邀请好友注册成功人数",
+            //     type : "number"
             }]
         ];
 
@@ -87,11 +87,22 @@ module.exports = {
             Result[key] = 0;
         }
 
+        Result["累计点赞用户数"] = 0;
+        Result["累计收藏用户数"] = 0;
+        Result["累计选择兴趣点人数"] = 0;
+        Result["累计邀请好友注册成功人数"] = 0;
         for(let item of source){
-            if(Result[item.key] != undefined){
+            if(Result[item.key]) {
                 Result[item.key] += item.value;
+            } else {
+                Result[item.key] = item.value;
             }
+            // if(Result[item.key] != undefined){
+            //     Result[item.key] += item.value;
+            // }
         }
+        Result.topic_praise_num = Result.topic_praise_num || 0;
+        Result.topic_collect_num = Result.topic_collect_num || 0;
 
         let registeruserallcount = 0,
             replytopicallcount   = 0;
@@ -101,10 +112,12 @@ module.exports = {
         }
         if(third.length > 0){
             replytopicallcount = third[0].replytopicallcount || 0;
+        } else {
+            third[0] = {};
         }
 
         Result.userin_lv = util.toFixed( Result.group_persons_num , registeruserallcount );
-        Result.reply_lv = util.toFixed( replytopicallcount , Result.all_topic_num );
+        Result.reply_lv = util.toFixed( third[0].new_reply_topic_num || 0 , Result.all_topic_num || 0 );
 
         return util.toTable([[Result],[Result],[Result]], rows, cols , null , [true , true , true]);
     },

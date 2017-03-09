@@ -255,10 +255,10 @@ const Config = {
             path: [
                 obj.videoStatis.videoEdition(),
                 obj.videoStatis.videoKpi(),
-                obj.videoStatis.videoDetails()
+                obj.videoStatis.videoDetails(),
+                obj.videoStatis.videoDetailsTwo()
             ],
             routers : [
-                obj.videoStatis.videoDetailsTwo(),
                 obj.videoStatis.videoDetailsOperating()
             ]
         },
@@ -273,19 +273,19 @@ const Config = {
                 obj.search.searchRecommend()
             ]
         },
-        "20": {
-            name: "IM使用",
-            display: true,
-            className: "fa  fa-laptop fa-fw",
-            href: "#",
-            path: [
-                obj.IM.Index()
-            ],
-            routers: [
-                obj.IM.Event(),
-                obj.IM.FaceDownload()
-            ]
-        },
+        // "20": {
+        //     name: "IM使用",
+        //     display: true,
+        //     className: "fa  fa-laptop fa-fw",
+        //     href: "#",
+        //     path: [
+        //         obj.IM.Index()
+        //     ],
+        //     routers: [
+        //         obj.IM.Event(),
+        //         obj.IM.FaceDownload()
+        //     ]
+        // },
         "21": {
             name: "数据埋点",
             display: true,
@@ -297,6 +297,24 @@ const Config = {
                 obj.databp.bpstats(),
                 obj.databp.spread()
 
+            ]
+        },
+        "25": {
+            name: "美办数据",
+            display: true,
+            className: "fa  fa-laptop fa-fw",
+            href: "#",
+            path: [
+                obj.office.index(),
+                obj.office.version(),
+                obj.office.terminal(),
+                obj.office.date(),
+                obj.office.fun(),
+                obj.office.error()
+            ],
+            routers : [
+                obj.office.terminalOther(),
+                obj.office.funOperating()
             ]
         },
         "29": {

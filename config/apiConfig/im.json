@@ -1,0 +1,518 @@
+{
+    "1484622259443": {
+        "modelName": [],
+        "date_picker": true,
+        "order": [],
+        "platform": false,
+        "router": "/IM/realtime_One",
+        "names": "数据总览",
+        "singleApi": true,
+        "singleFn": "im_realtime_one_api",
+        "rows": [
+            [
+                "date",
+                "total_message",
+                "total-uv",
+                "single-pv",
+                "single-uv",
+                "group-pv",
+                "group-uv",
+                "IM占比",
+                "notdisturb",
+                "faceload"
+            ]
+        ],
+        "cols": [
+            [
+                {
+                    "caption": "",
+                    "type": "date"
+                },
+                {
+                    "caption": "总计",
+                    "type": "number"
+                },
+                {
+                    "caption": "",
+                    "type": "number"
+                },
+                {
+                    "caption": "单聊",
+                    "type": "string"
+                },
+                {
+                    "caption": "",
+                    "type": "number"
+                },
+                {
+                    "caption": "群聊",
+                    "type": "number"
+                },
+                {
+                    "caption": "",
+                    "type": "number"
+                },
+                {
+                    "caption": "使用情况",
+                    "type": "number"
+                },
+                {
+                    "caption": "其它",
+                    "type": "number"
+                },
+                {
+                    "caption": "",
+                    "type": "number"
+                }
+            ]
+        ]
+    },
+    "1486359199771": {
+        "modelName": [],
+        "date_picker": false,
+        "order": [],
+        "platform": false,
+        "router": "/IM/realtime_Two",
+        "names": "实时趋势",
+        "singleApi": true,
+        "singleFn": "im_realtime_two_api",
+        "rows" : [
+            [
+                "Time",
+                "today",
+                "comparison"
+            ]
+        ],
+        "cols" : [
+            [
+                {
+                    "caption" : "",
+                    "type"    : "string"
+                },
+                {
+                    "caption" : "今日",
+                    "type"    : "number"
+                },
+                {
+                    "caption" : "对比",
+                    "type"    : "number"
+                }
+            ]
+        ]
+    },
+    "1484636208559": {
+        "modelName": [],
+        "date_picker": true,
+        "order": [],
+        "platform": false,
+        "router": "/IM/using_one",
+        "names": "数据总览",
+        "singleApi": true,
+        "singleFn": "im_using_one_api",
+        "rows": [
+            [
+                "Date",
+                "total_mess_pv",
+                "total_mess_uv",
+                "ios_mess_pv",
+                "ios_mess_uv",
+                "android_mess_pv",
+                "android_mess_uv"
+            ],
+            [
+                "Date",
+                "total_mess_pv",
+                "total_mess_uv",
+                "single_mess_pv",
+                "single_mess_uv",
+                "group_mess_pv",
+                "group_mess_uv",
+                "IM使用占比",
+                "新增使用占比",
+                "群活跃度",
+                "set_group_shield_pv",
+                "face_load_pv"
+            ]
+        ],
+        "cols": [
+            [
+                {
+                    "caption": "",
+                    "type": "date"
+                },
+                {
+                    "caption": "总计发消息数",
+                    "type": "number"
+                },
+                {
+                    "caption": "总计发消息人数",
+                    "type": "number"
+                },
+                {
+                    "caption": "ios发消息数",
+                    "type": "string"
+                },
+                {
+                    "caption": "ios发消息人数",
+                    "type": "number"
+                },
+                {
+                    "caption": "Android发消息数",
+                    "type": "number"
+                },
+                {
+                    "caption": "Android发消息人数",
+                    "type": "number"
+                }
+            ],
+            [
+                {
+                    "caption": "",
+                    "type": "date"
+                },
+                {
+                    "caption": "总计",
+                    "type": "number"
+                },
+                {
+                    "caption": "",
+                    "type": "number"
+                },
+                {
+                    "caption": "单聊",
+                    "type": "number"
+                },
+                {
+                    "caption": "",
+                    "type": "number"
+                },
+                {
+                    "caption": "群聊",
+                    "type": "number"
+                },
+                {
+                    "caption": "",
+                    "type": "number"
+                },
+                {
+                    "caption": "使用情况",
+                    "type": "number"
+                },
+                {
+                    "caption": "",
+                    "type": "number"
+                },
+                {
+                    "caption": "",
+                    "type": "number"
+                },
+                {
+                    "caption": "其他",
+                    "type": "number"
+                },
+                {
+                    "caption": "",
+                    "type": "number"
+                }
+            ]
+        ]
+    },
+    "1484706492749": {
+        "modelName": [],
+        "date_picker": true,
+        "order": [],
+        "platform": false,
+        "router": "/IM/using_Two",
+        "names": "数据趋势",
+        "singleApi": true,
+        "singleFn": "im_using_two_api",
+        "rows": [
+            [
+                "date",
+                "total_mess_pv",
+                "total_mess_uv",
+                "single_mess_pv",
+                "single_mess_uv",
+                "group_mess_pv",
+                "group_mess_uv"
+            ]
+        ],
+        "cols": [
+            [
+                {
+                    "caption": "",
+                    "type": "date"
+                },
+                {
+                    "caption": "总计",
+                    "type": "number"
+                },
+                {
+                    "caption": "",
+                    "type": "number"
+                },
+                {
+                    "caption": "单聊",
+                    "type": "number"
+                },
+                {
+                    "caption": "",
+                    "type": "number"
+                },
+                {
+                    "caption": "群聊",
+                    "type": "number"
+                },
+                {
+                    "caption": "",
+                    "type": "number"
+                }
+            ]
+        ]
+    },
+    "1484721268810": {
+        "modelName": [],
+        "date_picker": false,
+        "order": [],
+        "platform": false,
+        "router": "/IM/using_Three",
+        "names": "IM使用情况",
+        "singleApi": true,
+        "singleFn": "im_using_three_api",
+        "rows": [
+            [
+                "date",
+                "IM使用占比",
+                "新增使用占比",
+                "群活跃度",
+                "set_group_shield_pv",
+                "face_load_pv"
+            ]
+        ],
+        "cols": [
+            [
+                {
+                    "caption": "",
+                    "type": "date"
+                },
+                {
+                    "caption": "使用情况",
+                    "type": "number"
+                },
+                {
+                    "caption": "",
+                    "type": "number"
+                },
+                {
+                    "caption": "",
+                    "type": "number"
+                },
+                {
+                    "caption": "其他",
+                    "type": "number"
+                },
+                {
+                    "caption": "",
+                    "type": "number"
+                }
+            ]
+        ]
+    },
+    "1484810139571": {
+        "modelName": [],
+        "date_picker": false,
+        "order": [],
+        "platform": false,
+        "router": "/IM/using_Four",
+        "names": "IM带来的交易",
+        "singleApi": true,
+        "singleFn": "im_using_four_api",
+        "rows": [
+            [
+                "A",
+                "B",
+                "C",
+                "D",
+                "E",
+                "F"
+            ]
+        ],
+        "cols": [
+            [
+                {
+                    "caption": "",
+                    "type": "string"
+                },
+                {
+                    "caption": "下单人数",
+                    "type": "number"
+                },
+                {
+                    "caption": "支付人数",
+                    "type": "number"
+                },
+                {
+                    "caption": "新增订单量",
+                    "type": "number"
+                },
+                {
+                    "caption": "支付订单量",
+                    "type": "number"
+                },
+                {
+                    "caption": "支付金额",
+                    "type": "number"
+                }
+            ]
+        ]
+    },
+    "1484895412110": {
+        "modelName": [],
+        "date_picker": false,
+        "order": [],
+        "platform": false,
+        "router": "/IM/using_Five",
+        "names": "圈子群活跃排行Top100",
+        "singleApi": true,
+        "singleApi_excel": true,
+        "singleFn": "im_using_five_api",
+        "singleFn_excel": "im_using_five_api_excel",
+        "rows": [
+            [
+                "group_name",
+                "group_member_count",
+                "group_mess_pv",
+                "群活跃度"
+            ]
+        ],
+        "cols": [
+            [
+                {
+                    "caption": "群名称",
+                    "type": "string"
+                },
+                {
+                    "caption": "群成员数",
+                    "type": "number"
+                },
+                {
+                    "caption": "群消息数",
+                    "type": "number"
+                },
+                {
+                    "caption": "群活跃度",
+                    "type": "string"
+                }
+            ]
+        ]
+    },
+    "1485055907953": {
+        "modelName": [],
+        "date_picker": false,
+        "order": [],
+        "platform": false,
+        "router": "/IM/message_One",
+        "names": "消息类型统计列表",
+        "singleApi": true,
+        "singleFn": "im_message_one_api",
+        "rows": [
+            [
+                "message_event_name",
+                "click_pv",
+                "click_uv",
+                "人均发消息数",
+                "消息数占比"
+            ]
+        ],
+        "cols": [
+            [
+                {
+                    "caption": "消息类型",
+                    "type": "string"
+                },
+                {
+                    "caption": "发消息数",
+                    "type": "number"
+                },
+                {
+                    "caption": "发消息人数",
+                    "type": "number"
+                },
+                {
+                    "caption": "人均发消息数",
+                    "type": "number"
+                },
+                {
+                    "caption": "消息数占比",
+                    "type": "string"
+                }
+            ]
+        ]
+    },
+    "1485068113438": {
+        "modelName": [],
+        "date_picker": false,
+        "order": [],
+        "platform": false,
+        "router": "/IM/message_Three",
+        "names": "客服消息统计",
+        "singleApi": true,
+        "singleFn": "im_message_three_api",
+        "rows": [
+            [
+                "msg_type_name",
+                "msg_times",
+                "msg_users"
+            ]
+        ],
+        "cols": [
+            [
+                {
+                    "caption": "消息类别",
+                    "type": "string"
+                },
+                {
+                    "caption": "发消息数",
+                    "type": "number"
+                },
+                {
+                    "caption": "发消息人数",
+                    "type": "number"
+                }
+            ]
+        ]
+    },
+    "1485069189047": {
+        "modelName": [],
+        "date_picker": false,
+        "order": [],
+        "platform": false,
+        "router": "/IM/message_Four",
+        "names": "表情下载",
+        "singleApi": true,
+        "singleFn": "im_message_four_api",
+        "rows": [
+            [
+                "face_id",
+                "load_uv",
+                "load_pv"
+            ]
+        ],
+        "cols": [
+            [
+                {
+                    "caption": "表情名称",
+                    "type": "string"
+                },
+                {
+                    "caption": "下载人数",
+                    "type": "number"
+                },
+                {
+                    "caption": "下载次数",
+                    "type": "number"
+                }
+            ]
+        ]
+    }
+}

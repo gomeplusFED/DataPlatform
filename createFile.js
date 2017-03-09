@@ -66,6 +66,7 @@ function existFile(path) {
 function createFile(path) {
     if(!existFile(path)) {
         let p = path.split("\\");
+        console.log(p);
         let _p = p[0];
         for(let i = 0; i< p.length - 1; i++) {
             if(existFile(_p)) {
@@ -81,7 +82,7 @@ function createFile(path) {
  * @date ${moment(new Date()).format("YYYY-MM-DD")}
  * @fileoverview
  */
-module.exports = {}`);
+module.exports = {};`);
     console.log(`已经创建文件,${path}`);
 }
 function deleteFile(path) {

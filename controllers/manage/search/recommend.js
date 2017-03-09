@@ -48,10 +48,10 @@ module.exports = (Router) => {
                 title: "推荐位所在页面",
                 filter_key: "recommend_page",
                 groups: [{
-                    key: "1",
+                    key: "逛逛首页",
                     value: "逛逛首页"
                 }, {
-                    key: "2",
+                    key: "商品详情页",
                     value: "商品详情页"
                 }]
             }]));
@@ -170,6 +170,11 @@ module.exports = (Router) => {
         modelName : ["RecommendAnalyseNew"],
         platform: false,
         order: ["-date"],
+        params(query, params) {
+            params.recommend_page = "all";
+
+            return params;
+        },
         selectFilter(req, cb) {
             cb(null, utils.globalPlatform(req.session.userInfo.type["70"], [TypeObj]));
         },

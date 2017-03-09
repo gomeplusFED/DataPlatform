@@ -64,7 +64,9 @@ module.exports = (Router) => {
             return filter.tradePanelOne(data , query , dates);
         },
         rows: [
-            ["new_group_num" , "new_join_group_num" , "new_group_user_num" , "quit_group_user"]
+            ["new_group_num" , "new_join_group_num" , "new_group_user_num" , "quit_group_user", "groupHomepage_uv"
+                // , "shoppingHomepage_uv"
+            ]
         ]
     });
 
@@ -76,6 +78,7 @@ module.exports = (Router) => {
         date_picker : false,
         params(query , params , sendData){
             if(!query.type) params.type = "ALL";
+            params.category_id = "ALL";
             return params;
         },
         flexible_btn : [{

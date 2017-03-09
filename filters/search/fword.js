@@ -127,6 +127,6 @@ module.exports = {
             Result.push(item);
         }
 
-        return utils.toTable([Result], data.rows, data.cols , [data.first.count]);
+        return utils.toTable([Result], data.rows, data.cols , [data.first.count > 100 ? 100 : data.first.count]);
     }
 }

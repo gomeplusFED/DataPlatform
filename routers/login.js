@@ -6,10 +6,10 @@
 var ldap = require('ldapjs');
 var config = require('../config');
 var lodash = require('lodash');
-
 var username = 'LDAP_SysDevDept';
 var password = '3m4>9kj9+@-du!p3';
 var ldapurl = 'ldap://10.69.100.4';
+const md5 = require("md5");
 var superAdminInfo = {
     username: "superAdmin",
     password: "gome123456"
@@ -17,7 +17,7 @@ var superAdminInfo = {
 
 module.exports = function(Router) {
 
-    Router.get('/login', function(req, res) {
+    Router.get('/register', function(req, res) {
         if (req.session.isLogin) {
             res.redirect('/');
         } else {
@@ -40,17 +40,20 @@ module.exports = function(Router) {
         if (remember) {
             maxAge = 1000 * 60 * 60 * 24 * 7; // 一周
         }
-        userInfo.limited =  JSON.parse(userInfo.limited);
-        userInfo.export =  JSON.parse(userInfo.export);
+        userInfo.limited =  JSON.parse(userInfo.limited || "{}");
+        userInfo.export =  JSON.parse(userInfo.export || "{}");
         userInfo.sub_pages =  JSON.parse(userInfo.sub_pages || "{}");
         userInfo.type =  JSON.parse(userInfo.type || "{}");
-        req.sessionOptions.maxAge = new Date(Date.now() + maxAge);
+        req.session.cookie.maxAge = new Date(Date.now() + maxAge);
+        // req.sessionOptions.maxAge = new Date(Date.now() + maxAge);
         req.session.userInfo = userInfo;
         req.session.isLogin = true;
     }
 
     Router.post('/logout', function(req, res) {
-        req.session = null;
+        req.session.destroy((err) => {
+            console.log(err);
+        });
         res.redirect('/login');
     });
 
@@ -224,13 +227,40 @@ module.exports = function(Router) {
     });
 
     Router.get(/^((?!\/dist).)*$/, function(req, res, next) {
-        if (req.session.isLogin) {
-            /*用户输入浏览器地址栏URL路由权限控制*/
-            next();
+        const query = req.query;
+        if(query.filter_bi_time && query.filter_bi_key) {
+            if (req.session.userInfo.isBi) {
+                /*用户输入浏览器地址栏URL路由权限控制*/
+                return next();
+            }
+            const massage = md5(`${query.filter_bi_time}pingtai`);
+            if(massage.substr(4, 6) === query.filter_bi_key) {
+                req.models.User2.find({
+                    username : "hexisen"
+                }, (err, data) => {
+                    if(err) {
+                        next(err);
+                    } else {
+                        const userInfo = data[0];
+                        userInfo.isBi = true;
+                        saveLogin(req, res, false, "", userInfo);
+                        return next();
+                    }
+                });
+            }
         } else {
-            var form = req.protocol + '://' + req.get('host') + req.originalUrl;
-            res.redirect('/login?from=' + encodeURIComponent(form));
+            if (req.session.isLogin) {
+                /*用户输入浏览器地址栏URL路由权限控制*/
+                return next();
+            }
+            // var form = req.protocol + '://' + req.get('host') + req.originalUrl;
+            res.redirect("http://bigdata.ds.gome.com.cn/");
+            // res.redirect('/login?from=' + encodeURIComponent(form));
         }
+        // if (req.session.isLogin) {
+        //     /*用户输入浏览器地址栏URL路由权限控制*/
+        //     next();
+        // }
     });
 
     return Router;

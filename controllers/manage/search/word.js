@@ -65,6 +65,8 @@ module.exports = (Router) => {
         order: ["-search_result_pv"],
         excel_export : true,
         paging : [true],
+        date_picker_data : 1,
+        showDayUnit : true,
         params(query, params) {
             params.search_keyword = orm.not_in(["ALL"]);
 

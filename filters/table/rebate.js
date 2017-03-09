@@ -6,7 +6,8 @@
 const util = require("../../utils");
 const moment = require("moment");
 const rows = [
-    ["date", "unique_is_rebate_order_num", "unique_is_over_rebate_order_num",
+    ["date",
+        // "unique_is_rebate_order_num", "unique_is_over_rebate_order_num",
         "expect_rebate_user_num", "expect_rebate_amount", "cancel_rebate_amount",
         "is_over_rebate_order_amount", "unique_is_rebate_merchandise_num"],
     ["name", "plan_type_name", "plan_type", "rebate_type_name", "rebate_type",
@@ -19,10 +20,10 @@ const cols = [
     [{
         caption : "日期"
     },{
-        caption : "累计返利订单数"
-    },{
-        caption : "累计到账订单数"
-    },{
+    //     caption : "累计返利订单数"
+    // },{
+    //     caption : "累计到账订单数"
+    // },{
         caption : "累计返利参与人次"
     },{
         caption : "累计预计返利金额"
@@ -62,7 +63,8 @@ const cols = [
     },]
 ];
 const newRows = [
-    ["date", "unique_is_rebate_order_num", "unique_is_over_rebate_order_num",
+    ["date", "unique_is_rebate_order_num",
+        // "unique_is_over_rebate_order_num",
         "unique_expect_rebate_user_num", "expect_rebate_amount", "cancel_rebate_amount",
         "is_over_rebate_order_amount", "unique_is_rebate_merchandise_num",
         "unique_is_rebate_shop_num"],
@@ -76,8 +78,8 @@ const newCols = [
         caption : "日期"
     },{
         caption : "新增返利订单数"
-    },{
-        caption : "返利到账订单数"
+    // },{
+    //     caption : "返利到账订单数"
     },{
         caption : "参与返利人数（未去重）"
     },{

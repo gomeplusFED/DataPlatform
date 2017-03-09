@@ -80,7 +80,6 @@ module.exports = {
             }]);
         }
 
-
         if(query.filter_key2 == "one"){
             rows[0].splice(1,1);
             cols[0].splice(1,1);
@@ -91,7 +90,5 @@ module.exports = {
                 config : [merge]
             });
         }
-
-        
     }
 };

@@ -11,8 +11,17 @@
 <link rel="stylesheet" href="/dist/css/DataPlatform.min.css?v=39acd641d120daa75ed27d32c3ba363b"/>
 <!-- end -->
     <link rel="shortcut icon" href="/dist/img/favico.ico" type="image/x-icon">
+    <% if(userInfo.isBi) { %>
+    <style>
+        #page-wrapper {
+            margin: 0;
+        }
+    </style>
+    <% } %>
 </head>
 <body>
+<% if(userInfo.isBi) { %>
+<% } else { %>
 <div id="wrapper">
     <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
         <div class="navbar-header">
@@ -41,3 +50,4 @@
     <% include ./navbar.html %>
     </nav>
         
+<% } %>

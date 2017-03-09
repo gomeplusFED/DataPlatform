@@ -436,12 +436,12 @@ module.exports = (Router) => {
         },
         secondParams(query, params, data) {
             var now = new Date().getTime(),
-                date = util.getDate(new Date(now - 24 * 60 * 60 * 1000)),
-                topic_ids = _.uniq(_.pluck(data, "topic_id"));
+                date = util.moment(new Date(now - 24 * 60 * 60 * 1000)),
+                topic_ids = _.uniq(_.pluck(data.first.data, "topic_id"));
 
             return {
                 topic_id : topic_ids,
-                date : orm.between(date + " 00:00:00", date + " 23:59:59"),
+                date : date,
                 key : ["topic_reply_num", "topic_praise_num", "topic_subreply_user_num",
                     "topic_reply_user_num", "topic_subreply_num", "topic_collect_num"]
             };
@@ -449,17 +449,17 @@ module.exports = (Router) => {
         thirdParams(query, params, data) {
             return {};
         },
-        procedure : [false, {
-            aggregate : {
-                value : ["topic_id", "key"]
-            },
-            sum : ["value"],
-            groupBy : ["key"],
-            get : ""
-        }, false],
+        // procedure : [false, {
+        //     aggregate : {
+        //         value : ["topic_id", "key"]
+        //     },
+        //     sum : ["value"],
+        //     groupBy : ["key"],
+        //     get : ""
+        // }, false],
         firstSql(query, params, isCount) {
-            let keys = [query.startTime, query.endTime, query.day_type];
-            let where = ["date BETWEEN ? AND ?", "day_type=?"];
+            let keys = [query.startTime, query.endTime, query.day_type, query.type];
+            let where = ["date BETWEEN ? AND ?", "day_type=?", "type=?"];
             if(query.topic_id) {
                 keys.push(query.topic_id);
                 where.push("topic_id=?");
@@ -490,7 +490,7 @@ module.exports = (Router) => {
                title: '',
                filter_key: 'type',
                groups: [{
-                   key: ['APP', "WAP", "PC"],
+                   key: "ALL",
                    value: '全部'
                }, {
                    key: 'APP',
