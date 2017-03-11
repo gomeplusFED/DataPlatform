@@ -6,6 +6,7 @@
 var orm = require("orm"),
     config = require("../../../config/config").limit,
     _ = require("lodash"),
+    eventproxy = require("eventproxy"),
     util = require("../../../utils");
 
 module.exports = (Router) => {
@@ -411,5 +412,113 @@ module.exports = (Router) => {
         });
     });
 
+    Router.get("/users/down", (req, res, next) => {
+        const xl = require("excel4node");
+        const wb = new xl.Workbook();
+        const ws = wb.addWorksheet("角色权限");
+        const wss = wb.addWorksheet("用户角色");
+        const limit = {
+            15 : config["15"],
+            20 : config["20"],
+            17 : config["17"],
+            18 : config["18"],
+            25 : config["25"]
+        };
+        let ep = new eventproxy();
+        ep.all("users" , "role" , (users , role) => {
+            const newData = [];
+            const role_names = _.uniq(_.pluck(role, "name"));
+            const rows = ["菜单"].concat(role_names);
+            const cols = [];
+            const userArray = [];
+            const roleRows = ["role", "name"];
+            const roleCols = [{caption : "角色"},{caption:"域账号"}];
+            for(let user of users) {
+                let roleArray = [];
+                if(user.role) {
+                    roleArray = user.role.split(";");
+                }
+                for(let item of roleArray) {
+                    userArray.push({
+                        role : item,
+                        name : user.username
+                    });
+                }
+            }
+            util.export(wss, util.arrayToArray([{
+                cols : roleCols,
+                rows : roleRows,
+                data : userArray
+            }]));
+            for(let row of rows) {
+                cols.push({
+                    caption : row
+                });
+            }
+            for(let key of role) {
+                key.limited = JSON.parse(key.limited);
+            }
+            for(let key in limit) {
+                for(let k of limit[key].path) {
+                    let obj = {
+                        name : k.name,
+                        id : k.id,
+                        pid : key
+                    };
+                    add(newData, obj, role);
+                }
+            }
+            const data = [];
+            for(let key of newData) {
+                const obj = {};
+                for(let k of rows) {
+                    obj[k] = "";
+                }
+                obj["菜单"] = key.name;
+                for(let k of key.roles) {
+                    obj[k.name] = 1;
+                }
+                data.push(obj);
+            }
+            util.export(ws, util.arrayToArray([{
+                cols,
+                rows,
+                data
+            }]));
+
+            wb.write("report.xlsx", res);
+        });
+        req.models.User2.find({
+            is_admin : orm.lt(99),
+            status : 1
+        }, (err, data) => {
+            if(err) {
+                return next(err);
+            }
+            ep.emit("users", data);
+        });
+        req.models.Role.find({
+            status : 1
+        }, (err, data) => {
+            if(err) {
+                return next(err);
+            }
+            ep.emit("role", data);
+        });
+
+    });
+
      return Router;
 };
+
+function add(newData, obj, data) {
+    obj.roles = [];
+    for(let key of data) {
+        if(key.limited[obj.pid] && key.limited[obj.pid].indexOf(obj.id) >= 0) {
+            obj.roles.push({
+                name : key.name
+            });
+        }
+    }
+    newData.push(obj);
+}
