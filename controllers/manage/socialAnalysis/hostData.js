@@ -328,8 +328,9 @@ module.exports = (Router) => {
             preMethods: ['excel_export']
         }],
         rows: [
-            [ "top", "groupOwner_name",
-                // "groupOwner_id",
+            [ "top",
+                // "groupOwner_name",
+                "groupOwner_id",
                 "daren_flag", "person_topic_num",
                 // "new_invite_friends_num", "person_friends_num", "new_fans_num", "person_funs_num" ,
                 "new_group_num",
@@ -342,12 +343,12 @@ module.exports = (Router) => {
             [{
                 caption: "排名",
                 type: "number"
-            }, {
-                caption: "圈主名称",
-                type: "string"
             // }, {
-            //     caption: "圈主ID",
+            //     caption: "圈主名称",
             //     type: "string"
+            }, {
+                caption: "圈主ID",
+                type: "string"
             }, {
                 caption: "是否达人",
                 type: "string"

@@ -385,7 +385,8 @@ module.exports = (Router) => {
         rows: [
             [ "top", "group_name", "group_id", "category_id_1",
                 "category_id_2", "creater_flag", "group_owner_id",
-                "group_owner_name", "new_group_user_num", "group_person_num",
+                // "group_owner_name",
+                "new_group_user_num", "group_person_num",
                 "new_quit_group_num", "involve_group_user_num",
                 "new_group_topic_num", "group_topic_num", "new_group_share_num",
                 "topic_praise_num", "topic_collect_num", "new_group_topic_like_num",
@@ -416,9 +417,9 @@ module.exports = (Router) => {
             },{
                 caption : "圈主ID",
                 type : "string"
-            },{
-                caption : "圈主名称",
-                type : "string"
+            // },{
+            //     caption : "圈主名称",
+            //     type : "string"
             }, {
                 caption : "新增成员数",
                 type : "number"
