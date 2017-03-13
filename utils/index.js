@@ -254,7 +254,7 @@ exports.getDate = function(date){
 
 /*numberLeave("234.567789" , 3) // 234.567*/
 exports.numberLeave = function(number , num){
-    if(typeof number != "number"){
+    if(!validator.isNumeric(number)){
         console.error("must be a number");
         return 0;
     }
