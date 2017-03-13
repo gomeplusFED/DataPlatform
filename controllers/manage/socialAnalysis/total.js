@@ -29,7 +29,7 @@ module.exports = (Router) => {
     Router.get("/socialAnalysis/totalOne_json" , (req , res , next)=>{
         let query = req.query;
         let ep = new eventproxy();
-        let date = util.beforeDate(new Date() , 2)[1];
+        let date = util.beforeDate(new Date() , 1)[1];
 
         if(Object.keys(query).length == 0){
             res.json({
