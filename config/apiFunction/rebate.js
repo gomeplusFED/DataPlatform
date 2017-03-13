@@ -117,7 +117,10 @@ module.exports = {
 
         if(query.main_show_type_filter == "table"){
             for(let item of source) {
-                Deal100(item , ["expect_rebate_amount" , "cancel_rebate_amount" , "is_over_rebate_order_amount"]);
+                for(let key of ["expect_rebate_amount" , "cancel_rebate_amount" , "is_over_rebate_order_amount"]) {
+                    item[key] = (item[key] / 100).toFixed(2);
+                }
+                // Deal100(item , ["expect_rebate_amount" , "cancel_rebate_amount" , "is_over_rebate_order_amount"]);
             }
             // source = Deal100(item , ["expect_rebate_amount" , "cancel_rebate_amount" , "is_over_rebate_order_amount"]);
             return util.toTable([source], [rows], [cols]);
