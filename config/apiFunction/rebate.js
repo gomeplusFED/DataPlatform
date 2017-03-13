@@ -602,7 +602,7 @@ module.exports = {
         }
         //TODO 改动end
 
-        source = Deal100(source , ["expect_rebate_amount","is_over_rebate_order_amount" , "is_rebate_fee" , "cancel_rebate_amount", "is_rebate_item_fee"]);
+        source = Deal100(source , ["expect_rebate_amount","is_over_rebate_order_amount" , "is_rebate_fee" , "cancel_rebate_amount", "is_rebate_item_fee", "is_over_rebate_invite_amount"]);
         
         return util.toTable([source] , [rows], [cols] , [count]);
     },
