@@ -115,9 +115,13 @@ module.exports = {
         } else {
             third[0] = {};
         }
+        let new_reply_topic_num = 0;
+        for(let key of third) {
+            new_reply_topic_num += key.new_reply_topic_num;
+        }
 
         Result.userin_lv = util.toFixed( Result.group_persons_num , registeruserallcount );
-        Result.reply_lv = util.toFixed( third[0].new_reply_topic_num || 0 , Result.all_topic_num || 0 );
+        Result.reply_lv = util.toFixed( new_reply_topic_num , Result.all_topic_num || 0 );
 
         return util.toTable([[Result],[Result],[Result]], rows, cols , null , [true , true , true]);
     },
