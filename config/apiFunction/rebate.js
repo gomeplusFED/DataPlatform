@@ -19,14 +19,14 @@ let Deal100 = (arr , columns) => {
         for(let item of arr){
             for(let key of columns){
                 if(item[key]){
-                    item[key] = item[key] / 100;
+                    item[key] = (item[key] / 100).toFixed(2);
                 }
             }
         } 
     }else{
         for(let key of columns){
             if(arr[key]){
-                arr[key] = arr[key] / 100;
+                arr[key] = (arr[key] / 100).toFixed(2);
             }
         }
     }
