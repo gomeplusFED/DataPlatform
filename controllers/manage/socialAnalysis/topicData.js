@@ -531,7 +531,8 @@ module.exports = (Router) => {
         }],
         rows: [
             [ "top", "topic_name", "topic_id", "group_name", "category_id_1",
-                "category_id_2", "PV", "UV", "publisher_id", "publisher_name",
+                "category_id_2", "PV", "UV", "publisher_id",
+                // "publisher_name",
                 "new_topic_reply_num", "new_topic_reply_user_num",
                 //"rate",
                 "reply_num", "reply_user_num", "topic_rate", "new_topic_like_num",
@@ -566,9 +567,9 @@ module.exports = (Router) => {
             }, {
                 caption: "发布人ID",
                 type: 'string'
-            }, {
-                caption: "发布人名称",
-                type: 'string'
+            // }, {
+            //     caption: "发布人名称",
+            //     type: 'string'
             }, {
                 caption: "新增回复数",
                 type: 'number',
