@@ -25,7 +25,7 @@
 				<div class="panel-footer clearfix">
 					<button class="btn btn-default" style="margin-right: 10px;float: left;" @click="resetAll()">重置</button>
 					<div class="checked_select">当前选择：{{showResult.length ? showResult.join('－') : '默认'}}</div>
-					<button class="btn btn-default" style="margin-left: 10px;float: right;" @click="showSelect = !showSelect,resetAll()">取消</button>
+					<button class="btn btn-default" style="margin-left: 10px;float: right;" @click="showSelect = !showSelect">取消</button>
 					<button class="btn btn-default" style="margin-left: 10px;float: right;" @click="showSelect = !showSelect,submit()">确认</button>
 				</div>
 			</div>
