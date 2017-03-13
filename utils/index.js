@@ -254,6 +254,7 @@ exports.getDate = function(date){
 
 /*numberLeave("234.567789" , 3) // 234.567*/
 exports.numberLeave = function(number , num){
+    console.log(number);
     if(isNaN(Number(number))){
         console.error("must be a number");
         return 0;
