@@ -180,7 +180,7 @@ module.exports = (Router) => {
             },
             sum : ["new_topic_num", "delete_topic_num", "new_topic_reply_num",
                 "delete_topic_reply_num", "new_topic_like_num", "new_topic_save_num",
-                "new_topic_share_num"],
+                "new_topic_share_num", "is_item_topic_num", "is_vedio_topic_num"],
             groupBy : ["-date"],
             get : ""
         }],
