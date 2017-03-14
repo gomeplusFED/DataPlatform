@@ -1624,6 +1624,7 @@ module.exports = {
             delete params.search_key;
             delete query.search_key;
         }
+        params.rebate_type = params.rebate_type.split(",");
         return params;
     },
     rebate_shopPlan_01_second(query , params , sendData){
@@ -1670,8 +1671,8 @@ module.exports = {
                 cb(err);
             } else {
                 var user_party = _.uniq(_.pluck(data, "flow_code"));
-                filter_select.groups[0].key = user_party;
-                
+                filter_select.groups[0].key = user_party.join(",");
+
                 for(let item of data){
                     let obj = {
                         "key" : item.flow_code,
