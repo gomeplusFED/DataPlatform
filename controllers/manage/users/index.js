@@ -444,10 +444,12 @@ module.exports = (Router) => {
                     roleArray = user.role.split(";");
                 }
                 for(let item of roleArray) {
-                    userArray.push({
-                        role : item,
-                        name : user.username
-                    });
+                    if(role_names.indexOf(item)) {
+                        userArray.push({
+                            role : item,
+                            name : user.username
+                        });
+                    }
                 }
             }
             util.export(wss, util.arrayToArray([{
