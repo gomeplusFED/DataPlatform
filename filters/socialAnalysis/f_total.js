@@ -112,9 +112,8 @@ module.exports = {
         }
         if(third.length > 0){
             replytopicallcount = third[0].replytopicallcount || 0;
-        } else {
-            third[0] = {};
         }
+
         let new_reply_topic_num = 0;
         for(let key of third) {
             new_reply_topic_num += key.new_reply_topic_num;
