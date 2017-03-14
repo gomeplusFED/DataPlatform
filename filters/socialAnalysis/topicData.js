@@ -300,7 +300,7 @@ module.exports = {
                 `<button class='btn btn-default' url_link='/socialAnalysis/topicsDetail' url_fixed_params='{"topic_id": "${key.topic_id}"}'>详细>></button>`;
             source[i] = key;
         }
-        return util.toTable([source], data.rows, data.cols, [count]);
+        return util.toTable([source], data.rows, data.cols, [count > 100 ? 100 : count]);
     },
 
     /* ==============  详情部分  =========== */
