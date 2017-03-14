@@ -27,7 +27,7 @@ module.exports = {
         var source = data.first.data[0],
             newData = [],
             obj = {},
-            array = ["APP", "WAP", "PC", "总计"];
+            array = ["APP", "WAP", "PC", "ALL"];
 
         for(let key of array) {
             obj[key] = {
@@ -66,24 +66,25 @@ module.exports = {
                 obj[type].new_reply_topic_num = key.sum_new_reply_topic_num;
             }
 
-            obj["总计"].new_topic_num += key.sum_new_topic_num;
-
-            obj["总计"].new_pv += key.sum_new_pv;
-            obj["总计"].is_item_topic_num += key.sum_is_item_topic_num;
-            obj["总计"].is_vedio_topic_num += key.sum_is_vedio_topic_num;
-
-            obj["总计"].delete_topic_num += key.sum_delete_topic_num;
-            obj["总计"].new_topic_reply_num += key.sum_new_topic_reply_num;
-            obj["总计"].new_topic_reply_user_num += key.sum_new_topic_reply_user_num;
-            obj["总计"].delete_topic_reply_num += key.sum_delete_topic_reply_num;
-            obj["总计"].new_topic_like_num += key.sum_new_topic_like_num;
-            obj["总计"].new_topic_save_num += key.sum_new_topic_save_num;
-            obj["总计"].new_topic_share_num += key.sum_new_topic_share_num;
-            obj["总计"].new_reply_topic_num += key.sum_new_reply_topic_num;
+            // obj["总计"].new_topic_num += key.sum_new_topic_num;
+            //
+            // obj["总计"].new_pv += key.sum_new_pv;
+            // obj["总计"].is_item_topic_num += key.sum_is_item_topic_num;
+            // obj["总计"].is_vedio_topic_num += key.sum_is_vedio_topic_num;
+            //
+            // obj["总计"].delete_topic_num += key.sum_delete_topic_num;
+            // obj["总计"].new_topic_reply_num += key.sum_new_topic_reply_num;
+            // obj["总计"].new_topic_reply_user_num += key.sum_new_topic_reply_user_num;
+            // obj["总计"].delete_topic_reply_num += key.sum_delete_topic_reply_num;
+            // obj["总计"].new_topic_like_num += key.sum_new_topic_like_num;
+            // obj["总计"].new_topic_save_num += key.sum_new_topic_save_num;
+            // obj["总计"].new_topic_share_num += key.sum_new_topic_share_num;
+            // obj["总计"].new_reply_topic_num += key.sum_new_reply_topic_num;
         }
 
         for(let key in obj) {
             let item = obj[key];
+            key === "ALL" ? key = "总计" : "";
             newData.push({
                 type : key,
                 new_topic_num : item.new_topic_num,
@@ -96,7 +97,7 @@ module.exports = {
                 new_topic_reply_num : item.new_topic_reply_num,
                 new_topic_reply_user_num : item.new_topic_reply_user_num,
                 delete_topic_reply_num : item.delete_topic_reply_num,
-                rate : util.toFixed(item.new_reply_topic_num, item.new_topic_num),
+                rate : util.toFixed(item.new_reply_topic_num, obj.ALL.new_topic_num),
                 new_topic_like_num : item.new_topic_like_num,
                 new_topic_save_num : item.new_topic_save_num,
                 new_topic_share_num : item.new_topic_share_num
