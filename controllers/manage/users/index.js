@@ -426,7 +426,7 @@ module.exports = (Router) => {
             25 : config["25"],
             30 : {
                 name : "报表导出",
-                path : [config["30"][0],config["30"][1],config["30"][5]]
+                path : [config["30"].path[0],config["30"].path[1],config["30"].path[5]]
             }
         };
         let ep = new eventproxy();
