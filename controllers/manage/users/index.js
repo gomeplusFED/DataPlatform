@@ -417,12 +417,17 @@ module.exports = (Router) => {
         const wb = new xl.Workbook();
         const ws = wb.addWorksheet("角色权限");
         const wss = wb.addWorksheet("用户角色");
+        const tables = ["75", "00234", "76"];
         const limit = {
             15 : config["15"],
             20 : config["20"],
             17 : config["17"],
             18 : config["18"],
-            25 : config["25"]
+            25 : config["25"],
+            30 : {
+                name : "报表导出",
+                path : [config["30"][0],config["30"][1],config["30"][5]]
+            }
         };
         let ep = new eventproxy();
         ep.all("users" , "role" , (users , role) => {
