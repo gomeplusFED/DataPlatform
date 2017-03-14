@@ -467,7 +467,7 @@ module.exports = (Router) => {
                 for(let k of limit[key].path) {
                     let obj = {
                         name : k.name,
-                        id : k.id,
+                        id : k.id.toString(),
                         pid : key
                     };
                     add(newData, obj, role);
