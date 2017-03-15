@@ -353,7 +353,10 @@ module.exports = {
         var group_type = query.category_id,
             source = data.first.data[0],
             orderData = data.second.data[0],
+            config = {},
             type = "pie";
+
+        console.log(data.first);
 
         var filter_name = {
                 one : {
@@ -374,8 +377,18 @@ module.exports = {
             map = {
                 value : filterName
             };
+
+        for(let key of orderData) {
+            config[key.id] = key.name;
+        }
+
         var obj = {},
             newData = {};
+        for(let id of group_type) {
+            newData[config[id]] = {
+                value : 0
+            };
+        }
         // var showData = [];
 
 
@@ -388,9 +401,8 @@ module.exports = {
         // }
 
         for(let item of source){
-            if(item.category_id in obj){
-                newData[obj[item.category_id]].value += item[filterColumn];
-            }
+            newData[config[item.category_id]].value += item[filterColumn];
+            console.log(item[filterColumn]);
         }
 
         return [{
