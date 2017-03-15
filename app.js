@@ -65,7 +65,11 @@ app.use(bodyParser.json());
 
 app.set('trust proxy', 1);
 
-app.use(cors());
+app.use(cors({
+    origin : "*",
+    credentials : true,
+    methods : "GET,POST"
+}));
 
 app.use(cookieParse());
 app.use(session({
