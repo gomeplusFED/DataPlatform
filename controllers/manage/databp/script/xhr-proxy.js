@@ -1,4 +1,4 @@
-(function(pageUrl, platform) {
+(function(pageUrl, platform, origin) {
     if(platform === 'H5') {
         Object.defineProperty(window.navigator,'userAgent' ,{writable:true, configurable: true, enumerable:true});
         window.navigator.userAgent = 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1';
@@ -27,6 +27,8 @@
         for (var i = 0; i < arguments.length; i++) {
             args.push(arguments[i]);
         }
+        // 去除同域名origin
+        url = url.replace(origin, '');
         if (/https?:\/\//.test(url)) {
             if(url.match(/\.js\??/)) {
                 args[1] = `/databp/js?url=${encodeURIComponent(url)}`;
@@ -34,7 +36,7 @@
                 args[1] = url;
             }
         } else {
-            args[1] = '/databp/ajax' + (url.startsWith('/') ? url : '/' + url);
+            args[1] = '/databp/ajax' + (url.indexOf('/') === 0  ? url : '/' + url);
         }
         // call original open method
         return open.apply(this, args);

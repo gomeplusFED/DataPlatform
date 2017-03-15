@@ -1,7 +1,7 @@
 var { filterArgs, buildAjax, extractResult, errHandler } = require('./common');
 const commonFilds = ['pageUrl', 'platform', 'startTime', 'endTime', 'version', 'dateTime'];
 module.exports = {
-    getHeatVersions(data) {
+	getHeatVersions(data) {
 		return buildAjax('/point/versions', filterArgs(data, ['platform'])).then(function(res) {
 			if (res.code !== '200' || res.iserror !== '0') {
 				return Promise.reject('获取版本信息失败：' + res.msg);
@@ -13,7 +13,7 @@ module.exports = {
 				return Promise.reject('暂无版本信息');
 			}
 		}).catch(errHandler);
-    },
+	},
 	getHeatData(data) {
 		return buildAjax('/heat', filterArgs(data, commonFilds)).then(function(res) {
 			if (res.code !== '200' || res.iserror !== '0') {
@@ -27,7 +27,7 @@ module.exports = {
 			}
 		}).catch(errHandler);
 	},
-    getHeatTable() {
+	getHeatTable(data) {
 		return buildAjax('/heat/table', filterArgs(data, commonFilds)).then(function(res) {
 			if (res.code !== '200' || res.iserror !== '0') {
 				return Promise.reject('获取热力图表格失败：' + res.msg);
@@ -42,8 +42,8 @@ module.exports = {
 				return Promise.reject('获取的热力图表格信息为空');
 			}
 		}).catch(errHandler);
-    },
-    exportHeatTable() {
+	},
+	exportHeatTable(data) {
 		return buildAjax('/heat/export', filterArgs(data, commonFilds)).catch(errHandler);
-    }
+	}
 }

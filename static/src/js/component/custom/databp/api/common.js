@@ -2,7 +2,7 @@ var store = require('store');
 var actions = require('actions');
 var $ = require('jQuery');
 const baseurl = window.location.href.startsWith('http://bi.intra') ?
-	'http://api.point.bi.pro.gomeplus.com/bomber-pie' : 'http://10.69.205.26:9090/mock/5816ffd7881ccce602ab3d23'
+	'http://api.point.bi.pro.gomeplus.com/bomber-pie' : 'http://api.point.bi.pre.gomeplus.com/bomber-pie'
 // 请求失败 重试一次
 const RETRY_TIMES = 2;
 $.support.cors = true;
