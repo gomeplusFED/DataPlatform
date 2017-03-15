@@ -72,11 +72,6 @@
 // ep.all(["one" , "two" , "three"] , function(...values){
 //     console.log(values);
 // });
-// const md5 = require("md5");
-//
-// console.log(md5("148835962479pingtai").substr(4,6));
-function test(num, unit) {
-    const units = ["个", "十", "百", "千", "万"];
-	return num / Math.pow(10, units.indexOf(unit)) + unit;
-}
-console.log(test(10000, "万"));
+const md5 = require("md5");
+
+console.log(md5("1489549315161pingtai").substr(4,6));
