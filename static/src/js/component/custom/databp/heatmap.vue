@@ -446,6 +446,9 @@
 .heatmap .inpW1 {
 	width: 280px;
 }
+.nform-box select {
+	font-size: 12px;
+}
 .heatmap .inpW1 select {
 	min-width: 190px;
 }
