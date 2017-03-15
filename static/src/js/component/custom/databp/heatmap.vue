@@ -5,7 +5,7 @@
 			<div slot="extend-nav" class='form-group inpW1'>
 				<label>快照版本</label>
 				<select class="form-control data-type" v-model="version">
-					<option v-for="t of versions" >{{t.version}} - {{t.dateTime}}</option>
+					<option v-for="t of versions" >{{t.version}} - {{t.dateTime | Date 'yyyy-MM-dd hh:mm:ss'}}</option>
 				</select>
 			</div>
 			<div slot="extend-nav" class='form-group'>
@@ -96,15 +96,7 @@
 					name: 'uv',
 					p: 1
 				}],
-				versions: [
-				{
-					version: '1.1',
-					dateTime: '2012-03-11'
-
-				}, {
-					version: '1.2',
-					dateTime: '2012-03-11'
-				}],
+				versions: [],
 				version: '',
 				datatype: 'pv',
 				dom: {
@@ -419,7 +411,7 @@
 	margin-bottom: 10px;
 }
 .heatmap .inpW1 {
-	width: 250px;
+	width: 280px;
 }
 .heatmap .inpW1 select {
 	min-width: 190px;
