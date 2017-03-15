@@ -25,6 +25,7 @@ var cluster = new redis.Cluster(redisInfo[redisConfig]);
 global.cluster = cluster;
 var routers = require('./routers');
 var log4js       = require("./log");
+const cors = require("cors");
 
 
 
@@ -63,6 +64,8 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 app.set('trust proxy', 1);
+
+app.user(cors());
 
 app.use(cookieParse());
 app.use(session({

@@ -22,6 +22,7 @@
     "commander": "^2.9.0",
     "cookie-parser": "^1.4.3",
     "cookie-session": "2.0.0-alpha.1",
+    "cors": "^2.8.1",
     "echarts": "3.2.2",
     "ejs": "2.3.4",
     "emailjs": "^1.0.8",
