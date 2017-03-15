@@ -723,6 +723,7 @@ module.exports = {
     rebate_platformBase_02(query , params , sendData){
         // params.plan_type = 1;
 
+        params.plan_type = 6;
         switch(params.plan_type){
             case 1:
                 params.rebate_type = [1,2];
@@ -787,6 +788,7 @@ module.exports = {
     //平台基础返利 ---- 返利层级分布
     rebate_platformBase_03(query , params , sendData){
         // params.plan_type = 1;
+        params.plan_type = 6;
         return params;
     },
     rebate_platformBase_03_f(data, query, dates){
