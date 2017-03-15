@@ -100,7 +100,7 @@ module.exports = (Router) => {
                 html = html.replace(/<script.+?uba-sdk.+?<\/script>/, '');
 
                 // 添加自定义脚本
-                let proxytext = `<script>${xhrProxy}('${url}', '${platform}');</script>`;
+                let proxytext = `<script>${xhrProxy}('${url}', '${platform}', '${trunk}');</script>`;
                 html = html.replace('<head>', '<head>' + proxytext);
                 // databpSess.oldCookieKeys = parseCookie(req.headers.cookie, true);
                 databpStorage[req.session.userInfo.id] = databpSess;
@@ -158,6 +158,7 @@ module.exports = (Router) => {
             body = JSON.stringify(body);
         }
         let option = {
+            headers,
             method,
             headers: newheaders,
             body,
@@ -186,6 +187,7 @@ module.exports = (Router) => {
         fetch(newurl, {
                 method,
                 headers: newheaders,
+                cookie: headers.cookie.replace(/DataPlatform.*?=.+?;/gi, ''),
                 credentials: 'include'
             })
             .then(function (result) {
