@@ -8,6 +8,7 @@ var api = require("../../../base/main"),
     help = require("../../../base/help"),
     util = require("../../../utils"),
     orm = require("orm"),
+    moment = require("moment"),
     config = require("../../../utils/config.json"),
     filter = require("../../../filters/socialAnalysis/index2");
 
@@ -177,6 +178,7 @@ module.exports = (Router) => {
         modelName : [ "SocialGroupDetailList" , "Statistics" ],
         platform : false,
         excel_export : true,
+        date_picker : false,
         flexible_btn:[{
              content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ["excel_export"]
@@ -190,7 +192,8 @@ module.exports = (Router) => {
             get : ""
         }],
         firstSql(query, params) {
-            const sql = `select topic_id,topic_create_time,topic_name,publisher_name  from ads2_soc_group_detail_list where date between '${query.startTime}' and '${query.endTime}' and group_id='${query.group_id}' and day_type=1 group by topic_id order by topic_create_time desc`;
+            const date = moment(new Date() - 24 * 60 * 60 * 1000).format("YYYY-MM-DD");
+            const sql = `select topic_id,topic_create_time,topic_name,publisher_name  from ads2_soc_group_detail_list where date = '${date}' and group_id='${query.group_id}' and day_type=1 group by topic_id order by topic_create_time desc`;
 
             return {
                 sql : sql,
