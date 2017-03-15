@@ -72,7 +72,7 @@
         "rows": [
             [
                 "expect_rebate_amount",
-                "unique_expect_rebate_user_num",
+                "expect_rebate_user_num",
                 "cancel_rebate_amount",
                 "is_over_rebate_order_amount",
                 "unique_is_rebate_order_num",
@@ -1446,7 +1446,7 @@
                     "type": "number"
                 },
                 {
-                    "caption": "商家名称",
+                    "caption": "商家ID",
                     "type": "number"
                 },
                 {
