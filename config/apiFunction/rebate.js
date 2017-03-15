@@ -1053,15 +1053,23 @@ module.exports = {
         return params;
     },
     rebate_regist_01_f(data, query, dates){
-        let source = data.first.data[0],
-            sum    = data.first.sum;
+        let source = data.first.data[0];
+
         let obj    = {
-            "unique_rebate_invite_friend_planid_num" : sum[0] || 0,
-            "unique_rebate_invite_friend_user_num" : sum[1] || 0,
-            "unique_rebate_invite_friend_success_user_num" : sum[2] || 0,
-            "is_over_rebate_invite_friend_amount" : sum[3] || 0
+            "unique_rebate_invite_friend_planid_num" : 0,
+            "unique_rebate_invite_friend_user_num" : 0,
+            "unique_rebate_invite_friend_success_user_num" : 0,
+            "is_over_rebate_invite_friend_amount" : 0,
+            "all_register_user_num" : 0
+        };
+
+        for(let item of source) {
+            for(let key in obj) {
+                obj[key] += +item[key];
+            }
         }
-        obj.regist_lv = util.toFixed(sum[2] , sum[4] || 0);
+
+        obj.regist_lv = util.toFixed(obj.unique_rebate_invite_friend_success_user_num, obj.all_register_user_num);
 
         obj = Deal100(obj , ["is_over_rebate_invite_friend_amount"]);
         return util.toTable([[obj]], data.rows, data.cols);
@@ -1073,17 +1081,24 @@ module.exports = {
         return params;
     },
     rebate_regist_02_f(data, query, dates){
-        let source = data.first.data[0],
-            sum    = data.first.sum;
+        let source = data.first.data[0];
+
         let obj    = {
-            "unique_rebate_invite_shop_planid_num" : sum[0] || 0,
-            "unique_rebate_invite_shop_num" : sum[1] || 0,
-            "unique_rebate_invite_shop_success_num" : sum[2] || 0,
-            "is_over_rebate_invite_shop_amount" : sum[3] || 0
+            "unique_rebate_invite_shop_planid_num" :  0,
+            "unique_rebate_invite_shop_num" :  0,
+            "unique_rebate_invite_shop_success_num" :  0,
+            "is_over_rebate_invite_shop_amount" :  0,
+            "all_enter_shop_num" : 0
+        };
+
+        for(let item of source) {
+            for(let key in obj) {
+                obj[key] += +item[key];
+            }
         }
 
         obj = Deal100(obj , ["is_over_rebate_invite_shop_amount"]);
-        obj.regist_lv = util.toFixed(sum[2] , sum[4] || 0);
+        obj.regist_lv = util.toFixed(obj.unique_rebate_invite_shop_success_num , obj.all_enter_shop_num);
         //TODO 改动start
         let rows = [];
         let cols = [];
@@ -1175,7 +1190,7 @@ module.exports = {
             "Blank",
             "unique_order_num",
             // "fee",
-            "item_fee",
+            "is_rebate_item_fee",
 
             "unique_shop_num",
             "unique_user_num",
