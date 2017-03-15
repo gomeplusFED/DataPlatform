@@ -287,7 +287,7 @@ module.exports = (Router) => {
                         filter_select.groups.push(obj);
                     }
 
-                    if(this.filter_select.length < 2){
+                    if(this.filter_select.length <= 2){
                         this.filter_select.push(filter_select);
                     }
                     
