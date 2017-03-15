@@ -65,7 +65,7 @@ app.use(bodyParser.json());
 
 app.set('trust proxy', 1);
 
-app.user(cors());
+app.use(cors());
 
 app.use(cookieParse());
 app.use(session({
