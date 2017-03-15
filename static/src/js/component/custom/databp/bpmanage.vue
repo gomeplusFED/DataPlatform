@@ -256,6 +256,9 @@
 		background-color: #efefef;
 		position: relative;
 	}
+	.nform-box .inp {
+		font-size: 12px;
+	}
 	.nform-box ul {
 		width: 100%;
 		margin: 0 auto;
