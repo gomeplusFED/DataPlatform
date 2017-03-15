@@ -28,7 +28,7 @@ Object.assign(api, {
 	},
 	// {pageUrl, selector, pointName, platform, pointId, matchUrlId, pattern, publicParam, privateParam}
 	updateBp(data) {
-		return buildAjax('/point', filterArgs(data, ['pageUrl', 'selector', 'pointName', 'platform', 'pointId', 'matchUrlId', 'pattern', 'publicParam', 'privateParam', 'userInfo', 'type']), 'put').then((res) => {
+		return buildAjax('/point', data, 'put').then((res) => {
 			if (res.code !== '200' || res.iserror !== '0') {
 				return Promise.reject('更新失败：' + res.msg);
 			}
