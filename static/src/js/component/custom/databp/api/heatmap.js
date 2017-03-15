@@ -27,7 +27,7 @@ module.exports = {
 			}
 		}).catch(errHandler);
 	},
-	getHeatTable() {
+	getHeatTable(data) {
 		return buildAjax('/heat/table', filterArgs(data, commonFilds)).then(function(res) {
 			if (res.code !== '200' || res.iserror !== '0') {
 				return Promise.reject('获取热力图表格失败：' + res.msg);
@@ -43,7 +43,7 @@ module.exports = {
 			}
 		}).catch(errHandler);
 	},
-	exportHeatTable() {
+	exportHeatTable(data) {
 		return buildAjax('/heat/export', filterArgs(data, commonFilds)).catch(errHandler);
 	}
 }

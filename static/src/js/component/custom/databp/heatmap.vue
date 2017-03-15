@@ -4,8 +4,8 @@
 	<visualbp :loading.sync='loading' v-ref:visual>
 			<div slot="extend-nav" class='form-group inpW1'>
 				<label>快照版本</label>
-				<select class="form-control data-type" v-model="version">
-					<option v-for="t of versions" >{{t.version}} - {{t.dateTime | Date 'yyyy-MM-dd hh:mm:ss'}}</option>
+				<select id="version" class="form-control data-type" v-model="version"  data-content="请选择版本">
+					<option v-for="(i, t) of versions" value={{i}}>{{t.version}} - {{t.dateTime}}</option>
 				</select>
 			</div>
 			<div slot="extend-nav" class='form-group'>
@@ -20,7 +20,7 @@
 
 			</div>
 			<label class="showmap" slot="extend-nav"><input type="checkbox" v-model="show"></input>显示热力图</label>
-			<button slot="extend-nav" type='button' class='btn btn-primary export'>导出</button>
+			<button slot="extend-nav" type='button' class='btn btn-primary export' @click="exportTable">导出</button>
 
 		<div slot="data-table">
 			<table class="table table-hover">
@@ -35,11 +35,11 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>{{'-'}}</td>
-						<td>{{'-'}}</td>
-						<td>{{'-'}}</td>
-						<td>{{'-'}}</td>
-						<td>{{'-'}}</td>
+						<td>{{tableData.dataTime || '-'}}</td>
+						<td>{{tableData.uv || '-'}}</td>
+						<td>{{tableData.pv || '-'}}</td>
+						<td>{{tableData.hits || '-'}}</td>
+						<td>{{tableData.rate || '-'}}</td>
 					</tr>
 				</tbody>
 			</table>
@@ -53,7 +53,8 @@
 	const $ = require('jQuery');
 	const utils = require('utils');
 	const api = require('./api');
-	var DatePicker = require('../../common/datePicker.vue');
+	// const api = require('./mock/api');
+	const DatePicker = require('../../common/datePicker.vue');
 	const visualbp = require('./visualbp.vue');
 	const Heatmap = require('./lib/heatmap.js');
 	const heatmapFactory =  new Heatmap({
@@ -97,7 +98,8 @@
 					p: 1
 				}],
 				versions: [],
-				version: '',
+				version: null,
+				tableData: {},
 				datatype: 'pv',
 				dom: {
 					iframe: null,
@@ -137,13 +139,12 @@
 		ready() {
 			this.pageComponentsData.trigger = !this.pageComponentsData.trigger;
 			api.getHeatVersions(this.$refs.visual.bpConfig).then((res) => {
-				this.versions = res;
+				this.versions = res.map(x => ({...x, dateTime: utils.formatDate(new Date(x.dateTime), 'yyyy-MM-dd hh:mm:ss')}));
 			});
 		},
 		events: {
 			'visualbp_loaded': function (config) {
-				let heatconfig = {...config, dateTime: this.argvs.endTime};
-				this.init(heatconfig).then(() => {
+				this.init().then(() => {
 					let body = this.dom.body[0];
 					utils.observeDOMInserted(body, (mutations) => {
 						if(mutations[0].target !== body && !mutations[0].target.id.includes('heatmap')) {
@@ -162,9 +163,8 @@
 			},
 			'search_clicked':  function (config) {
 				this.loading.show = true;
-				let heatconfig = {...config, dateTime: this.argvs.endTime};
 				this.destroyCanvas();
-				this.init(heatconfig).then(() => {
+				this.init().then(() => {
 					this.loading.show = false;
 				}).catch(() => {
 					this.loading.show = false;
@@ -172,14 +172,47 @@
 			}
 		},
 		methods: {
-			init(config) {
-				return api.getHeatData(config).then((data) => {
-					// this.data = data;
-					this.rawData = data;
-					this.generateCanvas(data);
-					this.showTip();
-					window.requestAnimationFrame(this.freshCanvas);
-				});
+			init() {
+				// 表格
+				let options;
+				if(options = this.checkParams()) {
+					api.getHeatTable(options).then((res) => {
+						this.tableData = res;
+					});
+					return api.getHeatData(options).then((data) => {
+						// this.data = data;
+						this.rawData = data;
+						this.generateCanvas(data);
+						this.showTip();
+						window.requestAnimationFrame(this.freshCanvas);
+					});
+				} else {
+					return Promise.reject();
+				}
+			},
+			checkParams() {
+				var $ele;
+				if(!this.version) {
+					$ele =  $('#version');
+				} else if (!this.$refs.visual.bpConfig.pageUrl) {
+					$ele =  $('#page-url');
+				}
+				if($ele) {
+					$ele.popover('show');
+					setTimeout(function () { $ele.popover("destroy"); }, 1000);
+					return false;
+				}
+				return {...this.$refs.visual.bpConfig, 
+						...this.versions[this.version],
+						startTime: this.argvs.startTime + ' 00:00:00',
+						endTime: this.argvs.endTime + ' 23:59:59'
+					};
+			},
+			exportTable() {
+				let options;
+				if(options = this.checkParams()) {
+					api.exportHeatTable(options).then();
+				}
 			},
 			showTip() {
 				// bind event
