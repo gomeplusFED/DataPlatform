@@ -1175,7 +1175,7 @@ module.exports = {
             "Blank",
             "unique_order_num",
             // "fee",
-            "is_rebate_item_fee",
+            "item_fee",
 
             "unique_shop_num",
             "unique_user_num",
