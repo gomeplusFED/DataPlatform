@@ -523,7 +523,7 @@ var api = {
 		console.log(data);
 	},
 	getHeatTable(data) {
-        console.log(data);
+		console.log(data);
 		return Promise.resolve({
 			"msg": "SUCCESS",
 			"code": "200",
@@ -549,6 +549,15 @@ var api = {
 				return Promise.reject('暂无热点信息');
 			}
 		}).catch(errHandler);
+	},
+	getSiteList() {
+		return [{
+			name: '国美PLUS站',
+			url: 'https://www.gomeplus.com'
+		}, {
+			name: '国美在线PC',
+			url: 'https://www.gome.com.cn/'
+		}]
 	},
 	getHeatVersions() {
 		return Promise.resolve({
@@ -588,6 +597,70 @@ var api = {
 				return data;
 			} else {
 				return Promise.reject('暂无热点信息');
+			}
+		}).catch(errHandler);
+	},
+	runUpdate() {
+		return Promise.resolve({
+			"data": {
+				"total": 1,
+				"result": ""
+			},
+			"code": "200",
+			"msg": "一键更新任务启动",
+			"iserror": "0"
+		}).then(function(res) {
+			if (res.code !== '200' || res.iserror !== '0') {
+				return Promise.reject('一键更新任务启动失败:' + res.msg);
+			}
+			var data;
+			if (res && (data = res.data) && data.total) {
+				return data;
+			} else {
+				return Promise.reject('一键更新任务启动失败:' + res.msg);
+			}
+		}).catch(errHandler);
+	},
+	getLogs(data) {
+		console.log(data);
+		return Promise.resolve({
+			"msg": "成功",
+			"code": "200",
+			"data": {
+				"result": [{
+					"id": 12,
+					"website": "https://www.gomeplus.com",
+					"version": "1.0",
+					"state": "FINISH",
+					"updateTime": 1488855386000,
+					"userInfo": "",
+					"content": "",
+					"platform": "PC"
+				}, {
+					"id": 23,
+					"website": "https://www.gomeplus.com",
+					"version": "3.0",
+					"state": "FINISH",
+					"updateTime": 1488855386000,
+					"userInfo": "",
+					"content": "",
+					"platform": "PC"
+				}],
+				"total": 2
+			},
+			"iserror": "0"
+		}).then(function(res) {
+			if (res.code !== '200' || res.iserror !== '0') {
+				return Promise.reject('获取日志信息失败：' + res.msg);
+			}
+			var data;
+			if (res && (data = res.data) && (data = data.result)) {
+				return {
+					data,
+					total: res.data.total
+				}
+			} else {
+				return Promise.reject('获取的日志信息为空');
 			}
 		}).catch(errHandler);
 	},

@@ -13,6 +13,15 @@ module.exports = {
 			}
 		}).catch(errHandler);
 	},
+	getSiteList() {
+		return [{
+			name: '国美PLUS站',
+			url: 'https://www.gomeplus.com'
+		},{
+			name: '国美在线PC',
+			url: 'https://www.gome.com.cn/'
+		}]
+	},
 	getLogs(data) {
 		return buildAjax('/point/logs', filterArgs(data, ['platform', 'website', 'version', 'page', 'size'])).then(function(res) {
 			if (res.code !== '200' || res.iserror !== '0') {
@@ -29,5 +38,4 @@ module.exports = {
 			}
 		}).catch(errHandler);
 	}
-
 }
