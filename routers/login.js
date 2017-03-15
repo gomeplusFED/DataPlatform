@@ -262,6 +262,8 @@ module.exports = function(Router) {
                 return next();
             } else if(req.session.userInfo && !req.session.userInfo.isBi) {
                 return res.redirect("/register");
+            } else if(req.session.isLogin && req.session.userInfo && req.session.userInfo.isBi) {
+                return next();
             }
             // var form = req.protocol + '://' + req.get('host') + req.originalUrl;
             res.redirect(env === "pro" ? login.pro : login.test);
