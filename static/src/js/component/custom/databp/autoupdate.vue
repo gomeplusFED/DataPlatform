@@ -9,15 +9,15 @@
 					<option value='H5'>H5</option>
 				</select>
 				<label>站点</label>
-				<select class="form-control inp inpW1" v-model="searchParam.website">
+				<select class="form-control inp inpW1" id="website" data-content="请选择站点" v-model="searchParam.website">
 					<option v-for="site in sites" value={{site.url}}>{{site.name}}</option>
 				</select>
 				<label>版本号</label>
-				<input class="form-control inp inpW2" type="text" placeholder="" v-model="searchParam.version">
-				<button id="btnSearch" class="btn" type="button"  @click="query">查看更新日志</button>
+				<input class="form-control inp inpW2" type="text" placeholder="" id="version" data-content="请输入版本号"  v-model="searchParam.version">
+				<button class="btn" type="button"  @click="queryClick">查看更新日志</button>
 			</li>
 			<li>
-				<button id="btnSearch" class="btn btn-searchLi-top btn-primary" type="button" @click="runUpdate">一键更新</button>
+				<button  class="btn btn-searchLi-top btn-primary" type="button" @click="runUpdate">一键更新</button>
 			</li>
 		</ul> 
 	</div>
@@ -34,11 +34,11 @@
 			</thead>
 			<tbody> 
 				<tr v-for="(i, item) in dataList">
-					<td>{{i + baseIndex}}</td>
-					<td>{{item.pointName}}</td>
-					<td>单击</td>
-					<td title="{{item.type}}">{{item.type === 'block' ? '是' : '否'}}</td>
-					<td title="{{item.pageUrl}}"><a v-if="item.uniquePoint !== '2'" @click="heatmap(item)">{{item.pageUrl}}</a></td>
+					<td>{{item.updateTime | Date 'yyyy-MM-dd hh:mm:ss'}}</td>
+					<td>{{item.version || '-'}}</td>
+					<td>{{item.state === 'FINISH' ? '是' : '否'}}</td>
+					<td title="{{item.userInfo?(item.userInfo.department + item.userInfo.email) : '--'}}">{{item.userInfo.name || '--'}}</td>
+					<td title="{{item.website}}">{{item.website}}</td>
 				</tr>
 				<tr v-show="noData">
 					 <td colspan="5">暂无数据</td>
@@ -57,7 +57,8 @@
 	var store = require('store');
 	var actions = require('actions');
 	var Pagination = require('common/pagination.vue');
-	var api = require('./api');
+	const api = require('./api');
+	// const api = require('./mock/api');
 	var utils = require('utils');
 	var autodatabp = Vue.extend({
 		name: 'bpstats',
@@ -74,12 +75,7 @@
 			return {
 				index: 1,
 				noData: false,
-				sites: [
-					{
-						name: '国美PLUS站',
-						url: 'https://www.gomeplus.com'
-					}
-				],
+				sites: [],
 				paginationConf: {
 					currentPage: 1,     // 当前页
 					totalItems: 0,     // 总条数
@@ -108,6 +104,7 @@
 		ready() {
 			// triger the date picker
 			this.pageComponentsData.trigger = !this.pageComponentsData.trigger;
+			this.sites = api.getSiteList();
 		},
 		route: {
 	        activate: function (transition) {
@@ -116,30 +113,50 @@
 	        }
     	},
 		methods: {
-			runUpdate() {
-				actions.confirm(store, {
-					show: true,
-					title: '更新确认',
-					msg: '确定更新自动埋点吗',
-					apply: () => {
-						api.runUpdate().then(() =>{
-							this.query();
-						});
-						
-					}
-				});
+			checkParams() {
+				var $ele;
+				if(!this.searchParam.website) {
+					$ele =  $('#website');
+				} else if (!this.searchParam.version) {
+					$ele =  $('#version');
+				}
+				if($ele) {
+					$ele.popover('show');
+					setTimeout(function () { $ele.popover("destroy"); }, 1000);
+					return false;
+				}
+				return this.searchParam;
 			},
-			query() {
+			runUpdate() {
+				let options;
+				if(options = this.checkParams()) {
+					options.rootUrl = options.website;
+					actions.confirm(store, {
+						show: true,
+						title: '更新确认',
+						msg: '确定更新自动埋点吗',
+						apply: () => {
+							api.runUpdate(options).then(() =>{
+								this.query(options);
+							});
+						}
+					});
+				}
+
+			},
+			queryClick() {
+				this.paginationConf.currentPage = 1;
+				this.query(this.searchParam);
+			},
+			query(options) {
 				this.loading.show = true;
-				Object.assign(this.searchParam, {
+				Object.assign(options, {
 					// page从0开始
 					page: this.paginationConf.currentPage - 1,
-					size: this.paginationConf.itemsPerPage,
-					startTime: this.startTime,
-					endTime: this.endTime
+					size: this.paginationConf.itemsPerPage
 				});
 				
-				return api.getLogs(this.searchParam).then((res) => {
+				return api.getLogs(options).then((res) => {
 					this.dataList = res.data;
 					if (this.dataList.length === 0) {
 						 this.noData = true;
@@ -153,10 +170,6 @@
 					console.log(err);
 					this.loading.show = false;
 				});
-			},
-			queryClick() {
-				this.paginationConf.currentPage = 1;
-				this.query();
 			}
 		}
 	});
@@ -269,7 +282,7 @@
 	}
 
 	.ntable tr th:nth-last-child(n+2) {
-		width: 150px;
+		width: 180px;
 	}
 	.ntable tr td {
 		text-align: center;
