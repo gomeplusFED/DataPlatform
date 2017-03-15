@@ -1192,7 +1192,7 @@
             [
                 "Blank",
                 "unique_is_rebate_order_num",
-                "is_rebate_fee",
+                "is_rebate_item_fee",
                 "unique_is_rebate_shop_num",
                 "unique_is_rebate_user_num",
                 "is_rebate_merchandise_num",

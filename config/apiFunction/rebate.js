@@ -1071,7 +1071,7 @@ module.exports = {
 
         obj.regist_lv = util.toFixed(obj.unique_rebate_invite_friend_success_user_num, obj.all_register_user_num);
 
-        obj = Deal100(obj , ["is_over_rebate_invite_friend_amount"]);
+        obj.is_over_rebate_invite_friend_amount = (obj.is_over_rebate_invite_friend_amount / 100).toFixed(2);
         return util.toTable([[obj]], data.rows, data.cols);
     },
 
@@ -1190,7 +1190,7 @@ module.exports = {
             "Blank",
             "unique_order_num",
             // "fee",
-            "is_rebate_item_fee",
+            "item_fee",
 
             "unique_shop_num",
             "unique_user_num",
