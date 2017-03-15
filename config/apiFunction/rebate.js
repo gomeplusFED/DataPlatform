@@ -977,6 +977,7 @@ module.exports = {
     //邀请商户分享返利 -- 返利层级分布
     rebate_invitation_02(query , params , sendData){
         // params.plan_type = 1;
+        params.level = orm.not_in(["all"]);
         return params;
     },
     rebate_invitation_02_f(data, query, dates){
@@ -1007,8 +1008,8 @@ module.exports = {
         }
 
         for(let item of source){
-            if(param2[item.level]){
-                Result2[param2[item.level]].value += item[filter_key];
+            if(param2[item.rebate_level]){
+                Result2[param2[item.rebate_level]].value += item[filter_key];
             }
         }
 
@@ -1257,7 +1258,7 @@ module.exports = {
             Table_1_row2 = {};
         data.rows[0].map((item , index) => {
             if(item != "Blank"){
-                Table_1_row2[item] = util.toFixed( ThisOne[item] || 0 , AllOne[Table_Row1[index]] || 0 );
+                Table_1_row2[item] = util.toFixed( Table_1_row1[item] || 0 , AllOne[Table_Row1[index]] || 0 );
             } 
         });
         Table_1_row1["Blank"] = "返利订单";
