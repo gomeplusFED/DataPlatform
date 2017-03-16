@@ -246,7 +246,7 @@
             exportTable() {
                 if (this.checkParams()) {
                     let options = this.extendParams();
-                    api.exportHeatTable(options).then();
+                    api.exportHeatTable(options);
                 }
             },
             showTip() {

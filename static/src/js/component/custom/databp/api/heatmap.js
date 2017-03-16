@@ -1,4 +1,5 @@
-var { filterArgs, buildAjax, extractResult, errHandler } = require('./common');
+var { baseurl, filterArgs, buildAjax, extractResult, errHandler } = require('./common');
+const $ = require('jQuery');
 const commonFilds = ['pageUrl', 'platform', 'startTime', 'endTime', 'version', 'dateTime'];
 module.exports = {
 	getHeatVersions(data) {
@@ -41,7 +42,7 @@ module.exports = {
 		}).catch(errHandler);
 	},
 	exportHeatTable(data) {
-		return buildAjax('/heat/export', filterArgs(data, commonFilds)).catch(errHandler);
+		window.open(baseurl + '/heat/export?' + $.param(filterArgs(data, commonFilds)));
 	},
 	getLocalUrl(data) {
 		return buildAjax('/point/localurl', filterArgs(data, ['originalUrl', 'version', 'platform'])).then(function(res) {
