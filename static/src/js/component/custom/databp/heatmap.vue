@@ -437,11 +437,13 @@
 		watch: {
 			'show': {
 				handler(val) {
-					if(val) {
-						this.dom.heatdiv.show();
-						this.switchCanvas(this.datatype);
-					} else {
-						this.dom.heatdiv.hide();
+					if(this.dom.heatdiv) {
+						if(val) {
+							this.dom.heatdiv.show();
+							this.switchCanvas(this.datatype);
+						} else {
+							this.dom.heatdiv.hide();
+						}
 					}
 				}   
 			},
