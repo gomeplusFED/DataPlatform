@@ -2,7 +2,7 @@
 <div class="heatmap">
 
 	<visualbp :loading.sync='loading' v-ref:visual>
-			<div slot="extend-nav" class='form-group inpW1'>
+			<div slot="extend-nav" class='form-group'>
 				<label>快照版本</label>
 				<select id="version" class="form-control data-type" v-model="version"  data-content="请选择版本">
 					<option v-for="(i, t) of versions" value={{i}}>{{t.version}} - {{t.dateTime}}</option>
@@ -443,14 +443,8 @@
 	margin-right: 15px;
 	margin-bottom: 10px;
 }
-.heatmap .inpW1 {
-	width: 280px;
-}
 .nform-box select {
 	font-size: 12px;
-}
-.heatmap .inpW1 select {
-	min-width: 190px;
 }
 .heatmap .extendNav .data-type {
     display: inline-block;
