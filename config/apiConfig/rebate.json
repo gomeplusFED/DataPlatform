@@ -1408,7 +1408,7 @@
         "rows": [
             [
                 "Number",
-                "shop_name",
+                "merchant_id",
                 "unique_plan_id_num",
                 "unique_is_rebate_merchandise_num",
                 "unique_is_rebate_user_num",
@@ -1492,7 +1492,7 @@
             [
                 "Number",
                 "plan_name",
-                "shop_name",
+                "merchant_id",
                 "rebate_type",
                 "rebate_level",
                 "unique_expect_rebate_user_num",
