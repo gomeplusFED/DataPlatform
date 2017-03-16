@@ -158,8 +158,6 @@ module.exports = (Router) => {
                 category_id : Object.keys(Result),
                 date        : orm.between(query.startTime , query.endTime),
                 day_type    : query.day_type,
-                ver         : 0,
-                channel     : 0,
                 type        : "ALL"
             } , (err , result)=>{
                 let newData = {};
