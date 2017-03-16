@@ -12,7 +12,7 @@ let rows = [
             [
                 "group_num",
                 "group_persons_num",
-                "userin_lv",
+                // "userin_lv",
                 "del_group_num",
                 "all_topic_num",
                 "topic_reply_num"
@@ -36,9 +36,9 @@ let rows = [
             }, {
                 caption: "累计入圈用户数",
                 type: "number"
-            }, {
-                caption: "用户入圈率",
-                type: "number"
+            // }, {
+            //     caption: "用户入圈率",
+            //     type: "number"
             }, {
                 caption: "累计解散圈子数",
                 type: "number"

@@ -1414,7 +1414,7 @@ module.exports = {
         for(let key in param2){
             Result2[param2[key]] = {value:0};
         }
-
+0
         for(let item of source){
             if(param2[item.rebate_level] && item.level == "ALL"){
                 Result2[param2[item.rebate_level]].value += item[filter_key];
