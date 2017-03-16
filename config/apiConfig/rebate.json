@@ -1637,7 +1637,7 @@
             [
                 "Number",
                 "plan_name",
-                "shop_name",
+                "merchant_id",
                 "rebate_type",
                 "rebate_level",
                 "unique_is_rebate_user_num",
