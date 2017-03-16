@@ -101,6 +101,11 @@ module.exports = {
             //     Result[item.key] += item.value;
             // }
         }
+        for(let item of source){
+            if(item.key === "topic_subreply_num") {
+                Result.topic_reply_num += item.value;
+            }
+        }
         Result.topic_praise_num = Result.topic_praise_num || 0;
         Result.topic_collect_num = Result.topic_collect_num || 0;
 
