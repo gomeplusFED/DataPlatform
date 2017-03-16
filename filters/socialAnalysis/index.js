@@ -356,8 +356,6 @@ module.exports = {
             config = {},
             type = "pie";
 
-        console.log(data.first);
-
         var filter_name = {
                 one : {
                     "name" : "圈子数",
@@ -402,7 +400,6 @@ module.exports = {
 
         for(let item of source){
             newData[config[item.category_id]].value += item[filterColumn];
-            console.log(item[filterColumn]);
         }
 
         return [{
