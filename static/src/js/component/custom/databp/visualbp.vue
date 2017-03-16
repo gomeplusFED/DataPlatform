@@ -124,15 +124,21 @@
                 let $iframe = $(iframenode).contents();
                 // 修正重定向
                 let $iframewin = iframenode.contentWindow;
-                let _newurl = $iframewin.$pageUrl;
+                
                 // 修复最后无/
-                if (!_this.bpConfig.convertedUrl) {
-                    if (/^https:\/\/[^\/]+?(\/|\.html)/.exec(_newurl)) {
-                        _this.bpConfig.pageUrl = _newurl;
-                    } else {
-                        host = _this.bpConfig.pageUrl = _newurl + '/';
-                    }
-                }
+				let fullurl;
+				if(_this.bpConfig.convertedUrl) {
+					fullurl = _this.bpConfig.pageUrl;
+				} else {
+					fullurl = $iframewin.$pageUrl;
+				}
+				let host  = /^https?:\/\/[^\/]+?(\/|\.html|\?.+=.+)/.exec(fullurl);
+				if (host) {
+					host = host[0];
+					_this.bpConfig.pageUrl = fullurl;
+				} else {
+					host = _this.bpConfig.pageUrl = fullurl + '/';
+				}
                 _this.bpConfig.platform = $iframewin.$platform;
                 _this.$dispatch('visualbp_loaded', _this.bpConfig);
                 var $head = $iframe.find('head');
