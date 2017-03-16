@@ -45,13 +45,22 @@ module.exports = {
         source = Deal100(source , ["history_expect_rebate_amount" , "history_cancel_is_rebate_fee" , "history_is_over_rebate_order_amount" , "history_cancel_rebate_amount"]);
         let rows = [[]];
         let cols = [[]];
+        const obj = {};
         for(let i = 0, len = data.rows[0].length; i < len; i++) {
             if(i !== 0 && i !== 3 && i !== 5) {
+                obj[data.rows[0][i]] = 0;
                 rows[0].push(data.rows[0][i]);
                 cols[0].push(data.cols[0][i]);
             }
         }
-        return util.toTable([source], rows, cols);
+
+        for(let item of source) {
+            for(let key in obj) {
+                obj[key] += item[key];
+            }
+        }
+
+        return util.toTable([[obj]], rows, cols);
     },
     //返利总览
     rebate_total_02(query , params , sendData){
