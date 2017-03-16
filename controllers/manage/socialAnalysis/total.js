@@ -157,7 +157,7 @@ module.exports = (Router) => {
             }
             req.models.SocialTopicCategoryDistribution.find({
                 category_id : Object.keys(Result),
-                date        : orm.between(query.startTime , query.endTime),
+                date        : util.moment(Date.now() - 24 * 60 * 60 * 1000),
                 day_type    : query.day_type,
                 type        : "ALL"
             } , (err , result)=>{
@@ -190,7 +190,7 @@ module.exports = (Router) => {
                     modelData: [Return],
                     components: {
                         date_picker:{
-                            show: true, 
+                            show: false,
                             defaultData: 7,
                             name : "startTime",
                             endname: "endTime"
