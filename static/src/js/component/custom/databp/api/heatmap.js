@@ -34,9 +34,7 @@ module.exports = {
 			}
 			var data;
 			if (res && (data = res.data) && (data = data.result)) {
-				return {
-					data
-				}
+				return data;
 			} else {
 				return Promise.reject('获取的热力图表格信息为空');
 			}

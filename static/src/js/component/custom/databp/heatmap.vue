@@ -101,7 +101,13 @@
 				}],
 				versions: [],
 				version: null,
-				tableData: {},
+				tableData: {
+					dataTime: null,
+					uv: null,
+					pv: null,
+					hits: null,
+					rate: null
+				},
 				datatype: 'pv',
 				dom: {
 					iframe: null,
@@ -205,7 +211,7 @@
 				// 表格
 				let options = this.extendParams(config);
 				api.getHeatTable(options).then((res) => {
-					this.tableData = res;
+					Object.assign(this.tableData, res);
 				});
 				return api.getHeatData(options).then((data) => {
 					// this.data = data;
@@ -213,7 +219,7 @@
 					this.generateCanvas(data);
 					this.showTip();
 					window.requestAnimationFrame(this.freshCanvas);
-				});
+				}).catch(err => err);
 			},
 			checkParams(bpConfig = this.$refs.visual.bpConfig) {
 				var $ele;
