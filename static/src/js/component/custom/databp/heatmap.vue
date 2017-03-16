@@ -53,6 +53,8 @@
 	const $ = require('jQuery');
 	const utils = require('utils');
 	const api = require('./api');
+	const store = require('store');
+	const actions = require('actions');
 	// const api = require('./mock/api');
 	const DatePicker = require('../../common/datePicker.vue');
 	const visualbp = require('./visualbp.vue');
@@ -143,8 +145,8 @@
 			});
 		},
 		events: {
-			'visualbp_loaded': function (config) {
-				this.init().then(() => {
+			visualbp_loaded(config) {
+				this.init(config).then(() => {
 					let body = this.dom.body[0];
 					utils.observeDOMInserted(body, (mutations) => {
 						if(mutations[0].target !== body && !mutations[0].target.id.includes('heatmap')) {
@@ -161,10 +163,37 @@
 					});
 				});
 			},
-			'search_clicked':  function (config) {
+			will_search(config) {
+				if(this.checkParams(config)) {
+					config.stop = api.getLocalUrl({originalUrl: config.pageUrl,
+						version: this.versions[this.version].version,
+						platform: config.platform
+					}).then((url) => {
+						config.convertedUrl = url;
+						return false;
+					}).catch((err) => {
+						return new Promise((resolve, reject) => {
+							actions.confirm(store, {
+								show: true,
+								title: '确认',
+								msg: '当前页面无有效快照，是否显示最新页面',
+								apply: () => {
+									resolve(false);
+								},
+								cancle: () => {
+									resolve(true);
+								}
+							});
+						});
+					});
+				} else {
+					config.stop = true;
+				}
+			},
+			search_clicked(config) {
 				this.loading.show = true;
 				this.destroyCanvas();
-				this.init().then(() => {
+				this.init(config).then(() => {
 					this.loading.show = false;
 				}).catch(() => {
 					this.loading.show = false;
@@ -172,29 +201,25 @@
 			}
 		},
 		methods: {
-			init() {
+			init(config) {
 				// 表格
-				let options;
-				if(options = this.checkParams()) {
-					api.getHeatTable(options).then((res) => {
-						this.tableData = res;
-					});
-					return api.getHeatData(options).then((data) => {
-						// this.data = data;
-						this.rawData = data;
-						this.generateCanvas(data);
-						this.showTip();
-						window.requestAnimationFrame(this.freshCanvas);
-					});
-				} else {
-					return Promise.reject();
-				}
+				let options = this.extendParams(config);
+				api.getHeatTable(options).then((res) => {
+					this.tableData = res;
+				});
+				return api.getHeatData(options).then((data) => {
+					// this.data = data;
+					this.rawData = data;
+					this.generateCanvas(data);
+					this.showTip();
+					window.requestAnimationFrame(this.freshCanvas);
+				});
 			},
-			checkParams() {
+			checkParams(bpConfig = this.$refs.visual.bpConfig) {
 				var $ele;
 				if(!this.version) {
 					$ele =  $('#version');
-				} else if (!this.$refs.visual.bpConfig.pageUrl) {
+				} else if (!bpConfig.pageUrl) {
 					$ele =  $('#page-url');
 				}
 				if($ele) {
@@ -202,15 +227,18 @@
 					setTimeout(function () { $ele.popover("destroy"); }, 1000);
 					return false;
 				}
-				return {...this.$refs.visual.bpConfig, 
+				return true;
+			},
+			extendParams(bpConfig = this.$refs.visual.bpConfig) {
+				return {...bpConfig, 
 						...this.versions[this.version],
 						startTime: this.argvs.startTime + ' 00:00:00',
 						endTime: this.argvs.endTime + ' 23:59:59'
 					};
 			},
 			exportTable() {
-				let options;
-				if(options = this.checkParams()) {
+				if(this.checkParams()) {
+					let options = this.extendParams();
 					api.exportHeatTable(options).then();
 				}
 			},

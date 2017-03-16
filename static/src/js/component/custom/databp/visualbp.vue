@@ -119,19 +119,24 @@
 				}
 				_this.loading.show = false;
 				let iframenode = this.iframe_node;
+				if(!iframenode) {
+					return false;
+				}
 				let $iframe = $(iframenode).contents();
 
 
 
 				// 修正重定向
 				let $iframewin = iframenode.contentWindow;
+				
 				let _newurl= $iframewin.$pageUrl;
 				// 修复最后无/
-				let host;
-				if((host = _newurl.match(/^https:\/\/[^\/]+?\//)) && (host = host[0])) {
-					_this.bpConfig.pageUrl = _newurl;
-				} else {
-					host = _this.bpConfig.pageUrl = _newurl + '/';
+				if(!_this.bpConfig.convertedUrl) {
+					if(/^https:\/\/[^\/]+?(\/|\.html)/.exec(_newurl)) {
+						_this.bpConfig.pageUrl = _newurl;
+					} else {
+						host = _this.bpConfig.pageUrl = _newurl + '/';
+					}
 				}
 				_this.bpConfig.platform = $iframewin.$platform;
 
@@ -269,10 +274,16 @@
 
 				this.search();
 			},
-			search(forceloading = false) {
+			async search(forceloading = false) {
+				this.bpConfig.stop = false;
+				this.bpConfig.convertedUrl = '';
+				this.$dispatch('will_search', this.bpConfig);
+				if (await this.bpConfig.stop) {
+					return;
+				}
 				this.loading.show = true;
 				this.deadtimer && clearTimeout(this.deadtimer);
-				let rawurl = this.bpConfig.pageUrl;
+				let rawurl = this.bpConfig.convertedUrl || this.bpConfig.pageUrl;
 				var newiframe_url = '/databp/html?m='+this.bpConfig.platform+'&url=' + encodeURIComponent(rawurl);
 				let rawquery = rawurl.split('?')[1];
 				rawquery && (newiframe_url += '&' + rawquery);
@@ -280,7 +291,6 @@
 				if (newiframe_url === this.iframe_url && !forceloading) {
 					this.loading.show = false;
 					this.$dispatch('search_clicked', this.bpConfig);
-					
 				}
 				this.iframe_url = newiframe_url;
 				this.deadtimer = setTimeout(() => {
