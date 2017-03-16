@@ -62,7 +62,7 @@ module.exports = function(Router) {
         req.session.destroy((err) => {
             console.log(err);
         });
-        res.redirect('/login');
+        res.redirect('/register');
     });
 
     Router.post('/login', function(req, res, next) {
