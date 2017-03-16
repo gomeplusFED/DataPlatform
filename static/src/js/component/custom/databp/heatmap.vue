@@ -218,7 +218,7 @@
                     this.generateCanvas(data);
                     this.showTip();
                     window.requestAnimationFrame(this.freshCanvas);
-                }).catch(err => err);
+                });
             },
             checkParams(bpConfig = this.$refs.visual.bpConfig) {
                 var $ele;
