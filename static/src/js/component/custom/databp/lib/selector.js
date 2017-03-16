@@ -213,9 +213,11 @@ UTILS._cssPathStep = function(node, optimized, isTargetNode)
     	result = tmpres;
         // result += ":nth-child(" + (ownIndex + 1) + ")";
     } else if (needsClassNames) {
-        for (var prefixedName in prefixedOwnClassNamesArray)
-        // for (var prefixedName in prefixedOwnClassNamesArray.keySet())
-            result += "." + escapeIdentifierIfNeeded(prefixedOwnClassNamesArray[prefixedName].substr(1));
+        for (var prefixedName in prefixedOwnClassNamesArray){
+            if(prefixedOwnClassNamesArray.hasOwnProperty(prefixedName)) {
+                    result += "." + escapeIdentifierIfNeeded(prefixedOwnClassNamesArray[prefixedName].substr(1));
+            }
+        }
     }
 
     return new UTILS.DOMNodePathStep(result, false);
