@@ -346,10 +346,10 @@ module.exports = {
         Table_3_row1 = Deal100(Table_3_row1 , ["is_rebate_back_merchandise_amount"]);
 
         // Table_1_row1.is_rebate_fee = Table_1_row1.is_rebate_fee.toFixed(2);
-        // Table_1_row1.expect_rebate_amount = Table_1_row1.expect_rebate_amount.toFixed(2);
-        Table_1_row1.cancel_rebate_amount = Table_1_row1.cancel_rebate_amount.toFixed(2);
-        Table_1_row1.is_over_rebate_order_amount = Table_1_row1.is_over_rebate_order_amount.toFixed(2);
-        Table_1_row1.is_rebate_back_merchandise_amount = Table_1_row1.is_rebate_back_merchandise_amount.toFixed(2);
+        // ThisOne.expect_rebate_amount = Table_1_row1.expect_rebate_amount.toFixed(2);
+        // Table_1_row1.cancel_rebate_amount = Table_1_row1.cancel_rebate_amount.toFixed(2);
+        // Table_1_row1.is_over_rebate_order_amount = Table_1_row1.is_over_rebate_order_amount.toFixed(2);
+        // Table_1_row1.is_rebate_back_merchandise_amount = Table_1_row1.is_rebate_back_merchandise_amount.toFixed(2);
 
         return util.toTable([[Table_1_row1 , Table_1_row2] , [ThisOne] , [Table_3_row1
             // , Table_3_row2
@@ -625,14 +625,14 @@ module.exports = {
 
         source = Deal100(source , ["expect_rebate_amount","is_over_rebate_order_amount" , "is_rebate_fee" , "cancel_rebate_amount", "is_rebate_item_fee", "is_over_rebate_invite_amount"]);
 
-        for(let key of source) {
+        // for(let key of source) {
             // key.expect_rebate_amount = key.expect_rebate_amount.toFixed(2);
-            key.is_over_rebate_order_amount = key.is_over_rebate_order_amount.toFixed(2);
-            key.is_rebate_fee = key.is_rebate_fee.toFixed(2);
-            key.cancel_rebate_amount = key.cancel_rebate_amount.toFixed(2);
-            key.is_rebate_item_fee = key.is_rebate_item_fee.toFixed(2);
+            // key.is_over_rebate_order_amount = key.is_over_rebate_order_amount.toFixed(2);
+            // key.is_rebate_fee = key.is_rebate_fee.toFixed(2);
+            // key.cancel_rebate_amount = key.cancel_rebate_amount.toFixed(2);
+            // key.is_rebate_item_fee = key.is_rebate_item_fee.toFixed(2);
             // key.is_over_rebate_invite_amount = key.is_over_rebate_invite_amount.toFixed(2);
-        }
+        // }
 
         return util.toTable([source] , [rows], [cols] , [count]);
     },
