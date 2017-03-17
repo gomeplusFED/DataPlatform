@@ -345,7 +345,7 @@ module.exports = {
         ThisOne      = Deal100(ThisOne , ["expect_rebate_amount" , "cancel_rebate_amount" , "is_over_rebate_order_amount"]);
         Table_3_row1 = Deal100(Table_3_row1 , ["is_rebate_back_merchandise_amount"]);
 
-        Table_1_row1.is_rebate_fee = Table_1_row1.is_rebate_fee.toFixed(2);
+        // Table_1_row1.is_rebate_fee = Table_1_row1.is_rebate_fee.toFixed(2);
         Table_1_row1.expect_rebate_amount = Table_1_row1.expect_rebate_amount.toFixed(2);
         Table_1_row1.cancel_rebate_amount = Table_1_row1.cancel_rebate_amount.toFixed(2);
         Table_1_row1.is_over_rebate_order_amount = Table_1_row1.is_over_rebate_order_amount.toFixed(2);
@@ -631,7 +631,7 @@ module.exports = {
             key.is_rebate_fee = key.is_rebate_fee.toFixed(2);
             key.cancel_rebate_amount = key.cancel_rebate_amount.toFixed(2);
             key.is_rebate_item_fee = key.is_rebate_item_fee.toFixed(2);
-            key.is_over_rebate_invite_amount = key.is_over_rebate_invite_amount.toFixed(2);
+            // key.is_over_rebate_invite_amount = key.is_over_rebate_invite_amount.toFixed(2);
         }
 
         return util.toTable([source] , [rows], [cols] , [count]);
