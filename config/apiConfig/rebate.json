@@ -644,7 +644,7 @@
     },
     "1481856183500": {
         "modelName": [
-            "ads2_new_rebate_order_trend"
+            "ads2_new_rebate_order_muiltiple_trend"
         ],
         "date_picker": true,
         "order": [],
