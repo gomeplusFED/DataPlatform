@@ -344,7 +344,13 @@ module.exports = {
         Table_1_row1 = Deal100(Table_1_row1 , ["is_rebate_fee"]);
         ThisOne      = Deal100(ThisOne , ["expect_rebate_amount" , "cancel_rebate_amount" , "is_over_rebate_order_amount"]);
         Table_3_row1 = Deal100(Table_3_row1 , ["is_rebate_back_merchandise_amount"]);
-           
+
+        Table_1_row1.is_rebate_fee = Table_1_row1.is_rebate_fee.toFixed(2);
+        Table_1_row1.expect_rebate_amount = Table_1_row1.expect_rebate_amount.toFixed(2);
+        Table_1_row1.cancel_rebate_amount = Table_1_row1.cancel_rebate_amount.toFixed(2);
+        Table_1_row1.is_over_rebate_order_amount = Table_1_row1.is_over_rebate_order_amount.toFixed(2);
+        Table_1_row1.is_rebate_back_merchandise_amount = Table_1_row1.is_rebate_back_merchandise_amount.toFixed(2);
+
         return util.toTable([[Table_1_row1 , Table_1_row2] , [ThisOne] , [Table_3_row1
             // , Table_3_row2
         ]], [data.rows[0], data.rows[1], rows], [data.cols[0], data.cols[1], cols]);
@@ -448,6 +454,7 @@ module.exports = {
         for(let item of source){
             item.date = util.getDate(item.date);
             item = Deal100(item , ["is_rebate_item_fee"]);
+            item.is_rebate_item_fee = item.is_rebate_item_fee.toFixed(2);
             if(Result[item.date][item.plan_type] != undefined){
                 Result[item.date][item.plan_type] += item[colum];
             }else{
@@ -504,6 +511,8 @@ module.exports = {
 
         for(let item of firstSource){
             item = Deal100(item , ["is_rebate_item_fee" , "is_over_rebate_order_amount"]);
+            item.is_rebate_item_fee = item.is_rebate_item_fee.toFixed(2);
+            item.is_over_rebate_order_amount = item.is_over_rebate_order_amount.toFixed(2);
             if(param1[item.plan_type]){
                  Result1[param1[item.plan_type]].value += item[filter_key];
             }
@@ -615,7 +624,16 @@ module.exports = {
         //TODO 改动end
 
         source = Deal100(source , ["expect_rebate_amount","is_over_rebate_order_amount" , "is_rebate_fee" , "cancel_rebate_amount", "is_rebate_item_fee", "is_over_rebate_invite_amount"]);
-        
+
+        for(let key of source) {
+            key.expect_rebate_amount = key.expect_rebate_amount.toFixed(2);
+            key.is_over_rebate_order_amount = key.is_over_rebate_order_amount.toFixed(2);
+            key.is_rebate_fee = key.is_rebate_fee.toFixed(2);
+            key.cancel_rebate_amount = key.cancel_rebate_amount.toFixed(2);
+            key.is_rebate_item_fee = key.is_rebate_item_fee.toFixed(2);
+            key.is_over_rebate_invite_amount = key.is_over_rebate_invite_amount.toFixed(2);
+        }
+
         return util.toTable([source] , [rows], [cols] , [count]);
     },
     rebate_platformAll_04_selectFilter(req , cb){
@@ -731,6 +749,13 @@ module.exports = {
             "is_rebate_item_fee"
         ]);
 
+        Row.expect_rebate_amount = Row.expect_rebate_amount.toFixed(2);
+        Row.cancel_rebate_amount = Row.cancel_rebate_amount.toFixed(2);
+        Row.is_rebate_fee = Row.is_rebate_fee.toFixed(2);
+        Row.is_over_rebate_order_amount = Row.is_over_rebate_order_amount.toFixed(2);
+        Row.is_rebate_back_merchandise_amount = Row.is_rebate_back_merchandise_amount.toFixed(2);
+        Row.is_rebate_item_fee = Row.is_rebate_item_fee.toFixed(2);
+
         return util.toTable([[Row] , [Row]], [rows, data.rows[1]], [cols, data.cols[1]]);
     },
 
@@ -783,6 +808,8 @@ module.exports = {
         for(let item of source){
             item.date = util.getDate(item.date);
             item = Deal100(item , ["is_rebate_item_fee"]);
+
+            item.is_rebate_item_fee = item.is_rebate_item_fee.toFixed(2);
 
             if(Result[item.date][item.rebate_type] != undefined){
                 Result[item.date][item.rebate_type] += item[filter_key];
@@ -848,6 +875,8 @@ module.exports = {
         }
 
         for(let item of source){
+            item.is_rebate_item_fee = item.is_rebate_item_fee.toFixed(2);
+            item.is_over_rebate_order_amount = item.is_over_rebate_order_amount.toFixed(2);
             if(param1[item.plan_type] && item.level == "ALL"){
              Result1[param1[item.plan_type]].value += item[filter_key];
 
@@ -933,8 +962,10 @@ module.exports = {
         }
 
         for(let item of source){
+            item.is_rebate_item_fee = item.is_rebate_item_fee.toFixed(2);
+            item.is_over_rebate_order_amount = item.is_over_rebate_order_amount.toFixed(2);
             if(param1[item.rebate_type]){
-                Result1[param1[item.rebate_type]].value += item[filter_key];
+                Result1[param1[item.rebate_type]].value += +item[filter_key];
             }
         }
 
@@ -984,6 +1015,8 @@ module.exports = {
         }
 
         for(let item of source){
+            item.is_over_rebate_order_amount = item.is_over_rebate_order_amount.toFixed(2);
+
             item.date = util.getDate(item.date);
             Result[item.date]["1"] = item[filter_key];
         }
@@ -1035,6 +1068,8 @@ module.exports = {
         }
 
         for(let item of source){
+            item.is_rebate_item_fee = item.is_rebate_item_fee.toFixed(2);
+            item.is_over_rebate_order_amount = item.is_over_rebate_order_amount.toFixed(2);
             if(param2[item.rebate_level]){
                 Result2[param2[item.rebate_level]].value += item[filter_key];
             }
@@ -1126,6 +1161,7 @@ module.exports = {
         }
 
         obj = Deal100(obj , ["is_over_rebate_invite_shop_amount"]);
+        obj.is_over_rebate_invite_shop_amount = obj.is_over_rebate_invite_shop_amount.toFixed(2);
         obj.regist_lv = util.toFixed(obj.unique_rebate_invite_shop_success_num , obj.all_enter_shop_num);
         //TODO 改动start
         let rows = [];
@@ -1161,6 +1197,7 @@ module.exports = {
         }
 
         for(let item of source){
+            item.is_over_rebate_invite_amount = item.is_over_rebate_invite_amount.toFixed(2);
             item.date = util.getDate(item.date);
             switch(item.plan_type){
                 case "1":
@@ -1309,6 +1346,14 @@ module.exports = {
         ]);
         ThisOne      = Deal100(ThisOne , ["expect_rebate_amount" , "cancel_rebate_amount" , "is_over_rebate_order_amount" , "plat_rebate_order_amount"]);
         Table_3_row1 = Deal100(Table_3_row1 , ["is_rebate_back_merchandise_amount"]);
+
+        Table_1_row1.is_rebate_item_fee = Table_1_row1.is_rebate_item_fee.toFixed(2);
+        ThisOne.expect_rebate_amount = ThisOne.expect_rebate_amount.toFixed(2);
+        ThisOne.cancel_rebate_amount = ThisOne.cancel_rebate_amount.toFixed(2);
+        ThisOne.is_over_rebate_order_amount = ThisOne.is_over_rebate_order_amount.toFixed(2);
+        ThisOne.plat_rebate_order_amount = ThisOne.plat_rebate_order_amount.toFixed(2);
+        Table_3_row1.is_rebate_back_merchandise_amount = Table_3_row1.is_rebate_back_merchandise_amount.toFixed(2);
+
         //TODO 改动start
         let rows = [];
         let cols = [];
@@ -1361,6 +1406,7 @@ module.exports = {
 
         let colum = query.filter_key;
         for(let item of source){
+            item.is_rebate_fee = item.is_rebate_fee.toFixed(2);
             item.date = util.getDate(item.date);
             if(Result[item.date][item.rebate_type] != undefined){
                 Result[item.date][item.rebate_type] += item[colum];
@@ -1428,6 +1474,8 @@ module.exports = {
         }
 
         for(let item of second){
+            item.is_rebate_item_fee = item.is_rebate_item_fee.toFixed(2);
+            item.is_over_rebate_order_amount = item.is_over_rebate_order_amount.toFixed(2);
             if(param1[item.rebate_type]){
              Result1[param1[item.rebate_type]].value += item[filter_key];
             }
@@ -1441,6 +1489,8 @@ module.exports = {
         }
 0
         for(let item of source){
+            item.is_rebate_item_fee = item.is_rebate_item_fee.toFixed(2);
+            item.is_over_rebate_order_amount = item.is_over_rebate_order_amount.toFixed(2);
             if(param2[item.rebate_level] && item.level == "ALL"){
                 Result2[param2[item.rebate_level]].value += item[filter_key];
             }
@@ -1515,6 +1565,10 @@ module.exports = {
                 "plat_rebate_order_amount"]);
 
         for(let item of source){
+            item.is_rebate_fee = item.is_rebate_fee.toFixed(2);
+            item.expect_rebate_amount = item.expect_rebate_amount.toFixed(2);
+            item.is_over_rebate_order_amount = item.is_over_rebate_order_amount.toFixed(2);
+            item.plat_rebate_order_amount = item.plat_rebate_order_amount.toFixed(2);
             item.unique_is_rebate_order_num = item.unique_is_rebate_order_num + " / " + item.unique_order_num;
             item.is_rebate_fee = item.is_rebate_fee + " / " + item.fee;
         }
@@ -1759,7 +1813,15 @@ module.exports = {
         });
 
         source = Deal100(source , ["expect_rebate_amount", "is_over_rebate_order_amount", "cancel_rebate_amount",
-            "is_rebate_fee", "cancel_rebate_amount", "is_rebate_item_fee"]);
+            "is_rebate_fee", "is_rebate_item_fee"]);
+
+        for(let item of source) {
+            item.expect_rebate_amount = item.expect_rebate_amount.toFixed(2);
+            item.is_over_rebate_order_amount = item.is_over_rebate_order_amount.toFixed(2);
+            item.cancel_rebate_amount = item.cancel_rebate_amount.toFixed(2);
+            item.is_rebate_fee = item.is_rebate_fee.toFixed(2);
+            item.is_rebate_item_fee = item.is_rebate_item_fee.toFixed(2);
+        }
 
         return util.toTable([source], data.rows, data.cols , count);
     }
