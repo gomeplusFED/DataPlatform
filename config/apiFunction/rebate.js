@@ -447,7 +447,7 @@ module.exports = {
         let colum = query.filter_key;
         for(let item of source){
             item.date = util.getDate(item.date);
-            item = Deal100(item , ["is_rebate_fee"]);
+            item = Deal100(item , ["is_rebate_item_fee"]);
             if(Result[item.date][item.plan_type] != undefined){
                 Result[item.date][item.plan_type] += item[colum];
             }else{
