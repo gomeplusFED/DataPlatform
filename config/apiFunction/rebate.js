@@ -1401,7 +1401,7 @@ module.exports = {
         source = Deal100(source , ["is_rebate_item_fee"]);
 
         for(let item of second){
-            item.is_rebate_item_fee = item.is_rebate_item_fee.toFixed(2);
+            // item.is_rebate_item_fee = item.is_rebate_item_fee.toFixed(2);
             map[item.flow_code] = item.flow_name;
         }
          
