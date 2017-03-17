@@ -689,6 +689,10 @@ module.exports = {
             case 6:
                 params.rebate_type = [11,12];
         }
+        params.category_id_1 = "ALL";
+        params.category_id_2 = "ALL";
+        params.category_id_3 = "ALL";
+        params.category_id_4 = "ALL";
 
         return params;
     },
