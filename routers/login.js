@@ -22,7 +22,7 @@ var superAdminInfo = {
 
 module.exports = function(Router) {
 
-    Router.get('/register', function(req, res) {
+    Router.get('/secretRegister', function(req, res) {
         if (req.session.isLogin && !req.session.userInfo.isBi) {
             res.redirect('/');
         } else {
