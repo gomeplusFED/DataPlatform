@@ -679,6 +679,17 @@ module.exports = {
     //平台基础返利 ---- 平台基础返利总览
     rebate_platformBase_01(query , params , sendData){
         // params.plan_type = 1;
+        switch(params.plan_type){
+            case 1:
+                params.rebate_type = [1,2];
+                break;
+            case 2:
+                params.rebate_type = [1,2];
+                break;
+            case 6:
+                params.rebate_type = [11,12];
+        }
+
         return params;
     },
     rebate_platformBase_01_f(data, query, dates){
@@ -797,7 +808,17 @@ module.exports = {
     //平台基础返利 ---- 返利层级分布
     rebate_platformBase_03(query , params , sendData){
         // params.plan_type = 1;
-        params.plan_type = 6;
+        // params.plan_type = 6;
+        switch(params.plan_type){
+            case 1:
+                params.rebate_type = [1,2];
+                break;
+            case 2:
+                params.rebate_type = [1,2];
+                break;
+            case 6:
+                params.rebate_type = [11,12];
+        }
         return params;
     },
     rebate_platformBase_03_f(data, query, dates){
