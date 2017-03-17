@@ -544,6 +544,8 @@ module.exports = {
 
         for(let item of secondSource){
             item = Deal100(item , ["is_rebate_item_fee" , "is_over_rebate_order_amount"]);
+            item.is_rebate_item_fee = item.is_rebate_item_fee.toFixed(2);
+            item.is_over_rebate_order_amount = item.is_over_rebate_order_amount.toFixed(2);
             if(param2[item.rebate_level] && item.level != "ALL"){
                 Result3[param2[item.rebate_level]][item.level] += +item[filter_key];
             }
