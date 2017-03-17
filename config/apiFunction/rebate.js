@@ -751,7 +751,7 @@ module.exports = {
 
         Row.expect_rebate_amount = Row.expect_rebate_amount.toFixed(2);
         Row.cancel_rebate_amount = Row.cancel_rebate_amount.toFixed(2);
-        Row.is_rebate_fee = Row.is_rebate_fee.toFixed(2);
+        // Row.is_rebate_fee = Row.is_rebate_fee.toFixed(2);
         Row.is_over_rebate_order_amount = Row.is_over_rebate_order_amount.toFixed(2);
         Row.is_rebate_back_merchandise_amount = Row.is_rebate_back_merchandise_amount.toFixed(2);
         Row.is_rebate_item_fee = Row.is_rebate_item_fee.toFixed(2);
