@@ -732,7 +732,7 @@ module.exports = {
     rebate_platformBase_02(query , params , sendData){
         // params.plan_type = 1;
 
-        params.plan_type = 6;
+        // params.plan_type = 6;
         switch(params.plan_type){
             case 1:
                 params.rebate_type = [1,2];
