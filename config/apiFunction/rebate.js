@@ -782,7 +782,7 @@ module.exports = {
 
         for(let item of source){
             item.date = util.getDate(item.date);
-            item = Deal100(item , ["is_over_rebate_order_amount"]);
+            item = Deal100(item , ["is_rebate_item_fee"]);
 
             if(Result[item.date][item.rebate_type] != undefined){
                 Result[item.date][item.rebate_type] += item[filter_key];
