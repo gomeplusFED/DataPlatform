@@ -56,7 +56,7 @@ module.exports = {
 
         for(let item of source) {
             for(let key in obj) {
-                obj[key] += item[key];
+                obj[key] += +item[key];
             }
         }
 
@@ -173,14 +173,14 @@ module.exports = {
             item = Deal100(item , ["expect_rebate_amount" , "is_over_rebate_order_amount"]);
             if(item.plan_type == 3){
                 //商家
-                newData["商家返利"].value += item.expect_rebate_amount;
-                newData2["商家返利"].value += item.is_over_rebate_order_amount;
+                newData["商家返利"].value += +item.expect_rebate_amount;
+                newData2["商家返利"].value += +item.is_over_rebate_order_amount;
 
                 newData["商家返利"].value = util.numberLeave(newData["商家返利"].value , 2);
                 newData2["商家返利"].value = util.numberLeave(newData2["商家返利"].value , 2);
             }else{
-                newData["平台返利"].value += item.expect_rebate_amount;
-                newData2["平台返利"].value += item.is_over_rebate_order_amount;
+                newData["平台返利"].value += +item.expect_rebate_amount;
+                newData2["平台返利"].value += +item.is_over_rebate_order_amount;
 
                 newData["平台返利"].value = util.numberLeave(newData["平台返利"].value , 2);
                 newData2["平台返利"].value = util.numberLeave(newData2["平台返利"].value , 2);
@@ -456,7 +456,7 @@ module.exports = {
             item = Deal100(item , ["is_rebate_item_fee"]);
             item.is_rebate_item_fee = item.is_rebate_item_fee.toFixed(2);
             if(Result[item.date][item.plan_type] != undefined){
-                Result[item.date][item.plan_type] += item[colum];
+                Result[item.date][item.plan_type] += +item[colum];
             }else{
                 continue;
             }
@@ -514,7 +514,7 @@ module.exports = {
             item.is_rebate_item_fee = item.is_rebate_item_fee.toFixed(2);
             item.is_over_rebate_order_amount = item.is_over_rebate_order_amount.toFixed(2);
             if(param1[item.plan_type]){
-                 Result1[param1[item.plan_type]].value += item[filter_key];
+                 Result1[param1[item.plan_type]].value += +item[filter_key];
             }
         }
 
@@ -526,7 +526,7 @@ module.exports = {
         for(let item of secondSource){
             item = Deal100(item , ["is_rebate_item_fee" , "is_over_rebate_order_amount"]);
             if(param2[item.rebate_level] && item.level == "ALL"){
-                Result2[param2[item.rebate_level]].value += item[filter_key];
+                Result2[param2[item.rebate_level]].value += +item[filter_key];
             }
         }
 
@@ -545,7 +545,7 @@ module.exports = {
         for(let item of secondSource){
             item = Deal100(item , ["is_rebate_item_fee" , "is_over_rebate_order_amount"]);
             if(param2[item.rebate_level] && item.level != "ALL"){
-                Result3[param2[item.rebate_level]][item.level] += item[filter_key];
+                Result3[param2[item.rebate_level]][item.level] += +item[filter_key];
             }
         }
            
@@ -812,7 +812,7 @@ module.exports = {
             item.is_rebate_item_fee = item.is_rebate_item_fee.toFixed(2);
 
             if(Result[item.date][item.rebate_type] != undefined){
-                Result[item.date][item.rebate_type] += item[filter_key];
+                Result[item.date][item.rebate_type] += +item[filter_key];
             }
         }
         
@@ -878,7 +878,7 @@ module.exports = {
             item.is_rebate_item_fee = item.is_rebate_item_fee.toFixed(2);
             item.is_over_rebate_order_amount = item.is_over_rebate_order_amount.toFixed(2);
             if(param1[item.plan_type] && item.level == "ALL"){
-             Result1[param1[item.plan_type]].value += item[filter_key];
+             Result1[param1[item.plan_type]].value += +item[filter_key];
 
              Result1[param1[item.plan_type]].value = util.numberLeave( Result1[param1[item.plan_type]].value , 2 );
             }
@@ -1071,7 +1071,7 @@ module.exports = {
             item.is_rebate_item_fee = item.is_rebate_item_fee.toFixed(2);
             item.is_over_rebate_order_amount = item.is_over_rebate_order_amount.toFixed(2);
             if(param2[item.rebate_level]){
-                Result2[param2[item.rebate_level]].value += item[filter_key];
+                Result2[param2[item.rebate_level]].value += +item[filter_key];
             }
         }
 
@@ -1201,15 +1201,15 @@ module.exports = {
             item.date = util.getDate(item.date);
             switch(item.plan_type){
                 case "1":
-                Result[item.date]["one"] = item[filter_key];
+                Result[item.date]["one"] = +item[filter_key];
                 break;
 
                 case "2":
-                Result[item.date]["two"] = item[filter_key];
+                Result[item.date]["two"] = +item[filter_key];
                 break;
 
                 case "5":
-                Result[item.date]["three"] = item[filter_key];
+                Result[item.date]["three"] = +item[filter_key];
                 break;
             }
         }
@@ -1390,9 +1390,10 @@ module.exports = {
             second = data.second.data[0],
             map = {}, Result = {};
 
-        source = Deal100(source , ["is_rebate_fee"]);
+        source = Deal100(source , ["is_rebate_item_fee"]);
 
         for(let item of second){
+            item.is_rebate_item_fee = item.is_rebate_item_fee.toFixed(2);
             map[item.flow_code] = item.flow_name;
         }
          
@@ -1409,7 +1410,7 @@ module.exports = {
             item.is_rebate_fee = item.is_rebate_fee.toFixed(2);
             item.date = util.getDate(item.date);
             if(Result[item.date][item.rebate_type] != undefined){
-                Result[item.date][item.rebate_type] += item[colum];
+                Result[item.date][item.rebate_type] += +item[colum];
             }
         }
            
@@ -1477,7 +1478,7 @@ module.exports = {
             item.is_rebate_item_fee = item.is_rebate_item_fee.toFixed(2);
             item.is_over_rebate_order_amount = item.is_over_rebate_order_amount.toFixed(2);
             if(param1[item.rebate_type]){
-             Result1[param1[item.rebate_type]].value += item[filter_key];
+             Result1[param1[item.rebate_type]].value += +item[filter_key];
             }
         }
 
