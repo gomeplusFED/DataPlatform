@@ -717,7 +717,7 @@ module.exports = {
 
         for(let item of source){
             for(let key of Keys){
-                Row[key] += item[key];
+                Row[key] += +item[key];
             }
         }
 
