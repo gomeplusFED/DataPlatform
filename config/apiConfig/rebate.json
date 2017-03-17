@@ -692,7 +692,7 @@
                 "unique_is_over_rebate_order_num",
                 "unique_is_rebate_shop_num",
                 "unique_is_rebate_merchandise_num",
-                "is_rebate_merchandise_num",
+                "unique_is_rebate_back_merchandise_num",
                 "is_rebate_back_merchandise_num"
             ],
             [
