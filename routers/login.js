@@ -234,6 +234,14 @@ module.exports = function(Router) {
         }
     });
 
+    Router.get("/", (req, res, next) => {
+        if(req.session.isLogin && req.session.userInfo && req.session.userInfo.isBi) {
+            res.redirect(env === "pro" ? login.pro : login.test);
+        } else {
+            next();
+        }
+    });
+
     Router.get(/^((?!\/dist).)*$/, function(req, res, next) {
         const query = req.query;
         if(query.filter_bi_time && query.filter_bi_key) {
