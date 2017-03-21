@@ -235,7 +235,7 @@ module.exports = function(Router) {
     });
 
     Router.get("/", (req, res, next) => {
-        if(req.session.isLogin && req.session.userInfo && req.session.userInfo.isBi) {
+        if(req.originalUrl === "/" && req.session.isLogin && req.session.userInfo && req.session.userInfo.isBi) {
             res.redirect(env === "pro" ? login.pro : login.test);
         } else {
             next();
