@@ -68,6 +68,7 @@ module.exports = function(Router) {
     Router.post('/login', function(req, res, next) {
         if (req.session.isLogin) {
             res.redirect('/');
+            // next();
         } else {
             //本地要有个数据库
             var email = req.body.email,
@@ -234,13 +235,13 @@ module.exports = function(Router) {
         }
     });
 
-    // Router.get("/", (req, res, next) => {
-    //     if(req.originalUrl === "/" && req.session.isLogin && req.session.userInfo && req.session.userInfo.isBi) {
-    //         res.redirect(env === "pro" ? login.pro : login.test);
-    //     } else {
-    //         next();
-    //     }
-    // });
+    Router.get("/", (req, res, next) => {
+        if(req.originalUrl === "/" && req.session.isLogin && req.session.userInfo && req.session.userInfo.isBi) {
+            res.redirect(env === "pro" ? login.pro : login.test);
+        } else {
+            next();
+        }
+    });
 
     Router.get(/^((?!\/dist).)*$/, function(req, res, next) {
         const query = req.query;
