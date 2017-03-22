@@ -1658,8 +1658,8 @@ module.exports = {
             req.models.ads2_new_rebate_order_shop_info.find({
                 date        : orm.between(query.startTime , query.endTime),
                 day_type    : query.day_type,
-                rebate_type : orm.not_in(["ALL"]),
-                plan_id     : orm.not_in(["ALL"]),
+                rebate_type : "ALL",
+                plan_id     : "ALL",
                 unique_plan_id_num : orm.gt(0)
             } , {
                 limit       : query.limit / 1 || 20,
@@ -1672,8 +1672,8 @@ module.exports = {
             req.models.ads2_new_rebate_order_shop_info.find({
                 date        : orm.between(query.startTime , query.endTime),
                 day_type    : query.day_type,
-                rebate_type : orm.not_in(["ALL"]),
-                plan_id     : orm.not_in(["ALL"]),
+                rebate_type : "ALL",
+                plan_id     : "ALL",
                 unique_plan_id_num : orm.gt(0)
             }).count((err , data) => {
                 ep.emit("two" , data);
