@@ -1090,8 +1090,6 @@ module.exports = {
         }
 
         for(let item of source){
-            item.is_rebate_item_fee = item.is_rebate_item_fee.toFixed(2);
-            item.is_over_rebate_order_amount = item.is_over_rebate_order_amount.toFixed(2);
             if(param2[item.rebate_level]){
                 Result2[param2[item.rebate_level]].value += +item[filter_key];
             }
@@ -1112,6 +1110,19 @@ module.exports = {
         for(let item of source){
             if(param2[item.rebate_level]){
                 Result3[param2[item.rebate_level]][item.level] += item[filter_key];
+            }
+        }
+
+        if(filter_key === "is_rebate_item_fee" || filter_key === "is_over_rebate_order_amount") {
+            for(let key in Result2) {
+                Result2[key].value = Result2[key].value.toFixed(2);
+            }
+            for(let key in Result3) {
+                for(let k in Result3[key]) {
+                    if(Result3[key][k] !== "-") {
+                        Result3[key][k] = Result3[key][k].toFixed(2);
+                    }
+                }
             }
         }
            
