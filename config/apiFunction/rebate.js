@@ -991,8 +991,6 @@ module.exports = {
         }
 
         for(let item of source){
-            item.is_rebate_item_fee = item.is_rebate_item_fee.toFixed(2);
-            item.is_over_rebate_order_amount = item.is_over_rebate_order_amount.toFixed(2);
             if(param1[item.rebate_type]){
                 Result1[param1[item.rebate_type]].value += +item[filter_key];
             }
@@ -1009,7 +1007,16 @@ module.exports = {
                 Result3[param1[item.rebate_type]].value += item[filter_key];
             }
         }
-           
+
+        if(filter_key === "is_rebate_item_fee" || filter_key === "is_over_rebate_order_amount") {
+            for(let key in Result1) {
+                Result1[key].value = Result1[key].value.toFixed(2);
+            }
+            for(let key in Result3) {
+                Result3[key].value = Result3[key].value.toFixed(2);
+            }
+        }
+
         return [{
             type : "pie",
             map : {value:"返利类型占比"},
@@ -1656,9 +1663,9 @@ module.exports = {
                 unique_plan_id_num : orm.gt(0)
             } , {
                 limit       : query.limit / 1 || 20,
-                offset      : query.limit * (query.page - 1) / 1 || 0,
-                order       : ["-unique_is_rebate_order_num"]
-            } , (err , data) => {
+                offset      : query.limit * (query.page - 1) / 1 || 0
+            },
+            ["unique_is_rebate_order_num", "Z"], (err , data) => {
                 ep.emit("one"  , data);
             });
 
