@@ -1881,6 +1881,6 @@ module.exports = {
             item.is_rebate_item_fee = item.is_rebate_item_fee.toFixed(2);
         }
 
-        return util.toTable([source], data.rows, data.cols , count);
+        return util.toTable([source], data.rows, data.cols , [count]);
     }
 }
