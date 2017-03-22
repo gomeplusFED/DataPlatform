@@ -663,7 +663,7 @@
                     "url": "/#!/rebate/platformAll"
                 },
                 {
-                    "key": "1",
+                    "key": "1",f
                     "name": "平台基础返利",
                     "url": "/#!/rebate/platformBase?plan_type=1"
                 },
@@ -845,7 +845,7 @@
                         "value": "商品总金额"
                     },
                     {
-                        "key": "unique_is_over_rebate_order_num",
+                        "key": "unique_is_rebate_order_num",
                         "value": "返利订单数"
                     },
                     {
@@ -885,7 +885,7 @@
                         "value": "商品总金额"
                     },
                     {
-                        "key": "unique_is_over_rebate_order_num",
+                        "key": "unique_is_rebate_order_num",
                         "value": "返利订单数"
                     },
                     {
@@ -965,7 +965,7 @@
                         "value": "商品总金额"
                     },
                     {
-                        "key": "unique_is_over_rebate_order_num",
+                        "key": "unique_is_rebate_order_num",
                         "value": "返利订单数"
                     },
                     {
