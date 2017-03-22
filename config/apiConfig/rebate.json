@@ -663,7 +663,7 @@
                     "url": "/#!/rebate/platformAll"
                 },
                 {
-                    "key": "1",f
+                    "key": "1",
                     "name": "平台基础返利",
                     "url": "/#!/rebate/platformBase?plan_type=1"
                 },
