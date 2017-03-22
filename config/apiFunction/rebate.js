@@ -883,8 +883,6 @@ module.exports = {
         }
 
         for(let item of source){
-            item.is_rebate_item_fee = item.is_rebate_item_fee.toFixed(2);
-            item.is_over_rebate_order_amount = item.is_over_rebate_order_amount.toFixed(2);
             if(param1[item.plan_type] && item.level == "ALL"){
              Result1[param1[item.plan_type]].value += +item[filter_key];
 
@@ -921,6 +919,22 @@ module.exports = {
             if(param2[item.rebate_level] && item.level != "ALL"){
                 Result3[param2[item.rebate_level]][item.level] += item[filter_key];
                 Result3[param2[item.rebate_level]][item.level] = util.numberLeave( Result3[param2[item.rebate_level]][item.level] , 2 );
+            }
+        }
+
+        if(filter_key === "is_rebate_item_fee" || filter_key === "is_over_rebate_order_amount") {
+            for(let key in Result1) {
+                Result1[key].value = Result1[key].value.toFixed(2);
+            }
+            for(let key in Result2) {
+                Result2[key].value = Result2[key].value.toFixed(2);
+            }
+            for(let key in Result3) {
+                for(let k in Result3[key]) {
+                    if(Result3[key][k] !== "-") {
+                        Result3[key][k] = Result3[key][k].toFixed(2);
+                    }
+                }
             }
         }
            
