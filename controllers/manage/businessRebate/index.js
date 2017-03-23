@@ -570,11 +570,7 @@ module.exports = (Router) => {
             let source = data.first.data,
                 array  = data.first.count,
                 second = data.second.data[0],
-                count  = 0;
-
-            if(array.length > 0) {
-                count = array[0].count;
-            }
+                count  = array.length;
 
             // count = count > 50 ? 50 : count;
 
@@ -642,12 +638,16 @@ module.exports = (Router) => {
 
             // const rebate_type = query.rebate_type;
             const rebate_type = query.rebate_type.split(",");
-            const array = [];
-            for(let key of rebate_type) {
-                array.push("rebate_type=?");
-                params.push(key);
+            let string = "rebate_type in (";
+            for(let i = 0, len = rebate_type.length; i<len; i++) {
+                if(i === len - 1) {
+                    string += "?)"
+                } else {
+                    string += "?,";
+                }
+                params.push(rebate_type[i]);
             }
-            config.push(array.join(" or "));
+            config.push(string);
             if(isCount) {
                 let sql = `SELECT COUNT(*) count FROM ads2_new_rebate_order_shop_info WHERE ${config.join(" AND ")} 
                 GROUP BY plan_name, rebate_type, rebate_level`;
