@@ -128,7 +128,8 @@ var bpinfo = Vue.extend({
 				pageUrl: '',
 				selector: '',
 				privateParam: '',
-				publicParam: ''
+				publicParam: '',
+				version: ''
 			},
 			mask: false,
 			infopos: {
@@ -251,6 +252,7 @@ var bpinfo = Vue.extend({
 						_this.config[key] = data[key];
 					}
 				}
+				_this.config.version = data.version || '';
 				// show the config window
 				_this.publicBpStr = data.publicParam;
 				_this.privateBpStr = data.privateParam;
