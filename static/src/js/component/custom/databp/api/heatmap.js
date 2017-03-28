@@ -15,6 +15,19 @@ module.exports = {
 			}
 		}).catch(errHandler);
 	},
+	getLatestVersions(data) {
+		return buildAjax('/point/latestversion', filterArgs(data, ['platform'])).then(function(res) {
+			if (res.code !== '200' || res.iserror !== '0') {
+				return Promise.reject('获取最新版本信息失败：' + res.msg);
+			}
+			var data;
+			if (res && (data = res.data) && (data = data.result)) {
+				return data;
+			} else {
+				return Promise.reject('暂无最新版本信息');
+			}
+		}).catch(errHandler);
+	},
 	getHeatData(data) {
 		return buildAjax('/heat', filterArgs(data, commonFilds)).then(function(res) {
 			if (res.code !== '200' || res.iserror !== '0') {

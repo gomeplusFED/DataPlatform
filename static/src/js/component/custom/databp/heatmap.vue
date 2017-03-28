@@ -5,7 +5,7 @@
 			<div slot="extend-nav" class='form-group'>
 				<label>快照版本</label>
 				<select id="version" class="form-control data-type" v-model="version"  data-content="请选择版本">
-					<option v-for="(i, t) of versions" value={{i}}>{{t.version}} - {{t.dateTime}}</option>
+					<option v-for="(i, t) of versions" value={{i}} :selected="t.version === version ? 'selected' : ''">{{t.version}} - {{t.dateTime}}</option>
 				</select>
 			</div>
 			<div slot="extend-nav" class='form-group'>
@@ -142,10 +142,14 @@
         },
         ready() {
             this.pageComponentsData.trigger = !this.pageComponentsData.trigger;
-            api.getHeatVersions(this.$refs.visual.bpConfig).then((res) => {
+            let config = this.$refs.visual.bpConfig;
+            api.getHeatVersions(config).then((res) => {
                 this.versions = res.map(x => ({ ...x,
                     dateTime: utils.formatDate(new Date(x.dateTime), 'yyyy-MM-dd hh:mm:ss')
                 }));
+                api.getLatestVersions(config).then(ver => {
+                    this.version = ver;
+                })
             });
         },
         events: {
