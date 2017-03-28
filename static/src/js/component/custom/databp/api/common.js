@@ -1,7 +1,7 @@
-var store = require('store');
-var actions = require('actions');
-var $ = require('jQuery');
-const baseurl = window.location.href.startsWith('http://bi.intra') ?
+const store = require('store');
+const actions = require('actions');
+const $ = require('jQuery');
+export const baseurl = window.location.href.startsWith('http://bi.intra') ?
 	'http://api.point.bi.pro.gomeplus.com/bomber-pie' : 'http://api.point.bi.pre.gomeplus.com/bomber-pie'
 // 请求失败 重试一次
 const RETRY_TIMES = 2;

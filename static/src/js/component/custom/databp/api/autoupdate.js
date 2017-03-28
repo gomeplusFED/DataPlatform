@@ -16,7 +16,7 @@ module.exports = {
 	getSiteList() {
 		return [{
 			name: '国美PLUS站',
-			url: 'https://www.gomeplus.com'
+			url: 'https://www.gomeplus.com/'
 		},{
 			name: '国美在线PC',
 			url: 'https://www.gome.com.cn/'
