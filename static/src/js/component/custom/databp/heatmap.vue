@@ -148,7 +148,7 @@
                     dateTime: utils.formatDate(new Date(x.dateTime), 'yyyy-MM-dd hh:mm:ss')
                 }));
                 api.getLatestVersions(config).then(ver => {
-                    this.version = ver;
+                    this.version = this.versions.findIndex(x => x.version === ver);
                 })
             });
         },
@@ -226,7 +226,7 @@
             },
             checkParams(bpConfig = this.$refs.visual.bpConfig) {
                 var $ele;
-                if (!this.version) {
+                if (this.version == null) {
                     $ele = $('#version');
                 } else if (!bpConfig.pageUrl) {
                     $ele = $('#page-url');
