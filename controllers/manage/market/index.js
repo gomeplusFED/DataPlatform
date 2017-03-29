@@ -395,6 +395,10 @@ module.exports = (Router) => {
                 } else {
                     code = "00001";
                 }
+                const con = {
+                    'A': '商城-APP',
+                    'p': 'Plus-APP'
+                };
                 findCheck(req, findSql, code, (err, c) => {
                     if(err) {
                         returnErr(res, "添加失败");
@@ -415,7 +419,13 @@ module.exports = (Router) => {
                                     if(ee) {
                                         returnErr(res, "添加失败");
                                     } else {
-                                        _log(req, res, [`渠道管理已添加渠道`], "添加", dd);
+                                        _log(
+                                            req,
+                                            res,
+                                            [`渠道管理已添加渠道,站点:${con[body.site]};一级渠道:${body.channel_name};二级渠道:${body.channel_ex_name};三级渠道:${body.site + c}`],
+                                            "添加",
+                                            dd[0]
+                                        );
                                     }
                                 });
                             }
@@ -441,11 +451,7 @@ module.exports = (Router) => {
             if(err) {
                 returnErr(res, "修改失败");
             } else {
-                _log(req, res, ["渠道管理"])
-                res.json({
-                    code: 200,
-                    msg: "修改成功"
-                });
+                _log(req, res, ["渠道管理"], "修改");
             }
         });
     });
@@ -525,7 +531,7 @@ function _log(req, res, content, msg, data) {
                 code : 200,
                 success : true,
                 msg : `${msg}成功`,
-                data: data[0]
+                data: data
             })
         } else {
             res.json({
