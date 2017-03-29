@@ -512,3 +512,27 @@ function findCheck(req, sql, code, cb) {
         }
     });
 }
+
+function _log(req, res, content) {
+    var log = {
+        username : req.session.userInfo.username,
+        date : new Date().getTime(),
+        ip : util.getClientIp(req),
+        content : content.join(";")
+    };
+    req.models.Log.create(log, (err, data) => {
+        if(!err) {
+            res.json({
+                code : 200,
+                success : true,
+                msg : "修改成功"
+            })
+        } else {
+            res.json({
+                code : 400,
+                success : false,
+                msg : "修改失败"
+            })
+        }
+    });
+}
