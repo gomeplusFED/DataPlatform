@@ -147,27 +147,27 @@ var channelManage = Vue.extend({
     methods: {
         getData: function() {
             var _this = this;
-            $.get(`/custome/channelUtils?limit=${this.paginationConf.itemsPerPage}&page=${this.paginationConf.currentPage}`, function(res) {
+            $.get(`/custom/channelUtils?limit=${this.paginationConf.itemsPerPage}&page=${this.paginationConf.currentPage}`, function(res) {
                 _this.paginationConf.totalItems = count
                 _this.list = res.data
             })
         },
         onSubmit: function() {
             var _this = this;
-            $.post('/custome/channelUtilsAdd', this.form, function(res) {
+            $.post('/custom/channelUtilsAdd', this.form, function(res) {
                 _this.list.push(res.data)
             })
         },
         update: function(item) {
             var _this = this;
-            $.post('/custome/channelUtilsUpdate', this.form, function(res) {
+            $.post('/custom/channelUtilsUpdate', this.form, function(res) {
                 _this.update = false
             })
         },
         delete: function(id) {
             var _this = this;
             if (confirm('是否确认删除')) {
-                $.get('/custome/channelUtilsDelete?id=' + id, function(res) {
+                $.get('/custom/channelUtilsDelete?id=' + id, function(res) {
                     _this.list.splice(_this.list.findIndex(function(x){return x.id === id}), 1)
                 })
             }
