@@ -35,11 +35,7 @@ module.exports = {
             view: "/custom/channelManage",
             path: "/custom/channelManage",
             display: true,
-            defaultData: [{
-                type: "table",
-                title: "",
-                query_api: ""
-            }]
+            defaultData: []
         };
     }
 };
