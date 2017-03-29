@@ -8,6 +8,11 @@ var api = require("../../../base/main"),
     moment = require("moment"),
     util = require("../../../utils");
 
+const con = {
+    'A': '商城-APP',
+    'p': 'Plus-APP'
+};
+
 module.exports = (Router) => {
 
     Router = new api(Router,{
@@ -395,10 +400,6 @@ module.exports = (Router) => {
                 } else {
                     code = "00001";
                 }
-                const con = {
-                    'A': '商城-APP',
-                    'p': 'Plus-APP'
-                };
                 findCheck(req, findSql, code, (err, c) => {
                     if(err) {
                         returnErr(res, "添加失败");
@@ -422,7 +423,7 @@ module.exports = (Router) => {
                                         _log(
                                             req,
                                             res,
-                                            [`渠道管理已添加渠道,站点:${con[body.site]};一级渠道:${body.channel_name};二级渠道:${body.channel_ex_name};三级渠道:${body.site + c}`],
+                                            [`渠道管理工具添加渠道:站点:${con[body.site]};一级渠道:${body.channel_name};二级渠道:${body.channel_ex_name};三级渠道:${body.site + c}`],
                                             "添加",
                                             dd[0]
                                         );
@@ -447,11 +448,24 @@ module.exports = (Router) => {
             values.push(body[key]);
         }
         const sql = `update channel_util set ${a.join(",")} where id=${body.id}`;
-        req.models.db1.driver.execQuery(sql, values, (err, data) => {
+        const findSql = `select * from channel_util where id = ${body.id}`;
+        req.models.db1.driver.execQuery(findSql, (err, d) => {
             if(err) {
                 returnErr(res, "修改失败");
             } else {
-                _log(req, res, ["渠道管理"], "修改");
+                req.models.db1.driver.execQuery(sql, values, (err, data) => {
+                    if(err) {
+                        returnErr(res, "修改失败");
+                    } else {
+                        const obj = d[0];
+                        _log(
+                            req,
+                            res,
+                            [`渠道管理工具:一级渠道:${obj.channel_name}修改成${body.channel_name};二级渠道:${obj.channel_ex_name}修改成${body.channel_ex_name}`],
+                            "修改"
+                        );
+                    }
+                });
             }
         });
     });
@@ -460,13 +474,23 @@ module.exports = (Router) => {
     Router = Router.get("/custom/channelUtilsDelete", (req, res, next) => {
         const id = req.query.id;
         const sql = `delete from channel_util where id=?`;
-        req.models.db1.driver.execQuery(sql, [id], (err, data) => {
-            if(err) {
+        const findSql = `select * from channel_util where id=?`;
+        req.models.db1.driver.execQuery(findSql, [id], (e, d) => {
+            if(e) {
                 returnErr(res, "删除失败");
             } else {
-                res.json({
-                    code: 200,
-                    msg: "删除成功"
+                req.models.db1.driver.execQuery(sql, [id], (err, data) => {
+                    if(err) {
+                        returnErr(res, "删除失败");
+                    } else {
+                        const obj = d[0];
+                        _log(
+                            req,
+                            res,
+                            [`渠道管理工具:站点:${con[obj.site]};一级渠道:${obj.channel_name};二级渠道:${obj.channel_ex_name};三级渠道:${obj.channel_ext_name}被删除`],
+                            "删除"
+                        );
+                    }
                 });
             }
         });
@@ -531,7 +555,7 @@ function _log(req, res, content, msg, data) {
                 code : 200,
                 success : true,
                 msg : `${msg}成功`,
-                data: data
+                data
             })
         } else {
             res.json({
