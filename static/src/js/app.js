@@ -64,6 +64,9 @@ router.map({
 			},
 			'/channel': {
 				component: require('./component/custom/channel.vue')
+			},
+			'/channelManage': {
+				component: require('./component/custom/channelManage.vue')
 			}
 		}
 	},

@@ -87,7 +87,7 @@ module.exports = (Router) => {
                 }
                 // 转化静态标签的src和href，使其可以正常访问
 
-                html = html.replace(/(href|src)\s*=\s*"\s*((?!http|\/\/|javascript).+?)\s*"/g, function (m, p1, p2) {
+                html = html.replace(/(href|src)\s*=\s*"\s*((?!http|\/\/|javascript)[^"\s]+?)\s*"/g, function (m, p1, p2) {
                     if (p2.indexOf('.') === 0) {
                         return `${p1}="${trunk}/${p2}"`;
                     } else if (p2.indexOf('/') === 0) {
@@ -97,7 +97,7 @@ module.exports = (Router) => {
                     }
                 });
                 // 移除统计脚本
-                html = html.replace(/<script.+?uba-sdk.+?<\/script>/, '');
+                html = html.replace(/<script[\S]+?uba-sdk[\S]+?<\/script>/, '');
 
                 // 添加自定义脚本
                 let proxytext = `<script>${xhrProxy}('${url}', '${platform}', '${trunk}');</script>`;
