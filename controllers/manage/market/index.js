@@ -439,24 +439,13 @@ module.exports = (Router) => {
             values.push(body[key]);
         }
         const sql = `update channel_util set ${a.join(",")} where id=${body.id}`;
-        const findSql = `select * from channel_util where id = ${body.id}`;
-        req.models.db1.driver.execQuery(findSql, (e, d) => {
-            if(e) {
+        req.models.db1.driver.execQuery(sql, values, (err, data) => {
+            if(err) {
                 returnErr(res, "修改失败");
             } else {
-                if(body.site) {
-                    a.push("url=?");
-                    values.push(`http://shouji.gomeplus.com/kd/${body.site + d[0].code}.html`);
-                }
-                req.models.db1.driver.execQuery(sql, values, (err, data) => {
-                    if(err) {
-                        returnErr(res, "修改失败");
-                    } else {
-                        res.json({
-                            code: 200,
-                            msg: "修改成功"
-                        });
-                    }
+                res.json({
+                    code: 200,
+                    msg: "修改成功"
                 });
             }
         });
