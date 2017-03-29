@@ -332,5 +332,189 @@ module.exports = (Router) => {
         });
     });
 
+    //渠道管理工具-列表
+    Router = Router.get("/custom/channelUtils", (req, res, next) => {
+        const sql = `select * from channel_util limit ?,?;`;
+        const totalSql = `select count(*) count from channel_util`;
+        const query = req.query;
+        const page = query.page || 1;
+        const limit = query.limit || 20;
+        const offset = (page - 1) * limit;
+        req.models.db1.driver.execQuery(sql, [offset, +limit], (err, data) => {
+            if(err) {
+                // console.log(err);
+                res.json({
+                    code: 400,
+                    msg: "查询失败"
+                });
+            } else {
+                req.models.db1.driver.execQuery(totalSql, (e, d) => {
+                    if(e) {
+                        res.json({
+                            code: 400,
+                            msg: "查询失败"
+                        });
+                    } else {
+                        const newData = data.map((x, i) => {
+                            x.number = offset + i + 1;
+                            if(!x.code) {
+                                x.url = `http://shouji.gomeplus.com/kd/${x.channel_ext_name}.html`;
+                            }
+                            return x;
+                        });
+                        res.json({
+                            code: 200,
+                            msg: "查询成功",
+                            data: newData,
+                            count: d[0].count
+                        });
+                    }
+                });
+            }
+        });
+    });
+
+    //渠道管理工具-添加
+    Router = Router.post("/custom/channelUtilsAdd", (req, res, next) => {
+        const body = req.body;
+        const MaxCodeSql = `select * from channel_util order by code desc limit 0,1`;
+        const insertSql = `insert into channel_util(
+            site, 
+            channel_name, 
+            channel_ex_name,
+            channel_ext_name,
+            code,
+            url) values(?, ?, ?, ?, ?, ?)`;
+        const findSql = `select * from channel_util where code = ?`;
+        req.models.db1.driver.execQuery(MaxCodeSql, (err, data) => {
+            if(err) {
+                returnErr(res, "添加失败");
+            } else {
+                let code;
+                if(data.length) {
+                    code = Code(data[0].code);
+                } else {
+                    code = "00001";
+                }
+                findCheck(req, findSql, code, (err, c) => {
+                    if(err) {
+                        returnErr(res, "添加失败");
+                    } else {
+                        req.models.db1.driver.execQuery(insertSql, [
+                            body.site,
+                            body.channel_name,
+                            body.channel_ex_name,
+                            body.site + c,
+                            c,
+                            `http://shouji.gomeplus.com/kd/${body.site + c}.html`
+                        ], (e, d) => {
+                            if(e) {
+                                console.log(e);
+                                returnErr(res, "添加失败");
+                            } else {
+                                res.json({
+                                    code: 200,
+                                    msg: "添加成功"
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    });
+
+    //渠道管理工具-修改
+    Router = Router.post("/custom/channelUtilsUpdate", (req, res, next) => {
+        const body = req.body;
+        const a = [];
+        const values = [];
+        for(let key in body) {
+            a.push(`${key}=?`);
+            values.push(body[key]);
+        }
+        const sql = `update channel_util set ${a.join(",")} where id=${body.id}`;
+        const findSql = `select * from channel_util where id = ${body.id}`;
+        req.models.db1.driver.execQuery(findSql, (e, d) => {
+            if(e) {
+                returnErr(res, "修改失败");
+            } else {
+                if(body.site) {
+                    a.push("url=?");
+                    values.push(`http://shouji.gomeplus.com/kd/${body.site + d[0].code}.html`);
+                }
+                req.models.db1.driver.execQuery(sql, values, (err, data) => {
+                    if(err) {
+                        returnErr(res, "修改失败");
+                    } else {
+                        res.json({
+                            code: 200,
+                            msg: "修改成功"
+                        });
+                    }
+                });
+            }
+        });
+    });
+
+    //渠道管理工具-删除
+    Router = Router.get("/custom/channelUtilsDelete", (req, res, next) => {
+        const id = req.query.id;
+        const sql = `delete from channel_util where id=?`;
+        req.models.db1.driver.execQuery(sql, [id], (err, data) => {
+            if(err) {
+                returnErr(res, "删除失败");
+            } else {
+                res.json({
+                    code: 200,
+                    msg: "删除成功"
+                });
+            }
+        });
+    });
+
     return Router;
 };
+
+function Code(code) {
+    const num = (+code + 1).toString();
+    const len = 5;
+    let str = "";
+    for(let i = num.length; i < len; i++) {
+        str += "0";
+    }
+    return str + num;
+}
+
+function returnErr(res, msg) {
+    res.json({
+        code: 400,
+        msg
+    });
+}
+
+function check(req, sql, code, cb) {
+    req.models.db1.driver.execQuery(sql, [code], (err, data) => {
+        if(err) {
+            cb(err);
+        } else {
+            cb(null, data);
+        }
+    });
+}
+
+function findCheck(req, sql, code, cb) {
+    check(req, sql, code, (err, data) => {
+        let c = code;
+        if(err) {
+            cb(err);
+        } else {
+            if(data.length) {
+                c = Code(code);
+                findCheck(req, sql, c, cb);
+            } else {
+                cb(null, c);
+            }
+        }
+    });
+}

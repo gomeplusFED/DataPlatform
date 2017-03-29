@@ -72,6 +72,16 @@
 // ep.all(["one" , "two" , "three"] , function(...values){
 //     console.log(values);
 // });
-const md5 = require("md5");
-
-console.log(md5("1489549315161pingtai").substr(4,6));
+// const md5 = require("md5");
+//
+// console.log(md5("1489549315161pingtai").substr(4,6));
+console.log(code("123457"));
+function code(code) {
+    const num = (+code + 1).toString();
+    const len = 5;
+    let str = "";
+    for(let i = num.length; i < len; i++) {
+        str += "0";
+    }
+    return str + num;
+}
