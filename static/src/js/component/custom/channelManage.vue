@@ -11,7 +11,7 @@
                                 id="site"
                                 v-model="form.site">
                             <options v-for="(key, value) in options"
-                                     :value="item.key">{{item.value}}</options>
+                                     :value="key">{{value}}</options>
                         </select>
                     </div>
                 </div>
@@ -62,7 +62,7 @@
                             <span>{{options[item.site]}}</span>
                         </td>
                         <td>
-                            <span v-if="!item.update">{{options[item.channel_name]}}</span>
+                            <span v-if="!item.update">{{item.channel_name}}</span>
                             <input v-else
                                    v-model="item.channel_name"
                                    type="text"
@@ -70,7 +70,7 @@
                                    placeholder="">
                         </td>
                         <td>
-                            <span v-if="!item.update">{{options[item.channel_ex_name]}}</span>
+                            <span v-if="!item.update">{{item.channel_ex_name}}</span>
                             <input v-else
                                    v-model="item.channel_ex_name"
                                    type="text"
@@ -80,7 +80,7 @@
                         <td>
                             <button v-if="!item.update"
                                     class="btn btn-primary"
-                                    @click="update(item)">修改</button>
+                                    @click="item.update = true">修改</button>
                             <button v-if="!item.update"
                                     class="btn btn-danger"
                                     @click="delete(item.id)">删除</button>
@@ -149,10 +149,15 @@ var channelManage = Vue.extend({
             var _this = this;
             $.get(`/custom/channelUtils?limit=${this.paginationConf.itemsPerPage}&page=${this.paginationConf.currentPage}`, function(res) {
                 _this.paginationConf.totalItems = count
+                res.data.map(x => x.update = false)
                 _this.list = res.data
             })
         },
         onSubmit: function() {
+            if (!this.form.channel_name || !this.form.channel_ex_name) {
+                alert('请输入一级渠道和二级渠道')
+                return false
+            }
             var _this = this;
             $.post('/custom/channelUtilsAdd', this.form, function(res) {
                 _this.list.push(res.data)
