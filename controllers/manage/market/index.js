@@ -65,9 +65,9 @@ module.exports = (Router) => {
             }, {
                 caption: "活动结束时间",
                 type: "string"
-            //}, {
-            //    caption: "活动备注",
-            //    type: "string"
+                //}, {
+                //    caption: "活动备注",
+                //    type: "string"
             }, {
                 caption: "活动详情"
             }]
@@ -97,7 +97,7 @@ module.exports = (Router) => {
                         for(let item of ships){
                             channel_idArr.push(item.channel_id);
                         }
-    
+
                         req.models.Channel.find({"channel_id":channel_idArr} , (err , result) => {
                             if(err){
                                 res.json({
@@ -125,7 +125,7 @@ module.exports = (Router) => {
                                 data : data[0]
                             });
                         });
-                        
+
                     }
                 });
 
@@ -137,7 +137,7 @@ module.exports = (Router) => {
         const body = JSON.parse(req.body.data),
             activity = {},
             relationship = body.activity_channel_relationship;
-         
+
         for(let key in body) {
             if(key !== "activity_channel_relationship") {
                 activity[key] = body[key];
@@ -340,10 +340,6 @@ module.exports = (Router) => {
         const page = query.page || 1;
         const limit = query.limit || 20;
         const offset = (page - 1) * limit;
-        const con = {
-            "A" : "商城-APP",
-            "P" : "Plus-APP"
-        };
         req.models.db1.driver.execQuery(sql, [offset, +limit], (err, data) => {
             if(err) {
                 // console.log(err);
@@ -364,7 +360,6 @@ module.exports = (Router) => {
                             if(!x.code) {
                                 x.url = `http://shouji.gomeplus.com/kd/${x.channel_ext_name}.html`;
                             }
-                            x.site = con[x.site];
                             return x;
                         });
                         res.json({
@@ -414,13 +409,9 @@ module.exports = (Router) => {
                             `http://shouji.gomeplus.com/kd/${body.site + c}.html`
                         ], (e, d) => {
                             if(e) {
-                                console.log(e);
                                 returnErr(res, "添加失败");
                             } else {
-                                res.json({
-                                    code: 200,
-                                    msg: "添加成功"
-                                });
+                                _log(req, res, ["渠道管理已添加渠道"], "添加");
                             }
                         });
                     }
@@ -431,7 +422,9 @@ module.exports = (Router) => {
 
     //渠道管理工具-修改
     Router = Router.post("/custom/channelUtilsUpdate", (req, res, next) => {
-        const body = req.body;
+        let body = req.body;
+        delete body.update;
+        delete body.number;
         const a = [];
         const values = [];
         for(let key in body) {
@@ -440,6 +433,7 @@ module.exports = (Router) => {
         }
         const sql = `update channel_util set ${a.join(",")} where id=${body.id}`;
         req.models.db1.driver.execQuery(sql, values, (err, data) => {
+            console.log(err);
             if(err) {
                 returnErr(res, "修改失败");
             } else {
@@ -513,7 +507,7 @@ function findCheck(req, sql, code, cb) {
     });
 }
 
-function _log(req, res, content) {
+function _log(req, res, content, msg) {
     var log = {
         username : req.session.userInfo.username,
         date : new Date().getTime(),
@@ -525,13 +519,13 @@ function _log(req, res, content) {
             res.json({
                 code : 200,
                 success : true,
-                msg : "修改成功"
+                msg : `${msg}成功`
             })
         } else {
             res.json({
                 code : 400,
                 success : false,
-                msg : "修改失败"
+                msg : `${msg}失败`
             })
         }
     });

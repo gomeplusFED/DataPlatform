@@ -94,7 +94,7 @@
                         <td>
                             {{item.url}}
                             <span class="glyphicon glyphicon-copy"
-                                  @click="copy"></span>
+                                  @click="copy(item.url)"></span>
                         </td>
                     </tr>
                 </table>
@@ -148,7 +148,7 @@ var channelManage = Vue.extend({
         getData: function() {
             var _this = this;
             $.get(`/custom/channelUtils?limit=${this.paginationConf.itemsPerPage}&page=${this.paginationConf.currentPage}`, function(res) {
-                _this.paginationConf.totalItems = count
+                _this.paginationConf.totalItems = res.count
                 res.data.map(x => x.update = false)
                 _this.list = res.data
             })
@@ -165,8 +165,8 @@ var channelManage = Vue.extend({
         },
         update: function(item) {
             var _this = this;
-            $.post('/custom/channelUtilsUpdate', this.form, function(res) {
-                _this.update = false
+            $.post('/custom/channelUtilsUpdate', item, function(res) {
+                item.update = false
             })
         },
         delete: function(id) {
@@ -182,9 +182,10 @@ var channelManage = Vue.extend({
         },
         copy: function(text) {
             this.copyText = text
-            this.nextTick(function () {
+            this.$nextTick(function () {
                 document.querySelector('.copyText').select()
                 let result = document.execCommand('copy')
+                alert(`复制${result? '成功' : '失败'}`)
             })
         }
     }
