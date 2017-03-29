@@ -410,7 +410,14 @@ module.exports = (Router) => {
                             if(e) {
                                 returnErr(res, "添加失败");
                             } else {
-                                _log(req, res, [`渠道管理已添加渠道`], "添加");
+                                const find = `select * from channel_util where id=${d.insertId}`;
+                                req.models.db1.driver.execQuery(find, (ee, dd) => {
+                                    if(ee) {
+                                        returnErr(res, "添加失败");
+                                    } else {
+                                        _log(req, res, [`渠道管理已添加渠道`], "添加", dd);
+                                    }
+                                });
                             }
                         });
                     }
@@ -505,19 +512,20 @@ function findCheck(req, sql, code, cb) {
     });
 }
 
-function _log(req, res, content, msg) {
+function _log(req, res, content, msg, data) {
     var log = {
         username : req.session.userInfo.username,
         date : new Date().getTime(),
         ip : util.getClientIp(req),
         content : content.join(";")
     };
-    req.models.Log.create(log, (err, data) => {
+    req.models.Log.create(log, (err, da) => {
         if(!err) {
             res.json({
                 code : 200,
                 success : true,
-                msg : `${msg}成功`
+                msg : `${msg}成功`,
+                data: data[0]
             })
         } else {
             res.json({
