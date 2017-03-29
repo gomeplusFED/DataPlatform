@@ -111,6 +111,10 @@
 				// 筛选出当前页面有权限的三级页面
 				this.banSubPages = currentPageDefaultData.banSubPages || [];
 
+				if (currentPageDefaultData.defaultData.length === 0) {
+					return;
+				}
+
 				var query_api = currentPageDefaultData.defaultData[0].query_api;
 				
 				if(query_api.lastIndexOf('Zero') === query_api.length-4) {
