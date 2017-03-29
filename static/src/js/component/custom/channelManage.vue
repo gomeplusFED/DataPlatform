@@ -57,7 +57,7 @@
                     </tr>
                     <tr v-for="(index, item) in list">
                         <td>
-                            {{index}}
+                            {{(paginationConf.currentPage -1) * paginationConf.itemsPerPage + index + 1}}
                         </td>
                         <td>
                             <span>{{options[item.site]}}</span>
