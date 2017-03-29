@@ -105,6 +105,7 @@
                         </td>
                     </tr>
                 </table>
+                <m-pagination :pagination-conf="paginationConf"></m-pagination>
             </div>
     </div>
 </template>
@@ -112,6 +113,7 @@
 <script>
 var Vue = require('Vue');
 var $ = require('jQuery');
+ var Pagination = require('../common/pagination.vue');
 var channelManage = Vue.extend({
     name: 'channelManage',
     data() {
@@ -127,16 +129,35 @@ var channelManage = Vue.extend({
             },
             copyText: '',
             list: [],
+            paginationConf: {
+                currentPage: 1, // 当前页
+				totalItems: 0, // 总条数
+				itemsPerPage: 20, // 每页条数
+				pagesLength: 5, // 显示几页( 1,2,3 / 1,2,3,4,5)
+				onChange: function() {
+
+				}
+            }
         }
     },
+    components: {
+        'm-pagination': Pagination
+    },
+    ready() {
+        this.paginationConf.onChange = this.onPagingChange
+    },
     route: {
-        data: function () {
-            $.get('/custome/channelUtils', (res) => {
-                this.list = res.data
-            })
+        data () {
+            this.getData()
         }
     },
     methods: {
+        getData() {
+            $.get(`/custome/channelUtils?limit=${this.paginationConf.itemsPerPage}&page=${this.paginationConf.currentPage}`, (res) => {
+                this.paginationConf.totalItems = count
+                this.list = res.data
+            })
+        },
         onSubmit() {
             $.post('/custome/channelUtilsAdd', this.form, (res) => {
                 this.list.push(res.data)
@@ -153,6 +174,9 @@ var channelManage = Vue.extend({
                     this.list.splice(this.list.findIndex(x => x.id === id), 1)
                 })
             }
+        },
+        onPagingChange() {
+            this.getData()
         },
         copy(text) {
             this.copyText = text
