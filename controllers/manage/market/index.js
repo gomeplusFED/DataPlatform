@@ -340,6 +340,10 @@ module.exports = (Router) => {
         const page = query.page || 1;
         const limit = query.limit || 20;
         const offset = (page - 1) * limit;
+        const con = {
+            "A" : "商城-APP",
+            "P" : "Plus-APP"
+        };
         req.models.db1.driver.execQuery(sql, [offset, +limit], (err, data) => {
             if(err) {
                 // console.log(err);
@@ -360,6 +364,7 @@ module.exports = (Router) => {
                             if(!x.code) {
                                 x.url = `http://shouji.gomeplus.com/kd/${x.channel_ext_name}.html`;
                             }
+                            x.site = con[x.site];
                             return x;
                         });
                         res.json({
@@ -385,7 +390,7 @@ module.exports = (Router) => {
             channel_ext_name,
             code,
             url) values(?, ?, ?, ?, ?, ?)`;
-        const findSql = `select * from channel_util where code = ?`;
+        const findSql = `select * from channel_util where channel_ext_name = ?`;
         req.models.db1.driver.execQuery(MaxCodeSql, (err, data) => {
             if(err) {
                 returnErr(res, "添加失败");
