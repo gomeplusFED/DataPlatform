@@ -356,7 +356,6 @@ module.exports = (Router) => {
                         });
                     } else {
                         const newData = data.map((x, i) => {
-                            x.number = offset + i + 1;
                             if(!x.code) {
                                 x.url = `http://shouji.gomeplus.com/kd/${x.channel_ext_name}.html`;
                             }
@@ -411,7 +410,7 @@ module.exports = (Router) => {
                             if(e) {
                                 returnErr(res, "添加失败");
                             } else {
-                                _log(req, res, ["渠道管理已添加渠道"], "添加");
+                                _log(req, res, [`渠道管理已添加渠道`], "添加");
                             }
                         });
                     }
@@ -424,7 +423,6 @@ module.exports = (Router) => {
     Router = Router.post("/custom/channelUtilsUpdate", (req, res, next) => {
         let body = req.body;
         delete body.update;
-        delete body.number;
         const a = [];
         const values = [];
         for(let key in body) {
@@ -433,10 +431,10 @@ module.exports = (Router) => {
         }
         const sql = `update channel_util set ${a.join(",")} where id=${body.id}`;
         req.models.db1.driver.execQuery(sql, values, (err, data) => {
-            console.log(err);
             if(err) {
                 returnErr(res, "修改失败");
             } else {
+                _log(req, res, ["渠道管理"])
                 res.json({
                     code: 200,
                     msg: "修改成功"
