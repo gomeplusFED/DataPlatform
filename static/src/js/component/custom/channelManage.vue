@@ -9,6 +9,7 @@
                     <div class="col-sm-4">
                         <select name="site"
                                 id="site"
+                                class="form-control"
                                 v-model="form.site">
                             <option v-for="(key, value) in options"
                                      :value="key">{{value}}</option>
@@ -160,6 +161,7 @@ var channelManage = Vue.extend({
             }
             var _this = this;
             $.post('/custom/channelUtilsAdd', this.form, function(res) {
+                res.data.update = false
                 _this.list.push(res.data)
             })
         },
@@ -198,5 +200,8 @@ module.exports = channelManage;
         position: fixed;
         left: -999px;
         top: 0;
+    }
+    .glyphicon {
+        cursor: pointer;
     }
 </style>
