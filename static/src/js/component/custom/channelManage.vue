@@ -54,7 +54,7 @@
                         <th>操作</th>
                         <th>生成链接</th>
                     </tr>
-                    <tr v-for="(item, index) in list">
+                    <tr v-for="(index, item) in list">
                         <td>
                             {{item.number}}
                         </td>
@@ -188,9 +188,9 @@ module.exports = channelManage;
 </script>
 
 <style scoped>
-.copyText {
-    position: fixed;
-    left: -999px;
-    top: 0;
-}
+    .copyText {
+        position: fixed;
+        left: -999px;
+        top: 0;
+    }
 </style>
