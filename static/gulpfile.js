@@ -60,7 +60,7 @@ var webpackConfig = {
         loaders: [{
             test: /.js$/,
             loader: 'babel',
-            include: path.join(rootPath, './src'),
+            include: path.join(rootPath, './src/'),
             exclude: path.join(rootPath, '../node_modules/')
         }, {
             test: /.vue$/,

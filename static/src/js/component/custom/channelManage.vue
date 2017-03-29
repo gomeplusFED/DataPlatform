@@ -54,19 +54,12 @@
                         <th>操作</th>
                         <th>生成链接</th>
                     </tr>
-                    <tr v-for="(item, index) in list">
+                    <tr v-for="(index, item) in list">
                         <td>
                             {{item.number}}
                         </td>
                         <td>
-                            <span v-if="!item.update">{{options[item.site]}}</span>
-                            <select v-else
-                                    name="site"
-                                    id="site"
-                                    v-model="item.site">
-                                <options v-for="(key, value) in options"
-                                         :value="item.key">{{item.value}}</options>
-                            </select>
+                            <span>{{options[item.site]}}</span>
                         </td>
                         <td>
                             <span v-if="!item.update">{{options[item.channel_name]}}</span>
@@ -113,10 +106,13 @@
 <script>
 var Vue = require('Vue');
 var $ = require('jQuery');
- var Pagination = require('../common/pagination.vue');
+var Pagination = require('../common/pagination.vue');
 var channelManage = Vue.extend({
     name: 'channelManage',
-    data() {
+    components: {
+        'm-pagination': Pagination
+    },
+    data: function() {
         return {
             options: {
                 'A': '商城-APP',
@@ -140,45 +136,46 @@ var channelManage = Vue.extend({
             }
         }
     },
-    components: {
-        'm-pagination': Pagination
-    },
-    ready() {
+    ready: function() {
         this.paginationConf.onChange = this.onPagingChange
     },
     route: {
-        data () {
+        data: function() {
             this.getData()
         }
     },
     methods: {
-        getData() {
-            $.get(`/custome/channelUtils?limit=${this.paginationConf.itemsPerPage}&page=${this.paginationConf.currentPage}`, (res) => {
-                this.paginationConf.totalItems = count
-                this.list = res.data
+        getData: function() {
+            var _this = this;
+            $.get(`/custome/channelUtils?limit=${this.paginationConf.itemsPerPage}&page=${this.paginationConf.currentPage}`, function(res) {
+                _this.paginationConf.totalItems = count
+                _this.list = res.data
             })
         },
-        onSubmit() {
-            $.post('/custome/channelUtilsAdd', this.form, (res) => {
-                this.list.push(res.data)
+        onSubmit: function() {
+            var _this = this;
+            $.post('/custome/channelUtilsAdd', this.form, function(res) {
+                _this.list.push(res.data)
             })
         },
-        update(item) {
-            $.post('/custome/channelUtilsUpdate', this.form, (res) => {
-                item.update = false
+        update: function(item) {
+            var _this = this;
+            $.post('/custome/channelUtilsUpdate', this.form, function(res) {
+                _this.update = false
             })
         },
-        delete(id) {
+        delete: function(id) {
+            var _this = this;
             if (confirm('是否确认删除')) {
-                $.get('/custome/channelUtilsDelete?id=' + id, (res) => {
-                    this.list.splice(this.list.findIndex(x => x.id === id), 1)
+                $.get('/custome/channelUtilsDelete?id=' + id, function(res) {
+                    _this.list.splice(_this.list.findIndex(function(x){return x.id === id}), 1)
                 })
             }
         },
-        onPagingChange() {
+        onPagingChange: function() {
             this.getData()
         },
-        copy(text) {
+        copy: function(text) {
             this.copyText = text
             this.nextTick(function () {
                 document.querySelector('.copyText').select()
@@ -191,9 +188,9 @@ module.exports = channelManage;
 </script>
 
 <style scoped>
-.copyText {
-    position: fixed;
-    left: -999px;
-    top: 0;
-}
+    .copyText {
+        position: fixed;
+        left: -999px;
+        top: 0;
+    }
 </style>
