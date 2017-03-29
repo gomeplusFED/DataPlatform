@@ -10,8 +10,8 @@
                         <select name="site"
                                 id="site"
                                 v-model="form.site">
-                            <options v-for="(key, value) in options"
-                                     :value="key">{{value}}</options>
+                            <option v-for="(key, value) in options"
+                                     :value="key">{{value}}</option>
                         </select>
                     </div>
                 </div>
