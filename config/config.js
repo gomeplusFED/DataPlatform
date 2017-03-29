@@ -324,7 +324,8 @@ const Config = {
             href: "#",
             path: [
                 obj.market.channel(),
-                obj.market.activity()
+                obj.market.activity(),
+                obj.market.utils()
             ]
         },
         "30": {

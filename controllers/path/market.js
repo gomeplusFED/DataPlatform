@@ -27,5 +27,19 @@ module.exports = {
                 query_api: "/activity/listOne"
             }]
         };
+    },
+    utils() {
+        return {
+            id : 666,
+            name: "渠道管理工具",
+            view: "/custom/channelManage",
+            path: "/custom/channelManage",
+            display: true,
+            defaultData: [{
+                type: "table",
+                title: "",
+                query_api: ""
+            }]
+        };
     }
 };
