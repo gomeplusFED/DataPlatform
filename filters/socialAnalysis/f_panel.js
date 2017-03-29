@@ -105,9 +105,9 @@ module.exports = {
             "A" : "删除回复数: " + result.delete_topic_reply_num,
             "B" : "新增点赞数: " + result.new_topic_like_num,
             "C" : "新增收藏数: " + result.new_topic_save_num,
-            "D" : "新增话题PV: " + result.new_pv
+            "D" : "话题PV: " + result.new_pv
         },Data3 = {
-            "A" : "新增话题UV: " + result.new_uv,
+            "A" : "话题UV: " + result.new_uv,
         };
 
         return util.toTable([[Data1 , Data2 , Data3 ]], data.rows, [Cols] , null , [true]);
