@@ -10,7 +10,7 @@
 				</select>
 				<label>站点</label>
 				<select class="form-control inp inpW1" id="website" data-content="请选择站点" v-model="searchParam.website">
-					<option v-for="site in sites" value={{site.url}}>{{site.name}}</option>
+					<option v-for="(i,site) of sites" :value="site.url" :selected="site.url === searchParam.website ? 'selected' : ''">{{site.name}}</option>
 				</select>
 				<label>版本号</label>
 				<input class="form-control inp inpW2" type="text" placeholder="" id="version" data-content="请输入版本号"  v-model="searchParam.version">
@@ -75,7 +75,7 @@
 			return {
 				index: 1,
 				noData: false,
-				sites: [],
+				sites: api.getSiteList(),
 				paginationConf: {
 					currentPage: 1,     // 当前页
 					totalItems: 0,     // 总条数
@@ -105,6 +105,9 @@
 			// triger the date picker
 			this.pageComponentsData.trigger = !this.pageComponentsData.trigger;
 			this.sites = api.getSiteList();
+			if(this.sites.length) {
+				this.searchParam.website = this.sites[0].url;
+			}
 		},
 		route: {
 	        activate: function (transition) {
