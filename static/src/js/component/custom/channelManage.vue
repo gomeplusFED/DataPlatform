@@ -10,8 +10,8 @@
                         <select name="site"
                                 id="site"
                                 v-model="form.site">
-                            <options v-for="(key, value) in options"
-                                     :value="key">{{value}}</options>
+                            <option v-for="(key, value) in options"
+                                     :value="key">{{value}}</option>
                         </select>
                     </div>
                 </div>
@@ -56,7 +56,7 @@
                     </tr>
                     <tr v-for="(index, item) in list">
                         <td>
-                            {{item.number}}
+                            {{index}}
                         </td>
                         <td>
                             <span>{{options[item.site]}}</span>
@@ -119,7 +119,7 @@ var channelManage = Vue.extend({
                 'p': 'Plus-APP',
             },
             form: {
-                site: '',
+                site: 'A',
                 channel_name: '',
                 channel_ex_name: ''
             },
