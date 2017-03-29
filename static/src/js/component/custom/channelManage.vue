@@ -113,6 +113,7 @@
 <script>
 var Vue = require('Vue');
 var $ = require('jQuery');
+ var Pagination = require('../common/pagination.vue');
 var channelManage = Vue.extend({
     name: 'channelManage',
     data() {
@@ -138,6 +139,9 @@ var channelManage = Vue.extend({
 				}
             }
         }
+    },
+    components: {
+        'm-pagination': Pagination
     },
     ready() {
         this.paginationConf.onChange = this.onPagingChange

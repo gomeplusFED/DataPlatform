@@ -28,6 +28,9 @@ var vendorPlugin = new webpack.optimize.CommonsChunkPlugin({
     filename: 'vendor.min.js',
     minChunks: Infinity,
 });
+var sourceMap = new webpack.SourceMapDevToolPlugin({
+    filename: '[file].map'
+})
 var webpackConfig = {
     entry: {
         DataPlatform: './src/js/app.js',
@@ -48,7 +51,7 @@ var webpackConfig = {
             'echarts/lib/component/legend',
             'echarts/lib/component/tooltip',
         ],
-        addModule : "./src/js/app2.js",
+        addModule: "./src/js/app2.js",
     },
     output: {
         filename: '[name].min.js'
@@ -90,13 +93,13 @@ var webpackConfig = {
 //     ''
 // ].join('\n');
 
-gulp.task('clean', function() {
+gulp.task('clean', function () {
     return gulp
         .src(['./dist/*'], { read: false })
         .pipe(clean({ force: true }))
 });
 
-gulp.task('js', function() {
+gulp.task('js', function () {
     if (argv.env === 'pro') {
         webpackConfig.plugins.push(new webpack.optimize.UglifyJsPlugin({
             compress: {
@@ -105,14 +108,14 @@ gulp.task('js', function() {
         }));
     }
     return gulp
-        .src(['./src/js/app.js' , './src/js/app2.js'])
+        .src(['./src/js/app.js', './src/js/app2.js'])
         .pipe(plumber())
         .pipe(gulpWebpack(webpackConfig))
         // .pipe(gulpIf(argv.env == 'pro', header(banner, { config: config })))
         .pipe(gulp.dest('./dist/js/'))
 })
 
-gulp.task('css', function() {
+gulp.task('css', function () {
     return gulp
         .src('./src/css/*.css')
         .pipe(concat('all.js'))
@@ -122,32 +125,33 @@ gulp.task('css', function() {
         .pipe(gulp.dest('./dist/css/'))
 })
 
-gulp.task('img', function() {
+gulp.task('img', function () {
     return gulp
         .src('./src/img/*')
         .pipe(gulp.dest('./dist/img/'))
 })
 
-gulp.task('font', function() {
+gulp.task('font', function () {
     return gulp
         .src('./src/fonts/*')
         .pipe(gulp.dest('./dist/fonts/'))
 })
 
-gulp.task('rev', function() {
+gulp.task('rev', function () {
     return gulp
-        .src(['../views/include/header.html', '../views/include/footer.html' , "../views/include/addModule.html"])
+        .src(['../views/include/header.html', '../views/include/footer.html', "../views/include/addModule.html"])
         .pipe(gulpIf(argv.env == 'pro', rev({
             assetsDir: path.join(pwd)
         })))
         .pipe(gulp.dest('../views/include/'));
 })
 
-gulp.task('watch', function() {
+gulp.task('watch', function () {
     if (argv.env != 'pro') {
         webpackConfig.watch = true;
         webpackConfig.debug = true;
-        webpackConfig.devtool = 'inline-source-map';
+        // webpackConfig.devtool = 'inline-source-map';
+        webpackConfig.plugins.push(sourceMap)
     }
     gulp.start('js', 'css', 'img', 'font');
     gulp.watch('./src/css/*', ['css']);
@@ -156,6 +160,6 @@ gulp.task('watch', function() {
 
 gulp.task('build', ['js', 'css', 'img', 'font']);
 
-gulp.task('default', ['build'], function() {
+gulp.task('default', ['build'], function () {
     gulp.start('rev');
 });
