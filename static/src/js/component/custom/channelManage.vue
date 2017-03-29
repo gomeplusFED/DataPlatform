@@ -1,8 +1,8 @@
 <template>
     <div>
         <textarea class="copyText"
-                  v-model="copyText">
-            <form class="form-horizontal">
+                  v-model="copyText" ></textarea>
+            <div class="form-horizontal">
                 <div class="form-group">
                     <label for="activity_type"
                            class="col-sm-1 control-label">站点:</label>
@@ -43,7 +43,7 @@
                                 @click="onSubmit">增加渠道</button>
                     </div>
                 </div>
-            </form>
+            </div>
             <div>
                 <table class="table table-bordered">
                     <tr>
