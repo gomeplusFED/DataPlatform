@@ -56,7 +56,7 @@
                     </tr>
                     <tr v-for="(index, item) in list">
                         <td>
-                            {{item.number}}
+                            {{index}}
                         </td>
                         <td>
                             <span>{{options[item.site]}}</span>
@@ -119,7 +119,7 @@ var channelManage = Vue.extend({
                 'p': 'Plus-APP',
             },
             form: {
-                site: '',
+                site: 'A',
                 channel_name: '',
                 channel_ex_name: ''
             },
