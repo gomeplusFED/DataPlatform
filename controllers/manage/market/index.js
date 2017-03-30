@@ -362,6 +362,7 @@ module.exports = (Router) => {
                     } else {
                         const newData = data.map((x, i) => {
                             if(!x.code) {
+                                x.site = x.channel_ext_name.substr(0, 1);
                                 x.url = `http://shouji.gomeplus.com/kd/${x.channel_ext_name}.html`;
                             }
                             return x;
