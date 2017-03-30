@@ -60,7 +60,7 @@
                             {{(paginationConf.currentPage -1) * paginationConf.itemsPerPage + index + 1}}
                         </td>
                         <td>
-                            <span>{{options[item.site]}}</span>
+                            <span>{{options[item.site] || '商家-APP'}}</span>
                         </td>
                         <td>
                             <span v-if="!item.update">{{item.channel_name}}</span>

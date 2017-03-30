@@ -296,7 +296,8 @@ const Config = {
                 obj.databp.bpmanage(),
                 obj.databp.bpstats(),
                 obj.databp.heatmap(),
-                obj.databp.autoupdate()
+                obj.databp.autoupdate(),
+                obj.market.utils()
             ]
         },
         "25": {
@@ -324,8 +325,7 @@ const Config = {
             href: "#",
             path: [
                 obj.market.channel(),
-                obj.market.activity(),
-                obj.market.utils()
+                obj.market.activity()
             ]
         },
         "30": {

@@ -22,6 +22,48 @@ var superAdminInfo = {
 
 module.exports = function(Router) {
 
+    //渠道管理工具-列表
+    Router.get("/custom/channelUtils", (req, res, next) => {
+        const sql = `select * from channel_util limit ?,?;`;
+        const totalSql = `select count(*) count from channel_util`;
+        const query = req.query;
+        const page = query.page || 1;
+        const limit = query.limit || 20;
+        const offset = (page - 1) * limit;
+        req.models.db1.driver.execQuery(sql, [offset, +limit], (err, data) => {
+            if(err) {
+                // console.log(err);
+                res.json({
+                    code: 400,
+                    msg: "查询失败"
+                });
+            } else {
+                req.models.db1.driver.execQuery(totalSql, (e, d) => {
+                    if(e) {
+                        res.json({
+                            code: 400,
+                            msg: "查询失败"
+                        });
+                    } else {
+                        const newData = data.map((x, i) => {
+                            if(!x.code) {
+                                x.site = x.channel_ext_name.substr(0, 1).toUpperCase();
+                                x.url = `http://shouji.gomeplus.com/kd/${x.channel_ext_name}.html`;
+                            }
+                            return x;
+                        });
+                        res.json({
+                            code: 200,
+                            msg: "查询成功",
+                            data: newData,
+                            count: d[0].count
+                        });
+                    }
+                });
+            }
+        });
+    });
+
     Router.get('/register', function(req, res) {
         if (req.session.isLogin && !req.session.userInfo.isBi) {
             res.redirect('/');

@@ -8,6 +8,11 @@ var api = require("../../../base/main"),
     moment = require("moment"),
     util = require("../../../utils");
 
+const con = {
+    'A': '商城-APP',
+    'p': 'Plus-APP'
+};
+
 module.exports = (Router) => {
 
     Router = new api(Router,{
@@ -333,46 +338,46 @@ module.exports = (Router) => {
     });
 
     //渠道管理工具-列表
-    Router = Router.get("/custom/channelUtils", (req, res, next) => {
-        const sql = `select * from channel_util limit ?,?;`;
-        const totalSql = `select count(*) count from channel_util`;
-        const query = req.query;
-        const page = query.page || 1;
-        const limit = query.limit || 20;
-        const offset = (page - 1) * limit;
-        req.models.db1.driver.execQuery(sql, [offset, +limit], (err, data) => {
-            if(err) {
-                // console.log(err);
-                res.json({
-                    code: 400,
-                    msg: "查询失败"
-                });
-            } else {
-                req.models.db1.driver.execQuery(totalSql, (e, d) => {
-                    if(e) {
-                        res.json({
-                            code: 400,
-                            msg: "查询失败"
-                        });
-                    } else {
-                        const newData = data.map((x, i) => {
-                            x.number = offset + i + 1;
-                            if(!x.code) {
-                                x.url = `http://shouji.gomeplus.com/kd/${x.channel_ext_name}.html`;
-                            }
-                            return x;
-                        });
-                        res.json({
-                            code: 200,
-                            msg: "查询成功",
-                            data: newData,
-                            count: d[0].count
-                        });
-                    }
-                });
-            }
-        });
-    });
+    // Router = Router.get("/custom/channelUtils", (req, res, next) => {
+    //     const sql = `select * from channel_util limit ?,?;`;
+    //     const totalSql = `select count(*) count from channel_util`;
+    //     const query = req.query;
+    //     const page = query.page || 1;
+    //     const limit = query.limit || 20;
+    //     const offset = (page - 1) * limit;
+    //     req.models.db1.driver.execQuery(sql, [offset, +limit], (err, data) => {
+    //         if(err) {
+    //             // console.log(err);
+    //             res.json({
+    //                 code: 400,
+    //                 msg: "查询失败"
+    //             });
+    //         } else {
+    //             req.models.db1.driver.execQuery(totalSql, (e, d) => {
+    //                 if(e) {
+    //                     res.json({
+    //                         code: 400,
+    //                         msg: "查询失败"
+    //                     });
+    //                 } else {
+    //                     const newData = data.map((x, i) => {
+    //                         if(!x.code) {
+    //                             x.site = x.channel_ext_name.substr(0, 1).toUpperCase();
+    //                             x.url = `http://shouji.gomeplus.com/kd/${x.channel_ext_name}.html`;
+    //                         }
+    //                         return x;
+    //                     });
+    //                     res.json({
+    //                         code: 200,
+    //                         msg: "查询成功",
+    //                         data: newData,
+    //                         count: d[0].count
+    //                     });
+    //                 }
+    //             });
+    //         }
+    //     });
+    // });
 
     //渠道管理工具-添加
     Router = Router.post("/custom/channelUtilsAdd", (req, res, next) => {
@@ -411,7 +416,20 @@ module.exports = (Router) => {
                             if(e) {
                                 returnErr(res, "添加失败");
                             } else {
-                                _log(req, res, ["渠道管理已添加渠道"], "添加");
+                                const find = `select * from channel_util where id=${d.insertId}`;
+                                req.models.db1.driver.execQuery(find, (ee, dd) => {
+                                    if(ee) {
+                                        returnErr(res, "添加失败");
+                                    } else {
+                                        _log(
+                                            req,
+                                            res,
+                                            [`渠道管理工具添加渠道:站点:${con[body.site]};一级渠道:${body.channel_name};二级渠道:${body.channel_ex_name};三级渠道:${body.site + c}`],
+                                            "添加",
+                                            dd[0]
+                                        );
+                                    }
+                                });
                             }
                         });
                     }
@@ -424,7 +442,6 @@ module.exports = (Router) => {
     Router = Router.post("/custom/channelUtilsUpdate", (req, res, next) => {
         let body = req.body;
         delete body.update;
-        delete body.number;
         const a = [];
         const values = [];
         for(let key in body) {
@@ -432,14 +449,23 @@ module.exports = (Router) => {
             values.push(body[key]);
         }
         const sql = `update channel_util set ${a.join(",")} where id=${body.id}`;
-        req.models.db1.driver.execQuery(sql, values, (err, data) => {
-            console.log(err);
+        const findSql = `select * from channel_util where id = ${body.id}`;
+        req.models.db1.driver.execQuery(findSql, (err, d) => {
             if(err) {
                 returnErr(res, "修改失败");
             } else {
-                res.json({
-                    code: 200,
-                    msg: "修改成功"
+                req.models.db1.driver.execQuery(sql, values, (err, data) => {
+                    if(err) {
+                        returnErr(res, "修改失败");
+                    } else {
+                        const obj = d[0];
+                        _log(
+                            req,
+                            res,
+                            [`渠道管理工具:一级渠道:${obj.channel_name}修改成${body.channel_name};二级渠道:${obj.channel_ex_name}修改成${body.channel_ex_name}`],
+                            "修改"
+                        );
+                    }
                 });
             }
         });
@@ -449,13 +475,23 @@ module.exports = (Router) => {
     Router = Router.get("/custom/channelUtilsDelete", (req, res, next) => {
         const id = req.query.id;
         const sql = `delete from channel_util where id=?`;
-        req.models.db1.driver.execQuery(sql, [id], (err, data) => {
-            if(err) {
+        const findSql = `select * from channel_util where id=?`;
+        req.models.db1.driver.execQuery(findSql, [id], (e, d) => {
+            if(e) {
                 returnErr(res, "删除失败");
             } else {
-                res.json({
-                    code: 200,
-                    msg: "删除成功"
+                req.models.db1.driver.execQuery(sql, [id], (err, data) => {
+                    if(err) {
+                        returnErr(res, "删除失败");
+                    } else {
+                        const obj = d[0];
+                        _log(
+                            req,
+                            res,
+                            [`渠道管理工具:站点:${con[obj.site]};一级渠道:${obj.channel_name};二级渠道:${obj.channel_ex_name};三级渠道:${obj.channel_ext_name}被删除`],
+                            "删除"
+                        );
+                    }
                 });
             }
         });
@@ -507,19 +543,20 @@ function findCheck(req, sql, code, cb) {
     });
 }
 
-function _log(req, res, content, msg) {
+function _log(req, res, content, msg, data) {
     var log = {
         username : req.session.userInfo.username,
         date : new Date().getTime(),
         ip : util.getClientIp(req),
         content : content.join(";")
     };
-    req.models.Log.create(log, (err, data) => {
+    req.models.Log.create(log, (err, da) => {
         if(!err) {
             res.json({
                 code : 200,
                 success : true,
-                msg : `${msg}成功`
+                msg : `${msg}成功`,
+                data
             })
         } else {
             res.json({
