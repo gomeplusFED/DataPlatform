@@ -117,7 +117,7 @@ var channelManage = Vue.extend({
         return {
             options: {
                 'A': '商城-APP',
-                'P': 'Plus-APP',
+                'p': 'Plus-APP',
             },
             form: {
                 site: 'A',
