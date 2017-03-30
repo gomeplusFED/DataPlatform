@@ -1,4 +1,5 @@
 'use strict';
+require('babel-polyfill');
 var Vue = require('Vue');
 Vue.config.debug = true;
 var $ = require('jQuery');
