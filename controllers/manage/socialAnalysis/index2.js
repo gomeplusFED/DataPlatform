@@ -221,7 +221,8 @@ module.exports = (Router) => {
             }
         }, 
         rows : [
-            ["topic_create_time","topic_name","topic_id","publisher_name","reply_user_num",
+            ["topic_create_time","topic_name","topic_id","publisher_name",
+                // "reply_user_num",
                 "topic_reply_num","topic_praise_num","topic_collect_num"]
         ],
         cols: [
@@ -234,9 +235,9 @@ module.exports = (Router) => {
             },{
                 caption: "话题ID",
                 type: "string"
-            },{
-                caption: "发布人名称",
-                type: "string"
+            // },{
+            //     caption: "发布人名称",
+            //     type: "string"
             },{
                 caption: "累计回复人数",
                 type: "number"
