@@ -366,7 +366,7 @@ var bpinfo = Vue.extend({
 			var existKeys = {};
 			var allbps = [..._this.publicBp, ..._this.privateBp];
 			let emptyCount = 0;
-			let illegalRE = /[=&]|\$(?!{.+?})/;
+			let illegalRE = /[=&]|\$(?!{[^}]+?})/;
 			let emptyRE = /^\s*$/;
 			for (let a of allbps) {
 				let _key = a[0];
