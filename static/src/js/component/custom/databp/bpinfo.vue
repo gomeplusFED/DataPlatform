@@ -366,7 +366,7 @@ var bpinfo = Vue.extend({
 			var existKeys = {};
 			var allbps = [..._this.publicBp, ..._this.privateBp];
 			let emptyCount = 0;
-			let illegalRE = /[=&]/;
+			let illegalRE = /[=&]|\$(?!{.+?})/;
 			let emptyRE = /^\s*$/;
 			for (let a of allbps) {
 				let _key = a[0];
@@ -388,8 +388,13 @@ var bpinfo = Vue.extend({
 					$popover('请检查重复key');
 					return false;
 				}
-				if (illegalRE.test(_key) || illegalRE.test(_val)) {
-					$popover('含有非法字符，请检查');
+				let illegal;
+				if (illegal = illegalRE.exec(_key)) {
+					$popover(`key: ${_key}含有非法字符${illegal[0]}，请检查`);
+					return false;
+				}
+				if (illegal = illegalRE.exec(_val)) {
+					$popover(`value: ${_val}含有非法字符${illegal[0]}，请检查`);
 					return false;
 				}
 				existKeys[_key] = 1;
