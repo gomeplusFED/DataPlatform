@@ -98,7 +98,7 @@ module.exports = (Router) => {
                 });
                 // 移除统计脚本
                 html = html.replace(/<script[\S]+?uba-sdk[\S]+?<\/script>/, '');
-
+                html = html.replace(/top\.location/g, '{}');
                 // 添加自定义脚本
                 let proxytext = `<script>${xhrProxy}('${url}', '${platform}', '${trunk}');</script>`;
                 html = html.replace('<head>', '<head>' + proxytext);
@@ -195,6 +195,7 @@ module.exports = (Router) => {
             }).then(function (js) {
                 // 改变关于location的脚本
                 js = js && js.replace(/\.assign\(([^,]+?)\)/g, '.$assign($1)');
+                js = js && js.replace(/top\.location/g, '{}');
                 res.send(js);
             }).catch(function (err) {
                 console.log(err);
