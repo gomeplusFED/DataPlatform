@@ -15,13 +15,25 @@ module.exports = {
 	},
 	getSiteList() {
 		return [{
-			name: '国美PLUS站',
-			url: 'https://www.gomeplus.com/'
-		}
-		// ,{
-		// 	name: '国美在线PC',
-		// 	url: 'https://www.gome.com.cn/'
-		// }
+				name: '国美在线PC（测试）',
+				url: 'http://www.atguat.com.cn/'
+			}, {
+				name: '国美PLUS站PC',
+				url: 'https://www.gomeplus.com/'
+			}, {
+				name: '国美在线PC',
+				url: 'https://www.gome.com.cn/'
+			}
+			// {
+			// 	name: '国美Plus站Wap',
+			// 	url: 'https://m.gomeplus.com/'
+			// }, {
+			// 	name: '国美Plus站Wap（测试）',
+			// 	url: 'https://m.gomeplus.com/'
+			// },{
+			// 	name: '国美在线Wap',
+			// 	url: 'http://m.gome.com.cn/'
+			// }
 		]
 	},
 	getLogs(data) {
