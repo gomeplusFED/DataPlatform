@@ -66,7 +66,7 @@
         route: {
             activate: function(transition) {
                 // 防止iframe脚本替换父窗口的地址
-                window.onbeforeunload = (e) => true;
+                // window.onbeforeunload = (e) => true;
                 this.activate(this.$route.query);
                 return Promise.resolve(true);
             },
