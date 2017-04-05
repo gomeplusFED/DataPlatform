@@ -19,8 +19,7 @@
 	<div id='container' class='main'>
 		<div class='tabpanel_content' style='width: 100%; height: 1000px;'>
 			<div class='html_content' style='z-index: 2;'>
-				<iframe :class="{'pc-iframe': bpConfig.platform === 'PC', 'wap-iframe':  bpConfig.platform === 'H5'}" frameborder='no' border='0' marginwidth='0' marginheight='0' id='iframenode'  src='{{iframe_url}}' v-on:load="iframeload"></iframe>
-                 <!--sandbox="allow-forms allow-scripts allow-same-origin"-->
+				<iframe :class="{'pc-iframe': bpConfig.platform === 'PC', 'wap-iframe':  bpConfig.platform === 'H5'}" frameborder='no' border='0' marginwidth='0' marginheight='0' id='iframenode'  src='{{iframe_url}}' v-on:load="iframeload" sandbox="allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
 			</div>
 		</div>
 	</div>
