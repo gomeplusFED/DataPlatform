@@ -3,6 +3,7 @@
         Object.defineProperty(window.navigator,'userAgent' ,{writable:true, configurable: true, enumerable:true});
         window.navigator.userAgent = 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1';
     }
+    window.localStorage.clear();
     // 处理重定向
    
     window.$pageUrl = pageUrl;

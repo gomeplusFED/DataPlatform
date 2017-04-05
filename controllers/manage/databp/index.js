@@ -20,7 +20,7 @@ var databpStorage = {};
 module.exports = (Router) => {
 
     Router.get('/databp/html', (req, res, next) => {
-        
+
         let url = req.query.url;
         let options = {
             credentials: 'include',
@@ -71,7 +71,7 @@ module.exports = (Router) => {
                 if ((rawcookie = rawcookie._headers) && (rawcookie = rawcookie['set-cookie'])) {
                     let cookie = parseCookie(rawcookie);
                     databpSess.cookie = cookie;
-                    for(let c of cookie) {
+                    for (let c of cookie) {
                         res.append('Set-Cookie', c + ';');
                     }
                 }
@@ -125,18 +125,20 @@ module.exports = (Router) => {
         let host = sess.host;
         let newurl = url.replace('/databp/ajax', host);
         let newheaders = {
-            'cookie': headers.cookie.replace(/DataPlatform.*?=.+?;/gi, ''),
-            'host': host.replace(/https?:\/\//, ''),
-            'referer': encodeURI(sess.url),
-            'origin': null
+                'cookie': headers.cookie.replace(/DataPlatform.*?=.+?;/gi, ''),
+                'host': host.replace(/https?:\/\//, ''),
+                'referer': encodeURI(sess.url),
+                'origin': null
+        };
+        if (sess.cookie) {
+            sess.cookie.some((x, i) => {
+                if (x.includes('content_ctag')) {
+                    newheaders['content-type-ctag'] = x.split('content_ctag=')[1].slice(0, -1);
+                    return true;
+                }
+                return false;
+            });
         }
-        sess.cookie.some((x, i) => {
-            if (x.includes('content_ctag')) {
-                newheaders['content-type-ctag'] = x.split('content_ctag=')[1].slice(0, -1);
-                return true;
-            }
-            return false;
-        });
         let keys = Object.keys(headers);
         for (let key of keys) {
             if (newheaders[key] == null) {
