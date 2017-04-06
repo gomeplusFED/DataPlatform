@@ -9,7 +9,7 @@ const forward = require('./forward/dist');
 module.exports = (Router) => {
 
     Router.use(forward({
-        filterFunc(html) {
+        filterHtml(html) {
             // 移除统计脚本
             return html.replace(/<script[\S]+?uba-sdk[\S]+?<\/script>/, '').replace(/top\.location/g, '{}');
         },
