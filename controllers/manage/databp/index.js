@@ -4,11 +4,12 @@
  * @fileoverview 数据埋点
  */
 
-const forward = require('./forward/dist');
+const forward = require('express-forward-html');
 
 module.exports = (Router) => {
 
-    Router.use(forward({
+    forward({
+        router: Router,
         filterHtml(html) {
             // 移除统计脚本
             return html.replace(/<script[\S]+?uba-sdk[\S]+?<\/script>/, '').replace(/top\.location/g, '{}');
@@ -21,6 +22,6 @@ module.exports = (Router) => {
             return js && js.replace(/\.assign\(([^,]+?)\)/g, '.$assign($1)').replace(/top\.location/g, '{}');
         },
         prefix: '/databp'
-    }));
+    });
     return Router;
 };
