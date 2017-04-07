@@ -151,7 +151,7 @@
 				this.paginationConf.currentPage = 1;
 				this.query(this.searchParam);
 			},
-			query(options) {
+			query(options = this.searchParam) {
 				this.loading.show = true;
 				Object.assign(options, {
 					// page从0开始
