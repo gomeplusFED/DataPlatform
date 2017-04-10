@@ -69,7 +69,9 @@
 					<td title="{{item.pointParam}}">{{item.pointParam || '-'}}</td>
 					<td title="{{item.userInfo?(item.userInfo.department + item.userInfo.email) : '--'}}">{{item.userInfo.name || '--'}}</td>
 					<td title="{{item.updateTime |Date 'yyyy-MM-dd hh:mm:ss'}}">{{item.updateTime |Date 'yyyy-MM-dd hh:mm:ss'}}</td>
-					<td><a v-if="item.uniquePoint !== '2'" @click="edit(item)">修改</a>&nbsp<a v-if="item.isActive === '1'" @click="del(item)">删除</a><a v-else @click="restore(item)">恢复</a></td>
+					<td v-if="item.isActive === '1'"><a v-if="item.uniquePoint !== '2'" @click="edit(item)">修改</a>&nbsp<a v-if="item.isActive === '1' && item.uniquePoint !== '2'" @click="del(item)">删除</a></td>
+					<!--<a v-if="item.isActive === '0'" @click="restore(item)">恢复</a>-->
+					<td v-else> -- </td>
 				</tr>
 				<tr v-show="noData">
 					 <td colspan="10">暂无数据</td>
