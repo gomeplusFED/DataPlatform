@@ -3,66 +3,82 @@
 		<div class="nform-box">
 			<ul class="clearfix">
 				<li class="clearfix">
-					<label>埋点URL</label>
-					<input class="form-control inp inpW1"
-					       type="text"
-					       placeholder=""
-					       v-model="searchParam.pageUrl">
-					<label>埋点名称</label>
-					<input class="form-control inp inpW2"
-					       type="text"
-					       placeholder=""
-					       v-model="searchParam.pointName">
-					<label>状态</label>
-					<select class="form-control inp inpW2"
-					        v-model="searchParam.isActive">
-						<option value='1'>正常</option>
-						<option value='0'>已删除</option>
-					</select>
-					<label>埋点事件名称</label>
-					<input class="form-control inp inpW2"
-					       type="text"
-					       placeholder=""
-					       value="单击"
-					       disabled>
+					<div>
+						<label>埋点URL</label>
+						<input class="form-control inp inpW1"
+						       type="text"
+						       placeholder=""
+						       v-model="searchParam.pageUrl">
+					</div>
+					<div>
+						<label>埋点名称</label>
+						<input class="form-control inp inpW2"
+						       type="text"
+						       placeholder=""
+						       v-model="searchParam.pointName">
+					</div>
+					<div>
+						<label>状态</label>
+						<select class="form-control inp inpW2"
+						        v-model="searchParam.isActive">
+							<option value='1'>正常</option>
+							<option value='0'>已删除</option>
+						</select>
+					</div>
+					<div>
+						<label>埋点事件名称</label>
+						<input class="form-control inp inpW2"
+						       type="text"
+						       placeholder=""
+						       value="单击"
+						       disabled>
+					</div>
 				</li>
 				<li>
-					<label>匹配模式</label>
-					<input class="form-control inp inpW1"
-					       type="text"
-					       placeholder=""
-					       v-model="searchParam.pattern">
-					<label>平台</label>
-					<select class="form-control inp inpW2"
-					        v-model="searchParam.platform">
-						<option value='PC'>PC</option>
-						<option value='H5'>H5</option>
-					</select>
-					<label>是否模块</label>
-					<select class="form-control inp inpW2"
-					        v-model="searchParam.type">
-						<option value=''>全部</option>
-						<option value='block'>模块</option>
-						<option value='point'>单点</option>
-					</select>
+					<div>
+						<label>匹配模式</label>
+						<input class="form-control inp inpW1"
+						       type="text"
+						       placeholder=""
+						       v-model="searchParam.pattern">
+					</div>
+					<div>
+						<label>平台</label>
+						<select class="form-control inp inpW2"
+						        v-model="searchParam.platform">
+							<option value='PC'>PC</option>
+							<option value='H5'>H5</option>
+						</select>
+					</div>
+					<div>
+						<label>是否模块</label>
+						<select class="form-control inp inpW2"
+						        v-model="searchParam.type">
+							<option value=''>全部</option>
+							<option value='block'>模块</option>
+							<option value='point'>单点</option>
+						</select>
+					</div>
 	
 				</li>
 				<li>
-					<label>
-						<input type="checkbox"
-						       v-model="showDate"></input>起止时间</label>
-					<div class="date_picker">
-						<m-date :index="index"
-						        :page-components-data="pageComponentsData"
-						        :component-type="'date_picker'"
-						        :argvs.sync='argvs'
-						        :custom-option="datepickerOption"
-						        :cancel-date-limit="1"
-						        diasbled></m-date>
+					<div>
+						<label>
+							<input type="checkbox"
+							       v-model="showDate"></input>起止时间</label>
+						<div class="date_picker">
+							<m-date :index="index"
+							        :page-components-data="pageComponentsData"
+							        :component-type="'date_picker'"
+							        :argvs.sync='argvs'
+							        :custom-option="datepickerOption"
+							        :cancel-date-limit="1"
+							        diasbled></m-date>
+						</div>
 					</div>
 	
 					<button id="btnSearch"
-					        class="btn btn-searchLi-top btn-primary"
+					        class="btn btn-search btn-primary"
 					        type="button"
 					        data-toggle="popover"
 					        data-trigger="focus"
@@ -304,11 +320,19 @@ module.exports = databp;
 }
 
 .nform-box ul li {
+	display: flex;
+	justify-content: flex-start;
 	overflow: hidden;
 	padding-bottom: 6px;
 	list-style: none;
 	margin-bottom: 10px;
 	padding: 0;
+}
+
+.nform-box ul>li>div {
+	display: flex;
+	margin-right: 5%;
+	min-width: 170px;
 }
 
 .nform-box ul li label {
@@ -338,7 +362,6 @@ module.exports = databp;
 .nform-box ul li input,
 .nform-box ul li select {
 	max-height: 30px;
-	margin-right: 50px;
 	border-color: #c2c2c2 !important;
 }
 
@@ -359,8 +382,8 @@ module.exports = databp;
 	margin-right: 4px;
 }
 
-.nform-box li .btn-searchLi-top {
-	margin: 0 13px 0 235px;
+.nform-box li .btn-search {
+	margin: 0 0 0 46%;
 	width: 80px;
 }
 
