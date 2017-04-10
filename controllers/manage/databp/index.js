@@ -9,7 +9,6 @@ const forward = require('express-forward-html');
 module.exports = (Router) => {
 
     forward({
-        router: Router,
         filterHtml(html) {
             // 移除统计脚本
             return html.replace(/<script[\S]+?uba-sdk[\S]+?<\/script>/, '').replace(/top\.location/g, '{}');
@@ -22,6 +21,6 @@ module.exports = (Router) => {
             return js && js.replace(/\.assign\(([^,]+?)\)/g, '.$assign($1)').replace(/top\.location/g, '{}');
         },
         prefix: '/databp'
-    });
+    })(Router);
     return Router;
 };
