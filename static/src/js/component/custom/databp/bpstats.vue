@@ -203,6 +203,7 @@ var defaultChartOption = {
 		}
 	]
 };
+const BP_STAT_SUM = 'showbpsum';
 var databp = Vue.extend({
 	name: 'bpstats',
 	components: {
@@ -275,6 +276,9 @@ var databp = Vue.extend({
 			}
 		}
 	},
+	created() {
+		this.showSum = !!window.localStorage.getItem(BP_STAT_SUM);
+	},
 	ready() {
 		// triger the date picker
 		this.pageComponentsData.trigger = !this.pageComponentsData.trigger;
@@ -337,6 +341,11 @@ var databp = Vue.extend({
 		},
 		queryClick() {
 			this.paginationConf.currentPage = 1;
+			if(this.showSum) {
+				api.getHeatSum(this.searchParam).then((data) => {
+					this.sum = data;
+				});
+			}
 			this.query();
 		},
 		detail(item) {
@@ -382,9 +391,11 @@ var databp = Vue.extend({
 					api.getHeatSum(this.searchParam).then((data) => {
 						this.sum = data;
 					});
+					window.localStorage.setItem(BP_STAT_SUM, 1);
 				} else {
 					this.sum.pv = '';
 					this.sum.uv = '';
+					window.localStorage.removeItem(BP_STAT_SUM);
 				}
 			}
 		}
