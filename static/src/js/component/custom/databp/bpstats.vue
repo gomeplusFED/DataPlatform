@@ -3,42 +3,52 @@
 		<div class="nform-box">
 			<ul class="clearfix">
 				<li class="clearfix">
-					<label>埋点URL</label>
-					<input class="form-control inp inpW1"
-					       type="text"
-					       placeholder=""
-					       v-model="searchParam.pageUrl">
-					<label>埋点名称</label>
-					<input class="form-control inp inpW2"
-					       type="text"
-					       placeholder=""
-					       v-model="searchParam.pointName">
-					<label>平台</label>
-					<select class="form-control inp inpW2"
-					        v-model="searchParam.platform">
-						<option value='PC'>PC</option>
-						<option value='H5'>H5</option>
-					</select>
-					<label>是否模块</label>
-					<select class="form-control inp inpW2"
-					        v-model="searchParam.type">
-						<option value=''>全部</option>
-						<option value='block'>模块</option>
-						<option value='point'>单点</option>
-					</select>
+					<div>
+						<label>埋点URL</label>
+						<input class="form-control inp inpW1"
+						       type="text"
+						       placeholder=""
+						       v-model="searchParam.pageUrl">
+					</div>
+					<div>
+						<label>埋点名称</label>
+						<input class="form-control inp inpW2"
+						       type="text"
+						       placeholder=""
+						       v-model="searchParam.pointName">
+					</div>
+					<div>
+						<label>平台</label>
+						<select class="form-control inp inpW2"
+						        v-model="searchParam.platform">
+							<option value='PC'>PC</option>
+							<option value='H5'>H5</option>
+						</select>
+					</div>
+					<div>
+						<label>是否模块</label>
+						<select class="form-control inp inpW2"
+						        v-model="searchParam.type">
+							<option value=''>全部</option>
+							<option value='block'>模块</option>
+							<option value='point'>单点</option>
+						</select>
+					</div>
 				</li>
 				<li>
-					<label>查询时间</label>
-					<div class="date_picker">
-						<m-date :index="index"
-						        :page-components-data="pageComponentsData"
-						        :component-type="'date_picker'"
-						        :argvs.sync='argvs'
-						        :custom-option="datepickerOption"
-						        :cancel-date-limit="1"></m-date>
+					<div>
+						<label>查询时间</label>
+						<div class="date_picker">
+							<m-date :index="index"
+							        :page-components-data="pageComponentsData"
+							        :component-type="'date_picker'"
+							        :argvs.sync='argvs'
+							        :custom-option="datepickerOption"
+							        :cancel-date-limit="1"></m-date>
+						</div>
 					</div>
 					<button id="btnSearch"
-					        class="btn btn-searchLi-top btn-primary"
+					        class="btn btn-search btn-primary"
 					        type="button"
 					        data-toggle="popover"
 					        data-trigger="focus"
@@ -476,11 +486,20 @@ module.exports = databp;
 }
 
 .nform-box ul li {
+	display: flex;
+	justify-content: flex-start;
 	overflow: hidden;
 	padding-bottom: 6px;
 	list-style: none;
 	margin-bottom: 10px;
 	padding: 0;
+}
+
+.nform-box ul li>div {
+
+	display: flex;
+	margin-right: 5%;
+	min-width: 170px;
 }
 
 .nform-box ul li label {
@@ -498,6 +517,7 @@ module.exports = databp;
 	float: left;
 	min-width: 220px;
 }
+
 
 .nform-box li label,
 .nform-box li a,
@@ -531,8 +551,8 @@ module.exports = databp;
 	margin-right: 4px;
 }
 
-.nform-box li .btn-searchLi-top {
-	margin: 0 13px 0 540px;
+.nform-box li .btn-search {
+	margin: 0 0 0 45%;
 	width: 80px;
 }
 
