@@ -34,7 +34,9 @@
 						        :page-components-data="pageComponentsData"
 						        :component-type="'date_picker'"
 						        :argvs.sync='argvs'
-						        :custom-option="datepickerOption"></m-date>
+						        :custom-option="datepickerOption"
+								:cancel-date-limit="1"
+								></m-date>
 					</div>
 					<button id="btnSearch"
 					        class="btn btn-searchLi-top btn-primary"

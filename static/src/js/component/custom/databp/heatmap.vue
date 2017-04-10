@@ -16,7 +16,7 @@
 			</div>
 			<div slot="extend-nav" class="form-group">
 				<label>截止日期</label>                     
-				<m-date :index="index" :page-components-data="pageComponentsData" :component-type="'date_picker'" :argvs.sync='argvs' :custom-option = "datepickerOption"></m-date>
+				<m-date :index="index" :page-components-data="pageComponentsData" :component-type="'date_picker'" :argvs.sync='argvs' :custom-option = "datepickerOption" :cancel-date-limit="1"></m-date>
 
 			</div>
 			<label class="showmap" slot="extend-nav"><input type="checkbox" v-model="show"></input>显示热力图</label>

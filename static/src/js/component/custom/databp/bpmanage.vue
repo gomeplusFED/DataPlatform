@@ -34,7 +34,7 @@
 			<li>
 				<label><input type="checkbox" v-model="showDate"></input>起止时间</label>
 				<div class="date_picker">                
-					<m-date :index="index" :page-components-data="pageComponentsData" :component-type="'date_picker'" :argvs.sync='argvs' :custom-option="datepickerOption" diasbled></m-date>
+					<m-date :index="index" :page-components-data="pageComponentsData" :component-type="'date_picker'" :argvs.sync='argvs' :custom-option="datepickerOption" :cancel-date-limit="1" diasbled></m-date>
 				</div>
 
 				<button id="btnSearch" class="btn btn-searchLi-top btn-primary" type="button" data-toggle="popover" data-trigger="focus" @click="queryClick">查询</button>
