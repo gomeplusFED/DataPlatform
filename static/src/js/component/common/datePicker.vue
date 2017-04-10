@@ -116,7 +116,7 @@ var DateCom = Vue.extend({
                 })
 
                 $('#datePicker_' + this.index).find('input').on('apply.daterangepicker',function(ev, picker){
-                    if( !cancelDateLimit && _this.validlist.indexOf(_this.$route.path) === -1 && Number(picker.endDate.format('YYYY-MM-DD').replace(/\-/g,'')) > Number(yesterday.replace(/\-/g,''))){
+                    if( !this.cancelDateLimit && _this.validlist.indexOf(_this.$route.path) === -1 && Number(picker.endDate.format('YYYY-MM-DD').replace(/\-/g,'')) > Number(yesterday.replace(/\-/g,''))){
 
                         alert('请选择今天之前的时间！');
                         $('#datePicker_' + _this.index).find('input').data('daterangepicker').setStartDate(_this.pageComponentsData[_this.componentType].defaultData === 1 ? yesterday : last7Day);
