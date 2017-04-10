@@ -1,68 +1,123 @@
 <template>
-<div class="mask" v-show="bpConfig.show"   v-on:dragover.stop.prevent="" v-on:drop.stop.prevent="drop" @click="warning">
-	<div class="infobox" :draggable="draggable"  v-on:dragstart="dragstart" v-on:drag.stop.prevent="draging" v-bind:style="infopos">
-		<div class="closer" title="关闭" @click="hide">&times;</div>
-		<div class="sider-nav ">
-			<div class="tabs-container">
-				<ul class="nav nav-tabs">
-					<li role="presentation" class="active"><a href="#tab_baseinfo" data-toggle="tab" aria-expanded="true">基本信息</a></li> 
-					<li role="presentation" class=""><a href="#tab_bpdata" data-toggle="tab" aria-expanded="false">埋点数据</a></li> 
-				</ul> 
-				<div class="tab-content tabs-content zbgxt-content">
-					<div id="tab_baseinfo" class="tab-pane active in">
-						<div class="extendinfo" @focusin="setDraggable(false)" @focusout="unfocus">
-							<div>
-								<label>埋点名称</label>
-								<input type='text' class='form-control' placeholder='' v-model="config.pointName">
-							</div>
-							<div><label>选择器</label>{{config.selector}}</div>
-							<div><label>事件类型</label>单击事件</div>
-							<div><label>匹配模式</label>{{config.pattern}}</div>
-							<div class="type-filter"><label>是否模块</label>
-								<button @click="config.type = 'block'" :class="{'active': (config.type === 'block')}">是</button>
-								<button @click="config.type = 'point'" :class="{'active': (config.type !== 'block')}">否</button></div>
-							<div><label>全局埋点信息</label>{{publicBpStr}} <button @click="publicBp.push(['', ''])">+</button></div>
-							<div>
-								<div v-for="(i,item) in publicBp" class="pair">
-									key
-									<input type='text' class='form-control' placeholder='' v-model="item[0]">
-									value
-									<input type='text' class='form-control' placeholder='' v-model="item[1]" @click="showDropDown(item, $event)">
-									<button @click="publicBp.splice(i,1)">-</button>
+	<div class="mask"
+	     v-show="bpConfig.show"
+	     v-on:dragover.stop.prevent=""
+	     v-on:drop.stop.prevent="drop"
+	     @click="warning">
+		<div class="infobox"
+		     :draggable="draggable"
+		     v-on:dragstart="dragstart"
+		     v-on:drag.stop.prevent="draging"
+		     v-bind:style="infopos">
+			<div class="closer"
+			     title="关闭"
+			     @click="hide">&times;</div>
+			<div class="sider-nav ">
+				<div class="tabs-container">
+					<ul class="nav nav-tabs">
+						<li role="presentation"
+						    class="active"><a href="#tab_baseinfo"
+							   data-toggle="tab"
+							   aria-expanded="true">基本信息</a></li>
+						<li role="presentation"
+						    class=""><a href="#tab_bpdata"
+							   data-toggle="tab"
+							   aria-expanded="false">埋点数据</a></li>
+					</ul>
+					<div class="tab-content tabs-content zbgxt-content">
+						<div id="tab_baseinfo"
+						     class="tab-pane active in">
+							<div class="extendinfo"
+							     @focusin="setDraggable(false)"
+							     @focusout="unfocus">
+								<div>
+									<label>埋点名称</label>
+									<input type='text'
+									       class='form-control'
+									       placeholder=''
+									       v-model="config.pointName">
+								</div>
+								<div>
+									<label>选择器</label>{{config.selector}}</div>
+								<div>
+									<label>事件类型</label>单击事件</div>
+								<div>
+									<label>匹配模式</label>{{config.pattern}}</div>
+								<div class="type-filter">
+									<label>是否模块</label>
+									<button @click="config.type = 'block'"
+									        :class="{'active': (config.type === 'block')}">是</button>
+									<button @click="config.type = 'point'"
+									        :class="{'active': (config.type !== 'block')}">否</button>
+								</div>
+								<div>
+									<label>全局埋点信息</label>{{publicBpStr}}
+									<button @click="publicBp.push(['', ''])">+</button>
+								</div>
+								<div>
+									<div v-for="(i,item) in publicBp"
+									     class="pair">
+										key
+										<input type='text'
+										       class='form-control'
+										       placeholder=''
+										       v-model="item[0]"> value
+										<input type='text'
+										       class='form-control'
+										       placeholder=''
+										       v-model="item[1]"
+										       @click="showDropDown(item, $event)">
+										<button @click="publicBp.splice(i,1)">-</button>
+									</div>
+								</div>
+								<div>
+									<label>独立埋点信息</label>{{privateBpStr}}
+									<button @click="privateBp.push(['', ''])">+</button>
+									<div v-for="(i,item) in privateBp"
+									     class="pair">
+										key
+										<input type='text'
+										       class='form-control'
+										       placeholder=''
+										       v-model="item[0]"> value
+										<input type='text'
+										       class='form-control'
+										       placeholder=''
+										       v-model="item[1]">
+	
+										<button @click="privateBp.splice(i,1)">-</button>
+									</div>
 								</div>
 							</div>
-							<div>
-								<label>独立埋点信息</label>{{privateBpStr}}  <button @click="privateBp.push(['', ''])">+</button>
-								<div v-for="(i,item) in privateBp" class="pair">
-									key<input type='text' class='form-control' placeholder='' v-model="item[0]" >
-									value
-									<input type='text' class='form-control' placeholder='' v-model="item[1]">
-
-									<button  @click="privateBp.splice(i,1)">-</button>
-								</div>
+							<div class="value-list"
+							     v-show="selectpos.show"
+							     v-bind:style="selectpos">
+								<ul>
+									<li @click="selectVal('${id}')">${id}</li>
+								</ul>
 							</div>
 						</div>
-						<div class="value-list" v-show="selectpos.show" v-bind:style="selectpos">
-							<ul>
-								<li @click="selectVal('${id}')">${id}</li>
-							</ul>
+						<div id="tab_bpdata"
+						     class="tab-pane fade">
+							<!-- 						<div class="date_picker">                
+								<m-date :index="1" :page-components-data="pageComponentsData" :component-type="'date_picker'" :argvs.sync='argvs' :custom-option = "datepickerOption"></m-date>
+							</div> -->
+							<div v-if="trend.chartOption && trend.chartOption.xAxis.data.length > 0"
+							     class="bp-chart"
+							     v-echarts="trend.chartOption"></div>
+							<div v-show="!trend.chartOption || trend.chartOption.xAxis.data.length === 0"
+							     class="nodata all_center bp-chart">
+								<img src="/dist/img/nodata.png">
+							</div>
 						</div>
-					</div> 
-					<div id="tab_bpdata" class="tab-pane fade">
-<!-- 						<div class="date_picker">                
-							<m-date :index="1" :page-components-data="pageComponentsData" :component-type="'date_picker'" :argvs.sync='argvs' :custom-option = "datepickerOption"></m-date>
-						</div> -->
-						<div v-if="trend.chartOption && trend.chartOption.xAxis.data.length > 0" class="bp-chart" v-echarts="trend.chartOption"></div>
-						<div v-show="!trend.chartOption || trend.chartOption.xAxis.data.length === 0" class="nodata all_center bp-chart">
-							<img src="/dist/img/nodata.png">
-						</div>
-					</div> 
+					</div>
+					<button class="btn btn-success save"
+					        @click="save"
+					        data-toggle="popover">{{config.pointId ? '更新埋点' : '保存埋点'}}</button>
 				</div>
-				<button class="btn btn-success save" @click="save" data-toggle="popover">{{config.pointId ? '更新埋点' : '保存埋点'}}</button>
 			</div>
 		</div>
 	</div>
-</div>
 </template>
 
 <script>
@@ -106,7 +161,7 @@ var defaultChartOption = {
 
 
 var bpinfo = Vue.extend({
-	data: function() {
+	data: function () {
 		return {
 			argvs: {
 				endTime: utils.formatDate(new Date(), 'yyyy-MM-dd'),
@@ -159,9 +214,9 @@ var bpinfo = Vue.extend({
 	computed: {
 		publicBpStr: {
 			get() {
-				return this.publicBp.filter(function(a) {
+				return this.publicBp.filter(function (a) {
 					return (a[0] && a[1]);
-				}).map(function(a) {
+				}).map(function (a) {
 					return a.join('=');
 				}).join('&');
 			},
@@ -175,7 +230,7 @@ var bpinfo = Vue.extend({
 				var _this = this;
 				_this.publicBp.length = 0;
 				var pairs = newValue.split('&');
-				pairs.forEach(function(p) {
+				pairs.forEach(function (p) {
 					var pa = p.split('=');
 					if (pa.length === 2) {
 						_this.publicBp.push([pa[0], pa[1]]);
@@ -185,9 +240,9 @@ var bpinfo = Vue.extend({
 		},
 		privateBpStr: {
 			get() {
-				return this.privateBp.filter(function(a) {
+				return this.privateBp.filter(function (a) {
 					return (a[0] && a[1]);
-				}).map(function(a) {
+				}).map(function (a) {
 					return a.join('=');
 				}).join('&');
 			},
@@ -201,7 +256,7 @@ var bpinfo = Vue.extend({
 				var _this = this;
 				_this.privateBp.length = 0;
 				var pairs = newValue.split('&');
-				pairs.forEach(function(p) {
+				pairs.forEach(function (p) {
 					var pa = p.split('=');
 					if (pa.length === 2) {
 						_this.privateBp.push([pa[0], pa[1]]);
@@ -212,7 +267,7 @@ var bpinfo = Vue.extend({
 	},
 	props: ['loading', 'bpConfig'],
 	created() {
-		this.$watch('bpConfig.trigger', function(val) {
+		this.$watch('bpConfig.trigger', function (val) {
 			if (this.bpConfig.show) {
 				this.init();
 			}
@@ -243,7 +298,7 @@ var bpinfo = Vue.extend({
 		init() {
 			this.loading.show = true;
 			var _this = this;
-			api.getBp(_this.bpConfig).then(function(data) {
+			api.getBp(_this.bpConfig).then(function (data) {
 				let keys = Object.keys(data);
 				for (let key of keys) {
 					if (data[key] === '') {
@@ -261,7 +316,7 @@ var bpinfo = Vue.extend({
 					_this.loadChart();
 				}
 				_this.loading.show = false;
-			}).catch(function(err) {
+			}).catch(function (err) {
 				console.log(err);
 				_this.loading.show = false;
 			});
@@ -325,7 +380,8 @@ var bpinfo = Vue.extend({
 				startTime,
 				endTime
 			} = this.argvs;
-			api.getHeatDetail({...this.config,
+			api.getHeatDetail({
+				...this.config,
 				startTime: startTime + ' 00:00:00',
 				endTime: endTime + ' 23:59:59'
 			}).then((data) => {
@@ -349,11 +405,11 @@ var bpinfo = Vue.extend({
 		},
 		save(ev) {
 			let $save = $(ev.target);
-			let $popover = function(content) {
+			let $popover = function (content) {
 				$save.popover({
 					content
 				});
-				setTimeout(function() {
+				setTimeout(function () {
 					$save.popover("destroy");
 				}, 1000);
 				$save.popover('show');
@@ -407,12 +463,12 @@ var bpinfo = Vue.extend({
 			_this.config.privateParam = _this.privateBpStr;
 			_this.config.userInfo = JSON.stringify(_this.userInfo);
 			if (_this.config.pointId) {
-				api.updateBp(_this.config).then(function(res) {
+				api.updateBp(_this.config).then(function (res) {
 					// 更新成功刷新传入的数据
 					_this.bpConfig.show = false;
 				});
 			} else {
-				api.saveBp(_this.config).then(function() {
+				api.saveBp(_this.config).then(function () {
 					_this.bpConfig.show = false;
 				});
 			}
@@ -430,18 +486,22 @@ module.exports = bpinfo;
 	height: 10px;
 	background: #eee;
 }
+
 ::-webkit-scrollbar-thumb {
 	height: 50px;
 	background-color: #ccc !important;
 	-webkit-border-radius: 5px;
-	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+	-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
 }
+
 ::-webkit-scrollbar-track-piece {
 	-webkit-border-radius: 0;
 }
+
 .all_center {
 	top: 40%;
 }
+
 .mask {
 	position: fixed;
 	width: 100%;
@@ -450,6 +510,7 @@ module.exports = bpinfo;
 	z-index: 100;
 	cursor: auto;
 }
+
 .infobox {
 	cursor: auto;
 	width: 360px;
@@ -457,7 +518,7 @@ module.exports = bpinfo;
 	float: left;
 	background-color: #fff;
 	border: 1px solid #ccc;
-	box-shadow: 1px 1px 8px 1px rgba(0,0,0,.2);
+	box-shadow: 1px 1px 8px 1px rgba(0, 0, 0, .2);
 	position: fixed;
 	right: 50px;
 	font-size: 12px;
@@ -466,58 +527,65 @@ module.exports = bpinfo;
 	word-break: break-all;
 	z-index: 200;
 }
+
 .popover {
 	z-index: 300
 }
+
 .closer {
-    position: absolute;
-    right: 8px;
-    cursor: pointer;
-    font-size: 17px;
+	position: absolute;
+	right: 8px;
+	cursor: pointer;
+	font-size: 17px;
 }
 
 .type-filter button {
 	display: inline-block;
-    vertical-align: middle;
-    border: 1px solid #cacaca;
-    color: #333;
-    padding: 2px 12px;
-    background: #fff;
-    font-size: 12px;
-    outline: none;
-    margin-left: -3px;
-    transition: all ease 0.2s;
-    -webkit-transition: all ease 0.2s;
+	vertical-align: middle;
+	border: 1px solid #cacaca;
+	color: #333;
+	padding: 2px 12px;
+	background: #fff;
+	font-size: 12px;
+	outline: none;
+	margin-left: -3px;
+	transition: all ease 0.2s;
+	-webkit-transition: all ease 0.2s;
 }
 
 .type-filter button.active {
-    background: #3389d4;
-    border: 1px solid #3389d4;
-    color: #fff;
+	background: #3389d4;
+	border: 1px solid #3389d4;
+	color: #fff;
 }
+
 #tab_baseinfo input[type='text'] {
 	max-width: 180px;
 	display: inline-block;
 	max-height: 30px;
 }
+
 #tab_baseinfo .pair {
 	margin-top: 10px;
 }
+
 #tab_baseinfo .pair input {
 	max-width: 80px;
 	margin-right: 20px;
 	margin-left: 10px;
 }
-#tab_baseinfo div > label{
+
+#tab_baseinfo div>label {
 	font-weight: normal;
 	margin-right: 10px;
 }
-#tab_baseinfo div > label:first-child {
-	font-weight: bold; 
+
+#tab_baseinfo div>label:first-child {
+	font-weight: bold;
 	min-width: 50px;
 }
 
-#tab_baseinfo > .extendinfo > div {
+#tab_baseinfo>.extendinfo>div {
 	margin-bottom: 5px;
 }
 
@@ -532,16 +600,21 @@ module.exports = bpinfo;
 	width: 100%;
 }
 
-.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+.nav-tabs>li.active>a,
+.nav-tabs>li.active>a:focus,
+.nav-tabs>li.active>a:hover {
 	color: #555;
 	cursor: default;
 	background-color: #fff;
 	border-bottom-color: transparent;
 }
-.nav>li>a:focus, .nav>li>a:hover {
+
+.nav>li>a:focus,
+.nav>li>a:hover {
 	text-decoration: none;
 	background-color: #eee;
 }
+
 .nav-tabs>li>a {
 	margin-right: 2px;
 	line-height: 1.42857143;
@@ -549,45 +622,53 @@ module.exports = bpinfo;
 	border-radius: 4px 4px 0 0;
 	min-width: 80px;
 	text-align: center;
-	color:#555;
-	background:#f2f2f2;
+	color: #555;
+	background: #f2f2f2;
 	border: 1px solid #ddd;
 }
-.nav>li{
+
+.nav>li {
 	width: 33.3333%;
 }
+
 .nav>li>a {
 	position: relative;
 	display: block;
 	padding: 10px 0;
 }
-.tabs-container{
+
+.tabs-container {
 	width: 100%;
 	height: 100%;
 }
+
 .tabs-content {
 	border: 1px solid #ccc;
 	border-top: 0;
 	padding: 20px 0 0 0;
 	height: calc(100% - 90px);
 }
+
 .extendinfo {
 	max-height: 400px;
 	overflow-y: auto;
 	margin-left: 20px;
 	margin-bottom: 20px;
 }
+
 button.save {
 	margin: 8px auto;
 	display: block;
 }
-.closed{
-   background-color: #ccc !important;
+
+.closed {
+	background-color: #ccc !important;
 }
 
 .zbgxt-content .content {
 	padding: 10px;
 }
+
 .zbgxt-content .title2 {
 	font-size: 15px;
 	line-height: 20px;
@@ -596,6 +677,7 @@ button.save {
 	margin-left: 10px;
 	border-left: 2px solid #d40902;
 }
+
 .value-list {
 	position: fixed;
 	margin-left: 10px;
@@ -604,20 +686,25 @@ button.save {
 	background-color: #fff;
 	border-radius: 4px;
 }
+
 .value-list ul {
 	margin-bottom: 0;
 }
+
 .value-list li {
 	padding-left: 10px;
 	font-size: 14px;
 }
+
 .value-list li:hover {
 	background-color: #eee;
 }
+
 #tab_bpdata {
 	width: 100%;
 	height: 100%;
 }
+
 #tab_bpdata .bp-chart {
 	width: 336px;
 	height: 200px;

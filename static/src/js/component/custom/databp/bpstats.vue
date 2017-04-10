@@ -35,8 +35,7 @@
 						        :component-type="'date_picker'"
 						        :argvs.sync='argvs'
 						        :custom-option="datepickerOption"
-								:cancel-date-limit="1"
-								></m-date>
+						        :cancel-date-limit="1"></m-date>
 					</div>
 					<button id="btnSearch"
 					        class="btn btn-searchLi-top btn-primary"
@@ -343,7 +342,7 @@ var databp = Vue.extend({
 		},
 		queryClick() {
 			this.paginationConf.currentPage = 1;
-			if(this.showSum) {
+			if (this.showSum) {
 				api.getHeatSum(this.searchParam).then((data) => {
 					this.sum = data;
 				});
