@@ -26,7 +26,7 @@
 						</select>
 					</div>
 					<div>
-						<label>埋点事件名称</label>
+						<label>埋点事件</label>
 						<input class="form-control inp inpW2"
 						       type="text"
 						       placeholder=""
