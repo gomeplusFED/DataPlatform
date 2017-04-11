@@ -131,7 +131,7 @@ var defaultChartOption = {
 	legend: {
 		show: true,
 		bottom: 0,
-		data: ['PV', 'UV']
+		data: ['点击量', '点击UV']
 	},
 	grid: {
 		top: 10,
@@ -149,11 +149,11 @@ var defaultChartOption = {
 		type: 'value'
 	},
 	series: [{
-		name: 'PV',
+		name: '点击量',
 		type: 'line',
 		data: []
 	}, {
-		name: 'UV',
+		name: '点击UV',
 		type: 'line',
 		data: []
 	}]
