@@ -59,7 +59,17 @@
 							<option value='point'>单点</option>
 						</select>
 					</div>
-	
+					<div>
+						<label>埋点版本</label>
+						<select id="version"
+						        class="form-control data-type"
+						        v-model="searchParam.version"
+						        data-content="请选择版本">
+							<option v-for="(i, t) of versions"
+							        value={{t.version}}
+							        :selected="t.version === searchParam.version ? 'selected' : ''">{{t.version}} - {{t.dateTime}}</option>
+						</select>
+					</div>
 				</li>
 				<li>
 					<div>
@@ -93,6 +103,7 @@
 					<tr>
 						<th>序号</th>
 						<th>埋点名称</th>
+						<th>埋点版本</th>
 						<th>事件</th>
 						<th>是否模块</th>
 						<th>页面URL</th>
@@ -107,6 +118,7 @@
 					<tr v-for="(i, item) in dataList">
 						<td>{{i + baseIndex}}</td>
 						<td title="{{item.pointName}}">{{item.pointName}}</td>
+						<td title="{{item.version}}">{{item.version}}</td>
 						<td>单击</td>
 						<td title="{{item.type}}">{{item.type === 'block' ? '是' : '否'}}</td>
 						<td title="{{item.pageUrl}}"><a @click="heatmap(item)">{{item.pageUrl}}</a></td>
@@ -181,9 +193,11 @@ var databp = Vue.extend({
 				trigger: true
 			},
 			dataList: [],
+			versions: [],
 			searchParam: {
 				pointName: '',
 				platform: 'PC',
+				version: '',
 				pageUrl: '',
 				pattern: '',
 				isActive: '1',
@@ -195,7 +209,15 @@ var databp = Vue.extend({
 		this.showDate = false;
 	},
 	route: {
-		activate: function (transition) {
+		async activate(transition) {
+			let res = await api.getHeatVersions(this.searchParam);
+			this.versions = res.map(x => ({
+					...x,
+					dateTime: utils.formatDate(new Date(x.dateTime), 'yyyy-MM-dd hh:mm:ss')
+				}));
+			await api.getLatestVersions(this.searchParam).then(ver => {
+					this.searchParam.version = ver;
+			})
 			this.query();
 			return Promise.resolve(true);
 		}
@@ -383,7 +405,7 @@ module.exports = databp;
 }
 
 .nform-box li .btn-search {
-	margin: 0 0 0 46%;
+	margin: 0 0 0 42.5%;
 	width: 80px;
 }
 
@@ -431,7 +453,7 @@ module.exports = databp;
 	background-color: #f2faff;
 }
 
-.ntable tr th:nth-child(3) {
+.ntable tr th:nth-child(4) {
 	width: 50px;
 }
 
@@ -447,15 +469,15 @@ module.exports = databp;
 	width: 5%
 }
 
-.ntable tr th:nth-child(5) {
+.ntable tr th:nth-child(6) {
 	width: 300px;
 }
 
-.ntable tr th:nth-child(6) {
+.ntable tr th:nth-child(7) {
 	width: 200px;
 }
 
-.ntable tr th:nth-child(8) {
+.ntable tr th:nth-child(9) {
 	width: 80px;
 }
 
