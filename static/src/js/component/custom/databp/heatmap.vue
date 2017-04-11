@@ -283,10 +283,9 @@ let heatmap = Vue.extend({
         },
         showTip() {
             // bind event
-            this.dom.$elems && this.dom.$elems.off();
-            let $allElem = this.dom.$elems = this.data.filter(x => x.$elem).reduce((acu, cur) => acu.add(cur.$elem.attr('heat-data', `名称：${cur.pointName || '--'}<br>pv：${cur.pv}<br>日uv：${cur.uv}`)), $());
-            if (!$allElem) {
-                return;
+            this.dom.iframe.off();
+            for(let x of this.data) {
+                x.tip = `名称：${x.pointName || '--'}<br>点击量：${x.pv}<br>点击UV：${x.uv}`;
             }
             let $popover = this.dom.$popover;
             let $tip = this.dom.$tip;
@@ -295,8 +294,7 @@ let heatmap = Vue.extend({
             let _text;
             let docwidth = this.dom.width;
             let halfwidth = docwidth / 2;
-            let setPopover = (text, x, y) => {
-                $tip.html(text);
+            let setPopover = (x, y) => {
                 if (x < halfwidth) {
                     $popover.css('right', '');
                     $popover.css('left', x + 12);
@@ -308,22 +306,35 @@ let heatmap = Vue.extend({
                 $popover.show();
                 wait = false;
             }
-            $allElem.mousemove(function (e) {
-                if (_element !== this) {
-                    setPopover(_text = this.getAttribute('heat-data'), e.pageX, e.pageY);
-                } else {
-                    if (!wait) {
-                        // throttle
-                        setTimeout(() => {
-                            setPopover(_text, e.pageX, e.pageY);
-                        }, 200);
-                        wait = true;
+
+            this.dom.iframe.mousemove((e) => {
+                // 检查当前位置
+                let _x = e.pageX;
+                let _y = e.pageY;
+                let res = this.data.filter(p => {
+                    return Math.abs(p._centerX - _x) <= (p._width / 2) && Math.abs(p._centerY - _y) <= (p._height / 2);
+                });
+                if (res.length > 0) {
+                    let item = res[0];
+                    if (_element !== item) {
+                        $tip.html(item.tip);
+                        setPopover( _x, _y);
+                        _element = item;
+                    } else {
+                        if (!wait) {
+                            // throttle
+                            setTimeout(() => {
+                                _element && setPopover(_x, _y);
+                            }, 200);
+                            wait = true;
+                        }
                     }
+                } else {
+                    wait = false;
+                    _element = null;
+                    $popover.hide();
                 }
-            });
-            $allElem.mouseleave((e) => {
-                $popover.hide();
-                _element = null;
+            
             });
         },
         trimData(data) {
