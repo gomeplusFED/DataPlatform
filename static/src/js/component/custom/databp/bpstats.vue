@@ -73,7 +73,7 @@
 					       class="form-control inp inpW1"
 					       type="text"
 					       placeholder=""
-					       value="PV : {{sum.pv == null ? '  ' : sum.pv}}   UV : {{sum.uv == null ? '  ' : sum.uv}}"
+					       value="点击量 : {{sum.pv == null ? '  ' : sum.pv}}  日UV : {{sum.uv == null ? '  ' : sum.uv}}"
 					       disabled>
 				</li>
 			</ul>
@@ -89,8 +89,8 @@
 						<th>是否模块</th>
 						<th>页面URL</th>
 						<th>埋点参数</th>
-						<th>PV</th>
-						<th>UV</th>
+						<th>点击量</th>
+						<th>日UV</th>
 						<th>详情</th>
 					</tr>
 				</thead>
@@ -159,8 +159,8 @@
 								<thead>
 									<tr>
 										<th>日期</th>
-										<th>PV</th>
-										<th>UV</th>
+										<th>点击量</th>
+										<th>日UV</th>
 									</tr>
 								</thead>
 								<tbody>

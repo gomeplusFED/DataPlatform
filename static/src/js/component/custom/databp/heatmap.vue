@@ -22,7 +22,7 @@
                         v-model="datatype"
                         :disabled="!show">
                     <option v-for="(i, type) of dataTypes"
-                            value={{type.name}}>{{type.name}}</option>
+                            value={{type.name}}>{{type.text}}</option>
                 </select>
             </div>
             <div slot="extend-nav"
@@ -114,9 +114,11 @@ let heatmap = Vue.extend({
             maxVal: 1,
             dataTypes: [{
                 name: 'pv',
+                text: '点击量',
                 p: 1
             }, {
                 name: 'uv',
+                text: '点击uv',
                 p: 1
             }],
             versions: [],
