@@ -356,6 +356,7 @@ let heatmap = Vue.extend({
                 }
             });
         },
+        // 筛选出在canvas范围内的点
         filterFunc(arr, canvas) {
             return arr.filter(x => (x._centerX && x._centerX < canvas.width && x._centerY < canvas.height));
         },
@@ -363,7 +364,8 @@ let heatmap = Vue.extend({
             let newdata = this.trimData(this.data);
             let needkeep = [];
             let needupdate = [];
-            let needupdatePre = [];
+            // 旧位置的点
+            let needupdateLast = [];
             for (let i = 0, len = newdata.length; i < len; i++) {
                 let x0 = this.data[i];
                 let x1 = newdata[i];
@@ -371,7 +373,7 @@ let heatmap = Vue.extend({
                     needkeep.push(x0);
                 } else {
                     needupdate.push(x1)
-                    needupdatePre.push(x0);
+                    needupdateLast.push(x0);
                 }
             }
             let type = this.dataTypes.find(x => x.name === this.datatype);
@@ -379,19 +381,22 @@ let heatmap = Vue.extend({
             if (needupdate.length > 0) {
                 let filterFunc = (arr) => this.filterFunc(arr, canvas);
                 needupdate = filterFunc(needupdate);
-                needupdatePre = filterFunc(needupdatePre);
+                needupdateLast = filterFunc(needupdateLast);
                 needkeep = filterFunc(needkeep);
                 let field = '_' + type.name;
                 if (needupdate.length === 0) {
+                    // 传入需要保留的点位
                     heatmapFactory.refreshCanvas(canvas, needkeep.map(x => [x._centerX, x._centerY, x[field]]));
                 } else {
-                    let all = [...needupdatePre, ...needupdate];
+                    // 找到需要清除的最小区域
+                    let all = [...needupdateLast, ...needupdate];
                     let xseries = all.map(x => x._centerX);
                     let yseries = all.map(x => x._centerY);
                     let maxX = Math.max(...xseries);
                     let minX = Math.min(...xseries);
-                    let maxY = Math.max(...xseries);
+                    let maxY = Math.max(...yseries);
                     let minY = Math.min(...yseries);
+
                     heatmapFactory.refreshCanvas(canvas, [...needupdate, ...needkeep].map(x => [x._centerX, x._centerY, x[field]]), minX, minY, maxX - minX, maxY - minY);
                     all = null;
                     xseries = null;
@@ -400,7 +405,7 @@ let heatmap = Vue.extend({
             }
             this.data = newdata;
             needupdate = null;
-            needupdatePre = null;
+            needupdateLast = null;
             needkeep = null;
             return window.requestAnimationFrame(this.freshCanvas);
         },
