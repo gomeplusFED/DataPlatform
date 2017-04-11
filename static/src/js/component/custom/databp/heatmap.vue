@@ -21,7 +21,7 @@
                 <select class="form-control data-type"
                         v-model="datatype"
                         :disabled="!show">
-                    <option v-for="(type) of dataTypes"
+                    <option v-for="(i, type) of dataTypes"
                             value={{type.name}}>{{type.name}}</option>
                 </select>
             </div>
