@@ -290,27 +290,31 @@ let heatmap = Vue.extend({
             let $popover = this.dom.$popover;
             let $tip = this.dom.$tip;
             let wait = false;
-            let _x;
-            let _y;
             let _element;
             let _text;
-            let setPopover = (text) => {
+            let docwidth = this.dom.width;
+            let halfwidth = docwidth / 2;
+            let setPopover = (text, x, y) => {
                 $tip.html(text);
-                $popover.css('left', _x);
-                $popover.css('top', _y);
+                if (x < halfwidth) {
+                    $popover.css('right', '');
+                    $popover.css('left', x + 12);
+                } else {
+                    $popover.css('right', docwidth - x + 12);
+                    $popover.css('left', '');
+                }
+                $popover.css('top', y + 12);
                 $popover.show();
                 wait = false;
             }
             $allElem.mousemove(function (e) {
-                _x = e.pageX + 12;
-                _y = e.pageY + 12;
                 if (_element !== this) {
-                    setPopover(_text = this.getAttribute('heat-data'));
+                    setPopover(_text = this.getAttribute('heat-data'), e.pageX, e.pageY);
                 } else {
                     if (!wait) {
                         // throttle
                         setTimeout(() => {
-                            setPopover(_text);
+                            setPopover(_text, e.pageX, e.pageY);
                         }, 200);
                         wait = true;
                     }
