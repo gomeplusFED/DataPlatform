@@ -160,23 +160,24 @@ let heatmap = Vue.extend({
         }
     },
     route: {
-        activate: function (transition) {
+        async activate(transition) {
+            let config = this.$refs.visual.bpConfig;
+            await api.getHeatVersions(config).then((res) => {
+                this.versions = res.map(x => ({
+                    ...x,
+                    dateTime: utils.formatDate(new Date(x.dateTime), 'yyyy-MM-dd hh:mm:ss')
+                }));
+
+            });
+            await api.getLatestVersions(config).then(ver => {
+                this.version = this.versions.findIndex(x => x.version === ver);
+            });
             this.$broadcast('visual_url', this.$route.query);
             return Promise.resolve(true);
         }
     },
     ready() {
         this.pageComponentsData.trigger = !this.pageComponentsData.trigger;
-        let config = this.$refs.visual.bpConfig;
-        api.getHeatVersions(config).then((res) => {
-            this.versions = res.map(x => ({
-                ...x,
-                dateTime: utils.formatDate(new Date(x.dateTime), 'yyyy-MM-dd hh:mm:ss')
-            }));
-            api.getLatestVersions(config).then(ver => {
-                this.version = this.versions.findIndex(x => x.version === ver);
-            })
-        });
     },
     events: {
         visualbp_loaded(config) {
