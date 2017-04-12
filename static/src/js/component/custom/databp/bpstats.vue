@@ -47,6 +47,17 @@
 							        :cancel-date-limit="1"></m-date>
 						</div>
 					</div>
+					<div>
+						<label>埋点版本</label>
+						<select id="version"
+						        class="form-control data-type"
+						        v-model="searchParam.version"
+						        data-content="请选择版本">
+							<option v-for="(i, t) of versions"
+							        value={{t.version}}
+							        :selected="t.version === searchParam.version ? 'selected' : ''">{{t.version}} - {{t.dateTime}}</option>
+						</select>
+					</div>
 					<button id="btnSearch"
 					        class="btn btn-search btn-primary"
 					        type="button"
@@ -62,7 +73,7 @@
 					       class="form-control inp inpW1"
 					       type="text"
 					       placeholder=""
-					       value="PV : {{sum.pv == null ? '  ' : sum.pv}}   UV : {{sum.uv == null ? '  ' : sum.uv}}"
+					       value="点击量 : {{sum.pv == null ? '  ' : sum.pv}}  日UV : {{sum.uv == null ? '  ' : sum.uv}}"
 					       disabled>
 				</li>
 			</ul>
@@ -73,12 +84,13 @@
 					<tr>
 						<th>序号</th>
 						<th>埋点名称</th>
+						<th>埋点版本</th>
 						<th>事件</th>
 						<th>是否模块</th>
 						<th>页面URL</th>
 						<th>埋点参数</th>
-						<th>PV</th>
-						<th>UV</th>
+						<th>点击量</th>
+						<th>日UV</th>
 						<th>详情</th>
 					</tr>
 				</thead>
@@ -86,6 +98,7 @@
 					<tr v-for="(i, item) in dataList">
 						<td>{{i + baseIndex}}</td>
 						<td>{{item.pointName}}</td>
+						<td title="{{item.version}}">{{item.version}}</td>
 						<td>单击</td>
 						<td title="{{item.type}}">{{item.type === 'block' ? '是' : '否'}}</td>
 						<td title="{{item.pageUrl}}"><a v-if="item.uniquePoint !== '2'"
@@ -146,8 +159,8 @@
 								<thead>
 									<tr>
 										<th>日期</th>
-										<th>PV</th>
-										<th>UV</th>
+										<th>点击量</th>
+										<th>日UV</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -184,7 +197,7 @@ var defaultChartOption = {
 	legend: {
 		show: true,
 		bottom: 10,
-		data: ['PV', 'UV']
+		data: ['点击量', '日UV']
 	},
 	grid: {
 		top: 10,
@@ -203,12 +216,12 @@ var defaultChartOption = {
 	},
 	series: [
 		{
-			name: 'PV',
+			name: '点击量',
 			type: 'line',
 			data: []
 		},
 		{
-			name: 'UV',
+			name: '日UV',
 			type: 'line',
 			data: []
 		}
@@ -253,6 +266,7 @@ var databp = Vue.extend({
 				endTime: datepickerOption.endDate,
 				startTime: datepickerOption.startDate
 			},
+			versions: [],
 			trend: {
 				show: false,
 				data: null,
@@ -280,6 +294,7 @@ var databp = Vue.extend({
 			searchParam: {
 				pointName: '',
 				platform: 'PC',
+				version: null,
 				pageUrl: '',
 				pattern: '',
 				isActive: '1',
@@ -293,10 +308,19 @@ var databp = Vue.extend({
 	ready() {
 		// triger the date picker
 		this.pageComponentsData.trigger = !this.pageComponentsData.trigger;
+
 	},
 	route: {
-		activate: function (transition) {
-			this.query();
+		async activate(transition) {
+			let res = await api.getHeatVersions(this.searchParam);
+			this.versions = res.map(x => ({
+					...x,
+					dateTime: utils.formatDate(new Date(x.dateTime), 'yyyy-MM-dd hh:mm:ss')
+				}));
+			await api.getLatestVersions(this.searchParam).then(ver => {
+					this.searchParam.version = ver;
+			})
+			await this.query();
 			return Promise.resolve(true);
 		}
 	},
@@ -499,7 +523,6 @@ module.exports = databp;
 
 	display: flex;
 	margin-right: 5%;
-	min-width: 170px;
 }
 
 .nform-box ul li label {
@@ -535,15 +558,12 @@ module.exports = databp;
 }
 
 .nform-box ul li .inpW1 {
-	max-width: 200px;
+	width: 210px;
+    margin-right: 5px;
 }
 
 .nform-box ul li .inpW2 {
-	max-width: 100px;
-}
-
-.nform-box ul li input:last-child {
-	margin-right: 0px;
+	width: 100px;
 }
 
 .nform-box ul li input[type="checkbox"] {
@@ -552,8 +572,12 @@ module.exports = databp;
 }
 
 .nform-box li .btn-search {
-	margin: 0 0 0 45%;
+	margin: 0 0 0 16%;
 	width: 80px;
+}
+
+.nform-box li .data-type {
+    width: 200px;
 }
 
 .list-cot-h {
@@ -612,19 +636,19 @@ module.exports = databp;
 	width: 5%
 }
 
-.ntable tr th:nth-child(3) {
+.ntable tr th:nth-child(4) {
 	width: 50px;
 }
 
-.ntable tr th:nth-child(4) {
+.ntable tr th:nth-child(5) {
 	width: 100px;
 }
 
-.ntable tr th:nth-child(5) {
+.ntable tr th:nth-child(6) {
 	width: 250px;
 }
 
-.ntable tr th:nth-child(9) {
+.ntable tr th:nth-child(10) {
 	width: 80px;
 }
 

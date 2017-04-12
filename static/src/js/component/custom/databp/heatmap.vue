@@ -21,8 +21,8 @@
                 <select class="form-control data-type"
                         v-model="datatype"
                         :disabled="!show">
-                    <option v-for="(type) of dataTypes"
-                            value={{type.name}}>{{type.name}}</option>
+                    <option v-for="(i, type) of dataTypes"
+                            value={{type.name}}>{{type.text}}</option>
                 </select>
             </div>
             <div slot="extend-nav"
@@ -114,9 +114,11 @@ let heatmap = Vue.extend({
             maxVal: 1,
             dataTypes: [{
                 name: 'pv',
+                text: '点击量',
                 p: 1
             }, {
                 name: 'uv',
+                text: '点击uv',
                 p: 1
             }],
             versions: [],
@@ -158,23 +160,24 @@ let heatmap = Vue.extend({
         }
     },
     route: {
-        activate: function (transition) {
+        async activate(transition) {
+            let config = this.$refs.visual.bpConfig;
+            await api.getHeatVersions(config).then((res) => {
+                this.versions = res.map(x => ({
+                    ...x,
+                    dateTime: utils.formatDate(new Date(x.dateTime), 'yyyy-MM-dd hh:mm:ss')
+                }));
+
+            });
+            await api.getLatestVersions(config).then(ver => {
+                this.version = this.versions.findIndex(x => x.version === ver);
+            });
             this.$broadcast('visual_url', this.$route.query);
             return Promise.resolve(true);
         }
     },
     ready() {
         this.pageComponentsData.trigger = !this.pageComponentsData.trigger;
-        let config = this.$refs.visual.bpConfig;
-        api.getHeatVersions(config).then((res) => {
-            this.versions = res.map(x => ({
-                ...x,
-                dateTime: utils.formatDate(new Date(x.dateTime), 'yyyy-MM-dd hh:mm:ss')
-            }));
-            api.getLatestVersions(config).then(ver => {
-                this.version = this.versions.findIndex(x => x.version === ver);
-            })
-        });
     },
     events: {
         visualbp_loaded(config) {
@@ -280,43 +283,58 @@ let heatmap = Vue.extend({
         },
         showTip() {
             // bind event
-            this.dom.$elems && this.dom.$elems.off();
-            let $allElem = this.dom.$elems = this.data.filter(x => x.$elem).reduce((acu, cur) => acu.add(cur.$elem.attr('heat-data', `名称：${cur.pointName || '--'}<br>pv：${cur.pv}<br>日uv：${cur.uv}`)), $());
-            if (!$allElem) {
-                return;
+            this.dom.iframe.off();
+            for(let x of this.data) {
+                x.tip = `名称：${x.pointName || '--'}<br>点击量：${x.pv}<br>点击UV：${x.uv}`;
             }
             let $popover = this.dom.$popover;
             let $tip = this.dom.$tip;
             let wait = false;
-            let _x;
-            let _y;
             let _element;
             let _text;
-            let setPopover = (text) => {
-                $tip.html(text);
-                $popover.css('left', _x);
-                $popover.css('top', _y);
+            let docwidth = this.dom.width;
+            let halfwidth = docwidth / 2;
+            let setPopover = (x, y) => {
+                if (x < halfwidth) {
+                    $popover.css('right', '');
+                    $popover.css('left', x + 12);
+                } else {
+                    $popover.css('right', docwidth - x + 12);
+                    $popover.css('left', '');
+                }
+                $popover.css('top', y + 12);
                 $popover.show();
                 wait = false;
             }
-            $allElem.mousemove(function (e) {
-                _x = e.pageX + 12;
-                _y = e.pageY + 12;
-                if (_element !== this) {
-                    setPopover(_text = this.getAttribute('heat-data'));
-                } else {
-                    if (!wait) {
-                        // throttle
-                        setTimeout(() => {
-                            setPopover(_text);
-                        }, 200);
-                        wait = true;
+
+            this.dom.iframe.mousemove((e) => {
+                // 检查当前位置
+                let _x = e.pageX;
+                let _y = e.pageY;
+                let res = this.data.filter(p => {
+                    return Math.abs(p._centerX - _x) <= (p._width / 2) && Math.abs(p._centerY - _y) <= (p._height / 2);
+                });
+                if (res.length > 0) {
+                    let item = res[0];
+                    if (_element !== item) {
+                        $tip.html(item.tip);
+                        setPopover( _x, _y);
+                        _element = item;
+                    } else {
+                        if (!wait) {
+                            // throttle
+                            setTimeout(() => {
+                                _element && setPopover(_x, _y);
+                            }, 200);
+                            wait = true;
+                        }
                     }
+                } else {
+                    wait = false;
+                    _element = null;
+                    $popover.hide();
                 }
-            });
-            $allElem.mouseleave((e) => {
-                $popover.hide();
-                _element = null;
+            
             });
         },
         trimData(data) {
@@ -354,6 +372,7 @@ let heatmap = Vue.extend({
                 }
             });
         },
+        // 筛选出在canvas范围内的点
         filterFunc(arr, canvas) {
             return arr.filter(x => (x._centerX && x._centerX < canvas.width && x._centerY < canvas.height));
         },
@@ -361,7 +380,8 @@ let heatmap = Vue.extend({
             let newdata = this.trimData(this.data);
             let needkeep = [];
             let needupdate = [];
-            let needupdatePre = [];
+            // 旧位置的点
+            let needupdateLast = [];
             for (let i = 0, len = newdata.length; i < len; i++) {
                 let x0 = this.data[i];
                 let x1 = newdata[i];
@@ -369,7 +389,7 @@ let heatmap = Vue.extend({
                     needkeep.push(x0);
                 } else {
                     needupdate.push(x1)
-                    needupdatePre.push(x0);
+                    needupdateLast.push(x0);
                 }
             }
             let type = this.dataTypes.find(x => x.name === this.datatype);
@@ -377,19 +397,22 @@ let heatmap = Vue.extend({
             if (needupdate.length > 0) {
                 let filterFunc = (arr) => this.filterFunc(arr, canvas);
                 needupdate = filterFunc(needupdate);
-                needupdatePre = filterFunc(needupdatePre);
+                needupdateLast = filterFunc(needupdateLast);
                 needkeep = filterFunc(needkeep);
                 let field = '_' + type.name;
                 if (needupdate.length === 0) {
+                    // 传入需要保留的点位
                     heatmapFactory.refreshCanvas(canvas, needkeep.map(x => [x._centerX, x._centerY, x[field]]));
                 } else {
-                    let all = [...needupdatePre, ...needupdate];
+                    // 找到需要清除的最小区域
+                    let all = [...needupdateLast, ...needupdate];
                     let xseries = all.map(x => x._centerX);
                     let yseries = all.map(x => x._centerY);
                     let maxX = Math.max(...xseries);
                     let minX = Math.min(...xseries);
-                    let maxY = Math.max(...xseries);
+                    let maxY = Math.max(...yseries);
                     let minY = Math.min(...yseries);
+
                     heatmapFactory.refreshCanvas(canvas, [...needupdate, ...needkeep].map(x => [x._centerX, x._centerY, x[field]]), minX, minY, maxX - minX, maxY - minY);
                     all = null;
                     xseries = null;
@@ -398,7 +421,7 @@ let heatmap = Vue.extend({
             }
             this.data = newdata;
             needupdate = null;
-            needupdatePre = null;
+            needupdateLast = null;
             needkeep = null;
             return window.requestAnimationFrame(this.freshCanvas);
         },
