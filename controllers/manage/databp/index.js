@@ -5,6 +5,8 @@
  */
 
 const forward = require('express-forward-html');
+const fs = require('fs');
+const path = require('path');
 
 module.exports = (Router) => {
 
@@ -20,7 +22,8 @@ module.exports = (Router) => {
             // 改变关于location的脚本
             return js && js.replace(/\.assign\(([^,]+?)\)/g, '.$assign($1)').replace(/top\.location/g, '{}');
         },
-        prefix: '/databp'
+        prefix: '/databp',
+        script: fs.readFileSync(path.join(__dirname, './script.js'), 'utf8')
     })(Router);
     return Router;
 };
