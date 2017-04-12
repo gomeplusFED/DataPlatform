@@ -23,7 +23,7 @@
 					       type="text"
 					       placeholder=""
 					       id="version"
-					       data-content="请输入版本号"
+					       data-content="请输入正确的版本号，如1.0"
 					       v-model="searchParam.version">
 					<button class="btn"
 					        type="button"
@@ -152,7 +152,7 @@ var autodatabp = Vue.extend({
 			var $ele;
 			if (!this.searchParam.website) {
 				$ele = $('#website');
-			} else if (!this.searchParam.version) {
+			} else if (/^\d(\.?\d)*$/.test(this.searchParam.version)) {
 				$ele = $('#version');
 			}
 			if ($ele) {
