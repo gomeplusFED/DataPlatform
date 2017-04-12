@@ -102,6 +102,7 @@ var autodatabp = Vue.extend({
 					this.query();
 				}
 			},
+			userInfo: null,
 			pageComponentsData: {
 				date_picker: {
 					show: true,
@@ -125,6 +126,20 @@ var autodatabp = Vue.extend({
 		if (this.sites.length) {
 			this.searchParam.website = this.sites[0].url;
 		}
+
+		let {
+			name,
+			username,
+			email,
+			department
+		} = window.allPageConfig.userInfo;
+		this.userInfo = {
+			name,
+			username,
+			email,
+			department
+		};
+
 	},
 	route: {
 		activate: function (transition) {
@@ -151,6 +166,7 @@ var autodatabp = Vue.extend({
 			let options;
 			if (options = this.checkParams()) {
 				options.rootUrl = options.website;
+				options.operUser = JSON.stringify(this.userInfo);
 				actions.confirm(store, {
 					show: true,
 					title: '更新确认',

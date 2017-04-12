@@ -1,7 +1,7 @@
 var { filterArgs, buildAjax, extractResult, errHandler } = require('./common');
 module.exports = {
 	runUpdate(data) {
-		return buildAjax('/run', filterArgs(data, ['platform', 'rootUrl', 'version']), 'post').then(function(res) {
+		return buildAjax('/run', filterArgs(data, ['platform', 'rootUrl', 'version', 'operUser']), 'post').then(function(res) {
 			if (res.code !== '200' || res.iserror !== '0') {
 				return Promise.reject('一键更新任务启动失败:' + res.msg);
 			}
