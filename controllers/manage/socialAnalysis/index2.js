@@ -183,12 +183,6 @@ module.exports = (Router) => {
              content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ["excel_export"]
         }],
-        procedure : [false, {
-            aggregate : {
-                value : ["topic_id", "key"]
-            },
-            false
-        }],
         firstSql(query, params) {
             const date = moment(new Date() - 24 * 60 * 60 * 1000).format("YYYY-MM-DD");
             const sql = `select topic_id,topic_create_time,topic_name,publisher_name  from ads2_soc_group_detail_list where date = '${date}' and group_id='${query.group_id}' and day_type=1 group by topic_id order by topic_create_time desc`;
