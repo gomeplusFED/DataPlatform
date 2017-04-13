@@ -19,7 +19,7 @@ module.exports = {
 				url: 'http://www.atguat.com.cn/'
 			}, {
 				name: '国美PLUS站PC（测试）',
-				url: 'https://www.pre.gomeplus.com/'
+				url: 'http://www.pre.gomeplus.com/'
 			}, {
 				name: '国美在线PC',
 				url: 'https://www.gome.com.cn/'
