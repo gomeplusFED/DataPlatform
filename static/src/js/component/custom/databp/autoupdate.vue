@@ -152,7 +152,7 @@ var autodatabp = Vue.extend({
 			var $ele;
 			if (!this.searchParam.website) {
 				$ele = $('#website');
-			} else if (/^\d(\.?\d)*$/.test(this.searchParam.version)) {
+			} else if (!/^\d(\.?\d)*$/.test(this.searchParam.version)) {
 				$ele = $('#version');
 			}
 			if ($ele) {
