@@ -165,7 +165,7 @@ module.exports = {
          }
 
          for(let item of source2) {
-             config[item.topic_id][item.key] += item.sum_value;
+             config[item.topic_id][item.key] += item.value;
          }
 
          for(let item of newData) {

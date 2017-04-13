@@ -223,7 +223,7 @@ module.exports = (Router) => {
         rows : [
             ["topic_create_time","topic_name","topic_id",
                 // "publisher_name",
-                "reply_user_num",
+                "topic_reply_user_num",
                 "topic_reply_num","topic_praise_num","topic_collect_num"]
         ],
         cols: [
