@@ -17,7 +17,6 @@
                 "single-uv",
                 "group-pv",
                 "group-uv",
-                "IM占比",
                 "notdisturb",
                 "faceload"
             ]
@@ -50,10 +49,6 @@
                 },
                 {
                     "caption": "",
-                    "type": "number"
-                },
-                {
-                    "caption": "使用情况",
                     "type": "number"
                 },
                 {
@@ -127,8 +122,6 @@
                 "single_mess_uv",
                 "group_mess_pv",
                 "group_mess_uv",
-                "IM使用占比",
-                "新增使用占比",
                 "群活跃度",
                 "set_group_shield_pv",
                 "face_load_pv"
@@ -196,14 +189,6 @@
                 },
                 {
                     "caption": "使用情况",
-                    "type": "number"
-                },
-                {
-                    "caption": "",
-                    "type": "number"
-                },
-                {
-                    "caption": "",
                     "type": "number"
                 },
                 {
