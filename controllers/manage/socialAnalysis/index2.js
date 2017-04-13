@@ -187,9 +187,7 @@ module.exports = (Router) => {
             aggregate : {
                 value : ["topic_id", "key"]
             },
-            sum : ["value"],
-            groupBy : ["topic_id", "key"],
-            get : ""
+            false
         }],
         firstSql(query, params) {
             const date = moment(new Date() - 24 * 60 * 60 * 1000).format("YYYY-MM-DD");
@@ -223,7 +221,7 @@ module.exports = (Router) => {
         rows : [
             ["topic_create_time","topic_name","topic_id",
                 // "publisher_name",
-                "topic_reply_user_num",
+                "reply_user_num",
                 "topic_reply_num","topic_praise_num","topic_collect_num"]
         ],
         cols: [
