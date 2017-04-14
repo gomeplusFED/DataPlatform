@@ -183,14 +183,14 @@ module.exports = (Router) => {
              content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ["excel_export"]
         }],
-        procedure : [false, {
-            aggregate : {
-                value : ["topic_id", "key"]
-            },
-            sum : ["value"],
-            groupBy : ["topic_id", "key"],
-            get : ""
-        }],
+        // procedure : [false, {
+        //     aggregate : {
+        //         value : ["topic_id", "key"]
+        //     },
+        //     sum : ["value"],
+        //     groupBy : ["topic_id", "key"],
+        //     get : ""
+        // }],
         firstSql(query, params) {
             const date = moment(new Date() - 24 * 60 * 60 * 1000).format("YYYY-MM-DD");
             const sql = `select topic_id,topic_create_time,topic_name,publisher_name  from ads2_soc_group_detail_list where date = '${date}' and group_id='${query.group_id}' and day_type=1 group by topic_id order by topic_create_time desc`;
@@ -208,7 +208,7 @@ module.exports = (Router) => {
             var source = sendData.first.data;
             var arr = [];
             for(let item of source){
-                arr.push(item.topic_id);
+                arr.push(`'${item.topic_id}'`);
             }
 
             return {
@@ -219,7 +219,18 @@ module.exports = (Router) => {
                     "topic_reply_num", "topic_subreply_num", "topic_praise_num",
                     "topic_collect_num"]
             }
-        }, 
+        },
+        secondSql(query, params) {
+            const sql = `select topic, key, sum(value) sum_value from tbl_soc_statistics
+                where date='${params.date}' and group_id='${params.group_id}' and key in (${params.topic_id.join(",")})
+                and key in ('topic_reply_user_num', 'topic_subreply_user_num', 'topic_reply_num', 'topic_subreply_num',
+                'topic_praise_num', 'topic_collect_num') group by topic, key;`;
+
+            return {
+                sql : sql,
+                params: []
+            };
+        },
         rows : [
             ["topic_create_time","topic_name","topic_id",
                 // "publisher_name",
