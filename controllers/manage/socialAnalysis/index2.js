@@ -221,10 +221,10 @@ module.exports = (Router) => {
             }
         },
         secondSql(query, params) {
-            const sql = `select topic_id, 'key', sum(value) sum_value from tbl_soc_statistics
-                where date='${params.date}' and group_id='${params.group_id}' and 'topic_id' in (${params.topic_id.join(",")})
-                and 'key' in ('topic_reply_user_num', 'topic_subreply_user_num', 'topic_reply_num', 'topic_subreply_num',
-                'topic_praise_num', 'topic_collect_num') group by topic_id, 'key';`;
+            const sql = `select topic_id, \`key\`, sum(value) sum_value from tbl_soc_statistics
+                where date='${params.date}' and group_id='${params.group_id}' and topic_id in (${params.topic_id.join(",")})
+                and \`key\` in ('topic_reply_user_num', 'topic_subreply_user_num', 'topic_reply_num', 'topic_subreply_num',
+                'topic_praise_num', 'topic_collect_num') group by topic_id, \`key\`;`;
 
             return {
                 sql : sql,
