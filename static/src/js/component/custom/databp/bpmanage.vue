@@ -289,10 +289,10 @@ var databp = Vue.extend({
 			});
 		},
 		heatmap(item) {
-			let { pageUrl, platform } = item;
+			let { pageUrl, platform, version } = item;
 			this.$router.go({
 				path: '/databp/heatmap',
-				query: { pageUrl, platform }
+				query: { pageUrl, platform, version }
 			});
 		}
 	},

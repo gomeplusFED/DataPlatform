@@ -161,18 +161,23 @@ let heatmap = Vue.extend({
     },
     route: {
         async activate(transition) {
-            let config = this.$refs.visual.bpConfig;
-            await api.getHeatVersions(config).then((res) => {
+            let query = this.$route.query;
+            // let config = this.$refs.visual.bpConfig;
+            await api.getHeatVersions(query).then((res) => {
                 this.versions = res.map(x => ({
                     ...x,
                     dateTime: utils.formatDate(new Date(x.dateTime), 'yyyy-MM-dd hh:mm:ss')
                 }));
 
             });
-            await api.getLatestVersions(config).then(ver => {
-                this.version = this.versions.findIndex(x => x.version === ver);
-            });
-            this.$broadcast('visual_url', this.$route.query);
+            if(query.version) {
+                this.version = this.versions.findIndex(x => x.version === query.version);
+            } else {
+                await api.getLatestVersions(query).then(ver => {
+                    this.version = this.versions.findIndex(x => x.version === ver);
+                });
+            }
+            this.$broadcast('visual_url', query);
             return Promise.resolve(true);
         }
     },
