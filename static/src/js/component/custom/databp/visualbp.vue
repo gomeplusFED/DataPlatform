@@ -76,6 +76,7 @@ var visualbp = Vue.extend({
                 platform: 'PC',
                 pageUrl: '',
                 selector: '',
+                version: null,
                 type: 'point'
             }
         }
@@ -108,18 +109,14 @@ var visualbp = Vue.extend({
     methods: {
         activate(query) {
             this.loading.show = true;
-            let pageUrl = query.pageUrl;
-            let platform = query.platform;
+            
+            let {pageUrl, platform } = query;
             if (pageUrl && platform) {
+                Object.assign(this.bpConfig, query);
                 if (query.selector) {
-                    this.bpConfig.selector = query.selector;
-                    this.bpConfig.type = query.type;
-                    this.bpConfig.pointName = query.pointName;
                     this.trigger();
                     // actions.databp(store, query);
                 }
-                this.bpConfig.pageUrl = pageUrl;
-                this.bpConfig.platform = platform;
                 this.search(true);
             } else if (this.iframe_url === '') {
                 this.loading.show = false;
@@ -281,13 +278,7 @@ var visualbp = Vue.extend({
                 setTimeout(function () { $ele.popover("destroy"); }, 1000);
                 return false;
             }
-            this.$router.go({
-                path: this.$route.path.split('?')[0],
-                query: {
-                    pageUrl: url,
-                    platform: this.bpConfig.platform
-                }
-            });
+
             this.search();
         },
         async search(forceloading = false) {
@@ -297,6 +288,15 @@ var visualbp = Vue.extend({
             if (await this.bpConfig.stop) {
                 return;
             }
+            let query = {
+                pageUrl: this.bpConfig.pageUrl,
+                platform: this.bpConfig.platform
+            }
+            this.bpConfig.version && (query.version = (this.bpConfig.version));
+            this.$router.go({
+                path: this.$route.path.split('?')[0],
+                query
+            });
             this.loading.show = true;
             this.deadtimer && clearTimeout(this.deadtimer);
             let rawurl = this.bpConfig.convertedUrl || this.bpConfig.pageUrl;
