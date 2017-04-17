@@ -243,6 +243,7 @@ let heatmap = Vue.extend({
     },
     methods: {
         init(config) {
+            this.loading.show  = true;
             // 表格
             let options = this.extendParams(config);
             api.getHeatTable(options).then((res) => {
@@ -254,6 +255,10 @@ let heatmap = Vue.extend({
                 this.generateCanvas(data);
                 this.showTip();
                 window.requestAnimationFrame(this.freshCanvas);
+                this.loading.show  = false;
+            }).catch(err => {
+                console.error(err);
+                this.loading.show  = false;
             });
         },
         checkParams(bpConfig = this.$refs.visual.bpConfig) {
