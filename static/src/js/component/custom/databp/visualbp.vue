@@ -63,7 +63,7 @@ var visualbp = Vue.extend({
         'm-alert': Alert,
         'm-bpinfo': bpInfo
     },
-    props: ['loading'],
+    props: ['loading', 'searchFilter'],
     data: function () {
         return {
             iframe_url: '',
@@ -281,22 +281,9 @@ var visualbp = Vue.extend({
 
             this.search();
         },
-        async search(forceloading = false) {
-            this.bpConfig.stop = false;
-            this.bpConfig.convertedUrl = '';
-            this.$dispatch('will_search', this.bpConfig);
-            if (await this.bpConfig.stop) {
-                return;
-            }
-            let query = {
-                pageUrl: this.bpConfig.pageUrl,
-                platform: this.bpConfig.platform
-            }
-            this.bpConfig.version && (query.version = (this.bpConfig.version));
-            this.$router.go({
-                path: this.$route.path.split('?')[0],
-                query
-            });
+        searchUrl(forceloading) {
+            // let stop = false;
+
             this.loading.show = true;
             this.deadtimer && clearTimeout(this.deadtimer);
             let rawurl = this.bpConfig.convertedUrl || this.bpConfig.pageUrl;
@@ -319,7 +306,27 @@ var visualbp = Vue.extend({
                     this.loading.show = false;
                 }
             }, 10000);
+        },
+        search(forceloading = false) {
+            this.bpConfig.convertedUrl = '';
+            // this.$dispatch('will_search', {...this.bpConfig});
+
+            let query = {
+                pageUrl: this.bpConfig.pageUrl,
+                platform: this.bpConfig.platform
+            }
+            this.bpConfig.version && (query.version = (this.bpConfig.version));
+            this.$router.go({
+                path: this.$route.path.split('?')[0],
+                query
+            });
+            if(this.searchFilter) {
+                this.searchFilter(this.searchUrl.bind(this, forceloading));
+            } else {
+                this.searchUrl(forceloading);
+            }
         }
+
     }
 });
 module.exports = visualbp;

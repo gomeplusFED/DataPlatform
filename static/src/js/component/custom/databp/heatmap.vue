@@ -2,6 +2,7 @@
     <div class="heatmap">
     
         <visualbp :loading.sync='loading'
+                    :search-filter="searchFilter"
                   v-ref:visual>
             <div slot="extend-nav"
                  class='form-group'>
@@ -260,6 +261,34 @@ let heatmap = Vue.extend({
                 console.error(err);
                 this.loading.show  = false;
             });
+        },
+        searchFilter(searchFunc) {
+            let config = this.$refs.visual.bpConfig;
+            if (this.checkParams(config)) {
+                    config.version = this.versions[this.version].version;
+                    config.stop = api.getLocalUrl({
+                        originalUrl: config.pageUrl,
+                        version: this.versions[this.version].version,
+                        platform: config.platform
+                    }).then((url) => {
+                        config.convertedUrl = url;
+                        searchFunc();
+                    }).catch((err) => {
+                        return new Promise((resolve, reject) => {
+                            actions.confirm(store, {
+                                show: true,
+                                title: '确认',
+                                msg: '当前页面无有效快照，是否显示最新页面',
+                                apply: () => {
+                                    searchFunc();
+                                },
+                                cancle: () => {
+                                    // resolve(true);
+                                }
+                            });
+                        });
+                    });
+                }
         },
         checkParams(bpConfig = this.$refs.visual.bpConfig) {
             var $ele;
