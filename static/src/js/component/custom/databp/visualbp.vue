@@ -157,7 +157,7 @@ var visualbp = Vue.extend({
             if (host) {
                 host = host[0];
                 _this.bpConfig.pageUrl = fullurl;
-            } else {
+            } else if(host){
                 host = _this.bpConfig.pageUrl = fullurl + '/';
             }
             _this.bpConfig.platform = $iframewin.$platform;
@@ -278,7 +278,15 @@ var visualbp = Vue.extend({
                 setTimeout(function () { $ele.popover("destroy"); }, 1000);
                 return false;
             }
-
+            let query = {
+                pageUrl: this.bpConfig.pageUrl,
+                platform: this.bpConfig.platform
+            }
+            this.bpConfig.version && (query.version = (this.bpConfig.version));
+            this.$router.go({
+                path: this.$route.path.split('?')[0],
+                query
+            });
             this.search();
         },
         searchUrl(forceloading) {
@@ -310,16 +318,6 @@ var visualbp = Vue.extend({
         search(forceloading = false) {
             this.bpConfig.convertedUrl = '';
             // this.$dispatch('will_search', {...this.bpConfig});
-
-            let query = {
-                pageUrl: this.bpConfig.pageUrl,
-                platform: this.bpConfig.platform
-            }
-            this.bpConfig.version && (query.version = (this.bpConfig.version));
-            this.$router.go({
-                path: this.$route.path.split('?')[0],
-                query
-            });
             if(this.searchFilter) {
                 this.searchFilter(this.searchUrl.bind(this, forceloading));
             } else {
