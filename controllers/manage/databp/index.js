@@ -18,9 +18,9 @@ module.exports = (Router) => {
         filterCookie(cookie) {
             return cookie.replace(/DataPlatform.*?=.+?;/gi, '')
         },
-        filterJs(js) {
+        filterStatic(content) {
             // 改变关于location的脚本
-            return js && js.replace(/\.assign\(([^,]+?)\)/g, '.$assign($1)').replace(/top\.location/g, '{}');
+            return content && content.replace(/\.assign\(([^,]+?)\)/g, '.$assign($1)').replace(/top\.location/g, '{}');
         },
         prefix: '/databp',
         script: fs.readFileSync(path.join(__dirname, './script.js'), 'utf8')
