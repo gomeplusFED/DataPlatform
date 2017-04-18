@@ -30,34 +30,25 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 var UTILS = {};
-UTILS.cssPath = function(node, optimized) {
+UTILS.cssPath = function(node) {
 	if (node.nodeType !== Node.ELEMENT_NODE)
 		return "";
 	var steps = [];
 	var contextNode = node;
 	while (contextNode) {
-		var step = UTILS._cssPathStep(contextNode, !!optimized, contextNode === node);
+		var step = UTILS._cssPathStep(contextNode, contextNode === node);
 		if (!step)
 			break; // Error - bail out early.
 		steps.push(step);
-		if (step.optimized)
-			break;
 		contextNode = contextNode.parentNode;
 	}
 	steps.reverse();
 	return steps.join(" > ");
 }
-UTILS._cssPathStep = function(node, optimized, isTargetNode) {
+UTILS._cssPathStep = function(node, isTargetNode) {
 	if (node.nodeType !== Node.ELEMENT_NODE)
 		return null;
 	var id = node.getAttribute("id");
-	if (optimized) {
-		if (id)
-			return new UTILS.DOMNodePathStep(idSelector(id), true);
-		var nodeNameLower = node.nodeName.toLowerCase();
-		if (nodeNameLower === "body" || nodeNameLower === "head" || nodeNameLower === "html")
-			return new UTILS.DOMNodePathStep(node.nodeName.toLowerCase(), true);
-	}
 	var nodeName = node.nodeName.toLowerCase();
 	if (id)
 		return new UTILS.DOMNodePathStep(nodeName.toLowerCase() + idSelector(id), true);
@@ -200,11 +191,9 @@ UTILS._cssPathStep = function(node, optimized, isTargetNode) {
 /**
  * @constructor
  * @param {string} value
- * @param {boolean} optimized
  */
-UTILS.DOMNodePathStep = function(value, optimized) {
+UTILS.DOMNodePathStep = function(value) {
 	this.value = value;
-	this.optimized = optimized || false;
 }
 UTILS.DOMNodePathStep.prototype = {
 	/**
