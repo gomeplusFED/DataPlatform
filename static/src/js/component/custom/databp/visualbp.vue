@@ -63,7 +63,7 @@ var visualbp = Vue.extend({
         'm-alert': Alert,
         'm-bpinfo': bpInfo
     },
-    props: ['loading'],
+    props: ['loading', 'searchFilter'],
     data: function () {
         return {
             iframe_url: '',
@@ -76,6 +76,7 @@ var visualbp = Vue.extend({
                 platform: 'PC',
                 pageUrl: '',
                 selector: '',
+                version: null,
                 type: 'point'
             }
         }
@@ -108,18 +109,14 @@ var visualbp = Vue.extend({
     methods: {
         activate(query) {
             this.loading.show = true;
-            let pageUrl = query.pageUrl;
-            let platform = query.platform;
+            
+            let {pageUrl, platform } = query;
             if (pageUrl && platform) {
+                Object.assign(this.bpConfig, query);
                 if (query.selector) {
-                    this.bpConfig.selector = query.selector;
-                    this.bpConfig.type = query.type;
-                    this.bpConfig.pointName = query.pointName;
                     this.trigger();
                     // actions.databp(store, query);
                 }
-                this.bpConfig.pageUrl = pageUrl;
-                this.bpConfig.platform = platform;
                 this.search(true);
             } else if (this.iframe_url === '') {
                 this.loading.show = false;
@@ -160,7 +157,7 @@ var visualbp = Vue.extend({
             if (host) {
                 host = host[0];
                 _this.bpConfig.pageUrl = fullurl;
-            } else {
+            } else if(host){
                 host = _this.bpConfig.pageUrl = fullurl + '/';
             }
             _this.bpConfig.platform = $iframewin.$platform;
@@ -281,22 +278,20 @@ var visualbp = Vue.extend({
                 setTimeout(function () { $ele.popover("destroy"); }, 1000);
                 return false;
             }
+            let query = {
+                pageUrl: this.bpConfig.pageUrl,
+                platform: this.bpConfig.platform
+            }
+            this.bpConfig.version && (query.version = (this.bpConfig.version));
             this.$router.go({
                 path: this.$route.path.split('?')[0],
-                query: {
-                    pageUrl: url,
-                    platform: this.bpConfig.platform
-                }
+                query
             });
             this.search();
         },
-        async search(forceloading = false) {
-            this.bpConfig.stop = false;
-            this.bpConfig.convertedUrl = '';
-            this.$dispatch('will_search', this.bpConfig);
-            if (await this.bpConfig.stop) {
-                return;
-            }
+        searchUrl(forceloading) {
+            // let stop = false;
+
             this.loading.show = true;
             this.deadtimer && clearTimeout(this.deadtimer);
             let rawurl = this.bpConfig.convertedUrl || this.bpConfig.pageUrl;
@@ -319,7 +314,17 @@ var visualbp = Vue.extend({
                     this.loading.show = false;
                 }
             }, 10000);
+        },
+        search(forceloading = false) {
+            this.bpConfig.convertedUrl = '';
+            // this.$dispatch('will_search', {...this.bpConfig});
+            if(this.searchFilter) {
+                this.searchFilter(this.searchUrl.bind(this, forceloading));
+            } else {
+                this.searchUrl(forceloading);
+            }
         }
+
     }
 });
 module.exports = visualbp;

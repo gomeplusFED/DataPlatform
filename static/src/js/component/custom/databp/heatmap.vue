@@ -2,6 +2,7 @@
     <div class="heatmap">
     
         <visualbp :loading.sync='loading'
+                    :search-filter="searchFilter"
                   v-ref:visual>
             <div slot="extend-nav"
                  class='form-group'>
@@ -161,7 +162,7 @@ let heatmap = Vue.extend({
     },
     route: {
         async activate(transition) {
-            let config = this.$refs.visual.bpConfig;
+            let config = Object.assign(this.$refs.visual.bpConfig, this.$route.query);
             await api.getHeatVersions(config).then((res) => {
                 this.versions = res.map(x => ({
                     ...x,
@@ -169,10 +170,14 @@ let heatmap = Vue.extend({
                 }));
 
             });
-            await api.getLatestVersions(config).then(ver => {
-                this.version = this.versions.findIndex(x => x.version === ver);
-            });
-            this.$broadcast('visual_url', this.$route.query);
+            if(config.version) {
+                this.version = this.versions.findIndex(x => x.version === config.version);
+            } else {
+                await api.getLatestVersions(config).then(ver => {
+                    this.version = this.versions.findIndex(x => x.version === ver);
+                });
+            }
+            this.$broadcast('visual_url', config);
             return Promise.resolve(true);
         }
     },
@@ -200,6 +205,7 @@ let heatmap = Vue.extend({
         },
         will_search(config) {
             if (this.checkParams(config)) {
+                config.version = this.versions[this.version].version;
                 config.stop = api.getLocalUrl({
                     originalUrl: config.pageUrl,
                     version: this.versions[this.version].version,
@@ -238,6 +244,7 @@ let heatmap = Vue.extend({
     },
     methods: {
         init(config) {
+            this.loading.show  = true;
             // 表格
             let options = this.extendParams(config);
             api.getHeatTable(options).then((res) => {
@@ -249,7 +256,39 @@ let heatmap = Vue.extend({
                 this.generateCanvas(data);
                 this.showTip();
                 window.requestAnimationFrame(this.freshCanvas);
+                this.loading.show  = false;
+            }).catch(err => {
+                console.error(err);
+                this.loading.show  = false;
             });
+        },
+        searchFilter(searchFunc) {
+            let config = this.$refs.visual.bpConfig;
+            if (this.checkParams(config)) {
+                    config.version = this.versions[this.version].version;
+                    config.stop = api.getLocalUrl({
+                        originalUrl: config.pageUrl,
+                        version: this.versions[this.version].version,
+                        platform: config.platform
+                    }).then((url) => {
+                        config.convertedUrl = url;
+                        searchFunc();
+                    }).catch((err) => {
+                        return new Promise((resolve, reject) => {
+                            actions.confirm(store, {
+                                show: true,
+                                title: '确认',
+                                msg: '当前页面无有效快照，是否显示最新页面',
+                                apply: () => {
+                                    searchFunc();
+                                },
+                                cancle: () => {
+                                    // resolve(true);
+                                }
+                            });
+                        });
+                    });
+                }
         },
         checkParams(bpConfig = this.$refs.visual.bpConfig) {
             var $ele;

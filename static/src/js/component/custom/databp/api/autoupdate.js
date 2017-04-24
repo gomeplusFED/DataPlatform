@@ -1,7 +1,7 @@
 var { filterArgs, buildAjax, extractResult, errHandler } = require('./common');
 module.exports = {
 	runUpdate(data) {
-		return buildAjax('/run', filterArgs(data, ['platform', 'rootUrl', 'version']), 'post').then(function(res) {
+		return buildAjax('/run', filterArgs(data, ['platform', 'rootUrl', 'version', 'operUser']), 'post').then(function(res) {
 			if (res.code !== '200' || res.iserror !== '0') {
 				return Promise.reject('一键更新任务启动失败:' + res.msg);
 			}
@@ -18,11 +18,14 @@ module.exports = {
 				name: '国美在线PC（测试）',
 				url: 'http://www.atguat.com.cn/'
 			}, {
-				name: '国美PLUS站PC',
-				url: 'https://www.gomeplus.com/'
+				name: '国美PLUS站PC（测试）',
+				url: 'http://www.pre.gomeplus.com/'
 			}, {
 				name: '国美在线PC',
 				url: 'https://www.gome.com.cn/'
+			}, {
+				name: '国美PLUS站PC',
+				url: 'https://www.gomeplus.com/'
 			}
 			// {
 			// 	name: '国美Plus站Wap',

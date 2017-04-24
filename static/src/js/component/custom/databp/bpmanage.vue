@@ -215,9 +215,12 @@ var databp = Vue.extend({
 					...x,
 					dateTime: utils.formatDate(new Date(x.dateTime), 'yyyy-MM-dd hh:mm:ss')
 				}));
-			await api.getLatestVersions(this.searchParam).then(ver => {
-					this.searchParam.version = ver;
-			})
+			if(!this.searchParam.version) {
+				await api.getLatestVersions(this.searchParam).then(ver => {
+						this.searchParam.version = ver;
+				});
+			}
+
 			this.query();
 			return Promise.resolve(true);
 		}
@@ -289,10 +292,10 @@ var databp = Vue.extend({
 			});
 		},
 		heatmap(item) {
-			let { pageUrl, platform } = item;
+			let { pageUrl, platform, version } = item;
 			this.$router.go({
 				path: '/databp/heatmap',
-				query: { pageUrl, platform }
+				query: { pageUrl, platform, version }
 			});
 		}
 	},

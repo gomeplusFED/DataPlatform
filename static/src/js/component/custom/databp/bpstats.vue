@@ -109,7 +109,7 @@
 						<td><a @click="detail(item)">趋势</a></td>
 					</tr>
 					<tr v-show="noData">
-						<td colspan="9">暂无数据</td>
+						<td colspan="10">暂无数据</td>
 					</tr>
 				</tbody>
 			</table>
@@ -317,9 +317,11 @@ var databp = Vue.extend({
 					...x,
 					dateTime: utils.formatDate(new Date(x.dateTime), 'yyyy-MM-dd hh:mm:ss')
 				}));
-			await api.getLatestVersions(this.searchParam).then(ver => {
-					this.searchParam.version = ver;
-			})
+			if(!this.searchParam.version) {
+				await api.getLatestVersions(this.searchParam).then(ver => {
+						this.searchParam.version = ver;
+				})
+			}
 			await this.query();
 			return Promise.resolve(true);
 		}
@@ -411,11 +413,11 @@ var databp = Vue.extend({
 			});
 		},
 		heatmap(item) {
-			let { pageUrl } = item;
+			let { pageUrl, version } = item;
 			let platform = this.searchParam.platform;
 			this.$router.go({
 				path: '/databp/heatmap',
-				query: { pageUrl, platform }
+				query: { pageUrl, platform, version }
 			});
 		}
 	},

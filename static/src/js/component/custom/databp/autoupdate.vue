@@ -23,7 +23,7 @@
 					       type="text"
 					       placeholder=""
 					       id="version"
-					       data-content="请输入版本号"
+					       data-content="请输入正确的版本号，如1.0"
 					       v-model="searchParam.version">
 					<button class="btn"
 					        type="button"
@@ -102,6 +102,7 @@ var autodatabp = Vue.extend({
 					this.query();
 				}
 			},
+			userInfo: null,
 			pageComponentsData: {
 				date_picker: {
 					show: true,
@@ -125,6 +126,20 @@ var autodatabp = Vue.extend({
 		if (this.sites.length) {
 			this.searchParam.website = this.sites[0].url;
 		}
+
+		let {
+			name,
+			username,
+			email,
+			department
+		} = window.allPageConfig.userInfo;
+		this.userInfo = {
+			name,
+			username,
+			email,
+			department
+		};
+
 	},
 	route: {
 		activate: function (transition) {
@@ -137,7 +152,7 @@ var autodatabp = Vue.extend({
 			var $ele;
 			if (!this.searchParam.website) {
 				$ele = $('#website');
-			} else if (!this.searchParam.version) {
+			} else if (!/^\d(\.?\d)*$/.test(this.searchParam.version)) {
 				$ele = $('#version');
 			}
 			if ($ele) {
@@ -151,6 +166,7 @@ var autodatabp = Vue.extend({
 			let options;
 			if (options = this.checkParams()) {
 				options.rootUrl = options.website;
+				options.operUser = JSON.stringify(this.userInfo);
 				actions.confirm(store, {
 					show: true,
 					title: '更新确认',
