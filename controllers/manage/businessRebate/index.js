@@ -574,9 +574,9 @@ module.exports = (Router) => {
 
             // count = count > 50 ? 50 : count;
 
-            if(query.page == 3){
-                source.splice(10 , source.length - 1);
-            }
+            // if(query.page == 3){
+            //     source.splice(10 , source.length - 1);
+            // }
 
             let Translate = {};
             second.map((item , index) => {
@@ -660,7 +660,7 @@ module.exports = (Router) => {
                     limit = query.to || query.limit || 20;
 
 
-                params.push(page - 1);
+                params.push((page - 1) * limit);
                 params.push(+limit);
                 let sql = `SELECT
                     plan_name,

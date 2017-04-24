@@ -139,7 +139,7 @@ module.exports = {
      groupDetailFour(data, query) {
 
         var source = data.first.data,
-            source2 = data.second.data[0],
+            source2 = data.second.data,
             count = data.first.count > 100 ? 100 : data.first.count,
             ids = [];
             newData = [];
@@ -165,7 +165,9 @@ module.exports = {
          }
 
          for(let item of source2) {
-             config[item.topic_id][item.key] += item.sum_value;
+             if (config[item.topic_id]) {
+                config[item.topic_id][item.key] += item.sum_value;
+             }
          }
 
          for(let item of newData) {

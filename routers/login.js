@@ -301,6 +301,8 @@ module.exports = function(Router) {
                         next(err);
                     } else {
                         const userInfo = data[0];
+                        userInfo.username = query.filter_u_ename || userInfo.username;
+                        userInfo.name = query.filter_u_cname || userInfo.name;
                         userInfo.isBi = true;
                         saveLogin(req, res, false, "", userInfo);
                         return next();
