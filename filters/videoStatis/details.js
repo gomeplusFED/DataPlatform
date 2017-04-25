@@ -175,6 +175,7 @@ module.exports = {
         for(let key of source) {
             key.live_play_startime = moment(key.live_play_startime* 1000).format("YYYY-MM-DD HH:mm:ss");
             key.live_play_endtime = moment(key.live_play_endtime * 1000).format("YYYY-MM-DD HH:mm:ss");
+            key.date = moment(key.date).format("YYYY-MM-DD");
             key.one = util.toFixed(key.first_start_frame_succ, key.play_num);
             key.two = util.toFixed(key.start_frame_succ, key.first_load_num);
             key.three = util.toFixed(key.stop_play_num, key.first_load_num);
