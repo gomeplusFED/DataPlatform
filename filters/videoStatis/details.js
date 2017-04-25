@@ -86,9 +86,9 @@ const util = require("../../utils"),
         },{
             caption : "有效播放次数"
         },{
-            caption : "直播同时在线播放人数(峰值)"
+            caption : "直播同时在线播放人数"
         },{
-            caption : "直播同时在线播放次数(峰值)"
+            caption : "直播同时在线播放次数"
         },{
             caption : "首次首帧成功数"
         },{
