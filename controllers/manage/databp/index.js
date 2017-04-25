@@ -23,7 +23,21 @@ module.exports = (Router) => {
             return content && content.replace(/\.assign\(([^,]+?)\)/g, '.$assign($1)').replace(/top\.location/g, '{}');
         },
         prefix: '/databp',
-        script: fs.readFileSync(path.join(__dirname, './script.js'), 'utf8')
+        script: function _external(urlObj) {
+            window.$pageUrl = urlObj.href;
+            let platform = urlObj.mobile ? 'H5' : 'PC'
+            window.$platform = platform;
+            window.location.$assign = function (url) {
+                let newurl;
+                if (/https?:\/\//.test(url)) {
+                    // do noting
+                    newurl = url;
+                } else {
+                    newurl = '/databp/html?m=' + platform + '&url=' + encodeURIComponent(pageUrl.replace(/\/$/, '') + '/' + url.replace(/^\//, ''));
+                }
+                window.location.assign(newurl);
+            }
+        }
     })(Router);
     return Router;
 };
