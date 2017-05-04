@@ -387,7 +387,7 @@ module.exports = {
             })
         }
         data2[1]["port_succ"] = util.toFixedLength(second["port_succ"] || 0, second.start_load_num || 0 , 2);
-        data2[1]["start_frame_succ"] = util.toFixedLength(second["start_frame_succ"] || 0, second.first_load_num || 0 , 2);
+        data2[1]["start_frame_succ"] = util.toFixedLength(second["start_frame_succ"] || 0, second.start_load_num || 0 , 2);
         if (third) {
             let source = third
             let cols = ['port_io_failed', 'port_data_failed', 'port_overtime', 'play_failed', 'play_error', 'improper_play']
