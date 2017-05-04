@@ -24,7 +24,7 @@ module.exports = function(Router) {
 
     //渠道管理工具-列表
     Router.get("/custom/channelUtils", (req, res, next) => {
-        const sql = `select * from channel_util limit ?,?;`;
+        const sql = `select * from channel_util order by id desc limit ?,?;`;
         const totalSql = `select count(*) count from channel_util`;
         const query = req.query;
         const page = query.page || 1;
