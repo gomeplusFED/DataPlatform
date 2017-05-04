@@ -674,7 +674,7 @@ module.exports = (Router) => {
             }
             sql = `SELECT 
                     a.play_num as play_num, a.port_succ as port_succ, a.start_frame_succ as start_frame_succ, a.stop_play_num as stop_play_num, a.play_fluent as play_fluent, a.start_load_num as start_load_num,
-                    b.port_succ as port_succ_pre, b.start_frame_succ as start_frame_succ_pre, b.stop_play_num as stop_play_num_pre, b.play_fluent as play_fluent_pre, b.first_load_num as first_load_num
+                    b.port_succ as port_succ_pre, b.start_frame_succ as start_frame_succ_pre, b.stop_play_num as stop_play_num_pre, b.play_fluent as play_fluent_pre, a.first_load_num as first_load_num
                         FROM ${tablename} a
                          LEFT JOIN ${tablename} b 
                         on a.day_type = b.day_type and b.sdk_type='ALL' and b.date = DATE_ADD(a.date,INTERVAL -1 ${date_type_list[query.day_type || 1]})
