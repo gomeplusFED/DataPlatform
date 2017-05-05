@@ -1,10 +1,10 @@
 /**
  * @author yanglei
- * @date 20170503
- * @fileoverview 分享渠道
+ * @date 20170504
+ * @fileoverview 分享类型
  */
 var api = require("../../../base/main"),
-    filter = require("../../../filters/share/channel");
+    filter = require("../../../filters/share/type");
 
 function globalPlatform(type) {
     let all = true;
@@ -50,13 +50,13 @@ function globalPlatform(type) {
 module.exports = (Router) => {
 
     Router = new api(Router,{
-        router : "/share/channelOne",
+        router : "/share/typeOne",
         modelName : ["ads_share_data_analysis_info"],
         platform : false,
         date_picker_data: 1,
         showDayUnit: true,
         global_platform_filter(req) {
-            this.global_platform = globalPlatform(req.session.userInfo.type["667"]);
+            this.global_platform = globalPlatform(req.session.userInfo.type["668"]);
         },
         params(query, params, data, dates) {
             params.share_source = "ALL";
@@ -120,7 +120,7 @@ module.exports = (Router) => {
     });
 
     Router = new api(Router,{
-        router : "/share/channelTwo",
+        router : "/share/typeTwo",
         modelName : ["ads_share_data_analysis_info/ads_share_source_type_hour"],
         platform : false,
         toggle : {
@@ -226,8 +226,8 @@ module.exports = (Router) => {
     });
 
     Router = new api(Router,{
-        router : "/share/channelThree",
-        modelName : ["ads_share_data_analysis_info/ads_share_source_type_hour"],
+        router : "/share/typeThree",
+        modelName : ["ads_share_data_analysis_info"],
         platform : false,
         toggle : {
             show : true
@@ -314,8 +314,8 @@ module.exports = (Router) => {
     });
 
     Router = new api(Router,{
-        router : "/share/channelFour",
-        modelName : ["ads_share_data_analysis_info/ads_share_source_type_hour"],
+        router : "/share/typeFour",
+        modelName : ["ads_share_data_analysis_info"],
         platform : false,
         toggle : {
             show : true
@@ -402,7 +402,7 @@ module.exports = (Router) => {
     });
 
     Router = new api(Router,{
-        router : "/share/channelFive",
+        router : "/share/typeFive",
         modelName : ["ads_share_share_type_top"],
         platform : false,
         date_picker_data: 1,
@@ -446,7 +446,6 @@ module.exports = (Router) => {
             const limit = +query.limit || 20;
             const offset = (page - 1) * limit;
             const sql = `select 
-                    share_source,
                     share_type,
                     share_id,
                     share_name,
@@ -460,6 +459,8 @@ module.exports = (Router) => {
                 from 
                     ads_share_share_type_top 
                 where 
+                    share_source not in ('ALL')
+                and
                     share_type not in ('ALL')
                 and
                     day_type=${query.day_type}
@@ -490,7 +491,7 @@ module.exports = (Router) => {
             return filter.indexFive(data, query, dates, type);
         },
         rows : [
-            ["top", "share_source", "share_type", "name", "share_num", "share_user", "share_succeed_num",
+            ["top", "share_type", "name", "share_num", "share_user", "share_succeed_num",
                 "share_succeed_user", "share_links_num", "share_links_user", "rate"]
         ],
         cols : [
@@ -498,10 +499,6 @@ module.exports = (Router) => {
                 {
                     caption: "序号",
                     type: "number"
-                },
-                {
-                    caption: "分享渠道",
-                    type: "string"
                 },
                 {
                     caption: "分享类型",

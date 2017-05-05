@@ -7,143 +7,307 @@ var util = require("../../utils"),
     config = require("../../utils/config.json").share,
     _ = require("lodash");
 
+const filter_name = {
+    share_num           : "分享次数",
+    share_user          : "分享人数",
+    share_rate          : "人均分享次数",
+    share_succeed_num   : "分享成功次数",
+    share_succeed_user  : "分享成功人数",
+    success_rate        : "分享成功率",
+    share_links_num     : "分享链接点击量",
+    share_links_user    : "分享链接点击人数",
+    link_rate           : "分享回流率"
+};
+const help = {
+    share_num : {
+        caption: "分享次数",
+        type: "number"
+    },
+    share_user : {
+        caption: "分享人数",
+        type: "number"
+    },
+    share_rate : {
+        caption: "人均分享次数",
+        type: "number"
+    },
+    share_succeed_num : {
+        caption: "分享成功次数",
+        type: "number"
+    },
+    share_succeed_user : {
+        caption: "分享成功人数",
+        type: "number"
+    },
+    success_rate : {
+        caption: "分享成功率",
+        type: "string"
+    },
+    share_links_num : {
+        caption: "分享链接点击量",
+        type: "number"
+    },
+    share_links_user : {
+        caption: "分享链接点击人数",
+        type: "number"
+    },
+    link_rate : {
+        caption: "分享回流率",
+        type: "string"
+    }
+};
+
 module.exports = {
     indexOne(data) {
         var source = data.first.data[0],
             obj = {
-                share_time_sum : 0,
-                share_user_sum : 0,
-                click_time_sum : 0,
-                click_user_sum : 0
+                share_num           : 0,
+                share_user          : 0,
+                share_succeed_num   : 0,
+                share_succeed_user  : 0,
+                share_links_num     : 0,
+                share_links_user    : 0
             };
-        for(var key of source) {
-            obj.share_time_sum += key.share_time_sum;
-            obj.share_user_sum += key.share_user_sum;
-            obj.click_time_sum += key.click_time_sum;
-            obj.click_user_sum += key.click_user_sum;
+
+        for(var item of source) {
+            for(let key in obj) {
+                obj[key] += item[key];
+            }
         }
-        obj.rate = util.toFixed(obj.click_time_sum, obj.share_time_sum);
+
+        obj.share_rate  = util.round(obj.share_num, obj.share_user);
+        obj.success_rate= util.toFixed(obj.share_succeed_num, obj.share_num);
+        obj.link_rate   = util.toFixed(obj.share_links_num, obj.share_num);
+
         return util.toTable([[obj]], data.rows, data.cols);
     },
-    indexTwo(data, filter_key, dates) {
-        var source = data.first.data[0],
-            newData = {},
-            type = "line",
-            map = {
-                "shop" : "店铺",
-                "product" : "商品",
-                "topic" : "话题",
-                "group" : "圈子"
-            };
-        for(var date of dates) {
-            newData[date] = {
-                "shop" : 0,
-                "product" : 0,
-                "topic" : 0,
-                "group" : 0
-            };
+    indexTwo(data, query, dates, type) {
+        var source = data.first.data,
+            show_type = query.main_show_type_filter,
+            day_type = query.day_type,
+            filter_key = query.filter_key ? query.filter_key.split(",") : [];
+
+        let isHour = false;
+        if(day_type == 1) {
+            isHour = true;
         }
 
-        if(filter_key === "rate") {
-            for(var key in map) {
-                map[key] = map[key] + "(%)";
+        if(show_type == "table" || type == "excel") {
+            const cols = [{
+                caption: "日期",
+                type: "string"
+            }];
+            const rows = ["date"];
+            for(let key of filter_key) {
+                rows.push(key);
+                cols.push(help[key]);
             }
-        }
+            for(let item of source) {
+                item.date        = `${item.date}${isHour ? " " + item.hours + ":00" : ""}`;
+                item.share_rate  = util.round(item.share_num, item.share_user);
+                item.success_rate= util.toFixed(item.share_succeed_num, item.share_num);
+                item.link_rate   = util.toFixed(item.share_links_num, item.share_num);
+            }
 
-        for(var key of source) {
-            var date = util.getDate(key.date);
-            if(filter_key !== "rate") {
-                newData[date][key.share_source] = key[filter_key];
-            } else {
-                newData[date][key.share_source] =
-                    util.toRound(key.click_time_sum, key.share_time_sum);
-            }
+            return util.toTable([source], [rows], [cols]);
         }
-
-        return [{
-            type : type,
-            map : map,
-            data : newData,
-            config: { // 配置信息
-                stack: false // 图的堆叠
+        else {
+            const rows = ["share_num", "share_user", "share_succeed_num", "share_succeed_user", "share_links_num", "share_links_user"];
+            const map = {};
+            const newData= {};
+            for(let key of filter_key) {
+                map[key] = filter_name[key];
             }
-        }];
+            for(let item of source) {
+                let k = `${item.date}${isHour ? " " + item.hours : ""}`;
+                if(newData[k]) {
+                    for(let key of rows) {
+                        newData[k][key] += item[key];
+                    }
+                }
+                else {
+                    newData[k] = {};
+                    for(let key of rows) {
+                        newData[k][key] = item[key];
+                    }
+                }
+            }
+
+            for(let key in newData) {
+                newData[key].share_rate   = util.round(newData[key].share_num, newData[key].share_user);
+                newData[key].success_rate = util.toRound(newData[key].share_succeed_num, newData[key].share_num);
+                newData[key].link_rate    = util.toRound(newData[key].share_links_num, newData[key].share_num);
+            }
+
+            return [{
+                type : "line",
+                map : map,
+                data : newData,
+                config: { // 配置信息
+                    stack: false // 图的堆叠
+                }
+            }];
+        }
     },
-    indexThree(data) {
-        var source = data.first.data[0],
-            obj = {},
-            one = {},
-            two = {},
-            type = "pie",
-            total_time = 0,
-            total_user = 0;
+    indexThree(data, query, dates, type) {
+        var source = data.first.data;
+        const filter_key = query.filter_key;
+        const show_type = query.main_show_type_filter;
 
-        for(var key in config.channel) {
-            obj[key] = {
-                share_user_sum : 0,
-                share_time_sum : 0
-            };
-        }
-
-        for(var key of source) {
-            total_time += key.share_time_sum;
-            total_user += key.share_user_sum;
-            obj[key.share_channel].share_user_sum += key.share_user_sum;
-            obj[key.share_channel].share_time_sum += key.share_time_sum;
-        }
-
-        for(var key in obj) {
-            one[config.channel[key]] = {
-                value : util.toRound(obj[key].share_user_sum, total_user)
-            };
-            two[config.channel[key]] = {
-                value : util.toRound(obj[key].share_time_sum, total_time)
-            };
-        }
-
-        return [{
-            type : type,
-            map : {
-                value : "分享人数(%)"
-            },
-            data : one,
-            config: { // 配置信息
-                stack: false // 图的堆叠
+        if(show_type == "table" || type == "excel") {
+            const rows = ["share_source"];
+            const cols = [{
+                caption: "渠道名称",
+                type: "string"
+            }];
+            rows.push(filter_key);
+            rows.push("rate");
+            cols.push(help[filter_key]);
+            cols.push({
+                caption: `${filter_name[filter_key]}占比`,
+                type: "string"
+            });
+            let total = 0;
+            for(let item of source) {
+                total += item[filter_key];
             }
-        },{
-            type : type,
-            map : {
-                value : "分享次数(%)"
-            },
-            data : two,
-            config: { // 配置信息
-                stack: false // 图的堆叠
+            for(let item of source) {
+                item.rate = util.toFixed(item[filter_key], total);
             }
-        }];
+
+            return util.toTable([source], [rows], [cols]);
+        }
+        else {
+            const newDate = {};
+            for(let item of source) {
+                newDate[item.share_source] = {
+                    value: item[filter_key]
+                };
+            }
+
+            return [{
+                type : "pie",
+                map : {
+                    value : filter_name[filter_key]
+                },
+                data : newDate,
+                config: { // 配置信息
+                    stack: false // 图的堆叠
+                }
+            }];
+        }
     },
-    indexFour(data, filter_key, page) {
-        var source = data.first.data[0],
-            count = data.first.count,
-            page = page || 1,
-            sum = 1;
+    indexFour(data, query, dates, type) {
+        var source = data.first.data;
+        const filter_key = query.filter_key;
+        const show_type = query.main_show_type_filter;
 
-        if(filter_key === "all") {
-            data.rows[0][1] = "share_source";
-            data.cols[0][1].caption = "分享来源";
-        } else {
-            data.rows[0][1] = "share_source_name";
-            data.cols[0][1].caption = config.source[filter_key];
+        if(show_type == "table" || type == "excel") {
+            const rows = ["share_type"];
+            const cols = [{
+                caption: "分享类型",
+                type: "string"
+            }];
+            rows.push(filter_key);
+            rows.push("rate");
+            cols.push(help[filter_key]);
+            cols.push({
+                caption: `${filter_name[filter_key]}占比`,
+                type: "string"
+            });
+            let total = 0;
+            for(let item of source) {
+                total += item[filter_key];
+            }
+            for(let item of source) {
+                item.rate = util.toFixed(item[filter_key], total);
+            }
+
+            return util.toTable([source], [rows], [cols]);
+        }
+        else {
+            const newDate = {};
+            for(let item of source) {
+                newDate[item.share_type] = {
+                    value: item[filter_key]
+                };
+            }
+
+            return [{
+                type : "pie",
+                map : {
+                    value : filter_name[filter_key]
+                },
+                data : newDate,
+                config: { // 配置信息
+                    stack: false // 图的堆叠
+                }
+            }];
+        }
+    },
+    indexFive(data, query, dates, type) {
+        var source = data.first.data;
+        const filter_key = query.filter_key;
+        const show_type = query.main_show_type_filter;
+        const share_platform = query.share_platform ? query.share_platform : "ALL";
+        const platform_type = {
+            "ALL": ["APP站", "M站", "PC站"],
+            "APP": ["android", "IOS"],
+            "PC": ["gome", "plus"]
+        };
+
+        if(!platform_type[share_platform]) {
+            return {};
         }
 
-        for(var key of source) {
-            key.id = (page - 1) * 20 + sum;
-            key.share_source = config.source[key.share_source];
-            key.operating =  "<button class='btn btn-default' url_detail='/share/operating'>分渠道</button>";
-            key.rate = util.toFixed(key.click_time_sum, key.share_time_sum);
-            sum++;
-        }
+        if(show_type == "table" || type == "excel") {
+            const rows = ["product_line"];
+            const cols = [{
+                caption: "分享平台",
+                type: "string"
+            }];
+            let total = 0;
+            rows.push(filter_key);
+            rows.push("rate");
+            cols.push(help[filter_key]);
+            cols.push({
+                caption: `${filter_name[filter_key]}占比`,
+                type: "string"
+            });
+            for(let item of source) {
+                total += item[filter_key];
+            }
+            for(let item of source) {
+                item.rate = util.toFixed(item[filter_key], total);
+            }
 
-        return util.toTable([source], data.rows, data.cols, [count]);
+            return util.toTable([source], [rows], [cols]);
+        }
+        else {
+            const newDate = {};
+            const platform = platform_type[share_platform];
+            for(let key of platform) {
+                newDate[key] = {
+                    value: 0
+                };
+            }
+            for(let item of source) {
+                newDate[item.product_line] = {
+                    value: item[filter_key]
+                };
+            }
+
+            return [{
+                type : "pie",
+                map : {
+                    value : filter_name[filter_key]
+                },
+                data : newDate,
+                config: { // 配置信息
+                    stack: false // 图的堆叠
+                }
+            }];
+        }
     },
     operating(data) {
         var source = data.first.data[0],

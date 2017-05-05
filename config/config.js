@@ -137,12 +137,14 @@ const Config = {
         },
         "22" : ConfigAdd["22"],
         "9": {
-            name: "分享收藏",
+            name: "分享数据",
             display: true,
             className: "fa fa-external-link fa-fw",
             href: "#",
             path: [
-                obj.share.index()
+                obj.share.index(),
+                obj.share.channel(),
+                obj.share.type()
             ]
         },
         "10": {
