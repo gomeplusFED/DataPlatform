@@ -47,7 +47,7 @@ var Btns = Vue.extend({
     ready: function(){
         btnsVm = this;
     },
-    props: ['index','pageComponentsData','componentType','argvs','initData','resultArgvs'],
+    props: ['index','pageComponentsData','componentType','argvs','initData','resultArgvs', 'argvs'],
     methods: {
         excel_export: function(ev){
             var key = window.location.hash.replace('#!','').replace(/(\?.*)/, '');
@@ -132,6 +132,7 @@ var Btns = Vue.extend({
                 groups: item.groups,
                 apply: function(val){
                     Vue.set(_this.resultArgvs, item.key, val.join(','))
+                    Vue.set(_this.argvs, item.key, val.join(','))
                     this.cancel();
                 },
                 cancel: function(){
