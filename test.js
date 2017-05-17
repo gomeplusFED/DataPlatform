@@ -74,22 +74,24 @@
 // });
 const md5 = require("md5");
 const request = require("request");
-const query ={
-    start_time : "2016-11-30",
-    end_time : "2016-12-06",
-    date_type : 1,
-    wm : "app",
-    md5 : md5("2016-11-302016-12-06kD6pd*7q").toUpperCase()
-};
-const value = [];
-for(let key in query) {
-    value.push(`${key}=${query[key]}`);
-}
-request(`http://api.gpm.bi.pro.gomeplus.com/api/gpm/user/trafficSum?${value.join("&")}`, (err, response, body) => {
-    console.log(err);
-    // console.log(response);
-    console.log(JSON.parse(body));
-})
+
+console.log(md5("502_666_ 1493952798513_kD6pd*7q"));
+// const query ={
+//     start_time : "2016-11-30",
+//     end_time : "2016-12-06",
+//     date_type : 1,
+//     wm : "app",
+//     md5 : md5("2016-11-302016-12-06kD6pd*7q").toUpperCase()
+// };
+// const value = [];
+// for(let key in query) {
+//     value.push(`${key}=${query[key]}`);
+// }
+// request(`http://api.gpm.bi.pro.gomeplus.com/api/gpm/user/trafficSum?${value.join("&")}`, (err, response, body) => {
+//     console.log(err);
+//     // console.log(response);
+//     console.log(JSON.parse(body));
+// })
 
 // console.log(a);
 // console.log(code("123457"));

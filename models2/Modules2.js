@@ -184,6 +184,18 @@ module.exports = {
     },
     ads2_im_customerservice_msg : {
         modelName : "ads2_im_customerservice_msg"
+    },
+    //分享数据统计
+    ads_share_data_analysis_info : {
+        modelName : "ads_share_data_analysis_info"
+    },
+    //分享数据统计top100
+    ads_share_share_type_top : {
+        modelName : "ads_share_share_type_top"
+    },
+    //分享数据统计小时
+    ads_share_source_type_hour : {
+        modelName : "ads_share_source_type_hour"
     }
 };
 

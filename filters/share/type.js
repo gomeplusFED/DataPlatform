@@ -1,7 +1,7 @@
 /**
  * @author yanglei
- * @date 20170503
- * @fileoverview 分享渠道
+ * @date 20170504
+ * @fileoverview 分享类型
  */
 
 var util = require("../../utils"),
@@ -85,7 +85,7 @@ module.exports = {
             show_type = query.main_show_type_filter,
             day_type = query.day_type,
             filter_key = query.filter_key;
-        const share_source = _.uniq(_.pluck(source, "share_source"));
+        const share_source = _.uniq(_.pluck(source, "share_type"));
 
         let isHour = false;
         if(day_type == 1) {
