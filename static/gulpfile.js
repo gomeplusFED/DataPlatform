@@ -58,14 +58,19 @@ var webpackConfig = {
     },
     module: {
         loaders: [{
-            test: /.js$/,
-            loader: 'babel',
-            include: path.join(rootPath, './src/'),
-            exclude: path.join(rootPath, '../node_modules/')
-        }, {
-            test: /.vue$/,
-            loader: 'vue'
-        }]
+                test: /.js$/,
+                loader: 'babel',
+                include: path.join(rootPath, './src/'),
+                exclude: path.join(rootPath, '../node_modules/')
+            }, {
+                test: /.vue$/,
+                loader: 'vue'
+            },
+            {
+                test: /\.less$/,
+                loader: "style-loader!css-loader!less-loader",
+            }
+        ]
     },
     plugins: [vendorPlugin],
     resolve: {
@@ -95,8 +100,12 @@ var webpackConfig = {
 
 gulp.task('clean', function () {
     return gulp
-        .src(['./dist/*'], { read: false })
-        .pipe(clean({ force: true }))
+        .src(['./dist/*'], {
+            read: false
+        })
+        .pipe(clean({
+            force: true
+        }))
 });
 
 gulp.task('js', function () {
