@@ -131,7 +131,7 @@ var Btns = Vue.extend({
                 max: item.max,
                 groups: item.groups,
                 apply: function(val){
-                    Vue.set(_this.resultArgvs, item.key, val.join(','))
+                    // Vue.set(_this.resultArgvs, item.key, val.join(','))
                     Vue.set(_this.argvs, item.key, val.join(','))
                     this.cancel();
                 },
