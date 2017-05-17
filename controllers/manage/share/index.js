@@ -140,6 +140,8 @@ module.exports = (Router) => {
                     from 
                         ads_share_source_type_hour 
                     where 
+                        date='${query.startTime}'
+                    and
                         share_platform=?
                     and
                         share_source='ALL'
@@ -147,8 +149,6 @@ module.exports = (Router) => {
                         share_type='ALL'
                     and
                         day_type=1
-                    and
-                        date='${query.startTime}'
                     order by hours asc`;
 
                 return {
@@ -161,6 +161,8 @@ module.exports = (Router) => {
                     from 
                         ads_share_data_analysis_info 
                     where 
+                        date='${query.startTime}'
+                    and
                         product_line='ALL' 
                     and 
                         share_source='ALL' 
@@ -168,8 +170,6 @@ module.exports = (Router) => {
                         share_type='ALL'
                     and
                         day_type=${query.day_type}
-                    and
-                        date='${query.startTime}'
                     and
                         share_platform=?
                     order by date asc`;
@@ -248,7 +248,10 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/share/indexThree",
-        modelName : ["ads_share_data_analysis_info/ads_share_source_type_hour"],
+        modelName : ["ads_share_data_analysis_info/ads_share_source_type_hour", "ads_share_dim_channel"],
+        secondParams() {
+            return {};
+        },
         platform : false,
         filter_select: [{
             title: '指标选择',
@@ -308,6 +311,8 @@ module.exports = (Router) => {
                     from 
                         ads_share_source_type_hour 
                     where 
+                        date='${query.startTime}'
+                    and
                         share_platform=?
                     and
                         share_source not in ('ALL')
@@ -315,8 +320,6 @@ module.exports = (Router) => {
                         share_type='ALL'
                     and
                         day_type=1
-                    and
-                        date='${query.startTime}'
                     group by share_source`;
 
                 return {
@@ -335,7 +338,9 @@ module.exports = (Router) => {
                         sum(share_links_user)   as share_links_user 
                     from 
                         ads_share_data_analysis_info 
-                    where 
+                    where
+                        date='${query.startTime}' 
+                    and
                         product_line='ALL' 
                     and 
                         share_source not in ('ALL') 
@@ -343,8 +348,6 @@ module.exports = (Router) => {
                         share_type='ALL'
                     and
                         day_type=${query.day_type}
-                    and
-                        date='${query.startTime}'
                     and
                         share_platform=?
                     group by share_source`;
@@ -365,7 +368,10 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/share/indexFour",
-        modelName : ["ads_share_data_analysis_info/ads_share_source_type_hour"],
+        modelName : ["ads_share_data_analysis_info/ads_share_source_type_hour", "ads_share_dim_type"],
+        secondParams() {
+            return {};
+        },
         platform : false,
         filter_select: [{
             title: '指标选择',
@@ -424,7 +430,9 @@ module.exports = (Router) => {
                         sum(share_links_user)   as share_links_user
                     from 
                         ads_share_source_type_hour 
-                    where 
+                    where
+                        date='${query.startTime}' 
+                    and
                         share_platform=?
                     and
                         share_source='ALL'
@@ -432,8 +440,6 @@ module.exports = (Router) => {
                         share_type not in ('ALL')
                     and
                         day_type=1
-                    and
-                        date='${query.startTime}'
                     group by share_type`;
 
                 return {
@@ -453,6 +459,8 @@ module.exports = (Router) => {
                     from 
                         ads_share_data_analysis_info 
                     where 
+                        date='${query.startTime}'
+                    and
                         product_line='ALL' 
                     and 
                         share_source='ALL'
@@ -460,8 +468,6 @@ module.exports = (Router) => {
                         share_type not in ('ALL')
                     and
                         day_type=${query.day_type}
-                    and
-                        date='${query.startTime}'
                     and
                         share_platform=?
                     group by share_type`;
@@ -535,6 +541,8 @@ module.exports = (Router) => {
                 from 
                     ads_share_data_analysis_info 
                 where 
+                    date='${query.startTime}'
+                and
                     product_line not in ('ALL') 
                 and 
                     share_source='ALL'
@@ -542,8 +550,6 @@ module.exports = (Router) => {
                     share_type='ALL'
                 and
                     day_type=${query.day_type}
-                and
-                    date='${query.startTime}'
                 and
                     share_platform=?
                 group by product_line`;

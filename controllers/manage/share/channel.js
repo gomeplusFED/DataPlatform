@@ -55,11 +55,34 @@ module.exports = (Router) => {
         platform : false,
         date_picker_data: 1,
         showDayUnit: true,
+        selectFilter(req, cb) {
+            req.models.ads_share_dim_channel.find({}, (err, data) => {
+                if(err) {
+                    cb(err);
+                } else {
+                    var filter_select = [];
+                    filter_select.push({
+                        title: '渠道选择',
+                        filter_key: 'share_source',
+                        groups : [{
+                            key: "ALL",
+                            value: "全部"
+                        }]
+                    });
+                    for(let key of data) {
+                        filter_select[0].groups.push({
+                            key: key.channel_id,
+                            value: key.channel_name
+                        });
+                    }
+                    cb(null, filter_select);
+                }
+            });
+        },
         global_platform_filter(req) {
             this.global_platform = globalPlatform(req.session.userInfo.type["667"]);
         },
         params(query, params, data, dates) {
-            params.share_source = "ALL";
             params.share_type   = "ALL";
             params.product_line = "ALL";
             params.share_platform = query.share_platform ? query.share_platform : this.global_platform.list[0].key;
@@ -121,7 +144,10 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/share/channelTwo",
-        modelName : ["ads_share_data_analysis_info/ads_share_source_type_hour"],
+        modelName : ["ads_share_data_analysis_info/ads_share_source_type_hour", "ads_share_dim_channel"],
+        secondParams() {
+            return {};
+        },
         platform : false,
         toggle : {
             show : true
@@ -140,6 +166,8 @@ module.exports = (Router) => {
                     from 
                         ads_share_source_type_hour 
                     where 
+                        date='${query.startTime}'
+                    and
                         share_platform=?
                     and
                         share_source not in ('ALL')
@@ -147,8 +175,6 @@ module.exports = (Router) => {
                         share_type='ALL'
                     and
                         day_type=1
-                    and
-                        date='${query.startTime}'
                     order by hours asc`;
 
                 return {
@@ -161,6 +187,8 @@ module.exports = (Router) => {
                     from 
                         ads_share_data_analysis_info 
                     where 
+                        date='${query.startTime}'
+                    and
                         product_line='ALL' 
                     and 
                         share_source not in ('ALL') 
@@ -168,8 +196,6 @@ module.exports = (Router) => {
                         share_type='ALL'
                     and
                         day_type=${query.day_type}
-                    and
-                        date='${query.startTime}'
                     and
                         share_platform=?
                     order by date asc`;
@@ -227,12 +253,66 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/share/channelThree",
-        modelName : ["ads_share_data_analysis_info/ads_share_source_type_hour"],
+        modelName : ["ads_share_data_analysis_info/ads_share_source_type_hour", "ads_share_dim_type"],
+        secondParams() {
+            return {};
+        },
         platform : false,
         toggle : {
             show : true
         },
         showDayUnit: true,
+        selectFilter(req, cb) {
+            req.models.ads_share_dim_channel.find({}, (err, data) => {
+                if(err) {
+                    cb(err);
+                } else {
+                    var filter_select = [];
+                    filter_select.push({
+                        title: '渠道选择',
+                        filter_key: 'share_source',
+                        groups : []
+                    });
+                    for(let key of data) {
+                        filter_select[0].groups.push({
+                            key: key.channel_id,
+                            value: key.channel_name
+                        });
+                    }
+                    filter_select.push({
+                        title: '指标选择',
+                        filter_key: 'filter_key',
+                        groups: [
+                            {
+                                key: 'share_num',
+                                value: '分享次数'
+                            },
+                            {
+                                key: 'share_user',
+                                value: '分享人数'
+                            },
+                            {
+                                key: 'share_succeed_num',
+                                value: '分享成功次数'
+                            },
+                            {
+                                key: 'share_succeed_user',
+                                value: '分享成功人数'
+                            },
+                            {
+                                key: 'share_links_num',
+                                value: '分享链接点击量'
+                            },
+                            {
+                                key: 'share_links_user',
+                                value: '分享链接点击人数'
+                            }
+                        ]
+                    });
+                    cb(null, filter_select);
+                }
+            });
+        },
         firstSql(query, params) {
             let share_platform = query.share_platform ? decodeURI(query.share_platform) : this.global_platform.list[0].key;
             const sql = `select 
@@ -246,15 +326,15 @@ module.exports = (Router) => {
                 from 
                     ads_share_data_analysis_info 
                 where 
+                    date='${query.startTime}'
+                and
                     product_line='ALL' 
                 and 
-                    share_source='ALL'
+                    share_source='${query.share_source}'
                 and 
                     share_type not in ('ALL')
                 and
                     day_type=${query.day_type}
-                and
-                    date='${query.startTime}'
                 and
                     share_platform=?
                 group by share_type`;
@@ -268,36 +348,6 @@ module.exports = (Router) => {
                 params: [share_platform]
             };
         },
-        filter_select: [{
-            title: '指标选择',
-            filter_key: 'filter_key',
-            groups: [
-                {
-                    key: 'share_num',
-                    value: '分享次数'
-                },
-                {
-                    key: 'share_user',
-                    value: '分享人数'
-                },
-                {
-                    key: 'share_succeed_num',
-                    value: '分享成功次数'
-                },
-                {
-                    key: 'share_succeed_user',
-                    value: '分享成功人数'
-                },
-                {
-                    key: 'share_links_num',
-                    value: '分享链接点击量'
-                },
-                {
-                    key: 'share_links_user',
-                    value: '分享链接点击人数'
-                }
-            ]
-        }],
         global_platform_filter(req) {
             this.global_platform = globalPlatform(req.session.userInfo.type["667"]);
         },
@@ -309,7 +359,8 @@ module.exports = (Router) => {
             }
         ],
         filter(data, query, dates, type) {
-            return filter.indexThree(data, query, dates, type);
+            const select_filter = this.filter_select;
+            return filter.indexThree(data, query, dates, type, select_filter);
         }
     });
 
@@ -334,6 +385,8 @@ module.exports = (Router) => {
                 from 
                     ads_share_data_analysis_info 
                 where 
+                    date='${query.startTime}'
+                and
                     product_line not in ('ALL') 
                 and 
                     share_source='ALL'
@@ -341,8 +394,6 @@ module.exports = (Router) => {
                     share_type='ALL'
                 and
                     day_type=${query.day_type}
-                and
-                    date='${query.startTime}'
                 and
                     share_platform=?
                 group by product_line`;
@@ -428,11 +479,11 @@ module.exports = (Router) => {
                 from 
                     ads_share_share_type_top 
                 where 
+                    date='${query.startTime}'
+                and
                     share_type not in ('ALL')
                 and
                     day_type=${query.day_type}
-                and
-                    date='${query.startTime}'
                 and
                     share_platform=?
                 ${str}`;
@@ -460,11 +511,11 @@ module.exports = (Router) => {
                 from 
                     ads_share_share_type_top 
                 where 
+                    date='${query.startTime}'
+                and
                     share_type not in ('ALL')
                 and
                     day_type=${query.day_type}
-                and
-                    date='${query.startTime}'
                 and
                     share_platform=?
                 ${str}

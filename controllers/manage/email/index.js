@@ -10,7 +10,6 @@ module.exports = (Router) => {
 
     Router.post("/email/send", (req, res, next) => {
         let body = req.body;
-        console.log(body);
         let mails = JSON.parse(body.mails);
         var server = email.server.connect({
             user: body.username,

@@ -84,8 +84,13 @@ module.exports = {
         var source = data.first.data,
             show_type = query.main_show_type_filter,
             day_type = query.day_type,
+            second = data.second.data[0],
+            channelConfig = {},
             filter_key = query.filter_key;
         const share_source = _.uniq(_.pluck(source, "share_source"));
+        for(let item of second) {
+            channelConfig[item.channel_id] = item.channel_name;
+        }
 
         let isHour = false;
         if(day_type == 1) {
@@ -96,7 +101,7 @@ module.exports = {
         const newData= {};
         for(let item of source) {
             let k = `${item.date}${isHour ? " " + item.hours + ":00" : ""}`;
-            map[item.share_source] = item.share_source;
+            map[item.share_source] = channelConfig[item.share_source] || item.share_source;
             if(newData[k]) {
                 newData[k][item.share_source] += item[filter_key];
             }
@@ -119,7 +124,7 @@ module.exports = {
             for(let key of share_source) {
                 rows.push(key);
                 cols.push({
-                    caption: key,
+                    caption: channelConfig[key] || key,
                     type: "number"
                 });
             }
@@ -144,14 +149,26 @@ module.exports = {
             }];
         }
     },
-    indexThree(data, query, dates, type) {
+    indexThree(data, query, dates, type, select_filter) {
         var source = data.first.data,
             show_type = query.main_show_type_filter,
+            second = data.second.data[0],
+            typeConfig = {},
+            share_source,
             filter_key = query.filter_key;
+        for(let item of second) {
+            typeConfig[item.type_id] = item.type_name;
+        }
+
+        for(let item of select_filter[0].groups) {
+            if(item.key === query.share_source) {
+                share_source = item.value;
+            }
+        }
 
         if(show_type == "table" || type == "excel") {
             const cols = [{
-                caption: `分享类型-`,
+                caption: `分享类型-${share_source}`,
                 type: "string"
             }];
             const rows = ["share_type"];
@@ -178,7 +195,9 @@ module.exports = {
             };
             const newData = {};
             for(let item of source) {
-                newData[item.share_type] = item[filter_key];
+                newData[typeConfig[item.share_type] || item.share_type] = {
+                    value: item[filter_key]
+                };
             }
 
             return [{

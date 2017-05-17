@@ -151,8 +151,13 @@ module.exports = {
     },
     indexThree(data, query, dates, type) {
         var source = data.first.data;
+        const second = data.second.data[0];
         const filter_key = query.filter_key;
         const show_type = query.main_show_type_filter;
+        const channelConfig = {};
+        for(let item of second) {
+            channelConfig[item.channel_id] = item.channel_name;
+        }
 
         if(show_type == "table" || type == "excel") {
             const rows = ["share_source"];
@@ -173,6 +178,7 @@ module.exports = {
             }
             for(let item of source) {
                 item.rate = util.toFixed(item[filter_key], total);
+                item.share_source = channelConfig[item.share_source] || item.share_source;
             }
 
             return util.toTable([source], [rows], [cols]);
@@ -180,7 +186,7 @@ module.exports = {
         else {
             const newDate = {};
             for(let item of source) {
-                newDate[item.share_source] = {
+                newDate[channelConfig[item.share_source] || item.share_source] = {
                     value: item[filter_key]
                 };
             }
@@ -200,7 +206,12 @@ module.exports = {
     indexFour(data, query, dates, type) {
         var source = data.first.data;
         const filter_key = query.filter_key;
+        const second = data.second.data[0];
         const show_type = query.main_show_type_filter;
+        const typeConfig = {};
+        for(let item of second) {
+            typeConfig[item.type_id] = item.type_name;
+        }
 
         if(show_type == "table" || type == "excel") {
             const rows = ["share_type"];
@@ -221,6 +232,7 @@ module.exports = {
             }
             for(let item of source) {
                 item.rate = util.toFixed(item[filter_key], total);
+                item.share_type = typeConfig[item.share_type] || item.share_type;
             }
 
             return util.toTable([source], [rows], [cols]);
@@ -228,7 +240,7 @@ module.exports = {
         else {
             const newDate = {};
             for(let item of source) {
-                newDate[item.share_type] = {
+                newDate[typeConfig[item.share_type] || item.share_type] = {
                     value: item[filter_key]
                 };
             }

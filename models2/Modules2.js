@@ -196,7 +196,23 @@ module.exports = {
     //分享数据统计小时
     ads_share_source_type_hour : {
         modelName : "ads_share_source_type_hour"
-    }
+    },
+    //分享数据渠道
+    ads_share_dim_channel : {
+        modelName : "ads_share_dim_channel"
+    },
+    //分享数据分享页面
+    ads_share_dim_page : {
+        modelName : "ads_share_dim_page"
+    },
+    //分享数据平台
+    ads_share_dim_platform : {
+        modelName : "ads_share_dim_platform"
+    },
+    //分享数据类型
+    ads_share_dim_type : {
+        modelName : "ads_share_dim_type"
+    },
 };
 
 

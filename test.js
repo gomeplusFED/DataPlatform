@@ -75,7 +75,7 @@
 const md5 = require("md5");
 const request = require("request");
 
-console.log(md5("502_666_ 1493952798513_kD6pd*7q"));
+console.log(md5("2017050120170510eC29*b)0").toUpperCase());
 // const query ={
 //     start_time : "2016-11-30",
 //     end_time : "2016-12-06",
