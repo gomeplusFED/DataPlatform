@@ -126,59 +126,35 @@ module.exports = (Router) => {
         toggle : {
             show : true
         },
-        showDayUnit: true,
         firstSql(query, params) {
             let share_platform = query.share_platform ? query.share_platform : this.global_platform.list[0].key;
             const day_type = query.day_type;
+            const startIsEnd = query.startTime == query.endTime;
 
             if(share_platform !== "ALL") {
                 share_platform += "站";
             }
 
-            if(day_type == 1) {
-                const sql = `select * 
-                    from 
-                        ads_share_source_type_hour 
-                    where 
-                        date='${query.startTime}'
-                    and
-                        share_platform=?
-                    and
-                        share_source='ALL'
-                    and
-                        share_type='ALL'
-                    and
-                        day_type=1
-                    order by hours asc`;
+            const sql = `select * 
+            from 
+                ${startIsEnd ? "ads_share_source_type_hour" : "ads_share_data_analysis_info"}
+            where 
+                date between '${query.startTime}' and '${query.endTime}'
+                ${startIsEnd ? "" : "and product_line='ALL'"}
+            and
+                share_platform=?
+            and
+                share_source='ALL'
+            and
+                share_type='ALL'
+            and
+                day_type=1
+            order by ${startIsEnd ? "hours" : "date"} asc`;
 
-                return {
-                    sql,
-                    params:[share_platform]
-                };
-            }
-            else {
-                const sql = `select * 
-                    from 
-                        ads_share_data_analysis_info 
-                    where 
-                        date='${query.startTime}'
-                    and
-                        product_line='ALL' 
-                    and 
-                        share_source='ALL' 
-                    and 
-                        share_type='ALL'
-                    and
-                        day_type=${query.day_type}
-                    and
-                        share_platform=?
-                    order by date asc`;
-
-                return {
-                    sql,
-                    params: [share_platform]
-                };
-            }
+            return {
+                sql,
+                params: [share_platform]
+            };
         },
         global_platform_filter(req) {
             this.global_platform = globalPlatform(req.session.userInfo.type["71"]);
@@ -290,6 +266,7 @@ module.exports = (Router) => {
         toggle : {
             show : true
         },
+        date_picker_data: 1,
         showDayUnit: true,
         firstSql(query, params) {
             let share_platform = query.share_platform ? decodeURI(query.share_platform) : this.global_platform.list[0].key;
@@ -410,6 +387,7 @@ module.exports = (Router) => {
         toggle : {
             show : true
         },
+        date_picker_data: 1,
         showDayUnit: true,
         firstSql(query, params) {
             let share_platform = query.share_platform ? decodeURI(query.share_platform) : this.global_platform.list[0].key;
@@ -527,6 +505,7 @@ module.exports = (Router) => {
         toggle : {
             show : true
         },
+        date_picker_data: 1,
         showDayUnit: true,
         firstSql(query, params) {
             let share_platform = query.share_platform ? decodeURI(query.share_platform) : this.global_platform.list[0].key;

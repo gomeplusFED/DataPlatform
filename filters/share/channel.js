@@ -83,7 +83,6 @@ module.exports = {
     indexTwo(data, query, dates, type) {
         var source = data.first.data,
             show_type = query.main_show_type_filter,
-            day_type = query.day_type,
             second = data.second.data[0],
             channelConfig = {},
             filter_key = query.filter_key;
@@ -93,7 +92,7 @@ module.exports = {
         }
 
         let isHour = false;
-        if(day_type == 1) {
+        if(query.startTime === query.endTime) {
             isHour = true;
         }
 
@@ -281,11 +280,24 @@ module.exports = {
         var source = data.first.data,
             page = query.page || 1,
             limit = query.limit,
+            second = data.second.data[0],
+            third = data.third.data[0],
+            channelConfig = {},
+            typeConfig = {},
             count = data.first.count[0].count;
+        for(let item of second) {
+            channelConfig[item.channel_id] = item.channel_name;
+        }
+
+        for(let item of third) {
+            typeConfig[item.type_id] = item.type_name;
+        }
 
         source.forEach((x, i) => {
             x.top = (page - 1) * limit + i + 1;
             x.name = `${x.share_id}/${x.share_name}`;
+            x.share_source = channelConfig[x.share_source] || x.share_source;
+            x.share_type = typeConfig[x.share_type] || x.share_type;
             if(x.rate == "null" || x.rate == null) {
                 x.rate = 0.0000;
             }

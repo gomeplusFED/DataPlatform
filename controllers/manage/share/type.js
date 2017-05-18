@@ -55,12 +55,35 @@ module.exports = (Router) => {
         platform : false,
         date_picker_data: 1,
         showDayUnit: true,
+        selectFilter(req, cb) {
+            req.models.ads_share_dim_type.find({}, (err, data) => {
+                if(err) {
+                    cb(err);
+                } else {
+                    var filter_select = [];
+                    filter_select.push({
+                        title: '分享类型',
+                        filter_key: 'share_type',
+                        groups : [{
+                            key: "ALL",
+                            value: "全部"
+                        }]
+                    });
+                    for(let key of data) {
+                        filter_select[0].groups.push({
+                            key: key.type_id,
+                            value: key.type_name
+                        });
+                    }
+                    cb(null, filter_select);
+                }
+            });
+        },
         global_platform_filter(req) {
             this.global_platform = globalPlatform(req.session.userInfo.type["668"]);
         },
         params(query, params, data, dates) {
             params.share_source = "ALL";
-            params.share_type   = "ALL";
             params.product_line = "ALL";
             params.share_platform = query.share_platform ? query.share_platform : this.global_platform.list[0].key;
 
@@ -121,7 +144,10 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/share/typeTwo",
-        modelName : ["ads_share_data_analysis_info/ads_share_source_type_hour"],
+        modelName : ["ads_share_data_analysis_info/ads_share_source_type_hour", "ads_share_dim_type"],
+        secondParams() {
+            return {};
+        },
         platform : false,
         toggle : {
             show : true
@@ -130,55 +156,32 @@ module.exports = (Router) => {
         firstSql(query, params) {
             let share_platform = query.share_platform ? decodeURI(query.share_platform) : this.global_platform.list[0].key;
             const day_type = query.day_type;
+            const startIsEnd = query.startTime === query.endTime;
 
             if(share_platform !== "ALL") {
                 share_platform += "站";
             }
 
-            if(day_type == 1) {
-                const sql = `select * 
-                    from 
-                        ads_share_source_type_hour 
-                    where 
-                        date='${query.startTime}'
-                    and
-                        share_platform=?
-                    and
-                        share_source not in ('ALL')
-                    and
-                        share_type='ALL'
-                    and
-                        day_type=1
-                    order by hours asc`;
+            const sql = `select * 
+                from 
+                    ${startIsEnd ? "ads_share_source_type_hour" : "ads_share_data_analysis_info"} 
+                where 
+                    date between '${query.startTime}' and '${query.endTime}'
+                    ${startIsEnd ? "" : "and product_line='ALL'"}
+                and
+                    share_platform=?
+                and
+                    share_type not in ('ALL')
+                and
+                    share_source='ALL'
+                and
+                    day_type=1
+                order by ${startIsEnd ? "hours" : "date"} asc`;
 
-                return {
-                    sql,
-                    params:[share_platform]
-                };
-            }
-            else {
-                const sql = `select * 
-                    from 
-                        ads_share_data_analysis_info 
-                    where 
-                        date='${query.startTime}'
-                    and
-                        product_line='ALL' 
-                    and 
-                        share_source not in ('ALL') 
-                    and 
-                        share_type='ALL'
-                    and
-                        day_type=${query.day_type}
-                    and
-                        share_platform=?
-                    order by date asc`;
-
-                return {
-                    sql,
-                    params: [share_platform]
-                };
-            }
+            return {
+                sql,
+                params:[share_platform]
+            };
         },
         filter_select: [{
             title: '指标选择',
@@ -227,16 +230,20 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/share/typeThree",
-        modelName : ["ads_share_data_analysis_info"],
+        modelName : ["ads_share_data_analysis_info", "ads_share_dim_channel"],
+        secondParams() {
+            return {};
+        },
         platform : false,
         toggle : {
             show : true
         },
+        date_picker_data: 1,
         showDayUnit: true,
         firstSql(query, params) {
             let share_platform = query.share_platform ? decodeURI(query.share_platform) : this.global_platform.list[0].key;
             const sql = `select 
-                    share_type,
+                    share_source,
                     sum(share_num)          as share_num,
                     sum(share_user)         as share_user,
                     sum(share_succeed_num)  as share_succeed_num,
@@ -250,9 +257,9 @@ module.exports = (Router) => {
                 and
                     product_line='ALL' 
                 and 
-                    share_source='ALL'
+                    share_source not in ('ALL')
                 and 
-                    share_type not in ('ALL')
+                    share_type='${query.share_type}'
                 and
                     day_type=${query.day_type}
                 and
@@ -268,36 +275,57 @@ module.exports = (Router) => {
                 params: [share_platform]
             };
         },
-        filter_select: [{
-            title: '指标选择',
-            filter_key: 'filter_key',
-            groups: [
-                {
-                    key: 'share_num',
-                    value: '分享次数'
-                },
-                {
-                    key: 'share_user',
-                    value: '分享人数'
-                },
-                {
-                    key: 'share_succeed_num',
-                    value: '分享成功次数'
-                },
-                {
-                    key: 'share_succeed_user',
-                    value: '分享成功人数'
-                },
-                {
-                    key: 'share_links_num',
-                    value: '分享链接点击量'
-                },
-                {
-                    key: 'share_links_user',
-                    value: '分享链接点击人数'
+        selectFilter(req, cb) {
+            req.models.ads_share_dim_type.find({}, (err, data) => {
+                if(err) {
+                    cb(err);
+                } else {
+                    var filter_select = [];
+                    filter_select.push({
+                        title: '分享类型',
+                        filter_key: 'share_type',
+                        groups : []
+                    });
+                    for(let key of data) {
+                        filter_select[0].groups.push({
+                            key: key.type_id,
+                            value: key.type_name
+                        });
+                    }
+                    filter_select.push({
+                        title: '指标选择',
+                        filter_key: 'filter_key',
+                        groups: [
+                            {
+                                key: 'share_num',
+                                value: '分享次数'
+                            },
+                            {
+                                key: 'share_user',
+                                value: '分享人数'
+                            },
+                            {
+                                key: 'share_succeed_num',
+                                value: '分享成功次数'
+                            },
+                            {
+                                key: 'share_succeed_user',
+                                value: '分享成功人数'
+                            },
+                            {
+                                key: 'share_links_num',
+                                value: '分享链接点击量'
+                            },
+                            {
+                                key: 'share_links_user',
+                                value: '分享链接点击人数'
+                            }
+                        ]
+                    });
+                    cb(null, filter_select);
                 }
-            ]
-        }],
+            });
+        },
         global_platform_filter(req) {
             this.global_platform = globalPlatform(req.session.userInfo.type["667"]);
         },
@@ -309,7 +337,8 @@ module.exports = (Router) => {
             }
         ],
         filter(data, query, dates, type) {
-            return filter.indexThree(data, query, dates, type);
+            const filter_select = this.filter_select;
+            return filter.indexThree(data, query, dates, type, filter_select);
         }
     });
 
@@ -320,6 +349,7 @@ module.exports = (Router) => {
         toggle : {
             show : true
         },
+        date_picker_data: 1,
         showDayUnit: true,
         firstSql(query, params) {
             let share_platform = query.share_platform ? decodeURI(query.share_platform) : this.global_platform.list[0].key;
@@ -340,7 +370,7 @@ module.exports = (Router) => {
                 and 
                     share_source='ALL'
                 and 
-                    share_type='ALL'
+                    share_type='${query.share_type}'
                 and
                     day_type=${query.day_type}
                 and
@@ -356,36 +386,57 @@ module.exports = (Router) => {
                 params: [share_platform]
             };
         },
-        filter_select: [{
-            title: '指标选择',
-            filter_key: 'filter_key',
-            groups: [
-                {
-                    key: 'share_num',
-                    value: '分享次数'
-                },
-                {
-                    key: 'share_user',
-                    value: '分享人数'
-                },
-                {
-                    key: 'share_succeed_num',
-                    value: '分享成功次数'
-                },
-                {
-                    key: 'share_succeed_user',
-                    value: '分享成功人数'
-                },
-                {
-                    key: 'share_links_num',
-                    value: '分享链接点击量'
-                },
-                {
-                    key: 'share_links_user',
-                    value: '分享链接点击人数'
+        selectFilter(req, cb) {
+            req.models.ads_share_dim_type.find({}, (err, data) => {
+                if(err) {
+                    cb(err);
+                } else {
+                    var filter_select = [];
+                    filter_select.push({
+                        title: '分享类型',
+                        filter_key: 'share_type',
+                        groups : []
+                    });
+                    for(let key of data) {
+                        filter_select[0].groups.push({
+                            key: key.type_id,
+                            value: key.type_name
+                        });
+                    }
+                    filter_select.push({
+                        title: '指标选择',
+                        filter_key: 'filter_key',
+                        groups: [
+                            {
+                                key: 'share_num',
+                                value: '分享次数'
+                            },
+                            {
+                                key: 'share_user',
+                                value: '分享人数'
+                            },
+                            {
+                                key: 'share_succeed_num',
+                                value: '分享成功次数'
+                            },
+                            {
+                                key: 'share_succeed_user',
+                                value: '分享成功人数'
+                            },
+                            {
+                                key: 'share_links_num',
+                                value: '分享链接点击量'
+                            },
+                            {
+                                key: 'share_links_user',
+                                value: '分享链接点击人数'
+                            }
+                        ]
+                    });
+                    cb(null, filter_select);
                 }
-            ]
-        }],
+            });
+        },
         global_platform_filter(req) {
             this.global_platform = globalPlatform(req.session.userInfo.type["667"]);
         },
@@ -403,7 +454,10 @@ module.exports = (Router) => {
 
     Router = new api(Router,{
         router : "/share/typeFive",
-        modelName : ["ads_share_share_type_top"],
+        modelName : ["ads_share_share_type_top", "ads_share_dim_type"],
+        secondParams() {
+            return {};
+        },
         platform : false,
         date_picker_data: 1,
         showDayUnit: true,
@@ -430,7 +484,9 @@ module.exports = (Router) => {
                 where 
                     date='${query.startTime}'
                 and
-                    share_type not in ('ALL')
+                    share_source='ALL'
+                and
+                    share_type${query.share_type === "ALL" ? " not in ('ALL')" : '="' + query.share_type + '"'}
                 and
                     day_type=${query.day_type}
                 and
@@ -461,9 +517,9 @@ module.exports = (Router) => {
                 where 
                     date='${query.startTime}'
                 and
-                    share_source not in ('ALL')
+                    share_source='ALL'
                 and
-                    share_type not in ('ALL')
+                    share_type${query.share_type === "ALL" ? " not in ('ALL')" : '="' + query.share_type + '"'}
                 and
                     day_type=${query.day_type}
                 and
@@ -476,6 +532,32 @@ module.exports = (Router) => {
                 sql,
                 params: [share_platform, offset, limit]
             };
+        },
+        selectFilter(req, cb) {
+            req.models.ads_share_dim_type.find({}, (err, data) => {
+                if(err) {
+                    cb(err);
+                } else {
+                    var filter_select = [];
+                    filter_select.push({
+                        title: '分享类型',
+                        filter_key: 'share_type',
+                        groups : [
+                            {
+                                key: "ALL",
+                                value: "全部"
+                            }
+                        ]
+                    });
+                    for(let key of data) {
+                        filter_select[0].groups.push({
+                            key: key.type_id,
+                            value: key.type_name
+                        });
+                    }
+                    cb(null, filter_select);
+                }
+            });
         },
         global_platform_filter(req) {
             this.global_platform = globalPlatform(req.session.userInfo.type["667"]);

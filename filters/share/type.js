@@ -83,12 +83,17 @@ module.exports = {
     indexTwo(data, query, dates, type) {
         var source = data.first.data,
             show_type = query.main_show_type_filter,
-            day_type = query.day_type,
+            second = data.second.data[0],
+            typeConfig = {},
             filter_key = query.filter_key;
         const share_source = _.uniq(_.pluck(source, "share_type"));
 
+        for(let item of second) {
+            typeConfig[item.type_id] = item.type_name;
+        }
+
         let isHour = false;
-        if(day_type == 1) {
+        if(query.startTime === query.endTime) {
             isHour = true;
         }
 
@@ -96,16 +101,16 @@ module.exports = {
         const newData= {};
         for(let item of source) {
             let k = `${item.date}${isHour ? " " + item.hours + ":00" : ""}`;
-            map[item.share_source] = item.share_source;
+            map[item.share_type] = typeConfig[item.share_type] || item.share_type;
             if(newData[k]) {
-                newData[k][item.share_source] += item[filter_key];
+                newData[k][item.share_type] += item[filter_key];
             }
             else {
                 newData[k] = {};
                 for(let key of share_source) {
                     newData[k][key] = 0;
                 }
-                newData[k][item.share_source] = item[filter_key];
+                newData[k][item.share_type] = item[filter_key];
             }
         }
 
@@ -119,7 +124,7 @@ module.exports = {
             for(let key of share_source) {
                 rows.push(key);
                 cols.push({
-                    caption: key,
+                    caption: typeConfig[key] || key,
                     type: "number"
                 });
             }
@@ -144,17 +149,32 @@ module.exports = {
             }];
         }
     },
-    indexThree(data, query, dates, type) {
+    indexThree(data, query, dates, type, filter_select) {
         var source = data.first.data,
             show_type = query.main_show_type_filter,
+            second = data.second.data[0],
+            channelConfig = {},
+            typeName,
+            groups = filter_select[0].groups,
             filter_key = query.filter_key;
+
+        for(let item of second) {
+            channelConfig[item.channel_id] = item.channel_name;
+        }
+
+        for(let item of groups) {
+            if(item.key === query.share_type) {
+                typeName = item.value;
+                break;
+            }
+        }
 
         if(show_type == "table" || type == "excel") {
             const cols = [{
-                caption: `分享类型-`,
+                caption: `分享类型-${typeName}`,
                 type: "string"
             }];
-            const rows = ["share_type"];
+            const rows = ["share_source"];
             rows.push(filter_key);
             rows.push("rate");
             cols.push(help[filter_key]);
@@ -168,6 +188,7 @@ module.exports = {
             }
             for(let item of source) {
                 item.rate = util.toFixed(item[filter_key], total);
+                item.share_source = channelConfig[item.share_source] || item.share_source;
             }
 
             return util.toTable([source], [rows], [cols]);
@@ -178,7 +199,9 @@ module.exports = {
             };
             const newData = {};
             for(let item of source) {
-                newData[item.share_type] = item[filter_key];
+                newData[channelConfig[item.share_source] || item.share_source] = {
+                    value: item[filter_key]
+                };
             }
 
             return [{
@@ -262,11 +285,18 @@ module.exports = {
         var source = data.first.data,
             page = query.page || 1,
             limit = query.limit,
+            second = data.second.data[0],
+            typeConfig = {},
             count = data.first.count[0].count;
+
+        for(let item of second) {
+            typeConfig[item.type_id] = item.type_name;
+        }
 
         source.forEach((x, i) => {
             x.top = (page - 1) * limit + i + 1;
             x.name = `${x.share_id}/${x.share_name}`;
+            x.share_type = typeConfig[x.share_type] || x.share_type;
             if(x.rate == "null" || x.rate == null) {
                 x.rate = 0.0000;
             }

@@ -84,11 +84,10 @@ module.exports = {
     indexTwo(data, query, dates, type) {
         var source = data.first.data,
             show_type = query.main_show_type_filter,
-            day_type = query.day_type,
             filter_key = query.filter_key ? query.filter_key.split(",") : [];
 
         let isHour = false;
-        if(day_type == 1) {
+        if(query.startTime === query.endTime) {
             isHour = true;
         }
 
