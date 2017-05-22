@@ -106,7 +106,9 @@ function api(Router, options) {
         //是否页面显示表名
         debug : env !== "pro",
         //是否取消30天限制
-        cancelDateLimit : true
+        cancelDateLimit : true,
+        //全局块
+        global_block: null
     }, options);
 
     utils.mixin(this, defaultOption);
@@ -229,7 +231,8 @@ api.prototype = {
                     show : this.control_table_col
                 },
                 global_plataform : this.global_platform,
-                toggle: this.toggle
+                toggle: this.toggle,
+                global_block: this.global_block
             }
         };
         if(this.debug) {
