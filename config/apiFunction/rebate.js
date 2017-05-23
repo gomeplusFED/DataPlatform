@@ -1410,14 +1410,22 @@ module.exports = {
                 cols.push(data.cols[2][i]);
             }
         }
+        let oneRows = [];
+        let oneCols = [];
+        for(let i = 0, len = data.rows[0].length; i < len; i++) {
+            if(i != 3) {
+                oneRows.push(data.rows[0][i]);
+                oneCols.push(data.cols[0][i]);
+            }
+        }
         //TODO 改动end
            
         return util.toTable([[Table_1_row1 , Table_1_row2] , [ThisOne] , [Table_3_row1
             // , Table_3_row2
         ]],
             // data.rows, data.cols
-            [data.rows[0], data.rows[1], rows],
-            [data.cols[0], data.cols[1], cols]
+            [oneRows, data.rows[1], rows],
+            [oneCols, data.cols[1], cols]
         );
     },
 
