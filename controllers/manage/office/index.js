@@ -134,10 +134,10 @@ module.exports = (Router) => {
             this.global_platform = globalPlatform(req.session.userInfo.type["301"]);
         },
         firstSql(query, params) {
-            let boo = true;
+            let boo = false;
             const wm = params.wm || this.global_platform.list[0].key;
             if(wm === "ALL") {
-                boo = false;
+                boo = true;
             }
             const sql = `select 
                 date,
@@ -153,7 +153,7 @@ module.exports = (Router) => {
                 SUM(total_user) total_user
                 from ads2_company_oa_overview where
                 date between '${query.startTime}' and '${query.endTime}' 
-                and ${boo ? "wm='" + wm + "' and " : ""} day_type=1 group by date`;
+                and ${boo ? "wm in ('app', 'pc') and " : "wm='" + wm + "' and "} day_type=1 group by date`;
 
             return {
                 sql : sql,
@@ -199,10 +199,10 @@ module.exports = (Router) => {
             preMethods: ['excel_export']
         }],
         firstSql(query, params) {
-            let boo = true;
+            let boo = false;
             const wm = params.wm || this.global_platform.list[0].key;
             if(wm === "ALL") {
-                boo = false;
+                boo = true;
             }
             const sql = `select 
                 date,
@@ -216,7 +216,7 @@ module.exports = (Router) => {
                 SUM(total_user) total_user
                 from ads2_company_oa_overview where
                 date between '${query.startTime}' and '${query.endTime}' 
-                and ${boo ? "wm='" + wm + "' and " : ""} day_type=1 group by date limit ?,?`;
+                and ${boo ? "wm in ('app', 'pc') and " : "wm='" + wm + "' and "} day_type=1 group by date limit ?,?`;
             const page = query.page - 1 || 0,
                 offset = query.from || (page * query.limit),
                 limit = query.to || query.limit || 0;
@@ -288,7 +288,7 @@ module.exports = (Router) => {
             WHERE
                 date = '${utils.moment(new  Date() - 24 * 60 * 60 * 1000)}' 
             AND
-                day_type=1 ${wm === 'ALL' ? "" : "and wm='" + wm + "' "}
+                day_type=1 ${wm === 'ALL' ? "wm in ('app', 'pc') " : "wm='" + wm + "' "}
             group by versions ORDER BY ${query.filter_key} DESC`;
 
             return {
