@@ -103,7 +103,7 @@ module.exports = (Router) => {
                 SUM(total_user) total_user 
                 from ads2_company_oa_overview where
                 date between '${utils.moment(now - 2 * 24 * 60 * 60 * 1000)}' and '${utils.moment(now - 24 * 60 * 60 * 1000)}' 
-                and ${boo ? "wm='" + wm + "' and " : ""} day_type=1 group by date`;
+                and ${boo ? "wm in ('app', 'pc') and " : "wm='" + wm + "' and "} day_type=1 group by date`;
 
             return {
                 sql : sql,
