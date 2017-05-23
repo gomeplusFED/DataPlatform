@@ -68,7 +68,7 @@ module.exports = (Router) => {
 
     Router = Router.get("/office/dateTwo_json", (req, res, next) => {
         var params = req.query,
-            date = moment(params.startTime).format("MMDD"),
+            date = moment(params.endTime).format("MMDD"),
             rows = [["date", "value"]],
             cols = [
                 [
@@ -103,7 +103,7 @@ module.exports = (Router) => {
                         } else {
                             newData.push({
                                 date : `0${n}:00`,
-                                value : await (_find(`oa:${date}${n}:1:uv`)) || 0
+                                value : await (_find(`oa:${date}0${n}:1:uv`)) || 0
                             });
                         }
                     }

@@ -86,10 +86,10 @@ module.exports = (Router) => {
         },
         firstSql(query, params) {
             const now = new Date();
-            let boo = true;
+            let boo = false;
             const wm = params.wm || this.global_platform.list[0].key;
             if(wm === "ALL") {
-                boo = false;
+                boo = true;
             }
             const sql = `select 
                 date,
