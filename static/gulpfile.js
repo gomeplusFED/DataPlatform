@@ -58,14 +58,19 @@ var webpackConfig = {
     },
     module: {
         loaders: [{
-            test: /.js$/,
-            loader: 'babel',
-            include: path.join(rootPath, './src/'),
-            exclude: path.join(rootPath, '../node_modules/')
-        }, {
-            test: /.vue$/,
-            loader: 'vue'
-        }]
+                test: /.js$/,
+                loader: 'babel',
+                include: path.join(rootPath, './src/'),
+                exclude: path.join(rootPath, '../node_modules/')
+            }, {
+                test: /.vue$/,
+                loader: 'vue'
+            },
+            {
+                test: /\.less$/,
+                loader: "style-loader!css-loader!less-loader",
+            }
+        ]
     },
     plugins: [vendorPlugin],
     resolve: {
@@ -95,8 +100,12 @@ var webpackConfig = {
 
 gulp.task('clean', function () {
     return gulp
-        .src(['./dist/*'], { read: false })
-        .pipe(clean({ force: true }))
+        .src(['./dist/*'], {
+            read: false
+        })
+        .pipe(clean({
+            force: true
+        }))
 });
 
 gulp.task('js', function () {
@@ -147,12 +156,12 @@ gulp.task('rev', function () {
 })
 
 gulp.task('watch', function () {
-    if (argv.env != 'pro') {
+    // if (argv.env != 'pro') {
         webpackConfig.watch = true;
         webpackConfig.debug = true;
         // webpackConfig.devtool = 'inline-source-map';
         webpackConfig.plugins.push(sourceMap)
-    }
+    // }
     gulp.start('js', 'css', 'img', 'font');
     gulp.watch('./src/css/*', ['css']);
     gulp.watch('./src/img/*', ['img']);

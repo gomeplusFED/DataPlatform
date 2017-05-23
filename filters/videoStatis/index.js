@@ -274,10 +274,13 @@ module.exports = {
             item.date = util.getDate(item.date);
 
             for (let key of RowsOther) {
-                item[key + "_ratio"] = util.toFixedLength(item[key], item.play_num, 2);
+                item[key + "_ratio"] = util.toFixedLength(item[key], item.first_load_num, 2);
                 item[key] = item[key].toString();
             }
             item["port_succ_ratio"] = util.toFixedLength(item.port_succ, item.start_load_num, 2);
+            item["port_io_failed_ratio"] = util.toFixedLength(item.port_io_failed, item.play_num, 2);
+            item["port_data_failed_ratio"] = util.toFixedLength(item.port_data_failed, item.play_num, 2);
+            item["port_overtime_ratio"] = util.toFixedLength(item.port_overtime, item.play_num, 2);
 
             if (!ArrObj[item.date][item.sdk_type]) ArrObj[item.date][item.sdk_type] = [];
             ArrObj[item.date][item.sdk_type].push(item);
@@ -320,9 +323,24 @@ module.exports = {
             }
         }
 
+        const cols = [];
+        const rows = [];
+
+        data.rows[0].forEach((x, i) => {
+            if(query.type == "livevideo") {
+                cols.push(data.cols[0][i]);
+                rows.push(data.rows[0][i]);
+            } else {
+                if(i != 5) {
+                    cols.push(data.cols[0][i]);
+                    rows.push(data.rows[0][i]);
+                }
+            }
+        });
+
         var merge = util.mergeCell(EndArr, ["date"]);
 
-        return util.toTable([EndArr], data.rows, data.cols, {
+        return util.toTable([EndArr], [rows], [cols], {
             count: [count],
             config: [merge]
         });
@@ -369,6 +387,7 @@ module.exports = {
             })
         }
         data2[1]["port_succ"] = util.toFixedLength(second["port_succ"] || 0, second.start_load_num || 0 , 2);
+        data2[1]["start_frame_succ"] = util.toFixedLength(second["start_frame_succ"] || 0, second.first_load_num || 0 , 2);
         if (third) {
             let source = third
             let cols = ['port_io_failed', 'port_data_failed', 'port_overtime', 'play_failed', 'play_error', 'improper_play']
@@ -514,17 +533,36 @@ module.exports = {
         let cols = ['port_succ', 'start_frame_succ', 'stop_play_num', 'play_fluent', 'port_io_failed', 'port_data_failed', 'port_overtime', 'play_failed', 'play_error', 'improper_play']
         source.forEach(x => {
             x.date = moment(x.date).format('MM月DD日')
+            //play_num
             cols.forEach(col => {
-                x[col+'_ratio'] =  util.toFixedLength(x[col], x.play_num, 2);
+                x[col+'_ratio'] =  util.toFixedLength(x[col], x.first_load_num, 2);
                 x[col] = x[col].toString();
             });
             x["port_succ_ratio"] = util.toFixedLength(x.port_succ, x.start_load_num, 2);
+            x["port_io_failed_ratio"] = util.toFixedLength(x.port_io_failed, x.play_num, 2);
+            x["port_data_failed_ratio"] = util.toFixedLength(x.port_data_failed, x.play_num, 2);
+            x["port_overtime_ratio"] = util.toFixedLength(x.port_overtime, x.play_num, 2);
 
             data2.push(x)
         });
 
+        const _cols = [];
+        const _rows = [];
 
-        return util.toTable([data2], data.rows, data.cols, [count]);
+        data.rows[0].forEach((x, i) => {
+            if(query.type == "livevideo") {
+                _cols.push(data.cols[0][i]);
+                _rows.push(data.rows[0][i]);
+            } else {
+                if(i != 3) {
+                    _cols.push(data.cols[0][i]);
+                    _rows.push(data.rows[0][i]);
+                }
+            }
+        });
+
+
+        return util.toTable([data2], [_rows], [_cols], [count]);
     }
 
 };

@@ -468,6 +468,7 @@ module.exports = (Router) => {
                 "ver",
                 "play_user",
                 "play_num",
+                "first_load_num",
 
                 //健康播放统计
                 "port_succ",
@@ -513,6 +514,9 @@ module.exports = (Router) => {
                     caption: "播放次数",
                     type: "number",
                     help: "视频播放次数"
+                },{
+                    caption: "有效播放次数",
+                    type: "number"
                 },
 
                 //健康播放统计
@@ -670,7 +674,7 @@ module.exports = (Router) => {
             }
             sql = `SELECT 
                     a.play_num as play_num, a.port_succ as port_succ, a.start_frame_succ as start_frame_succ, a.stop_play_num as stop_play_num, a.play_fluent as play_fluent, a.start_load_num as start_load_num,
-                    b.port_succ as port_succ_pre, b.start_frame_succ as start_frame_succ_pre, b.stop_play_num as stop_play_num_pre, b.play_fluent as play_fluent_pre
+                    b.port_succ as port_succ_pre, b.start_frame_succ as start_frame_succ_pre, b.stop_play_num as stop_play_num_pre, b.play_fluent as play_fluent_pre, a.first_load_num as first_load_num
                         FROM ${tablename} a
                          LEFT JOIN ${tablename} b 
                         on a.day_type = b.day_type and b.sdk_type='ALL' and b.date = DATE_ADD(a.date,INTERVAL -1 ${date_type_list[query.day_type || 1]})
@@ -893,9 +897,7 @@ module.exports = (Router) => {
                 param.push(query.sdk_type)
             }
 
-            let sql = `SELECT 
-            date, play_user as play_user, play_num as play_num, port_succ as port_succ, start_frame_succ as start_frame_succ, stop_play_num as stop_play_num, play_fluent as play_fluent, start_load_num as start_load_num,
-            port_io_failed as port_io_failed, port_data_failed as port_data_failed, port_overtime as port_overtime, port_overtime as port_overtime, play_failed as play_failed, play_error as play_error, improper_play as improper_play
+            let sql = `SELECT *
                     FROM ${tablename}
                     WHERE ${config.join(" AND ")} group by date order by date desc`;
 
@@ -932,7 +934,7 @@ module.exports = (Router) => {
             }
         ],
         rows: [[
-            "date", "play_user", "play_num", 'port_succ', 'port_succ_ratio', 'start_frame_succ', 'start_frame_succ_ratio', 'stop_play_num', 'stop_play_num_ratio', 'play_fluent', 'play_fluent_ratio',
+            "date", "play_user", "play_num", "first_load_num", 'port_succ', 'port_succ_ratio', 'start_frame_succ', 'start_frame_succ_ratio', 'stop_play_num', 'stop_play_num_ratio', 'play_fluent', 'play_fluent_ratio',
             'port_io_failed', 'port_io_failed_ratio', 'port_data_failed', 'port_data_failed_ratio', 'port_overtime', 'port_overtime_ratio', 'play_failed', 'play_failed_ratio', 'play_error', 'play_error_ratio', 'improper_play', 'improper_play_ratio'
         ]],
         cols: [[
@@ -949,6 +951,10 @@ module.exports = (Router) => {
                 caption: "播放次数",
                 type: "number",
                 help : "视频播放次数"
+            },
+            {
+                caption: "有效播放次数",
+                type: "number"
             },
             // 健康播放统计
             {

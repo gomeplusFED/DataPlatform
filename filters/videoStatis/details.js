@@ -9,15 +9,19 @@ const util = require("../../utils"),
             //直播id
             "live_play_id",
             //直播名称
-            //"live_play_name",
+            "live_play_name",
             //直播开始时间
             "live_play_startime",
             //直播结束时间
             "live_play_endtime",
+            //日志上报日期
+            "date",
             //直播播放人数
             "play_user",
             //直播播放次数
             "play_num",
+            //有效播放次数
+            "first_load_num",
             //直播同时在线播放人数(峰值)
             "live_play_user",
             //直播同时在线播放次数(峰值)
@@ -67,20 +71,24 @@ const util = require("../../utils"),
     cols = [
         [{
             caption : "直播id"
-        //},{
-        //    caption : ""
+        },{
+           caption : "直播名称"
         },{
             caption : "直播开始时间"
         },{
             caption : "直播结束时间"
         },{
+            caption : "日志上报日期"
+        },{
             caption : "直播播放用户数"
         },{
             caption : "直播播放次数"
         },{
-            caption : "直播同时在线播放人数(峰值)"
+            caption : "有效播放次数"
         },{
-            caption : "直播同时在线播放次数(峰值)"
+            caption : "直播同时在线播放人数"
+        },{
+            caption : "直播同时在线播放次数"
         },{
             caption : "首次首帧成功数"
         },{
@@ -167,18 +175,21 @@ module.exports = {
         for(let key of source) {
             key.live_play_startime = moment(key.live_play_startime* 1000).format("YYYY-MM-DD HH:mm:ss");
             key.live_play_endtime = moment(key.live_play_endtime * 1000).format("YYYY-MM-DD HH:mm:ss");
+            key.live_real_startime = moment(key.live_real_startime * 1000).format("YYYY-MM-DD HH:mm:ss");
+            key.live_real_endtime = moment(key.live_real_endtime * 1000).format("YYYY-MM-DD HH:mm:ss");
+            key.date = moment(key.date).format("YYYY-MM-DD");
             key.one = util.toFixed(key.first_start_frame_succ, key.play_num);
-            key.two = util.toFixed(key.start_frame_succ, key.play_num);
-            key.three = util.toFixed(key.stop_play_num, key.play_num);
-            key.four = util.toFixed(key.play_fluent, key.play_num);
+            key.two = util.toFixed(key.start_frame_succ, key.first_load_num);
+            key.three = util.toFixed(key.stop_play_num, key.first_load_num);
+            key.four = util.toFixed(key.play_fluent, key.first_load_num);
             key.five = util.toFixed(key.port_io_failed, key.play_num);
             key.six = util.toFixed(key.port_data_failed, key.play_num);
             key.seven = util.toFixed(key.port_overtime, key.play_num);
-            key.eight = util.toFixed(key.play_failed, key.play_num);
-            key.night = util.toFixed(key.play_error, key.play_num);
-            key.ten = util.toFixed(key.improper_play, key.play_num);
+            key.eight = util.toFixed(key.play_failed, key.first_load_num);
+            key.night = util.toFixed(key.play_error, key.first_load_num);
+            key.ten = util.toFixed(key.improper_play, key.first_load_num);
             key.operating =
-                `<button class='btn btn-default' url_link='/videoStatis/videoDetailsOperating' url_fixed_params='{"live_play_id": "${key.live_play_id}","startTime" : "${key.live_play_startime}", "endTime" : "${key.live_play_endtime}"}'>详细>></button>`;
+                `<button class='btn btn-default' url_link='/videoStatis/videoDetailsOperating' url_fixed_params='{"live_play_id": "${key.live_play_id}","startTime" : "${key.live_real_startime}", "endTime" : "${key.live_real_endtime}"}'>详细>></button>`;
         }
 
         return util.toTable([source], rows, cols, [count]);
@@ -189,7 +200,7 @@ module.exports = {
             sum = data.first.sum,
             rows = [
                 ["id", "play_id",
-                    //"play_name",
+                    "play_name",
                     "play_num", "one"]
             ],
             cols = [
@@ -199,9 +210,9 @@ module.exports = {
                 },{
                     caption : "video_id",
                     type : "string"
-                //},{
-                //    caption : "视频名称",
-                //    type : "string"
+                },{
+                   caption : "视频名称",
+                   type : "string"
                 },{
                     caption : "播放次数",
                     type : "number"

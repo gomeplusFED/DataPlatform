@@ -60,6 +60,62 @@ module.exports = (Router) => {
     //     ]
     // });
 
+     Router = Router.get("/socialAnalysis/groupZero_json" , function(req , res , next){
+
+        res.json({
+            code: 200,
+            modelData: [],
+            components: {
+                switch_filter: {
+                    show: true,
+                    defaultIndex: 0,
+                    btns: [
+                        {
+                            title: '明细表',
+                            group: [0,1]
+                        },
+                        {
+                            title: '统计表',
+                            group: [2,3,4]
+                        },
+                    ],
+                    radios: [
+                        {
+                            title: '客户端',
+                            key: 'platform',
+                            value: 'all',
+                            group: [
+                                {
+                                    title: '全站',
+                                    key: 'all'
+                                },
+                                {
+                                    title: 'PC',
+                                    key: 'pc'
+                                }
+                            ]
+                        },
+                        {
+                            title: '用户标签',
+                            key: 'tag',
+                            value: 'all2',
+                            group: [
+                                {
+                                    title: '全站',
+                                    key: 'all2',
+                                },
+                                {
+                                    title: '签约达人创建',
+                                    key: 'star',
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        });
+    });
+
     //圈子数据统计
     Router = new api(Router,{
         router : "/socialAnalysis/groupSeven",

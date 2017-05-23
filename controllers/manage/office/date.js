@@ -30,7 +30,7 @@ module.exports = (Router) => {
 
     Router = Router.get("/office/dateOne_json", (req, res, next) => {
         var params = req.query,
-            date = moment(params.startTime).format("MMDD"),
+            date = moment(params.endTime).format("MMDD"),
             newData = {};
 
         if(Object.keys(params).length === 0) {

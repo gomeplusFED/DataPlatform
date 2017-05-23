@@ -162,7 +162,7 @@ var channelManage = Vue.extend({
             var _this = this;
             $.post('/custom/channelUtilsAdd', this.form, function(res) {
                 res.data.update = false
-                _this.list.push(res.data)
+                _this.list.unshift(res.data)
             })
         },
         update: function(item) {

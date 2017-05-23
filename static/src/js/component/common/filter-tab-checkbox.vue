@@ -40,7 +40,7 @@
 		},
 		computed: {
 			list() {
-				return this.tabCheckboxConfig.groups;
+				return JSON.parse(JSON.stringify(this.tabCheckboxConfig.groups));
 			}
 		},
 		data() {

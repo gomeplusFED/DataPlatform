@@ -118,6 +118,11 @@ module.exports = {
                 {
                     type: "table",
                     title:"圈子数据统计",
+                    query_api : "/socialAnalysis/groupZero"
+                },
+                {
+                    type: "table",
+                    title:"圈子数据统计",
                     query_api : "/socialAnalysis/groupSeven"
                 },
                 {
