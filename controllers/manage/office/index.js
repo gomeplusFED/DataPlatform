@@ -288,7 +288,7 @@ module.exports = (Router) => {
             WHERE
                 date = '${utils.moment(new  Date() - 24 * 60 * 60 * 1000)}' 
             AND
-                day_type=1 ${wm === 'ALL' ? "wm in ('app', 'pc') " : "wm='" + wm + "' "}
+                day_type=1 AND ${wm === 'ALL' ? "wm in ('app', 'pc') " : "wm='" + wm + "' "}
             group by versions ORDER BY ${query.filter_key} DESC`;
 
             return {
