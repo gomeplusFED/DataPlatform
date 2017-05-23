@@ -68,7 +68,6 @@
                     </tbody>
                 </table>
             </div>
-    
         </visualbp>
     </div>
 </template>
@@ -82,14 +81,8 @@ const actions = require('actions');
 // const api = require('./mock/api');
 const DatePicker = require('../../common/datePicker.vue');
 const visualbp = require('./visualbp.vue');
-const Heatmap = require('./lib/heatmap.js');
-const heatmapFactory = new Heatmap({
-    type: 'heatmap',
-    hoverable: false,
-    minAlpha: 0.2,
-    valueScale: 1,
-    opacity: 1
-});
+// const Heatmap = require('./lib/heatmap.js');
+import Adapter from 'page-heatmap';
 let heatmap = Vue.extend({
     name: 'heatmap',
     components: {
@@ -124,6 +117,8 @@ let heatmap = Vue.extend({
             }],
             versions: [],
             version: null,
+            $adapter: null,
+            $heatdata: null,
             tableData: {
                 dataTime: null,
                 uv: null,
@@ -132,16 +127,6 @@ let heatmap = Vue.extend({
                 rate: null
             },
             datatype: 'pv',
-            dom: {
-                iframe: null,
-                body: null,
-                heatdiv: null,
-                width: null,
-                height: null,
-                $elems: null,
-                $tip: null,
-                $popover: null
-            },
             data: [],
             rawData: [],
             argvs: {
@@ -170,7 +155,7 @@ let heatmap = Vue.extend({
                 }));
 
             });
-            if(config.version) {
+            if (config.version) {
                 this.version = this.versions.findIndex(x => x.version === config.version);
             } else {
                 await api.getLatestVersions(config).then(ver => {
@@ -183,24 +168,25 @@ let heatmap = Vue.extend({
     },
     ready() {
         this.pageComponentsData.trigger = !this.pageComponentsData.trigger;
+        this.$adapter = new Adapter({ types: this.dataTypes });
     },
     events: {
         visualbp_loaded(config) {
             this.init(config).then(() => {
-                let body = this.dom.body[0];
-                utils.observeDOMInserted(body, (mutations) => {
-                    if (mutations[0].target !== body && !mutations[0].target.id.includes('heatmap')) {
-                        // this.dom.heatdiv.remove();
-                        // 延迟一下，使浏览器先render完毕
-                        setTimeout(() => {
-                            if (this.dom.iframe.height() !== this.dom.height || this.dom.iframe.width() !== this.dom.width) {
-                                this.destroyCanvas();
-                                this.generateCanvas(this.rawData);
-                            }
-                            this.showTip();
-                        }, 10);
-                    }
-                });
+                // let body = this.dom.body[0];
+                // utils.observeDOMInserted(body, (mutations) => {
+                //     if (mutations[0].target !== body && !mutations[0].target.id.includes('heatmap')) {
+                //         // this.dom.heatdiv.remove();
+                //         // 延迟一下，使浏览器先render完毕
+                //         setTimeout(() => {
+                //             if (this.dom.iframe.height() !== this.dom.height || this.dom.iframe.width() !== this.dom.width) {
+                //                 this.destroyCanvas();
+                //                 this.generateCanvas(this.rawData);
+                //             }
+                //             this.showTip();
+                //         }, 10);
+                //     }
+                // });
             });
         },
         will_search(config) {
@@ -244,51 +230,51 @@ let heatmap = Vue.extend({
     },
     methods: {
         init(config) {
-            this.loading.show  = true;
+            this.loading.show = true;
             // 表格
             let options = this.extendParams(config);
             api.getHeatTable(options).then((res) => {
                 Object.assign(this.tableData, res);
             });
             return api.getHeatData(options).then((data) => {
-                // this.data = data;
-                this.rawData = data;
-                this.generateCanvas(data);
-                this.showTip();
-                window.requestAnimationFrame(this.freshCanvas);
-                this.loading.show  = false;
+                this.$heatdata = data;
+                this.$adapter.init({ initData: data.map(x => ({ value: x[this.datatype], selector: x.selector })), $win: document.querySelector('iframe').contentWindow });
+                this.$adapter.start();
+                this.showTip()
+                this.loading.show = false;
             }).catch(err => {
+                // throw err;
                 console.error(err);
-                this.loading.show  = false;
+                this.loading.show = false;
             });
         },
         searchFilter(searchFunc) {
             let config = this.$refs.visual.bpConfig;
             if (this.checkParams(config)) {
-                    config.version = this.versions[this.version].version;
-                    config.stop = api.getLocalUrl({
-                        originalUrl: config.pageUrl,
-                        version: this.versions[this.version].version,
-                        platform: config.platform
-                    }).then((url) => {
-                        config.convertedUrl = url;
-                        searchFunc();
-                    }).catch((err) => {
-                        return new Promise((resolve, reject) => {
-                            actions.confirm(store, {
-                                show: true,
-                                title: '确认',
-                                msg: '当前页面无有效快照，是否显示最新页面',
-                                apply: () => {
-                                    searchFunc();
-                                },
-                                cancle: () => {
-                                    // resolve(true);
-                                }
-                            });
+                config.version = this.versions[this.version].version;
+                config.stop = api.getLocalUrl({
+                    originalUrl: config.pageUrl,
+                    version: this.versions[this.version].version,
+                    platform: config.platform
+                }).then((url) => {
+                    config.convertedUrl = url;
+                    searchFunc();
+                }).catch((err) => {
+                    return new Promise((resolve, reject) => {
+                        actions.confirm(store, {
+                            show: true,
+                            title: '确认',
+                            msg: '当前页面无有效快照，是否显示最新页面',
+                            apply: () => {
+                                searchFunc();
+                            },
+                            cancle: () => {
+                                // resolve(true);
+                            }
                         });
                     });
-                }
+                });
+            }
         },
         checkParams(bpConfig = this.$refs.visual.bpConfig) {
             var $ele;
@@ -321,234 +307,51 @@ let heatmap = Vue.extend({
             }
         },
         showTip() {
-            // bind event
-            this.dom.iframe.off();
-            for(let x of this.data) {
-                x.tip = `名称：${x.pointName || '--'}<br>点击量：${x.pv}<br>点击UV：${x.uv}`;
-            }
-            let $popover = this.dom.$popover;
-            let $tip = this.dom.$tip;
-            let wait = false;
-            let _element;
-            let _text;
-            let docwidth = this.dom.width;
-            let halfwidth = docwidth / 2;
-            let setPopover = (x, y) => {
-                if (x < halfwidth) {
-                    $popover.css('right', '');
-                    $popover.css('left', x + 12);
-                } else {
-                    $popover.css('right', docwidth - x + 12);
-                    $popover.css('left', '');
-                }
-                $popover.css('top', y + 12);
-                $popover.show();
-                wait = false;
-            }
-
-            this.dom.iframe.mousemove((e) => {
-                // 检查当前位置
-                let _x = e.pageX;
-                let _y = e.pageY;
-                let res = this.data.filter(p => {
-                    return Math.abs(p._centerX - _x) <= (p._width / 2) && Math.abs(p._centerY - _y) <= (p._height / 2);
-                });
-                if (res.length > 0) {
-                    let item = res[0];
-                    if (_element !== item) {
-                        $tip.html(item.tip);
-                        setPopover( _x, _y);
-                        _element = item;
-                    } else {
-                        if (!wait) {
-                            // throttle
-                            setTimeout(() => {
-                                _element && setPopover(_x, _y);
-                            }, 200);
-                            wait = true;
-                        }
-                    }
-                } else {
-                    wait = false;
-                    _element = null;
-                    $popover.hide();
-                }
-            
-            });
-        },
-        trimData(data) {
-            let $iframe = this.dom.iframe;
-            return data.map((x, i) => {
-                let $elem = x.$elem || $iframe.find(x.selector);
-                if ($elem.length) {
-                    $elem = $elem.first();
-                } else {
-                    return {
-                        ...this.rawData[i]
-                    };
-                }
-                let _offset = $elem.offset();
-                let _left = _offset.left;
-                let _top = _offset.top;
-                if ($elem.is(":visible") && (_left + _top) > 0) {
-                    let _width = $elem.outerWidth();
-                    let _height = $elem.outerHeight();
-                    let _centerX = _left + _width / 2;
-                    let _centerY = _top + _height / 2;
-                    return ({
-                        ...x,
-                        $elem,
-                        _width,
-                        _height,
-                        _centerX,
-                        _centerY
-                    });
-                } else {
-                    return ({
-                        ...this.rawData[i],
-                        $elem
-                    });
-                }
-            });
-        },
-        // 筛选出在canvas范围内的点
-        filterFunc(arr, canvas) {
-            return arr.filter(x => (x._centerX && x._centerX < canvas.width && x._centerY < canvas.height));
-        },
-        freshCanvas() {
-            let newdata = this.trimData(this.data);
-            let needkeep = [];
-            let needupdate = [];
-            // 旧位置的点
-            let needupdateLast = [];
-            for (let i = 0, len = newdata.length; i < len; i++) {
-                let x0 = this.data[i];
-                let x1 = newdata[i];
-                if ((x0._centerX === x1._centerX) && (x0._centerY === x1._centerY)) {
-                    needkeep.push(x0);
-                } else {
-                    needupdate.push(x1)
-                    needupdateLast.push(x0);
-                }
-            }
-            let type = this.dataTypes.find(x => x.name === this.datatype);
-            let canvas = this.resultData[type.name].canvas;
-            if (needupdate.length > 0) {
-                let filterFunc = (arr) => this.filterFunc(arr, canvas);
-                needupdate = filterFunc(needupdate);
-                needupdateLast = filterFunc(needupdateLast);
-                needkeep = filterFunc(needkeep);
-                let field = '_' + type.name;
-                if (needupdate.length === 0) {
-                    // 传入需要保留的点位
-                    heatmapFactory.refreshCanvas(canvas, needkeep.map(x => [x._centerX, x._centerY, x[field]]));
-                } else {
-                    // 找到需要清除的最小区域
-                    let all = [...needupdateLast, ...needupdate];
-                    let xseries = all.map(x => x._centerX);
-                    let yseries = all.map(x => x._centerY);
-                    let maxX = Math.max(...xseries);
-                    let minX = Math.min(...xseries);
-                    let maxY = Math.max(...yseries);
-                    let minY = Math.min(...yseries);
-
-                    heatmapFactory.refreshCanvas(canvas, [...needupdate, ...needkeep].map(x => [x._centerX, x._centerY, x[field]]), minX, minY, maxX - minX, maxY - minY);
-                    all = null;
-                    xseries = null;
-                    yseries = null;
-                }
-            }
-            this.data = newdata;
-            needupdate = null;
-            needupdateLast = null;
-            needkeep = null;
-            return window.requestAnimationFrame(this.freshCanvas);
-        },
-        destroyCanvas() {
-            if (this.dom.heatdiv) {
-                this.dom.heatdiv.remove();
-                this.dom.heatdiv = null;
-            }
-        },
-        generateCanvas(data = this.rawData) {
-            let _this = this;
-            let $iframe = this.dom.iframe = $('iframe').contents();
-            // let iframedoc = $iframe[0];
-            let $body = this.dom.body = $iframe.find('body');
-            let heatdiv = document.createElement("div");
-            heatdiv.id = 'heatdiv';
-            let $heatdiv = $(heatdiv);
-            this.dom.heatdiv = $heatdiv;
-            data = this.trimData(this.rawData);
-            if (data.length === 0) {
-                this.show = false;
-                return;
-            }
-            let docheight = this.dom.height = $iframe.height();
-            let docwidth = this.dom.width = $iframe.width();
-            let normalData = data.filter(x => x._centerX);
-            heatdiv.style = `overflow:hidden;z-index:1100;position:absolute;height:${docheight}px;width:${docwidth}px;top:0;left:0;pointer-events:none;`;
-            $body.append(heatdiv);
+            let $tip, $popover;
+            let $adapter = this.$adapter;
             // inject popover
-            let $tip = $('<p id="heatmaptip" style="text-align: left;"></p>');
-            let $popover = $(`<div style="z-index:1200;overflow:hidden;display:none;position:absolute;border:0px solid rgb(51,51,51);transition:left 0.4s,top 0.4s;border-radius:4px;color:rgb(255,255,255);padding:5px;background-color:rgba(0,0,0,0.7);transition: all 0.5s"></div>`);
-            $popover.append($tip);
-            this.dom.$popover = $popover;
-            this.dom.$tip = $tip;
-            $heatdiv.append($popover);
-            for (let type of _this.dataTypes) {
-                let name = type.name;
-                let vals = this.rawData.map(x => x[name]);
-                let max = Math.max(...vals);
-                if (max > this.maxVal) {
-                    type.p = this.maxVal / max;
-                }
-                let field = '_' + name;
-                // 处理数据
-                this.rawData.forEach((x, i) => {
-                    x[field] = x[name] * type.p;
-                    data[i][field] = x[field];
-                })
-                let canvasData = normalData.map(x => [x._centerX, x._centerY, x[field]]);
-                let _canvas = heatmapFactory.getCanvas(canvasData,
-                    docwidth, docheight);
-                _canvas.style.display = 'none';
-                heatdiv.appendChild(_canvas);
-                _this.resultData[name] = {
-                    canvas: _canvas
-                };
-            }
-            this.data = data;
-            this.switchCanvas(this.datatype);
-            _this.show = true;
-        },
-        switchCanvas(type = this.datatype) {
-            for (let t in this.resultData) {
-                let data = this.resultData[t];
-                if (t === type) {
-                    data.canvas.style.display = 'block';
+            $tip = document.createElement('p');
+            $tip.style.textAlign = 'left';
+            $popover = document.createElement('div');
+            $popover.style.cssText = `z-index:999999;overflow:hidden;display:none;position:absolute;border:0px solid rgb(51,51,51);transition:left 0.4s,top 0.4s;border-radius:4px;color:rgb(255,255,255);padding:5px;background-color:rgba(0,0,0,0.7);transition: all 0.5s`;
+            $popover.appendChild($tip);
+            $adapter.append($popover);
+            const getTipText = (data) => this.dataTypes.map(x => `${x.text}: ${data[x.name]}`).join('<br>');
+            const tipData = this.$heatdata.map(x => `Name：${x.pointName || '--'}<br>${getTipText(x)}`);
+            const setPopover = (x, y) => {
+                let docwidth = $adapter.$body.offsetWidth;
+                let halfwidth = docwidth / 2;
+                if (x < halfwidth) {
+                    $popover.style.right = '';
+                    $popover.style.left = x + 12 + 'px';
                 } else {
-                    data.canvas.style.display = 'none';
+                    $popover.style.right = docwidth - x + 12 + 'px';
+                    $popover.style.left = '';
                 }
+                $popover.style.top = y + 12 + 'px';
+                $popover.style.display = 'block';
             }
+            $adapter.hover((x, y, i) => {
+                $tip.innerHTML = tipData[i];
+                setPopover(x, y);
+            }, setPopover, () => {
+                $popover.style.display = 'none';
+            })
         }
     },
     watch: {
         'show': {
             handler(val) {
-                if (this.dom.heatdiv) {
-                    if (val) {
-                        this.dom.heatdiv.show();
-                        this.switchCanvas(this.datatype);
-                    } else {
-                        this.dom.heatdiv.hide();
-                    }
+                if (val) {
+                    this.$adapter.show();
+                } else {
+                    this.$adapter.hide();
                 }
             }
         },
         'datatype': {
             handler(val) {
-                this.switchCanvas(val);
+                this.$adapter && this.$adapter.reset(this.$heatdata.map(x => ({ value: x[this.datatype], selector: x.selector })));
             }
         }
     }
