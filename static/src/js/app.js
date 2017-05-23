@@ -5,6 +5,7 @@ Vue.config.debug = true;
 var $ = require('jQuery');
 var VueRouter = require('vue-router');
 Vue.use(VueRouter);
+// Vue.config.devtools = true
 
 // for jq plugin and debug
 window.jQuery = $;
@@ -68,6 +69,9 @@ router.map({
 			},
 			'/channelManage': {
 				component: require('./component/custom/channelManage.vue')
+			},
+			'/topic': {
+				component: require('./component/custom/socialAnalysis/topic.vue')
 			}
 		}
 	},

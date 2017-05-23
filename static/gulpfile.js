@@ -156,12 +156,12 @@ gulp.task('rev', function () {
 })
 
 gulp.task('watch', function () {
-    if (argv.env != 'pro') {
+    // if (argv.env != 'pro') {
         webpackConfig.watch = true;
         webpackConfig.debug = true;
         // webpackConfig.devtool = 'inline-source-map';
         webpackConfig.plugins.push(sourceMap)
-    }
+    // }
     gulp.start('js', 'css', 'img', 'font');
     gulp.watch('./src/css/*', ['css']);
     gulp.watch('./src/img/*', ['img']);

@@ -1,5 +1,6 @@
 <template>
 	<div class="global">
+		<m-switch-filter  v-if="pageComponentsData['switch_filter']" :init-data="initData" :page-components-data="pageComponentsData" component-type="switch_filter" :argvs.sync='argvs'></m-switch-filter>
 		<button class="btn btn-default" v-if="pageComponentsData['flexible_btn']" @click="tab_checkbox(pageComponentsData['flexible_btn'])">{{pageComponentsData['flexible_btn'].content || 筛选}}</button>
 		<button class="btn btn-default excel-export" v-if="pageComponentsData['export']" @click="location(pageComponentsData['export'])">导出</button>
 		<m-level-select v-if="pageComponentsData['level_select']" :index="-1" :init-data="initData" :page-components-data="pageComponentsData" component-type="level_select" :argvs.sync='argvs'></m-level-select>
@@ -24,6 +25,7 @@
 	var LevelSelect = require('../common/levelSelect.vue');
 	var FilterSelect = require('../common/filterSelect.vue');
 	var DatePicker = require('../common/datePicker.vue');
+	var SwitchFilter = require('../common/switchFilter.vue');
 
 	var eventBus = require('../support/event-bus.vue');
 
@@ -125,7 +127,8 @@
 			'm-tab-checkbox': FilterTabCheckbox,
 			'm-level-select': LevelSelect,
 			'm-filter-select': FilterSelect,
-			'm-date': DatePicker
+			'm-date': DatePicker,
+			'm-switch-filter': SwitchFilter
 		},
 		methods: {
 			tab_checkbox: function(item) {
