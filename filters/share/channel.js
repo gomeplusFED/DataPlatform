@@ -222,7 +222,14 @@ module.exports = {
         };
 
         if(!platform_type[platform]) {
-            return {};
+            return [{
+                type : "pie",
+                map : {},
+                data : {},
+                config: { // 配置信息
+                    stack: false // 图的堆叠
+                }
+            }];
         }
 
         const newData= {};
