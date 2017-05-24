@@ -253,7 +253,7 @@ module.exports = (Router) => {
                 from 
                     ads_share_data_analysis_info 
                 where 
-                    date='${query.startTime}'
+                    date='${query.endTime}'
                 and
                     product_line='ALL' 
                 and 
@@ -367,7 +367,7 @@ module.exports = (Router) => {
                 from 
                     ads_share_data_analysis_info 
                 where 
-                    date='${query.startTime}'
+                    date='${query.endTime}'
                 and
                     product_line not in ('ALL') 
                 and 
@@ -488,7 +488,7 @@ module.exports = (Router) => {
                 from 
                     ads_share_share_type_top 
                 where 
-                    date='${query.startTime}'
+                    date='${query.endTime}'
                 and
                     share_source='ALL'
                 and
