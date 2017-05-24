@@ -268,7 +268,14 @@ module.exports = {
         };
 
         if(!platform_type[share_platform]) {
-            return {};
+            return [{
+                type : "pie",
+                map : {},
+                data : {},
+                config: { // 配置信息
+                    stack: false // 图的堆叠
+                }
+            }];;
         }
 
         if(show_type == "table" || type == "excel") {
