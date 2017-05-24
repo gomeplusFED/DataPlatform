@@ -67,8 +67,10 @@
 						if (query) {
 							let params = query.split('&');
 							params.forEach(x => {
-								let val = x.split('=')[1];
-								if (arr.indexOf(val) == -1){
+								let result = x.split('=')
+								let key = result[0]
+								let val = result[1];
+								if (key.indexOf('filter') === -1 && arr.indexOf(val) === -1){
 									arr.push(val);
 								}
 							})
