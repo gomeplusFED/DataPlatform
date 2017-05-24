@@ -284,7 +284,10 @@ module.exports = (Router) => {
                     filter_select.push({
                         title: '分享类型',
                         filter_key: 'share_type',
-                        groups : []
+                        groups : [{
+                            key: "ALL",
+                            value: "全部类型"
+                        }]
                     });
                     for(let key of data) {
                         filter_select[0].groups.push({
@@ -395,7 +398,10 @@ module.exports = (Router) => {
                     filter_select.push({
                         title: '分享类型',
                         filter_key: 'share_type',
-                        groups : []
+                        groups : [{
+                            key: "ALL",
+                            value: "全部类型"
+                        }]
                     });
                     for(let key of data) {
                         filter_select[0].groups.push({

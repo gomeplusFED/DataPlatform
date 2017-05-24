@@ -248,7 +248,10 @@ module.exports = (Router) => {
                     filter_select.push({
                         title: '渠道选择',
                         filter_key: 'share_source',
-                        groups : []
+                        groups : [{
+                            key: "ALL",
+                            value: "全部渠道"
+                        }]
                     });
                     for(let key of data) {
                         filter_select[0].groups.push({
@@ -394,7 +397,10 @@ module.exports = (Router) => {
                     filter_select.push({
                         title: '渠道选择',
                         filter_key: 'share_source',
-                        groups : []
+                        groups : [{
+                            key: "ALL",
+                            value: "全部渠道"
+                        }]
                     });
                     for(let key of data) {
                         filter_select[0].groups.push({
