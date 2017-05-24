@@ -12,7 +12,7 @@
 					<div class="checkbox">
 						<div v-for="(index, item) in list" v-show="tabindex === index">
 							<label v-for="option in item.options">
-								<input type="checkbox" :value="option.value" v-model="option.ischeck" name=""> {{option.text}}
+								<input type="checkbox" :value="option.value" v-model="checkList" name=""> {{option.text}}
 							</label>
 						</div>
 					</div>
@@ -45,19 +45,13 @@
 		},
 		data() {
 			return {
-				tabindex: 0
+				tabindex: 0,
+				checkList: []
 			}
 		},
 		methods: {
 			apply: function(){
-				var arr = [];
-				this.list.forEach(function(x){
-					x.options.forEach(function(option){
-						if(option.ischeck){
-							arr.push(option.value);
-						}
-					})
-				})
+				var arr = this.checkList;
 				var max = this.tabCheckboxConfig.max;
 				var length = arr.length;
 				if (length > max){
