@@ -183,6 +183,7 @@ module.exports = {
                 total += item[filter_key];
             }
             for(let item of source) {
+                item.share_type = typeConfig[item.share_type] || item.share_type;
                 item.rate = util.toFixed(item[filter_key], total);
             }
 
