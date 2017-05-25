@@ -158,6 +158,18 @@ module.exports = {
             channelConfig[item.channel_id] = item.channel_name;
         }
 
+        const newDate = {};
+        for(let item of source) {
+            if(newDate[channelConfig[item.share_source] || "其他"]) {
+                newDate[channelConfig[item.share_source] || "其他"].value += item[filter_key];
+            }
+            else {
+                newDate[channelConfig[item.share_source] || "其他"] = {
+                    value: item[filter_key]
+                };
+            }
+        }
+
         if(show_type == "table" || type == "excel") {
             const rows = ["share_source"];
             const cols = [{
@@ -175,21 +187,19 @@ module.exports = {
             for(let item of source) {
                 total += item[filter_key];
             }
-            for(let item of source) {
-                item.rate = util.toFixed(item[filter_key], total);
-                item.share_source = channelConfig[item.share_source] || item.share_source;
+            const tableData = [];
+            for(let key in newDate) {
+                let obj = {
+                    share_source: key,
+                    rate: util.toFixed(newDate[key].value, total),
+                };
+                obj[filter_key] = newDate[key].value;
+                tableData.push(obj);
             }
 
-            return util.toTable([source], [rows], [cols]);
+            return util.toTable([tableData], [rows], [cols]);
         }
         else {
-            const newDate = {};
-            for(let item of source) {
-                newDate[channelConfig[item.share_source] || item.share_source] = {
-                    value: item[filter_key]
-                };
-            }
-
             return [{
                 type : "pie",
                 map : {
@@ -211,6 +221,17 @@ module.exports = {
         for(let item of second) {
             typeConfig[item.type_id] = item.type_name;
         }
+        const newDate = {};
+        for(let item of source) {
+            if(newDate[typeConfig[item.share_type] || "其他"]) {
+                newDate[typeConfig[item.share_type] || "其他"].value += item[filter_key];
+            }
+            else {
+                newDate[typeConfig[item.share_type] || "其他"] = {
+                    value: item[filter_key]
+                };
+            }
+        }
 
         if(show_type == "table" || type == "excel") {
             const rows = ["share_type"];
@@ -229,21 +250,19 @@ module.exports = {
             for(let item of source) {
                 total += item[filter_key];
             }
-            for(let item of source) {
-                item.rate = util.toFixed(item[filter_key], total);
-                item.share_type = typeConfig[item.share_type] || item.share_type;
+            const tableData = [];
+            for(let key in newDate) {
+                let obj = {
+                    share_type: key,
+                    rate: util.toFixed(newDate[key].value, total)
+                };
+                obj[filter_key] = newDate[key].value;
+                tableData.push(obj);
             }
 
-            return util.toTable([source], [rows], [cols]);
+            return util.toTable([tableData], [rows], [cols]);
         }
         else {
-            const newDate = {};
-            for(let item of source) {
-                newDate[typeConfig[item.share_type] || item.share_type] = {
-                    value: item[filter_key]
-                };
-            }
-
             return [{
                 type : "pie",
                 map : {

@@ -101,16 +101,16 @@ module.exports = {
         const newData= {};
         for(let item of source) {
             let k = `${item.date}${isHour ? " " + item.hours + ":00" : ""}`;
-            map[item.share_type] = typeConfig[item.share_type] || item.share_type;
+            map[typeConfig[item.share_type] || "其他"] = typeConfig[item.share_type] || "其他";
             if(newData[k]) {
-                newData[k][item.share_type] += item[filter_key];
+                newData[k][typeConfig[item.share_type] || "其他"] += item[filter_key];
             }
             else {
                 newData[k] = {};
                 for(let key of share_source) {
-                    newData[k][key] = 0;
+                    newData[k][typeConfig[key] || "其他"] = 0;
                 }
-                newData[k][item.share_type] = item[filter_key];
+                newData[k][typeConfig[item.share_type] || "其他"] = item[filter_key];
             }
         }
 
@@ -122,9 +122,9 @@ module.exports = {
             const rows = ["date"];
             const tableData = [];
             for(let key of share_source) {
-                rows.push(key);
+                rows.push(typeConfig[key] || "其他");
                 cols.push({
-                    caption: typeConfig[key] || key,
+                    caption: typeConfig[key] || "其他",
                     type: "number"
                 });
             }
@@ -162,6 +162,21 @@ module.exports = {
             channelConfig[item.channel_id] = item.channel_name;
         }
 
+        const map = {
+            value: filter_name[filter_key]
+        };
+        const newData = {};
+        for(let item of source) {
+            if(newData[channelConfig[item.share_source] || "其他"]) {
+                newData[channelConfig[item.share_source] || "其他"].value += item[filter_key];
+            }
+            else {
+                newData[channelConfig[item.share_source] || "其他"] = {
+                    value: item[filter_key]
+                };
+            }
+        }
+
         for(let item of groups) {
             if(item.key === query.share_type) {
                 typeName = item.value;
@@ -186,23 +201,19 @@ module.exports = {
             for(let item of source) {
                 total += item[filter_key];
             }
-            for(let item of source) {
-                item.rate = util.toFixed(item[filter_key], total);
-                item.share_source = channelConfig[item.share_source] || item.share_source;
+            const tableData = [];
+            for(let key in newData) {
+                let obj = {
+                    share_source: key,
+                    rate: util.toFixed(newData[key].value, total)
+                };
+                obj[filter_key] = newData[key].value;
+                tableData.push(obj);
             }
 
-            return util.toTable([source], [rows], [cols]);
+            return util.toTable([tableData], [rows], [cols]);
         }
         else {
-            const map = {
-                value: filter_name[filter_key]
-            };
-            const newData = {};
-            for(let item of source) {
-                newData[channelConfig[item.share_source] || item.share_source] = {
-                    value: item[filter_key]
-                };
-            }
 
             return [{
                 type : "pie",
@@ -318,7 +329,7 @@ module.exports = {
         source.forEach((x, i) => {
             x.top = (page - 1) * limit + i + 1;
             x.name = `${x.share_id}/${x.share_name}`;
-            x.share_type = typeConfig[x.share_type] || x.share_type;
+            x.share_type = typeConfig[x.share_type] || "其他";
             if(x.rate == "null" || x.rate == null) {
                 x.rate = 0.0000;
             }
