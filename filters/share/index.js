@@ -75,7 +75,7 @@ module.exports = {
             }
         }
 
-        obj.share_rate  = util.round(obj.share_num, obj.share_user);
+        obj.share_rate  = util.division(obj.share_num, obj.share_user, 1);
         obj.success_rate= util.toFixed(obj.share_succeed_num, obj.share_num);
         obj.link_rate   = util.toFixed(obj.share_links_num, obj.share_num);
 
@@ -105,7 +105,7 @@ module.exports = {
             }
             for(let item of source) {
                 item.date        = `${item.date}${isHour ? " " + item.hours + ":00" : ""}`;
-                item.share_rate  = util.round(item.share_num, item.share_user);
+                item.share_rate  = util.division(item.share_num, item.share_user, 1);
                 item.success_rate= util.toFixed(item.share_succeed_num, item.share_num);
                 item.link_rate   = util.toFixed(item.share_links_num, item.share_num);
             }

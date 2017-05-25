@@ -74,7 +74,7 @@ module.exports = {
             }
         }
 
-        obj.share_rate  = util.round(obj.share_num, obj.share_user);
+        obj.share_rate  = util.division(obj.share_num, obj.share_user, 1);
         obj.success_rate= util.toFixed(obj.share_succeed_num, obj.share_num);
         obj.link_rate   = util.toFixed(obj.share_links_num, obj.share_num);
 
