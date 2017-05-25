@@ -252,12 +252,16 @@ module.exports = {
         }
         if(_platform) {
             for(let item of source) {
-                newData[item.product_line][filter_key] = item[filter_key];
+                if(newData[item.product_line]) {
+                    newData[item.product_line][filter_key] = item[filter_key];
+                }
             }
         }
         else {
             for(let item of source) {
-                newData[item.share_platform][filter_key] = item[filter_key];
+                if(newData[item.share_platform]) {
+                    newData[item.share_platform][filter_key] = item[filter_key];
+                }
             }
         }
 

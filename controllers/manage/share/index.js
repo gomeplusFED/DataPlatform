@@ -165,57 +165,57 @@ module.exports = (Router) => {
                 content: '<a href="javascript:void(0)">导出</a>',
                 preMethods: ['excel_export']
             },
-            {
-                content: '<a href="javascript:void(0)">指标选择</a>',
-                preMethods: ['show_filter'],
-                customMethods: '',
-                max: 2,
-                key: 'filter_key',
-                groups: [
-                    {
-                        value: 'filter_test',
-                        text: '指标选择',
-                        options: [
-                            {
-                                value: 'share_num',
-                                text: '分享次数'
-                            },
-                            {
-                                value: 'share_user',
-                                text: '分享人数'
-                            },
-                            {
-                                value: 'share_rate',
-                                text: '人均分享次数'
-                            },
-                            {
-                                value: 'share_succeed_num',
-                                text: '分享成功次数'
-                            },
-                            {
-                                value: 'share_succeed_user',
-                                text: '分享成功人数'
-                            },
-                            {
-                                value: 'success_rate',
-                                text: '分享成功率'
-                            },
-                            {
-                                value: 'share_links_num',
-                                text: '分享链接点击量'
-                            },
-                            {
-                                value: 'share_links_user',
-                                text: '分享链接点击人数'
-                            },
-                            {
-                                value: 'link_rate',
-                                text: '分享回流率'
-                            }
-                        ]
-                    }
-                ]
-            }
+            // {
+            //     content: '<a href="javascript:void(0)">指标选择</a>',
+            //     preMethods: ['show_filter'],
+            //     customMethods: '',
+            //     max: 2,
+            //     key: 'filter_key',
+            //     groups: [
+            //         {
+            //             value: 'filter_test',
+            //             text: '指标选择',
+            //             options: [
+            //                 {
+            //                     value: 'share_num',
+            //                     text: '分享次数'
+            //                 },
+            //                 {
+            //                     value: 'share_user',
+            //                     text: '分享人数'
+            //                 },
+            //                 {
+            //                     value: 'share_rate',
+            //                     text: '人均分享次数'
+            //                 },
+            //                 {
+            //                     value: 'share_succeed_num',
+            //                     text: '分享成功次数'
+            //                 },
+            //                 {
+            //                     value: 'share_succeed_user',
+            //                     text: '分享成功人数'
+            //                 },
+            //                 {
+            //                     value: 'success_rate',
+            //                     text: '分享成功率'
+            //                 },
+            //                 {
+            //                     value: 'share_links_num',
+            //                     text: '分享链接点击量'
+            //                 },
+            //                 {
+            //                     value: 'share_links_user',
+            //                     text: '分享链接点击人数'
+            //                 },
+            //                 {
+            //                     value: 'link_rate',
+            //                     text: '分享回流率'
+            //                 }
+            //             ]
+            //         }
+            //     ]
+            // }
         ],
         filter(data, query, dates, type) {
             return filter.indexTwo(data, query, dates, type);

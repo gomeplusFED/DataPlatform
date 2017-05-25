@@ -84,7 +84,9 @@ module.exports = {
     indexTwo(data, query, dates, type) {
         var source = data.first.data,
             show_type = query.main_show_type_filter,
-            filter_key = query.filter_key ? query.filter_key.split(",") : [];
+            filter_key = ["share_num", "share_user", "share_rate", "share_succeed_num",
+                "share_succeed_user", "success_rate", "share_links_num", "share_links_user",
+                "link_rate"];
 
         let isHour = false;
         if(query.startTime === query.endTime) {
@@ -286,6 +288,7 @@ module.exports = {
             "APP": ["android", "IOS"],
             "PC": ["gome", "plus"]
         };
+        const _platform = platform_type[share_platform];
 
         if(!platform_type[share_platform]) {
             return [{
@@ -318,18 +321,23 @@ module.exports = {
                 caption: `${filter_name[filter_key]}占比`,
                 type: "string"
             });
+            const tableData = [];
             for(let item of source) {
-                total += item[filter_key];
+                if(_platform.indexOf(item[rows[0]]) != -1) {
+                    total += item[filter_key];
+                }
             }
             for(let item of source) {
-                item.rate = util.toFixed(item[filter_key], total);
+                if(_platform.indexOf(item[rows[0]]) != -1) {
+                    item.rate = util.toFixed(item[filter_key], total);
+                    tableData.push(item);
+                }
             }
 
-            return util.toTable([source], [rows], [cols]);
+            return util.toTable([tableData], [rows], [cols]);
         }
         else {
             const newDate = {};
-            const _platform = platform_type[share_platform];
             for(let key of _platform) {
                 newDate[key] = {
                     value: 0
@@ -337,16 +345,20 @@ module.exports = {
             }
             if(platform) {
                 for(let item of source) {
-                    newDate[item.product_line] = {
-                        value: item[filter_key]
-                    };
+                    if(newDate[item.product_line]) {
+                        newDate[item.product_line] = {
+                            value: item[filter_key]
+                        };
+                    }
                 }
             }
             else {
                 for(let item of source) {
-                    newDate[item.share_platform] = {
-                        value: item[filter_key]
-                    };
+                    if(newDate[item.share_platform]) {
+                        newDate[item.share_platform] = {
+                            value: item[filter_key]
+                        };
+                    }
                 }
             }
 
