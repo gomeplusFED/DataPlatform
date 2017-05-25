@@ -136,55 +136,89 @@ api.prototype = {
         this.global_platform_filter && this.global_platform_filter(req);
 
         //无参数时，返回组件信息
-        if(Object.keys(query).length === 0) {
 
-            //用于查库添加组件信息
-            if(this.selectFilter) {
-                this.selectFilter(req, (err, data) => {
-                    if(!err) {
+        if(this.selectFilter) {
+            this.selectFilter(req, (err, data) => {
+                if(!err) {
 
-                        //将查询结果返回组件中
-                        this.filter_select = data;
+                    //将查询结果返回组件中
+                    this.filter_select = data;
 
-                        //返回组件信息
+                    //返回组件信息
+                    if(Object.keys(query).length === 0) {
+                        //如无查库添加组件，直接返回组件信息
                         this._render(res, [], type);
                     } else {
-                        next(err);
-                    }
-                });
-            } else {
-                //如无查库添加组件，直接返回组件信息
-                this._render(res, [], type);
-            }
-        } else {
-            //有参数时，返回数据以及组件信息
+                        //有参数时，返回数据以及组件信息
 
-            //校验时间，正确返回true，否则返回false
-            if(this._checkDate(query, next)) {
-                if(query.startTime && query.endTime) {
-                    //添加查询条件，时间
-                    params.date = orm.between(
-                        new Date(query.startTime + " 00:00:00"),
-                        new Date(query.endTime + " 23:59:59")
-                    );
-                }
+                        //校验时间，正确返回true，否则返回false
+                        if(this._checkDate(query, next)) {
+                            if(query.startTime && query.endTime) {
+                                //添加查询条件，时间
+                                params.date = orm.between(
+                                    new Date(query.startTime + " 00:00:00"),
+                                    new Date(query.endTime + " 23:59:59")
+                                );
+                            }
 
 
-                if(typeof this.fixedParams === "function") {
-                    //需查库添加查询条件
-                    this.fixedParams(req, query, (err, data) => {
-                        if(err) {
-                            next(err);
-                        } else {
-                            query = data;
-                            dates = utils.times(query.startTime, query.endTime, query.day_type);
-                            this._getCache(type, req, res, next, query, params, dates);
+                            if(typeof this.fixedParams === "function") {
+                                //需查库添加查询条件
+                                this.fixedParams(req, query, (err, data) => {
+                                    if(err) {
+                                        next(err);
+                                    } else {
+                                        query = data;
+                                        dates = utils.times(query.startTime, query.endTime, query.day_type);
+                                        this._getCache(type, req, res, next, query, params, dates);
+                                    }
+                                });
+                            } else {
+                                //根据时间单位分割时间
+                                dates = utils.times(query.startTime, query.endTime, query.day_type);
+                                this._getCache(type, req, res, next, query, params, dates);
+                            }
                         }
-                    });
+                    }
                 } else {
-                    //根据时间单位分割时间
-                    dates = utils.times(query.startTime, query.endTime, query.day_type);
-                    this._getCache(type, req, res, next, query, params, dates);
+                    next(err);
+                }
+            });
+        } else {
+            //如无查库添加组件，直接返回组件信息
+            if(Object.keys(query).length === 0) {
+                //返回组件信息
+                this._render(res, [], type);
+            } else {
+                //有参数时，返回数据以及组件信息
+
+                //校验时间，正确返回true，否则返回false
+                if(this._checkDate(query, next)) {
+                    if(query.startTime && query.endTime) {
+                        //添加查询条件，时间
+                        params.date = orm.between(
+                            new Date(query.startTime + " 00:00:00"),
+                            new Date(query.endTime + " 23:59:59")
+                        );
+                    }
+
+
+                    if(typeof this.fixedParams === "function") {
+                        //需查库添加查询条件
+                        this.fixedParams(req, query, (err, data) => {
+                            if(err) {
+                                next(err);
+                            } else {
+                                query = data;
+                                dates = utils.times(query.startTime, query.endTime, query.day_type);
+                                this._getCache(type, req, res, next, query, params, dates);
+                            }
+                        });
+                    } else {
+                        //根据时间单位分割时间
+                        dates = utils.times(query.startTime, query.endTime, query.day_type);
+                        this._getCache(type, req, res, next, query, params, dates);
+                    }
                 }
             }
         }

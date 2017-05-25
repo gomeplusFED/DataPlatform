@@ -261,6 +261,7 @@ module.exports = {
         const filter_key = query.filter_key;
         const show_type = query.main_show_type_filter;
         const share_platform = query.share_platform ? query.share_platform : "ALL";
+        const platform = query.share_platform !== "ALL";
         const platform_type = {
             "ALL": ["APP站", "M站", "PC站"],
             "APP": ["android", "IOS"],
@@ -279,7 +280,13 @@ module.exports = {
         }
 
         if(show_type == "table" || type == "excel") {
-            const rows = ["product_line"];
+            let rows = [];
+            if(platform) {
+                rows.push("product_line");
+            }
+            else {
+                rows.push("share_platform");
+            }
             const cols = [{
                 caption: "分享平台",
                 type: "string"
@@ -303,16 +310,25 @@ module.exports = {
         }
         else {
             const newDate = {};
-            const platform = platform_type[share_platform];
-            for(let key of platform) {
+            const _platform = platform_type[share_platform];
+            for(let key of _platform) {
                 newDate[key] = {
                     value: 0
                 };
             }
-            for(let item of source) {
-                newDate[item.product_line] = {
-                    value: item[filter_key]
-                };
+            if(platform) {
+                for(let item of source) {
+                    newDate[item.product_line] = {
+                        value: item[filter_key]
+                    };
+                }
+            }
+            else {
+                for(let item of source) {
+                    newDate[item.share_platform] = {
+                        value: item[filter_key]
+                    };
+                }
             }
 
             return [{

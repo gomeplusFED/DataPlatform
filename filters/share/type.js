@@ -218,6 +218,7 @@ module.exports = {
         var source = data.first.data,
             show_type = query.main_show_type_filter,
             platform = query.share_platform ? decodeURI(query.share_platform) : "ALL",
+            _platform = platform !== "ALL",
             filter_key = query.filter_key;
         const platform_type= {
             "ALL": ["M站", "PC站", "APP站"],
@@ -242,8 +243,15 @@ module.exports = {
             newData[key] = {};
             newData[key][filter_key] = 0;
         }
-        for(let item of source) {
-            newData[item.product_line][filter_key] = item[filter_key];
+        if(_platform) {
+            for(let item of source) {
+                newData[item.product_line][filter_key] = item[filter_key];
+            }
+        }
+        else {
+            for(let item of source) {
+                newData[item.share_platform][filter_key] = item[filter_key];
+            }
         }
 
         if(show_type == "table" || type == "excel") {
@@ -251,7 +259,13 @@ module.exports = {
                 caption: `分享平台`,
                 type: "string"
             }];
-            const rows = ["product_line"];
+            let rows = [];
+            if(_platform) {
+                rows.push("product_line");
+            }
+            else {
+                rows.push("share_platform");
+            }
             rows.push(filter_key);
             rows.push("rate");
             cols.push(help[filter_key]);
@@ -268,6 +282,7 @@ module.exports = {
             for(let key in newData) {
                 const obj = newData[key];
                 obj.product_line = key;
+                obj.share_platform = key;
                 obj.rate = util.toFixed(obj[filter_key], total);
                 tableData.push(obj);
             }

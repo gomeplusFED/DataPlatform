@@ -355,8 +355,11 @@ module.exports = (Router) => {
         date_picker_data: 1,
         showDayUnit: true,
         firstSql(query, params) {
-            let share_platform = query.share_platform ? decodeURI(query.share_platform) : this.global_platform.list[0].key;
-            const sql = `select 
+            let share_platform = query.share_platform = query.share_platform ? decodeURI(query.share_platform) : this.global_platform.list[0].key;
+            let platform = share_platform !== "ALL";
+            let sql;
+            if(platform) {
+                sql = `select 
                     product_line,
                     sum(share_num)          as share_num,
                     sum(share_user)         as share_user,
@@ -379,6 +382,32 @@ module.exports = (Router) => {
                 and
                     share_platform=?
                 group by product_line`;
+            }
+            else {
+                sql = `select 
+                    share_platform,
+                    sum(share_num)          as share_num,
+                    sum(share_user)         as share_user,
+                    sum(share_succeed_num)  as share_succeed_num,
+                    sum(share_succeed_user) as share_succeed_user,
+                    sum(share_links_num)    as share_links_num,
+                    sum(share_links_user)   as share_links_user
+                from 
+                    ads_share_data_analysis_info 
+                where 
+                    date='${query.endTime}'
+                and
+                    product_line='ALL' 
+                and 
+                    share_source='ALL'
+                and 
+                    share_type='${query.share_type}'
+                and
+                    day_type=${query.day_type}
+                and
+                    share_platform != 'ALL'
+                group by share_platform`;
+            }
 
             if(share_platform !== "ALL") {
                 share_platform += "站";
