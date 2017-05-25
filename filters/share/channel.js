@@ -121,11 +121,13 @@ module.exports = {
             const rows = ["date"];
             const tableData = [];
             for(let key of share_source) {
-                rows.push(channelConfig[key] || "其他");
-                cols.push({
-                    caption: channelConfig[key] || "其他",
-                    type: "number"
-                });
+                if(rows.indexOf(channelConfig[key] || "其他") != -1) {
+                    rows.push(channelConfig[key] || "其他");
+                    cols.push({
+                        caption: channelConfig[key] || "其他",
+                        type: "number"
+                    });
+                }
             }
 
             for(let key in newData) {

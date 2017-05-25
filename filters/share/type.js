@@ -122,11 +122,13 @@ module.exports = {
             const rows = ["date"];
             const tableData = [];
             for(let key of share_source) {
-                rows.push(typeConfig[key] || "其他");
-                cols.push({
-                    caption: typeConfig[key] || "其他",
-                    type: "number"
-                });
+                if(rows.indexOf(typeConfig[key] || "其他") != -1) {
+                    rows.push(typeConfig[key] || "其他");
+                    cols.push({
+                        caption: typeConfig[key] || "其他",
+                        type: "number"
+                    });
+                }
             }
 
             for(let key in newData) {
