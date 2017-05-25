@@ -536,8 +536,14 @@ module.exports = (Router) => {
                 };
             }
             const page = query.page || 1;
-            const limit = +query.limit || 20;
-            const offset = (page - 1) * limit;
+            let limit = +query.limit || 20;
+            let offset = (page - 1) * limit;
+            if(params.from) {
+                offset = params.from - 1;
+            }
+            if(params.to) {
+                limit = +params.to;
+            }
             const sql = `select 
                     share_source,
                     share_type,

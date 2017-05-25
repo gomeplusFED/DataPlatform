@@ -330,8 +330,15 @@ module.exports = {
             typeConfig[item.type_id] = item.type_name;
         }
 
+        let i = 1;
+        if(query.page) {
+            i = (page - 1) * limit + i;
+        }
+        if(query.from) {
+            i = query.from;
+        }
         source.forEach((x, i) => {
-            x.top = (page - 1) * limit + i + 1;
+            x.top = i++;
             x.name = `${x.share_id}/${x.share_name}`;
             x.share_type = typeConfig[x.share_type] || "其他";
             if(x.rate == "null" || x.rate == null) {

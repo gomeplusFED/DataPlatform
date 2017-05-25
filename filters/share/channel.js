@@ -330,8 +330,16 @@ module.exports = {
             typeConfig[item.type_id] = item.type_name;
         }
 
-        source.forEach((x, i) => {
-            x.top = (page - 1) * limit + i + 1;
+        let i = 1;
+        if(query.page) {
+            i = (page - 1) * limit + i;
+        }
+        if(query.from) {
+            i = query.from;
+        }
+
+        source.forEach((x) => {
+            x.top = i++;
             x.name = `${x.share_id}/${x.share_name}`;
             x.share_source = channelConfig[x.share_source] || "其他";
             x.share_type = typeConfig[x.share_type] || "其他";
