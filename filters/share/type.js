@@ -122,7 +122,7 @@ module.exports = {
             const rows = ["date"];
             const tableData = [];
             for(let key of share_source) {
-                if(rows.indexOf(typeConfig[key] || "其他") != -1) {
+                if(rows.indexOf(typeConfig[key] || "其他") == -1) {
                     rows.push(typeConfig[key] || "其他");
                     cols.push({
                         caption: typeConfig[key] || "其他",
