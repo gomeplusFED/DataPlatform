@@ -337,7 +337,7 @@ module.exports = {
         if(query.from) {
             i = query.from;
         }
-        source.forEach((x, i) => {
+        source.forEach((x) => {
             x.top = i++;
             x.name = `${x.share_id}/${x.share_name}`;
             x.share_type = typeConfig[x.share_type] || "其他";
