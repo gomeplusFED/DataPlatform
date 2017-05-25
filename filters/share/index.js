@@ -291,6 +291,13 @@ module.exports = {
         const _platform = platform_type[share_platform];
 
         if(!platform_type[share_platform]) {
+            if(show_type == "table") {
+                return [{
+                    data: [],
+                    rows: [],
+                    cols: []
+                }];
+            }
             return [{
                 type : "pie",
                 map : {},
@@ -298,7 +305,7 @@ module.exports = {
                 config: { // 配置信息
                     stack: false // 图的堆叠
                 }
-            }];;
+            }];
         }
 
         if(show_type == "table" || type == "excel") {

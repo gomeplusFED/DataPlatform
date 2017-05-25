@@ -238,6 +238,13 @@ module.exports = {
         };
 
         if(!platform_type[platform]) {
+            if(show_type == "table") {
+                return [{
+                    data: [],
+                    rows: [],
+                    cols: []
+                }];
+            }
             return [{
                 type : "pie",
                 map : {},
