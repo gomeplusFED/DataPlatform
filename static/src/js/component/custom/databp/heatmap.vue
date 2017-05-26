@@ -189,38 +189,9 @@ let heatmap = Vue.extend({
                 // });
             });
         },
-        will_search(config) {
-            if (this.checkParams(config)) {
-                config.version = this.versions[this.version].version;
-                config.stop = api.getLocalUrl({
-                    originalUrl: config.pageUrl,
-                    version: this.versions[this.version].version,
-                    platform: config.platform
-                }).then((url) => {
-                    config.convertedUrl = url;
-                    return false;
-                }).catch((err) => {
-                    return new Promise((resolve, reject) => {
-                        actions.confirm(store, {
-                            show: true,
-                            title: '确认',
-                            msg: '当前页面无有效快照，是否显示最新页面',
-                            apply: () => {
-                                resolve(false);
-                            },
-                            cancle: () => {
-                                resolve(true);
-                            }
-                        });
-                    });
-                });
-            } else {
-                config.stop = true;
-            }
-        },
         search_clicked(config) {
             this.loading.show = true;
-            this.destroyCanvas();
+            // this.destroyCanvas();
             this.init(config).then(() => {
                 this.loading.show = false;
             }).catch(() => {
@@ -260,6 +231,7 @@ let heatmap = Vue.extend({
                     config.convertedUrl = url;
                     searchFunc();
                 }).catch((err) => {
+                    console.error(err)
                     return new Promise((resolve, reject) => {
                         actions.confirm(store, {
                             show: true,
