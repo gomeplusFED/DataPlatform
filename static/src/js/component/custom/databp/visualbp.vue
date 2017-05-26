@@ -132,6 +132,9 @@ var visualbp = Vue.extend({
             this.bpConfig.type = 'point';
         },
         iframeload() {
+            if(this.deadtimer == null) {
+                return;
+            }
             // console.log('load');
             let _this = this;
             if (!_this.bpConfig.pageUrl) {
@@ -305,13 +308,14 @@ var visualbp = Vue.extend({
             this.iframe_url = newiframe_url;
             this.deadtimer = setTimeout(() => {
                 if (this.loading.show) {
-                    if (window.stop) {
-                        window.stop();
-                    } else {
-                        document.execCommand('Stop'); // MSIE
-                    }
+                    // if (window.stop) {
+                    //     window.stop();
+                    // } else {
+                    //     document.execCommand('Stop'); // MSIE
+                    // }
                     this.iframeload();
                     this.loading.show = false;
+                    this.deadtimer = null;
                 }
             }, 10000);
         },

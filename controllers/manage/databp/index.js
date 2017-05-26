@@ -7,10 +7,22 @@
 const forward = require('express-forward-html');
 const fs = require('fs');
 const path = require('path');
+const urlLib = require('url');
+const querystring = require('querystring');
+const request = require('request');
+const isMobile = (url) => /[/.](m|wap)\./.test(url);
 
 module.exports = (Router) => {
 
     forward({
+        isMobileUA(url, req) {
+            return isMobile(url) || (req.query.m === 'H5');
+        },
+        needRedirect(url, req) {
+            let mobile = isMobile(url);
+            let isSpecifedH5 = req.query.m === 'H5';
+            return (!isSpecifedH5 && mobile) || (!mobile && isSpecifedH5);
+        },
         filterHtml(html) {
             // 移除统计脚本
             return html.replace(/<script[\S]+?uba-sdk[\S]+?<\/script>/, '').replace(/top\.location/g, '{}');
@@ -39,5 +51,38 @@ module.exports = (Router) => {
             }
         }
     })(Router);
+
+    Router.all(`/databp/*`, function (req, res, next) {
+        let {
+            url,
+            method,
+            query,
+            body,
+            headers
+        } = req;
+        let {
+            referer
+        } = headers;
+        if (!referer) {
+            res.status(400).end(`Can not forward other request because of non referer in headers, HTML url: ${referer||'null'}, XHR url: ${url}`);
+            return;
+        }
+        let refobj = urlLib.parse(referer);
+        let refQuery = querystring.parse(refobj.query);
+        let referurl = refQuery.url;
+        if (!referurl) {
+            res.status(400).end(`Can not forward other request because of non refer url in headers, HTML url: ${referer||'null'}, XHR url: ${url}`);
+            return;
+        }
+        url = urlLib.resolve(referurl, url.replace('/databp/', ''));
+        let urlObj = urlLib.parse(url);
+        const option = {
+            url: `${refobj.protocol}//${refobj.host}${refobj.pathname}?${querystring.stringify(Object.assign({}, refQuery, {url}))}`,
+            method,
+            headers,
+            credentials: 'include'
+        };
+        request(option).pipe(res);
+    });
     return Router;
 };
