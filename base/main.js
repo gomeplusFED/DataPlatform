@@ -99,6 +99,8 @@ function api(Router, options) {
         search : {show: false},
         //表格字段选择框
         control_table_col : false,
+        //默认表格列
+        control_table_col_default: null,
         //全局模块
         global_platform: {show: false},
         //是否支持图转表
@@ -262,7 +264,8 @@ api.prototype = {
                 filter_select: this.filter_select,
                 search: this.search,
                 control_table_col : {
-                    show : this.control_table_col
+                    show : this.control_table_col,
+                    default: this.control_table_col_default,
                 },
                 global_plataform : this.global_platform,
                 toggle: this.toggle,
