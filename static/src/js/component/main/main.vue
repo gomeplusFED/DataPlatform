@@ -112,11 +112,16 @@ var Main = Vue.extend({
 	},
 	route: {
 		data: function() {
-			
 		}
 	},
 	ready: function() {
 		var _this = this;
+		let data = store.state.currentPageDefaultData.defaultData.find(function(item) {
+			return item.query_api === _this.currentData.query_api;
+		})
+		if (data) {
+			this.argvs.main_show_type_filter  = data.type;
+		}
 		$.ajax({
 			url: _this.currentData.query_api + '_json',
 			type: 'get',
