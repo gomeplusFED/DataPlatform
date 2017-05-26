@@ -39,6 +39,7 @@ module.exports = (Router) => {
             window.$pageUrl = urlObj.href;
             let platform = urlObj.mobile ? 'H5' : 'PC'
             window.$platform = platform;
+            window.$originalUrl = urlObj.serverUrlObj.href;
             window.location.$assign = function (url) {
                 let newurl;
                 if (/https?:\/\//.test(url)) {
@@ -75,14 +76,8 @@ module.exports = (Router) => {
             return;
         }
         url = urlLib.resolve(referurl, url.replace('/databp/', ''));
-        let urlObj = urlLib.parse(url);
-        const option = {
-            url: `${refobj.protocol}//${refobj.host}${refobj.pathname}?${querystring.stringify(Object.assign({}, refQuery, {url}))}`,
-            method,
-            headers,
-            credentials: 'include'
-        };
-        request(option).pipe(res);
+        url = `${refobj.protocol}//${refobj.host}${refobj.pathname}?${querystring.stringify(Object.assign({}, querystring.parse(urlLib.parse(url).query), refQuery, {url}))}`
+        res.redirect(url);
     });
     return Router;
 };
