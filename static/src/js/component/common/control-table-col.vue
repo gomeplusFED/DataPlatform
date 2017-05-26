@@ -45,7 +45,7 @@ var eventBus = require('../support/event-bus.vue');
 
 module.exports = Vue.extend({
 	name: 'control-table-col',
-	data: function() {
+	data: function () {
 		return {
 			showModal: false,
 			tableData: null,
@@ -53,33 +53,45 @@ module.exports = Vue.extend({
 		};
 	},
 	props: ['index', 'pageComponentsData', 'componentType', 'initData', 'currentData'],
-	ready: function() {
+	ready: function () {
 		var _this = this;
-		eventBus.$on('tableGenerate' + this.index, function(tableData) {
+		eventBus.$on('tableGenerate' + this.index, function (tableData) {
 			_this.tableData = tableData[0];
 			_this.checkAll();
+			if (_this.pageComponentsData) {
+				let defaultConfig = _this.pageComponentsData[_this.componentType].default
+				if (defaultConfig) {
+					Object.assign(_this.multiCheckedOption, defaultConfig)
+					_this.applyMulti()
+				}
+			}
 		});
 	},
 	methods: {
-		check: function(item, index) {
+		check: function (item, index) {
 			if (this.multiCheckedOption[index]) {
 				this.multiCheckedOption[index] = false;
 			} else {
 				Vue.set(this.multiCheckedOption, index, true);
 			}
 		},
-		hideMultiCon: function() {
+		hideMultiCon: function () {
 			this.showModal = false;
 		},
-		applyMulti: function() {
+		applyMulti: function () {
 			eventBus.$emit('controlTableCol' + this.index, this.multiCheckedOption);
 			this.showModal = false;
 		},
-		checkAll: function() {
+		checkAll: function () {
 			var _this = this;
-			this.tableData.cols.forEach(function(item, index) {
+			this.tableData.cols.forEach(function (item, index) {
 				Vue.set(_this.multiCheckedOption, index, true);
 			});
+		}
+	},
+	watch: {
+		pageComponentsData(val) {
+			
 		}
 	}
 });

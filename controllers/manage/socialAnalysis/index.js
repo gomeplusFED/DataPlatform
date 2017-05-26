@@ -402,6 +402,7 @@ module.exports = (Router) => {
         platform : false,
         paging : [true, false],
         control_table_col : true,
+        control_table_col_default: {0: false, 1: false},
         order  : ["-involve_group_user_num"],
         excel_export : true,
         procedure : [false, {
