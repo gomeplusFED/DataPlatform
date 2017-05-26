@@ -164,6 +164,8 @@ var visualbp = Vue.extend({
                 host = _this.bpConfig.pageUrl = fullurl + '/';
             }
             _this.bpConfig.platform = $iframewin.$platform;
+            // reset iframe url
+            $iframewin.location.href = _this.bpConfig.pageUrl;
             _this.$dispatch('visualbp_loaded', _this.bpConfig);
             var $head = $iframe.find('head');
             var $body = $iframe.find('body');
