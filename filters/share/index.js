@@ -75,7 +75,7 @@ module.exports = {
             }
         }
 
-        obj.share_rate  = util.round(obj.share_num, obj.share_user);
+        obj.share_rate  = util.division(obj.share_num, obj.share_user, 1);
         obj.success_rate= util.toFixed(obj.share_succeed_num, obj.share_num);
         obj.link_rate   = util.toFixed(obj.share_links_num, obj.share_num);
 
@@ -84,7 +84,9 @@ module.exports = {
     indexTwo(data, query, dates, type) {
         var source = data.first.data,
             show_type = query.main_show_type_filter,
-            filter_key = query.filter_key ? query.filter_key.split(",") : [];
+            filter_key = ["share_num", "share_user", "share_rate", "share_succeed_num",
+                "share_succeed_user", "success_rate", "share_links_num", "share_links_user",
+                "link_rate"];
 
         let isHour = false;
         if(query.startTime === query.endTime) {
@@ -103,7 +105,7 @@ module.exports = {
             }
             for(let item of source) {
                 item.date        = `${item.date}${isHour ? " " + item.hours + ":00" : ""}`;
-                item.share_rate  = util.round(item.share_num, item.share_user);
+                item.share_rate  = util.division(item.share_num, item.share_user, 1);
                 item.success_rate= util.toFixed(item.share_succeed_num, item.share_num);
                 item.link_rate   = util.toFixed(item.share_links_num, item.share_num);
             }
@@ -158,6 +160,18 @@ module.exports = {
             channelConfig[item.channel_id] = item.channel_name;
         }
 
+        const newDate = {};
+        for(let item of source) {
+            if(newDate[channelConfig[item.share_source] || "其他"]) {
+                newDate[channelConfig[item.share_source] || "其他"].value += item[filter_key];
+            }
+            else {
+                newDate[channelConfig[item.share_source] || "其他"] = {
+                    value: item[filter_key]
+                };
+            }
+        }
+
         if(show_type == "table" || type == "excel") {
             const rows = ["share_source"];
             const cols = [{
@@ -175,21 +189,19 @@ module.exports = {
             for(let item of source) {
                 total += item[filter_key];
             }
-            for(let item of source) {
-                item.rate = util.toFixed(item[filter_key], total);
-                item.share_source = channelConfig[item.share_source] || item.share_source;
+            const tableData = [];
+            for(let key in newDate) {
+                let obj = {
+                    share_source: key,
+                    rate: util.toFixed(newDate[key].value, total),
+                };
+                obj[filter_key] = newDate[key].value;
+                tableData.push(obj);
             }
 
-            return util.toTable([source], [rows], [cols]);
+            return util.toTable([tableData], [rows], [cols]);
         }
         else {
-            const newDate = {};
-            for(let item of source) {
-                newDate[channelConfig[item.share_source] || item.share_source] = {
-                    value: item[filter_key]
-                };
-            }
-
             return [{
                 type : "pie",
                 map : {
@@ -211,6 +223,17 @@ module.exports = {
         for(let item of second) {
             typeConfig[item.type_id] = item.type_name;
         }
+        const newDate = {};
+        for(let item of source) {
+            if(newDate[typeConfig[item.share_type] || "其他"]) {
+                newDate[typeConfig[item.share_type] || "其他"].value += item[filter_key];
+            }
+            else {
+                newDate[typeConfig[item.share_type] || "其他"] = {
+                    value: item[filter_key]
+                };
+            }
+        }
 
         if(show_type == "table" || type == "excel") {
             const rows = ["share_type"];
@@ -229,21 +252,19 @@ module.exports = {
             for(let item of source) {
                 total += item[filter_key];
             }
-            for(let item of source) {
-                item.rate = util.toFixed(item[filter_key], total);
-                item.share_type = typeConfig[item.share_type] || item.share_type;
+            const tableData = [];
+            for(let key in newDate) {
+                let obj = {
+                    share_type: key,
+                    rate: util.toFixed(newDate[key].value, total)
+                };
+                obj[filter_key] = newDate[key].value;
+                tableData.push(obj);
             }
 
-            return util.toTable([source], [rows], [cols]);
+            return util.toTable([tableData], [rows], [cols]);
         }
         else {
-            const newDate = {};
-            for(let item of source) {
-                newDate[typeConfig[item.share_type] || item.share_type] = {
-                    value: item[filter_key]
-                };
-            }
-
             return [{
                 type : "pie",
                 map : {
@@ -261,18 +282,40 @@ module.exports = {
         const filter_key = query.filter_key;
         const show_type = query.main_show_type_filter;
         const share_platform = query.share_platform ? query.share_platform : "ALL";
+        const platform = query.share_platform !== "ALL";
         const platform_type = {
             "ALL": ["APP站", "M站", "PC站"],
             "APP": ["android", "IOS"],
             "PC": ["gome", "plus"]
         };
+        const _platform = platform_type[share_platform];
 
         if(!platform_type[share_platform]) {
-            return {};
+            if(show_type == "table") {
+                return [{
+                    data: [],
+                    rows: [],
+                    cols: []
+                }];
+            }
+            return [{
+                type : "pie",
+                map : {},
+                data : {},
+                config: { // 配置信息
+                    stack: false // 图的堆叠
+                }
+            }];
         }
 
         if(show_type == "table" || type == "excel") {
-            const rows = ["product_line"];
+            let rows = [];
+            if(platform) {
+                rows.push("product_line");
+            }
+            else {
+                rows.push("share_platform");
+            }
             const cols = [{
                 caption: "分享平台",
                 type: "string"
@@ -285,27 +328,45 @@ module.exports = {
                 caption: `${filter_name[filter_key]}占比`,
                 type: "string"
             });
+            const tableData = [];
             for(let item of source) {
-                total += item[filter_key];
+                if(_platform.indexOf(item[rows[0]]) != -1) {
+                    total += item[filter_key];
+                }
             }
             for(let item of source) {
-                item.rate = util.toFixed(item[filter_key], total);
+                if(_platform.indexOf(item[rows[0]]) != -1) {
+                    item.rate = util.toFixed(item[filter_key], total);
+                    tableData.push(item);
+                }
             }
 
-            return util.toTable([source], [rows], [cols]);
+            return util.toTable([tableData], [rows], [cols]);
         }
         else {
             const newDate = {};
-            const platform = platform_type[share_platform];
-            for(let key of platform) {
+            for(let key of _platform) {
                 newDate[key] = {
                     value: 0
                 };
             }
-            for(let item of source) {
-                newDate[item.product_line] = {
-                    value: item[filter_key]
-                };
+            if(platform) {
+                for(let item of source) {
+                    if(newDate[item.product_line]) {
+                        newDate[item.product_line] = {
+                            value: item[filter_key]
+                        };
+                    }
+                }
+            }
+            else {
+                for(let item of source) {
+                    if(newDate[item.share_platform]) {
+                        newDate[item.share_platform] = {
+                            value: item[filter_key]
+                        };
+                    }
+                }
             }
 
             return [{

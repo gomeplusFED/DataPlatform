@@ -126,6 +126,10 @@ module.exports = {
             plan_type = {},
             rebate_type = {};
 
+        second.sort((a, b) => {
+            return a.plan_type - b.plan_type;
+        });
+
         for(let key of third) {
             plan_type[key.type_code] = key.type_name;
             rebate_type[key.flow_code] = key.flow_name;
@@ -164,6 +168,10 @@ module.exports = {
             third = data.third.data[0],
             plan_type = {},
             rebate_type = {};
+
+        second.sort((a, b) => {
+            return a.plan_type - b.plan_type;
+        });
 
         for(let key of third) {
             plan_type[key.type_code] = key.type_name;

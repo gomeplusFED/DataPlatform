@@ -165,57 +165,57 @@ module.exports = (Router) => {
                 content: '<a href="javascript:void(0)">导出</a>',
                 preMethods: ['excel_export']
             },
-            {
-                content: '<a href="javascript:void(0)">指标选择</a>',
-                preMethods: ['show_filter'],
-                customMethods: '',
-                max: 2,
-                key: 'filter_key',
-                groups: [
-                    {
-                        value: 'filter_test',
-                        text: '指标选择',
-                        options: [
-                            {
-                                value: 'share_num',
-                                text: '分享次数'
-                            },
-                            {
-                                value: 'share_user',
-                                text: '分享人数'
-                            },
-                            {
-                                value: 'share_rate',
-                                text: '人均分享次数'
-                            },
-                            {
-                                value: 'share_succeed_num',
-                                text: '分享成功次数'
-                            },
-                            {
-                                value: 'share_succeed_user',
-                                text: '分享成功人数'
-                            },
-                            {
-                                value: 'success_rate',
-                                text: '分享成功率'
-                            },
-                            {
-                                value: 'share_links_num',
-                                text: '分享链接点击量'
-                            },
-                            {
-                                value: 'share_links_user',
-                                text: '分享链接点击人数'
-                            },
-                            {
-                                value: 'link_rate',
-                                text: '分享回流率'
-                            }
-                        ]
-                    }
-                ]
-            }
+            // {
+            //     content: '<a href="javascript:void(0)">指标选择</a>',
+            //     preMethods: ['show_filter'],
+            //     customMethods: '',
+            //     max: 2,
+            //     key: 'filter_key',
+            //     groups: [
+            //         {
+            //             value: 'filter_test',
+            //             text: '指标选择',
+            //             options: [
+            //                 {
+            //                     value: 'share_num',
+            //                     text: '分享次数'
+            //                 },
+            //                 {
+            //                     value: 'share_user',
+            //                     text: '分享人数'
+            //                 },
+            //                 {
+            //                     value: 'share_rate',
+            //                     text: '人均分享次数'
+            //                 },
+            //                 {
+            //                     value: 'share_succeed_num',
+            //                     text: '分享成功次数'
+            //                 },
+            //                 {
+            //                     value: 'share_succeed_user',
+            //                     text: '分享成功人数'
+            //                 },
+            //                 {
+            //                     value: 'success_rate',
+            //                     text: '分享成功率'
+            //                 },
+            //                 {
+            //                     value: 'share_links_num',
+            //                     text: '分享链接点击量'
+            //                 },
+            //                 {
+            //                     value: 'share_links_user',
+            //                     text: '分享链接点击人数'
+            //                 },
+            //                 {
+            //                     value: 'link_rate',
+            //                     text: '分享回流率'
+            //                 }
+            //             ]
+            //         }
+            //     ]
+            // }
         ],
         filter(data, query, dates, type) {
             return filter.indexTwo(data, query, dates, type);
@@ -276,64 +276,34 @@ module.exports = (Router) => {
                 share_platform += "站";
             }
 
-            if(day_type == 1) {
-                const sql = `select 
-                        share_source,
-                        sum(share_num)          as share_num,
-                        sum(share_user)         as share_user,
-                        sum(share_succeed_num)  as share_succeed_num,
-                        sum(share_succeed_user) as share_succeed_user,
-                        sum(share_links_num)    as share_links_num,
-                        sum(share_links_user)   as share_links_user
-                    from 
-                        ads_share_source_type_hour 
-                    where 
-                        date='${query.startTime}'
-                    and
-                        share_platform=?
-                    and
-                        share_source not in ('ALL')
-                    and
-                        share_type='ALL'
-                    and
-                        day_type=1
-                    group by share_source`;
+            const sql = `select 
+                    share_source,
+                    sum(share_num)          as share_num,
+                    sum(share_user)         as share_user,
+                    sum(share_succeed_num)  as share_succeed_num,
+                    sum(share_succeed_user) as share_succeed_user,
+                    sum(share_links_num)    as share_links_num,
+                    sum(share_links_user)   as share_links_user 
+                from 
+                    ads_share_data_analysis_info 
+                where
+                    date='${query.endTime}' 
+                and
+                    product_line='ALL' 
+                and 
+                    share_source not in ('ALL') 
+                and 
+                    share_type='ALL'
+                and
+                    day_type=${query.day_type}
+                and
+                    share_platform=?
+                group by share_source`;
 
-                return {
-                    sql,
-                    params:[share_platform]
-                };
-            }
-            else {
-                const sql = `select 
-                        share_source,
-                        sum(share_num)          as share_num,
-                        sum(share_user)         as share_user,
-                        sum(share_succeed_num)  as share_succeed_num,
-                        sum(share_succeed_user) as share_succeed_user,
-                        sum(share_links_num)    as share_links_num,
-                        sum(share_links_user)   as share_links_user 
-                    from 
-                        ads_share_data_analysis_info 
-                    where
-                        date='${query.startTime}' 
-                    and
-                        product_line='ALL' 
-                    and 
-                        share_source not in ('ALL') 
-                    and 
-                        share_type='ALL'
-                    and
-                        day_type=${query.day_type}
-                    and
-                        share_platform=?
-                    group by share_source`;
-
-                return {
-                    sql,
-                    params: [share_platform]
-                };
-            }
+            return {
+                sql,
+                params: [share_platform]
+            };
         },
         global_platform_filter(req) {
             this.global_platform = globalPlatform(req.session.userInfo.type["71"]);
@@ -397,64 +367,34 @@ module.exports = (Router) => {
                 share_platform += "站";
             }
 
-            if(day_type == 1) {
-                const sql = `select 
-                        share_type,
-                        sum(share_num)          as share_num,
-                        sum(share_user)         as share_user,
-                        sum(share_succeed_num)  as share_succeed_num,
-                        sum(share_succeed_user) as share_succeed_user,
-                        sum(share_links_num)    as share_links_num,
-                        sum(share_links_user)   as share_links_user
-                    from 
-                        ads_share_source_type_hour 
-                    where
-                        date='${query.startTime}' 
-                    and
-                        share_platform=?
-                    and
-                        share_source='ALL'
-                    and
-                        share_type not in ('ALL')
-                    and
-                        day_type=1
-                    group by share_type`;
+            const sql = `select 
+                    share_type,
+                    sum(share_num)          as share_num,
+                    sum(share_user)         as share_user,
+                    sum(share_succeed_num)  as share_succeed_num,
+                    sum(share_succeed_user) as share_succeed_user,
+                    sum(share_links_num)    as share_links_num,
+                    sum(share_links_user)   as share_links_user 
+                from 
+                    ads_share_data_analysis_info 
+                where 
+                    date='${query.endTime}'
+                and
+                    product_line='ALL' 
+                and 
+                    share_source='ALL'
+                and 
+                    share_type not in ('ALL')
+                and
+                    day_type=${query.day_type}
+                and
+                    share_platform=?
+                group by share_type`;
 
-                return {
-                    sql,
-                    params:[share_platform]
-                };
-            }
-            else {
-                const sql = `select 
-                        share_type,
-                        sum(share_num)          as share_num,
-                        sum(share_user)         as share_user,
-                        sum(share_succeed_num)  as share_succeed_num,
-                        sum(share_succeed_user) as share_succeed_user,
-                        sum(share_links_num)    as share_links_num,
-                        sum(share_links_user)   as share_links_user 
-                    from 
-                        ads_share_data_analysis_info 
-                    where 
-                        date='${query.startTime}'
-                    and
-                        product_line='ALL' 
-                    and 
-                        share_source='ALL'
-                    and 
-                        share_type not in ('ALL')
-                    and
-                        day_type=${query.day_type}
-                    and
-                        share_platform=?
-                    group by share_type`;
-
-                return {
-                    sql,
-                    params: [share_platform]
-                };
-            }
+            return {
+                sql,
+                params: [share_platform]
+            };
         },
         global_platform_filter(req) {
             this.global_platform = globalPlatform(req.session.userInfo.type["71"]);
@@ -508,8 +448,11 @@ module.exports = (Router) => {
         date_picker_data: 1,
         showDayUnit: true,
         firstSql(query, params) {
-            let share_platform = query.share_platform ? decodeURI(query.share_platform) : this.global_platform.list[0].key;
-            const sql = `select 
+            let share_platform = query.share_platform = query.share_platform ? decodeURI(query.share_platform) : this.global_platform.list[0].key;
+            let platform = share_platform !== "ALL";
+            let sql;
+            if(platform) {
+                sql = `select 
                     product_line,
                     sum(share_num)          as share_num,
                     sum(share_user)         as share_user,
@@ -520,7 +463,7 @@ module.exports = (Router) => {
                 from 
                     ads_share_data_analysis_info 
                 where 
-                    date='${query.startTime}'
+                    date='${query.endTime}'
                 and
                     product_line not in ('ALL') 
                 and 
@@ -532,8 +475,34 @@ module.exports = (Router) => {
                 and
                     share_platform=?
                 group by product_line`;
+            }
+            else {
+                sql = `select 
+                    share_platform,
+                    sum(share_num)          as share_num,
+                    sum(share_user)         as share_user,
+                    sum(share_succeed_num)  as share_succeed_num,
+                    sum(share_succeed_user) as share_succeed_user,
+                    sum(share_links_num)    as share_links_num,
+                    sum(share_links_user)   as share_links_user 
+                from 
+                    ads_share_data_analysis_info 
+                where 
+                    date='${query.endTime}'
+                and
+                    product_line='ALL' 
+                and 
+                    share_source='ALL'
+                and 
+                    share_type='ALL'
+                and
+                    day_type=${query.day_type}
+                and
+                    share_platform != 'ALL'
+                group by share_platform`;
+            }
 
-            if(share_platform !== "ALL") {
+            if(platform) {
                 share_platform += "站";
             }
 

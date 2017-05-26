@@ -74,7 +74,7 @@ module.exports = {
             }
         }
 
-        obj.share_rate  = util.round(obj.share_num, obj.share_user);
+        obj.share_rate  = util.division(obj.share_num, obj.share_user, 1);
         obj.success_rate= util.toFixed(obj.share_succeed_num, obj.share_num);
         obj.link_rate   = util.toFixed(obj.share_links_num, obj.share_num);
 
@@ -100,16 +100,16 @@ module.exports = {
         const newData= {};
         for(let item of source) {
             let k = `${item.date}${isHour ? " " + item.hours + ":00" : ""}`;
-            map[item.share_source] = channelConfig[item.share_source] || item.share_source;
+            map[channelConfig[item.share_source] || "其他"] = channelConfig[item.share_source] || "其他";
             if(newData[k]) {
-                newData[k][item.share_source] += item[filter_key];
+                newData[k][channelConfig[item.share_source] || "其他"] += item[filter_key];
             }
             else {
                 newData[k] = {};
                 for(let key of share_source) {
-                    newData[k][key] = 0;
+                    newData[k][channelConfig[key] || "其他"] = 0;
                 }
-                newData[k][item.share_source] = item[filter_key];
+                newData[k][channelConfig[item.share_source] || "其他"] = item[filter_key];
             }
         }
 
@@ -121,11 +121,13 @@ module.exports = {
             const rows = ["date"];
             const tableData = [];
             for(let key of share_source) {
-                rows.push(key);
-                cols.push({
-                    caption: channelConfig[key] || key,
-                    type: "number"
-                });
+                if(rows.indexOf(channelConfig[key] || "其他") == -1) {
+                    rows.push(channelConfig[key] || "其他");
+                    cols.push({
+                        caption: channelConfig[key] || "其他",
+                        type: "number"
+                    });
+                }
             }
 
             for(let key in newData) {
@@ -159,6 +161,21 @@ module.exports = {
             typeConfig[item.type_id] = item.type_name;
         }
 
+        const map = {
+            value: filter_name[filter_key]
+        };
+        const newData = {};
+        for(let item of source) {
+            if(newData[typeConfig[item.share_type] || "其他"]) {
+                newData[typeConfig[item.share_type] || "其他"].value += item[filter_key];
+            }
+            else {
+                newData[typeConfig[item.share_type] || "其他"] = {
+                    value: item[filter_key]
+                };
+            }
+        }
+
         for(let item of select_filter[0].groups) {
             if(item.key === query.share_source) {
                 share_source = item.value;
@@ -182,22 +199,19 @@ module.exports = {
             for(let item of source) {
                 total += item[filter_key];
             }
-            for(let item of source) {
-                item.rate = util.toFixed(item[filter_key], total);
+            const tableData = [];
+            for(let key in newData) {
+                let obj = {
+                    share_type: key,
+                    rate: util.toFixed(newData[key].value, total)
+                };
+                obj[filter_key] = newData[key].value;
+                tableData.push(obj);
             }
 
-            return util.toTable([source], [rows], [cols]);
+            return util.toTable([tableData], [rows], [cols]);
         }
         else {
-            const map = {
-                value: filter_name[filter_key]
-            };
-            const newData = {};
-            for(let item of source) {
-                newData[typeConfig[item.share_type] || item.share_type] = {
-                    value: item[filter_key]
-                };
-            }
 
             return [{
                 type : "pie",
@@ -213,6 +227,7 @@ module.exports = {
         var source = data.first.data,
             show_type = query.main_show_type_filter,
             platform = query.share_platform ? decodeURI(query.share_platform) : "ALL",
+            _platform = platform !== "ALL",
             filter_key = query.filter_key;
         const platform_type= {
             "ALL": ["M站", "PC站", "APP站"],
@@ -221,7 +236,21 @@ module.exports = {
         };
 
         if(!platform_type[platform]) {
-            return {};
+            if(show_type == "table") {
+                return [{
+                    data: [],
+                    rows: [],
+                    cols: []
+                }];
+            }
+            return [{
+                type : "pie",
+                map : {},
+                data : {},
+                config: { // 配置信息
+                    stack: false // 图的堆叠
+                }
+            }];
         }
 
         const newData= {};
@@ -230,8 +259,19 @@ module.exports = {
             newData[key] = {};
             newData[key][filter_key] = 0;
         }
-        for(let item of source) {
-            newData[item.product_line][filter_key] = item[filter_key];
+        if(_platform) {
+            for(let item of source) {
+                if(newData[item.product_line]) {
+                    newData[item.product_line][filter_key] = item[filter_key];
+                }
+            }
+        }
+        else {
+            for(let item of source) {
+                if(newData[item.share_platform]) {
+                    newData[item.share_platform][filter_key] = item[filter_key];
+                }
+            }
         }
 
         if(show_type == "table" || type == "excel") {
@@ -239,7 +279,13 @@ module.exports = {
                 caption: `分享平台`,
                 type: "string"
             }];
-            const rows = ["product_line"];
+            let rows = [];
+            if(_platform) {
+                rows.push("product_line");
+            }
+            else {
+                rows.push("share_platform")
+            }
             rows.push(filter_key);
             rows.push("rate");
             cols.push(help[filter_key]);
@@ -293,11 +339,19 @@ module.exports = {
             typeConfig[item.type_id] = item.type_name;
         }
 
-        source.forEach((x, i) => {
-            x.top = (page - 1) * limit + i + 1;
-            x.name = `${x.share_id}/${x.share_name}`;
-            x.share_source = channelConfig[x.share_source] || x.share_source;
-            x.share_type = typeConfig[x.share_type] || x.share_type;
+        let i = 1;
+        if(query.page) {
+            i = (page - 1) * limit + i;
+        }
+        if(query.from) {
+            i = query.from;
+        }
+
+        source.forEach((x) => {
+            x.top = i++;
+            x.name = `${x.share_name ? x.share_name : x.share_id}`;
+            x.share_source = channelConfig[x.share_source] || "其他";
+            x.share_type = typeConfig[x.share_type] || "其他";
             if(x.rate == "null" || x.rate == null) {
                 x.rate = 0.0000;
             }
