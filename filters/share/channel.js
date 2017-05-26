@@ -349,7 +349,7 @@ module.exports = {
 
         source.forEach((x) => {
             x.top = i++;
-            x.name = `${x.share_id ? x.share_id : x.share_name}`;
+            x.name = `${x.share_name ? x.share_name : x.share_id}`;
             x.share_source = channelConfig[x.share_source] || "其他";
             x.share_type = typeConfig[x.share_type] || "其他";
             if(x.rate == "null" || x.rate == null) {
