@@ -211,7 +211,8 @@ exports.sort = function(array, first, second) {
     return array;
 };
 
-exports.toFixed = function(one, two, num = 2) {
+exports.toFixed = function(one, two, num) {
+    num = num || 2;
     return (one / (Math.ceil(two) === 0 ? 1 : two) * 100).toFixed(num) + "%";
 };
 
@@ -230,7 +231,8 @@ exports.toRound = function(one, two) {
     return Math.round(one / (two === 0 ? 1 : two) * 100);
 };
 
-exports.division = function(one, two, num = 2) {
+exports.division = function(one, two, num) {
+    num = num || 2;
     return (one / (Math.ceil(two) === 0 ? 1 : two)).toFixed(num);
 };
 
