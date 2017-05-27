@@ -355,7 +355,7 @@ module.exports = {
             if(x.rate == "null" || x.rate == null) {
                 x.rate = 0.0000;
             }
-            x.rate = x.rate * 100 + "%";
+            x.rate = (x.rate * 100).toFixed(2) + "%";
         });
 
         return util.toTable([source], data.rows, data.cols, [count > 100 ? 100 : count]);
