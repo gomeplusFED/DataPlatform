@@ -264,7 +264,7 @@ module.exports = (Router) => {
                     day_type=${query.day_type}
                 and
                     share_platform=?
-                group by share_type`;
+                group by share_source`;
 
             if(share_platform !== "ALL") {
                 share_platform += "站";

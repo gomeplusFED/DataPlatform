@@ -15,144 +15,155 @@ var api = require("../../../base/main"),
         "new_pv",
         "is_item_topic_num",
         "is_vedio_topic_num",
-    "delete_topic_num", "new_topic_reply_num",
+        "delete_topic_num", "new_topic_reply_num",
         "new_topic_reply_user_num", "delete_topic_reply_num",
         "new_topic_like_num", "new_topic_save_num", "new_topic_share_num",
         "new_reply_topic_num"];
 
 module.exports = (Router) => {
 
-    // Router = new api(Router,{
-    //     router : "/socialAnalysis/topicsOne",
-    //     modelName : ["Statistics"],
-    //     platform : false,
-    //     date_picker: false,
-    //     //date_picker_data: 1,
-    //     params(query, params, data) {
-    //         var now = new Date().getTime(),
-    //             date = util.getDate(new Date(now - 24 * 60 * 60 * 1000));
+    Router = Router.get("/socialAnalysis/topicsZero_json" , function(req , res , next){
 
-    //         return {
-    //             date : orm.between(date + " 00:00:00", date + " 23:59:59"),
-    //             key : ["all_topic_num", "all_topic_reply_num", "all_topic_subReply_num", "all_praise_num"]
-    //         };
-    //     },
-    //     procedure : [{
-    //         aggregate : {
-    //             value : ["key"]
-    //         },
-    //         sum : ["value"],
-    //         groupBy : ["key"],
-    //         get : ""
-    //     }],
-    //     filter(data) {
-    //         return filter.topicsOne(data);
-    //     },
-    //     /*flexible_btn: [{
-    //         content: '<a href="javascript:void(0)" help_url="/socialAnalysis/helpTwo_json">帮助</a>',
-    //         preMethods: ["show_help"],
-    //         customMethods: ''
-    //     }],*/
-    //     rows: [
-    //         ["all_topic_num", "all", "all_praise_num"]
-    //     ],
-    //     cols: [
-    //         [{
-    //             caption: "累计话题数",
-    //             type: "number",
-    //             help : "累计话题数"
-    //         }, {
-    //             caption: "累计回复次数",
-    //             type: "number"
-    //         //}, {
-    //         //    caption: "话题回复率", // = 被回复的话题数 / 话题数
-    //         //    type: "string",
-    //         //    help : "被回复的话题数/话题数"
-    //         }, {
-    //             caption: "累计点赞数",
-    //             type: "number"
-    //         //}, {
-    //         //    caption: "累计收藏数",
-    //         //    type: "number"
-    //         }]
-    //     ]
-    // });
+        res.json({
+            code: 200,
+            modelData: [],
+            components: {
+                switch_filter: {
+                    show: true,
+                    defaultIndex: 0,
+                    btns: [
+                        {
+                            title: '明细表',
+                            group: [4]
+                        },
+                        {
+                            title: '统计表',
+                            group: [0,1,2,3]
+                        },
+                    ],
+                    radios: [
+                        {
+                            title: '客户端',
+                            key: 'type',
+                            value: 'all',
+                            group: [
+                                {
+                                    title: '全站',
+                                    key: 'all,pc,wap,android,ios'
+                                },
+                                {
+                                    title: 'PC',
+                                    key: 'all,pc'
+                                },
+                                {
+                                    title: 'WAP',
+                                    key: 'all,wap'
+                                },
+                                {
+                                    title: 'APP',
+                                    key: "all,android,ios"
+                                }
+                            ]
+                        },
+                        {
+                            title: '用户标签',
+                            key: 'expert_type',
+                            value: 'all',
+                            group: [
+                                {
+                                    title: '全站',
+                                    key: '平台达人,签约达人,普通用户'
+                                },
+                                {
+                                    title: '平台达人创建',
+                                    key: '平台达人'
+                                },
+                                {
+                                    title: '签约达人创建',
+                                    key: '签约达人'
+                                },
+                                {
+                                    title: '普通用户创建',
+                                    key: '普通用户'
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        });
+    });
 
     Router = new api(Router,{
         router : "/socialAnalysis/topicsTwo",
-        modelName : [ "SocialTopicStatistics" ],
+        modelName : [ "ads2_soc_topic_statistics" ],
         platform : false,
         params(query, params) {
-            params.category_id = "ALL";
+            params.type = params.type.split(",");
+            params.expert_type = params.expert_type.split(",");
+            params.category_id = "all";
 
             return params;
         },
-        procedure : [{
-            aggregate : {
-                value : ["type"]
-            },
-            sum : topicsTwo,
-            groupBy : ["type"],
-            get : ""
-        }],
         filter(data, query, dates, type) {
             return filter.topicsTwo(data);
         },
         rows : [
-            ["type" , "new_topic_num",
-
-            "new_pv",
-            "is_item_topic_num",
-            "is_vedio_topic_num",
-
-             "delete_topic_num", "new_topic_reply_num",
-                "new_topic_reply_user_num", "delete_topic_reply_num", "rate",
-                "new_topic_like_num", "new_topic_save_num", "new_topic_share_num"]
+            ["type", "new_topic_num", "is_item_topic_num", "is_vedio_topic_num", "delete_topic_num",
+                "new_uv", "new_pv", "new_topic_reply_num", "new_topic_reply_user_num",
+                "delete_topic_reply_num", "rate", "new_topic_share_num"]
         ],
         cols : [
-            [{
-                caption: "平台",
-                type: "string"
-            },{
-                caption: "新增话题数",
-                type: "number",
-                help : "新增的话题数"
-            },{
-                caption: "新增PV",
-                type: "number"
-            },{
-                caption: "新增带商品话题数",
-                type: "number"
-            },{
-                caption: "新增带视频话题数",
-                type: "number"
-            },{
-                caption: "删除话题数",
-                type: "number"
-            },{
-                caption: "新增回复数",
-                type: "number",
-                help : "新增的回复数"
-            },{
-                caption: "新增回复人数",
-                type: "number"
-            },{
-                caption: "删除回复数",
-                type: "number"
-            },{
-                caption: "新增话题回复率",
-                type: "number",
-                help : "被回复的新增话题数 / 新增话题数"
-            },{
-                caption: "新增点赞数",
-                type: "number"
-            },{
-                caption: "新增收藏数",
-                type: "number"
-            },{
-                caption: "新增分享数",
-                type: "number"
-            }]
+            [
+                {
+                    caption: "平台",
+                    type: "string"
+                },
+                {
+                    caption: "新增话题数",
+                    type: "number"
+                },
+                {
+                    caption: "新增带商品话题数",
+                    type: "number"
+                },
+                {
+                    caption: "新增带视频话题数",
+                    type: "number"
+                },
+                {
+                    caption: "",
+                    type: ""
+                },
+                {
+                    caption: "",
+                    type: ""
+                },
+                {
+                    caption: "",
+                    type: ""
+                },
+                {
+                    caption: "",
+                    type: ""
+                },
+                {
+                    caption: "",
+                    type: ""
+                },
+                {
+                    caption: "",
+                    type: ""
+                },
+                {
+                    caption: "",
+                    type: ""
+                },
+                {
+                    caption: "",
+                    type: ""
+                }
+            ]
         ]
     });
     

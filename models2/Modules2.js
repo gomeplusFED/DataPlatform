@@ -213,6 +213,10 @@ module.exports = {
     ads_share_dim_type : {
         modelName : "ads_share_dim_type"
     },
+    //社交分析话题类型
+    ads2_soc_topic_statistics : {
+        modelName : "ads2_soc_topic_statistics"
+    },
 };
 
 

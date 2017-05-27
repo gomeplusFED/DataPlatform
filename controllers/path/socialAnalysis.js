@@ -185,11 +185,11 @@ module.exports = {
             path : "/socialAnalysis/topics",
             display : true,
             defaultData : [
-                // {
-                //     type : "table",
-                //     title : "话题数据总览",
-                //     query_api : "/socialAnalysis/topicsOne"
-                // },
+                {
+                    type : "table",
+                    title : "话题数据总览",
+                    query_api : "/socialAnalysis/topicsZero"
+                },
                 {
                     type : "table",
                     title : "话题数据统计",
