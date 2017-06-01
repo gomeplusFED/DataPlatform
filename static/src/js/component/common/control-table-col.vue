@@ -59,10 +59,13 @@ module.exports = Vue.extend({
 			_this.tableData = tableData[0];
 			_this.checkAll();
 			if (_this.pageComponentsData) {
-				let defaultConfig = _this.pageComponentsData[_this.componentType].default
-				if (defaultConfig) {
-					Object.assign(_this.multiCheckedOption, defaultConfig)
-					_this.applyMulti()
+				let defaultConfig = _this.pageComponentsData[_this.componentType]
+				if(defaultConfig) {
+				    defaultConfig = _this.pageComponentsData[_this.componentType].default
+                    if (defaultConfig) {
+                        Object.assign(_this.multiCheckedOption, defaultConfig)
+                        _this.applyMulti()
+                    }
 				}
 			}
 		});
