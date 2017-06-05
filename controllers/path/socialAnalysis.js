@@ -192,27 +192,27 @@ module.exports = {
                 },
                 {
                     type : "table",
-                    title : "话题数据统计",
+                    title : "数据概览",
                     query_api : "/socialAnalysis/topicsTwo"
                 },
                 {
                     type : "chart",
-                    title : "话题数据趋势",
+                    title : "数据趋势",
                     query_api : "/socialAnalysis/topicsThree"
                 },
                 {
                     type : "chart",
-                    title : "一级圈子类型分布",
+                    title : "话题分布",
                     query_api : "/socialAnalysis/topicsFour"
                 },
                 {
                     type : "chart",
-                    title : "二级圈子类型分布",
+                    title : "话题偏好",
                     query_api : "/socialAnalysis/topicsFive"
                 },
                 {
                     type : "table",
-                    title : "热门话题排行TOP100",
+                    title : "话题排行TOP100",
                     query_api : "/socialAnalysis/topicsSix"
                 }
             ]
@@ -231,15 +231,15 @@ module.exports = {
                     query_api : "/socialAnalysis/topicDetailOne"
                 },
                 {
-                    type : "table",
-                    title : "数据统计",
-                    query_api : "/socialAnalysis/topicDetailTwo"
-                },
-                {
                     type : "chart",
                     title : "数据趋势",
-                    query_api : "/socialAnalysis/topicDetailThree"
+                    query_api : "/socialAnalysis/topicDetailTwo"
                 }
+                // {
+                //     type : "chart",
+                //     title : "数据趋势",
+                //     query_api : "/socialAnalysis/topicDetailThree"
+                // }
             ]
         }
     },

@@ -27,240 +27,258 @@ module.exports = {
         var source = data.first.data[0],
             newData = [],
             obj = {},
-            array = ["APP", "WAP", "PC", "ALL"];
+            rows = [],
+            _cols = data.cols[0],
+            _rows = data.rows[0],
+            array = ["android", "ios", "wap", "pc", "all"];
+
+        _cols.forEach((x, i) => {
+            if(x.type === "number") {
+                rows.push(_rows[i]);
+            }
+        });
 
         for(let key of array) {
-            obj[key] = {
-                new_topic_num : 0,
-                "new_pv" : 0,
-                "is_item_topic_num" : 0,
-                "is_vedio_topic_num" : 0,
-                delete_topic_num : 0,
-                new_topic_reply_num : 0,
-                new_topic_reply_user_num : 0,
-                delete_topic_reply_num : 0,
-                new_topic_like_num : 0,
-                new_topic_save_num : 0,
-                new_topic_share_num : 0,
-                new_reply_topic_num : 0
+            obj[key] = {};
+            for(let row of rows) {
+                obj[key][row] = 0;
             }
+            obj[key].new_reply_topic_num = 0;
         }
 
-        for(let key of source) {
-            key.type = key.type.toUpperCase();
-            let type = key.type;
-            if(obj[type]) {
-                obj[type].new_topic_num = key.sum_new_topic_num;
-
-                obj[type].new_pv = key.sum_new_pv;
-                obj[type].is_item_topic_num = key.sum_is_item_topic_num;
-                obj[type].is_vedio_topic_num = key.sum_is_vedio_topic_num;
-
-                obj[type].delete_topic_num = key.sum_delete_topic_num;
-                obj[type].new_topic_reply_num = key.sum_new_topic_reply_num;
-                obj[type].new_topic_reply_user_num = key.sum_new_topic_reply_user_num;
-                obj[type].delete_topic_reply_num = key.sum_delete_topic_reply_num;
-                obj[type].new_topic_like_num = key.sum_new_topic_like_num;
-                obj[type].new_topic_save_num = key.sum_new_topic_save_num;
-                obj[type].new_topic_share_num = key.sum_new_topic_share_num;
-                obj[type].new_reply_topic_num = key.sum_new_reply_topic_num;
+        for(let item of source) {
+            let type = item.type.toLowerCase();
+            for(let row of rows) {
+                obj[type][row] += item[row];
             }
-
-            // obj["总计"].new_topic_num += key.sum_new_topic_num;
-            //
-            // obj["总计"].new_pv += key.sum_new_pv;
-            // obj["总计"].is_item_topic_num += key.sum_is_item_topic_num;
-            // obj["总计"].is_vedio_topic_num += key.sum_is_vedio_topic_num;
-            //
-            // obj["总计"].delete_topic_num += key.sum_delete_topic_num;
-            // obj["总计"].new_topic_reply_num += key.sum_new_topic_reply_num;
-            // obj["总计"].new_topic_reply_user_num += key.sum_new_topic_reply_user_num;
-            // obj["总计"].delete_topic_reply_num += key.sum_delete_topic_reply_num;
-            // obj["总计"].new_topic_like_num += key.sum_new_topic_like_num;
-            // obj["总计"].new_topic_save_num += key.sum_new_topic_save_num;
-            // obj["总计"].new_topic_share_num += key.sum_new_topic_share_num;
-            // obj["总计"].new_reply_topic_num += key.sum_new_reply_topic_num;
+            obj[type].new_reply_topic_num += item.new_reply_topic_num;
         }
 
-        for(let key in obj) {
-            let item = obj[key];
-            key === "ALL" ? key = "总计" : "";
-            newData.push({
-                type : key,
-                new_topic_num : item.new_topic_num,
-
-                "new_pv" : item.new_pv,
-                "is_item_topic_num" : item.is_item_topic_num,
-                "is_vedio_topic_num" : item.is_vedio_topic_num,
-
-                delete_topic_num : item.delete_topic_num,
-                new_topic_reply_num : item.new_topic_reply_num,
-                new_topic_reply_user_num : item.new_topic_reply_user_num,
-                delete_topic_reply_num : item.delete_topic_reply_num,
-                rate : util.toFixed(item.new_reply_topic_num, obj.ALL.new_topic_num),
-                new_topic_like_num : item.new_topic_like_num,
-                new_topic_save_num : item.new_topic_save_num,
-                new_topic_share_num : item.new_topic_share_num
-            });
+        obj.pc.type = "PC";
+        obj.pc.rate = util.toFixed(obj.pc.new_reply_topic_num, obj.pc.new_topic_num);
+        newData.push(obj.pc);
+        obj.wap.type = "WAP";
+        obj.wap.rate = util.toFixed(obj.wap.new_reply_topic_num, obj.wap.new_topic_num);
+        newData.push(obj.wap);
+        obj.app = {
+            type: "APP"
+        };
+        for(let key in obj.ios) {
+            obj.app[key] = obj.ios[key] + obj.android[key];
         }
+        obj.app.rate = util.toFixed(obj.app.new_reply_topic_num, obj.app.new_topic_num);
+        newData.push(obj.app);
+        obj.all.type = "ALL";
+        obj.all.rate = util.toFixed(obj.all.new_reply_topic_num, obj.all.new_topic_num);
+        newData.push(obj.all);
 
         return util.toTable([newData], data.rows, data.cols);
     },
-    topicsThree(data, query, dates) {
-        let filter_key = query.filter_key;
-        var source = data.first.data[0],
-            type = "line",
-            filter_name = {
-                "new_topic_num" : "新增话题数",
-                "is_item_topic_num" : "新增带商品话题数",
-                "is_vedio_topic_num" : "新增带视频话题数",
-                "delete_topic_num" : "删除话题数",
-                "new_topic_reply_num" : "新增回复数",
-                "delete_topic_reply_num" : "删除回复数",
-                "new_topic_like_num" : "新增点赞数",
-                "new_topic_save_num" : "新增收藏数",
-                "new_topic_share_num" : "新增分享数"
-            },
-            map = {
-                value : filter_name[filter_key]
-            },
-            newData = {};
-       
-        for(let date of dates){
-            newData[date] = {
-                value : 0
-            };
-        }
+    topicsThree(data, query, dates, type) {
+        const map = {
+            new_topic_num: "新增话题数",
+            new_pv: "新增pv",
+            is_item_topic_num: "新增带商品话题数",
+            is_vedio_topic_num: "新增带视频话题数",
+            delete_topic_num: "删除话题数",
+            new_topic_reply_num: "新增回复数",
+            delete_topic_reply_num: "删除回复数",
+            new_topic_like_num: "新增点赞数",
+            new_topic_save_num: "新增收藏数",
+            new_topic_share_num: "新增分享数"
+        };
+        const show_type = query.main_show_type_filter;
+        const source = data.first.data;
 
-        for(let key of source) {
-            let date = util.getDate(key.date);
-            newData[date].value = key["sum_" + filter_key];
-            key.date = date;
-        }
-
-        if(query.main_show_type_filter == "table"){
-            data.rows[0] = [];
-            data.cols[0] = [];
-
-            data.rows[0] = Object.keys(filter_name);
-            data.rows[0].unshift("date");
-
-            for(let key in filter_name){
-                data.cols[0].push({
-                    "caption" : filter_name[key],
-                    "type"    : "number"
-                })
-            }
-            data.cols[0].unshift({
-                "caption" : "日期",
-                "type"    : "date"
-            });
-
-            for(let i=1;i<data.rows[0].length;i++){
-                data.rows[0][i] = "sum_" + data.rows[0][i]; 
+        if(show_type == "table" || type == "excel") {
+            const rows = ["date"];
+            const cols = [{
+                caption : "日期",
+                type : "string"
+            }];
+            for(let key in map) {
+                rows.push(key);
+                cols.push({
+                    caption: map[key],
+                    type: "number"
+                });
             }
 
-            return util.toTable([source] , data.rows , data.cols)
+            return util.toTable([source], [rows], [cols]);
         }
-
-        return [{
-            type : type,
-            map : map,
-            data : newData,
-            config: {
-                stack: false
+        else {
+            const newData = {};
+            for(let item of source) {
+                const date = util.moment(item.date);
+                newData[date] = {};
+                for(let key in map) {
+                    newData[date][key] = item[key];
+                }
             }
-        }]
+
+            return [{
+                type : "line",
+                map : map,
+                data : newData,
+                config: {
+                    stack: false
+                }
+            }];
+        }
     },
-    topicsFour(data, filter_key) {
-        var source = data.first.data[0],
-            orderData = data.second.data[0],
-            type = "pie",
-            obj = {},
-            filter_name = {
-                new_topic_num : "话题",
-                new_topic_reply_num : "回复",
-                new_topic_like_num : "点赞",
-                new_topic_save_num: "收藏",
-                new_topic_share_num: "分享"
-            },
-            map = {
-                value : filter_name[filter_key]
-            },
-            newData = {};
-        for(var key of orderData) {
-            obj[key.id] = {
-                value : 0
-            }
-        }
-        for(var key of source) {
-            obj[key.category_id].value = key["sum_" + filter_key];
-        }
-        for(var key of orderData) {
-            newData[key.name] = {
-                value : obj[key.id].value
-            };
-        }
-        return [{
-            type : type,
-            map : map,
-            data : newData,
-            config: {
-                stack: false
-            }
-        }]
-    },
-    topicsFive(data , query){
-        var group_type = query.category_id,
-            source = data.first.data[0],
-            orderData = data.second.data[0],
-            config = {},
-            type = "pie";
+    topicsFour(data, query, dates, type, filter_select) {
+        const source = data.first.data;
+        const second = query.filter_data;
+        const category = (query.filter_type || "0").split(",");
+        const config = {};
+        const show_type = query.main_show_type_filter;
+        const filter_key = query.filter_key;
+        const filter_name = {
+            new_topic_num: "新增话题",
+            new_topic_reply_num: "回复",
+            new_topic_like_num: "点赞",
+            new_topic_save_num: "收藏",
+            new_topic_share_num: "分享"
+        };
 
-        var obj = {},
-            filter_name = {
-                new_topic_num : "话题",
-                new_topic_reply_num : "回复",
-                new_topic_like_num : "点赞",
-                new_topic_save_num: "收藏",
-                new_topic_share_num: "分享"
-            },
-            map = {
-                value : filter_name[query.filter_key2]
-            },
-            newData = {};
-
-        for(let key of orderData) {
-            config[key.id] = key.name;
-            if(key.pid === query.filter_key) {
-                obj[key.id] = {
-                    value : 0
-                };
-            }
+        for(let item of second) {
+            config[item.id] = item.name;
         }
-
-        for(let key of source) {
-            obj[key.category_id].value = key["sum_" + query.filter_key2];
-        }
-        for(let key in obj) {
+        const map = {};
+        map[filter_key] = filter_name[filter_key];
+        const newData = {};
+        for(let key of category) {
             newData[config[key]] = {
-                value : obj[key].value
+                new_topic_num : 0,
+                new_topic_reply_num: 0,
+                new_topic_like_num: 0,
+                new_topic_save_num: 0,
+                new_topic_share_num: 0
             };
         }
-        return [{
-            type : type,
-            map : map,
-            data : newData,
-            config: {
-                stack: false
+        for(let item of source) {
+            let obj = {};
+            for(let key in filter_name) {
+                obj[key] = item[key];
             }
-        }]
+            newData[config[item.category_id] || "未知"] = obj;
+
+        }
+
+        if(show_type == "table" || type == "excel") {
+            const isOneCategory = query.filter_type.indexOf("-") > -1;
+            const rows = ["category_id"];
+            const cols = [{
+                caption: `${isOneCategory ? "一级分类" : "二级分类"}`,
+                type: "string"
+            }];
+            const tableData = [];
+
+            for(let key of filter_select) {
+                rows.push(key.key);
+                cols.push({
+                    caption: key.value,
+                    type: "number"
+                });
+            }
+
+            for(let key in newData) {
+                let obj = newData[key];
+                obj.category_id = key;
+                tableData.push(obj);
+            }
+
+            return util.toTable([tableData], [rows], [cols]);
+        }
+        else {
+            return [{
+                type : "pie",
+                map : map,
+                data : newData,
+                config: {
+                    stack: false
+                }
+            }]
+        }
+    },
+    topicsFive(data, query, dates, type){
+        const source = data.first.data;
+        const second = query.filter_data;
+        const filter_key = query.filter_key || "0";
+        const category = filter_key.split(",");
+        const config = {};
+        const show_type = query.main_show_type_filter;
+
+        for(let item of second) {
+            config[item.id] = item.name;
+        }
+        const map = {
+            new_pv: "PV",
+            new_uv: "UV"
+        };
+        const newData = {};
+        for(let item of source) {
+            let obj = {};
+            for(let key in map) {
+                obj[key] = item[key];
+            }
+            newData[config[item.category_id] || "未知"] = obj;
+        }
+
+        if(filter_key.indexOf("-") > -1) {
+            for(let key of category) {
+                if(!newData[config[key]]) {
+                    newData[config[key]] = {
+                        new_uv: 0,
+                        new_pv: 0
+                    }
+                }
+            }
+        }
+
+        if(show_type == "table" || type == "excel") {
+            const isOneCategory = query.filter_key.indexOf("-") > -1;
+            const rows = ["category_id", "new_pv", "new_uv"];
+            const cols = [
+                {
+                    caption: `${isOneCategory ? "一级分类" : "二级分类"}`,
+                    type: "string"
+                },
+                {
+                    caption: "PV",
+                    type: "number"
+                },
+                {
+                    caption: "UV",
+                    type: "number"
+                }
+            ];
+            const tableData = [];
+
+            for(let key in newData) {
+                let obj = newData[key];
+                obj.category_id = key;
+                tableData.push(obj);
+            }
+
+            return util.toTable([tableData], [rows], [cols]);
+        }
+        else {
+            return [{
+                type : "bar",
+                map : map,
+                data : newData,
+                config: {
+                    stack: false
+                }
+            }]
+        }
     },
     topicsSix(data, query) {
         var source = data.first.data,
-            count = data.first.count[0].count,
+            count = data.first.count[0].total,
             orderSource = data.second.data[0],
-            thirdSource = data.third.data[0],
+            thirdSource = query.filter_data,
             page = query.page || 1,
             limit = query.limit || 20,
             category = {},
@@ -283,17 +301,13 @@ module.exports = {
             let key = source[i];
             let obj = config[key.topic_id] || {};
             key.top = (page - 1) * limit + i +1;
-            key.topic_reply_num = obj.topic_reply_num || 0;
-            key.topic_subreply_num = obj.topic_subreply_num || 0;
+            key.topic_reply_num = obj.topic_reply_num || 0 + obj.topic_subreply_num || 0;
             key.topic_praise_num = obj.topic_praise_num || 0;
-            key.topic_reply_user_num = obj.topic_reply_user_num || 0;
-            key.topic_subreply_user_num = obj.topic_subreply_user_num || 0;
             key.topic_collect_num = obj.topic_collect_num || 0;
-            key.reply_num = key.topic_reply_num + key.topic_subreply_num;
-            key.reply_user_num = key.topic_reply_user_num + key.topic_subreply_user_num;
-            key.topic_rate = util.round(key.reply_num, key.topic_reply_user_num);
-            key.rate = "0.00%";
-            key.weiding = 0;
+            key.rate = util.division(
+                key.topic_reply_num,
+                obj.topic_reply_user_num || 0 + obj.topic_subreply_user_num || 0
+            );
             key.category_id_1 = category[key.category_id_1] || null;
             key.category_id_2 = category[key.category_id_2] || null;
             key.operating =
@@ -305,120 +319,145 @@ module.exports = {
 
     /* ==============  详情部分  =========== */
     topicDetailOne(data){
-        var source = data.first.data[0],
-            newData = {
-                topic_subreply_num : 0,
-                topic_reply_num : 0,
-                topic_praise_num : 0,
-                three : 0,
-                four : 0,
-                five : 0
-            };
-
-        for(let key of source) {
-            newData[key.key] = key.sum_value;
-        }
-
-        newData.num = newData.topic_reply_num + newData.topic_subreply_num;
-
-        return util.toTable([[newData]], data.rows, data.cols);
-    },
-    topicDetailTwo(data){
-        var source = data.first.data[0],
-            obj = {},
-            newData = [],
-            array = ["APP", "WAP", "PC", "总计"];
-
-        for(let key of array) {
-            obj[key] = {
-                new_topic_user_num : 0,
-                new_topic_reply_num : 0,
-                new_topic_reply_user_num : 0,
-                delete_topic_reply_num : 0,
-                new_topic_like_num : 0,
-                new_topic_save_num : 0,
-                new_topic_share_num : 0
+        const source = data.first.data;
+        const obj = {
+            "ios": {},
+            "android": {},
+            "pc": {},
+            "wap": {},
+            "all": {}
+        };
+        const rows = data.rows[0];
+        const newData = [];
+        for(let i = 1, len = rows.length; i < len; i++) {
+            for(let key in obj) {
+                obj[key][rows[i]] = 0;
             }
         }
 
-        for(let key of source) {
-            key.type = key.type.toUpperCase();
-            if(obj[key.type]) {
-                obj[key.type].new_topic_user_num = key.sum_new_topic_user_num;
-                obj[key.type].new_topic_reply_num = key.sum_new_topic_reply_num;
-                obj[key.type].new_topic_reply_user_num = key.sum_new_topic_reply_user_num;
-                obj[key.type].delete_topic_reply_num = key.sum_delete_topic_reply_num;
-                obj[key.type].new_topic_like_num = key.sum_new_topic_like_num;
-                obj[key.type].new_topic_save_num = key.sum_new_topic_save_num;
-                obj[key.type].new_topic_share_num = key.sum_new_topic_share_num;
-            } else {
-                obj["总计"].new_topic_user_num = key.sum_new_topic_user_num;
-                obj["总计"].new_topic_reply_num = key.sum_new_topic_reply_num;
-                obj["总计"].new_topic_reply_user_num += key.sum_new_topic_reply_user_num;
-                obj["总计"].delete_topic_reply_num = key.sum_delete_topic_reply_num;
-                obj["总计"].new_topic_like_num = key.sum_new_topic_like_num;
-                obj["总计"].new_topic_save_num = key.sum_new_topic_save_num;
-                obj["总计"].new_topic_share_num = key.sum_new_topic_share_num;
+        for(let item of source) {
+            let type = item.type.toLowerCase();
+            for(let key in obj.ios) {
+                obj[type][key] = item[key];
             }
         }
-
-        for(let key in obj) {
-            newData.push({
-                type : key,
-                new_topic_user_num : obj[key].new_topic_user_num,
-                new_topic_reply_num : obj[key].new_topic_reply_num,
-                new_topic_reply_user_num : obj[key].new_topic_reply_user_num,
-                delete_topic_reply_num : obj[key].delete_topic_reply_num,
-                new_topic_like_num : obj[key].new_topic_like_num,
-                new_topic_save_num : obj[key].new_topic_save_num,
-                new_topic_share_num : obj[key].new_topic_share_num
-            });
+        const app = {
+            type: "APP"
+        };
+        for(let key in obj.ios) {
+            app[key] = obj.ios[key] + obj.android[key];
         }
+
+        app.new_topic_like_num = obj.pc.new_topic_like_num = obj.wap.new_topic_like_num = "--";
+        app.new_topic_save_num = obj.pc.new_topic_save_num = obj.wap.new_topic_save_num = "--";
+        newData.push(app);
+        obj.wap.type = "WAP";
+        newData.push(obj.wap);
+        obj.pc.type = "PC";
+        newData.push(obj.pc);
+        obj.all.type = "总计";
+        newData.push(obj.all);
 
         return util.toTable([newData], data.rows, data.cols);
     },
-     topicDetailThree(data, query, dates) {
-        var source = data.first.data[0],
-            type = "line",
-            newData = {},
-            filter_name = {
-                new_topic_user_num : "新增成员数",
-                new_topic_reply_num : "新增回复数",
-                new_topic_reply_user_num : "新增回复人数",
-                delete_topic_reply_num : "删除回复数",
-                new_topic_like_num: "新增点赞数",
-                new_topic_save_num: "新增收藏数",
-                new_topic_share_num:"新增分享数"
-            },
-            map = {
-                value : filter_name[query.filter_key]
-            };
+    topicDetailTwo(data, query, dates){
+        const source = data.first.data[0];
+        const map = {
+            "new_topic_reply_num": "新增回复数",
+            "new_topic_reply_user_num": "新增回复人数",
+            // "PV": "新增PV",
+            // "UV": "新增UV",
+            "delete_topic_reply_num": "删除回复数",
+            "new_topic_like_num": "新增点赞数",
+            "new_topic_save_num": "新增收藏数",
+            "new_topic_share_num": "新增分享数"
+        };
+        const show_type = query.main_show_type_filter;
+        const newData = {};
 
         for(let date of dates) {
-            newData[date] = {
-                value : 0
-            };
-        }
-
-        for(let key of source) {
-            var date = util.getDate(key.date);
-            newData[date].value = key["sum_" + query.filter_key];
-        }
-
-        return [{
-            type : type,
-            map : map,
-            data : newData,
-            config: { // 配置信息
-                stack: false, // 图的堆叠
-                categoryY : false, //柱状图竖着
-                toolBox : {
-                    magicType : {
-                        type: ['line', 'bar']
-                    },
-                    dataView: {readOnly: true}
-                }
+            newData[date] = {};
+            for(let key in map) {
+                newData[date][key] = 0;
             }
-        }];
+        }
+
+        for(let item of source) {
+            let date = util.getDate(item.date);
+            for(let key in map) {
+                newData[date][key] += item[key];
+            }
+        }
+
+        if(show_type === "table") {
+            const rows = ["date"];
+            const cols = [{ caption: "日期" }];
+            for(let key in map) {
+                rows.push(key);
+                cols.push({ caption: map[key] });
+            }
+            const tableData = [];
+            for(let key in newData) {
+                let obj = newData[key];
+                obj.date = key;
+                tableData.push(obj);
+            }
+
+            return util.toTable([tableData], [rows], [cols]);
+        }
+        else {
+            return [{
+                type : "line",
+                map : map,
+                data : newData,
+                config: {
+                    stack: false
+                }
+            }];
+        }
     }
+    // topicDetailThree(data, query, dates) {
+    //     var source = data.first.data[0],
+    //         type = "line",
+    //         newData = {},
+    //         filter_name = {
+    //             new_topic_user_num : "新增成员数",
+    //             new_topic_reply_num : "新增回复数",
+    //             new_topic_reply_user_num : "新增回复人数",
+    //             delete_topic_reply_num : "删除回复数",
+    //             new_topic_like_num: "新增点赞数",
+    //             new_topic_save_num: "新增收藏数",
+    //             new_topic_share_num:"新增分享数"
+    //         },
+    //         map = {
+    //             value : filter_name[query.filter_key]
+    //         };
+    //
+    //     for(let date of dates) {
+    //         newData[date] = {
+    //             value : 0
+    //         };
+    //     }
+    //
+    //     for(let key of source) {
+    //         var date = util.getDate(key.date);
+    //         newData[date].value = key["sum_" + query.filter_key];
+    //     }
+    //
+    //     return [{
+    //         type : type,
+    //         map : map,
+    //         data : newData,
+    //         config: { // 配置信息
+    //             stack: false, // 图的堆叠
+    //             categoryY : false, //柱状图竖着
+    //             toolBox : {
+    //                 magicType : {
+    //                     type: ['line', 'bar']
+    //                 },
+    //                 dataView: {readOnly: true}
+    //             }
+    //         }
+    //     }];
+    // }
 };

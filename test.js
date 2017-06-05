@@ -25,7 +25,7 @@
 // var redis = require("ioredis");
 // var redisInfo = require("./db/redis.json");   //info
 // var redisConfig = require("./db/config.json").redis;  // test or dev , test
-// var cluster = new redis.Cluster(redisInfo[redisConfig]); 
+// var cluster = new redis.Cluster(redisInfo[redisConfig]);
 
 // cluster.on("connect" , (...data)=>{
 //     console.log("redis connect");
@@ -72,10 +72,10 @@
 // ep.all(["one" , "two" , "three"] , function(...values){
 //     console.log(values);
 // });
-const md5 = require("md5");
-const request = require("request");
-
-console.log(md5("2017050120170510eC29*b)0").toUpperCase());
+// const md5 = require("md5");
+// const request = require("request");
+//
+// console.log(md5("2017050120170510eC29*b)0").toUpperCase());
 // const query ={
 //     start_time : "2016-11-30",
 //     end_time : "2016-12-06",
@@ -104,3 +104,24 @@ console.log(md5("2017050120170510eC29*b)0").toUpperCase());
 //     }
 //     return str + num;
 // }
+const some = (...funs) => (...args) => funs.reduce((last, fun) => {
+ return last === undefined ? fun(...args) : last
+ }, undefined)
+
+function validateNull(obj) {
+    if (!obj) {
+        return '年龄不能为空'
+    }
+}
+
+function validateNumber(obj) {
+    if (parseInt(obj) != obj) {
+        return '年龄必须为自然数'
+    }
+}
+
+function pass() {
+    return '验证通过'
+}
+
+console.log(some(validateNull, validateNumber, pass)('55a'))
