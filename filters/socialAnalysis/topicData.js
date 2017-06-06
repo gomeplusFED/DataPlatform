@@ -365,8 +365,8 @@ module.exports = {
         const map = {
             "new_topic_reply_num": "新增回复数",
             "new_topic_reply_user_num": "新增回复人数",
-            // "PV": "新增PV",
-            // "UV": "新增UV",
+            "PV": "新增PV",
+            "UV": "新增UV",
             "delete_topic_reply_num": "删除回复数",
             "new_topic_like_num": "新增点赞数",
             "new_topic_save_num": "新增收藏数",

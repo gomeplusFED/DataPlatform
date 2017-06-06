@@ -123,19 +123,23 @@ module.exports = (Router) => {
                 },
                 {
                     caption: "新增话题数",
-                    type: "number"
+                    type: "number",
+                    help: "所选日期内,新增的话题总数"
                 },
                 {
                     caption: "新增带商品话题数",
-                    type: "number"
+                    type: "number",
+                    help: "所选日期内,新增的带商品链接的话题总数"
                 },
                 {
                     caption: "新增带视频话题数",
-                    type: "number"
+                    type: "number",
+                    help: "所选日期内,新增的带视频链接的话题总数"
                 },
                 {
                     caption: "删除话题数",
-                    type: "number"
+                    type: "number",
+                    help: "所选日期内,删除的话题总数"
                 },
                 {
                     caption: "UV",
@@ -143,27 +147,33 @@ module.exports = (Router) => {
                 },
                 {
                     caption: "PV",
-                    type: "number"
+                    type: "number",
+                    help: "所选日期内,话题的浏览量"
                 },
                 {
                     caption: "新增回复数",
-                    type: "number"
+                    type: "number",
+                    help: "所选日期内,话题新增的回复总数(包含一、二级回复)"
                 },
                 {
                     caption: "新增回复人数",
-                    type: "number"
+                    type: "number",
+                    help: "所选日期内,话题新增的回复用户数(包含一、二级回复的用户)"
                 },
                 {
                     caption: "删除回复数",
-                    type: "number"
+                    type: "number",
+                    help: "所选日期内,话题新增的回复用户数(包含一、二级回复的用户)"
                 },
                 {
                     caption: "新增话题回复率",
-                    type: "string"
+                    type: "string",
+                    help: "所选日期内,被回复的新增话题书/新增话题数"
                 },
                 {
                     caption: "新增分享数",
-                    type: "number"
+                    type: "number",
+                    help: "所选日期内,话题新增的分享总数"
                 }
             ]
         ]
@@ -678,19 +688,23 @@ module.exports = (Router) => {
             },
             {
                 caption: "uv",
-                type: "number"
+                type: "number",
+                help: "所选日期内,该话题的浏览用户数"
             },
             {
                 caption: "pv",
-                type: "number"
+                type: "number",
+                help: "所选日期内,该话题的浏览量"
             },
             {
                 caption: "新增回复数",
-                type: "number"
+                type: "number",
+                help: "所选日期内,该话题新增的回复总数(包含一、二级回复)"
             },
             {
                 caption: "新增回复人数",
-                type: "number"
+                type: "number",
+                help: "所选日期内,该话题新增的回复总数(包含一、二级回复)"
             },
             {
                 caption: "一级回复数",
@@ -702,31 +716,38 @@ module.exports = (Router) => {
             },
             {
                 caption: "当前回复数",
-                type: "number"
+                type: "number",
+                help: "截止所选日期,该话题当前被回复总次数(包含一、二级回复)"
             },
             {
                 caption: "人均回复量",
-                type: "string"
+                type: "string",
+                help: "所选日期内,该话题新增回复数/新增回复人数"
             },
             {
                 caption: "新增点赞数",
-                type: "number"
+                type: "number",
+                help: "所选日期内,该话题新增的点赞总数"
             },
             {
                 caption: "当前点赞数",
-                type: "number"
+                type: "number",
+                help: "截止所选日期,该话题的点赞总数"
             },
             {
                 caption: "新增收藏数",
-                type: "number"
+                type: "number",
+                help: "所选日期内,该话题新增的收藏总数"
             },
             {
                 caption: "当前收藏数",
-                type: "number"
+                type: "number",
+                help: "截止所选日期,该话题的收藏总数"
             },
             {
                 caption: "新增分享数",
-                type: "number"
+                type: "number",
+                help: "所选日期内,该话题新增的分享总数"
             },
             {
                 caption: "话题详情",
