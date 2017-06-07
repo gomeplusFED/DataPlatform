@@ -256,21 +256,8 @@ var visualbp = Vue.extend({
                         return false;
                     } else if (/javascript/.test(href)) {
                         // 内联脚本 正常执行
-                    } else if (/https?:\/\//.test(href)) {
-                        // do noting
-                        _this.bpConfig.pageUrl = href;
-                        _this.searchClick();
-                        return false;
                     } else {
-                        if (href.startsWith('/')) {
-                            if (href.startsWith('//')) {
-                                _this.bpConfig.pageUrl = host.match(/https?:/)[0] + href;
-                            } else {
-                                _this.bpConfig.pageUrl = host + href.slice(1);
-                            }
-                        } else {
-                            _this.bpConfig.pageUrl = _this.bpConfig.pageUrl.replace(/\/$/, '') + '/' + href;
-                        }
+                        _this.bpConfig.pageUrl = (new window.URL(href,  _this.bpConfig.pageUrl)).toString();
                         _this.searchClick();
                         return false;
                     }
