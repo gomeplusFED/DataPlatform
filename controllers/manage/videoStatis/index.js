@@ -385,15 +385,23 @@ module.exports = (Router) => {
                 config.push('ver=?')
                 param.push(query.ver)
             }
+            else {
+                config.push('ver!=?');
+                param.push("ALL");
+            }
 
             if (query.sdk_type && query.sdk_type !== 'ALL') {
                 config.push('sdk_type = ?')
                 param.push(query.sdk_type)
             }
+            else {
+                config.push("sdk_type != ?");
+                param.push("ALL")
+            }
 
             sql = `SELECT *
                 FROM ${tablename} 
-                WHERE day_type=1 and sdk_type != 'ALL' and ver != 'ALL' 
+                WHERE day_type=1  
                 and ${config.join(" AND ")} group by date,sdk_type order by date desc`;
 
             return {
