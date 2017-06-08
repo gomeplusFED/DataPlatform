@@ -763,8 +763,7 @@ module.exports = (Router) => {
                 help: "所选日期内,该话题新增的分享总数"
             },
             {
-                caption: "话题详情",
-                type: "string"
+                caption: "话题详情"
             }
         ]]
     });
