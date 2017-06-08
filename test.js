@@ -104,24 +104,58 @@
 //     }
 //     return str + num;
 // }
-const some = (...funs) => (...args) => funs.reduce((last, fun) => {
- return last === undefined ? fun(...args) : last
- }, undefined)
+// const some = (...funs) => (...args) => funs.reduce((last, fun) => {
+//  return last === undefined ? fun(...args) : last
+//  }, undefined)
+//
+// function validateNull(obj) {
+//     if (!obj) {
+//         return '年龄不能为空'
+//     }
+// }
+//
+// function validateNumber(obj) {
+//     if (parseInt(obj) != obj) {
+//         return '年龄必须为自然数'
+//     }
+// }
+//
+// function pass() {
+//     return '验证通过'
+// }
+//
+// console.log(some(validateNull, validateNumber, pass)('55a'))
+const crypto = require("crypto");
+const key = "gomedscn";
+const request = require("request");
+const obj = {
+    loginId: "jiaoyance-ds"
+};
 
-function validateNull(obj) {
-    if (!obj) {
-        return '年龄不能为空'
+function encrypt(plaintext){
+    // var iv = "";
+    var cipher = crypto.createCipheriv("des-cbc", key, key);
+    cipher.setAutoPadding(true)  //default true
+    var ciph = cipher.update(plaintext, 'utf8', 'base64');
+    ciph += cipher.final('base64');
+    return ciph;
+}
+
+// function decrypt(encrypt_text){
+//     var iv = "";
+//     var decipher = crypto.createDecipheriv(this.algorithm.ecb, key, iv);
+//     decipher.setAutoPadding(true);
+//     var txt = decipher.update(encrypt_text, 'base64', 'utf8');
+//     txt += decipher.final('utf8');
+//     return txt;
+// }
+
+obj.pwd = encrypt("456.gome");
+
+request.post("http://splunk.oa.api/Login.ashx", {
+    form: {
+        body: JSON.stringify(obj)
     }
-}
-
-function validateNumber(obj) {
-    if (parseInt(obj) != obj) {
-        return '年龄必须为自然数'
-    }
-}
-
-function pass() {
-    return '验证通过'
-}
-
-console.log(some(validateNull, validateNumber, pass)('55a'))
+}, (err,httpResponse,body) => {
+    console.log(body);
+});

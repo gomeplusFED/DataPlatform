@@ -148,7 +148,7 @@ module.exports = {
         map[filter_key] = filter_name[filter_key];
         const newData = {};
         for(let key of category) {
-            newData[config[key]] = {
+            newData[config[key] || "未知"] = {
                 new_topic_num : 0,
                 new_topic_reply_num: 0,
                 new_topic_like_num: 0,

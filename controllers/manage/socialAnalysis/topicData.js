@@ -461,11 +461,24 @@ module.exports = (Router) => {
                             };
                             one.push(item.id);
                         } else {
-                            config[item.pid].value.push({
-                                key: item.id,
-                                value: item.name
-                            });
-                            two.push(item.id);
+                            if(config[item.pid]) {
+                                config[item.pid].value.push({
+                                    key: item.id,
+                                    value: item.name
+                                });
+                                two.push(item.id);
+                            }
+                            else {
+                                config[item.pid] = {
+                                    name: item.name,
+                                    value: [{
+                                        key: item.id,
+                                        value: item.name
+                                    }]
+                                };
+                                two.push(item.id);
+                            }
+
                         }
                     }
                     var filter_select = [];
