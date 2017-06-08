@@ -305,8 +305,8 @@ module.exports = {
             key.topic_praise_num = obj.topic_praise_num || 0;
             key.topic_collect_num = obj.topic_collect_num || 0;
             key.rate = util.division(
-                key.topic_reply_num,
-                obj.topic_reply_user_num || 0 + obj.topic_subreply_user_num || 0
+                key.new_topic_reply_num,
+                key.new_topic_reply_user_num
             );
             key.category_id_1 = category[key.category_id_1] || null;
             key.category_id_2 = category[key.category_id_2] || null;
