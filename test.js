@@ -134,10 +134,12 @@ const obj = {
 
 function encrypt(plaintext){
     // var iv = "";
-    var cipher = crypto.createCipheriv("des-cbc", key, key);
+    const k = new Buffer(key);
+    const vi = new Buffer(key);
+    var cipher = crypto.createCipheriv("des-cbc", k, vi);
     cipher.setAutoPadding(true)  //default true
-    var ciph = cipher.update(plaintext, 'utf8', 'base64');
-    ciph += cipher.final('base64');
+    var ciph = cipher.update(plaintext, 'utf8', 'hex');
+    ciph += cipher.final('hex');
     return ciph;
 }
 
@@ -150,7 +152,7 @@ function encrypt(plaintext){
 //     return txt;
 // }
 
-obj.pwd = encrypt("456.gome");
+obj.pwd = encrypt("qaz@1988");
 
 request.post("http://splunk.oa.api/Login.ashx", {
     form: {
