@@ -527,12 +527,12 @@ module.exports = (Router) => {
                 and
                     day_type=${query.day_type}
                 and
-                    share_platform=?
+                    share_platform ${share_platform == "ALL" ? "!='ALL'" : "='" + share_platform + "'"}
                 ${str}`;
 
                 return {
                     sql,
-                    params: [share_platform]
+                    params: []
                 };
             }
             const page = query.page || 1;

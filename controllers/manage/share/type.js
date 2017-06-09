@@ -169,7 +169,7 @@ module.exports = (Router) => {
                     date between '${query.startTime}' and '${query.endTime}'
                     ${startIsEnd ? "" : "and product_line='ALL'"}
                 and
-                    share_platform ${share_platform == "ALL" ? "!='ALL'" : "='" + share_platform + "'"}
+                    share_platform=?
                 and
                     share_type not in ('ALL')
                 and
@@ -180,7 +180,7 @@ module.exports = (Router) => {
 
             return {
                 sql,
-                params:[]
+                params:[share_platform]
             };
         },
         filter_select: [{
@@ -525,12 +525,12 @@ module.exports = (Router) => {
                 and
                     day_type=${query.day_type}
                 and
-                    share_platform=?
+                    share_platform ${share_platform == "ALL" ? "!='ALL'" : "='" + share_platform + "'"}
                 ${str}`;
 
                 return {
                     sql,
-                    params: [share_platform]
+                    params: []
                 };
             }
             const page = query.page || 1;
@@ -564,14 +564,14 @@ module.exports = (Router) => {
                 and
                     day_type=${query.day_type}
                 and
-                    share_platform=?
+                    share_platform ${share_platform == "ALL" ? "!='ALL'" : "='" + share_platform + "'"}
                 ${str}
                 order by share_num desc
                 limit ?,?`;
 
             return {
                 sql,
-                params: [share_platform, offset, limit]
+                params: [offset, limit]
             };
         },
         selectFilter(req, cb) {
