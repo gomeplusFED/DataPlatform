@@ -169,11 +169,11 @@ module.exports = (Router) => {
                     date between '${query.startTime}' and '${query.endTime}'
                     ${startIsEnd ? "" : "and product_line='ALL'"}
                 and
-                    share_platform=?
+                    share_platform ${share_platform == "ALL" ? "!='ALL'" : "='" + share_platform + "'"}
                 and
                     share_type not in ('ALL')
                 and
-                    share_platform ${share_platform == "ALL" ? "!='ALL'" : "='" + share_platform + "'"}
+                    share_source='ALL'
                 and
                     day_type=1
                 order by ${startIsEnd ? "hours" : "date"} asc`;
@@ -264,7 +264,7 @@ module.exports = (Router) => {
                     day_type=${query.day_type}
                 and
                     share_platform=?
-                group by share_source`;
+                group by share_type`;
 
             if(share_platform !== "ALL") {
                 share_platform += "站";
