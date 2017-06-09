@@ -173,14 +173,14 @@ module.exports = (Router) => {
                 and
                     share_type not in ('ALL')
                 and
-                    share_source='ALL'
+                    share_platform ${share_platform == "ALL" ? "!='ALL'" : "='" + share_platform + "'"}
                 and
                     day_type=1
                 order by ${startIsEnd ? "hours" : "date"} asc`;
 
             return {
                 sql,
-                params:[share_platform]
+                params:[]
             };
         },
         filter_select: [{
