@@ -93,6 +93,10 @@ export default {
 
     .switch {
         float: left;
+        
+        .btn {
+            margin-right: 5px;
+        }
     }
 
     &:after {
