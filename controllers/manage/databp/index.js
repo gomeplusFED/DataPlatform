@@ -75,6 +75,10 @@ module.exports = (Router) => {
             res.status(400).end(`Can not forward other request because of non refer url in headers, HTML url: ${referer||'null'}, XHR url: ${url}`);
             return;
         }
+        let referurlObj = urlLib.parse(referurl, true);
+        if (referurlObj.query.url) {
+            url = decodeURIComponent(referurlObj.query.url);
+        }
         url = urlLib.resolve(referurl, url.replace('/databp/', ''));
         url = `${refobj.protocol}//${refobj.host}${refobj.pathname}?${querystring.stringify(Object.assign({}, querystring.parse(urlLib.parse(url).query), refQuery, {url}))}`
         res.redirect(url);
