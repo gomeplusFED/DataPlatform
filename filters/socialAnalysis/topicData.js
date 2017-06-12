@@ -148,7 +148,7 @@ module.exports = {
         map[filter_key] = filter_name[filter_key];
         const newData = {};
         for(let key of category) {
-            newData[config[key]] = {
+            newData[config[key] || "未知"] = {
                 new_topic_num : 0,
                 new_topic_reply_num: 0,
                 new_topic_like_num: 0,
@@ -305,8 +305,8 @@ module.exports = {
             key.topic_praise_num = obj.topic_praise_num || 0;
             key.topic_collect_num = obj.topic_collect_num || 0;
             key.rate = util.division(
-                key.topic_reply_num,
-                obj.topic_reply_user_num || 0 + obj.topic_subreply_user_num || 0
+                key.new_topic_reply_num,
+                key.new_topic_reply_user_num
             );
             key.category_id_1 = category[key.category_id_1] || null;
             key.category_id_2 = category[key.category_id_2] || null;
@@ -365,8 +365,8 @@ module.exports = {
         const map = {
             "new_topic_reply_num": "新增回复数",
             "new_topic_reply_user_num": "新增回复人数",
-            // "PV": "新增PV",
-            // "UV": "新增UV",
+            "PV": "新增PV",
+            "UV": "新增UV",
             "delete_topic_reply_num": "删除回复数",
             "new_topic_like_num": "新增点赞数",
             "new_topic_save_num": "新增收藏数",

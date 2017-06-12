@@ -302,6 +302,7 @@ module.exports = {
             for(let key in newData) {
                 const obj = newData[key];
                 obj.product_line = key;
+                obj.share_platform = key;
                 obj.rate = util.toFixed(obj[filter_key], total);
                 tableData.push(obj);
             }

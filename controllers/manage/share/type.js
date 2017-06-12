@@ -264,7 +264,7 @@ module.exports = (Router) => {
                     day_type=${query.day_type}
                 and
                     share_platform=?
-                group by share_source`;
+                group by share_type`;
 
             if(share_platform !== "ALL") {
                 share_platform += "站";
@@ -525,12 +525,12 @@ module.exports = (Router) => {
                 and
                     day_type=${query.day_type}
                 and
-                    share_platform=?
+                    share_platform ${share_platform == "ALL" ? "!='ALL'" : "='" + share_platform + "'"}
                 ${str}`;
 
                 return {
                     sql,
-                    params: [share_platform]
+                    params: []
                 };
             }
             const page = query.page || 1;
@@ -564,14 +564,14 @@ module.exports = (Router) => {
                 and
                     day_type=${query.day_type}
                 and
-                    share_platform=?
+                    share_platform ${share_platform == "ALL" ? "!='ALL'" : "='" + share_platform + "'"}
                 ${str}
                 order by share_num desc
                 limit ?,?`;
 
             return {
                 sql,
-                params: [share_platform, offset, limit]
+                params: [offset, limit]
             };
         },
         selectFilter(req, cb) {

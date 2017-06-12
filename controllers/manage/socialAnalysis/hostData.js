@@ -334,7 +334,7 @@ module.exports = (Router) => {
                 "daren_flag", "person_topic_num",
                 // "new_invite_friends_num", "person_friends_num", "new_fans_num", "person_funs_num" ,
                 "new_group_num",
-                "weiding",
+                // "weiding",
                 // "new_attention_num",
                 // "new_cancel_attention_num"
             ]
@@ -373,10 +373,10 @@ module.exports = (Router) => {
                 caption: "新增圈子数",
                 type: "number",
                 help : "圈主新建圈子数"
-            }, {
-               caption: "当前圈子数",
-               type: "number",
-               help : "此圈主下圈子数"
+            // }, {
+            //    caption: "当前圈子数",
+            //    type: "number",
+            //    help : "此圈主下圈子数"
             // }, {
             //     caption: "新增关注次数",
             //     type: "number"

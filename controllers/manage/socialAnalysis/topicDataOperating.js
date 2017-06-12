@@ -23,6 +23,9 @@ module.exports = (Router) => {
                     sum(delete_topic_reply_num) as delete_topic_reply_num,
                     sum(new_topic_share_num) as new_topic_share_num,
                     sum(new_topic_like_num) as new_topic_like_num,
+                    sum(PV) as PV,
+                    sum(UV) as UV,
+                    sum(delete_topic_reply_user_num) as delete_topic_reply_user_num,
                     sum(new_topic_save_num) as new_topic_save_num
                 from
                     ads2_soc_topic_detail_statistics
@@ -45,9 +48,9 @@ module.exports = (Router) => {
         },
         rows: [
             ["type",
-                // "uv", "pv",
+                "UV", "PV",
                 "new_topic_reply_num", "new_topic_reply_user_num", "delete_topic_reply_num",
-                // "delete_topic_reply_user_num",
+                "delete_topic_reply_user_num",
                 "new_topic_share_num", "new_topic_like_num", "new_topic_save_num"]
         ],
         cols: [
@@ -55,32 +58,41 @@ module.exports = (Router) => {
                 {
                     caption: "平台"
                 },
-                // {
-                //     caption: "UV"
-                // },
-                // {
-                //     caption: "PV"
-                // },
                 {
-                    caption: "新增回复数"
+                    caption: "UV",
+                    help: "所选日期内,该话题的浏览用户数"
                 },
                 {
-                    caption: "新增回复人数"
+                    caption: "PV",
+                    help: "所选日期内,该话题的浏览量"
                 },
                 {
-                    caption: "删除回复数"
-                },
-                // {
-                //     caption: "删除回复人数"
-                // },
-                {
-                    caption: "新增分享数"
+                    caption: "新增回复数",
+                    help: "所选日期内,该话题新增的回复总数(包含一、二级回复)"
                 },
                 {
-                    caption: "新增点赞数"
+                    caption: "新增回复人数",
+                    help: "所选日期内,该话题新增的回复用户数(包含一、二级回复的用户)"
                 },
                 {
-                    caption: "新增收藏数"
+                    caption: "删除回复数",
+                    help: "所选日期内,该话题删除的回复总数(包含一、二级回复)"
+                },
+                {
+                    caption: "删除回复人数",
+                    help: "所选日期内,该话题删除的回复的用户总数(包含一、二级回复)"
+                },
+                {
+                    caption: "新增分享数",
+                    help: "所选日期内,该话题新增的分享总数"
+                },
+                {
+                    caption: "新增点赞数",
+                    help: "所选日期内,该话题新增的点赞总数"
+                },
+                {
+                    caption: "新增收藏数",
+                    help: "所选日期内,该话题新增的收藏总数"
                 }
             ]
         ]
@@ -95,6 +107,7 @@ module.exports = (Router) => {
             if(params.type == "app") {
                 params.type = ["ios", "android"];
             }
+            if(!params.date) params.date = util.moment(Date.now());
 
             return params;
         },

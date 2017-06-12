@@ -93,7 +93,7 @@ module.exports = {
         }
 
         let isHour = false;
-        if(query.startTime === query.end) {
+        if(query.startTime === query.endTime) {
             isHour = true;
         }
 
