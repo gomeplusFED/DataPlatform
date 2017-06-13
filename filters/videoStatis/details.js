@@ -30,6 +30,8 @@ const util = require("../../utils"),
             "first_start_frame_succ",
             //首次首帧成功率
             "one",
+            //play接口成功数
+            "port_succ",
             //首帧成功数
             "start_frame_succ",
             //首帧成功率
@@ -89,6 +91,8 @@ const util = require("../../utils"),
             caption : "直播同时在线播放人数"
         },{
             caption : "直播同时在线播放次数"
+        },{
+            caption : "play接口成功数"
         },{
             caption : "首次首帧成功数"
         },{
@@ -189,13 +193,13 @@ module.exports = {
             key.night = util.toFixed(key.play_error, key.first_load_num);
             key.ten = util.toFixed(key.improper_play, key.first_load_num);
             key.operating =
-                `<button class='btn btn-default' url_link='/videoStatis/videoDetailsOperating' url_fixed_params='{"live_play_id": "${key.live_play_id}","startTime" : "${key.live_real_startime}", "endTime" : "${key.live_real_endtime}"}'>详细>></button>`;
+                `<button class='btn btn-default' url_link='/videoStatis/videoDetailsOperating' url_fixed_params='{"live_play_id": "${key.live_play_id}","startTime" : "${key.live_real_startime}", "endTime" : "${key.live_real_endtime}", "name" : "${key.live_play_name}"}'>详细>></button>`;
         }
 
         return util.toTable([source], rows, cols, [count]);
     },
     Two(data, page) {
-        const source = data.first.data[0],
+        const source = data.first.data,
             count = data.first.count,
             sum = data.first.sum,
             rows = [
@@ -224,7 +228,7 @@ module.exports = {
 
         for(let i = 0, len = source.length; i < len; i++) {
             source[i].id = ((page || 1) - 1) * 20 + i + 1;
-            source[i].one = util.toFixed(source[i].play_num, sum[0] || 0);
+            source[i].one = util.toFixed(source[i].play_num, sum || 0);
         }
 
         return util.toTable([source], rows, cols, [count]);

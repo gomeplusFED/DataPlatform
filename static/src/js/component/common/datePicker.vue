@@ -39,12 +39,17 @@ var DateCom = Vue.extend({
             validlist: [ '/custom/saveActivity', '/databp/bpmanage', '/databp/heatmap', '/databp/bpstats' ]
         }
     },
-    props: ['index','pageComponentsData','componentType','argvs','initData', 'cancelDateLimit', 'isGlobal', 'customOption'],
+    props: ['index','pageComponentsData','componentType','argvs','initData', 'isGlobal', 'customOption'],
     ready: function() {
        
     },
     methods: {
 
+    },
+    computed: {
+        cancelDateLimit() {
+            return  this.pageComponentsData[this.componentType].cancelDateLimit
+        }
     },
     watch: {
         'pageComponentsData': {
@@ -102,7 +107,7 @@ var DateCom = Vue.extend({
                     "showDayUnit": this.pageComponentsData[this.componentType].showDayUnit ? true : false
                 }
                 // 取消日期限制
-                if(this.cancelDateLimit || this.pageComponentsData[this.componentType].cancelDateLimit) {
+                if(this.cancelDateLimit) {
                     options.dateLimit = null;
                 }
                 if(this.customOption) {

@@ -18,12 +18,39 @@ module.exports = (Router) => {
         router: "/videoStatis/videoDetailsOne",
         modelName: ["LivevideoDetail2"],
         platform: false,
-        paging : [true],
-        control_table_col : true,
-        flexible_btn : [{
+        paging: [true],
+        control_table_col: true,
+        control_table_col_default: {
+            2: false,
+            3: false,
+            4: false,
+            8: false,
+            9: false,
+            // 10: false,
+            11: false,
+            12: false,
+            14: false,
+            // 14: false,
+            16: false,
+            // 16: false,
+            18: false,
+            // 18: false,
+            20: false,
+            // 20: false,
+            22: false,
+            23: false,
+            24: false,
+            25: false,
+            26: false,
+            27: false,
+            28: false,
+            29: false,
+            30: false,
+        },
+        flexible_btn: [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
-        },{
+        }, {
             content: '<a href="javascript:void(0)" help_url="/videoStatis/videoDetailsOne/help_json">帮助</a>',
             preMethods: ["show_help"],
             customMethods: ''
@@ -40,14 +67,14 @@ module.exports = (Router) => {
         //         url : "#!/videoStatis/videoDetailsDian"
         //     }]
         // },
-        search : {
-            show : true,
-            title : "请输入视频ID",
-            key : "live_play_id"
+        search: {
+            show: true,
+            title: "请输入视频ID",
+            key: "live_play_id"
         },
         params(query, params) {
             params.live_play_id = params.live_play_id ? orm.like(`%${params.live_play_id ||""}%`) : orm.not_in(["all"]);
-            params.ver = "all";
+            params.ver = params.ver || "all";
 
             return params;
         },
@@ -55,7 +82,7 @@ module.exports = (Router) => {
         order: ["-date"],
         filter_select: [{
             title: 'sdk类型',
-            filter_key : 'sdk_type',
+            filter_key: 'sdk_type',
             groups: [{
                 key: "ALL",
                 value: '全部SDK'
@@ -76,6 +103,48 @@ module.exports = (Router) => {
                 value: 'IOS'
             }]
         }],
+        selectFilter(req, cb) {
+            // var filter_select = {
+            //     title: "版本号",
+            //     filter_key: "ver",
+            //     groups: [{
+            //         key: "ALL",
+            //         value: "ALL"
+            //     }]
+            // };
+            let sql = `select distinct sdk_type,ver from ads2_livevideo_detail2 order by sdk_type,ver desc`
+            req.models.db1.driver.execQuery(sql, (err, data) => {
+                if (!err) {
+                    var filter_select = [{
+                        title: 'sdk类型',
+                        filter_key: 'sdk_type',
+                        groups: []
+                    }]
+                    let i = 0
+                    for (var key of data) {
+                        let index = filter_select[0].groups.findIndex(x => x.value === key.sdk_type)
+
+                        if (index === -1) {
+                            filter_select[0].groups.push({
+                                key: key.sdk_type,
+                                value: key.sdk_type,
+                                cell: {
+                                    title: '版本号',
+                                    filter_key: 'ver',
+                                    groups: data.filter(x => x.sdk_type === key.sdk_type).map((x, i) => {
+                                        return {key: x.ver, value: x.ver}
+                                    })
+                                }
+                            })
+                        }
+                        i++
+                    }
+                    cb(null, filter_select);
+                } else {
+                    cb(err);
+                }
+            })
+        },
         filter(data) {
             return filter.One(data);
         }
@@ -87,17 +156,17 @@ module.exports = (Router) => {
         modelName: ["LivevideoTrend2"],
         platform: false,
         //showDayUnit: true,
-        toggle : {
-            show : true
+        toggle: {
+            show: true
         },
-        date_picker : false,
-        flexible_btn : [{
+        date_picker: false,
+        flexible_btn: [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
         filter_select: [{
             title: 'sdk类型',
-            filter_key : 'sdk_type',
+            filter_key: 'sdk_type',
             groups: [{
                 key: "ALL",
                 value: '全部SDK'
@@ -118,12 +187,48 @@ module.exports = (Router) => {
                 value: 'IOS'
             }]
         }],
+        selectFilter(req, cb) {
+            var filter_select = [{
+                title: 'sdk类型',
+                filter_key: 'sdk_type',
+                groups: []
+            }]
+            let sql = `select distinct sdk_type,ver from ads2_livevideo_trend2 order by sdk_type,ver desc`
+            req.models.db1.driver.execQuery(sql, (err, data) => {
+                if (!err) {
+                    
+                    let i = 0
+                    for (var key of data) {
+                        let index = filter_select[0].groups.findIndex(x => x.value === key.sdk_type)
+
+                        if (index === -1) {
+                            filter_select[0].groups.push({
+                                key: key.sdk_type,
+                                value: key.sdk_type,
+                                cell: {
+                                    title: '版本号',
+                                    filter_key: 'ver',
+                                    groups: data.filter(x => x.sdk_type === key.sdk_type).map((x, i) => {
+                                        return {key: x.ver, value: x.ver}
+                                    })
+                                }
+                            })
+                        }
+                        i++
+                    }
+                    cb(null, filter_select);
+                } else {
+                    cb(err);
+                }
+            })
+        },
         params(query, params) {
             params.date = orm.between(
                 moment(new Date(query.startTime)).format("YYYY-MM-DD"),
                 moment(new Date(query.endTime)).format("YYYY-MM-DD")
             );
-            params.ver = "all";
+            params.ver = params.ver || "all";
+            delete params.name
 
             return params;
         },
@@ -137,51 +242,52 @@ module.exports = (Router) => {
         const xl = require("excel4node");
         const wb = new xl.Workbook();
         const style = {
-            font : {
-                bold : true
+            font: {
+                bold: true
             },
-            alignment : {
-                horizontal : "center"
+            alignment: {
+                horizontal: "center"
             },
-            fill : {
+            fill: {
                 type: 'pattern',
                 patternType: 'solid',
                 fgColor: '#FFFF33'
             }
         };
         let url = `http://localhost:7879/videoStatis/videoDetailsOne_json?startTime=${query.startTime}&endTime=${query.endTime}&day_type=1&sdk_type=${query.sdk_type}`;
-        if(query.live_play_id) {
+        if (query.live_play_id) {
             url += "&live_play_id=" + query.live_play_id;
         }
-        if(query.limit) {
+        if (query.limit) {
             url += "&limit=" + query.limit;
         }
-        if(query.page) {
+        if (query.page) {
             url += "&page=" + query.page;
         }
-        if(query.from) {
+        if (query.from) {
             url += "&from=" + query.from;
         }
-        if(query.to) {
+        if (query.to) {
             url += "&to=" + query.to;
         }
         const ws = wb.addWorksheet("视频明细");
         request({
-            url : url,
-            headers : req.headers
+            url: url,
+            headers: req.headers
         }, (err, response, body) => {
             body = JSON.parse(body);
-            if(body.iserro) {
+            if (body.iserro) {
                 return next(new Error(`/videoStatis/videoDetailsOne_excel has error`));
             }
 
             const col = ["直播id",
                 //"直播名称",
                 "直播开始时间", "直播结束时间", "直播播放用户数",
-                "直播播放次数", "直播同时在线播放人数(峰值)", "直播同时在线播放次数(峰值)"];
+                "直播播放次数", "直播同时在线播放人数(峰值)", "直播同时在线播放次数(峰值)"
+            ];
 
             const o = [];
-            for(let i = 0,len = col.length; i < len; i++) {
+            for (let i = 0, len = col.length; i < len; i++) {
                 o.push([1, i + 1, 2, i + 1, col[i], style]);
             }
 
@@ -198,62 +304,65 @@ module.exports = (Router) => {
         const xl = require("excel4node");
         const wb = new xl.Workbook();
         const style = {
-            font : {
-                bold : true
+            font: {
+                bold: true
             },
-            alignment : {
-                horizontal : "center"
+            alignment: {
+                horizontal: "center"
             },
-            fill : {
+            fill: {
                 type: 'pattern',
                 patternType: 'solid',
                 fgColor: '#FFFF33'
             }
         };
         let url = `http://localhost:7879/videoStatis/videoDetailsOperatingOne_json?startTime=${query.startTime}&endTime=${query.endTime}&day_type=1&sdk_type=${query.sdk_type}`;
-        if(query.live_play_id) {
+        if (query.live_play_id) {
             url += "&live_play_id=" + query.live_play_id;
         }
         const ws = wb.addWorksheet("视频明细");
         request({
-            url : url,
-            headers : req.headers
+            url: url,
+            headers: req.headers
         }, (err, response, body) => {
             body = JSON.parse(body);
-            if(body.iserro) {
+            if (body.iserro) {
                 return next(new Error(`/videoStatis/videoDetailsOperatingOne_json has error`));
             }
             const rows = ["date", "one", "two", "three", "four"];
             const cols = [{
-                caption : "时间点"
+                caption: "时间点"
             }, {
-                caption : "卡顿播放数"
+                caption: "卡顿播放数"
             }, {
-                caption : "卡顿播放率"
+                caption: "卡顿播放率"
             }, {
-                caption : "直播同时在线播放人数"
+                caption: "直播同时在线播放人数"
             }, {
-                caption : "直播同时在线播放次数"
+                caption: "直播同时在线播放次数"
             }];
             const newData = [];
             const data = body.modelData[0].data;
-            for(let key in data) {
+            for (let key in data) {
                 newData.push({
-                    date : key,
-                    one : data[key].stop_play_num,
-                    two : data[key].rate + "%",
-                    three : data[key].live_play_user,
-                    four : data[key].live_play_num
+                    date: key,
+                    one: data[key].stop_play_num,
+                    two: data[key].rate + "%",
+                    three: data[key].live_play_user,
+                    four: data[key].live_play_num
                 });
             }
 
-            util.export(ws, [[
-                [1, 1, 1, 1, `直播id: ${query.live_play_id}`, style],
-                [1, 2, 1, 2, `sdk类型: ${query.sdk_type}`, style]]].concat(util.excelReport([{
-                    data : newData,
-                    rows : rows,
-                    cols : cols
-                }])));
+            util.export(ws, [
+                [
+                    [1, 1, 1, 1, `直播id: ${query.live_play_id}`, style],
+                    [1, 2, 1, 2, `sdk类型: ${query.sdk_type}`, style]
+                ]
+            ].concat(util.excelReport([{
+                data: newData,
+                rows: rows,
+                cols: cols
+            }])));
             wb.write("Report.xlsx", res);
         });
     });
@@ -263,10 +372,10 @@ module.exports = (Router) => {
         router: "/videoStatis/videoDetailsDianOne",
         modelName: ["VideoplayDetail2"],
         platform: false,
-        paging : [true],
-        excel_export : true,
-        order : ["-play_num"],
-        flexible_btn : [{
+        paging: [true],
+        excel_export: true,
+        order: ["-play_num"],
+        flexible_btn: [{
             content: '<a href="javascript:void(0)">导出</a>',
             preMethods: ['excel_export']
         }],
@@ -282,23 +391,47 @@ module.exports = (Router) => {
         //         url : "#!/videoStatis/videoDetailsDian"
         //     }]
         // },
-        search : {
-            show : true,
-            title : "请输入视频ID",
-            key : "play_id"
+        search: {
+            show: true,
+            title: "请输入视频ID",
+            key: "play_id"
+        },
+        firstSql(req, params) {
+            let sql = `select * from ads2_videoplay_detail2 where `
+            const {page, limit} = params
+            if (params.play_id) {
+                sql += `
+                    (play_id = '${params.play_id}' or play_name like '%${params.play_id}%') and 
+                `
+            }
+            let config = []
+            let param = []
+            Object.keys(params).filter(x => ['play_id', 'page', 'limit', 'date'].indexOf(x) === -1).forEach((x, i) => {
+                config.push(`${x}=?`)
+                param.push(params[x])
+            })
+            sql += config.join(' AND ')
+            sql += ` LIMIT ?,?`
+            param.push((page - 1) * limit)
+            param.push(+limit)
+
+            return {
+                sql: sql,
+                params: param
+            }
         },
         params(query, params) {
-            params.play_id = params.play_id ? params.play_id : orm.not_in(["all"]);
-            params.ver = "all";
+            // params.play_id = params.play_id ? params.play_id : orm.not_in(["all"]);
+            params.ver = params.ver || "all";
 
             return params;
         },
-        date_picker_data : 1,
+        date_picker_data: 1,
         showDayUnit: true,
-        sum : ["play_num"],
+        sum: ["play_num"],
         filter_select: [{
             title: 'sdk类型',
-            filter_key : 'sdk_type',
+            filter_key: 'sdk_type',
             groups: [{
                 key: "ALL",
                 value: '全部SDK'
@@ -319,64 +452,97 @@ module.exports = (Router) => {
                 value: 'IOS'
             }]
         }],
+        selectFilter(req, cb) {
+            var filter_select = [{
+                title: 'sdk类型',
+                filter_key: 'sdk_type',
+                groups: []
+            }]
+            let sql = `select distinct sdk_type,ver from ads2_videoplay_detail2 order by sdk_type,ver desc`
+            req.models.db1.driver.execQuery(sql, (err, data) => {
+                if (!err) {
+                    
+                    let i = 0
+                    for (var key of data) {
+                        let index = filter_select[0].groups.findIndex(x => x.value === key.sdk_type)
+
+                        if (index === -1) {
+                            filter_select[0].groups.push({
+                                key: key.sdk_type,
+                                value: key.sdk_type,
+                                cell: {
+                                    title: '版本号',
+                                    filter_key: 'ver',
+                                    groups: data.filter(x => x.sdk_type === key.sdk_type).map((x, i) => {
+                                        return {key: x.ver, value: x.ver}
+                                    })
+                                }
+                            })
+                        }
+                        i++
+                    }
+                    cb(null, filter_select);
+                } else {
+                    cb(err);
+                }
+            })
+        },
         filter(data, query) {
             return filter.Two(data, query.page);
         }
     });
 
     Router = new help(Router, {
-        router : "/videoStatis/videoDetailsOne/help",
-        rows : [
+        router: "/videoStatis/videoDetailsOne/help",
+        rows: [
             ["name", "help"]
         ],
-        cols : [[
-            {
-                "caption" : "指标",
-                "type" : "string"
+        cols: [
+            [{
+                "caption": "指标",
+                "type": "string"
             }, {
-                "caption" : "注释",
-                "type" : "string"
-            }
-        ]],
-        data : [
-            {
-                name : "播放用户数",
-                help : "直播视频播放用户数"
-            },{
-                name : "播放次数",
-                help : "直播视频播放次数"
-            },{
-                name : "play接口成功数 / 率",
-                help : "直播视频请求play接口成功 / play接口成功数率≥0"
-            },{
-                name : "首帧成功数 / 率",
-                help : "直播视频获取首帧成功  /  首帧成功率≥0"
-            },{
-                name : "卡顿播放次数 / 率",
-                help : "直播视频出现卡顿  /  卡顿播放率≥0"
-            },{
-                name : "播放流畅数 / 率",
-                help : "一次没有卡的直播视频  /  播放流畅率≤1"
-            },{
-                name : "play接口IO错误数 / 率",
-                help : "直播视频play接口io错误  /  play接口IO错误率≤1"
-            },{
-                name : "play接口数据错误数 / 率",
-                help : "直播视频play接口数据错误  /  play接口数据错误率≤1"
-            },{
-                name : "play接口超时数 / 率",
-                help : "直播视频play接口超时  /  play接口超时率≤1"
-            },{
-                name : "播放失败数 / 率",
-                help : "播放视频渲染失败的直播视频  /  播放失败率≥0"
-            },{
-                name : "直播视频错误数 / 率",
-                help : "出现错误等级error的直播视频  /  直播视频错误率≥0"
-            },{
-                name : "非正常播放数 / 率",
-                help : "出现错误等级warn的直播视频  /  非正常播放率≥0"
-            }
-        ]
+                "caption": "注释",
+                "type": "string"
+            }]
+        ],
+        data: [{
+            name: "播放用户数",
+            help: "直播视频播放用户数"
+        }, {
+            name: "播放次数",
+            help: "直播视频播放次数"
+        }, {
+            name: "play接口成功数 / 率",
+            help: "直播视频请求play接口成功 / play接口成功数率≥0"
+        }, {
+            name: "首帧成功数 / 率",
+            help: "直播视频获取首帧成功  /  首帧成功率≥0"
+        }, {
+            name: "卡顿播放次数 / 率",
+            help: "直播视频出现卡顿  /  卡顿播放率≥0"
+        }, {
+            name: "播放流畅数 / 率",
+            help: "一次没有卡的直播视频  /  播放流畅率≤1"
+        }, {
+            name: "play接口IO错误数 / 率",
+            help: "直播视频play接口io错误  /  play接口IO错误率≤1"
+        }, {
+            name: "play接口数据错误数 / 率",
+            help: "直播视频play接口数据错误  /  play接口数据错误率≤1"
+        }, {
+            name: "play接口超时数 / 率",
+            help: "直播视频play接口超时  /  play接口超时率≤1"
+        }, {
+            name: "播放失败数 / 率",
+            help: "播放视频渲染失败的直播视频  /  播放失败率≥0"
+        }, {
+            name: "直播视频错误数 / 率",
+            help: "出现错误等级error的直播视频  /  直播视频错误率≥0"
+        }, {
+            name: "非正常播放数 / 率",
+            help: "出现错误等级warn的直播视频  /  非正常播放率≥0"
+        }]
     });
 
     return Router;

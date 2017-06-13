@@ -361,8 +361,16 @@ module.exports = {
             let source = one
             data1 = [
                 {
-                    play_user: '播放用户数: ' + (source.play_user || 0),
-                    play_num: '播放次数: ' + (source.play_num || 0)
+                    index: '数值',
+                    play_user: (source.play_user || 0),
+                    play_num: (source.play_num || 0),
+                    avg: util.toFixedLength(source.play_num || 0, source.play_user|| 0 , 2)
+                },
+                {
+                    index: '环比',
+                    play_user: Chain(source.play_user || 0, source.play_user_pre || 0),
+                    play_num: Chain(source.play_num || 0, source.play_num_pre || 0),
+                    avg: Chain(source.play_num/source.play_user, source.play_num_pre/source.play_user_pre),
                 }
             ]
         }
@@ -409,7 +417,7 @@ module.exports = {
             })
         }
 
-        return util.toTable([data1, data2, data3], data.rows, data.cols, [count1, count2, count3], [true, false, false]);
+        return util.toTable([data1, data2, data3], data.rows, data.cols, [count1, count2, count3], [false, false, false]);
     },
 
     videoKpiTwo(data, query, dates) {

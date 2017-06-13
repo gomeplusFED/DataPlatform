@@ -652,7 +652,7 @@ module.exports = (Router) => {
         },
         firstSql(query, params, isCount) {
             let date_type_list = ['', 'DAY', 'WEEK', 'MONTH']
-            let config = ["date BETWEEN ? AND ?", "day_type=?", "sdk_type=?"],
+            let config = ["a.date BETWEEN ? AND ?", "a.day_type=?", "a.sdk_type=?"],
                 param = [query.startTime, query.endTime, query.day_type || 1, "ALL"],
                 sql = '',
                 tablename = 'ads2_videoplay_overview2';
@@ -661,8 +661,11 @@ module.exports = (Router) => {
                 tablename = query.type === 'livevideo' ? 'ads2_livevideo_overview2' : 'ads2_videoplay_overview2'
             }
 
-            sql = `SELECT play_user, play_num
-                FROM ${tablename} 
+            sql = `SELECT a.play_user as play_user, a.play_num as play_num, b.play_user as play_user_pre,b.play_num as play_num_pre
+                FROM ${tablename} a
+                LEFT JOIN ${tablename} b
+                on a.day_type = b.day_type
+                 and b.date = DATE_ADD(a.date,INTERVAL -1 ${date_type_list[query.day_type || 1]})
                 WHERE ${config.join(" AND ")}`;
 
             return {
@@ -715,6 +718,7 @@ module.exports = (Router) => {
             };
         },
         date_picker_data: 1,
+        cancelDateLimit: true,
         showDayUnit: true,
         global_platform: {
             show: true,
@@ -729,18 +733,26 @@ module.exports = (Router) => {
             }]
         },
         rows: [
-            ['play_user', 'play_num'],
+            [ 'index', 'play_user', 'play_num', 'avg'],
             ['index', 'port_succ', 'start_frame_succ', 'stop_play_num', 'play_fluent', ],
             ['index', 'port_io_failed', 'port_data_failed', 'port_overtime', 'play_failed', 'play_error', 'improper_play']
         ],
         cols: [
             [
                 {
-                    caption: "",
+                    caption: "基础指标",
                     type: "string"
                 },
                 {
-                    caption: "",
+                    caption: "播放用户数",
+                    type: "string"
+                },
+                {
+                    caption: "播放次数",
+                    type: "string"
+                },
+                {
+                    caption: "人均播放次数",
                     type: "string"
                 }
             ],
