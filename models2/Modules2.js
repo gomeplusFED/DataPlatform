@@ -212,6 +212,14 @@ module.exports = {
     //分享数据类型
     ads_share_dim_type : {
         modelName : "ads_share_dim_type"
+    },
+    //返利汇总-返利总览/返利趋势
+    ads_rebate_v3_rebate_summary: {
+        modelName: "ads_rebate_v3_rebate_summary"
+    },
+    //返利汇总-返利详情
+    ads_rebate_v3_rebate_plantype_rebatetype: {
+        modelName: "ads_rebate_v3_rebate_plantype_rebatetype"
     }
 };
 
