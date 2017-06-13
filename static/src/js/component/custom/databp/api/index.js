@@ -1,7 +1,14 @@
 var store = require('store');
 var actions = require('actions');
 var { filterArgs, buildAjax, extractResult, errHandler } = require('./common');
-var api = [require('./heatmap'), require('./bpstats'), require('./autoupdate'), require('./bpinfo')].reduce((pre, cur) => Object.assign(pre, cur));
+// var api = [require('./heatmap'), require('./bpstats'), require('./autoupdate'), require('./bpinfo')].reduce((pre, cur) => Object.assign(pre, cur));
+
+const files = require.context('.', false, /\.js$/);
+const api = {};
+files.keys().forEach((key) => {
+	if (key === './index.js') return;
+	Object.assign(api, files(key));
+});
 Object.assign(api, {
 	// {pageUrl, selector, platform, pointId, matchUrlId}
 	alert(opt) {
