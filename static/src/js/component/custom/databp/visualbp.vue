@@ -8,7 +8,7 @@
                        placeholder=''
                        id="page-url"
                        data-content="请输入网址"
-                       v-model="bpConfig.pageUrl"
+                       v-model="url"
                        @keydown.enter.stop.prevent="searchClick">
             </div>
             <div class='form-group'>
@@ -78,6 +78,19 @@ var visualbp = Vue.extend({
                 selector: '',
                 version: null,
                 type: 'point'
+            }
+        }
+    },
+    computed: {
+        'url': {
+            get() {
+                return this.bpConfig.pageUrl.replace(/^https?:\/\//, '');
+            },
+            set(val) {
+                if(val.indexOf('//') === -1) {
+                    val = 'http://' + val;
+                }
+                this.bpConfig.pageUrl = (new URL(val)).toString();
             }
         }
     },
