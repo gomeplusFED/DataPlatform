@@ -296,7 +296,8 @@ const Config = {
                 obj.databp.bpmanage(),
                 obj.databp.bpstats(),
                 obj.databp.heatmap(),
-                obj.databp.autoupdate()
+                obj.databp.autoupdate(),
+                obj.databp.promheatmap()
             ]
         },
         "25": {

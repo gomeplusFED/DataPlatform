@@ -53,7 +53,17 @@ module.exports = {
             name: "一键更新",
             path: "/databp/autoupdate",
             display: true,
+            defaultData: []
+        }
+    },
+    promheatmap() {
+        return {
+            id: 100006,
+            name: "点击热力图",
+            path: "/databp/promheatmap",
+            display: true,
             defaultData: [
+
             ]
         }
     }
