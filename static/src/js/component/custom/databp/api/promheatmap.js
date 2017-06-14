@@ -40,13 +40,22 @@ export const promheatmap = {
 			}
 		}).catch(errHandler);
 	},
-	getHeatData(data) {
-		return buildAjax('/heat', filterArgs(data, commonFilds)).then(function(res) {
-			if (res.code !== '200' || res.iserror !== '0') {
+	getHeatData({ pageUrl, startTime, endTime }) {
+		//const url = 'http://10.144.52.83:8080/gomeplus-activity-api/hotmap';
+		const url = 'http://10.58.72.205:8100/api/activity/hotmap';
+		const urlObj = new URL(url);
+		urlObj.searchParams.set('prefixurl', pageUrl);
+		urlObj.searchParams.set('start_date', startTime);
+		urlObj.searchParams.set('end_date', endTime);
+		// console.log(urlObj.toString());
+		return fetch(urlObj).then(function(res) {
+			return res.json();
+		}).then(function(res) {
+			if (res.code !== '200') {
 				return Promise.reject('获取热力图信息失败：' + res.msg);
 			}
 			var data;
-			if (res && (data = res.data) && (data = data.result) && data.length) {
+			if (res && (data = res.data) && data.length) {
 				return data;
 			} else {
 				return Promise.reject('暂无热力图信息');
@@ -54,7 +63,21 @@ export const promheatmap = {
 		}).catch(errHandler);
 	},
 	getHeatTable(data) {
-		return buildAjax('/heat/table', filterArgs(data, commonFilds)).then(function(res) {
+		return Promise.resolve({
+			"msg": "SUCCESS",
+			"code": "200",
+			"data": {
+				"result": {
+					"dataTime": "-",
+					"pv": '-',
+					"uv": '-',
+					"hits": '-',
+					"rate": '-'
+				},
+				"total": 1
+			},
+			"iserror": "0"
+		}).then(function(res) {
 			if (res.code !== '200' || res.iserror !== '0') {
 				return Promise.reject('获取热力图表格失败：' + res.msg);
 			}
@@ -69,13 +92,20 @@ export const promheatmap = {
 	exportHeatTable(data) {
 		window.open(baseurl + '/heat/export?' + $.param(filterArgs(data, commonFilds)));
 	},
-	getLocalUrl(data) {
-		return buildAjax('/point/localurl', filterArgs(data, ['originalUrl', 'version', 'platform'])).then(function(res) {
+	getLocalUrl({ originalUrl }) {
+		return Promise.resolve({
+			code: '200',
+			iserror: '0',
+			data: {
+				result: originalUrl
+			}
+		}).then(function(res) {
 			if (res.code !== '200' || res.iserror !== '0') {
 				return Promise.reject('热力图地址转化失败：' + res.msg);
 			}
 			var data;
 			if (res && (data = res.data) && (data = data.result)) {
+				console.log(data);
 				return data;
 			} else {
 				return Promise.reject('无热力图地址');

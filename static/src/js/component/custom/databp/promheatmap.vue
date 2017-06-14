@@ -3,6 +3,7 @@
     
         <visualbp :loading.sync='loading'
                     :search-filter="searchFilter"
+                    :url-filter="urlFilter"
                   v-ref:visual>
             <div slot="extend-nav"
                  class='form-group'>
@@ -107,7 +108,7 @@ const promheatmap = Vue.extend({
             // 最大不透明度为1
             maxVal: 1,
             dataTypes: [{
-                name: 'pv',
+                name: 'click',
                 text: '点击量',
                 p: 1
             }, {
@@ -126,7 +127,7 @@ const promheatmap = Vue.extend({
                 hits: null,
                 rate: null
             },
-            datatype: 'pv',
+            datatype: 'click',
             data: [],
             rawData: [],
             argvs: {
@@ -142,7 +143,19 @@ const promheatmap = Vue.extend({
                 },
                 trigger: true
             },
-            resultData: {}
+            resultData: {},
+            urlFilter: {
+                get(str) {
+                    let urlobj = new URL(str);
+                    return urlobj.host + urlobj.pathname;
+                },
+                set(val) {
+                    if(val.indexOf('//') === -1) {
+                        val = 'http://' + val;
+                    }
+                    return (new URL(val)).toString();
+                }
+            }
         }
     },
     route: {
@@ -151,7 +164,7 @@ const promheatmap = Vue.extend({
             await api.getHeatVersions(config).then((res) => {
                 this.versions = res.map(x => ({
                     ...x,
-                    dateTime: utils.formatDate(new Date(x.dateTime), 'yyyy-MM-dd hh:mm:ss')
+                    dateTime: utils.formatDate(new Date(x.dateTime), 'yyyy-MM-dd')
                 }));
 
             });
@@ -172,22 +185,7 @@ const promheatmap = Vue.extend({
     },
     events: {
         visualbp_loaded(config) {
-            this.init(config).then(() => {
-                // let body = this.dom.body[0];
-                // utils.observeDOMInserted(body, (mutations) => {
-                //     if (mutations[0].target !== body && !mutations[0].target.id.includes('heatmap')) {
-                //         // this.dom.heatdiv.remove();
-                //         // 延迟一下，使浏览器先render完毕
-                //         setTimeout(() => {
-                //             if (this.dom.iframe.height() !== this.dom.height || this.dom.iframe.width() !== this.dom.width) {
-                //                 this.destroyCanvas();
-                //                 this.generateCanvas(this.rawData);
-                //             }
-                //             this.showTip();
-                //         }, 10);
-                //     }
-                // });
-            });
+            this.init(config);
         },
         search_clicked(config) {
             this.loading.show = true;
@@ -207,11 +205,31 @@ const promheatmap = Vue.extend({
             api.getHeatTable(options).then((res) => {
                 Object.assign(this.tableData, res);
             });
-            return api.getHeatData(options).then((data) => {
-                this.$heatdata = data;
-                this.$adapter.init({ initData: data.map(x => ({ value: x[this.datatype], selector: x.selector })), $win: document.querySelector('iframe').contentWindow });
+            const {startTime, endTime} = options
+            return api.getHeatData({startTime, endTime, pageUrl: this.$refs.visual.url}).then((data) => {
+                const $win = document.querySelector('iframe').contentWindow;
+                const height = $win.document.body.clientHeight - 50;
+                const offsetWidth = $win.screen.width / 2;
+                const initData = data.map(a => ({ ...a, value: a[this.datatype], cx: a.x + 600 - offsetWidth, cy: a.y, w: 25, h:25, visible: a.y < height, slient: a.y < height })).filter(a => (a.cx > 0 && a.cx < $win.screen.width && a.cy > 0 && a.cy < 100000));
+                this.$heatdata = initData;
+                // console.log(initData);
+                
+                const customProcessor = (data) => {
+                    let height = $win.document.body.clientHeight - 50;
+                    return data.map((x) => {
+                    if(!x.visible) {
+                        let visible = x.cy < height;
+                        return {...x, visible, slient: false}
+                    } else {
+                        if(!x.slient) {
+                            x.slient = true;
+                        }
+                        return x;
+                    }
+                })};
+                this.$adapter.init({initData, $win, customProcessor, dataLengthFixed: true });
                 this.$adapter.start();
-                this.showTip()
+                // this.showTip()
                 this.loading.show = false;
             }).catch(err => {
                 // throw err;
@@ -268,8 +286,8 @@ const promheatmap = Vue.extend({
             return {
                 ...bpConfig,
                 ...this.versions[this.version],
-                startTime: this.argvs.startTime + ' 00:00:00',
-                endTime: this.argvs.endTime + ' 23:59:59'
+                startTime: this.argvs.startTime,
+                endTime: this.argvs.endTime
             };
         },
         exportTable() {
@@ -289,7 +307,7 @@ const promheatmap = Vue.extend({
             $popover.appendChild($tip);
             $adapter.append($popover);
             const getTipText = (data) => this.dataTypes.map(x => `${x.text}: ${data[x.name]}`).join('<br>');
-            const tipData = this.$heatdata.map(x => `Name：${x.pointName || '--'}<br>${getTipText(x)}`);
+            const tipData = this.$heatdata.map(x => `Name：${x.cy || '--'}<br>${getTipText(x)}`);
             const setPopover = (x, y) => {
                 let docwidth = $adapter.$body.offsetWidth;
                 let halfwidth = docwidth / 2;
@@ -323,7 +341,7 @@ const promheatmap = Vue.extend({
         },
         'datatype': {
             handler(val) {
-                this.$adapter && this.$adapter.reset(this.$heatdata.map(x => ({ value: x[this.datatype], selector: x.selector })));
+                this.$adapter && this.$adapter.reset(this.$heatdata.map(x => ({ ...x, value: x[this.datatype]})));
             }
         }
     }
