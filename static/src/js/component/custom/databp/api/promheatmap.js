@@ -55,7 +55,7 @@ export const promheatmap = {
 				return Promise.reject('获取热力图信息失败：' + res.msg);
 			}
 			var data;
-			if (res && (data = res.data) && data.length) {
+			if (res && (data = res.data) && data.length != null) {
 				return data;
 			} else {
 				return Promise.reject('暂无热力图信息');

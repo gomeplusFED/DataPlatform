@@ -42,10 +42,10 @@
                    slot="extend-nav">
                 <input type="checkbox"
                        v-model="show"></input>显示热力图</label>
-            <button slot="extend-nav"
+            <!--<button slot="extend-nav"
                     type='button'
                     class='btn btn-primary export'
-                    @click="exportTable">导出</button>
+                    @click="exportTable">导出</button>-->
     
             <div slot="data-table">
                 <table class="table table-hover">
@@ -103,6 +103,7 @@ const promheatmap = Vue.extend({
         };
         return {
             show: true,
+            loadedUrl: '',
             datepickerOption,
             // 防止热力图无限扩大设置的最大值
             // 最大不透明度为1
@@ -185,50 +186,46 @@ const promheatmap = Vue.extend({
     },
     events: {
         visualbp_loaded(config) {
-            this.init(config);
+            this.init(config).then(() => {
+                this.loadedUrl = config.pageUrl;
+            });
         },
         search_clicked(config) {
-            this.loading.show = true;
-            // this.destroyCanvas();
-            this.init(config).then(() => {
-                this.loading.show = false;
-            }).catch(() => {
-                this.loading.show = false;
-            });
+            if(this.loadedUrl === config.pageUrl) {
+                this.init(config, true);
+            }
         }
     },
     methods: {
-        init(config) {
+        init(config, isReset = false) {
             this.loading.show = true;
             // 表格
             let options = this.extendParams(config);
             api.getHeatTable(options).then((res) => {
                 Object.assign(this.tableData, res);
             });
-            const {startTime, endTime} = options
-            return api.getHeatData({startTime, endTime, pageUrl: this.$refs.visual.url}).then((data) => {
-                const $win = document.querySelector('iframe').contentWindow;
-                const height = $win.document.body.clientHeight - 50;
-                const offsetWidth = $win.screen.width / 2;
-                const initData = data.map(a => ({ ...a, value: a[this.datatype], cx: a.x + 600 - offsetWidth, cy: a.y, w: 25, h:25, visible: a.y < height, slient: a.y < height })).filter(a => (a.cx > 0 && a.cx < $win.screen.width && a.cy > 0 && a.cy < 100000));
-                this.$heatdata = initData;
-                // console.log(initData);
-                
-                const customProcessor = (data) => {
-                    let height = $win.document.body.clientHeight - 50;
-                    return data.map((x) => {
-                    if(!x.visible) {
-                        let visible = x.cy < height;
-                        return {...x, visible, slient: false}
-                    } else {
-                        if(!x.slient) {
-                            x.slient = true;
+            const {startTime, endTime} = options;
+            const heatDataOption = {startTime, endTime, pageUrl: this.$refs.visual.url};
+            return api.getHeatData(heatDataOption).then((data) => {
+                this.$heatdata = this.parseData(data)
+                if(isReset) {
+                    this.$adapter.reset(this.$heatdata);
+                } else {
+                    this.$adapter.destroy();
+                    const $win = document.querySelector('iframe').contentWindow;                 
+                    const customProcessor = (data) => {
+                        let height = $win.document.body.clientHeight;
+                        return data.map((x) => {
+                        if(!x.visible) {
+                            let visible = x.cy < height;
+                            return {...x, visible}
+                        } else {
+                            return x;
                         }
-                        return x;
-                    }
-                })};
-                this.$adapter.init({initData, $win, customProcessor, dataLengthFixed: true });
-                this.$adapter.start();
+                    })};
+                    this.$adapter.init({initData: this.$heatdata, $win, customProcessor, dataLengthFixed: true });
+                }
+                this.$adapter.render();
                 // this.showTip()
                 this.loading.show = false;
             }).catch(err => {
@@ -236,6 +233,12 @@ const promheatmap = Vue.extend({
                 console.error(err);
                 this.loading.show = false;
             });
+        },
+        parseData(data) {
+            const $win = document.querySelector('iframe').contentWindow;
+            const height = $win.document.body.clientHeight;
+            const offsetWidth = $win.innerWidth / 2;
+            return data.map(a => ({ ...a, value: a[this.datatype], cx: a.x + offsetWidth- 600, cy: a.y, w: 25, h:25, visible: a.y < height })).filter(a => (a.cx > 0 && a.cx < $win.screen.width && a.cy > 0 && a.cy < 100000));
         },
         searchFilter(searchFunc) {
             let config = this.$refs.visual.bpConfig;
@@ -341,7 +344,14 @@ const promheatmap = Vue.extend({
         },
         'datatype': {
             handler(val) {
-                this.$adapter && this.$adapter.reset(this.$heatdata.map(x => ({ ...x, value: x[this.datatype]})));
+                if(this.$adapter) {
+                    this.loading.show = true;
+                    this.$heatdata = this.$heatdata.map(x => ({ ...x, value: x[this.datatype]}))
+                    this.$adapter.reset(this.$heatdata);
+                    this.$adapter.render();
+                    this.loading.show = false;
+                }
+
             }
         }
     }
