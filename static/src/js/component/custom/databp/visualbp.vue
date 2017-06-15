@@ -2,7 +2,7 @@
     <div class='page-content'>
         <form class='form-inline'>
             <div class='form-group'>
-                <label>埋点URL</label>
+                <label style="margin-right: 2em;">URL</label>
                 <input type='text'
                        class='form-control'
                        placeholder=''
@@ -15,8 +15,13 @@
                 <label>平台</label>
                 <select class="form-control"
                         v-model="bpConfig.platform">
-                    <option value='PC'>PC</option>
-                    <option value='H5'>H5</option>
+                        <template v-if="platforms">
+                            <option v-for="p of platforms">{{p}}</option>
+                        </template>
+                        <template v-else>
+                            <option value='PC'>PC</option>
+                            <option value='H5'>H5</option>
+                        </template>
                 </select>
             </div>
             <slot name="extend-nav"></slot>
@@ -64,7 +69,7 @@ var visualbp = Vue.extend({
         'm-alert': Alert,
         'm-bpinfo': bpInfo
     },
-    props: ['loading', 'searchFilter', 'urlFilter'],
+    props: ['loading', 'searchFilter', 'urlFilter', 'platforms'],
     data: function () {
         return {
             iframe_url: '',

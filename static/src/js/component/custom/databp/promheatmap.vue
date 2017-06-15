@@ -4,6 +4,7 @@
         <visualbp :loading.sync='loading'
                     :search-filter="searchFilter"
                     :url-filter="urlFilter"
+                    :platforms="platforms" 
                   v-ref:visual>
             <div slot="extend-nav"
                  class='form-group'>
@@ -103,6 +104,7 @@ const promheatmap = Vue.extend({
         };
         return {
             show: true,
+            platforms: ['PC'],
             loadedUrl: '',
             datepickerOption,
             // 防止热力图无限扩大设置的最大值
