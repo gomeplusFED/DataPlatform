@@ -360,8 +360,8 @@ module.exports = promheatmap;
 </script>
 <style>
 .heatmap #search {
-    margin-left: 20%;
-    margin-right: 15px;
+    margin-left: 20px;
+    margin-right: 0;
 }
 
 .heatmap .export {
