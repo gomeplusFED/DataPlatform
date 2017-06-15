@@ -204,7 +204,19 @@ const Config = {
                 obj.marketingAnalysis.operating()
             ]
         },
-        "15" : ConfigAdd["15"],
+        "15" : {
+            "name": "返利分析",
+            "display": true,
+            "className": "fa  fa-laptop fa-fw",
+            "filename": "rebate",
+            "href": "#",
+            "path": [
+                obj.platformRebate.total()
+            ],
+            "routers": [
+
+            ]
+        },
         // "15": {
         //     name: "平台返利汇总",
         //     display: true,
