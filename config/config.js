@@ -299,7 +299,8 @@ const Config = {
                 obj.databp.bpstats(),
                 obj.databp.heatmap(),
                 obj.databp.autoupdate(),
-                obj.market.utils()
+                obj.market.utils(),
+                obj.databp.promheatmap()
             ]
         },
         "25": {

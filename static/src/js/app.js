@@ -92,6 +92,9 @@ router.map({
 			},
 			'/autoupdate': {
 				component: require('./component/custom/databp/autoupdate.vue')
+			},
+			'/promheatmap': {
+				component: require('./component/custom/databp/promheatmap.vue')
 			}
 		}
 	}

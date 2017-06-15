@@ -8,7 +8,7 @@
                        placeholder=''
                        id="page-url"
                        data-content="请输入网址"
-                       v-model="bpConfig.pageUrl"
+                       v-model="url"
                        @keydown.enter.stop.prevent="searchClick">
             </div>
             <div class='form-group'>
@@ -57,13 +57,14 @@ var getSelector = require('./lib/selector.js').getSelector;
 var api = require('./api');
 var Alert = require('common/alert.vue');
 var bpInfo = require('./bpinfo.vue');
+const idFunc = x => x;
 var visualbp = Vue.extend({
     name: 'databp',
     components: {
         'm-alert': Alert,
         'm-bpinfo': bpInfo
     },
-    props: ['loading', 'searchFilter'],
+    props: ['loading', 'searchFilter', 'urlFilter'],
     data: function () {
         return {
             iframe_url: '',
@@ -78,6 +79,20 @@ var visualbp = Vue.extend({
                 selector: '',
                 version: null,
                 type: 'point'
+            }
+        }
+    },
+    computed: {
+        'url': {
+            get() {
+                return (this.urlFilter &&  this.urlFilter.get || idFunc)(this.bpConfig.pageUrl)
+            },
+            set(val) {
+                this.bpConfig.pageUrl = (this.urlFilter &&  this.urlFilter.set || idFunc)(val)
+                // if(val.indexOf('//') === -1) {
+                //     val = 'http://' + val;
+                // }
+                // this.bpConfig.pageUrl = (new URL(val)).toString();
             }
         }
     },
@@ -285,7 +300,6 @@ var visualbp = Vue.extend({
         },
         searchUrl(forceloading) {
             // let stop = false;
-
             this.loading.show = true;
             this.deadtimer && clearTimeout(this.deadtimer);
             let rawurl = this.bpConfig.convertedUrl || this.bpConfig.pageUrl;

@@ -459,55 +459,7 @@ var api = {
 		}).catch(errHandler);
 	},
 	getHeatData() {
-		return Promise.resolve({
-			"data": {
-				"total": 5,
-				"result": [{
-					"pageUrl": "https://www.gomeplus.com/",
-					"selector": "html > body > div:first-child > div:first-child+div > div > div:first-child+div > a:first-child",
-					"pv": 29,
-					"uv": 28,
-					"pointId": 0,
-					"pointName": "首页注册",
-					"dateTime": "2017-03-01"
-				}, {
-					"pageUrl": "https://www.gomeplus.com/",
-					"selector": "html > body > div:first-child > div:first-child > div > h1:first-child+div > em",
-					"pv": 50,
-					"uv": 23,
-					"pointId": 0,
-					"pointName": "搜索按钮",
-					"dateTime": "2017-03-01"
-				}, {
-					"pageUrl": "https://www.gomeplus.com/",
-					"selector": "html > body > div.banner > div > div:first-child > ul > li:first-child+li+li+li+li+li+li > a",
-					"pv": 122,
-					"uv": 131,
-					"pointId": 0,
-					"pointName": "sy_banner",
-					"dateTime": "2017-03-01"
-				}, {
-					"pageUrl": "https://www.gomeplus.com/",
-					"selector": "html > body > div.banner > div > div:first-child > ul > li:first-child+li > a",
-					"pv": 71,
-					"uv": 95,
-					"pointId": 0,
-					"pointName": "sy_banner1",
-					"dateTime": "2017-03-01"
-				}, {
-					"pageUrl": "https://www.gomeplus.com/",
-					"selector": "#fullcategory-content-box > div:nth-child(1) > ul > div.list > a:nth-child(1)",
-					"pv": 115,
-					"uv": 125,
-					"pointId": 0,
-					"pointName": "sy_banner2",
-					"dateTime": "2017-03-01"
-				}]
-			},
-			"code": "200",
-			"msg": "SUCCESS",
-			"iserror": "0"
-		}).then(function(res) {
+		return Promise.resolve(require('./heatdata.js')).then(function(res) {
 			if (res.code !== '200' || res.iserror !== '0') {
 				return Promise.reject('获取埋点信息失败：' + res.msg);
 			}
@@ -547,6 +499,26 @@ var api = {
 				return data;
 			} else {
 				return Promise.reject('暂无热点信息');
+			}
+		}).catch(errHandler);
+	},
+	getLocalUrl({originalUrl}) {
+		return Promise.resolve({
+			"msg": "SUCCESS",
+			"code": "200",
+			"data": {
+				"result": originalUrl
+			},
+			"iserror": "0"
+		}).then(function(res) {
+			if (res.code !== '200' || res.iserror !== '0') {
+				return Promise.reject('热力图地址转化失败：' + res.msg);
+			}
+			var data;
+			if (res && (data = res.data) && (data = data.result)) {
+				return data;
+			} else {
+				return Promise.reject('无热力图地址');
 			}
 		}).catch(errHandler);
 	},
