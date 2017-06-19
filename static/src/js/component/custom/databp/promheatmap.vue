@@ -29,7 +29,7 @@
                 </select>
             </div>
             <div slot="extend-nav"
-                 class="form-group">
+                 class="form-group" v-el:datepicker>
                 <label>截止日期</label>
                 <m-date :index="index"
                         :page-components-data="pageComponentsData"
@@ -183,6 +183,11 @@ const promheatmap = Vue.extend({
         }
     },
     ready() {
+        const pickerdom = this.$els.datepicker;
+        const { right } = pickerdom.getBoundingClientRect();
+        if (window.innerWidth - right < 800) {
+            this.datepickerOption.opens = 'left';
+        }
         this.pageComponentsData.trigger = !this.pageComponentsData.trigger;
         this.$adapter = new Adapter({ types: this.dataTypes });
     },
