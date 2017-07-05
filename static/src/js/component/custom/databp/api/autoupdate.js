@@ -15,16 +15,16 @@ module.exports = {
 	},
 	getSiteList() {
 		return [{
-				name: '国美在线PC（测试）',
-				url: 'http://www.atguat.com.cn/'
+				name: '视频PC站',
+				url: 'https://v.gomeplus.com/'
 			}, {
-				name: '国美PLUS站PC（测试）',
-				url: 'http://www.pre.gomeplus.com/'
+				name: '视频M站',
+				url: 'https://m-v.gomeplus.com'
 			}, {
-				name: '国美在线PC',
+				name: '国美在线PC站',
 				url: 'https://www.gome.com.cn/'
 			}, {
-				name: '国美PLUS站PC',
+				name: '国美PLUS PC站',
 				url: 'https://www.gomeplus.com/'
 			}
 			// {
